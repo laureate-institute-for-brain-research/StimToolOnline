@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>PHQ Survey</title>
+        <script src="https://unpkg.com/jquery"></script>
+        <script src="/bundles/prettydiff?v=E3KTA7j8SjgR8NaAhm1jADBJxbWj5Yx1GQ2EdHBzuxE1"></script>
+
+        <script src="https://unpkg.com/survey-jquery@0.12.10/survey.jquery.min.js"></script>
+
+        <link rel="stylesheet" href="https://unpkg.com/bootstrap@3.3.7/dist/css/bootstrap.min.css">
+        <link rel="stylesheet" href="./index.css">
+
+    </head>
+    <body>
+        <div id="surveyElement"></div>
+        <div id="surveyResult"></div>
+
+        <script type="text/javascript">
+        	
+        	Survey.Survey.cssType = "bootstrap";
+			Survey.defaultBootstrapCss.navigationButton = "btn btn-green";
+
+			var json = {pages:[{elements:[{type:"radiogroup",choices:[{value:"0",text:"Not at all"},{value:"1",text:"Several days"},{value:"2",text:"More than half the days"},{value:"3",text:"Nearly every day"}],isRequired:true,name:"question1",title:"Little interest or pleasure in doing things"},{type:"radiogroup",choices:[{value:"0",text:"Not at all"},{value:"1",text:"Several days"},{value:"2",text:"More than half the days"},{value:"3",text:"Nearly every day"}],isRequired:true,name:"question2",title:"Feeling down, depressed, or hopeless"},{type:"radiogroup",choices:[{value:"0",text:"Not at all"},{value:"1",text:"Several days"},{value:"2",text:"More than half the days"},{value:"3",text:"Nearly every day"}],isRequired:true,name:"question3",title:"Trouble falling or staying asleep, or sleeping too much"},{type:"radiogroup",choices:[{value:"0",text:"Not at all"},{value:"1",text:"Several days"},{value:"2",text:"More than half the days"},{value:"3",text:"Nearly every day"}],isRequired:true,name:"question4",title:"Feeling tired or having little energy"},{type:"radiogroup",choices:[{value:"0",text:"Not at all"},{value:"1",text:"Several days"},{value:"2",text:"More than half the days"},{value:"3",text:"Nearly every day"}],isRequired:true,name:"question5",title:"Poor appetite or overeating"},{type:"radiogroup",choices:[{value:"0",text:"Not at all"},{value:"1",text:"Several days"},{value:"2",text:"More than half the days"},{value:"3",text:"Nearly every day"}],isRequired:true,name:"question6",title:"Feeling bad about yourself--or that you are a failure or have let yourself or your family down"},{type:"radiogroup",choices:[{value:"0",text:"Not at all"},{value:"1",text:"Several days"},{value:"2",text:"More than half the days"},{value:"3",text:"Nearly every day"}],isRequired:true,name:"question7",title:"Trouble concentrating on things, such as reading the newspaper or watching television"},{type:"radiogroup",choices:[{value:"0",text:"Not at all"},{value:"1",text:"Several days"},{value:"2",text:"More than half the days"},{value:"3",text:"Nearly every day"}],isRequired:true,name:"question8",title:"Moving or speaking so slowly that other people could have noticed. Or the opposite--being so fidgety or restless that you have been moving around a lot more than usual"},{type:"radiogroup",choices:[{value:"0",text:"Not at all"},{value:"1",text:"Several days"},{value:"2",text:"More than half the days"},{value:"3",text:"Nearly every day"}],isRequired:true,name:"question9",title:"Thoughts that you would be better off dead, or of hurting yourself"}],name:"page1"}]}
+
+
+			window.survey = new Survey.Model(json);
+
+			survey
+			    .onComplete
+			    .add(function (result) {
+			        document
+			            .querySelector('#surveyResult')
+			            .innerHTML = "result: " + JSON.stringify(result.data);
+			    });
+
+			$("#surveyElement").Survey({model: survey});
+
+        </script>
+
+    </body>
+</html>
