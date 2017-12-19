@@ -4,46 +4,78 @@ var formidable = require("formidable");
 var util = require('util');
 var url = require('url');
 
+var path = require('path');
 
+var dir = path.join(__dirname, 'public')
+
+
+var mime = {
+    html: 'text/html',
+    txt: 'text/plain',
+    css: 'text/css',
+    gif: 'image/gif',
+    jpg: 'image/jpeg',
+    png: 'image/png',
+    svg: 'image/svg+xml',
+    js: 'application/javascript'
+};
 
 var mysql = require('mysql')
 
 var server = http.createServer(function (req, res) {
     //console.log(req.url)
+    var reqpath = req.url.toString().split('?')[0]
+    var q = url.parse(req.url, true).query;
+	var session = q.session;
+	var mkturk_id = q.mkturk_id;
+	var survey = q.survey;
+	var task = q.task;
+    var file = path.join(dir, reqpath.replace(/\/$/, '/index.html'));
 
-    if (req.method.toLowerCase() == 'get') {
+    if (file.indexOf(dir + path.sep) !== 0) {
+        res.statusCode = 403;
+        res.setHeader('Content-Type', 'text/plain');
+        return res.end('Forbidden');
+    } 
 
-    	var q = url.parse(req.url, true).query;
-    	var session = q.session;
-    	var mkturk_id = q.mkturk_id;
-    	var survey = q.survey;
-    	var task = q.task;
+    var type = mime[path.extname(file).slice(1)] || 'text/plain';
+    var s = fs.createReadStream(file);
+    s.on('open', function () {
+        res.setHeader('Content-Type', type);
+        s.pipe(res);
+    });
+    s.on('error', function () {
+        res.setHeader('Content-Type', 'text/plain');
+        res.statusCode = 404;
+        res.end('Not found');
+    });
 
-	    if (session == '1' && survey == 'demo'){
-	    	console.log("Session 1")
-	    	console.log(mkturk_id)
-	    	displaySurveyDemo(res);
-	    }else if(session == '1' && survey == 'oasis'){
-	    	displaySurveyOASIS(res);
-	    }else if (session == '1' && survey == 'phq') {
-	    	// Redirect To phq survey
-	    	displaySurveyPHQ(res);
 
-	    }else if(session == '1' && task == 'dotprobe') {
-	    	displaydotprobe1(res);
-	    }else if (session == '2' && survey == 'demo'){
-	    	console.log("Sesison 2!")
-	    	displaySurvey(res);
-	    } else {
-	    	displayForm(res);
-	    }
-	    // Saveing Survey Data from POST request.
-    } else if(req.method.toLowerCase() == 'post' && req.url == '/saveSurvey/'){
-    	processSurveyData(req, res);
 
-    } else if (req.method.toLowerCase() == 'post' ) {
-        processFormFieldsIndividual(req, res);
+	if (session == '1' && survey == 'demo'){
+    	console.log("Session 1")
+    	console.log(mkturk_id)
+    	displaySurveyDemo(res);
+    }else if(session == '1' && survey == 'oasis'){
+    	displaySurveyOASIS(res);
+    }else if (session == '1' && survey == 'phq') {
+    	// Redirect To phq survey
+    	displaySurveyPHQ(res);
+
+    }else if(session == '1' && task == 'dotprobe') {
+    	displaydotprobe1(res);
+    }else if (session == '2' && survey == 'demo'){
+    	console.log("Sesison 2!")
+    	displaySurvey(res);
+    } else {
+    	displayForm(res);
     }
+
+    if (req.method.toLowerCase() == 'post'){
+    	processFormFieldsIndividual(req, res);
+	}
+
+
 });
 
 function processSurveyData(req, res){
@@ -130,30 +162,25 @@ var con = mysql.createConnection({
 // 	}
 // }
 
-function insertNewData(fields){
+function insertNewData(fields,con){
 	console.log("Inserting New Data to Database!")
 	var currentdate = new Date();
 	var next24hrdate = getFuture24Date(currentdate)
 
 
-	con.connect(function(err) {
-		if (err) throw err;
-		console.log('Connected!')
-
-		sqlinsert = "INSERT INTO dot_probe1 (mkturk_id,email,remind,time_created,time_ready) VALUES (" + 
+	sqlinsert = "INSERT INTO dot_probe1 (mkturk_id,email,remind,time_created,time_ready) VALUES (" + 
 		    '\"' + fields.mturkid + '\",' +
 		    '\"' + fields.email + '\",' +
 		    '\"' + fields.remind + '\",' +
 		    '\"' + currentdate + '\",' +
 		    '\"' + next24hrdate + '\");'
 
-		con.query(sqlinsert,function (err, result) {
+	con.query(sqlinsert,function (err, result) {
 
-			if (err) console.log(err);
-			// get the result of the SQL Database
-			console.log("record Inserted!")
+		if (err) console.log(err);
+		// get the result of the SQL Database
+		console.log("record Inserted!")
 
-		});
 	});
 
 
@@ -274,7 +301,7 @@ function processFormFieldsIndividual(req, res) {
 		  	//console.log(jsonsqldata);
 		  	//console.log(fields);
 
-		  	insertNewData(fields);
+		  	insertNewData(fields, con);
 		  	//displaySurvey(res)
 		  }
 
@@ -301,7 +328,6 @@ function processFormFieldsIndividual(req, res) {
     });
     form.parse(req);
 }
-
 server.listen(1185);
 console.log("server listening on 1185");
 
