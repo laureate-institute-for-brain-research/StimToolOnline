@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>ASI Survey</title>
+        <script src="https://unpkg.com/jquery"></script>
+        <script src="/bundles/prettydiff?v=E3KTA7j8SjgR8NaAhm1jADBJxbWj5Yx1GQ2EdHBzuxE1"></script>
+
+        <script src="https://unpkg.com/survey-jquery@0.12.10/survey.jquery.min.js"></script>
+
+        <link rel="stylesheet" href="https://unpkg.com/bootstrap@3.3.7/dist/css/bootstrap.min.css">
+        <link rel="stylesheet" href="./index.css">
+
+    </head>
+    <body>
+        <center><a href="http://www.laureateinstitute.org/"><img class="logo" src="/images/logo.png"></a></center>
+        
+
+        <!-- Showing Time Elapsed
+        <div style="position: fixed; left : 50% ;  background-color: #ff9900;"><center><p id="mkId"></p></center><p id="timeOutput"></p></div>
+         -->
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-10">
+                    <h1 style="padding: 17px" >ASI Survey</h1>
+                </div>
+            </div>
+
+
+            <div class="row">
+                <p align="right" class="col-md-10" >Mechanical Turk ID:</p>
+                <a align="right" id="mkid"></a> 
+            </div>
+
+            <div class="row">
+                <p align="right" class="col-md-10">Session: </p>
+                <a align="right" id="session"></a>   
+            </div>
+
+            <div class="row">
+                <p align="right" class="col-md-10">Time Spent on Question: </p>
+                <a align="right" id="timeEl"></a> 
+                </p>
+            </div>
+
+            <div class="row" style="padding: 17px">
+                <div id="surveyElement"></div>
+                <div id="surveyResult"></div>    
+            </div>
+
+
+        </div>
+
+        <div class="container-fluid">
+            <center><p class="text-p">&copy; 2017 <a href="http://www.laureateinstitute.org">laureateinstitute.org</a>. All rights reserved.</center>
+        </div>
+
+
+        <script type="text/javascript">
+            
+            Survey.Survey.cssType = "bootstrap";
+            Survey.defaultBootstrapCss.navigationButton = "btn btn-green";
+
+            var json = {pages:[{elements:[{type:"radiogroup",choices:[{value:"0",text:"very little"},{value:"1",text:"a little"},{value:"2",text:"some"},{value:"3",text:"much"},{value:"4",text:"very much"}],isRequired:true,name:"asi3_1",title:"It is important for me not to appear nervous."}],name:"page1"},{elements:[{type:"radiogroup",choices:[{value:"0",text:"very little"},{value:"1",text:"a little"},{value:"2",text:"some"},{value:"3",text:"much"},{value:"4",text:"very much"}],isRequired:true,name:"asi3_2",title:"When I cannot keep my mind on a task, I worry that I might be going crazy."}],name:"page2"},{elements:[{type:"radiogroup",choices:[{value:"0",text:"very little"},{value:"1",text:"a little"},{value:"2",text:"some"},{value:"3",text:"much"},{value:"4",text:"very much"}],isRequired:true,name:"asi3_3",title:"It scares me when my heart beats rapidly."}],name:"page3"},{elements:[{type:"radiogroup",choices:[{value:"0",text:"very little"},{value:"1",text:"a little"},{value:"2",text:"some"},{value:"3",text:"much"},{value:"4",text:"very much"}],isRequired:true,name:"asi3_4",title:"When my stomach is upset, I worry that I might be seriously ill."}],name:"page4"},{elements:[{type:"radiogroup",choices:[{value:"0",text:"very little"},{value:"1",text:"a little"},{value:"2",text:"some"},{value:"3",text:"much"},{value:"4",text:"very much"}],isRequired:true,name:"asi3_5",title:"It scares me when I am unable to keep my mind on a task."}],name:"page5"},{elements:[{type:"radiogroup",choices:[{value:"0",text:"very little"},{value:"1",text:"a little"},{value:"2",text:"some"},{value:"3",text:"much"},{value:"4",text:"very much"}],isRequired:true,name:"asi3_6",title:"When I tremble in the presence of others, I fear what people might think of me."}],name:"page6"},{elements:[{type:"radiogroup",choices:[{value:"0",text:"very little"},{value:"1",text:"a little"},{value:"2",text:"some"},{value:"3",text:"much"},{value:"4",text:"very much"}],isRequired:true,name:"asi3_7",title:"When my chest feels tight, I get scared that I won't be able to breathe properly."}],name:"page7"},{elements:[{type:"radiogroup",choices:[{value:"0",text:"very little"},{value:"1",text:"a little"},{value:"2",text:"some"},{value:"3",text:"much"},{value:"4",text:"very much"}],isRequired:true,name:"asi3_8",title:"When I feel pain in my chest, I worry that I'm going to have a heart attack."}],name:"page8"},{elements:[{type:"radiogroup",choices:[{value:"0",text:"very little"},{value:"1",text:"a little"},{value:"2",text:"some"},{value:"3",text:"much"},{value:"4",text:"very much"}],isRequired:true,name:"asi3_9",title:"I worry that other people will notice my anxiety."}],name:"page9"},{elements:[{type:"radiogroup",choices:[{value:"0",text:"very little"},{value:"1",text:"a little"},{value:"2",text:"some"},{value:"3",text:"much"},{value:"4",text:"very much"}],isRequired:true,name:"asi3_10",title:"When I feel \"spacey\" or spaced out I worry that I may be mentally ill."}],name:"page10"},{elements:[{type:"radiogroup",choices:[{value:"0",text:"very little"},{value:"1",text:"a little"},{value:"2",text:"some"},{value:"3",text:"much"},{value:"4",text:"very much"}],isRequired:true,name:"asi3_11",title:"It scares me when I blush in front of people."}],name:"page11"},{elements:[{type:"radiogroup",choices:[{value:"0",text:"very little"},{value:"1",text:"a little"},{value:"2",text:"some"},{value:"3",text:"much"},{value:"4",text:"very much"}],isRequired:true,name:"asi3_12",title:"When I notice my heart skipping a beat, I worry that there is something seriously wrong with me."}],name:"page12"},{elements:[{type:"radiogroup",choices:[{value:"0",text:"very little"},{value:"1",text:"a little"},{value:"2",text:"some"},{value:"3",text:"much"},{value:"4",text:"very much"}],isRequired:true,name:"asi3_13",title:"When I begin to sweat in a social situation, I fear people will think negatively of me."}],name:"page13"},{elements:[{type:"radiogroup",choices:[{value:"0",text:"very little"},{value:"1",text:"a little"},{value:"2",text:"some"},{value:"3",text:"much"},{value:"4",text:"very much"}],isRequired:true,name:"asi3_14",title:"When my thoughts seem to speed up, I worry that I might be going crazy."}],name:"page14"},{elements:[{type:"radiogroup",choices:[{value:"0",text:"very little"},{value:"1",text:"a little"},{value:"2",text:"some"},{value:"3",text:"much"},{value:"4",text:"very much"}],isRequired:true,name:"asi3_15",title:"When my throat feels tight, I worry that I could choke to death."}],name:"page15"},{elements:[{type:"radiogroup",choices:[{value:"0",text:"very little"},{value:"1",text:"a little"},{value:"2",text:"some"},{value:"3",text:"much"},{value:"4",text:"very much"}],isRequired:true,name:"asi3_16",title:"When I have trouble thinking clearly, I worry that there is something wrong with me."}],name:"page16"},{elements:[{type:"radiogroup",choices:[{value:"0",text:"very little"},{value:"1",text:"a little"},{value:"2",text:"some"},{value:"3",text:"much"},{value:"4",text:"very much"}],isRequired:true,name:"asi3_17",title:"I think it would be horrible for me to faint in public."}],name:"page17"},{elements:[{type:"radiogroup",choices:[{value:"0",text:"very little"},{value:"1",text:"a little"},{value:"2",text:"some"},{value:"3",text:"much"},{value:"4",text:"very much"}],isRequired:true,name:"asi3_18",title:"When my mind goes blank, I worry there is something terribly wrong with me."}],name:"page18"}]}
+
+
+
+            window.survey = new Survey.Model(json);
+
+
+            
+            var timerID = null;
+
+            function timerCallback(){
+                var page = survey.currentPage;
+                if (!page) return;
+                var valueName = "TRQ" + survey.pages.indexOf(page);
+
+                var ms = survey.getValue(valueName);   
+
+                if( ms == null) ms = 0;
+                else ms ++;
+                survey.setValue(valueName, ms);
+
+                displayTime(ms);
+                // display the time in the timeEl elemtn
+                //renderTime(milliseconds);
+            }
+
+            function getQueryVariable(variable) {
+                var query = window.location.search.substring(1);
+                var vars = query.split('&');
+                for (var i = 0; i < vars.length; i++) {
+                    var pair = vars[i].split('=');
+                    if (decodeURIComponent(pair[0]) == variable) {
+                        return decodeURIComponent(pair[1]);
+                    }
+                }
+                return 'NULL'
+            }
+
+
+            // When in new page, timerID is set to 0
+            survey.onCurrentPageChanged.add(function() {
+                timerCallback();
+            })
+            survey.showProgressBar = "bottom";
+
+            survey.goNextPageAutomatic = true
+            survey.showNavigationButtons = false
+            survey.showCompletedPage = false;
+
+            // Get Query Variables
+
+            var session = getQueryVariable('session');
+            var mkturkid = getQueryVariable('mkturk_id');
+            var surveyname = getQueryVariable('survey');
+
+            survey.onComplete.add(function (result) {
+                postSurveyData(result.data, session, mkturkid,surveyname);
+                window.location.href = "/?session="+session+"&mkturk_id="+mkturkid+"&task=dotprobe";
+             });
+
+            // Parse the URL 
+
+
+
+            function postSurveyData(data, session, mkturkid, surveyname){
+                $.ajax({
+                    type: 'POST',
+                    url: 'saveSurvey/?session=' + session + '&mkturk_id=' + mkturkid + '&survey=' + surveyname,
+                    data: JSON.stringify(data), // or JSON.stringify ({name: 'jonas'}),
+                    success: function(data) { alert('data: ' + data); },
+                    contentType: "application/json",
+                    dataType: 'json'
+                });
+            }
+
+
+            $("#surveyElement").Survey({model: survey});
+            $("#mkid").text(mkturkid);
+            $("#session").text(session);
+
+
+            timerCallback();
+
+            function displayTime(val){
+                $('#timeEl').text(val + ' ms');
+            }
+            // executes timerCallback every 1 ms
+            timerID = window.setInterval(function(){
+                timerCallback()
+
+            }, 1);
+
+        </script>
+
+    </body>
+</html>
