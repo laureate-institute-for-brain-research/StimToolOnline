@@ -70,20 +70,24 @@
             
             var timerID = null;
 
-            function timerCallback(){
-                var page = survey.currentPage;
+            lastpage = survey.currentPage;
+            function timerLoop(elapsed){
+                var page = survey.currentPage; // page variable is the currentPage on the survey
                 if (!page) return;
+                if (lastpage != page) {
+                    // set new start date
+                    start = new Date().getTime(); // sets new start Date object when page has changed.
+                    lastpage = page // sets the last page to currente page 
+
+                }
                 var valueName = "TRQ" + survey.pages.indexOf(page);
 
-                var ms = survey.getValue(valueName);   
+                var ms = survey.getValue(valueName);  // gets the value of the valuename. e.g: TRQ1
 
                 if( ms == null) ms = 0;
-                else ms ++;
+                else ms = elapsed;
                 survey.setValue(valueName, ms);
-
-                displayTime(ms);
-                // display the time in the timeEl elemtn
-                //renderTime(milliseconds);
+                $('#timeEl').text(elapsed + ' ms');
             }
 
             function getQueryVariable(variable) {
@@ -99,10 +103,6 @@
             }
 
 
-            // When in new page, timerID is set to 0
-            survey.onCurrentPageChanged.add(function() {
-                timerCallback();
-            })
             survey.showProgressBar = "bottom";
 
             survey.goNextPageAutomatic = true
@@ -140,17 +140,22 @@
             $("#mkid").text(mkturkid);
             $("#session").text(session);
 
+            var start = new Date().getTime(),
+                elapsed = '0.0';
 
-            timerCallback();
-
-            function displayTime(val){
-                $('#timeEl').text(val + ' ms');
-            }
-            // executes timerCallback every 1 ms
+            // executes timerCallback every 100 ms
             timerID = window.setInterval(function(){
-                timerCallback()
+                
+                var time = new Date().getTime() - start;
+                elapsed = Math.floor(time);
 
-            }, 1);
+                //alert(elapsed);
+                //$('#timeEl').text(elapsed + ' ms');
+
+                //displayTime(1);
+                timerLoop(elapsed);
+
+            }, 5);
 
         </script>
 
