@@ -12,12 +12,14 @@ var url = require('url');
 var mysql = require('mysql');
 var csv = require('csvdata')
 var converter = require('json-2-csv');
+const requestIp = require('request-ip');
 
 
 var app = express();
 
 app.use(bodyParser.json())
 app.use(express.static('public'))
+app.use(requestIp.mw())
 
 
 
@@ -28,7 +30,7 @@ app.use(express.static('public'))
 
 
 app.get('/',function (req, res) {
-	
+	//console.log(req.clientIp);
 	// Parse URL
 
     var q = url.parse(req.url, true).query;
@@ -58,16 +60,19 @@ app.get('/',function (req, res) {
 
 // Returning the get request when it has
 // not been past 25hours
-app.get('/24hours', function (req, res) {
+app.get('/tooearly', function (req, res) {
 	var q = url.parse(req.url, true). query;
 	var session = q.session
 	var mkturk_id = q.mkturk_id;
+
+	display24HourPage(res);
 
 
 
 });
 
 app.post('/', function (req, res) {
+
 	var q = url.parse(req.url, true).query;
 	var session = q.session;
 	var mkturk_id = q.mkturk_id;
@@ -85,11 +90,12 @@ app.post('/saveSurvey/', function(req, res) {
 	var mkturk_id = q.mkturk_id;
 	var survey = q.survey;
 	var task = q.task;
+	var ipaddr = req.clientIp;
 
 	json = req.body;
 	console.log(json);
 
-	outputString = survey + '-' + mkturk_id + '-' + 'T' + session + '-' + d.toDateString() +',User Agent: ' + req.headers['user-agent'] + '\n'
+	outputString = survey + '-' + mkturk_id + '-' + 'T' + session + '-' + d.toDateString() +',User Agent: ' + req.headers['user-agent'] +',IP: ' + ipaddr + '\n'
 
 	outputString = outputString + 'QUESTION,RESULT,RT(ms)\n';
 
@@ -135,10 +141,11 @@ app.post('/saveTask/', function(req, res) {
 	var mkturk_id = q.mkturk_id;
 	var survey = q.survey;
 	var task = q.task;
+	var ipaddr = req.clientIp;
 
 	data = req.body; // json input
 	content = data.content;  
-	var head1 = "Orginal File Name:,"+ 'DP-' + mkturk_id + '-' + file_date + '.csv'+ ',UserAGENT:' + req.headers['user-agent'] +",Time:,"+file_date+",Parameter File:,None:FromPsyToolkit,Event Codes:,[('INSTRUCT_ONSET', 1), ('TASK_ONSET', 2), ('TRIAL_ONSET', 3), ('CUE_ONSET', 4), ('IMAGE_ONSET', 5), ('TARGET_ONSET', 6), ('RESPONSE', 7), ('ERROR_DELAY', 8), ('BREAK_ONSET', 9), ('BREAK_END', 10)],Trial Types are coded as follows: 8 bits representing [valence neut/neg/pos] [target_orientation H/V] [target_side left/right] [duration .5/1] [valenced_image left/right] [cue_orientation H/V] [cue_side left/right] \n"
+	var head1 = "Orginal File Name:,"+ 'DP-' + mkturk_id + '-' + file_date + '.csv'+ ',UserAGENT:' + req.headers['user-agent'] + ',IP: ' + ipaddr + ",Time:,"+file_date+",Parameter File:,None:FromPsyToolkit,Event Codes:,[('INSTRUCT_ONSET', 1), ('TASK_ONSET', 2), ('TRIAL_ONSET', 3), ('CUE_ONSET', 4), ('IMAGE_ONSET', 5), ('TARGET_ONSET', 6), ('RESPONSE', 7), ('ERROR_DELAY', 8), ('BREAK_ONSET', 9), ('BREAK_END', 10)],Trial Types are coded as follows: 8 bits representing [valence neut/neg/pos] [target_orientation H/V] [target_side left/right] [duration .5/1] [valenced_image left/right] [cue_orientation H/V] [cue_side left/right] \n"
     var head2 = "trial_number,trial_type,event_code,absolute_time,response_time,response,result\n"
 
 	fs.writeFile('task/data/DP-' + mkturk_id + '-' + 'T' + session + '-' + file_date + '.csv', head1 + head2 + content, (err) => {
@@ -243,10 +250,26 @@ function displayDotProbe2(res){
 	});	
 }
 
+function display24HourPage(res){
+	fs.readFile('tooearly.html', function (err, data) {
+		// Write Header
+		res.writeHead(200, {
+			'Content-Type' : 'text/html'
+		});
+		// Wrte Body
+		res.write(data);
+		res.end();
+	});	
+}
+
 
 // Returns Data object that is 24hours from the passed in DataObject
-function getFuture24Date(dateobject){
-	var dateTime = new Date(dateobject.getTime() + 60 * 60 * 24 * 1000);
+function getFuture24Date(dateobject,numHours){
+	// getTime() gets the time in ms, so we add 8.64E7 which is the number of ms in 24 hours
+
+	// changed later to 30 hours because for some reason, mailgun sends it prematurely
+
+	var dateTime = new Date(dateobject.getTime() + 60 * 60 * numHours * 1000);
 	return dateTime
 
 }
@@ -288,7 +311,16 @@ function sendEmail(emailaddress, futuredate){
 function insertNewData(fields,con){
 	console.log("Inserting New Data to Database!")
 	var currentdate = new Date();
-	var next24hrdate = getFuture24Date(currentdate)
+	var next24hrdate = getFuture24Date(currentdate,24)
+
+	data = {
+		mkturk_id : fields.mkturk_id,
+		email : fields.email,
+		remind : fields.remind,
+		time_created : currentdate,
+		time_ready : next24hrdate
+
+	}
 
 
 	// sqlinsert = "INSERT INTO dot_probe1 (mkturk_id,email,remind,time_created,time_ready) VALUES (" + 
@@ -298,7 +330,7 @@ function insertNewData(fields,con){
 	// 	    '\"' + currentdate + '\",' +
 	// 	    '\"' + next24hrdate + '\");'
 
-	con.query('INSERT INTO dot_probe1 SET ?', fields, function (err, result) {
+	con.query('INSERT INTO dot_probe1 SET ?', data, function (err, result) {
 
 		if (err) console.log(err);
 		// get the result of the SQL Database
@@ -307,39 +339,13 @@ function insertNewData(fields,con){
 	});
 	// If the User kept the checked marked YES, thatn it well send email to remind them when session two is available
 	// for them. 
-	if (fields.remind == 'YES'){
+	if (fields.remind == 'YES' && fields.mkturk_id != ''){
 		// send reminder email
-		sendEmail(fields.email, next24hrdate);
+		sendEmail(fields.email, getFuture24Date(currentdate,30));
 	}
 
 }
 
-function checkTimeReady(id, con){
-	//. Session 2
-
-	// var now = new Data();
-	// console.log('Checking if it\'s been 24hours');
-
-	// sqlGetID = "SELECT time_ready FROM dot_probe1 WHERE mkturk_id = \'" + id + "\' LIMIT 1;";
-	// con.query(sqlGetID,function (err, result) {
-
-	// 	if (err) console.log(err);
-	// 	// get the result of the SQL Database
-	//   	//jsonsqldata = JSON.stringify(result);
-
-	//   	console.log(result);
-
-
-	//   	if (result.length == 1) {
-
-
-	//   	} else {
-	//   	// should not happen
-
-	//   	}
-	//   }
-
-}
 
 // Connecting to database
 var con = mysql.createConnection({
@@ -363,23 +369,7 @@ function processForm(req, res) {
     });
 
 
-    //console.log('Now: ' + currentdate)
-    //console.log('Date in 24hrs: ' + getFuture24Date(currentdate))
-    //console.log(post)
-
     form.on('end', function () {
-        //console.log('Form Submitted!!')
-        var currentdate = new Date();
-	    var next24hrdate = getFuture24Date(currentdate)
-
-	    // JS object of things to Add to database
-	    var post = {
-	    	mkturk_id : fields.mturkid,
-	    	email : fields.email,
-	    	remind : fields.remind,
-	    	time_created : currentdate,
-	    	time_ready : next24hrdate
-	    }
 
 	    var sessionNumber = 1;
 	    con.connect(function(err) {
@@ -393,51 +383,34 @@ function processForm(req, res) {
 
         //console.log(sql)
 
-        // Initial SQL Query
-		con.query('SELECT mkturk_id FROM dot_probe1 WHERE mkturk_id = ?',[fields.mturkid],function (err, result) {
-		  if (err) console.log(err);
-		  // get the result of the SQL Database
-		  jsonsqldata = JSON.stringify(result);
-		  console.log(result.length);
+        // Initial SQL Query checks the database if the subjece is not already on there
+		con.query('SELECT time_ready FROM dot_probe1 WHERE mkturk_id = ?',[fields.mkturk_id],function (err, result) {
+		  
+		  // Throws error bcause subject is not in the database/ :)
 
-		  // If SQL QUERY has 1 length, than ID is already in Database
-		  // IF not, it will be added and sent to
-		  if (result.length == 1) {
-		  	// old user take them to sesison 2
-		  	console.log('sql output is not empty')
-		  	sessionNumber = 2;
-		  	//console.log(jsonsqldata)
-		  } else {
-		  	// empty, insert to database
-		  	console.log('sql empty.');
-		  	//console.log(jsonsqldata);
-		  	//console.log(fields);
+		  try {
+		  	//console.log('sql output is not empty')
+		  	sqlresult = JSON.parse(JSON.stringify(result));
+		  	jsondata = sqlresult[0]
+		  	console.log(jsondata.time_ready);
 
-		  	insertNewData(fields, con);
-		  	//displaySurvey(res)
-		  }
-
-		 // The output after hitting proceed 
-
-		if (sessionNumber == 2) {
-
-			checkTimeReady(fields.mkturk_id, con);
-
-		} else {
-			
-        	res.writeHead(301, {
-            	Location: '/?session=' + sessionNumber + '&mkturk_id=' + fields.mturkid + '&survey=demo'
+		  	res.writeHead(301, {
+            	Location: '/tooearly?mkturk_id=' + fields.mkturk_id + '&timeleft=' + jsondata.time_ready
         	});
 
         	res.end();
+		  }
+		  catch (TypeError) {
 
-		}
-        // res.write('received the data:\n\n');
-        // res.end(util.inspect({
-        //     post: post
-        // }));
+		  	insertNewData(fields, con);
+		  	//displaySurvey(res)
 
-        //console.log(post);
+		  	res.writeHead(301, {
+            	Location: '/?session=1' + '&mkturk_id=' + fields.mkturk_id + '&survey=demo'
+        	});
+
+        	res.end();
+		  }
 
 		});
 
