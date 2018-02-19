@@ -13,6 +13,7 @@ var mysql = require('mysql');
 var csv = require('csvdata')
 var converter = require('json-2-csv');
 const requestIp = require('request-ip');
+var SqlString = require('sqlstring');
 
 
 var app = express();
@@ -25,10 +26,6 @@ app.use(requestIp.mw())
 
 
 // ROUTES
-
-
-
-
 app.get('/',function (req, res) {
 	//console.log(req.clientIp);
 	// Parse URL
@@ -66,8 +63,6 @@ app.get('/tooearly', function (req, res) {
 	var mkturk_id = q.mkturk_id;
 
 	display24HourPage(res);
-
-
 
 });
 
@@ -123,12 +118,16 @@ app.post('/saveSurvey/', function(req, res) {
 	    if (err) throw err;
 	    // success case, the file was saved
 	    //console.log('File saved!');
-	    console.log("file saved")
-	});	
+	    console.log("file saved");
 
+	});
+	
 	//csv.write('surveys/data/' + survey +'-' + mkturk_id + '-T' + session + '.csv', req.body, {header: 'question'});
 	res.send('');
+
 	res.end('\n');
+	updateStatus(mkturk_id, survey,session,con);	
+
 
 });
 
@@ -139,9 +138,36 @@ app.post('/saveTask/', function(req, res) {
 	var q = url.parse(req.url, true).query;
 	var session = q.session;
 	var mkturk_id = q.mkturk_id;
-	var survey = q.survey;
+	//var survey = q.survey;
 	var task = q.task;
 	var ipaddr = req.clientIp;
+
+
+	// Send the Code by Email if they Include it
+	if (session == '2'){
+		con.query('SELECT email FROM dot_probe1 WHERE mkturk_id = ?',[mkturk_id],function (err, result) {
+		  
+		  // Throws error bcause subject is not in the database/ :)
+
+		  try {
+		  	//console.log('sql output is not empty')
+		  	sqlresult = JSON.parse(JSON.stringify(result));
+		  	jsondata = sqlresult[0]
+		  	console.log('sending code to ' + jsondata.email);
+
+		  	sendEmailCode(jsondata.email);
+
+		  }
+		  catch (TypeError) {
+		  	// No Email
+		  	// Do Nothing
+		  }
+
+		});
+
+	}
+
+
 
 	data = req.body; // json input
 	content = data.content;  
@@ -156,16 +182,13 @@ app.post('/saveTask/', function(req, res) {
 
 	res.send('Got the data!\n');
 
+	updateStatus(mkturk_id, task,session,con);
+
 
 });
 
 
-
-
-
-
 // 			Output Pages 		//
-
 function displayHome(res) {
 	fs.readFile('index.html', function (err, data) {
 		// Write Header
@@ -227,6 +250,7 @@ function displaySurveyasi(res){
 }
 
 function displayDotProbe1(res){
+
 	fs.readFile('task/dotprobe1.html', function (err, data) {
 		// Write Header
 		res.writeHead(200, {
@@ -260,6 +284,62 @@ function display24HourPage(res){
 		res.write(data);
 		res.end();
 	});	
+}
+
+
+// Updates the DP_status
+// mkturk_id: their Mechanical TURK ID
+// job: The survey or the task
+
+function updateStatus(mkturk_id, job,session,con){
+
+	var jobToSqlColumn = {
+		'demo_1' : 'survey_demo_T1',
+		'demo_2' : 'survey_demo_T2',
+		'phq_1' : 'survey_phq_T1',
+		'phq_2' : 'survey_phq_T2',
+		'oasis_1' : 'survey_oasis_T1',
+		'oasis_2' : 'survey_oasis_T2',
+		'asi_1' : 'survey_asi_T1',
+		'asi_2' : 'survey_asi_T2',
+		'dotprobe_1' : 'dp_task_T1',
+		'dotprobe_2' : 'dp_task_T2'
+	}
+
+	colname = jobToSqlColumn[job + '_' + session];
+
+
+	// sql = "INSERT INTO dp_status (mkturk_id, " + colname + ") " +
+	// "VALUES (" + mkturk_id + ",\'YES\') " +
+	// "ON DUPLICATE KEY UPDATE " + colname + "=\'YES\'";
+	sql = SqlString.format("INSERT INTO dp_status (mkturk_id, " + colname + " ) " +
+	"VALUES ( ? ,\'YES\') " +
+	"ON DUPLICATE KEY UPDATE " + colname + "=\'YES\';",[mkturk_id]);
+	console.log(sql);
+
+	con.query(sql,function (err, result) {
+	  
+		
+		// Throws error bcause subject is not in the database/ :)
+		try {
+		  	//console.log('sql output is not empty')
+
+		  	console.log('Updating..' + mkturk_id + ': ' + colname );
+		  	//sendEmailCode(jsondata.email);
+
+		}
+		catch (err) {
+		  	console.log('Failed Updating..')
+		  	// Do Nothing
+		}
+
+	});
+}
+
+// Send the user to the survey or task that they have not completed yet
+function reRoute(con,mkturk_id,res){
+
+	// sql = 
 }
 
 
@@ -308,6 +388,24 @@ function sendEmail(emailaddress, futuredate){
 	});
 }
 
+function sendEmailCode(emailaddress){
+	var mailgun = require("mailgun-js");
+	var api_key = 'key-fa2d65c78c52cfabac185c98eb95721e';
+	var DOMAIN = 'paulus.touthang.info';
+	var mailgun = require('mailgun-js')({apiKey: api_key, domain: DOMAIN});
+
+	var data = {
+	  from: 'James <jtouthang@libr.net>',
+	  to: emailaddress,
+	  subject: 'Mechanical Turk Survey Code!',
+	  text: 'Hello!\n\nYour Survey Code is: 11853\n\nFrom all of us at LIBR,\nThank you for your participation.',
+	};
+
+	mailgun.messages().send(data, function (error, body) {
+	  console.log(body);
+	});
+}
+
 function insertNewData(fields,con){
 	console.log("Inserting New Data to Database!")
 	var currentdate = new Date();
@@ -345,6 +443,8 @@ function insertNewData(fields,con){
 	}
 
 }
+
+
 
 
 // Connecting to database
@@ -394,6 +494,13 @@ function processForm(req, res) {
 		  	jsondata = sqlresult[0]
 		  	console.log(jsondata.time_ready);
 
+		  	// SUBJECT IS IN THE DATABASE
+
+
+		  	// Re Route subject to the survey or task they have not completed yet.
+		  	//reRoute(con,mkturk_id,res);
+
+
 		  	res.writeHead(301, {
             	Location: '/tooearly?mkturk_id=' + fields.mkturk_id + '&timeleft=' + jsondata.time_ready
         	});
@@ -402,8 +509,12 @@ function processForm(req, res) {
 		  }
 		  catch (TypeError) {
 
+		  	// SUBJECT IS NOT IN THE DATABASE
 		  	insertNewData(fields, con);
+
 		  	//displaySurvey(res)
+
+		  	// 
 
 		  	res.writeHead(301, {
             	Location: '/?session=1' + '&mkturk_id=' + fields.mkturk_id + '&survey=demo'
