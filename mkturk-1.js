@@ -165,37 +165,6 @@ app.post('/saveTask/', function(req, res) {
 	var task = q.task;
 	var ipaddr = req.clientIp;
 
-
-	// Send the Code by Email if they Include it
-	if (session == '2'){
-		con.query('SELECT email,remind FROM dot_probe1 WHERE mkturk_id = ?',[mkturk_id],function (err, result) {
-		  
-		  // Throws error bcause subject is not in the database/ :)
-
-		  try {
-		  	//console.log('sql output is not empty')
-		  	sqlresult = JSON.parse(JSON.stringify(result));
-		  	jsondata = sqlresult[0]
-		  	console.log('sending code to ' + jsondata.email);
-
-
-		  	// If they gave an email addres, than we WILL email them the code
-		  	sendEmailCode(jsondata.email);
-
-		  }
-		  catch (TypeError) {
-		  	// No Email
-		  	// Do Nothing
-		  }
-
-		});
-
-	} else {
-		// Must be Session 1
-	}
-
-
-
 	data = req.body; // json input
 	content = data.content;  
 	var head1 = "Orginal File Name:,"+ 'DP-' + mkturk_id + '-' + file_date + '.csv'+ ',UserAGENT:' + req.headers['user-agent'] + ',IP: ' + ipaddr + ",Time:,"+file_date+",Parameter File:,None:FromPsyToolkit,Event Codes:,[('INSTRUCT_ONSET', 1), ('TASK_ONSET', 2), ('TRIAL_ONSET', 3), ('CUE_ONSET', 4), ('IMAGE_ONSET', 5), ('TARGET_ONSET', 6), ('RESPONSE', 7), ('ERROR_DELAY', 8), ('BREAK_ONSET', 9), ('BREAK_END', 10)],Trial Types are coded as follows: 8 bits representing [valence neut/neg/pos] [target_orientation H/V] [target_side left/right] [duration .5/1] [valenced_image left/right] [cue_orientation H/V] [cue_side left/right] \n"
@@ -214,8 +183,38 @@ app.post('/saveTask/', function(req, res) {
 	// add Time Ready so that the ready time initiates once Task1 has been completed
 	addTimeReady(mkturk_id,con);
 
-	// send Email if the subject gave email and marked the remind checkbox
-	sendEmail(mkturk_id, con);
+	// Send the Code by Email if they Include it
+	con.query('SELECT email,remind,time_ready FROM dot_probe1 WHERE mkturk_id = ?',[mkturk_id],function (err, result) {
+		  
+		  // Throws error bcause subject is not in the database/ :)
+
+		  try {
+		  	//console.log('sql output is not empty')
+		  	sqlresult = JSON.parse(JSON.stringify(result));
+		  	jsondata = sqlresult[0];
+
+
+		  	if (session == '2'){
+		  		console.log('sending code to ' + jsondata.email);
+			  	// If they gave an email addres, than we WILL email them the code
+			  	sendEmailCode(jsondata.email);
+		  	} else if (session == '1'){
+		  		// redirect them to the tooearly page
+		  			// send Email if the subject gave email and marked the remind checkbox
+				sendEmail(mkturk_id, con);
+		  		response.writeHead(301,{Location : '/tooearly?&mkturk_id=' + mkturk_id + '&timeleft=' + jsondata.time_ready });
+				response.end();
+
+		  	}
+
+
+		  }
+		  catch (TypeError) {
+		  	// No Email
+		  	// Do Nothing
+		  }
+
+	});
 
 
 });
@@ -467,7 +466,7 @@ function getCodeEmailHTML(){
 function addTimeReady(mkturk_id,con){
 	var currentdate = new Date();
 	var next24hrdate = getFuture24Date(currentdate,24) // Date 24 hours from the currentdate object
-	console.log('Updating Time Ready..' + next24hrdate);
+	//console.log('Updating Time Ready..' + next24hrdate);
 	sql = SqlString.format("INSERT INTO dot_probe1 (mkturk_id, time_ready) " +
 		"VALUES ( ? , \"" + next24hrdate  + "\" ) " + 
 		"ON DUPLICATE KEY UPDATE time_ready=\"" + next24hrdate + '\"', [mkturk_id,]);
@@ -476,7 +475,7 @@ function addTimeReady(mkturk_id,con){
 	con.query(sql, function (err, result) {
 
 		try {
-			console.log("Added time_ready for " + mkturk_id);
+			console.log("Added time_ready for " + mkturk_id + ' at ' + next24hrdate);
 		}
 		catch (err){
 			console.log("Failed Added time Ready..");
@@ -513,7 +512,7 @@ function updateStatus(mkturk_id, job,session,con){
 	sql = SqlString.format("INSERT INTO dp_status (mkturk_id, " + colname + " ) " +
 	"VALUES ( ? ,\'YES\') " +
 	"ON DUPLICATE KEY UPDATE " + colname + "=\'YES\';",[mkturk_id]);
-	console.log(sql);
+	//console.log(sql);
 
 	con.query(sql,function (err, result) {
 	  
@@ -576,7 +575,9 @@ function reRoute(con,mkturk_id,response){
 
 		  	// get the key with the last 'YES' status and the time_ready value
 
-		  	//console.log(obj);
+
+
+		  	console.log(obj);
 		  	for (var key in obj){
 
 		  		var val = obj[key];
@@ -601,29 +602,44 @@ function reRoute(con,mkturk_id,response){
 		  		// 	timeReady = val;
 		  		// }
 
-
+		  		//console.log('job: ' + job + '\tname: ' + name + '\tsession: ' + session + '\tvalue: ' + val);
+		  		//console.log(mkturk_id + ':' + job + ':' + name + ':' + val);
 		  		if (val == null) {
 
-		  			console.log('job: ' + job + '\tname: ' + name + '\tsession: ' + session + '\tvalue: ' + val);
+		  			
 		  			console.log('redirect..');
 		  			//response.redirect('/?&mkturk_id=' + mkturk_id + '&' + job + '=' + 'asi' + '&session=' + session)
 					// this.statusCode = 302;
 					response.writeHead(301,{Location : '/?&mkturk_id=' + mkturk_id + '&' + job + '=' + name + '&session=' + session });
 					response.end();
 		  			break;
-		  		} else if (job == 'time' && !isReady(val)){
+		  		} else if (job == 'time' && isReady(val)){
 		  			// completed session 1
 
-		  			console.log('did all session 1');
+		  			console.log('did all session 1 and  is ready for session 2');
 
-		  			response.writeHead(301,{Location : '/?&mkturk_id=' + mkturk_id + '&' + job + '=' + name + '&session=' + session });
+
+		  	// 		response.writeHead(301,{Location : '/?&mkturk_id=' + mkturk_id + '&' + job + '=' + name + '&session=' + session });
+					// response.end();
+					continue;
+		  		} else if (job == 'time' && !isReady(val)) {
+
+		  			console.log('did all session 1 and is too early...');
+		  			response.writeHead(301,{Location : '/tooearly?&mkturk_id=' + mkturk_id + '&timeleft=' + val });
 					response.end();
 					break;
-		  		} else {
+		  		}else if (job == 'task' && session == '2') {
 
+		  			
 		  			console.log('did all session 1 and 2!');
 				  	response.writeHead(301,{Location : '/completed?&mkturk_id=' + mkturk_id });
 					response.end();
+					break;
+		  		} else {
+		  			// value is not null,
+		  			// Already did this so skip to the next  key
+
+		  			continue;
 		  		}
 
 		  		//console.log('job: ' + job + '\tname: ' + name + '\tsession: ' + session + '\tvalue: ' + val);
