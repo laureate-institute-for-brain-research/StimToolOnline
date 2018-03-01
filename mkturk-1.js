@@ -67,7 +67,18 @@ app.get('/',function (req, res) {
 
 	} else if (task == 'test') {
 		displayTest(res);
-		//sendEmail(mkturk_id, con);
+		sendEmailCode(mkturk_id);
+	} else if ((q.name == 'email') && (q.type == 'code')){
+
+		// for some reason.. this doesn't work
+		console.log('Test Email Code....');
+		sendEmailCode(mkturk_id);
+		res.send('Tried to send code email..');
+
+
+	} else if (q.name == 'email' && q.type == 'remind'){
+		sendEmailRemind(mkturk_id,hours_away=1);
+		res.send('Tried to send remind email');
 	} else{
 		displayHome(res);
 	}
@@ -185,34 +196,37 @@ app.post('/saveTask/', function(req, res) {
 
 	// Send the Code by Email if they Include it
 	con.query('SELECT email,remind,time_ready FROM dot_probe1 WHERE mkturk_id = ?',[mkturk_id],function (err, result) {
-		  
-		  // Throws error bcause subject is not in the database/ :)
 
-		  try {
-		  	//console.log('sql output is not empty')
-		  	sqlresult = JSON.parse(JSON.stringify(result));
-		  	jsondata = sqlresult[0];
+	// Throws error bcause subject is not in the database/ :)
 
-
-		  	if (session == '2'){
-		  		console.log('sending code to ' + jsondata.email);
-			  	// If they gave an email addres, than we WILL email them the code
-			  	sendEmailCode(jsondata.email);
-		  	} else if (session == '1'){
-		  		// redirect them to the tooearly page
-		  			// send Email if the subject gave email and marked the remind checkbox
-				sendEmail(mkturk_id, con);
-		  		response.writeHead(301,{Location : '/tooearly?&mkturk_id=' + mkturk_id + '&timeleft=' + jsondata.time_ready });
-				response.end();
-
-		  	}
+	try {
+	  	//console.log('sql output is not empty')
+	  	sqlresult = JSON.parse(JSON.stringify(result));
+	  	jsondata = sqlresult[0];
 
 
-		  }
-		  catch (TypeError) {
-		  	// No Email
-		  	// Do Nothing
-		  }
+	  	if (session == '2'){
+	  		console.log('sending code to ' + jsondata.email);
+		  	// If they gave an email addres, than we WILL email them the code
+		  	sendEmailCode(mkturk_id);
+		  	response.writeHead(301,{Location : '/completed?&mkturk_id=' + mkturk_id});
+			response.end();
+
+	  	} else if (session == '1'){
+	  		// redirect them to the tooearly page
+	  			// send Email if the subject gave email and marked the remind checkbox
+			sendEmailRemind(mkturk_id);
+	  		response.writeHead(301,{Location : '/tooearly?&mkturk_id=' + mkturk_id + '&timeleft=' + jsondata.time_ready });
+			response.end();
+
+	  	}
+
+
+	  }
+	  catch (TypeError) {
+	  	// No Email
+	  	// Do Nothing
+	  }
 
 	});
 
@@ -745,7 +759,7 @@ function getFormattedDate(dateobject){
 
 // Send Reminder Email at Futre Date Object
 // Uses Mailgun API to send email 24 hours after they were recorded in the Database
-function sendEmail(mkturk_id, con){
+function sendEmailRemind(mkturk_id,hours_away=30){
 
 
 	con.query('SELECT email, remind FROM dot_probe1 WHERE mkturk_id = ?',[mkturk_id], function(err, result) {
@@ -759,7 +773,7 @@ function sendEmail(mkturk_id, con){
 			var currentdate = new Date();
 			// var emailaddress = getEmailAddress(mkturk_id, con);
 			// var remind = getRemind(mkturk_id, con);
-			var next24hrdate = getFormattedDate(getFuture24Date(currentdate,30)); // will be delivery 30 hours from current datetime
+			var next24hrdate = getFormattedDate(getFuture24Date(currentdate,hours_away)); // will be delivery 30 hours from current datetime
 
 
 			var mailgun = require("mailgun-js");
@@ -795,22 +809,42 @@ function sendEmail(mkturk_id, con){
 	});
 }
 
-function sendEmailCode(emailaddress){
-	var mailgun = require("mailgun-js");
-	var api_key = 'key-fa2d65c78c52cfabac185c98eb95721e';
-	var DOMAIN = 'paulus.touthang.info';
-	var mailgun = require('mailgun-js')({apiKey: api_key, domain: DOMAIN});
+function sendEmailCode(mkturk_id){
 
-	var data = {
-	  from: 'James <jtouthang@libr.net>',
-	  to: emailaddress,
-	  subject: 'Mechanical Turk Survey Code!',
-	  text: 'Hello!\n\nYour Survey Code is: 11853\n\nFrom all of us at LIBR,\nThank you for your participation.',
-	  html : getCodeEmailHTML()
-	};
+	con.query('SELECT email, remind FROM dot_probe1 WHERE mkturk_id = ?',[mkturk_id], function(err, result) {
+		try {
+			sqlresult = JSON.parse(JSON.stringify(result));
+			jsondata = sqlresult[0]
+			emailaddress = jsondata.email;
+			remind = jsondata.remind;
+			//deliverydate = jsondata.time_ready;
 
-	mailgun.messages().send(data, function (error, body) {
-	  console.log(body);
+			var mailgun = require("mailgun-js");
+			var api_key = 'key-fa2d65c78c52cfabac185c98eb95721e';
+			var DOMAIN = 'paulus.touthang.info';
+			var mailgun = require('mailgun-js')({apiKey: api_key, domain: DOMAIN});
+
+			var data = {
+			  from: 'James <jtouthang@libr.net>',
+			  to: emailaddress,
+			  subject: 'Mechanical Turk Survey Code!',
+			  text: 'Hello!\n\nYour Survey Code is: 11853\n\nFrom all of us at LIBR,\nThank you for your participation.',
+			  html : getCodeEmailHTML()
+			};
+
+			if (emailaddress != null && remind == 'YES'){
+				console.log("Sending email: " + emailaddress + '\tID: ' + mkturk_id);
+				mailgun.messages().send(data, function (error, body) {
+			  		console.log(body);
+				});	
+			} else {
+				console.log('USER didn\'t give email');
+			}
+
+		} catch (err) {
+			console.log('Error quering for sending email');
+			console.log(err);
+		}
 	});
 }
 
