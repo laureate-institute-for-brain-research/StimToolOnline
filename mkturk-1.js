@@ -18,10 +18,25 @@ var SqlString = require('sqlstring');
 
 var app = express();
 
-app.use(bodyParser.json())
-app.use(express.static('public'))
-app.use(requestIp.mw())
+// Connecting to database
+var con = mysql.createConnection({
+     host		: "localhost",
+     user		: "weblogin",
+     password	: "U5AZwEpM",
+     database	: "mk_turk1"
+});
 
+con.connect(function(err) {
+	if (!err)
+		console.log('Database is Connected');
+	else
+		console.log('DB connection err.');
+
+});
+
+app.use(bodyParser.json());
+app.use(express.static('public'));
+//app.use(requestIp.mw());
 
 
 
@@ -35,7 +50,7 @@ app.get('/',function (req, res) {
 	var mkturk_id = q.mkturk_id;
 	var survey = q.survey;
 	var task = q.task;
-	console.log('session: ' + session, 'id: ' + mkturk_id, 'survey: ' + survey, 'task: ' + task)
+	//console.log('session: ' + session, 'id: ' + mkturk_id, 'survey: ' + survey, 'task: ' + task)
 
 	if (survey == 'demo'){
 		displaySurveydemo(res);
@@ -50,7 +65,10 @@ app.get('/',function (req, res) {
 	} else if (session == '2' && task == 'dotprobe'){
 		displayDotProbe2(res);
 
-	}else{
+	} else if (task == 'test') {
+		displayTest(res);
+		//sendEmail(mkturk_id, con);
+	} else{
 		displayHome(res);
 	}
 });
@@ -59,11 +77,18 @@ app.get('/',function (req, res) {
 // not been past 25hours
 app.get('/tooearly', function (req, res) {
 	var q = url.parse(req.url, true). query;
-	var session = q.session
+	var session = q.session;
 	var mkturk_id = q.mkturk_id;
 
 	display24HourPage(res);
+});
 
+app.get('/completed', function (req, res) {
+	var q = url.parse(req.url, true). query;
+	var session = q.session;
+	var mkturk_id = q.mkturk_id;
+
+	displayCompleted(res);
 });
 
 app.post('/', function (req, res) {
@@ -90,7 +115,7 @@ app.post('/saveSurvey/', function(req, res) {
 	json = req.body;
 	console.log(json);
 
-	outputString = survey + '-' + mkturk_id + '-' + 'T' + session + '-' + d.toDateString() +',User Agent: ' + req.headers['user-agent'] +',IP: ' + ipaddr + '\n'
+	outputString = survey + '-' + mkturk_id + '-' + 'T' + session + '-' + getFormattedDate(d) +',User Agent: ' + req.headers['user-agent'] +',IP: ' + ipaddr + '\n'
 
 	outputString = outputString + 'QUESTION,RESULT,RT(ms)\n';
 
@@ -127,8 +152,6 @@ app.post('/saveSurvey/', function(req, res) {
 
 	res.end('\n');
 	updateStatus(mkturk_id, survey,session,con);	
-
-
 });
 
 app.post('/saveTask/', function(req, res) {
@@ -145,7 +168,7 @@ app.post('/saveTask/', function(req, res) {
 
 	// Send the Code by Email if they Include it
 	if (session == '2'){
-		con.query('SELECT email FROM dot_probe1 WHERE mkturk_id = ?',[mkturk_id],function (err, result) {
+		con.query('SELECT email,remind FROM dot_probe1 WHERE mkturk_id = ?',[mkturk_id],function (err, result) {
 		  
 		  // Throws error bcause subject is not in the database/ :)
 
@@ -155,6 +178,8 @@ app.post('/saveTask/', function(req, res) {
 		  	jsondata = sqlresult[0]
 		  	console.log('sending code to ' + jsondata.email);
 
+
+		  	// If they gave an email addres, than we WILL email them the code
 		  	sendEmailCode(jsondata.email);
 
 		  }
@@ -165,6 +190,8 @@ app.post('/saveTask/', function(req, res) {
 
 		});
 
+	} else {
+		// Must be Session 1
 	}
 
 
@@ -182,10 +209,19 @@ app.post('/saveTask/', function(req, res) {
 
 	res.send('Got the data!\n');
 
+	// Update the Status
 	updateStatus(mkturk_id, task,session,con);
+	// add Time Ready so that the ready time initiates once Task1 has been completed
+	addTimeReady(mkturk_id,con);
+
+	// send Email if the subject gave email and marked the remind checkbox
+	sendEmail(mkturk_id, con);
 
 
 });
+
+
+
 
 
 // 			Output Pages 		//
@@ -200,7 +236,6 @@ function displayHome(res) {
 		res.end();
 	});
 }
-
 function displaySurveydemo(res){
 	fs.readFile('surveys/demo.html', function (err, data) {
 		// Write Header
@@ -212,7 +247,6 @@ function displaySurveydemo(res){
 		res.end();
 	});	
 }
-
 function displaySurveyphq(res){
 	fs.readFile('surveys/phq.html', function (err, data) {
 		// Write Header
@@ -224,7 +258,6 @@ function displaySurveyphq(res){
 		res.end();
 	});	
 }
-
 function displaySurveyoasis(res){
 	fs.readFile('surveys/oasis.html', function (err, data) {
 		// Write Header
@@ -236,7 +269,6 @@ function displaySurveyoasis(res){
 		res.end();
 	});	
 }
-
 function displaySurveyasi(res){
 	fs.readFile('surveys/asi.html', function (err, data) {
 		// Write Header
@@ -248,7 +280,18 @@ function displaySurveyasi(res){
 		res.end();
 	});	
 }
+function displayTest(res){
 
+	fs.readFile('task/dotprobe1-5Trial.html', function (err, data) {
+		// Write Header
+		res.writeHead(200, {
+			'Content-Type' : 'text/html'
+		});
+		// Wrte Body
+		res.write(data);
+		res.end();
+	});	
+}
 function displayDotProbe1(res){
 
 	fs.readFile('task/dotprobe1.html', function (err, data) {
@@ -261,7 +304,6 @@ function displayDotProbe1(res){
 		res.end();
 	});	
 }
-
 function displayDotProbe2(res){
 	fs.readFile('task/dotprobe2.html', function (err, data) {
 		// Write Header
@@ -273,7 +315,6 @@ function displayDotProbe2(res){
 		res.end();
 	});	
 }
-
 function display24HourPage(res){
 	fs.readFile('tooearly.html', function (err, data) {
 		// Write Header
@@ -284,6 +325,163 @@ function display24HourPage(res){
 		res.write(data);
 		res.end();
 	});	
+}
+function displayCompleted(res){
+	fs.readFile('completed.html', function (err, data) {
+		// Write Header
+		res.writeHead(200, {
+			'Content-Type' : 'text/html'
+		});
+		// Wrte Body
+		res.write(data);
+		res.end();
+	});	
+}
+
+
+
+
+// SENDHTML CODES
+
+function getRemindHTML(mkturk_id){
+	var session2Link = 'http://brainworkout.paulus.libr.net/?session=2&mkturk_id=' + mkturk_id + '&survey=demo';
+	return `<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>You may now perform session 2! </title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+</head>
+<body style="margin: 0; padding: 0;">
+	<table border="0" cellpadding="0" cellspacing="0" width="100%">	
+		<tr>
+			<td style="padding: 10px 0 30px 0;">
+				<table align="center" border="0" cellpadding="0" cellspacing="0" width="600" style="border: 1px solid #cccccc; border-collapse: collapse;">
+					<tr>
+						<td align="center" bgcolor="#FFFFFF" style="padding: 40px 0 30px 0; color: #153643; font-size: 28px; font-weight: bold; font-family: Arial, sans-serif;">
+							<center><a href="http://www.laureateinstitute.org/"><img class="logo" src="http://brainworkout.paulus.libr.net/images/logo.png"></a></center>
+						</td>
+
+					</tr>
+					<tr>
+						<td bgcolor="#ffffff" style="padding: 40px 30px 40px 30px;">
+							<table border="0" cellpadding="0" cellspacing="0" width="100%">
+								<tr>
+									<td style="color: #153643; font-family: Arial, sans-serif; font-size: 24px;">
+										<b>Session 2 is ready for you to complete!</b>
+									</td>
+								</tr>
+								<tr>
+									<td style="padding: 20px 0 30px 0; color: #153643; font-family: Arial, sans-serif; font-size: 16px; line-height: 20px;">
+										Hello ${mkturk_id}!
+										<br>
+										It has been 24 hours since you finished session 1, and can now complete session 2 of
+										this HIT!
+
+									</td>
+								</tr>
+
+								<tr>
+									<td style="padding: 20px 0 30px 0; color: #153643; font-family: Arial, sans-serif; font-size: 16px; line-height: 20px;">
+										Click the link below to take you to session 2!!
+										<br>
+
+										${session2Link}
+
+									</td>
+								</tr>
+							</table>
+						</td>
+					</tr>
+				
+				</table>
+			</td>
+		</tr>
+	</table>
+</body>
+</html>`
+}
+
+function getCodeEmailHTML(){
+	return `
+	<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Code for LIBR Mechanical Turk</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+</head>
+<body style="margin: 0; padding: 0;">
+	<table border="0" cellpadding="0" cellspacing="0" width="100%">	
+		<tr>
+			<td style="padding: 10px 0 30px 0;">
+				<table align="center" border="0" cellpadding="0" cellspacing="0" width="600" style="border: 1px solid #cccccc; border-collapse: collapse;">
+					<tr>
+						<td align="center" bgcolor="#FFFFFF" style="padding: 40px 0 30px 0; color: #153643; font-size: 28px; font-weight: bold; font-family: Arial, sans-serif;">
+							<center><a href="http://www.laureateinstitute.org/"><img class="logo" src="http://brainworkout.paulus.libr.net/images/logo.png"></a></center>
+						</td>
+
+					</tr>
+					<tr>
+						<td bgcolor="#ffffff" style="padding: 40px 30px 40px 30px;">
+							<table border="0" cellpadding="0" cellspacing="0" width="100%">
+								<tr>
+									<td style="color: #153643; font-family: Arial, sans-serif; font-size: 24px;">
+										<center><b>Thank you for your participation!!</b></center>
+									</td>
+								</tr>
+								<tr>
+									<td style="padding: 20px 0 30px 0; color: #153643; font-family: Arial, sans-serif; font-size: 16px; line-height: 20px;">
+										Hello !
+										<br>
+										The code for the Mechanical Turk HIT is:
+									</td>
+								</tr>
+
+								<tr>
+									<td style="padding: 20px 0 30px 0; color: #153643; font-family: Arial, sans-serif; font-size: 50px; line-height: 20px;">
+										<center>11853</center>
+									</td>
+
+								</tr>
+								<tr>
+									<td style="padding: 20px 0 30px 0; color: #153643; font-family: Arial, sans-serif; font-size: 16px; line-height: 20px;">
+										Enter this code on Amazon Mechanical Turk HIT to recieve payment. If you have any questions email us at:
+										<a href="mailto:jtouthang@libr.net">jtouthang@libr.net</a>
+									</td>
+								</tr>
+							</table>
+						</td>
+					</tr>
+
+				</table>
+			</td>
+		</tr>
+	</table>
+</body>
+</html>
+	`
+}
+
+// Add the Time Ready in the SQL Table
+function addTimeReady(mkturk_id,con){
+	var currentdate = new Date();
+	var next24hrdate = getFuture24Date(currentdate,24) // Date 24 hours from the currentdate object
+	console.log('Updating Time Ready..' + next24hrdate);
+	sql = SqlString.format("INSERT INTO dot_probe1 (mkturk_id, time_ready) " +
+		"VALUES ( ? , \"" + next24hrdate  + "\" ) " + 
+		"ON DUPLICATE KEY UPDATE time_ready=\"" + next24hrdate + '\"', [mkturk_id,]);
+
+	console.log(sql);
+	con.query(sql, function (err, result) {
+
+		try {
+			console.log("Added time_ready for " + mkturk_id);
+		}
+		catch (err){
+			console.log("Failed Added time Ready..");
+		}
+	});
 }
 
 
@@ -302,8 +500,8 @@ function updateStatus(mkturk_id, job,session,con){
 		'oasis_2' : 'survey_oasis_T2',
 		'asi_1' : 'survey_asi_T1',
 		'asi_2' : 'survey_asi_T2',
-		'dotprobe_1' : 'dp_task_T1',
-		'dotprobe_2' : 'dp_task_T2'
+		'dotprobe_1' : 'task_dotprobe_T1',
+		'dotprobe_2' : 'task_dotprobe_T2'
 	}
 
 	colname = jobToSqlColumn[job + '_' + session];
@@ -329,7 +527,7 @@ function updateStatus(mkturk_id, job,session,con){
 
 		}
 		catch (err) {
-		  	console.log('Failed Updating..')
+		  	console.log('Failed Updating..');
 		  	// Do Nothing
 		}
 
@@ -337,21 +535,184 @@ function updateStatus(mkturk_id, job,session,con){
 }
 
 // Send the user to the survey or task that they have not completed yet
-function reRoute(con,mkturk_id,res){
+function reRoute(con,mkturk_id,response){
 
-	// sql = 
+	console.log('reroute has been summoned :D')
+	// THIS function can only be run if user is already in the database
+	var sql = SqlString.format("SELECT dp_status.survey_demo_T1, " +
+		"dp_status.survey_phq_T1," +
+		"dp_status.survey_oasis_T1," +
+		'dp_status.survey_asi_T1,' +
+		'dp_status.task_dotprobe_T1,' +
+		'dot_probe1.time_ready,' + 
+		'dp_status.survey_demo_T2,' +
+		'dp_status.survey_phq_T2,' +
+		'dp_status.survey_oasis_T2,' +
+		'dp_status.survey_asi_T2,' + 
+		'dp_status.task_dotprobe_T2 ' +
+		'FROM dp_status ' + 
+		"LEFT JOIN dot_probe1 ON dp_status.mkturk_id = dot_probe1.mkturk_id " + 
+		"WHERE dot_probe1.mkturk_id = ?", [mkturk_id])
+	
+	//console.log(sql);
+
+	//response.redirect('/?mkturk_id=JT&survey=demo&session=1');
+
+	con.query(sql,function (err, result) {
+
+		try {
+		  	//console.log('sql output is not empty')
+		  	sqlresult = JSON.parse(JSON.stringify(result));
+		  	obj = sqlresult[0];
+
+		  	lastYesKey = '';
+		  	lastJob = '';
+		  	lastName = ''
+		  	lastSession = '';
+		  	value = '';
+		  	timeReady = '';
+
+
+
+		  	// get the key with the last 'YES' status and the time_ready value
+
+		  	//console.log(obj);
+		  	for (var key in obj){
+
+		  		var val = obj[key];
+		  		//console.log('key: ' + key + ',' + obj[key]);
+
+		  		// Parse the keys
+
+		  		jobs = parseKey(key);
+		  		var job = jobs[0];
+		  		var name = jobs[1];
+		  		var session = jobs[2];
+
+		  		// if (val == 'YES') {
+		  		// 	// store the key with the last 'YES' value column will be stored
+		  		// 	lastYesKey = key;
+		  		// 	lastJob = job;
+		  		// 	lastName = name;
+		  		// 	lastSession = session;
+		  		// }
+
+		  		// if (job == 'time'){
+		  		// 	timeReady = val;
+		  		// }
+
+
+		  		if (val == null) {
+
+		  			console.log('job: ' + job + '\tname: ' + name + '\tsession: ' + session + '\tvalue: ' + val);
+		  			console.log('redirect..');
+		  			//response.redirect('/?&mkturk_id=' + mkturk_id + '&' + job + '=' + 'asi' + '&session=' + session)
+					// this.statusCode = 302;
+					response.writeHead(301,{Location : '/?&mkturk_id=' + mkturk_id + '&' + job + '=' + name + '&session=' + session });
+					response.end();
+		  			break;
+		  		} else if (job == 'time' && !isReady(val)){
+		  			// completed session 1
+
+		  			console.log('did all session 1');
+
+		  			response.writeHead(301,{Location : '/?&mkturk_id=' + mkturk_id + '&' + job + '=' + name + '&session=' + session });
+					response.end();
+					break;
+		  		} else {
+
+		  			console.log('did all session 1 and 2!');
+				  	response.writeHead(301,{Location : '/completed?&mkturk_id=' + mkturk_id });
+					response.end();
+		  		}
+
+		  		//console.log('job: ' + job + '\tname: ' + name + '\tsession: ' + session + '\tvalue: ' + val);
+
+		  	}
+
+		  	// Did all Session 1 and Session 2!!
+
+
+
+
+		  	// Route them to their last YES job
+		  	// if (lastSession == '1' && lastJob == 'task'){
+		  	// 	// need to check if it's been 24 hours
+		  	// 	if(isReady(timeReady)){
+		  	// 		res.writeHead(301, {
+		  	// 			Location: '/?session=2&mkturk_id=' + mkturk_id + '&' + job + '=' + name
+		  	// 		});
+			  //       res.end();	
+		  	// 	}else {
+		  	// 		// premature check. user is too early!
+		  	// 		res.writeHead(301, {
+		  	// 			Location: '/tooearly&mkturk_id=' + mkturk_id + '&timeleft=' + timeReady
+		  	// 		});
+			  //       res.end();	
+		  	// 	}
+
+		  	// } else if (lastSession == '1' && lastJob == 'survey'){
+
+	  		// 	// takes them to their last survey the didn't finish
+	  		// 	res.writeHead(301, {
+	  		// 		Location: '/?session=' + lastSession + '&mkturk_id=' + mkturk_id + '&' + job + '=' + name
+	  		// 	});
+		   //      res.end();	
+
+		  	// } else if (lastSession == '2' && lastJob == 'survey'){
+		  	
+		  	// 	res.writeHead(301, {
+	  		// 		Location: '/?session=' + lastSession + '&mkturk_id=' + mkturk_id + '&' + job + '=' + name
+	  		// 	});
+		   //      res.end();
+		  	// } else if (lastSession == '2' && lastJob == 'task'){
+		  	// 	// subject has completed any of them!!		  	}
+
+		  	// 	res.writeHead(301, {
+	  		// 		Location: '/?completed=' + lastSession + '&mkturk_id=' + mkturk_id
+	  		// 	});
+		   //      res.end();		  		
+		  	// }
+		  	// All Conditions have been a yes, user is finished with this HIT
+		}
+		catch (err) {
+			console.log(err);
+	  	// Do Nothing
+		}
+	});
+}
+// Return True if the subject has past the 24 hour period
+function isReady(dateString){
+	date = new Date(dateString);
+
+	now = new Date();
+	if ( (date.getTime() - now.getTime()) <= 0){
+		return true;
+	} else {
+		return false;
+	}
 }
 
+
+// Returns the array of job, name and session
+// example: survey_demo_T2
+
+// return [survey, demo, 2]
+
+function parseKey(key){
+	job = key.substring(0,key.search("_"));
+	name = key.substring(key.search('_') + 1,key.lastIndexOf("_"));
+	session = key.substring(key.lastIndexOf('_') + 2,key.lastIndexOf('_') + 3);
+	return [job, name, session]
+}
 
 // Returns Data object that is 24hours from the passed in DataObject
 function getFuture24Date(dateobject,numHours){
 	// getTime() gets the time in ms, so we add 8.64E7 which is the number of ms in 24 hours
 
 	// changed later to 30 hours because for some reason, mailgun sends it prematurely
-
 	var dateTime = new Date(dateobject.getTime() + 60 * 60 * numHours * 1000);
 	return dateTime
-
 }
 function getFormattedDate(dateobject){
 	var days = ["Mon", "Tue", "Wed", "Thu","Fri", "Sat", "Sun"];
@@ -364,27 +725,57 @@ function getFormattedDate(dateobject){
 		dateobject.getSeconds() + ' UTC';
 	//console.log(str)
 	return str
-
 }
 
 // Send Reminder Email at Futre Date Object
 // Uses Mailgun API to send email 24 hours after they were recorded in the Database
-function sendEmail(emailaddress, futuredate){
-	var mailgun = require("mailgun-js");
-	var api_key = 'key-fa2d65c78c52cfabac185c98eb95721e';
-	var DOMAIN = 'paulus.touthang.info';
-	var mailgun = require('mailgun-js')({apiKey: api_key, domain: DOMAIN});
+function sendEmail(mkturk_id, con){
 
-	var data = {
-	  from: 'James <jtouthang@libr.net>',
-	  to: emailaddress,
-	  subject: 'Mechanical Turk: Session 2 Ready!!',
-	  text: 'Hello! You can now do session 2',
-	  "o:deliverytime" : getFormattedDate(futuredate)
-	};
 
-	mailgun.messages().send(data, function (error, body) {
-	  console.log(body);
+	con.query('SELECT email, remind FROM dot_probe1 WHERE mkturk_id = ?',[mkturk_id], function(err, result) {
+		try {
+			sqlresult = JSON.parse(JSON.stringify(result));
+			jsondata = sqlresult[0]
+			emailaddress = jsondata.email;
+			remind = jsondata.remind;
+			//deliverydate = jsondata.time_ready;
+
+			var currentdate = new Date();
+			// var emailaddress = getEmailAddress(mkturk_id, con);
+			// var remind = getRemind(mkturk_id, con);
+			var next24hrdate = getFormattedDate(getFuture24Date(currentdate,30)); // will be delivery 30 hours from current datetime
+
+
+			var mailgun = require("mailgun-js");
+			var api_key = 'key-fa2d65c78c52cfabac185c98eb95721e';
+			var DOMAIN = 'paulus.touthang.info';
+			var mailgun = require('mailgun-js')({apiKey: api_key, domain: DOMAIN});
+
+			var session2Link = 'http://brainworkout.paulus.libr.net/?session=2&mkturk_id=' + mkturk_id + '&survey=demo';
+			var body = 'Hi ' + mkturk_id + '! \n\nSession 2 of the LIBR brainworkout Amazon Mechanical Turk HIT is ready for you to complete!!!\n\n' + 'Click the link below to complete Session 2!\n\n'+ session2Link +'\n\nReminder: You MUST complete session 2 to receive payment for the HIT';
+
+			var data = {
+			  from: 'James <jtouthang@libr.net>',
+			  to: emailaddress,
+			  subject: 'Hello! You can now do session 2 for LIBR brainworkout Amazon Mechanical Turk HIT!',
+			  text: body,
+			  html: getRemindHTML(mkturk_id),
+			  "o:deliverytime" : next24hrdate
+			};
+
+			if (emailaddress != null && remind == 'YES'){
+				console.log("Sending email: " + emailaddress + '\tID: ' + mkturk_id);
+				mailgun.messages().send(data, function (error, body) {
+			  		console.log(body);
+				});	
+			} else {
+				console.log('USER didn\'t give email');
+			}
+
+		} catch (err) {
+			console.log('Error quering for sending email');
+			console.log(err);
+		}
 	});
 }
 
@@ -399,6 +790,7 @@ function sendEmailCode(emailaddress){
 	  to: emailaddress,
 	  subject: 'Mechanical Turk Survey Code!',
 	  text: 'Hello!\n\nYour Survey Code is: 11853\n\nFrom all of us at LIBR,\nThank you for your participation.',
+	  html : getCodeEmailHTML()
 	};
 
 	mailgun.messages().send(data, function (error, body) {
@@ -406,56 +798,75 @@ function sendEmailCode(emailaddress){
 	});
 }
 
-function insertNewData(fields,con){
-	console.log("Inserting New Data to Database!")
+// Function that adds the record to dp_status table
+function addRecordToStatusTable(id, con){
+	data = {
+		mkturk_id : id
+	}
+	con.query('INSERT INTO dp_status SET ?', data, function (err, result) {
+		if (err) {
+			console.log('Error Inserting to dp_status Table');
+		} else {
+			console.log('Record Inserted to dp_status Table')
+		}
+	});
+}
+
+// Inserts new Record into database
+function insertNewData(fields,con, response){
+	console.log("Trying to insert New Data to SQL Database!");
 	var currentdate = new Date();
-	var next24hrdate = getFuture24Date(currentdate,24)
+	//var next24hrdate = getFuture24Date(currentdate,24)
+
 
 	data = {
 		mkturk_id : fields.mkturk_id,
 		email : fields.email,
 		remind : fields.remind,
 		time_created : currentdate,
-		time_ready : next24hrdate
-
+		time_ready : null,
 	}
 
-
-	// sqlinsert = "INSERT INTO dot_probe1 (mkturk_id,email,remind,time_created,time_ready) VALUES (" + 
-	// 	    '\"' + fields.mturkid + '\",' +
-	// 	    '\"' + fields.email + '\",' +
-	// 	    '\"' + fields.remind + '\",' +
-	// 	    '\"' + currentdate + '\",' +
-	// 	    '\"' + next24hrdate + '\");'
+	// //console.log(data);
 
 	con.query('INSERT INTO dot_probe1 SET ?', data, function (err, result) {
+		
+		if (err){
+			
+			if (err.code == 'ER_DUP_ENTRY'){
+				// Duplicate Entry
+				// User already has ID on the database
 
-		if (err) console.log(err);
-		// get the result of the SQL Database
-		console.log("record Inserted!")
+				console.log('Duplicate Entry on dot_probe1 Table');
+
+				// Duplicate so will reroute
+				reRoute(con, fields.mkturk_id,response);
+			} else {
+				console.log(err);
+			}
+			//console.log(err);
+
+		
+		} else{
+			// get the result of the SQL Database
+			// 1st Time New User Login
+			addRecordToStatusTable(fields.mkturk_id,con);
+
+			response.writeHead(301, {
+				Location: '/?session=1' + '&mkturk_id=' + fields.mkturk_id + '&survey=demo'
+			});
+
+			response.end();				
+
+
+		}
 
 	});
-	// If the User kept the checked marked YES, thatn it well send email to remind them when session two is available
-	// for them. 
-	if (fields.remind == 'YES' && fields.mkturk_id != ''){
-		// send reminder email
-		sendEmail(fields.email, getFuture24Date(currentdate,30));
-	}
 
 }
 
-
-
-
-// Connecting to database
-var con = mysql.createConnection({
-     host		: "localhost",
-     user		: "weblogin",
-     password	: "U5AZwEpM",
-     database	: "mk_turk1"
-});
-
-function processForm(req, res) {
+// process the fields
+function processForm(req, response) {
     //Store the data from the fields into SQL Database
     var fields = {};
     var form = new formidable.IncomingForm();
@@ -471,65 +882,16 @@ function processForm(req, res) {
 
     form.on('end', function () {
 
-	    var sessionNumber = 1;
-	    con.connect(function(err) {
-        	if (!err)
-        		console.log('Database is Connected');
-        	else
-        		console.log('DB connection err.');
-
-        });
-
-
-        //console.log(sql)
-
-        // Initial SQL Query checks the database if the subjece is not already on there
-		con.query('SELECT time_ready FROM dot_probe1 WHERE mkturk_id = ?',[fields.mkturk_id],function (err, result) {
-		  
-		  // Throws error bcause subject is not in the database/ :)
-
-		  try {
-		  	//console.log('sql output is not empty')
-		  	sqlresult = JSON.parse(JSON.stringify(result));
-		  	jsondata = sqlresult[0]
-		  	console.log(jsondata.time_ready);
-
-		  	// SUBJECT IS IN THE DATABASE
-
-
-		  	// Re Route subject to the survey or task they have not completed yet.
-		  	//reRoute(con,mkturk_id,res);
-
-
-		  	res.writeHead(301, {
-            	Location: '/tooearly?mkturk_id=' + fields.mkturk_id + '&timeleft=' + jsondata.time_ready
-        	});
-
-        	res.end();
-		  }
-		  catch (TypeError) {
-
-		  	// SUBJECT IS NOT IN THE DATABASE
-		  	insertNewData(fields, con);
-
-		  	//displaySurvey(res)
-
-		  	// 
-
-		  	res.writeHead(301, {
-            	Location: '/?session=1' + '&mkturk_id=' + fields.mkturk_id + '&survey=demo'
-        	});
-
-        	res.end();
-		  }
-
-		});
+    	insertNewData(fields, con,response);
 
     });
+
     form.parse(req);
 }
 
 
+
+/// IGNORE EVERYTHING AFTER HERE
 var server = app.listen(1185, function() {
 	console.log('listening on port: ', server.address().port);
 })

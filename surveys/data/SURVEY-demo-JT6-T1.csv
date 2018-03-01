@@ -1,0 +1,16 @@
+demo-JT6-T1-Wed, 27 Feb 2018 9:36:35 UTC,User Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.167 Safari/537.36,IP: ::1
+QUESTION,RESULT,RT(ms)
+demps_lv10_gender,1,3416
+demps_lv10_hispanic_ethnicity,1,1507
+demps_lv10_hispanic_ethnicity_type,demps_lv10_hispanic_ethnicity_type___12,1507
+demps_lv10_race,demps_lv10_race___11,809
+demps_lv10_engprimary,1,609
+demps_lv10_intactfamorigin,1,438
+demps_lv10_current_marital_status,1,445
+demps_lv10_prevmarried,0,1269
+demps_lv10_nchild,1,1338
+demps_lv10_nsachild,0,975
+demps_lv10_residence,1,777
+demps_lv10_current_educational_attainment,0,323
+demps_lv10_employment,1,453
+demps_lv10_leftjobreason,1,563
