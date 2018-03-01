@@ -143,7 +143,14 @@ psy_load_bitmap("http://brainworkout.paulus.libr.net/images/dotprobe_media/T0/A6
     }
 
     function showEnd(){
-    	alert('You have completed Session 1!\nComeback after 24 hours to complete session 2!');
+        $.get('/getTimeReady?mkturk_id=' + mkturkid,function(result){
+             //alert(result);
+             window.location.replace("/tooearly?" + "&mkturk_id="+mkturkid+"&timeleft=" + result);
+            //console.log('success?');
+        });
+       
+
+
     	//$('#endSession').text('You have completed Session 1!\nComeback to brainworkout.paulus.libr.net after 24 hours to complete session 2!');
     }
 

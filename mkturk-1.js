@@ -67,7 +67,7 @@ app.get('/',function (req, res) {
 
 	} else if (task == 'test') {
 		displayTest(res);
-		sendEmailCode(mkturk_id);
+		//sendEmailCode(mkturk_id);
 	} else if ((q.name == 'email') && (q.type == 'code')){
 
 		// for some reason.. this doesn't work
@@ -187,17 +187,16 @@ app.post('/saveTask/', function(req, res) {
 
 	});
 
-	res.send('Got the data!\n');
+	//res.send('Got the data!\n');
 
 	// Update the Status
 	updateStatus(mkturk_id, task,session,con);
 	// add Time Ready so that the ready time initiates once Task1 has been completed
-	addTimeReady(mkturk_id,con);
+	addTimeReady(mkturk_id,res);
 
-	// Send the Code by Email if they Include it
+	// // Send the Code by Email if they Include it
 	con.query('SELECT email,remind,time_ready FROM dot_probe1 WHERE mkturk_id = ?',[mkturk_id],function (err, result) {
 
-	// Throws error bcause subject is not in the database/ :)
 
 	try {
 	  	//console.log('sql output is not empty')
@@ -208,16 +207,16 @@ app.post('/saveTask/', function(req, res) {
 	  	if (session == '2'){
 	  		console.log('sending code to ' + jsondata.email);
 		  	// If they gave an email addres, than we WILL email them the code
-		  	sendEmailCode(mkturk_id);
-		  	response.writeHead(301,{Location : '/completed?&mkturk_id=' + mkturk_id});
-			response.end();
+		  	//sendEmailCode(mkturk_id);
+		  	res.writeHead(301,{Location : '/completed?&mkturk_id=' + mkturk_id});
+			res.end();
 
 	  	} else if (session == '1'){
 	  		// redirect them to the tooearly page
 	  			// send Email if the subject gave email and marked the remind checkbox
-			sendEmailRemind(mkturk_id);
-	  		response.writeHead(301,{Location : '/tooearly?&mkturk_id=' + mkturk_id + '&timeleft=' + jsondata.time_ready });
-			response.end();
+			//sendEmailRemind(mkturk_id);
+	  		res.writeHead(301,{Location : '/tooearly?&mkturk_id=' + mkturk_id + '&timeleft=' + jsondata.time_ready });
+			res.end();
 
 	  	}
 
@@ -233,6 +232,30 @@ app.post('/saveTask/', function(req, res) {
 
 });
 
+// Return Time Life given id
+app.get('/getTimeReady', function(req, res) {
+	var q = url.parse(req.url, true).query;
+	var mkturk_id = q.mkturk_id;
+
+	sql = SqlString.format('SELECT time_ready FROM dot_probe1 WHERE mkturk_id = ?',[mkturk_id]);
+	//console.log(sql);
+
+	con.query(sql, function(err, result) {
+	try {
+			sqlresult = JSON.parse(JSON.stringify(result));
+			jsondata = sqlresult[0];
+			//console.log(jsondata);
+			res.send(jsondata.time_ready);
+			//res.end();
+
+	} catch (err) {
+		console.log('error getTImeReady Request');
+		console.log(err);
+
+	}
+
+	});
+})
 
 
 
@@ -477,7 +500,7 @@ function getCodeEmailHTML(){
 }
 
 // Add the Time Ready in the SQL Table
-function addTimeReady(mkturk_id,con){
+function addTimeReady(mkturk_id,response){
 	var currentdate = new Date();
 	var next24hrdate = getFuture24Date(currentdate,24) // Date 24 hours from the currentdate object
 	//console.log('Updating Time Ready..' + next24hrdate);
@@ -490,9 +513,13 @@ function addTimeReady(mkturk_id,con){
 
 		try {
 			console.log("Added time_ready for " + mkturk_id + ' at ' + next24hrdate);
+			response.writeHead(301,{Location : '/tooearly?&mkturk_id=' + mkturk_id + '&timeleft=' + next24hrdate });
+			response.end();
+
 		}
 		catch (err){
 			console.log("Failed Added time Ready..");
+			console.log(err);
 		}
 	});
 }
