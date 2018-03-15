@@ -16,7 +16,7 @@ Mechanical Turk web application for Dot Probe Online Task
 
 ## Run node js
 ```
-$ cd mkturk
+$ cd mkturk-1
 $ node mkturk-1.js
 ```
 
