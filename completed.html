@@ -11,6 +11,31 @@
         <link rel="stylesheet" href="./index.css">
 
     </head>
+    <style>
+        #phq {
+            font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+            border-collapse: collapse;
+            width: 30%;
+        }
+
+        #phq td, #phq th {
+            border: 1px solid #ddd;
+            padding: 8px;
+            font-size: 15px;
+        }
+
+        #phq tr:nth-child(even){background-color: #f2f2f2;}
+
+        #phq tr:hover {background-color: #ddd;}
+
+        #phq th {
+            padding-top: 12px;
+            padding-bottom: 12px;
+            text-align: left;
+            background-color: #d6173a;
+            color: white;
+        }
+    </style>
     <body>
         <center><a href="http://www.laureateinstitute.org/"><img class="logo" src="/images/logo.png"></a></center>
         
@@ -25,14 +50,98 @@
                 <h1 style="padding: 17px" >Thank You For Your Participation!!</h1>
                 <h3>You have completed all tasks and surveys for this study</h4>
                 <br>
-                <p id='mkturk_id'></p>
-                <p>The code for the HIT is: <strong>11853</strong></p>
+                <p id='mkturk_id' style="color: orange; font-size: 30px;"></p>
+                <p>The code for this HIT is: </p>
+                <p><strong style="font-size: 70px">11853</strong></p>
+
+                
+
+                <br>
+                <hr>
+
+                <h2>Your PHQ Score:</h2>
+                <p>The Patient Health Questionnaire (PHQ) is a self-administered version of the PRIME-MD diagnostic instrument for common mental disorders. If you like to know more about PHQ, click <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC1495268/">here</a></p>
+
+                <p><strong id='phqscore' style="font-size: 50px;">null</strong></p>
+
+
+                <div class="container">
+                  <h4>PHQ Interpretation Score</h4>    
+
+                  <p></p>                                                                                 
+                  <div class="table-responsive">          
+                  <table id="phq" class="table table-condensed">
+                    <thead>
+                      <tr>
+                        <th>Total Score</th>
+                        <th>Depression Severity</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>1 - 4</td>
+                        <td>Minimal Depression</td>
+                      </tr>
+                      <tr>
+                          <td>5 - 9</td>
+                          <td>Mild Depression</td>
+                      </tr>
+                        <tr>
+                          <td>10 - 14</td>
+                          <td>Moderate Depression</td>
+                        </tr>
+                        <tr>
+                          <td>15 - 19</td>
+                          <td>Moderate Severe Depression</td>
+                        </tr>
+                            <tr>
+                          <td>20 - 27</td>
+                          <td>Severe Depression</td>
+                        </tr>
+                    </tbody>
+                  </table>
+                  </div>
+                </div>
+
+                
+
+                <hr>
+                <h2>Your OASIS Score:</h2>
+                <p>The Overall Anxiety Severity and Impairment Scale (OASIS) is a 5-item self-report measure that can be used to assess severity and impairment associated with any anxiety disorder or multiple anxiety disorders. To learn more about OASIS click <a href='https://www.sciencedirect.com/science/article/pii/S0165032715000452'>here</a></p>
+                <p><strong id="oasisscore" style="font-size: 50px;">null</strong></p>
+
+
+                <hr>
+                <h2>Your Total ASI Score:</h2>
+                <p><strong id="asiTotal" style="font-size: 50px;"></strong></p>
+                <p>Anxiety sensitivity index(ASI) is the fear of anxiety-related sensations based on beliefs about their harmful consequences. If you like to learn more about it click <a href="https://www.researchgate.net/profile/Joshua_Broman-Fulks/publication/23685638_The_Anxiety_Sensitivity_Index-Revised/links/54ebd79c0cf2082851bec4f3/The-Anxiety-Sensitivity-Index-Revised.pdf">here. </a></p>
+                <table class='table' style="width: 30%;">
+                    <tbody style="font-size: 17px;">
+                        <tr>
+                            <td>ASI Physical Concerns</td>
+                            <td><strong id="asiPhysical">null</strong></td>
+                        </tr>
+                        <tr>
+                            <td>ASI Cognitive Concerns</td>
+                            <td><strong id="asiCognitive">null</strong></td>
+                        </tr>
+                        <tr>
+                            <td>ASI Social Concerns</td>
+                            <td><strong id="asiSocial">null</strong></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <br>
+                <hr>
+                <p>If you have any questions please email us at <a href="mailto:jtouthang@libr.net">jtouthang@libr.net</a></p>
+                <p>To learn more about what we do at LIBR click <a href="http://www.laureateinstitute.org/">HERE</a></p>
+                
 
             </div>
         </center>
 
         <div class="container-fluid">
-            <center><p class="text-p">&copy; 2017 <a href="http://www.laureateinstitute.org">laureateinstitute.org</a>. All rights reserved.</center>
+            <center><p class="text-p">&copy; 2018 <a href="http://www.laureateinstitute.org">laureateinstitute.org</a>. All rights reserved.</center>
         </div>
 
 
@@ -58,6 +167,46 @@
 
 
             document.getElementById("mkturk_id").innerHTML = 'Hi, ' + mkturkid;
+
+            // Get Scores
+            var asiTotal;
+            var asiPhysical;
+            var asiCognitive;
+            var asiSocial;
+
+
+
+            $.get('/getPHQ?mkturk_id=' + mkturkid, function(data) {
+                phqscore = data;
+                document.getElementById("phqscore").innerHTML = data;
+            });
+            $.get('/getOASIS?mkturk_id=' + mkturkid, function(data) {
+                phqscore = data;
+                document.getElementById("oasisscore").innerHTML = data;
+            });
+            $.get('/getASI?type=total&mkturk_id=' + mkturkid, function(data) {
+                phqscore = data;
+                document.getElementById("asiTotal").innerHTML = data;
+            });
+            $.get('/getASI?type=physical&mkturk_id=' + mkturkid, function(data) {
+                phqscore = data;
+                document.getElementById("asiPhysical").innerHTML = data;
+            });
+            $.get('/getASI?type=cognitive&mkturk_id=' + mkturkid, function(data) {
+                phqscore = data;
+                document.getElementById("asiCognitive").innerHTML = data;
+            });
+            $.get('/getASI?type=social&mkturk_id=' + mkturkid, function(data) {
+                phqscore = data;
+                document.getElementById("asiSocial").innerHTML = data;
+            });            
+
+
+
+            setTimeout(function () {
+                // body...
+                document.getElementById('plot').src = "/stats/" + mkturkid + "DP.html"
+            },1500) // upate after 700 ms
 
             //$("#timeleft").text(timeleft);
         </script>

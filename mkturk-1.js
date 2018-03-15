@@ -14,6 +14,8 @@ var csv = require('csvdata')
 var converter = require('json-2-csv');
 const requestIp = require('request-ip');
 var SqlString = require('sqlstring');
+const shell = require('shelljs');
+var ip = require('ip');
 
 
 var app = express();
@@ -121,7 +123,7 @@ app.post('/saveSurvey/', function(req, res) {
 	var mkturk_id = q.mkturk_id;
 	var survey = q.survey;
 	var task = q.task;
-	var ipaddr = req.clientIp;
+	var ipaddr = requestIp.getClientIp(req);;
 
 	json = req.body;
 	console.log(json);
@@ -186,13 +188,20 @@ app.post('/saveTask/', function(req, res) {
 		console.log('File DP saved!');
 
 	});
+		// add Time Ready so that the ready time initiates once Task1 has been completed
+	addTimeReady(mkturk_id);
 
-	//res.send('Got the data!\n');
+	res.send('Got the Data')
+
+	// Run the plot script
+	//shell.cd('stats');
+	//shell.exec('python makeHTMLplot.py ' + mkturk_id);
+	//shell.exec('Rscript makePlot.r ' + mkturk_id);
+	//shell.cd('..');
 
 	// Update the Status
 	updateStatus(mkturk_id, task,session,con);
-	// add Time Ready so that the ready time initiates once Task1 has been completed
-	addTimeReady(mkturk_id,res);
+
 
 	// // Send the Code by Email if they Include it
 	con.query('SELECT email,remind,time_ready FROM dot_probe1 WHERE mkturk_id = ?',[mkturk_id],function (err, result) {
@@ -207,16 +216,16 @@ app.post('/saveTask/', function(req, res) {
 	  	if (session == '2'){
 	  		console.log('sending code to ' + jsondata.email);
 		  	// If they gave an email addres, than we WILL email them the code
-		  	//sendEmailCode(mkturk_id);
-		  	res.writeHead(301,{Location : '/completed?&mkturk_id=' + mkturk_id});
-			res.end();
+		  	sendEmailCode(mkturk_id);
+		  	//res.writeHead(301,{Location : '/completed?&mkturk_id=' + mkturk_id});
+			//res.end();
 
 	  	} else if (session == '1'){
 	  		// redirect them to the tooearly page
 	  			// send Email if the subject gave email and marked the remind checkbox
-			//sendEmailRemind(mkturk_id);
-	  		res.writeHead(301,{Location : '/tooearly?&mkturk_id=' + mkturk_id + '&timeleft=' + jsondata.time_ready });
-			res.end();
+			sendEmailRemind(mkturk_id);
+	  		//res.writeHead(301,{Location : '/tooearly?&mkturk_id=' + mkturk_id + '&timeleft=' + jsondata.time_ready });
+			//res.end();
 
 	  	}
 
@@ -258,6 +267,159 @@ app.get('/getTimeReady', function(req, res) {
 })
 
 
+// Return the phq score of the given mkturk_id
+app.get('/getPHQ',function(req, res){
+	var q = url.parse(req.url, true).query;
+	var mkturk_id = q.mkturk_id;
+	res.send(getPHQScore('surveys/data/SURVEY-phq-' + mkturk_id + '-T2.csv'))
+
+})
+
+
+app.get('/getOASIS', function(req, res) {
+	var q = url.parse(req.url, true).query;
+	var mkturk_id = q.mkturk_id;
+
+	// oasis sums up scores the same as phq
+	res.send(getPHQScore('surveys/data/SURVEY-oasis-' + mkturk_id + '-T2.csv'))
+})
+
+
+// Get the ASI Score,
+// Total
+// physical
+// cognitive
+// social
+app.get('/getASI', function(req, res) {
+	var q = url.parse(req.url, true).query;
+	var mkturk_id = q.mkturk_id;
+	//var type = q.type;
+
+	var filename = 'surveys/data/SURVEY-asi-' + mkturk_id + '-T2.csv'
+	var value = 'not specified';
+	switch(q.type){
+		case 'total':
+			value = getASITotal(filename);
+			break;
+		case 'physical':
+			value = getASIPhysical(filename);
+			break;
+		case 'cognitive':
+			value = getASICognitive(filename);
+			break;
+		case 'social':
+			value = getASISocial(filename);
+			break;
+
+	}
+	//console.log(value);
+
+	res.send(value)
+
+})
+function getASITotal(filename){
+	var stringContent = fs.readFileSync(filename).toString();
+	var contents = toArrayfromCSVString(stringContent);
+	var Total = 0;
+	for (var i = 2; i < contents.length - 1; i++){
+		value = parseInt(contents[i][1])
+		Total = Total + value;
+		//console.log(value);
+	}
+	//console.log(Total)
+	return Total.toString();
+}
+
+function getASIPhysical(filename){
+	var stringContent = fs.readFileSync(filename).toString();
+	var contents = toArrayfromCSVString(stringContent);
+	q_num = [4,12,8,7,15,3];
+
+	var Total = 0;
+	for (var i = 2; i < contents.length - 1; i++){
+		if (q_num.includes(i - 1)){
+			var value = parseInt(contents[i][1])
+			Total = Total + value;
+
+		}
+	}
+
+	return Total.toString();
+
+
+}
+
+function getASICognitive(filename) {
+	var stringContent = fs.readFileSync(filename).toString();
+	var contents = toArrayfromCSVString(stringContent);
+	q_num = [14,18,10,16,2,5];
+
+	var Total = 0;
+	for (var i = 2; i < contents.length - 1; i++){
+		if (q_num.includes(i - 1)){
+			var value = parseInt(contents[i][1])
+			Total = Total + value;
+
+		}
+	}
+
+	return Total.toString();
+}
+
+function getASISocial(filename) {
+	var stringContent = fs.readFileSync(filename).toString();
+	var contents = toArrayfromCSVString(stringContent);
+	q_num = [9,6,11,13,17,1];
+
+	var Total = 0;
+	for (var i = 2; i < contents.length - 1; i++){
+		if (q_num.includes(i - 1)){
+			var value = parseInt(contents[i][1])
+			Total = Total + value;
+
+		}
+	}
+
+	return Total.toString();
+
+
+}
+
+
+// Will return the phq score given the survey filename
+function getPHQScore(filename){
+	
+	var stringContent = fs.readFileSync(filename).toString();
+	var contents = toArrayfromCSVString(stringContent);
+	
+	var Total = 0;
+	// skips the first line 
+	for (var i = 2; i < contents.length -1; i++){
+		question = contents[i][0]
+		value = parseInt(contents[i][1])
+
+		Total = Total + value;
+		//Total = Total + value
+		// if (value != ''){
+		// 	Total = Total + parseInt(value)
+		// }
+
+	}
+	return Total.toString();
+
+}
+
+
+
+function toArrayfromCSVString(string){
+	var line = string.split('\n');
+	var x = new Array(line.length);
+	for ( var i = 0; i < line.length; i++){
+		x[i] = line[i].split(',')
+	}
+
+	return x;
+}
 
 
 // 			Output Pages 		//
@@ -500,7 +662,7 @@ function getCodeEmailHTML(){
 }
 
 // Add the Time Ready in the SQL Table
-function addTimeReady(mkturk_id,response){
+function addTimeReady(mkturk_id){
 	var currentdate = new Date();
 	var next24hrdate = getFuture24Date(currentdate,24) // Date 24 hours from the currentdate object
 	//console.log('Updating Time Ready..' + next24hrdate);
@@ -513,8 +675,8 @@ function addTimeReady(mkturk_id,response){
 
 		try {
 			console.log("Added time_ready for " + mkturk_id + ' at ' + next24hrdate);
-			response.writeHead(301,{Location : '/tooearly?&mkturk_id=' + mkturk_id + '&timeleft=' + next24hrdate });
-			response.end();
+			//response.writeHead(301,{Location : '/tooearly?&mkturk_id=' + mkturk_id + '&timeleft=' + next24hrdate });
+			//response.end();
 
 		}
 		catch (err){

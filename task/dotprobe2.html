@@ -146,8 +146,7 @@ psy_load_bitmap("http://brainworkout.paulus.libr.net/images/dotprobe_media/T4/A3
     }
 
     function showEnd(){
-    	alert('You have completed Session 2!\nYour Code is: 11853 ');
-    	$('#code').html('Survey Code is : <strong>11853</strong> <br>Enter this on Mechanical Turk to receive your reward!! Thank you for participating!');
+        window.location.replace("/completed?" + "&mkturk_id=" + mkturkid);
     	//$('#endSession').text('You have completed Session 1!\nComeback to brainworkout.paulus.libr.net after 24 hours to complete session 2!');
     }
 
@@ -156,7 +155,7 @@ psy_load_bitmap("http://brainworkout.paulus.libr.net/images/dotprobe_media/T4/A3
 <center><a id="code"></a></center>
 <div class="container-fluid">
 	<br>
-    <center><p class="text-p">&copy; 2017 <a href="http://www.laureateinstitute.org">laureateinstitute.org</a>. All rights reserved.</center>
+    <center><p class="text-p">&copy; 2018 <a href="http://www.laureateinstitute.org">laureateinstitute.org</a>. All rights reserved.</center>
 </div>
 
 </body>

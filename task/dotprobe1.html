@@ -144,12 +144,8 @@ psy_load_bitmap("http://brainworkout.paulus.libr.net/images/dotprobe_media/T0/A3
         });
     }
     
-    function showEnd(){
-        $.get('/getTimeReady?mkturk_id=' + mkturkid,function(result){
-             //alert(result);
-             window.location.replace("/tooearly?" + "&mkturk_id=" + mkturkid + "&timeleft=" + result);
-            //console.log('success?');
-        });
+    function showEnd(mkturkid){
+        window.location.replace("/tooearly?" + "&mkturk_id=" + mkturkid);
     }
 
 
@@ -157,7 +153,7 @@ psy_load_bitmap("http://brainworkout.paulus.libr.net/images/dotprobe_media/T0/A3
 <div id='showdata'></div>
 <div class="container-fluid">
 	<br>
-    <center><p class="text-p">&copy; 2017 <a href="http://www.laureateinstitute.org">laureateinstitute.org</a>. All rights reserved.</center>
+    <center><p class="text-p">&copy; 2018 <a href="http://www.laureateinstitute.org">laureateinstitute.org</a>. All rights reserved.</center>
 </div>
 
 
