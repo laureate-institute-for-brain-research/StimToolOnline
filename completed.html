@@ -168,14 +168,8 @@
 
             document.getElementById("mkturk_id").innerHTML = 'Hi, ' + mkturkid;
 
-            // Get Scores
-            var asiTotal;
-            var asiPhysical;
-            var asiCognitive;
-            var asiSocial;
 
-
-
+            // get the scores
             $.get('/getPHQ?mkturk_id=' + mkturkid, function(data) {
                 phqscore = data;
                 document.getElementById("phqscore").innerHTML = data;
