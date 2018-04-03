@@ -1,6 +1,35 @@
 <!DOCTYPE html>
 <html>
 <head>
+	<style type="text/css">
+	@font-face {
+		    font-family: gotham;
+		    src: url(/gotham-book-regular.otf);
+		}
+		body {
+			background-color: #f2f0eb;
+		}
+		* {
+			font-family: Helvetica Neue;
+		}
+		a:link,a:visited {
+		    color: #5e3f99;
+		}
+		img {
+		    max-width: 40%;
+		    height: auto;
+		}
+		input[type=text]:focus {
+			border-color: 	#f68826;
+			box-shadow: 0 0 5px #f68826 !important;
+		}
+		input[type=email]:focus {
+			border-color: 	#f68826;
+			box-shadow: 0 0 5px #f68826 !important;
+		}
+
+
+	</style>
 	<title>LIBR Online Task</title>
 
 
@@ -11,7 +40,7 @@
 </head>
 <body>
 	<!-- <button type="button" data-toggle="modal" data-target="#exampleModal">Launch modal</button> -->
-
+	
 	<!-- Modal -->
 	<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 	  <div class="modal-dialog" role="document">
@@ -33,11 +62,14 @@
 	</div>
 
 	<div class="container">
+		<br>
+
 
 
 
 
 		<center><a href="http://www.laureateinstitute.org/"><img class="logo" src="/images/logo.png"></a></center>
+		<hr style="border-top:5px solid #b1b3b6" />
 	      <br>
 	      <p>Martin Paulus, M.D. and his collaborators at Laureate Institute for Brain Research are conducting a research study to find out more about individuals' attitude in experiencing certain life events and to test the reliabilithy of psychological tasks. There will be approximately&nbsp;100 subjects that will participate in this study.</p>
 	      <p>If you agree to be in this study, there are two&nbsp;sessions to complete:</p>
@@ -65,6 +97,8 @@
 
 
 	    <br>
+	    <hr style="border-top:3px solid #b1b3b6" />
+	    <br>
 	    <div class="row justify-content-md-center">
 
 		    <div class="col-md-7">
@@ -75,20 +109,20 @@
 							<br>
 
 							<input type="email" id="userEmail" name="email" class="form-control" placeholder="Email address (optional)">
-							<div class="checkbox">
-								<label>
-									<input type="checkbox" id="remind" name="remind" class="checkbox" value="YES" checked>  Remind Me
+							<div>
+								<label for="remind">
+									<input style="background-color: #ffc920" type="checkbox" id="remind" name="remind" class="checkbox" value="YES" checked><span class="checkbox">   Remind Me</span> 
 								</label>
 							</div>
 
-							<div class="checkbox">
-								<label>
-									<input type="checkbox" name="consent" value="YES" required autofocus>  I will do this task truthfully and to the best of my ability. Any information I provide may be used for research. I also hereby certify that I am over 18 years of age.
+							<div>
+								<label for="c2">
+									<input id="c2" type="checkbox" name="consent" value="YES" required autofocus><span></span>  I will do this task truthfully and to the best of my ability. Any information I provide may be used for research. I also hereby certify that I am over 18 years of age.
 								</label>
 							</div>
 
 
-							<input class="btn btn-lg btn-primary btn-block" type="submit" value="Proceed">					
+							<input style="background-color: #f68826; border: #f68826;" class="btn btn-lg btn-primary btn-block" type="submit" value="Proceed">					
 						</fieldset>
 					</form>
 				</div>
@@ -121,7 +155,7 @@
 
 <footer>
   <div class="container" style="text-align:center">
-    <p class="text-p">&copy; 2017 <a href="http://www.laureateinstitute.org">laureateinstitute.org</a>. All rights reserved.
+    <p class="text-p">&copy; 2018 <a href="http://www.laureateinstitute.org">laureateinstitute.org</a>. All rights reserved.
   </div>
 </footer>
 

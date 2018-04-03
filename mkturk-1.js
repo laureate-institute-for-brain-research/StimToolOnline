@@ -67,6 +67,8 @@ app.get('/',function (req, res) {
 	} else if (session == '2' && task == 'dotprobe'){
 		displayDotProbe2(res);
 
+	} else if (session == '1' && task == 'chicken'){
+		displayChicken1(res);
 	} else if (task == 'test') {
 		displayTest(res);
 		//sendEmailCode(mkturk_id);
@@ -104,6 +106,30 @@ app.get('/completed', function (req, res) {
 	displayCompleted(res);
 });
 
+// Page of all Task
+app.get('/list', function(req,res){
+	fs.readFile('list.html', function (err, data) {
+		// Write Header
+		res.writeHead(200, {
+			'Content-Type' : 'text/html'
+		});
+		// Wrte Body
+		res.write(data);
+		res.end();
+	});	
+});
+
+app.get('/test', function(req,res){
+	fs.readFile('test.html', function (err, data) {
+		// Write Header
+		res.writeHead(200, {
+			'Content-Type' : 'text/html'
+		});
+		// Wrte Body
+		res.write(data);
+		res.end();
+	});	
+});
 app.post('/', function (req, res) {
 
 	var q = url.parse(req.url, true).query;
@@ -478,6 +504,7 @@ function displaySurveyasi(res){
 		res.end();
 	});	
 }
+
 function displayTest(res){
 
 	fs.readFile('task/dotprobe1-5Trial.html', function (err, data) {
@@ -513,6 +540,19 @@ function displayDotProbe2(res){
 		res.end();
 	});	
 }
+
+function displayChicken1(res){
+	fs.readFile('task/chicken_task/chicken123.html', function (err, data) {
+		// Write Header
+		res.writeHead(200, {
+			'Content-Type' : 'text/html'
+		});
+		// Wrte Body
+		res.write(data);
+		res.end();
+	});		
+}
+
 function display24HourPage(res){
 	fs.readFile('tooearly.html', function (err, data) {
 		// Write Header
@@ -1096,12 +1136,8 @@ function insertNewData(fields,con, response){
 			});
 
 			response.end();				
-
-
 		}
-
 	});
-
 }
 
 // process the fields
@@ -1120,9 +1156,7 @@ function processForm(req, response) {
 
 
     form.on('end', function () {
-
     	insertNewData(fields, con,response);
-
     });
 
     form.parse(req);
@@ -1132,5 +1166,5 @@ function processForm(req, response) {
 
 /// IGNORE EVERYTHING AFTER HERE
 var server = app.listen(1185, function() {
-	console.log('listening on port: ', server.address().port);
-})
+	console.log('listening on port: 1185');
+});

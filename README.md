@@ -1,5 +1,6 @@
-# mkturk-1
-Mechanical Turk web application for Dot Probe Online Task
+# Brain Workout
+![alt text](tasks.png "Logo Title Text 1")
+Mechanical Turk Web application for Online Tasks
 
 
 # To Install on a new server
