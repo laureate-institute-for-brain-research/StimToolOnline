@@ -69,7 +69,13 @@ app.get('/',function (req, res) {
 
 	} else if (session == '1' && task == 'chicken'){
 		displayChicken1(res);
-	} else if (task == 'test') {
+	} else if (session == '2' && task == 'chicken'){
+		displayChicken2(res);
+	} else if (session == '3' && task == 'chicken'){
+		displayChicken3(res);
+	}
+
+	else if (task == 'test') {
 		displayTest(res);
 		//sendEmailCode(mkturk_id);
 	} else if ((q.name == 'email') && (q.type == 'code')){
@@ -542,7 +548,31 @@ function displayDotProbe2(res){
 }
 
 function displayChicken1(res){
-	fs.readFile('task/chicken_task/chicken123.html', function (err, data) {
+	fs.readFile('task/chicken_task/chicken134.html', function (err, data) {
+		// Write Header
+		res.writeHead(200, {
+			'Content-Type' : 'text/html'
+		});
+		// Wrte Body
+		res.write(data);
+		res.end();
+	});		
+}
+
+function displayChicken2(res){
+	fs.readFile('task/chicken_task/chicken145.html', function (err, data) {
+		// Write Header
+		res.writeHead(200, {
+			'Content-Type' : 'text/html'
+		});
+		// Wrte Body
+		res.write(data);
+		res.end();
+	});		
+}
+
+function displayChicken3(res){
+	fs.readFile('task/chicken_task/chicken4.html', function (err, data) {
 		// Write Header
 		res.writeHead(200, {
 			'Content-Type' : 'text/html'
