@@ -125,6 +125,18 @@ app.get('/list', function(req,res){
 	});	
 });
 
+app.get('/workouts', function(req,res){
+	fs.readFile('list.html', function (err, data) {
+		// Write Header
+		res.writeHead(200, {
+			'Content-Type' : 'text/html'
+		});
+		// Wrte Body
+		res.write(data);
+		res.end();
+	});	
+});
+
 app.get('/test', function(req,res){
 	fs.readFile('test.html', function (err, data) {
 		// Write Header
