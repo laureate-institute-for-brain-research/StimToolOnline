@@ -24,7 +24,7 @@ $ node mkturk-1.js
 
 ---
 
-## Creating New Task
+### Creating New Task
 Tasks are created used [psytoolkit](https://www.psytoolkit.org/). 
 
 The overall workflow to create a task is:
@@ -34,8 +34,9 @@ The overall workflow to create a task is:
 3) Modify experiement HTML code to fit with this app
 	* It is easier to modify to simliary task under `task/[TASK].html`
 
+4) Store the html code under `task/`
 
-
+---
 ### How the node app works
 
 **mkturk-1.js** is the main central code that runs the entire app. It uses SQL to keep track of subject's info as well as their status through the study.
@@ -52,7 +53,7 @@ SQL database contains 2 tables.
 		- remind
 		- time_created
 		- time_ready
-	* ** dp_status**
+	* **dp_status**
 		- mkturk_id
 		- task_dotprobe_T1
 		- task_dotprobe_T2
@@ -66,4 +67,8 @@ SQL database contains 2 tables.
 		- survey_asi_T2
 
 The sql structure separated tables by the user info and their status. **dot_probe1** table hols only information about the user's info. **dp_status** is used to hold the status of the user's tasks. This was created so that if the user happens to finish halfway through the surveys or the online task, it will redirect them to their unfinished 'job'. The tables was also setup by tasks since, the studies will uses differente task, and could easily be foreked to for an entirely new experiment.
+
+This particular pilot study requres the mkturk user to tak 3 surveys in 2 sessions (hence the T1/T2). All the survey data get saved to the `surveys/data/` folder and the online task data get saved to `task/data/` directory.
+
+
 
