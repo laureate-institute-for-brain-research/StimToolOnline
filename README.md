@@ -70,5 +70,12 @@ The sql structure separated tables by the user info and their status. **dot_prob
 
 This particular pilot study requres the mkturk user to tak 3 surveys in 2 sessions (hence the T1/T2). All the survey data get saved to the `surveys/data/` folder and the online task data get saved to `task/data/` directory.
 
+### Emailing Users
+Notifying users of when to start session 2 is done through the [mailgun API](https://www.mailgun.com/). This API allows to send 10,000 emails a month at no cost. 
+
+### CDN
+Rather than having the images hosted in the VM, All images are using a CDN [Cloudinary API](https://cloudinary.com/). This API allows us to host 300,000 imges and videos at no cost.
+
+
 
 
