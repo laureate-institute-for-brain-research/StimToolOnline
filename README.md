@@ -40,7 +40,7 @@ The overall workflow to create a task is:
 ### How the node app works
 
 **mkturk-1.js** is the main central code that runs the entire app. It uses SQL to keep track of subject's info as well as their status through the study.
-Refer to sql structure section to get more info about how this works.
+Refer to sql structure section to get more info about how this works. All online tasks and surveys are done client side and only data is saved server side.
 
 ### SQL Structure
 
