@@ -19,22 +19,43 @@
 		    max-width: 40%;
 		    height: auto;
 		}
-		input[type=text]:focus {
+		/* label focus color */
+		.input-field input:focus + label {
+			color: #f68826 !important;
+		}
+		 /* label underline focus color */
+		.input-field input:focus {
+			border-bottom: 1px solid #f68826 !important;
+			box-shadow: 0 1px 0 0 #f68826 !important
+		}
+		[type="checkbox"].filled-in:checked + span:not(.lever):after {
+		  top: 0;
+		  width: 20px;
+		  height: 20px;
+		  border: 2px solid #f68826 !important;
+		  background-color: #f68826 !important;
+		  z-index: 0;
+		}
+  
+		/*input[type=text]:focus {
 			border-color: 	#f68826;
 			box-shadow: 0 0 5px #f68826 !important;
 		}
 		input[type=email]:focus {
 			border-color: 	#f68826;
 			box-shadow: 0 0 5px #f68826 !important;
-		}
+		}*/
 
 
 	</style>
 	<title>LIBR Online Task</title>
 
 
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-alpha.4/css/materialize.min.css">
     
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"></script>
 	
 
 </head>
@@ -84,8 +105,9 @@
 	  	</p>
 	      <p style="padding-left: 30px;">Part B: You will complete the Dot Probe Task:</p>
 	      <p style="padding-left: 60px;">
-	      	During the task, you will be shown images on the screen and presented with a red bar before and after each image. Using your keyboard, you will be asked to determine if the orientation of the bars was the same or different. The exact instructions will be provided to you when you reach this portion of the human intelligence task (HIT).
-	      <p>
+	      	During the task, you will be shown images on the screen and presented with a red bar before and after each image. Using your keyboard, you will be asked to determine if the orientation of the bars was the same or different. The exact instructions will be provided to you when you reach this portion of the human intelligence task (HIT).</p>
+	      <strong><p style="padding-left: 60px; color: red;">The images are from a standard set made for psychological experiments. Some of the images may contain graphical content.</p></strong>
+	      
 	    
 	      
 	      <p><strong>Session 2: (~30 minutes, completed at least <u>24 hours</u> after Session 1)</strong></p>
@@ -106,27 +128,54 @@
 	    <div class="row justify-content-md-center">
 
 		    <div class="col-md-7">
-		    	<div class="col-md-auto">
+		    	<div>
 					<form name="field" method='post' enctype="multipart/form-data">
 						<fieldset>
-							<input type="text" id="userID" name="mkturk_id" class="form-control" placeholder="Amazon Turk ID" required autofocus>
-							<br>
+							<div class="row">
+								<div class="input-field col s12 ">
+									<input type="text" class="validate" id="userID" class="validate" name="mkturk_id" >
+						        	<!-- <input id="last_name" type="text" class="validate"> -->
+						        	<label for="userID">Amazon Mechanical Turk ID</label>
+						        </div>
+					    	</div>
 
-							<input type="email" id="userEmail" name="email" class="form-control" placeholder="Email address (optional)">
-							<div>
-								<label for="remind">
-									<input style="background-color: #ffc920" type="checkbox" id="remind" name="remind" class="checkbox" value="YES" checked><span class="checkbox">    Remind Me</span> 
+					    	<div class="row">
+
+								<div class="input-field col s12">
+									<!-- <input type="text" class="validate" id="userID" class="validate" name="mkturk_id" > -->
+									<input type="email" id="userEmail" name="email" class="validate">
+						        	<!-- <input id="last_name" type="text" class="validate"> -->
+						        	<label for="userEmail">Email Address (Optional)</label>
+						        </div>
+					    	</div>
+
+					    	
+							
+							<div class="row">
+								<!-- <input type="checkbox" id="remind" name="remind" class="checkbox-indigo" value="YES" checked>
+							    <input type="checkbox" class="filled-in checkbox-orange" id="filled-in-box" checked="checked" />
+								<label for="filled-in-box"></label> -->
+								
+
+								<label for="remind" >
+									<input type="checkbox" class="filled-in" id="remind" name="remind" value="YES" checked>
+									<span>Remind Me</span> 
 								</label>
 							</div>
 
-							<div>
+							<div class="row">
 								<label for="c2">
-									<input id="c2" type="checkbox" name="consent" value="YES" required autofocus><span></span>    I will do this task truthfully and to the best of my ability. Any information I provide may be used for research. I also hereby certify that I am over 18 years of age.
+									<input id="c2" type="checkbox" class="filled-in" name="consent" value="YES" required autofocus>
+									<span>I will do this task truthfully and to the best of my ability. Any information I provide may be used for research. I also hereby certify that I am over 18 years of age.
+									</span>
 								</label>
 							</div>
 
-
-							<input style="background-color: #f68826; border: #f68826;" class="btn btn-lg btn-primary btn-block" type="submit" value="Proceed">					
+							<div class="row">
+								
+								<input style="background-color: #f68826; border: #f68826;" class="btn btn-lg btn-primary btn-block" type="submit" value="Proceed">
+								
+							</div>			
 						</fieldset>
 					</form>
 				</div>
@@ -140,7 +189,6 @@
 	<script type="text/javascript">
 		
 	//JS script
-	$("#exampleModal").modal('show');
 	</script>
 
 
