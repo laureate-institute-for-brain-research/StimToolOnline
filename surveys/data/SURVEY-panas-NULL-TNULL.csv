@@ -1,0 +1,22 @@
+panas-NULL-TNULL-Fri, 24 May 2018 15:27:40 UTC,User Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.181 Safari/537.36,IP: ::1
+QUESTION,RESULT,RT(ms)
+panas_interested,0,12325
+panas_distressed,0,2112
+panas_ excited,0,3477
+panas_upset,0,1355
+panas_strong,3,1419
+panas_ guilty,1,1522
+panas_scared,2,1304
+panas_hostile,2,1497
+panas_enthusiastic,2,1094
+panas_proud,3,1175
+panas_ irritable,3,1379
+panas_alert,4,1529
+panas_ashamed,3,1453
+panas_inspired,3,1436
+panas_nervous,2,1367
+panas_determined,2,1467
+panas_attentive,3,1219
+panas_jittery,2,1261
+panas_active,2,1262
+panas_afraid,2,1463

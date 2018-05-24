@@ -62,11 +62,12 @@ app.get('/',function (req, res) {
 		displaySurveyoasis(res);
 	} else if (survey == 'asi') {
 		displaySurveyasi(res);
+	} else if(survey == 'panas'){
+		displaySurveyPanas(res);
 	} else if (session == '1' && task == 'dotprobe'){
 		displayDotProbe1(res);
 	} else if (session == '2' && task == 'dotprobe'){
 		displayDotProbe2(res);
-
 	} else if (session == '1' && task == 'chicken'){
 		displayChicken1(res);
 	} else if (session == '2' && task == 'chicken'){
@@ -513,6 +514,18 @@ function displaySurveyoasis(res){
 }
 function displaySurveyasi(res){
 	fs.readFile('surveys/asi.html', function (err, data) {
+		// Write Header
+		res.writeHead(200, {
+			'Content-Type' : 'text/html'
+		});
+		// Wrte Body
+		res.write(data);
+		res.end();
+	});	
+}
+
+function displaySurveyPanas(res){
+	fs.readFile('surveys/panas.html', function (err, data) {
 		// Write Header
 		res.writeHead(200, {
 			'Content-Type' : 'text/html'
