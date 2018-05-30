@@ -209,6 +209,7 @@ app.post('/saveSurvey/', function(req, res) {
 	res.send('');
 
 	res.end('\n');
+	// Update the Status Table in SQL
 	updateStatus(mkturk_id, survey,session,con);	
 });
 
@@ -250,36 +251,30 @@ app.post('/saveTask/', function(req, res) {
 
 	// // Send the Code by Email if they Include it
 	con.query('SELECT email,remind,time_ready FROM dot_probe1 WHERE mkturk_id = ?',[mkturk_id],function (err, result) {
+		try {
+			//console.log('sql output is not empty')
+			sqlresult = JSON.parse(JSON.stringify(result));
+			jsondata = sqlresult[0];
+			if (session == '2'){
+				console.log('sending code to ' + jsondata.email);
+				// If they gave an email addres, than we WILL email them the code
+				sendEmailCode(mkturk_id);
+				//res.writeHead(301,{Location : '/completed?&mkturk_id=' + mkturk_id});
+				//res.end();
 
+			} else if (session == '1'){
+				// redirect them to the tooearly page
+					// send Email if the subject gave email and marked the remind checkbox
+				sendEmailRemind(mkturk_id);
+				//res.writeHead(301,{Location : '/tooearly?&mkturk_id=' + mkturk_id + '&timeleft=' + jsondata.time_ready });
+				//res.end();
 
-	try {
-	  	//console.log('sql output is not empty')
-	  	sqlresult = JSON.parse(JSON.stringify(result));
-	  	jsondata = sqlresult[0];
-
-
-	  	if (session == '2'){
-	  		console.log('sending code to ' + jsondata.email);
-		  	// If they gave an email addres, than we WILL email them the code
-		  	sendEmailCode(mkturk_id);
-		  	//res.writeHead(301,{Location : '/completed?&mkturk_id=' + mkturk_id});
-			//res.end();
-
-	  	} else if (session == '1'){
-	  		// redirect them to the tooearly page
-	  			// send Email if the subject gave email and marked the remind checkbox
-			sendEmailRemind(mkturk_id);
-	  		//res.writeHead(301,{Location : '/tooearly?&mkturk_id=' + mkturk_id + '&timeleft=' + jsondata.time_ready });
-			//res.end();
-
-	  	}
-
-
-	  }
-	  catch (TypeError) {
-	  	// No Email
-	  	// Do Nothing
-	  }
+			}
+		}
+		catch (TypeError) {
+			// No Email
+			// Do Nothing
+		}
 
 	});
 
@@ -293,7 +288,6 @@ app.get('/getTimeReady', function(req, res) {
 
 	sql = SqlString.format('SELECT time_ready FROM dot_probe1 WHERE mkturk_id = ?',[mkturk_id]);
 	//console.log(sql);
-
 	con.query(sql, function(err, result) {
 	try {
 			sqlresult = JSON.parse(JSON.stringify(result));
@@ -305,9 +299,7 @@ app.get('/getTimeReady', function(req, res) {
 	} catch (err) {
 		console.log('error getTImeReady Request');
 		console.log(err);
-
 	}
-
 	});
 })
 
@@ -362,6 +354,74 @@ app.get('/getASI', function(req, res) {
 	res.send(value)
 
 })
+
+app.get('/getPANAS', function(req, res) {
+	var q = url.parse(req.url, true).query;
+	var mkturk_id = q.mkturk_id;
+	//var type = q.type;
+
+	var filename = 'surveys/data/SURVEY-panas-' + mkturk_id + '-T2.csv'
+	var value = 'not specified';
+	switch(q.type){
+		case 'positive':
+			value = getPANASPositive(filename);
+			break;
+		case 'negative':
+			value = getPANASNegative(filename);
+			break;
+
+	}
+	//console.log(value);
+
+	res.send(value)
+
+})
+
+function getPANASPositive(filename){
+	var stringContent = fs.readFileSync(filename).toString();
+	var contents = toArrayfromCSVString(stringContent);
+	q_num = [1, 3, 5, 9, 10, 12, 14, 16,17,19];
+
+	// Value should be + 1 more since the suryve has fields like:
+	// 0|Very slightly or not at all  
+	// 1|A little
+	// 2|Moderately
+	// 3|Quite a bit
+	// 4|Extremely
+
+	// Scoring should be:
+	// 1|Very slightly or not at all  
+	// 2|A little
+	// 3|Moderately
+	// 4|Quite a bit
+	// 5|Extremely
+	var Total = 0;
+	for (var i = 2; i < contents.length - 1; i++){
+		if (q_num.includes(i - 1)){
+			var value = parseInt(contents[i][1]) + 1
+			Total = Total + value;
+
+		}
+	}
+	return Total.toString();
+}
+
+function getPANASNegative(filename){
+	var stringContent = fs.readFileSync(filename).toString();
+	var contents = toArrayfromCSVString(stringContent);
+	q_num = [2, 4, 6, 7, 8, 11, 13, 15,18, 20];
+
+	var Total = 0;
+	for (var i = 2; i < contents.length - 1; i++){
+		if (q_num.includes(i - 1)){
+			var value = parseInt(contents[i][1]) + 1
+			Total = Total + value;
+
+		}
+	}
+	return Total.toString();
+}
+
 function getASITotal(filename){
 	var stringContent = fs.readFileSync(filename).toString();
 	var contents = toArrayfromCSVString(stringContent);
@@ -795,8 +855,8 @@ function updateStatus(mkturk_id, job,session,con){
 		'phq_2' : 'survey_phq_T2',
 		'oasis_1' : 'survey_oasis_T1',
 		'oasis_2' : 'survey_oasis_T2',
-		'asi_1' : 'survey_asi_T1',
-		'asi_2' : 'survey_asi_T2',
+		'panas_1' : 'survey_panas_T1',
+		'panas_2' : 'survey_panas_T2',
 		'dotprobe_1' : 'task_dotprobe_T1',
 		'dotprobe_2' : 'task_dotprobe_T2'
 	}
@@ -832,6 +892,8 @@ function updateStatus(mkturk_id, job,session,con){
 }
 
 // Send the user to the survey or task that they have not completed yet
+// This function isn't used at the moment... 
+// reroute is done client side
 function reRoute(con,mkturk_id,response){
 
 	console.log('reroute has been summoned :D')
@@ -839,13 +901,13 @@ function reRoute(con,mkturk_id,response){
 	var sql = SqlString.format("SELECT dp_status.survey_demo_T1, " +
 		"dp_status.survey_phq_T1," +
 		"dp_status.survey_oasis_T1," +
-		'dp_status.survey_asi_T1,' +
+		'dp_status.survey_panas_T1,' +
 		'dp_status.task_dotprobe_T1,' +
 		'dot_probe1.time_ready,' + 
 		'dp_status.survey_demo_T2,' +
 		'dp_status.survey_phq_T2,' +
 		'dp_status.survey_oasis_T2,' +
-		'dp_status.survey_asi_T2,' + 
+		'dp_status.survey_panas_T2,' + 
 		'dp_status.task_dotprobe_T2 ' +
 		'FROM dp_status ' + 
 		"LEFT JOIN dot_probe1 ON dp_status.mkturk_id = dot_probe1.mkturk_id " + 

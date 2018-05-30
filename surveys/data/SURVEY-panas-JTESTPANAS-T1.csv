@@ -1,0 +1,22 @@
+panas-JTESTPANAS-T1-Thu, 30 May 2018 16:9:34 UTC,User Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.181 Safari/537.36,IP: ::1
+QUESTION,RESULT,RT(ms)
+panas_interested,4,1601
+panas_distressed,4,1631
+panas_ excited,4,961
+panas_upset,4,537
+panas_strong,4,494
+panas_ guilty,4,397
+panas_scared,4,437
+panas_hostile,4,446
+panas_enthusiastic,4,1477
+panas_proud,4,1259
+panas_ irritable,4,1121
+panas_alert,4,1509
+panas_ashamed,4,1583
+panas_inspired,4,1437
+panas_nervous,4,1005
+panas_determined,4,1070
+panas_attentive,4,1556
+panas_jittery,4,1070
+panas_active,4,1067
+panas_afraid,4,1108

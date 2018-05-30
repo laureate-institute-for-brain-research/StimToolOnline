@@ -143,22 +143,22 @@
 
 
                 <hr>
-                <h2>Your Total ASI Score:</h2>
+                <h2>Your Total PANAS Score:</h2>
                 <p><strong id="asiTotal" style="font-size: 50px;"></strong></p>
-                <p style="width: 40%;">Anxiety sensitivity index(ASI) is the fear of anxiety-related sensations based on beliefs about their harmful consequences. If you like to learn more about it click <a href="https://www.researchgate.net/profile/Joshua_Broman-Fulks/publication/23685638_The_Anxiety_Sensitivity_Index-Revised/links/54ebd79c0cf2082851bec4f3/The-Anxiety-Sensitivity-Index-Revised.pdf">here. </a></p>
+                <p style="width: 40%;"> The Positive and Negative Affect Schedule (PANAS) is a self-report questionnaire that consists of two 10-item scales to measure both positive and negative affect.
+                        <br>Positive Affect Score: Scores can range from 10 - 50, with higher scores representing higher levels of positive affect.
+                        <br>Negative Affect Score: Scores can range from 10 - 50, with lower scores representing lower levels of negative affect.
+
+                    <a href="https://en.wikipedia.org/wiki/Positive_and_Negative_Affect_Schedule">here. </a></p>
                 <table class='table' style="width: 30%;">
                     <tbody style="font-size: 17px;">
                         <tr>
-                            <td>ASI Physical Concerns</td>
-                            <td><strong id="asiPhysical">null</strong></td>
+                            <td>Positive Affect Score</td>
+                            <td><strong id="panasPositive">null</strong></td>
                         </tr>
                         <tr>
-                            <td>ASI Cognitive Concerns</td>
-                            <td><strong id="asiCognitive">null</strong></td>
-                        </tr>
-                        <tr>
-                            <td>ASI Social Concerns</td>
-                            <td><strong id="asiSocial">null</strong></td>
+                            <td>Negative Affect Score</td>
+                            <td><strong id="panasNegative">null</strong></td>
                         </tr>
                     </tbody>
                 </table>
@@ -245,22 +245,14 @@
                 phqscore = data;
                 document.getElementById("oasisscore").innerHTML = data;
             });
-            $.get('/getASI?type=total&mkturk_id=' + mkturkid, function(data) {
+            $.get('/getPANAS?type=positive&mkturk_id=' + mkturkid, function(data) {
                 phqscore = data;
-                document.getElementById("asiTotal").innerHTML = data;
+                document.getElementById("panasPositive").innerHTML = data;
             });
-            $.get('/getASI?type=physical&mkturk_id=' + mkturkid, function(data) {
+            $.get('/getPANAS?type=negative&mkturk_id=' + mkturkid, function(data) {
                 phqscore = data;
-                document.getElementById("asiPhysical").innerHTML = data;
-            });
-            $.get('/getASI?type=cognitive&mkturk_id=' + mkturkid, function(data) {
-                phqscore = data;
-                document.getElementById("asiCognitive").innerHTML = data;
-            });
-            $.get('/getASI?type=social&mkturk_id=' + mkturkid, function(data) {
-                phqscore = data;
-                document.getElementById("asiSocial").innerHTML = data;
-            });            
+                document.getElementById("panasNegative").innerHTML = data;
+            });          
 
 
 
