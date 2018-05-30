@@ -77,5 +77,21 @@ Notifying users of when to start session 2 is done through the [mailgun API](htt
 Rather than having the images hosted in the VM, All images are using a CDN [Cloudinary API](https://cloudinary.com/). This API allows us to host 300,000 imges and videos at no cost.
 
 
+### All pages in this web app
+These are all the available pages that can be accessed that are also used through the use of the program.
+
+- [Workouts Page (list of all the online task)](http://brainworkout.paulus.libr.net/workouts)
+- [Demographics Survey](http://brainworkout.paulus.libr.net/?survey=demo)
+- [PHQ-8 Survey](http://brainworkout.paulus.libr.net/?survey=phq)
+- [OASIS Survey](http://brainworkout.paulus.libr.net/?survey=oasis)
+- [ASI Survey](http://brainworkout.paulus.libr.net/?survey=asi)
+- [PANAS Survey](http://brainworkout.paulus.libr.net/?survey=panas)
+- [Dot Probe Version 1 for Session 1](http://brainworkout.paulus.libr.net/?task=dotprobe&session=1)
+- [Dot Probe Version 2 for Session 2](http://brainworkout.paulus.libr.net/?task=dotprobe&session=2)
+- [Chicken Task Version 1](http://brainworkout.paulus.libr.net/?task=chicken&session=1)
+- [Chicken Task Version 2](http://brainworkout.paulus.libr.net/?task=chicken&session=2)
+- [Chicken Task Version 3](http://brainworkout.paulus.libr.net/?task=chicken&session=3)
+
+
 
 
