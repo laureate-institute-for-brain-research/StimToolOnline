@@ -19,26 +19,52 @@
 		    max-width: 40%;
 		    height: auto;
 		}
-		input[type=text]:focus {
+		
+		/* label focus color */
+		.input-field input:focus + label {
+			color: #f68826 !important;
+		}
+		 /* label underline focus color */
+		.input-field input:focus {
+			border-bottom: 1px solid #f68826 !important;
+			box-shadow: 0 1px 0 0 #f68826 !important
+		}
+		[type="checkbox"].filled-in:checked + span:not(.lever):after {
+		  top: 0;
+		  width: 20px;
+		  height: 20px;
+		  border: 2px solid #f68826 !important;
+		  background-color: #f68826 !important;
+		  z-index: 0;
+		}
+  
+		/*input[type=text]:focus {
 			border-color: 	#f68826;
 			box-shadow: 0 0 5px #f68826 !important;
 		}
 		input[type=email]:focus {
 			border-color: 	#f68826;
 			box-shadow: 0 0 5px #f68826 !important;
-		}
+		}*/
 
 
 	</style>
-	<title>LIBR Online Task</title>
+	<title>LIBR Wave 2</title>
 
 
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-alpha.4/css/materialize.min.css">
     
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"></script>
 	
 
 </head>
+
+
 <body>
+	
+
 	<!-- <button type="button" data-toggle="modal" data-target="#exampleModal">Launch modal</button> -->
 	
 	<!-- Modal -->
@@ -61,6 +87,7 @@
 	  </div>
 	</div>
 
+
 	<div class="container">
 		<br>
 
@@ -70,34 +97,39 @@
 
 		<center><a href="http://www.laureateinstitute.org/"><img class="logo" src="/images/logo.png"></a></center>
 		<hr style="border-top:5px solid #b1b3b6" />
+
+
 	      <br>
-	      <p>Martin Paulus, M.D. and his collaborators at the Laureate Institute for Brain Research (LIBR) are conducting a research study to 1) evaluate the feasibility of collecting data from online psychological tasks completed on Amazon Mechanical Turk (MTurk) and 2) evaluate the test-retest reliability of tasks completed on MTurk. Approximately 200 people will participate in the study.</p>
+	      <p>Martin Paulus, M.D. and his collaborators at the Laureate Institute for Brain Research (LIBR) are conducting a research study to:
+	      <ol style="padding-left: 60px;">
+	      	<li>evaluate the feasibility of collecting data from online psychological tasks completed on Amazon Mechanical Turk (MTurk) and 
+	      	</li>
+	      	<li>evaluate the test-retest reliability of tasks completed on MTurk. Approximately 200 people will participate in the study.
+	      	</li>
+	      </ol>
 	      <p>If you agree to be in this study, you will complete two sessions:</p>
-	      <p><strong>Session 1: (~30 minutes)</strong></p>
+	      <br>
+	      <h3><strong>Session 1: (~30 minutes)</strong></h3>
 	      <p style="padding-left: 30px;">Part A: You will complete 4 Surveys that ask questions about your demographic information and psychological well-being.</p>
 	      <ol style="padding-left: 60px;">
 	      	<li>Demographic Information</li>
-	      	<li>Patient Health Questionnaire (PHQ-9)</li>
+	      	<li>Patient Health Questionnaire (PHQ-8)</li>
 	      	<li>Overall Anxiety Severity and Impairment Scale (OASIS)</li>
-	      	<li>Anxiety Sensitiviy Index (ASI-3)</li>
+	      	<li>Positive and Negative Affect Schedule (PANAS)</li>
 	      </ol>
-	  	</p>
-	      <p style="padding-left: 30px;">Part B: You will complete one of these two tasks:</p>
-	      <ol style="padding-left: 60px;">
-	      	<li>Dot Probe Task: During the task, you will be shown images on the screen and presented with a red bar before and after each image. Using your keyboard, you will be asked to determine if the orientation of the bars was the same or different. The exact instructions will be provided to you when you reach this portion of the human intelligence task (HIT).</li>
-	      	<li>Chicken Task: During the task, you will be shown images on the screen of two chickens. Using your keyboard, you will be asked to determine which chicken will lay the next egg. The exact instructions will be provided to you when you reach this portion of the human intelligence task (HIT).</li>
-	      </ol>
+	      <p style="padding-left: 30px;">Part B: You will complete the Chicken Task:</p>
+	      <p style="padding-left: 40px;">
+						During the task, you will be shown images on the screen of two chickens. Using your keyboard, you will be asked to determine which chicken will lay the next egg. The exact instructions will be provided to you when you reach this portion of the human intelligence task (HIT).</p>      
 	    
-	      
-	      <p><strong>Session 2: (~30 minutes, completed at least <u>24 hours</u> after Session 1)</strong></p>
-	      <p style="padding-left: 30px;">Part A: Same Surveys as Session 1</p>
-	      <p style="padding-left: 30px;">Part B: Repeat the same task (dot probe or chicken) from Session 1 with different sets of images.</p>
+	      <br>
+	      <h3><strong>Session 2: (~30 minutes, completed at least <u>24 hours</u> after Session 1)</strong></h3>
+	      <p style="padding-left: 30px;">For session 2, you will complete the same survey and task as session 1.</p>
 
 
-	      <p style="padding-left: 30px;"><i><u>If you provide an email address, we will remind you when 24 hours have passed and it is time to complete Session 2.</u></i> After Session 2 is complete, you will be given a code to redeem a $3 reward for your time and effort on Mechanical Turk.</p>
-	      <p style="padding-left: 30px;">&nbsp;</p>
+	      <p><i><u>If you provide an email address, we will remind you when 24 hours have passed and it is time to complete Session 2.</u></i> After Session 2 is complete, you will be given a code to for a $3 reward for your time and effort on Mechanical Turk.&nbsp;</p>
+	      <p style="padding-left: 30px;"></p>
 	      <p>Participation in research is voluntary. You may stop this HIT at any time when you feel uncomfortable. If you have any questions, please contact LIBR at <a href="mailto:jtouthang@libr.net?Subject=Amazon MKTURK%20TASK" target="_blank">jtouthang@libr.net</a>.</p>
-	      <p>No personally identifiable information will be collected in this study. If you do provide an email address, we will delete it from the database once you have completed session 2!</p>
+	      <p>No personally identifiable information will be collected in this study except your email address if provided. If you do provide an email address, we will delete it from the database once you have completed session 2!</p>
 
 	     <h2 style="font-size: 20px; text-align: center;"><strong>You must complete both sessions to receive payment.</strong></h2>
 
@@ -108,27 +140,55 @@
 	    <div class="row justify-content-md-center">
 
 		    <div class="col-md-7">
-		    	<div class="col-md-auto">
+		    	<div>
 					<form name="field" method='post' enctype="multipart/form-data">
 						<fieldset>
-							<input type="text" id="userID" name="mkturk_id" class="form-control" placeholder="Amazon Turk ID" required autofocus>
-							<br>
+							<div class="row">
+								<div class="input-field col s12 ">
+									<input type="text" class="validate" id="userID" class="validate" name="mkturk_id" required>
+						        	<!-- <input id="last_name" type="text" class="validate"> -->
+						        	<label for="userID">Amazon Mechanical Turk ID</label>
+						        </div>
+					    	</div>
 
-							<input type="email" id="userEmail" name="email" class="form-control" placeholder="Email address (optional)">
-							<div>
-								<label for="remind">
-									<input style="background-color: #ffc920" type="checkbox" id="remind" name="remind" class="checkbox" value="YES" checked><span class="checkbox">    Remind Me</span> 
+					    	<div class="row">
+
+								<div class="input-field col s12">
+									<!-- <input type="text" class="validate" id="userID" class="validate" name="mkturk_id" > -->
+									<input type="email" id="userEmail" name="email" class="validate">
+						        	<!-- <input id="last_name" type="text" class="validate"> -->
+						        	<label for="userEmail">Email Address (Optional)</label>
+						        	<span class="helper-text">The email you provide will be deleted from the database once you have completed session 2</span>
+						        </div>
+					    	</div>
+
+					    	
+							
+							<div class="row">
+								<!-- <input type="checkbox" id="remind" name="remind" class="checkbox-indigo" value="YES" checked>
+							    <input type="checkbox" class="filled-in checkbox-orange" id="filled-in-box" checked="checked" />
+								<label for="filled-in-box"></label> -->
+								
+
+								<label for="remind" >
+									<input type="checkbox" class="filled-in" id="remind" name="remind" value="YES" checked>
+									<span>Remind Me</span> 
 								</label>
 							</div>
 
-							<div>
+							<div class="row">
 								<label for="c2">
-									<input id="c2" type="checkbox" name="consent" value="YES" required autofocus><span></span>    I will do this task truthfully and to the best of my ability. Any information I provide may be used for research. I also hereby certify that I am over 18 years of age.
+									<input id="c2" type="checkbox" class="filled-in" name="consent" value="YES" required autofocus>
+									<span>I will do this task truthfully and to the best of my ability. Any information I provide may be used for research. I also hereby certify that I am over 18 years of age.
+									</span>
 								</label>
 							</div>
 
-
-							<input style="background-color: #f68826; border: #f68826;" class="btn btn-lg btn-primary btn-block" type="submit" value="Proceed">					
+							<div class="row">
+								
+								<input style="background-color: #f68826; border: #f68826; height: 50px" size="19" class="btn btn-lg btn-primary btn-block" type="submit" value="Proceed">
+								
+							</div>			
 						</fieldset>
 					</form>
 				</div>
@@ -142,7 +202,6 @@
 	<script type="text/javascript">
 		
 	//JS script
-	$("#exampleModal").modal('show');
 	</script>
 
 
@@ -156,15 +215,9 @@
 <br>
 <br>
 
-
-
-
-<footer>
-  <div class="container" style="text-align:center">
-    <p class="text-p">&copy; 2018 <a href="http://www.laureateinstitute.org">laureateinstitute.org</a>. All rights reserved.
-  </div>
-</footer>
-
-
-
+	<footer>
+	  <div class="container" style="text-align:center">
+	    <p class="text-p">&copy; 2018 <a href="http://www.laureateinstitute.org">laureateinstitute.org</a>. All rights reserved.<br>Wave 2
+	  </div>
+	</footer>
 </html>

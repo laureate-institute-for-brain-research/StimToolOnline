@@ -113,6 +113,22 @@ app.get('/completed', function (req, res) {
 	displayCompleted(res);
 });
 
+app.get('/wave-2', function (req, res) {
+	var q = url.parse(req.url, true). query;
+	var session = q.session;
+	var mkturk_id = q.mkturk_id;
+
+	fs.readFile('index-chicken.html', function (err, data) {
+		// Write Header
+		res.writeHead(200, {
+			'Content-Type' : 'text/html'
+		});
+		// Wrte Body
+		res.write(data);
+		res.end();
+	});
+});
+
 // Page of all Task
 app.get('/list', function(req,res){
 	fs.readFile('list.html', function (err, data) {
@@ -308,7 +324,8 @@ app.get('/getTimeReady', function(req, res) {
 app.get('/getPHQ',function(req, res){
 	var q = url.parse(req.url, true).query;
 	var mkturk_id = q.mkturk_id;
-	res.send(getPHQScore('surveys/data/SURVEY-phq-' + mkturk_id + '-T2.csv'))
+	var session = q.session;
+	res.send(getPHQScore('surveys/data/SURVEY-phq-' + mkturk_id + '-T' + session +'.csv'))
 
 })
 
@@ -316,9 +333,10 @@ app.get('/getPHQ',function(req, res){
 app.get('/getOASIS', function(req, res) {
 	var q = url.parse(req.url, true).query;
 	var mkturk_id = q.mkturk_id;
+	var session = q.session;
 
 	// oasis sums up scores the same as phq
-	res.send(getPHQScore('surveys/data/SURVEY-oasis-' + mkturk_id + '-T2.csv'))
+	res.send(getPHQScore('surveys/data/SURVEY-oasis-' + mkturk_id + '-T' + session + '.csv'))
 })
 
 
@@ -358,9 +376,10 @@ app.get('/getASI', function(req, res) {
 app.get('/getPANAS', function(req, res) {
 	var q = url.parse(req.url, true).query;
 	var mkturk_id = q.mkturk_id;
+	var session = q.session;
 	//var type = q.type;
 
-	var filename = 'surveys/data/SURVEY-panas-' + mkturk_id + '-T2.csv'
+	var filename = 'surveys/data/SURVEY-panas-' + mkturk_id + '-T' + session +'.csv'
 	var value = 'not specified';
 	switch(q.type){
 		case 'positive':

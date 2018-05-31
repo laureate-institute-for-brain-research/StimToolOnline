@@ -77,7 +77,7 @@ Notifying users of when to start session 2 is done through the [mailgun API](htt
 Rather than having the images hosted in the VM, All images are using a CDN [Cloudinary API](https://cloudinary.com/). This API allows us to host 300,000 imges and videos at no cost.
 
 
-### All pages in this web app
+# All pages in this web app
 These are all the available pages that can be accessed that are also used through the use of the program.
 
 - [Workouts Page (list of all the online task)](http://brainworkout.paulus.libr.net/workouts)

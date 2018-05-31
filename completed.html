@@ -41,27 +41,46 @@
 
     </head>
     <style>
-        #phq {
+        #phq,#oasis,#panas {
             font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
             border-collapse: collapse;
             width: 30%;
         }
 
-        #phq td, #phq th {
+        #phq td, #phq th,#oasis th, #panas th {
             border: 1px solid #ddd;
             padding: 8px;
             font-size: 15px;
         }
 
         #phq tr:nth-child(even){background-color: #f2f2f2;}
+        #oasis tr:nth-child(even){background-color: #f2f2f2;}
+        #panas tr:nth-child(even){background-color: #f2f2f2;}
 
         #phq tr:hover {background-color: #ddd;}
+        #oasis tr:hover {background-color: #ddd;}
+        #panas tr:hover {background-color: #ddd;}
 
         #phq th {
             padding-top: 12px;
             padding-bottom: 12px;
             text-align: left;
-            background-color: #d6173a;
+            background-color: #f68826;
+            color: white;
+        }
+
+        #oasis th {
+            padding-top: 12px;
+            padding-bottom: 12px;
+            text-align: left;
+            background-color: #ed2d87;
+            color: white;
+        }
+        #panas th {
+            padding-top: 12px;
+            padding-bottom: 12px;
+            text-align: left;
+            background-color: #5e3f99;
             color: white;
         }
     </style>
@@ -76,12 +95,12 @@
         
         <center>
             <div class="container-fluid">
-                <hr style="border-top:5px solid #b1b3b6" />
+                <hr style="border-top:3px solid #b1b3b6" />
                 <br>
                 <h1 style="padding: 17px" >Thank You For Your Participation!!</h1>
                 <h3>You have completed all tasks and surveys for this study</h4>
                 <br>
-                <p id='mkturk_id' style="color: orange; font-size: 30px;"></p>
+                Hi,<p id='mkturk_id' style="font-size: 30px;"></p>
                 <p>The code for this HIT is: </p>
                 <p><strong style="font-size: 70px">11853</strong></p>
 
@@ -90,13 +109,30 @@
                 <br>
                 <hr>
 
-                <h2>Your PHQ Score:</h2>
-                <p style="width: 40%;">The Patient Health Questionnaire (PHQ) is a self-administered version of the PRIME-MD diagnostic instrument for common mental disorders. If you like to know more about PHQ, click <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC1495268/">here</a></p>
+                <h2>PHQ Score:</h2>
+                <p style="width: 50%;">The Patient Health Questionnaire (PHQ) is a self-administered version of the PRIME-MD diagnostic instrument for common mental disorders. If you like to know more about PHQ, click <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC1495268/">here</a></p>
 
-                <p><strong id='phqscore' style="font-size: 50px;">null</strong></p>
+                <div class="table-responsive">
+                    <table id="phq" class="table table-condensed" style="width: 40%;">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>Session 1</th>
+                                <th>Session 2</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Your PHQ Score</td>
+                                <td><strong id='phqscore1'>null</strong></td>
+                                <td><strong id='phqscore2'>null</strong></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
 
-
-                <div class="container">
+                <div style="width: 90%">
                   <h4>PHQ Interpretation Score</h4>    
 
                   <p></p>                                                                                 
@@ -137,31 +173,93 @@
                 
 
                 <hr>
-                <h2>Your OASIS Score:</h2>
+                <h2>OASIS Score:</h2>
                 <p style="width: 40%;">The Overall Anxiety Severity and Impairment Scale (OASIS) is a 5-item self-report measure that can be used to assess severity and impairment associated with any anxiety disorder or multiple anxiety disorders. To learn more about OASIS click <a href='https://www.sciencedirect.com/science/article/pii/S0165032715000452'>here</a></p>
-                <p><strong id="oasisscore" style="font-size: 50px;">null</strong></p>
+                <div class="table-responsive">
+                        <table id="oasis" class="table table-condensed" style="width: 40%;">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>Session 1</th>
+                                    <th>Session 2</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Your OASIS Score</td>
+                                    <td>
+                                        <strong id="oasisscore1">null</strong>
+                                    </td>
+                                    <td>
+                                        <strong id="oasisscore2">null</strong>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                
+                <div class="table-responsive"> 
+                    <h4>OASIS Interpretation Score</h4>          
+                        <table id="oasis" class="table table-condensed">
+                          <thead>
+                            <tr>
+                              <th>OASIS Score</th>
+                              <th>Severity</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr>
+                              <td> 1 - 5 </td>
+                              <td>Moderate</td>
+                            </tr>
+                            <tr>
+                                <td> 6 - 9 </td>
+                                <td>Marked</td>
+                            </tr>
+                            <tr>
+                                <td> > 10 </td>
+                                <td>Severe</td>
+                            </tr>
+                          </tbody>
+                        </table>
+                        </div>
+                
 
 
                 <hr>
-                <h2>Your Total PANAS Score:</h2>
+                <h2>PANAS Score:</h2>
                 <p><strong id="asiTotal" style="font-size: 50px;"></strong></p>
-                <p style="width: 40%;"> The Positive and Negative Affect Schedule (PANAS) is a self-report questionnaire that consists of two 10-item scales to measure both positive and negative affect.
+                <p style="width: 50%;"> The Positive and Negative Affect Schedule (PANAS) is a self-report questionnaire that consists of two 10-item scales to measure both positive and negative affect.
                         <br>Positive Affect Score: Scores can range from 10 - 50, with higher scores representing higher levels of positive affect.
                         <br>Negative Affect Score: Scores can range from 10 - 50, with lower scores representing lower levels of negative affect.
-
+                    To learn more about PANAS click
                     <a href="https://en.wikipedia.org/wiki/Positive_and_Negative_Affect_Schedule">here. </a></p>
-                <table class='table' style="width: 30%;">
-                    <tbody style="font-size: 17px;">
-                        <tr>
-                            <td>Positive Affect Score</td>
-                            <td><strong id="panasPositive">null</strong></td>
-                        </tr>
-                        <tr>
-                            <td>Negative Affect Score</td>
-                            <td><strong id="panasNegative">null</strong></td>
-                        </tr>
-                    </tbody>
-                </table>
+                <div class="table-responsive">
+                    <table id="panas" class="table table-condensed" style="width: 60%;">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>Session 1</th>
+                                <th>Session 2</th>
+                                <th>Average (original study, n=660)</th>
+                            </tr>
+                        </thead>
+                        <tbody style="font-size: 17px;">
+                            <tr>
+                                <td>Positive Affect Score</td>
+                                <td><strong id="panasPositive1">null</strong></td>
+                                <td><strong id="panasPositive2">null</strong></td>
+                                <td><strong >29.7</strong></td>
+                            </tr>
+                            <tr>
+                                <td>Negative Affect Score</td>
+                                <td><strong id="panasNegative1">null</strong></td>
+                                <td><strong id="panasNegative2">null</strong></td>
+                                <td><strong >14.8</strong></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
                 <hr>
 
                 <br>
@@ -233,25 +331,35 @@
             var timeleft = getQueryVariable('timeleft');
 
 
-            document.getElementById("mkturk_id").innerHTML = 'Hi, ' + mkturkid;
+            document.getElementById("mkturk_id").innerHTML = mkturkid;
 
 
             // get the scores
-            $.get('/getPHQ?mkturk_id=' + mkturkid, function(data) {
-                phqscore = data;
-                document.getElementById("phqscore").innerHTML = data;
+            $.get('/getPHQ?session=1&mkturk_id=' + mkturkid, function(data) {
+                document.getElementById("phqscore1").innerHTML = data;
             });
-            $.get('/getOASIS?mkturk_id=' + mkturkid, function(data) {
-                phqscore = data;
-                document.getElementById("oasisscore").innerHTML = data;
+            $.get('/getPHQ?session=2&mkturk_id=' + mkturkid, function(data) {
+                document.getElementById("phqscore2").innerHTML = data;
             });
-            $.get('/getPANAS?type=positive&mkturk_id=' + mkturkid, function(data) {
-                phqscore = data;
-                document.getElementById("panasPositive").innerHTML = data;
+
+            $.get('/getOASIS?session=1&mkturk_id=' + mkturkid, function(data) {
+                document.getElementById("oasisscore1").innerHTML = data;
             });
-            $.get('/getPANAS?type=negative&mkturk_id=' + mkturkid, function(data) {
-                phqscore = data;
-                document.getElementById("panasNegative").innerHTML = data;
+            $.get('/getOASIS?session=2&mkturk_id=' + mkturkid, function(data) {
+                document.getElementById("oasisscore2").innerHTML = data;
+            });
+            
+            $.get('/getPANAS?type=positive&session=1&mkturk_id=' + mkturkid, function(data) {
+                document.getElementById("panasPositive1").innerHTML = data;
+            });
+            $.get('/getPANAS?type=positive&session=2&mkturk_id=' + mkturkid, function(data) {
+                document.getElementById("panasPositive2").innerHTML = data;
+            });
+            $.get('/getPANAS?type=negative&session=1&mkturk_id=' + mkturkid, function(data) {
+                document.getElementById("panasNegative1").innerHTML = data;
+            });
+            $.get('/getPANAS?type=negative&session=2&mkturk_id=' + mkturkid, function(data) {
+                document.getElementById("panasNegative2").innerHTML = data;
             });          
 
 
