@@ -81,6 +81,7 @@ Rather than having the images hosted in the VM, All images are using a CDN [Clou
 These are all the available pages that can be accessed that are also used through the use of the program.
 
 - [Workouts Page (list of all the online task)](http://brainworkout.paulus.libr.net/workouts)
+- [Complete Page (list of all the online task)](http://brainworkout.paulus.libr.net/completed)
 - [Demographics Survey](http://brainworkout.paulus.libr.net/?survey=demo)
 - [PHQ-8 Survey](http://brainworkout.paulus.libr.net/?survey=phq)
 - [OASIS Survey](http://brainworkout.paulus.libr.net/?survey=oasis)
