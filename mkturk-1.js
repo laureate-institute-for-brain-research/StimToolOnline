@@ -4,18 +4,13 @@
 
 var express = require('express');
 var bodyParser = require('body-parser');
-var path = require('path');
 var formidable = require('formidable');
-var util = require('util');
 var fs = require('fs');
 var url = require('url');
 var mysql = require('mysql');
-var csv = require('csvdata')
-var converter = require('json-2-csv');
+
 const requestIp = require('request-ip');
 var SqlString = require('sqlstring');
-const shell = require('shelljs');
-var ip = require('ip');
 
 
 var app = express();
@@ -74,6 +69,8 @@ app.get('/',function (req, res) {
 		displayChicken2(res);
 	} else if (session == '3' && task == 'chicken'){
 		displayChicken3(res);
+	} else if (session == '0' && task == 'chicken'){
+		displayChicken0(res);
 	}
 
 	else if (task == 'test') {
@@ -229,6 +226,8 @@ app.post('/saveSurvey/', function(req, res) {
 	updateStatus(mkturk_id, survey,session,con);	
 });
 
+
+// This is the Save Task endppoint for Wave 1 of the test and retest
 app.post('/saveTask/', function(req, res) {
 	var d = new Date();
 
@@ -296,6 +295,76 @@ app.post('/saveTask/', function(req, res) {
 
 
 });
+
+// This is wave-2 saveTask endpoint that saves Chicken Task Data
+app.post('/saveTaskWave2/', function(req, res) {
+	var d = new Date();
+
+	var file_date = d.getFullYear() + "_" + d.getMonth() + "_" +d.getDay() + "_" + d.getHours() + d.getMinutes()
+	var q = url.parse(req.url, true).query;
+	var session = q.session;
+	var mkturk_id = q.mkturk_id;
+	//var survey = q.survey;
+	var task = q.task;
+	var ipaddr = req.clientIp;
+
+	data = req.body; // json input
+	content = data.content;  
+	var head1 = "Orginal File Name:,"+ 'CT-' + mkturk_id + '-' + file_date + '.csv'+ ',UserAGENT:' + req.headers['user-agent'] + ',IP: ' + ipaddr + ",Time:,"+file_date+",Parameter File:,None:FromPsyToolkit,Event Codes:,[('INSTRUCT_ONSET', 1), ('TASK_ONSET', 2), ('TRIAL_ONSET', 3), ('CUE_ONSET', 4), ('IMAGE_ONSET', 5), ('TARGET_ONSET', 6), ('RESPONSE', 7), ('ERROR_DELAY', 8), ('BREAK_ONSET', 9), ('BREAK_END', 10)],Trial Types are coded as follows: 8 bits representing [valence neut/neg/pos] [target_orientation H/V] [target_side left/right] [duration .5/1] [valenced_image left/right] [cue_orientation H/V] [cue_side left/right] \n"
+    var head2 = "trial_type,trial_number,block_num,egg_x_position,egg_y_position,absolute_time,response_time,response,result\n"
+
+	fs.writeFile('task/data/CT-' + mkturk_id + '-' + 'T' + session + '-' + file_date + '.csv', head1 + head2 + content, (err) => {
+		if (err) throw err;
+		console.log('Saved Chicken Task Data!');
+
+	});
+	// add Time Ready so that the ready time initiates once Task1 has been completed
+	//addTimeReady(mkturk_id);
+
+	res.send('Got the Chicken Task Data')
+
+	// Run the plot script
+	//shell.cd('stats');
+	//shell.exec('python makeHTMLplot.py ' + mkturk_id);
+	//shell.exec('Rscript makePlot.r ' + mkturk_id);
+	//shell.cd('..');
+
+	// Update the Status
+	//updateStatus(mkturk_id, task,session,con);
+
+
+	// // Send the Code by Email if they Include it
+	con.query('SELECT email,remind,time_ready FROM dot_probe1 WHERE mkturk_id = ?',[mkturk_id],function (err, result) {
+		try {
+			//console.log('sql output is not empty')
+			sqlresult = JSON.parse(JSON.stringify(result));
+			jsondata = sqlresult[0];
+			if (session == '2'){
+				console.log('sending code to ' + jsondata.email);
+				// If they gave an email addres, than we WILL email them the code
+				sendEmailCode(mkturk_id);
+				//res.writeHead(301,{Location : '/completed?&mkturk_id=' + mkturk_id});
+				//res.end();
+
+			} else if (session == '1'){
+				// redirect them to the tooearly page
+					// send Email if the subject gave email and marked the remind checkbox
+				sendEmailRemind(mkturk_id);
+				//res.writeHead(301,{Location : '/tooearly?&mkturk_id=' + mkturk_id + '&timeleft=' + jsondata.time_ready });
+				//res.end();
+
+			}
+		}
+		catch (TypeError) {
+			// No Email
+			// Do Nothing
+		}
+
+	});
+
+
+});
+
 
 // Return Time Life given id
 app.get('/getTimeReady', function(req, res) {
@@ -602,7 +671,6 @@ function displaySurveyasi(res){
 		res.end();
 	});	
 }
-
 function displaySurveyPanas(res){
 	fs.readFile('surveys/panas.html', function (err, data) {
 		// Write Header
@@ -614,7 +682,6 @@ function displaySurveyPanas(res){
 		res.end();
 	});	
 }
-
 function displayTest(res){
 
 	fs.readFile('task/dotprobe1-5Trial.html', function (err, data) {
@@ -650,7 +717,6 @@ function displayDotProbe2(res){
 		res.end();
 	});	
 }
-
 function displayChicken1(res){
 	fs.readFile('task/chicken_task/chicken134.html', function (err, data) {
 		// Write Header
@@ -662,7 +728,6 @@ function displayChicken1(res){
 		res.end();
 	});		
 }
-
 function displayChicken2(res){
 	fs.readFile('task/chicken_task/chicken145.html', function (err, data) {
 		// Write Header
@@ -674,7 +739,6 @@ function displayChicken2(res){
 		res.end();
 	});		
 }
-
 function displayChicken3(res){
 	fs.readFile('task/chicken_task/chicken4.html', function (err, data) {
 		// Write Header
@@ -686,7 +750,17 @@ function displayChicken3(res){
 		res.end();
 	});		
 }
-
+function displayChicken0(res){
+	fs.readFile('task/chicken_task/chicken0.html', function (err, data) {
+		// Write Header
+		res.writeHead(200, {
+			'Content-Type' : 'text/html'
+		});
+		// Wrte Body
+		res.write(data);
+		res.end();
+	});		
+}
 function display24HourPage(res){
 	fs.readFile('tooearly.html', function (err, data) {
 		// Write Header
@@ -714,7 +788,6 @@ function displayCompleted(res){
 
 
 // SENDHTML CODES
-
 function getRemindHTML(mkturk_id){
 	var session2Link = 'http://brainworkout.paulus.libr.net/?session=2&mkturk_id=' + mkturk_id + '&survey=demo';
 	return `<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -773,7 +846,6 @@ function getRemindHTML(mkturk_id){
 </body>
 </html>`
 }
-
 function getCodeEmailHTML(){
 	return `
 	<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -1125,8 +1197,6 @@ function getFormattedDate(dateobject){
 // Send Reminder Email at Futre Date Object
 // Uses Mailgun API to send email 24 hours after they were recorded in the Database
 function sendEmailRemind(mkturk_id,hours_away=30){
-
-
 	con.query('SELECT email, remind FROM dot_probe1 WHERE mkturk_id = ?',[mkturk_id], function(err, result) {
 		try {
 			sqlresult = JSON.parse(JSON.stringify(result));
@@ -1247,30 +1317,24 @@ function insertNewData(fields,con, response){
 	con.query('INSERT INTO dot_probe1 SET ?', data, function (err, result) {
 		
 		if (err){
-			
 			if (err.code == 'ER_DUP_ENTRY'){
 				// Duplicate Entry
 				// User already has ID on the database
-
 				console.log('Duplicate Entry on dot_probe1 Table');
-
 				// Duplicate so will reroute
 				reRoute(con, fields.mkturk_id,response);
 			} else {
 				console.log(err);
 			}
 			//console.log(err);
-
 		
 		} else{
 			// get the result of the SQL Database
 			// 1st Time New User Login
 			addRecordToStatusTable(fields.mkturk_id,con);
-
 			response.writeHead(301, {
 				Location: '/?session=1' + '&mkturk_id=' + fields.mkturk_id + '&survey=demo'
 			});
-
 			response.end();				
 		}
 	});
@@ -1297,7 +1361,6 @@ function processForm(req, response) {
 
     form.parse(req);
 }
-
 
 
 /// IGNORE EVERYTHING AFTER HERE

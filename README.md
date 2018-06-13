@@ -17,7 +17,6 @@ Mechanical Turk Web application for Online Tasks
 
 ## Run node js
 ```
-$ cd mkturk-1
 $ node mkturk-1.js
 ```
 
