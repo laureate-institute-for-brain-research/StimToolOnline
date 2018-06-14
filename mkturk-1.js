@@ -48,6 +48,7 @@ app.get('/',function (req, res) {
 	var survey = q.survey;
 	var task = q.task;
 	//console.log('session: ' + session, 'id: ' + mkturk_id, 'survey: ' + survey, 'task: ' + task)
+	//console.log(req.connection.remoteAddress)
 
 	if (survey == 'demo'){
 		displaySurveydemo(res);
@@ -237,7 +238,7 @@ app.post('/saveTask/', function(req, res) {
 	var mkturk_id = q.mkturk_id;
 	//var survey = q.survey;
 	var task = q.task;
-	var ipaddr = req.clientIp;
+	var ipaddr = req.connection.remoteAddress;
 
 	data = req.body; // json input
 	content = data.content;  
@@ -306,7 +307,7 @@ app.post('/saveTaskWave2/', function(req, res) {
 	var mkturk_id = q.mkturk_id;
 	//var survey = q.survey;
 	var task = q.task;
-	var ipaddr = req.clientIp;
+	var ipaddr = req.connection.remoteAddress;
 
 	data = req.body; // json input
 	content = data.content;  
