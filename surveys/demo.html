@@ -65,6 +65,10 @@
                 <p align="right" class="col-md-10">Session: </p>
                 <a align="right" id="session"></a>   
             </div>
+            <div class="row">
+                <p align="right" class="col-md-10">Study: </p>
+                <a align="right" id="study"></a>   
+            </div>
 
 <!--             <div class="row">
                 <p align="right" class="col-md-10">Time Spent on Question: </p>
@@ -149,7 +153,7 @@
 
             survey.onComplete.add(function (result) {
                 postSurveyData(result.data, session, mkturkid, surveyname);
-                window.location.replace("/?session="+session+"&mkturk_id="+mkturkid+"&survey=phq");
+                window.location.replace("/?session="+session+"&mkturk_id="+mkturkid+"&survey=phq"+"&study="+getQueryVariable('study'));
              });
 
 
@@ -157,7 +161,7 @@
             function postSurveyData(data, session, mkturkid, surveyname){
                 $.ajax({
                     type: 'POST',
-                    url: 'saveSurvey/?session=' + session + '&mkturk_id=' + mkturkid + '&survey=' + surveyname,
+                    url: 'saveSurvey/?session=' + session + '&mkturk_id=' + mkturkid + '&survey=' + surveyname + '&study=' + getQueryVariable('study'),
                     data: JSON.stringify(data), // or JSON.stringify ({name: 'jonas'}),
                     success: function(data) { console.log('Data saved!') },
                     contentType: "application/json",
@@ -168,6 +172,7 @@
             $("#surveyElement").Survey({model: survey});
             $("#mkid").text(mkturkid);
             $("#session").text(session);
+            $("#study").text(getQueryVariable('study'));
 
 
             //timerLoop(0);

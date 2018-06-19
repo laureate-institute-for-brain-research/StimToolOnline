@@ -8,7 +8,8 @@ var url = require('url');
 var mysql = require('mysql');
 var formidable = require('formidable');
 
-var config = require('./config.json')
+// Configuration File for Wave 2 Study
+var config = require('./wave2-config.json')
 
 // Connecting to database
 // Each study/wave should have their own database
@@ -16,7 +17,7 @@ var con = mysql.createConnection({
 	host		: config.mysql_host,
 	user		: config.mysql_user,
 	password	: config.mysql_password,
-	database	: 'wave2'
+	database	: config.mysql_database
 });
 
 con.connect(function(err) {
@@ -56,7 +57,7 @@ module.exports = function(app){
 
 
 // process the fields
-processForm = function (req, response) {
+function processForm(req, response) {
     //Store the data from the fields into SQL Database
     var fields = {};
     var form = new formidable.IncomingForm();
@@ -72,7 +73,7 @@ processForm = function (req, response) {
 
 
     form.on('end', function () {
-		response.send(fields);
+		//response.send(fields);
 		insertNewData(fields, con,response);
 		console.log(fields);
     });
@@ -88,6 +89,9 @@ function insertNewData(fields,con, response){
 	var currentdate = new Date();
 	//var next24hrdate = getFuture24Date(currentdate,24)
 
+	// get version number for chicken task
+	var chicken_version = Math.floor(Math.random() * 3) + 1
+
 
 	data = {
 		mkturk_id : fields.mkturk_id,
@@ -95,17 +99,18 @@ function insertNewData(fields,con, response){
 		remind : fields.remind,
 		time_created : currentdate,
 		time_ready : null,
+		task_version : chicken_version
 	}
 
 	// //console.log(data);
 
-	con.query('INSERT INTO dot_probe1 SET ?', data, function (err, result) {
+	con.query('INSERT INTO subjects SET ?', data, function (err, result) {
 		
 		if (err){
 			if (err.code == 'ER_DUP_ENTRY'){
 				// Duplicate Entry
 				// User already has ID on the database
-				console.log('Duplicate Entry on dot_probe1 Table');
+				console.log('Duplicate Entry on subjects Table');
 				// Duplicate so will reroute
 				reRoute(con, fields.mkturk_id,response);
 			} else {
@@ -118,9 +123,190 @@ function insertNewData(fields,con, response){
 			// 1st Time New User Login
 			addRecordToStatusTable(fields.mkturk_id,con);
 			response.writeHead(301, {
-				Location: '/?session=1' + '&mkturk_id=' + fields.mkturk_id + '&survey=demo'
+				Location: '/?study=wave2&session=1' + '&mkturk_id=' + fields.mkturk_id + '&survey=demo'
 			});
 			response.end();				
+		}
+	});
+}
+
+// Send the user to the survey or task that they have not completed yet
+// This function isn't used at the moment... 
+// reroute is done client side
+function reRoute(con,mkturk_id,response){
+
+	console.log('reroute has been summoned :D')
+	// THIS function can only be run if user is already in the database
+	var sql = SqlString.format("SELECT status.survey_demo_T1, " +
+		"status.survey_phq_T1," +
+		"status.survey_oasis_T1," +
+		'status.survey_panas_T1,' +
+		'status.task_chicken_T1,' +
+		'subjects.time_ready,' + 
+		'status.survey_demo_T2,' +
+		'status.survey_phq_T2,' +
+		'status.survey_oasis_T2,' +
+		'status.survey_panas_T2,' + 
+		'status.task_chicken_T2 ' +
+		'FROM status ' + 
+		"LEFT JOIN subjects ON status.mkturk_id = subjects.mkturk_id " + 
+		"WHERE subjects.mkturk_id = ?", [mkturk_id])
+	
+	//console.log(sql);
+
+	//response.redirect('/?mkturk_id=JT&survey=demo&session=1');
+
+	con.query(sql,function (err, result) {
+
+		try {
+		  	//console.log('sql output is not empty')
+		  	sqlresult = JSON.parse(JSON.stringify(result));
+		  	obj = sqlresult[0];
+
+		  	lastYesKey = '';
+		  	lastJob = '';
+		  	lastName = ''
+		  	lastSession = '';
+		  	value = '';
+		  	timeReady = '';
+
+
+
+		  	// get the key with the last 'YES' status and the time_ready value
+
+
+
+		  	console.log(obj);
+		  	for (var key in obj){
+
+		  		var val = obj[key];
+		  		//console.log('key: ' + key + ',' + obj[key]);
+
+		  		// Parse the keys
+
+		  		jobs = parseKey(key);
+		  		var job = jobs[0];
+		  		var name = jobs[1];
+		  		var session = jobs[2];
+
+		  		// if (val == 'YES') {
+		  		// 	// store the key with the last 'YES' value column will be stored
+		  		// 	lastYesKey = key;
+		  		// 	lastJob = job;
+		  		// 	lastName = name;
+		  		// 	lastSession = session;
+		  		// }
+
+		  		// if (job == 'time'){
+		  		// 	timeReady = val;
+		  		// }
+
+		  		//console.log('job: ' + job + '\tname: ' + name + '\tsession: ' + session + '\tvalue: ' + val);
+		  		//console.log(mkturk_id + ':' + job + ':' + name + ':' + val);
+		  		if (val == null) {
+
+		  			
+		  			console.log('redirect..');
+		  			//response.redirect('/?&mkturk_id=' + mkturk_id + '&' + job + '=' + 'asi' + '&session=' + session)
+					// this.statusCode = 302;
+					response.writeHead(301,{Location : '/?study=wave2&mkturk_id=' + mkturk_id + '&' + job + '=' + name + '&session=' + session });
+					response.end();
+		  			break;
+		  		} else if (job == 'time' && isReady(val)){
+		  			// completed session 1
+
+		  			console.log('did all session 1 and  is ready for session 2');
+
+
+		  	// 		response.writeHead(301,{Location : '/?&mkturk_id=' + mkturk_id + '&' + job + '=' + name + '&session=' + session });
+					// response.end();
+					continue;
+		  		} else if (job == 'time' && !isReady(val)) {
+
+		  			console.log('did all session 1 and is too early...');
+		  			response.writeHead(301,{Location : '/tooearly?study=wave2&mkturk_id=' + mkturk_id + '&timeleft=' + val });
+					response.end();
+					break;
+		  		}else if (job == 'task' && session == '2') {
+
+		  			
+		  			console.log('did all session 1 and 2!');
+				  	response.writeHead(301,{Location : '/completed?study=wave2&mkturk_id=' + mkturk_id });
+					response.end();
+					break;
+		  		} else {
+		  			// value is not null,
+		  			// Already did this so skip to the next  key
+
+		  			continue;
+		  		}
+
+		  		//console.log('job: ' + job + '\tname: ' + name + '\tsession: ' + session + '\tvalue: ' + val);
+
+		  	}
+
+		  	// Did all Session 1 and Session 2!!
+
+
+
+
+		  	// Route them to their last YES job
+		  	// if (lastSession == '1' && lastJob == 'task'){
+		  	// 	// need to check if it's been 24 hours
+		  	// 	if(isReady(timeReady)){
+		  	// 		res.writeHead(301, {
+		  	// 			Location: '/?session=2&mkturk_id=' + mkturk_id + '&' + job + '=' + name
+		  	// 		});
+			  //       res.end();	
+		  	// 	}else {
+		  	// 		// premature check. user is too early!
+		  	// 		res.writeHead(301, {
+		  	// 			Location: '/tooearly&mkturk_id=' + mkturk_id + '&timeleft=' + timeReady
+		  	// 		});
+			  //       res.end();	
+		  	// 	}
+
+		  	// } else if (lastSession == '1' && lastJob == 'survey'){
+
+	  		// 	// takes them to their last survey the didn't finish
+	  		// 	res.writeHead(301, {
+	  		// 		Location: '/?session=' + lastSession + '&mkturk_id=' + mkturk_id + '&' + job + '=' + name
+	  		// 	});
+		   //      res.end();	
+
+		  	// } else if (lastSession == '2' && lastJob == 'survey'){
+		  	
+		  	// 	res.writeHead(301, {
+	  		// 		Location: '/?session=' + lastSession + '&mkturk_id=' + mkturk_id + '&' + job + '=' + name
+	  		// 	});
+		   //      res.end();
+		  	// } else if (lastSession == '2' && lastJob == 'task'){
+		  	// 	// subject has completed any of them!!		  	}
+
+		  	// 	res.writeHead(301, {
+	  		// 		Location: '/?completed=' + lastSession + '&mkturk_id=' + mkturk_id
+	  		// 	});
+		   //      res.end();		  		
+		  	// }
+		  	// All Conditions have been a yes, user is finished with this HIT
+		}
+		catch (err) {
+			console.log(err);
+	  	// Do Nothing
+		}
+	});
+}
+
+// Function that adds the record to dp_status table
+function addRecordToStatusTable(id, con){
+	data = {
+		mkturk_id : id
+	}
+	con.query('INSERT INTO status SET ?', data, function (err, result) {
+		if (err) {
+			console.log('Error Inserting to status Table');
+		} else {
+			console.log('Record Inserted to status Table')
 		}
 	});
 }

@@ -13,7 +13,8 @@ var mysql = require('mysql');
 const requestIp = require('request-ip');
 var SqlString = require('sqlstring');
 
-var config = require('./config.json')
+// Configuration File for this Wave 1 Study
+var config = require('./wave1-config.json')
 
 
 var app = express();
@@ -31,9 +32,9 @@ var con = mysql.createConnection({
 
 con.connect(function(err) {
 	if (!err)
-		console.log('Database is Connected');
+		console.log('wave1 db is Connected');
 	else
-		console.log('DB connection err.');
+		console.log('wave2 db connection err.');
 
 });
 
@@ -172,6 +173,7 @@ app.post('/saveSurvey/', function(req, res) {
 	var session = q.session;
 	var mkturk_id = q.mkturk_id;
 	var survey = q.survey;
+	var study = q.study;
 	var task = q.task;
 	var ipaddr = requestIp.getClientIp(req);;
 
@@ -201,7 +203,7 @@ app.post('/saveSurvey/', function(req, res) {
 		}
 		outputString = outputString + ques + ',' + ans + ',' + rt + '\n';
 	}
-	fs.writeFile('surveys/data/SURVEY-' + survey +'-' + mkturk_id + '-T' + session + '.csv',outputString, (err) => {  
+	fs.writeFile('data/' + study + '/surveys/SURVEY-' + survey +'-' + mkturk_id + '-T' + session + '.csv',outputString, (err) => {  
 	    // throws an error, you could also catch it here
 	    if (err) throw err;
 	    // success case, the file was saved
@@ -1140,6 +1142,7 @@ function reRoute(con,mkturk_id,response){
 		}
 	});
 }
+
 // Return True if the subject has past the 24 hour period
 function isReady(dateString){
 	date = new Date(dateString);
