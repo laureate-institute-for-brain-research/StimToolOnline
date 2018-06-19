@@ -7,6 +7,7 @@ var fs = require('fs');
 var url = require('url');
 var mysql = require('mysql');
 var formidable = require('formidable');
+var SqlString = require('sqlstring');
 
 // Configuration File for Wave 2 Study
 var config = require('./wave2-config.json')
@@ -152,7 +153,7 @@ function reRoute(con,mkturk_id,response){
 		"LEFT JOIN subjects ON status.mkturk_id = subjects.mkturk_id " + 
 		"WHERE subjects.mkturk_id = ?", [mkturk_id])
 	
-	//console.log(sql);
+	console.log(sql);
 
 	//response.redirect('/?mkturk_id=JT&survey=demo&session=1');
 
@@ -297,6 +298,52 @@ function reRoute(con,mkturk_id,response){
 	});
 }
 
+
+function updateStatus(mkturk_id, job,session,con){
+	
+	var jobToSqlColumn = {
+		'demo_1' : 'survey_demo_T1',
+		'demo_2' : 'survey_demo_T2',
+		'phq_1' : 'survey_phq_T1',
+		'phq_2' : 'survey_phq_T2',
+		'oasis_1' : 'survey_oasis_T1',
+		'oasis_2' : 'survey_oasis_T2',
+		'panas_1' : 'survey_panas_T1',
+		'panas_2' : 'survey_panas_T2',
+		'chicken_1' : 'task_chicken_T1',
+		'chicken_2' : 'task_chicken_T2'
+	}
+
+	colname = jobToSqlColumn[job + '_' + session];
+
+
+	// sql = "INSERT INTO dp_status (mkturk_id, " + colname + ") " +
+	// "VALUES (" + mkturk_id + ",\'YES\') " +
+	// "ON DUPLICATE KEY UPDATE " + colname + "=\'YES\'";
+	sql = SqlString.format("INSERT INTO status (mkturk_id, " + colname + " ) " +
+	"VALUES ( ? ,\'YES\') " +
+	"ON DUPLICATE KEY UPDATE " + colname + "=\'YES\';",[mkturk_id]);
+	//console.log(sql);
+
+	con.query(sql,function (err, result) {
+	  
+		
+		// Throws error bcause subject is not in the database/ :)
+		try {
+		  	//console.log('sql output is not empty')
+
+		  	console.log('Updating..' + mkturk_id + ': ' + colname );
+		  	//sendEmailCode(jsondata.email);
+
+		}
+		catch (err) {
+		  	console.log('Failed Updating..');
+		  	// Do Nothing
+		}
+
+	});
+}
+
 // Function that adds the record to dp_status table
 function addRecordToStatusTable(id, con){
 	data = {
@@ -310,3 +357,5 @@ function addRecordToStatusTable(id, con){
 		}
 	});
 }
+// export functions to be used in mkturk-1.js
+module.exports.updateStatus = updateStatus;

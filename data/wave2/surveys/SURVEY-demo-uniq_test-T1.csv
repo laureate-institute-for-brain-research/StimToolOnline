@@ -1,16 +1,16 @@
-demo-uniq_test-T1-Wed, 19 Jun 2018 15:27:52 UTC,User Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.87 Safari/537.36,IP: ::1
+demo-uniq_test-T1-Wed, 19 Jun 2018 15:56:31 UTC,User Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.87 Safari/537.36,IP: ::1
 QUESTION,RESULT,RT(ms)
-demps_lv10_gender,1,2947
-demps_lv10_hispanic_ethnicity,7,1134
-demps_lv10_race,demps_lv10_race___24,demps_lv10_race___20,3634
-demps_lv10_engprimary,1,2472
-demps_lv10_intactfamorigin,1,1664
-demps_lv10_current_marital_status,1,1175
-demps_lv10_prevmarried,0,2839
-demps_lv10_nchild,1,1545
-demps_lv10_nsachild,1,1491
-demps_lv10_residence,3,958
-demps_lv10_current_educational_attainment,4,1790
-demps_lv10_employment,11,1839
-demps_lv10_leftjobreason,3,1971
-mkturk_other,0,2114
+demps_lv10_gender,1,42137
+demps_lv10_hispanic_ethnicity,7,1021
+demps_lv10_race,demps_lv10_race___13,1627
+demps_lv10_engprimary,2,1366
+demps_lv10_intactfamorigin,1,2099
+demps_lv10_current_marital_status,5,1650
+demps_lv10_prevmarried,0,1882
+demps_lv10_nchild,0,1820
+demps_lv10_nsachild,1,1781
+demps_lv10_residence,4,980
+demps_lv10_current_educational_attainment,11,2420
+demps_lv10_employment,17,2253
+demps_lv10_leftjobreason,4,1514
+mkturk_other,0,2124

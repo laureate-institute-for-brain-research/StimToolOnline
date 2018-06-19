@@ -217,7 +217,8 @@ app.post('/saveSurvey/', function(req, res) {
 
 	res.end('\n');
 	// Update the Status Table in SQL
-	updateStatus(mkturk_id, survey,session,con);	
+	
+	updateStatus(mkturk_id, survey,session,con, study);	
 });
 
 
@@ -228,6 +229,7 @@ app.post('/saveTask/', function(req, res) {
 	var file_date = d.getFullYear() + "_" + d.getMonth() + "_" +d.getDay() + "_" + d.getHours() + d.getMinutes()
 	var q = url.parse(req.url, true).query;
 	var session = q.session;
+	var study = q.study;
 	var mkturk_id = q.mkturk_id;
 	//var survey = q.survey;
 	var task = q.task;
@@ -238,7 +240,7 @@ app.post('/saveTask/', function(req, res) {
 	var head1 = "Orginal File Name:,"+ 'DP-' + mkturk_id + '-' + file_date + '.csv'+ ',UserAGENT:' + req.headers['user-agent'] + ',IP: ' + ipaddr + ",Time:,"+file_date+",Parameter File:,None:FromPsyToolkit,Event Codes:,[('INSTRUCT_ONSET', 1), ('TASK_ONSET', 2), ('TRIAL_ONSET', 3), ('CUE_ONSET', 4), ('IMAGE_ONSET', 5), ('TARGET_ONSET', 6), ('RESPONSE', 7), ('ERROR_DELAY', 8), ('BREAK_ONSET', 9), ('BREAK_END', 10)],Trial Types are coded as follows: 8 bits representing [valence neut/neg/pos] [target_orientation H/V] [target_side left/right] [duration .5/1] [valenced_image left/right] [cue_orientation H/V] [cue_side left/right] \n"
     var head2 = "trial_number,trial_type,event_code,absolute_time,response_time,response,result\n"
 
-	fs.writeFile('task/data/DP-' + mkturk_id + '-' + 'T' + session + '-' + file_date + '.csv', head1 + head2 + content, (err) => {
+	fs.writeFile('data/' + study + '/tasks/' + '/DP-' + mkturk_id + '-' + 'T' + session + '-' + file_date + '.csv', head1 + head2 + content, (err) => {
 		if (err) throw err;
 		console.log('File DP saved!');
 
@@ -255,7 +257,7 @@ app.post('/saveTask/', function(req, res) {
 	//shell.cd('..');
 
 	// Update the Status
-	updateStatus(mkturk_id, task,session,con);
+	updateStatus(mkturk_id, task,session,con,study);
 
 
 	// // Send the Code by Email if they Include it
@@ -273,7 +275,7 @@ app.post('/saveTask/', function(req, res) {
 
 			} else if (session == '1'){
 				// redirect them to the tooearly page
-					// send Email if the subject gave email and marked the remind checkbox
+				// send Email if the subject gave email and marked the remind checkbox
 				sendEmailRemind(mkturk_id);
 				//res.writeHead(301,{Location : '/tooearly?&mkturk_id=' + mkturk_id + '&timeleft=' + jsondata.time_ready });
 				//res.end();
@@ -291,12 +293,13 @@ app.post('/saveTask/', function(req, res) {
 });
 
 // This is wave-2 saveTask endpoint that saves Chicken Task Data
-app.post('/saveTaskWave2/', function(req, res) {
+app.post('/saveChickenTask/', function(req, res) {
 	var d = new Date();
 
 	var file_date = d.getFullYear() + "_" + d.getMonth() + "_" +d.getDay() + "_" + d.getHours() + d.getMinutes()
 	var q = url.parse(req.url, true).query;
 	var session = q.session;
+	var study = q.study;
 	var mkturk_id = q.mkturk_id;
 	//var survey = q.survey;
 	var task = q.task;
@@ -307,7 +310,7 @@ app.post('/saveTaskWave2/', function(req, res) {
 	var head1 = "Orginal File Name:,"+ 'CT-' + mkturk_id + '-' + file_date + '.csv'+ ',UserAGENT:' + req.headers['user-agent'] + ',IP: ' + ipaddr + ",Time:,"+file_date+",Parameter File:,None:FromPsyToolkit\n"
     var head2 = "trial_type,trial_number,block_num,egg_x_position,egg_y_position,absolute_time_sec,response_time_sec,response,result\n"
 
-	fs.writeFile('task/data/CT-' + mkturk_id + '-' + 'T' + session + '-' + file_date + '.csv', head1 + head2 + content, (err) => {
+	fs.writeFile('data/' + study + '/tasks/CT-' + mkturk_id + '-' + 'T' + session + '-' + file_date + '.csv', head1 + head2 + content, (err) => {
 		if (err) throw err;
 		console.log('Saved Chicken Task Data!');
 
@@ -931,8 +934,15 @@ function addTimeReady(mkturk_id){
 // mkturk_id: their Mechanical TURK ID
 // job: The survey or the task
 
-function updateStatus(mkturk_id, job,session,con){
+function updateStatus(mkturk_id, job,session,con,study){
 
+	if (study == 'wave2'){
+		wave2.updateStatus(mkturk_id, job,session,con)
+		return; 
+		// exit from the function since we don't want to run the 
+		// code snippet below 
+	}
+	
 	var jobToSqlColumn = {
 		'demo_1' : 'survey_demo_T1',
 		'demo_2' : 'survey_demo_T2',
