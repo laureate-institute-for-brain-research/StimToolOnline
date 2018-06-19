@@ -10,6 +10,23 @@ var formidable = require('formidable');
 
 var config = require('./config.json')
 
+// Connecting to database
+// Each study/wave should have their own database
+var con = mysql.createConnection({
+	host		: config.mysql_host,
+	user		: config.mysql_user,
+	password	: config.mysql_password,
+	database	: 'wave2'
+});
+
+con.connect(function(err) {
+   if (!err)
+	   console.log('wave2 db is Connected');
+   else
+	   console.log('wave2 db connection err.');
+
+});
+
 module.exports = function(app){
 
 	// show index page for Wave-2
