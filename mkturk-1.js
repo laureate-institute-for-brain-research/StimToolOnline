@@ -2,6 +2,7 @@
 // Written by James Touthang
 
 
+
 var express = require('express');
 var bodyParser = require('body-parser');
 var formidable = require('formidable');
@@ -12,15 +13,20 @@ var mysql = require('mysql');
 const requestIp = require('request-ip');
 var SqlString = require('sqlstring');
 
+var config = require('./config.json')
+
 
 var app = express();
 
+// This .js file is for Wave-1
+var wave2 = require('./wave2')(app);
+
 // Connecting to database
 var con = mysql.createConnection({
-     host		: "localhost",
-     user		: "weblogin",
-     password	: "U5AZwEpM",
-     database	: "mk_turk1"
+     host		: config.mysql_host,
+     user		: config.mysql_user,
+     password	: config.mysql_password,
+     database	: config.mysql_database
 });
 
 con.connect(function(err) {
@@ -111,21 +117,6 @@ app.get('/completed', function (req, res) {
 	displayCompleted(res);
 });
 
-app.get('/wave-2', function (req, res) {
-	var q = url.parse(req.url, true). query;
-	var session = q.session;
-	var mkturk_id = q.mkturk_id;
-
-	fs.readFile('index-chicken.html', function (err, data) {
-		// Write Header
-		res.writeHead(200, {
-			'Content-Type' : 'text/html'
-		});
-		// Wrte Body
-		res.write(data);
-		res.end();
-	});
-});
 
 // Page of all Task
 app.get('/list', function(req,res){
@@ -1365,6 +1356,6 @@ function processForm(req, response) {
 
 
 /// IGNORE EVERYTHING AFTER HERE
-var server = app.listen(1185, function() {
-	console.log('listening on port: 1185');
+var server = app.listen(config.app_port, function() {
+	console.log('listening on port: ' + config.app_port.toString() );
 });
