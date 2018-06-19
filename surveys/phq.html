@@ -65,6 +65,11 @@
                 <a align="right" id="session"></a>   
             </div>
 
+            <div class="row">
+                <p align="right" class="col-md-10">Study: </p>
+                <a align="right" id="study"></a>   
+            </div>
+
 <!--             <div class="row">
                 <p align="right" class="col-md-10">Time Spent on Question: </p>
                 <a align="right" id="timeEl"></a> 
@@ -146,7 +151,7 @@
 
             survey.onComplete.add(function (result) {
                 postSurveyData(result.data, session, mkturkid, surveyname);
-                window.location.href = "/?session="+session+"&mkturk_id="+mkturkid+"&survey=oasis";
+                window.location.href = "/?session="+session+"&mkturk_id="+mkturkid+"&survey=oasis" + "&study=" + getQueryVariable('study');
              });
 
             // Parse the URL 
@@ -156,7 +161,7 @@
             function postSurveyData(data, session, mkturkid, surveyname){
                 $.ajax({
                     type: 'POST',
-                    url: 'saveSurvey/?session=' + session + '&mkturk_id=' + mkturkid + '&survey=' + surveyname,
+                    url: 'saveSurvey/?session=' + session + '&mkturk_id=' + mkturkid + '&survey=' + surveyname + "&study=" + getQueryVariable('study'),
                     data: JSON.stringify(data), // or JSON.stringify ({name: 'jonas'}),
                     success: function(data) { alert('data: ' + data); },
                     contentType: "application/json",
@@ -168,6 +173,7 @@
             $("#surveyElement").Survey({model: survey});
             $("#mkid").text(mkturkid);
             $("#session").text(session);
+            $("#study").text(getQueryVariable('study'));
 
 
             var start = new Date().getTime(),
