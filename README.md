@@ -8,7 +8,7 @@ Mechanical Turk Web application for Online Tasks
 - install nodejs
 
 ## Setup Mysql
-- create database with these settings:
+- create database with these settings. (change the config.json to make changes):
 ```
      user	: "weblogin",
      password	: "U5AZwEpM",
