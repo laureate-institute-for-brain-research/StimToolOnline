@@ -1,5 +1,5 @@
 -- Create the database
-CREATE SCHEMA `new_schema` DEFAULT CHARACTER SET latin1 ;
+CREATE SCHEMA `wave2` DEFAULT CHARACTER SET latin1 ;
 
 -- Creating the subjects table
 CREATE TABLE `wave2`.`subjects` (
@@ -27,3 +27,7 @@ CREATE TABLE `wave2`.`status` (
   `survey_panas_T1` VARCHAR(45) NULL,
   `survey_panas_T2` VARCHAR(45) NULL,
   PRIMARY KEY (`id`));
+
+-- # ADD CONSTRAINTS FOR UNIUE Column
+ALTER TABLE status ADD CONSTRAINT mid_table UNIQUE (mkturk_id);
+ALTER TABLE subjects ADD CONSTRAINT mid_uniq_table UNIQUE (mkturk_id);

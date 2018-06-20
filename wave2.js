@@ -90,7 +90,8 @@ function insertNewData(fields,con, response){
 	var currentdate = new Date();
 	//var next24hrdate = getFuture24Date(currentdate,24)
 
-	// get version number for chicken task
+	// get version number for chicken tas
+	// since each subject gets a random chicken task version
 	var chicken_version = Math.floor(Math.random() * 3) + 1
 
 
