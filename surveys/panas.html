@@ -65,6 +65,11 @@
                 <a align="right" id="session"></a>   
             </div>
 
+            <div class="row">
+                <p align="right" class="col-md-10">Study: </p>
+                <a align="right" id="study"></a>   
+            </div>
+
 <!--             <div class="row">
                 <p align="right" class="col-md-10">Time Spent on Question: </p>
                 <a align="right" id="timeEl"></a> 
@@ -170,7 +175,7 @@
             $("#surveyElement").Survey({model: survey});
             $("#mkid").text(mkturkid);
             $("#session").text(session);
-            $("#study").text(stgetQueryVariable('study'));
+            $("#study").text(getQueryVariable('study'));
 
 
             var start = new Date().getTime(),

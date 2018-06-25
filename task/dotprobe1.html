@@ -59,6 +59,11 @@
             <a align="right" id="session"></a>   
         </div>
 
+        <div class="row">
+            <p align="right" class="col-md-10">Study: </p>
+            <a align="right" id="study"></a>   
+        </div>
+
     </div>
 <script>
     function getQueryVariable(variable) {
@@ -78,6 +83,8 @@
 
     $("#mkid").text(mkturkid);
     $("#session").text(session);
+    $("#study").text(getQueryVariable('study'));
+
 function tmpmouse(e){MouseX=e.clientX-c.getBoundingClientRect().left;MouseY=e.clientY-c.getBoundingClientRect().top; if(MouseX>255 && MouseX<705 && MouseY>185 && MouseY<535){window.removeEventListener('mousedown', tmpmouse, false);main();}}
 
 function whenloaded(){
@@ -158,7 +165,7 @@ psy_load_bitmap("http://res.cloudinary.com/laureate-institute-for-brain-research
     function postData(data, session, mkturkid, task){
         $.ajax({
             type: 'POST',
-            url: 'saveDPTask/?session=' + session + '&mkturk_id=' + mkturkid + '&task=' + task,
+            url: 'saveDPTask/?session=' + session + '&mkturk_id=' + mkturkid + '&task=' + task + '&study=' + getQueryVariable('study'),
             data: JSON.stringify({content : data}), // or JSON.stringify ({name: 'jonas'}),
             success: function(data) { alert('data: ' + data); },
             contentType: "application/json",
@@ -167,7 +174,7 @@ psy_load_bitmap("http://res.cloudinary.com/laureate-institute-for-brain-research
     }
     
     function showEnd(mkturkid){
-        window.location.replace("/tooearly?" + "&mkturk_id=" + mkturkid);
+        window.location.replace("/tooearly?" + "&mkturk_id=" + getQueryVariable('mkturk_id') + '&study=' + getQueryVariable('study'));
     }
 
 

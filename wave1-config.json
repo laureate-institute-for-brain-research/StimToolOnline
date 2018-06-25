@@ -1,7 +1,0 @@
-{
-    "app_port" : 1185,
-    "mysql_host" : "localhost",
-    "mysql_user" : "weblogin",
-    "mysql_password" : "U5AZwEpM",
-    "mysql_databse" : "mk_turk1"
-}

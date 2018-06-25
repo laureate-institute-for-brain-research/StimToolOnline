@@ -12,15 +12,15 @@ var mysql = require('mysql');
 
 const requestIp = require('request-ip');
 var SqlString = require('sqlstring');
+var cloudinary = require('cloudinary');
 
 // Configuration File for this Wave 1 Study
-var config = require('./wave1-config.json')
-
+var config = require('./study/wave1/wave1-config.json')
 
 var app = express();
 
 // This .js file is for Wave-1
-var wave2 = require('./wave2')(app);
+var wave2 = require('./study/wave2/wave2')(app);
 
 // Connecting to database
 var con = mysql.createConnection({
@@ -30,6 +30,14 @@ var con = mysql.createConnection({
      database	: config.mysql_database
 });
 
+// Setup the configurations for CDN
+cloudinary.config({ 
+	cloud_name: config.cloudinary_name, 
+	api_key: config.cloudinary_api_key, 
+	api_secret:  config.cloudinary_api_secret
+});
+
+
 con.connect(function(err) {
 	if (!err)
 		console.log('wave1 db is Connected');
@@ -37,6 +45,7 @@ con.connect(function(err) {
 		console.log('wave2 db connection err.');
 
 });
+
 
 app.use(bodyParser.json());
 app.use(express.static('public'));
@@ -54,6 +63,7 @@ app.get('/',function (req, res) {
 	var mkturk_id = q.mkturk_id;
 	var survey = q.survey;
 	var task = q.task;
+	var study = q.study;
 	//console.log('session: ' + session, 'id: ' + mkturk_id, 'survey: ' + survey, 'task: ' + task)
 	//console.log(req.connection.remoteAddress)
 
@@ -93,7 +103,7 @@ app.get('/',function (req, res) {
 
 
 	} else if (q.name == 'email' && q.type == 'remind'){
-		sendEmailRemind(mkturk_id,hours_away=1);
+		sendEmailRemind(mkturk_id,hours_away=1, study);
 		res.send('Tried to send remind email');
 	} else{
 		displayHome(res);
@@ -155,7 +165,7 @@ app.get('/test', function(req,res){
 		res.end();
 	});	
 });
-app.post('/', function (req, res) {
+app.post('/wave1proceed', function (req, res) {
 
 	var q = url.parse(req.url, true).query;
 	var session = q.session;
@@ -203,27 +213,32 @@ app.post('/saveSurvey/', function(req, res) {
 		}
 		outputString = outputString + ques + ',' + ans + ',' + rt + '\n';
 	}
-	fs.writeFile('data/' + study + '/surveys/SURVEY-' + survey +'-' + mkturk_id + '-T' + session + '.csv',outputString, (err) => {  
+	var filename = 'data/' + study + '/surveys/' + study +'-SURVEY-' + survey + '-' + mkturk_id + '-T' + session + '.csv'
+	fs.writeFile(filename ,outputString, (err) => {  
 	    // throws an error, you could also catch it here
 	    if (err) throw err;
 	    // success case, the file was saved
 	    //console.log('File saved!');
 	    console.log("file saved");
-
 	});
 	
 	//csv.write('surveys/data/' + survey +'-' + mkturk_id + '-T' + session + '.csv', req.body, {header: 'question'});
 	res.send('');
 
 	res.end('\n');
+
+	// Upload to Cloudinary
+	uploadToCloudinary(filename);
+
 	// Update the Status Table in SQL
+	updateStatus(mkturk_id, survey,session,con, study);
 	
-	updateStatus(mkturk_id, survey,session,con, study);	
+	
 });
 
 
 // This is the Save Task endppoint for Wave 1 of the test and retest
-app.post('/saveTask/', function(req, res) {
+app.post('/saveDPTask/', function(req, res) {
 	var d = new Date();
 
 	var file_date = d.getFullYear() + "_" + d.getMonth() + "_" +d.getDay() + "_" + d.getHours() + d.getMinutes()
@@ -233,20 +248,23 @@ app.post('/saveTask/', function(req, res) {
 	var mkturk_id = q.mkturk_id;
 	//var survey = q.survey;
 	var task = q.task;
-	var ipaddr = req.connection.remoteAddress;
+	var ipaddr = requestIp.getClientIp(req)
 
 	data = req.body; // json input
 	content = data.content;  
 	var head1 = "Orginal File Name:,"+ 'DP-' + mkturk_id + '-' + file_date + '.csv'+ ',UserAGENT:' + req.headers['user-agent'] + ',IP: ' + ipaddr + ",Time:,"+file_date+",Parameter File:,None:FromPsyToolkit,Event Codes:,[('INSTRUCT_ONSET', 1), ('TASK_ONSET', 2), ('TRIAL_ONSET', 3), ('CUE_ONSET', 4), ('IMAGE_ONSET', 5), ('TARGET_ONSET', 6), ('RESPONSE', 7), ('ERROR_DELAY', 8), ('BREAK_ONSET', 9), ('BREAK_END', 10)],Trial Types are coded as follows: 8 bits representing [valence neut/neg/pos] [target_orientation H/V] [target_side left/right] [duration .5/1] [valenced_image left/right] [cue_orientation H/V] [cue_side left/right] \n"
     var head2 = "trial_number,trial_type,event_code,absolute_time,response_time,response,result\n"
 
-	fs.writeFile('data/' + study + '/tasks/' + '/DP-' + mkturk_id + '-' + 'T' + session + '-' + file_date + '.csv', head1 + head2 + content, (err) => {
+	var filename = 'data/' + study + '/tasks/' + '/' + study + '-DP-' + mkturk_id + '-' + 'T' + session + '-' + file_date + '.csv'
+	fs.writeFile(filename, head1 + head2 + content, (err) => {
 		if (err) throw err;
 		console.log('File DP saved!');
 
 	});
 		// add Time Ready so that the ready time initiates once Task1 has been completed
 	addTimeReady(mkturk_id);
+	// upload to cloudinary
+	uploadToCloudinary(filename);
 
 	res.send('Got the Data')
 
@@ -257,8 +275,7 @@ app.post('/saveTask/', function(req, res) {
 	//shell.cd('..');
 
 	// Update the Status
-	updateStatus(mkturk_id, task,session,con,study);
-
+	updateStatus(mkturk_id, task,session,con,study);	
 
 	// // Send the Code by Email if they Include it
 	con.query('SELECT email,remind,time_ready FROM dot_probe1 WHERE mkturk_id = ?',[mkturk_id],function (err, result) {
@@ -276,7 +293,7 @@ app.post('/saveTask/', function(req, res) {
 			} else if (session == '1'){
 				// redirect them to the tooearly page
 				// send Email if the subject gave email and marked the remind checkbox
-				sendEmailRemind(mkturk_id);
+				sendEmailRemind(mkturk_id, study=study);
 				//res.writeHead(301,{Location : '/tooearly?&mkturk_id=' + mkturk_id + '&timeleft=' + jsondata.time_ready });
 				//res.end();
 
@@ -310,7 +327,8 @@ app.post('/saveChickenTask/', function(req, res) {
 	var head1 = "Orginal File Name:,"+ 'CT-' + mkturk_id + '-' + file_date + '.csv'+ ',UserAGENT:' + req.headers['user-agent'] + ',IP: ' + ipaddr + ",Time:,"+file_date+",Parameter File:,None:FromPsyToolkit\n"
     var head2 = "trial_type,trial_number,block_num,egg_x_position,egg_y_position,absolute_time_sec,response_time_sec,response,result\n"
 
-	fs.writeFile('data/' + study + '/tasks/CT-' + mkturk_id + '-' + 'T' + session + '-' + file_date + '.csv', head1 + head2 + content, (err) => {
+	var filename = 'data/' + study + '/tasks/CT-' + mkturk_id + '-' + 'T' + session + '-' + file_date + '.csv'
+	fs.writeFile(filename, head1 + head2 + content, (err) => {
 		if (err) throw err;
 		console.log('Saved Chicken Task Data!');
 
@@ -328,6 +346,9 @@ app.post('/saveChickenTask/', function(req, res) {
 
 	// Update the Status
 	//updateStatus(mkturk_id, task,session,con);
+
+	// upload to cloudinary
+	uploadToCloudinary(filename);
 
 
 	// // Send the Code by Email if they Include it
@@ -394,7 +415,6 @@ app.get('/getPHQ',function(req, res){
 	res.send(getPHQScore('surveys/data/SURVEY-phq-' + mkturk_id + '-T' + session +'.csv'))
 
 })
-
 
 app.get('/getOASIS', function(req, res) {
 	var q = url.parse(req.url, true).query;
@@ -575,7 +595,6 @@ function getASISocial(filename) {
 
 }
 
-
 // Will return the phq score given the survey filename
 function getPHQScore(filename){
 	
@@ -598,8 +617,6 @@ function getPHQScore(filename){
 	return Total.toString();
 
 }
-
-
 
 function toArrayfromCSVString(string){
 	var line = string.split('\n');
@@ -785,8 +802,8 @@ function displayCompleted(res){
 
 
 // SENDHTML CODES
-function getRemindHTML(mkturk_id){
-	var session2Link = 'http://brainworkout.paulus.libr.net/?session=2&mkturk_id=' + mkturk_id + '&survey=demo';
+function getRemindHTML(mkturk_id, study){
+	var session2Link = 'http://brainworkout.paulus.libr.net/?session=2&mkturk_id=' + mkturk_id + '&survey=demo' + '&study=' + study;
 	return `<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -801,7 +818,8 @@ function getRemindHTML(mkturk_id){
 				<table align="center" border="0" cellpadding="0" cellspacing="0" width="600" style="border: 1px solid #cccccc; border-collapse: collapse;">
 					<tr>
 						<td align="center" bgcolor="#FFFFFF" style="padding: 40px 0 30px 0; color: #153643; font-size: 28px; font-weight: bold; font-family: Arial, sans-serif;">
-							<center><a href="http://www.laureateinstitute.org/"><img class="logo" src="http://brainworkout.paulus.libr.net/images/logo.png"></a></center>
+							<center><a href="http://www.laureateinstitute.org/"><img class="logo" style = "width: 400px;
+							height: 70px;" src="http://brainworkout.paulus.libr.net/images/logo.png"></a></center>
 						</td>
 
 					</tr>
@@ -937,7 +955,7 @@ function addTimeReady(mkturk_id){
 function updateStatus(mkturk_id, job,session,con,study){
 
 	if (study == 'wave2'){
-		wave2.updateStatus(mkturk_id, job,session,con)
+		wave2.updateStatus(mkturk_id, job,session)
 		return; 
 		// exit from the function since we don't want to run the 
 		// code snippet below 
@@ -1060,27 +1078,24 @@ function reRoute(con,mkturk_id,response){
 		  		//console.log('job: ' + job + '\tname: ' + name + '\tsession: ' + session + '\tvalue: ' + val);
 		  		//console.log(mkturk_id + ':' + job + ':' + name + ':' + val);
 		  		if (val == null) {
-
 		  			
 		  			console.log('redirect..');
 		  			//response.redirect('/?&mkturk_id=' + mkturk_id + '&' + job + '=' + 'asi' + '&session=' + session)
 					// this.statusCode = 302;
-					response.writeHead(301,{Location : '/?&mkturk_id=' + mkturk_id + '&' + job + '=' + name + '&session=' + session });
+					response.writeHead(301,{Location : '/?study=wave1&mkturk_id=' + mkturk_id + '&' + job + '=' + name + '&session=' + session });
 					response.end();
 		  			break;
 		  		} else if (job == 'time' && isReady(val)){
 		  			// completed session 1
 
 		  			console.log('did all session 1 and  is ready for session 2');
-
-
 		  	// 		response.writeHead(301,{Location : '/?&mkturk_id=' + mkturk_id + '&' + job + '=' + name + '&session=' + session });
 					// response.end();
 					continue;
 		  		} else if (job == 'time' && !isReady(val)) {
 
 		  			console.log('did all session 1 and is too early...');
-		  			response.writeHead(301,{Location : '/tooearly?&mkturk_id=' + mkturk_id + '&timeleft=' + val });
+		  			response.writeHead(301,{Location : '/tooearly?study=wave1&mkturk_id=' + mkturk_id + '&timeleft=' + val });
 					response.end();
 					break;
 		  		}else if (job == 'task' && session == '2') {
@@ -1102,9 +1117,6 @@ function reRoute(con,mkturk_id,response){
 		  	}
 
 		  	// Did all Session 1 and Session 2!!
-
-
-
 
 		  	// Route them to their last YES job
 		  	// if (lastSession == '1' && lastJob == 'task'){
@@ -1201,7 +1213,7 @@ function getFormattedDate(dateobject){
 
 // Send Reminder Email at Futre Date Object
 // Uses Mailgun API to send email 24 hours after they were recorded in the Database
-function sendEmailRemind(mkturk_id,hours_away=30){
+function sendEmailRemind(mkturk_id,hours_away=30, study){
 	con.query('SELECT email, remind FROM dot_probe1 WHERE mkturk_id = ?',[mkturk_id], function(err, result) {
 		try {
 			sqlresult = JSON.parse(JSON.stringify(result));
@@ -1215,13 +1227,12 @@ function sendEmailRemind(mkturk_id,hours_away=30){
 			// var remind = getRemind(mkturk_id, con);
 			var next24hrdate = getFormattedDate(getFuture24Date(currentdate,hours_away)); // will be delivery 30 hours from current datetime
 
-
 			var mailgun = require("mailgun-js");
 			var api_key = 'key-fa2d65c78c52cfabac185c98eb95721e';
 			var DOMAIN = 'paulus.touthang.info';
 			var mailgun = require('mailgun-js')({apiKey: api_key, domain: DOMAIN});
 
-			var session2Link = 'http://brainworkout.paulus.libr.net/?session=2&mkturk_id=' + mkturk_id + '&survey=demo';
+			var session2Link = 'http://brainworkout.paulus.libr.net/?session=2&mkturk_id=' + mkturk_id + '&survey=demo'+ '&study=' + study;
 			var body = 'Hi ' + mkturk_id + '! \n\nSession 2 of the LIBR brainworkout Amazon Mechanical Turk HIT is ready for you to complete!!!\n\n' + 'Click the link below to complete Session 2!\n\n'+ session2Link +'\n\nReminder: You MUST complete session 2 to receive payment for the HIT';
 
 			var data = {
@@ -1229,7 +1240,7 @@ function sendEmailRemind(mkturk_id,hours_away=30){
 			  to: emailaddress,
 			  subject: 'Hello! You can now do session 2 for LIBR brainworkout Amazon Mechanical Turk HIT!',
 			  text: body,
-			  html: getRemindHTML(mkturk_id),
+			  html: getRemindHTML(mkturk_id, study),
 			  "o:deliverytime" : next24hrdate
 			};
 
@@ -1338,7 +1349,7 @@ function insertNewData(fields,con, response){
 			// 1st Time New User Login
 			addRecordToStatusTable(fields.mkturk_id,con);
 			response.writeHead(301, {
-				Location: '/?session=1' + '&mkturk_id=' + fields.mkturk_id + '&survey=demo'
+				Location: '/?study=wave1&session=1' + '&mkturk_id=' + fields.mkturk_id + '&survey=demo'
 			});
 			response.end();				
 		}
@@ -1372,3 +1383,23 @@ function processForm(req, response) {
 var server = app.listen(config.app_port, function() {
 	console.log('listening on port: ' + config.app_port.toString() );
 });
+
+
+function uploadToCloudinary(file){
+	cloudinary.v2.uploader.upload(file, {
+		resource_type : 'auto',
+		folder : 'Data',
+		use_filename : 'true',
+	},  function(error, result){
+		console.log('uploaded..' + file);
+		console.log(result);
+		console.log(error);
+
+	});
+}
+
+
+// Module Exports
+module.exports = {
+	sendEmailRemind
+}
