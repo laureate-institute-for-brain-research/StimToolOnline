@@ -302,7 +302,7 @@
             function postSurveyData(data, session, mkturkid, surveyname){
                 $.ajax({
                     type: 'POST',
-                    url: 'saveSurvey/?session=' + session + '&mkturk_id=' + mkturkid + '&survey=' + surveyname,
+                    url: 'saveSurvey/?session=' + session + '&mkturk_id=' + mkturkid + '&survey=' + surveyname + '&study=' + getQueryVariable('study'),
                     data: JSON.stringify(data), // or JSON.stringify ({name: 'jonas'}),
                     success: function(data) { console.log('Data saved!') },
                     contentType: "application/json",
@@ -329,45 +329,46 @@
 
             var mkturkid = getQueryVariable('mkturk_id');
             var timeleft = getQueryVariable('timeleft');
+            var study = getQueryVariable('study');
 
 
             document.getElementById("mkturk_id").innerHTML = mkturkid;
 
 
             // get the scores
-            $.get('/getPHQ?session=1&mkturk_id=' + mkturkid, function(data) {
+            $.get('/getPHQ?session=1&mkturk_id=' + mkturkid + '&study=' + study, function(data) {
                 document.getElementById("phqscore1").innerHTML = data;
             });
-            $.get('/getPHQ?session=2&mkturk_id=' + mkturkid, function(data) {
+            $.get('/getPHQ?session=2&mkturk_id=' + mkturkid + '&study=' + study, function(data) {
                 document.getElementById("phqscore2").innerHTML = data;
             });
 
-            $.get('/getOASIS?session=1&mkturk_id=' + mkturkid, function(data) {
+            $.get('/getOASIS?session=1&mkturk_id=' + mkturkid + '&study=' + study, function(data) {
                 document.getElementById("oasisscore1").innerHTML = data;
             });
-            $.get('/getOASIS?session=2&mkturk_id=' + mkturkid, function(data) {
+            $.get('/getOASIS?session=2&mkturk_id=' + mkturkid + '&study=' + study, function(data) {
                 document.getElementById("oasisscore2").innerHTML = data;
             });
             
-            $.get('/getPANAS?type=positive&session=1&mkturk_id=' + mkturkid, function(data) {
+            $.get('/getPANAS?type=positive&session=1&mkturk_id=' + mkturkid + '&study=' + study, function(data) {
                 document.getElementById("panasPositive1").innerHTML = data;
             });
-            $.get('/getPANAS?type=positive&session=2&mkturk_id=' + mkturkid, function(data) {
+            $.get('/getPANAS?type=positive&session=2&mkturk_id=' + mkturkid + '&study=' + study, function(data) {
                 document.getElementById("panasPositive2").innerHTML = data;
             });
-            $.get('/getPANAS?type=negative&session=1&mkturk_id=' + mkturkid, function(data) {
+            $.get('/getPANAS?type=negative&session=1&mkturk_id=' + mkturkid + '&study=' + study, function(data) {
                 document.getElementById("panasNegative1").innerHTML = data;
             });
-            $.get('/getPANAS?type=negative&session=2&mkturk_id=' + mkturkid, function(data) {
+            $.get('/getPANAS?type=negative&session=2&mkturk_id=' + mkturkid + '&study=' + study, function(data) {
                 document.getElementById("panasNegative2").innerHTML = data;
             });          
 
 
 
-            setTimeout(function () {
-                // body...
-                document.getElementById('plot').src = "/stats/" + mkturkid + "DP.html"
-            },1500) // upate after 700 ms
+            // setTimeout(function () {
+            //     // body...
+            //     document.getElementById('plot').src = "/stats/" + mkturkid + "DP.html"
+            // },1500) // upate after 700 ms
 
             //$("#timeleft").text(timeleft);
         </script>

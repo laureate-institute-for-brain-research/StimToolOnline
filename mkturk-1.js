@@ -412,7 +412,9 @@ app.get('/getPHQ',function(req, res){
 	var q = url.parse(req.url, true).query;
 	var mkturk_id = q.mkturk_id;
 	var session = q.session;
-	res.send(getPHQScore('surveys/data/SURVEY-phq-' + mkturk_id + '-T' + session +'.csv'))
+	var study = q.study;
+	var filename = 'data/' + study + '/surveys/' + study +'-SURVEY-' + 'phq' + '-' + mkturk_id + '-T' + session + '.csv'
+	res.send(getPHQScore(filename))
 
 })
 
@@ -420,9 +422,11 @@ app.get('/getOASIS', function(req, res) {
 	var q = url.parse(req.url, true).query;
 	var mkturk_id = q.mkturk_id;
 	var session = q.session;
+	var study = q.study;
+	var filename = 'data/' + study + '/surveys/' + study +'-SURVEY-' + 'oasis' + '-' + mkturk_id + '-T' + session + '.csv'
 
 	// oasis sums up scores the same as phq
-	res.send(getPHQScore('surveys/data/SURVEY-oasis-' + mkturk_id + '-T' + session + '.csv'))
+	res.send(getPHQScore(filename))
 })
 
 
@@ -463,9 +467,9 @@ app.get('/getPANAS', function(req, res) {
 	var q = url.parse(req.url, true).query;
 	var mkturk_id = q.mkturk_id;
 	var session = q.session;
-	//var type = q.type;
+	var study = q.study;
+	var filename = 'data/' + study + '/surveys/' + study +'-SURVEY-' + 'panas' + '-' + mkturk_id + '-T' + session + '.csv'
 
-	var filename = 'surveys/data/SURVEY-panas-' + mkturk_id + '-T' + session +'.csv'
 	var value = 'not specified';
 	switch(q.type){
 		case 'positive':
