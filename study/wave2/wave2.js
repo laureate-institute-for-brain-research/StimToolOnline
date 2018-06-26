@@ -2,6 +2,8 @@
 // This .js file is for all code pertaining to Wave-2 portion of the 
 // retest-study
 // Wave 2 'study'
+// The node js file baceknd file for 
+// the chicken task. 
 
 var fs = require('fs');
 var url = require('url');

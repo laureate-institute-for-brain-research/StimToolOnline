@@ -6,5 +6,7 @@
     "mysql_database" : "mk_turk1",
     "cloudinary_name" : "laureate-institute-for-brain-research",
     "cloudinary_api_key" : "575327231288218",
-    "cloudinary_api_secret" : "swQDJdDziYyRz-GyTFxTPWiQUSs"
+    "cloudinary_api_secret" : "swQDJdDziYyRz-GyTFxTPWiQUSs",
+    "mailgun_domain" : "paulus.touthang.info",
+    "mailgun_api_key" : "key-fa2d65c78c52cfabac185c98eb95721e"
 }

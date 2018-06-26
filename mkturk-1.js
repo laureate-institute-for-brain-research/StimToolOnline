@@ -241,7 +241,7 @@ app.post('/saveSurvey/', function(req, res) {
 app.post('/saveDPTask/', function(req, res) {
 	var d = new Date();
 
-	var file_date = d.getFullYear() + "_" + d.getMonth() + "_" +d.getDay() + "_" + d.getHours() + d.getMinutes()
+	var file_date = d.getFullYear() + "_" + d.getMonth() + 1 + "_" + d.getDate() + "_" + d.getHours() + '_' + d.getMinutes()
 	var q = url.parse(req.url, true).query;
 	var session = q.session;
 	var study = q.study;
@@ -255,7 +255,7 @@ app.post('/saveDPTask/', function(req, res) {
 	var head1 = "Orginal File Name:,"+ 'DP-' + mkturk_id + '-' + file_date + '.csv'+ ',UserAGENT:' + req.headers['user-agent'] + ',IP: ' + ipaddr + ",Time:,"+file_date+",Parameter File:,None:FromPsyToolkit,Event Codes:,[('INSTRUCT_ONSET', 1), ('TASK_ONSET', 2), ('TRIAL_ONSET', 3), ('CUE_ONSET', 4), ('IMAGE_ONSET', 5), ('TARGET_ONSET', 6), ('RESPONSE', 7), ('ERROR_DELAY', 8), ('BREAK_ONSET', 9), ('BREAK_END', 10)],Trial Types are coded as follows: 8 bits representing [valence neut/neg/pos] [target_orientation H/V] [target_side left/right] [duration .5/1] [valenced_image left/right] [cue_orientation H/V] [cue_side left/right] \n"
     var head2 = "trial_number,trial_type,event_code,absolute_time,response_time,response,result\n"
 
-	var filename = 'data/' + study + '/tasks/' + '/' + study + '-DP-' + mkturk_id + '-' + 'T' + session + '-' + file_date + '.csv'
+	var filename = 'data/' + study + '/tasks/' + '/' + study + '-DP-' + mkturk_id + '-' + 'T' + session + '.csv'
 	fs.writeFile(filename, head1 + head2 + content, (err) => {
 		if (err) throw err;
 		console.log('File DP saved!');
@@ -313,7 +313,7 @@ app.post('/saveDPTask/', function(req, res) {
 app.post('/saveChickenTask/', function(req, res) {
 	var d = new Date();
 
-	var file_date = d.getFullYear() + "_" + d.getMonth() + "_" +d.getDay() + "_" + d.getHours() + d.getMinutes()
+	var file_date = d.getFullYear() + "_" + d.getMonth() + 1 + "_" + d.getDate() + "_" + d.getHours() + '_' + d.getMinutes()
 	var q = url.parse(req.url, true).query;
 	var session = q.session;
 	var study = q.study;
@@ -327,7 +327,7 @@ app.post('/saveChickenTask/', function(req, res) {
 	var head1 = "Orginal File Name:,"+ 'CT-' + mkturk_id + '-' + file_date + '.csv'+ ',UserAGENT:' + req.headers['user-agent'] + ',IP: ' + ipaddr + ",Time:,"+file_date+",Parameter File:,None:FromPsyToolkit\n"
     var head2 = "trial_type,trial_number,block_num,egg_x_position,egg_y_position,absolute_time_sec,response_time_sec,response,result\n"
 
-	var filename = 'data/' + study + '/tasks/CT-' + mkturk_id + '-' + 'T' + session + '-' + file_date + '.csv'
+	var filename = 'data/' + study + '/tasks/CT-' + mkturk_id + '-' + 'T' + session + '.csv'
 	fs.writeFile(filename, head1 + head2 + content, (err) => {
 		if (err) throw err;
 		console.log('Saved Chicken Task Data!');
@@ -1048,11 +1048,7 @@ function reRoute(con,mkturk_id,response){
 		  	value = '';
 		  	timeReady = '';
 
-
-
 		  	// get the key with the last 'YES' status and the time_ready value
-
-
 
 		  	console.log(obj);
 		  	for (var key in obj){
@@ -1104,7 +1100,6 @@ function reRoute(con,mkturk_id,response){
 					break;
 		  		}else if (job == 'task' && session == '2') {
 
-		  			
 		  			console.log('did all session 1 and 2!');
 				  	response.writeHead(301,{Location : '/completed?&mkturk_id=' + mkturk_id });
 					response.end();
@@ -1234,7 +1229,7 @@ function sendEmailRemind(mkturk_id,hours_away=30, study){
 			var mailgun = require("mailgun-js");
 			var api_key = 'key-fa2d65c78c52cfabac185c98eb95721e';
 			var DOMAIN = 'paulus.touthang.info';
-			var mailgun = require('mailgun-js')({apiKey: api_key, domain: DOMAIN});
+			var mailgun = require('mailgun-js')({apiKey: config.mailgun_api_key, domain: config.mailgun_domain});
 
 			var session2Link = 'http://brainworkout.paulus.libr.net/?session=2&mkturk_id=' + mkturk_id + '&survey=demo'+ '&study=' + study;
 			var body = 'Hi ' + mkturk_id + '! \n\nSession 2 of the LIBR brainworkout Amazon Mechanical Turk HIT is ready for you to complete!!!\n\n' + 'Click the link below to complete Session 2!\n\n'+ session2Link +'\n\nReminder: You MUST complete session 2 to receive payment for the HIT';
