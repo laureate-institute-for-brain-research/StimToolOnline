@@ -263,10 +263,11 @@
                 <hr>
 
                 <br>
-                <div class="row" style="width: 60%;">
+                <!-- Feed back Survey -->
+                <!-- <div class="row" style="width: 60%;">
                     <div id="surveyElement"></div>
                     <div id="surveyResult"></div>    
-                </div>
+                </div> -->
                 <hr>
                 <br>
                 <br>
@@ -283,34 +284,34 @@
 
         <script type="text/javascript">
 
-            Survey.Survey.cssType = "bootstrap";
-            Survey.defaultBootstrapCss.navigationButton = "btn btn-green";
+            // Survey.Survey.cssType = "bootstrap";
+            // Survey.defaultBootstrapCss.navigationButton = "btn btn-green";
 
-            var json = {completedHtml:"<h1><strong>Thank You for your Feedback!</strong></h1>",pages:[{name:"page1",elements:[{type:"dropdown",name:"question1",title:"How would you rate your general experience for this task. As a reminder, this is on a scale of 1-10, with 1 being the worst and 10 being the best experience.",isRequired:true,choices:["1","2","3","4","5","6","7","8","9","10"]}]},{name:"page2",elements:[{type:"radiogroup",name:"question2",title:"Would you be willing to do tasks similar to this?",isRequired:true,choices:[{value:"0",text:"No"},{value:"1",text:"Yes"}]}]},{name:"page3",elements:[{type:"comment",name:"question3",title:"What did you DISLIKE about this HIT?",isRequired:true}]},{name:"page4",elements:[{type:"comment",name:"question4",title:"What did you LIKE about this HIT?",isRequired:true}]},{name:"page5",elements:[{type:"comment",name:"question5",title:"What other ways can we improve on?",isRequired:true}]}]}
-
-
-
-            window.survey = new Survey.Model(json);
-
-            survey.onComplete.add(function (result) {
-                postSurveyData(result.data, '2', mkturkid, 'dp-feedback');
-                //window.location.replace("/?session="+session+"&mkturk_id="+mkturkid+"&survey=phq");
-             });
+            // var json = {completedHtml:"<h1><strong>Thank You for your Feedback!</strong></h1>",pages:[{name:"page1",elements:[{type:"dropdown",name:"question1",title:"How would you rate your general experience for this task. As a reminder, this is on a scale of 1-10, with 1 being the worst and 10 being the best experience.",isRequired:true,choices:["1","2","3","4","5","6","7","8","9","10"]}]},{name:"page2",elements:[{type:"radiogroup",name:"question2",title:"Would you be willing to do tasks similar to this?",isRequired:true,choices:[{value:"0",text:"No"},{value:"1",text:"Yes"}]}]},{name:"page3",elements:[{type:"comment",name:"question3",title:"What did you DISLIKE about this HIT?",isRequired:true}]},{name:"page4",elements:[{type:"comment",name:"question4",title:"What did you LIKE about this HIT?",isRequired:true}]},{name:"page5",elements:[{type:"comment",name:"question5",title:"What other ways can we improve on?",isRequired:true}]}]}
 
 
-            // Parse the URL 
-            function postSurveyData(data, session, mkturkid, surveyname){
-                $.ajax({
-                    type: 'POST',
-                    url: 'saveSurvey/?session=' + session + '&mkturk_id=' + mkturkid + '&survey=' + surveyname + '&study=' + getQueryVariable('study'),
-                    data: JSON.stringify(data), // or JSON.stringify ({name: 'jonas'}),
-                    success: function(data) { console.log('Data saved!') },
-                    contentType: "application/json",
-                    dataType: 'json'
-                });
-            }
 
-            $("#surveyElement").Survey({model: survey});
+            // window.survey = new Survey.Model(json);
+
+            // survey.onComplete.add(function (result) {
+            //     postSurveyData(result.data, '2', mkturkid, 'dp-feedback');
+            //     //window.location.replace("/?session="+session+"&mkturk_id="+mkturkid+"&survey=phq");
+            //  });
+
+
+            // // Parse the URL 
+            // function postSurveyData(data, session, mkturkid, surveyname){
+            //     $.ajax({
+            //         type: 'POST',
+            //         url: 'saveSurvey/?session=' + session + '&mkturk_id=' + mkturkid + '&survey=' + surveyname + '&study=' + getQueryVariable('study'),
+            //         data: JSON.stringify(data), // or JSON.stringify ({name: 'jonas'}),
+            //         success: function(data) { console.log('Data saved!') },
+            //         contentType: "application/json",
+            //         dataType: 'json'
+            //     });
+            // }
+
+            // $("#surveyElement").Survey({model: survey});
 
             function getQueryVariable(variable) {
                 var query = window.location.search.substring(1);

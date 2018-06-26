@@ -48,8 +48,6 @@
                 <h1 style="padding: 17px" >Session 2: Dot Probe Behavioral Task</h1>
             </div>
         </div>
-
-
         <div class="row">
             <p align="right" class="col-md-10" >Mechanical Turk ID:</p>
             <a align="right" id="mkid"></a> 
@@ -172,8 +170,9 @@ psy_load_bitmap("http://res.cloudinary.com/laureate-institute-for-brain-research
             dataType: 'json'
         });
     }
+    // Redirects them to the feedback survey
     function showEnd(){
-        window.location.replace("/completed?" + "&mkturk_id=" + mkturkid + '&study=' + getQueryVariable('task'));
+        window.location.replace("/?" + "&mkturk_id=" + mkturkid + '&study=' + getQueryVariable('study') + '&survey=feedback' );
         //$('#endSession').text('You have completed Session 1!\nComeback to brainworkout.paulus.libr.net after 24 hours to complete session 2!');
     }
 
