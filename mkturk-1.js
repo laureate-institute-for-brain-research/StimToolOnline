@@ -191,8 +191,10 @@ app.post('/saveSurvey/', function(req, res) {
 
 	json = req.body;
 	console.log(json);
+	var month = d.getMonth() + 1 // on a separate since if we add, it concatenates the numbers
+	var file_date = d.getFullYear() + "_" + month + "_" + d.getDate() + "_" + d.getHours() + '_' + d.getMinutes()
 
-	outputString = survey + '-' + mkturk_id + '-' + 'T' + session + '-' + getFormattedDate(d) +',User Agent: ' + req.headers['user-agent'] +',IP: ' + ipaddr + '\n'
+	outputString = survey + '-' + mkturk_id + '-' + 'T' + session + '-' + file_date + ',User Agent: ' + req.headers['user-agent'] +',IP: ' + ipaddr + '\n'
 
 	outputString = outputString + 'QUESTION,RESULT,RT(ms)\n';
 
@@ -243,7 +245,8 @@ app.post('/saveSurvey/', function(req, res) {
 app.post('/saveDPTask/', function(req, res) {
 	var d = new Date();
 
-	var file_date = d.getFullYear() + "_" + d.getMonth() + 1 + "_" + d.getDate() + "_" + d.getHours() + '_' + d.getMinutes()
+	var month = d.getMonth() + 1 // on a separate since if we add, it concatenates the numbers
+	var file_date = d.getFullYear() + "_" + month + "_" + d.getDate() + "_" + d.getHours() + '_' + d.getMinutes()
 	var q = url.parse(req.url, true).query;
 	var session = q.session;
 	var study = q.study;
@@ -315,7 +318,9 @@ app.post('/saveDPTask/', function(req, res) {
 app.post('/saveChickenTask/', function(req, res) {
 	var d = new Date();
 
-	var file_date = d.getFullYear() + "_" + d.getMonth() + 1 + "_" + d.getDate() + "_" + d.getHours() + '_' + d.getMinutes()
+	var month = d.getMonth() + 1 // on a separate since if we add, it concatenates the numbers
+
+	var file_date = d.getFullYear() + "_" + month + "_" + d.getDate() + "_" + d.getHours() + '_' + d.getMinutes()
 	var q = url.parse(req.url, true).query;
 	var session = q.session;
 	var study = q.study;
