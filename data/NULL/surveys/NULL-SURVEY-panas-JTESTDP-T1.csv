@@ -1,0 +1,6 @@
+panas-JTESTDP-T1-2018_6_27_15_10,User Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/11.1.1 Safari/605.1.15,IP: ::1
+QUESTION,RESULT,RT(ms)
+panas_interested,2,9187
+panas_distressed,0,2778
+panas_ excited,0,1540
+panas_upset,0,1835
