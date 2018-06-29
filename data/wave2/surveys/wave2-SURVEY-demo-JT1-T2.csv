@@ -1,0 +1,16 @@
+demo-JT1-T2-2018_6_29_14_11,User Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.99 Safari/537.36,IP: ::1
+QUESTION,RESULT,RT(ms)
+demps_lv10_gender,1,3281
+demps_lv10_hispanic_ethnicity,9,1128
+demps_lv10_race,demps_lv10_race___14,1172
+demps_lv10_engprimary,2,1686
+demps_lv10_intactfamorigin,1,3130
+demps_lv10_current_marital_status,1,1112
+demps_lv10_prevmarried,0,1916
+demps_lv10_nchild,0,2566
+demps_lv10_nsachild,1,2137
+demps_lv10_residence,1,2683
+demps_lv10_current_educational_attainment,6,1621
+demps_lv10_employment,13,1558
+demps_lv10_leftjobreason,3,1572
+mkturk_other,0,1898

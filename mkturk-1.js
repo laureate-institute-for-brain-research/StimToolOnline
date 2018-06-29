@@ -6,6 +6,7 @@
 var express = require('express');
 var bodyParser = require('body-parser');
 var formidable = require('formidable');
+const path = require('path');
 var fs = require('fs');
 var url = require('url');
 var mysql = require('mysql');
@@ -13,14 +14,17 @@ var mysql = require('mysql');
 const requestIp = require('request-ip');
 var SqlString = require('sqlstring');
 var cloudinary = require('cloudinary');
+var serveIndex = require('serve-index');
 
 // Configuration File for this Wave 1 Study
 var config = require('./study/wave1/wave1-config.json')
 
 var app = express();
 
-// This .js file is for Wave-1
-var wave2 = require('./study/wave2/wave2')(app);
+// This is the Module for wave2
+var wave2 = require('./study/wave2/wave2');
+
+var wave2route = wave2.routes(app)
 
 // Connecting to database
 var con = mysql.createConnection({
@@ -49,8 +53,17 @@ con.connect(function(err) {
 
 app.use(bodyParser.json());
 app.use(express.static('public'));
-//app.use(requestIp.mw());
 
+// Serve the static files
+app.use('/data',serveIndex('data',{
+	'icons': true,
+	'index': true,
+	'setHeaders': setHeaders
+}));
+//app.use(requestIp.mw());
+function setHeaders(res, filepath) {
+    res.setHeader('Content-Disposition', 'attachment; filename=' + path.basename(filepath));
+}
 
 
 // ROUTES
@@ -64,6 +77,8 @@ app.get('/',function (req, res) {
 	var survey = q.survey;
 	var task = q.task;
 	var study = q.study;
+
+	var ctversion = q.version;
 	//console.log('session: ' + session, 'id: ' + mkturk_id, 'survey: ' + survey, 'task: ' + task)
 	//console.log(req.connection.remoteAddress)
 
@@ -83,13 +98,13 @@ app.get('/',function (req, res) {
 		displayDotProbe1(res);
 	} else if (session == '2' && task == 'dotprobe'){
 		displayDotProbe2(res);
-	} else if (session == '1' && task == 'chicken'){
+	} else if (ctversion == '1' && task == 'chicken'){
 		displayChicken1(res);
-	} else if (session == '2' && task == 'chicken'){
+	} else if (ctversion == '2' && task == 'chicken'){
 		displayChicken2(res);
-	} else if (session == '3' && task == 'chicken'){
+	} else if (ctversion == '3' && task == 'chicken'){
 		displayChicken3(res);
-	} else if (session == '0' && task == 'chicken'){
+	} else if (ctversion == '0' && task == 'chicken'){
 		displayChicken0(res);
 	}
 
@@ -234,9 +249,10 @@ app.post('/saveSurvey/', function(req, res) {
 	// Upload to Cloudinary
 	uploadToCloudinary(filename);
 
+
 	// Update the Status Table in SQL
 	updateStatus(mkturk_id, survey,session,con, study);
-	
+
 	
 });
 
@@ -260,14 +276,18 @@ app.post('/saveDPTask/', function(req, res) {
 	var head1 = "Orginal File Name:,"+ 'DP-' + mkturk_id + '-' + file_date + '.csv'+ ',UserAGENT:' + req.headers['user-agent'] + ',IP: ' + ipaddr + ",Time:,"+file_date+",Parameter File:,None:FromPsyToolkit,Event Codes:,[('INSTRUCT_ONSET', 1), ('TASK_ONSET', 2), ('TRIAL_ONSET', 3), ('CUE_ONSET', 4), ('IMAGE_ONSET', 5), ('TARGET_ONSET', 6), ('RESPONSE', 7), ('ERROR_DELAY', 8), ('BREAK_ONSET', 9), ('BREAK_END', 10)],Trial Types are coded as follows: 8 bits representing [valence neut/neg/pos] [target_orientation H/V] [target_side left/right] [duration .5/1] [valenced_image left/right] [cue_orientation H/V] [cue_side left/right] \n"
     var head2 = "trial_number,trial_type,event_code,absolute_time,response_time,response,result\n"
 
+	// Write to File on current server
 	var filename = 'data/' + study + '/tasks/'+ study + '-DP-' + mkturk_id + '-' + 'T' + session + '.csv'
 	fs.writeFile(filename, head1 + head2 + content, (err) => {
 		if (err) throw err;
 		console.log(filename + ' DP saved!');
 
 	});
-		// add Time Ready so that the ready time initiates once Task1 has been completed
-	addTimeReady(mkturk_id);
+
+	
+
+	// add Time Ready so that the ready time initiates once Task1 has been completed
+	addTimeReady(mkturk_id, study);
 	// upload to cloudinary
 	uploadToCloudinary(filename);
 
@@ -283,33 +303,8 @@ app.post('/saveDPTask/', function(req, res) {
 	updateStatus(mkturk_id, task,session,con,study);	
 
 	// // Send the Code by Email if they Include it
-	con.query('SELECT email,remind,time_ready FROM dot_probe1 WHERE mkturk_id = ?',[mkturk_id],function (err, result) {
-		try {
-			//console.log('sql output is not empty')
-			sqlresult = JSON.parse(JSON.stringify(result));
-			jsondata = sqlresult[0];
-			if (session == '2'){
-				console.log('sending code to ' + jsondata.email);
-				// If they gave an email addres, than we WILL email them the code
-				sendEmailCode(mkturk_id);
-				//res.writeHead(301,{Location : '/completed?&mkturk_id=' + mkturk_id});
-				//res.end();
-
-			} else if (session == '1'){
-				// redirect them to the tooearly page
-				// send Email if the subject gave email and marked the remind checkbox
-				sendEmailRemind(mkturk_id, study=study);
-				//res.writeHead(301,{Location : '/tooearly?&mkturk_id=' + mkturk_id + '&timeleft=' + jsondata.time_ready });
-				//res.end();
-
-			}
-		}
-		catch (TypeError) {
-			// No Email
-			// Do Nothing
-		}
-
-	});
+	sendEmails(mkturk_id, session, study);
+	
 
 
 });
@@ -334,14 +329,14 @@ app.post('/saveChickenTask/', function(req, res) {
 	var head1 = "Orginal File Name:,"+ 'CT-' + mkturk_id + '-' + file_date + '.csv'+ ',UserAGENT:' + req.headers['user-agent'] + ',IP: ' + ipaddr + ",Time:,"+file_date+",Parameter File:,None:FromPsyToolkit\n"
     var head2 = "trial_type,trial_number,block_num,egg_x_position,egg_y_position,absolute_time_sec,response_time_sec,response,result\n"
 
-	var filename = 'data/' + study + '/tasks/CT-' + mkturk_id + '-' + 'T' + session + '.csv'
+	var filename = 'data/' + study + '/tasks/'+ study + '-CT-' + mkturk_id + '-' + 'T' + session + '.csv'
 	fs.writeFile(filename, head1 + head2 + content, (err) => {
 		if (err) throw err;
 		console.log('Saved Chicken Task Data!');
 
 	});
 	// add Time Ready so that the ready time initiates once Task1 has been completed
-	//addTimeReady(mkturk_id);
+	addTimeReady(mkturk_id, study);
 
 	res.send('Got the Chicken Task Data')
 
@@ -352,41 +347,14 @@ app.post('/saveChickenTask/', function(req, res) {
 	//shell.cd('..');
 
 	// Update the Status
-	//updateStatus(mkturk_id, task,session,con);
+	updateStatus(mkturk_id, task,session,con,study);
 
 	// upload to cloudinary
 	uploadToCloudinary(filename);
 
-
+	// Send Emails
 	// // Send the Code by Email if they Include it
-	con.query('SELECT email,remind,time_ready FROM dot_probe1 WHERE mkturk_id = ?',[mkturk_id],function (err, result) {
-		try {
-			//console.log('sql output is not empty')
-			sqlresult = JSON.parse(JSON.stringify(result));
-			jsondata = sqlresult[0];
-			if (session == '2'){
-				console.log('sending code to ' + jsondata.email);
-				// If they gave an email addres, than we WILL email them the code
-				sendEmailCode(mkturk_id);
-				//res.writeHead(301,{Location : '/completed?&mkturk_id=' + mkturk_id});
-				//res.end();
-
-			} else if (session == '1'){
-				// redirect them to the tooearly page
-					// send Email if the subject gave email and marked the remind checkbox
-				sendEmailRemind(mkturk_id);
-				//res.writeHead(301,{Location : '/tooearly?&mkturk_id=' + mkturk_id + '&timeleft=' + jsondata.time_ready });
-				//res.end();
-
-			}
-		}
-		catch (TypeError) {
-			// No Email
-			// Do Nothing
-		}
-
-	});
-
+	sendEmails(mkturk_id, session, study);
 
 });
 
@@ -395,21 +363,28 @@ app.post('/saveChickenTask/', function(req, res) {
 app.get('/getTimeReady', function(req, res) {
 	var q = url.parse(req.url, true).query;
 	var mkturk_id = q.mkturk_id;
+	
+	var study = q.study;
+
+	if (study == 'wave2'){
+		res.send(wave2.getTimeReady(mkturk_id));
+	
+	}
 
 	sql = SqlString.format('SELECT time_ready FROM dot_probe1 WHERE mkturk_id = ?',[mkturk_id]);
 	//console.log(sql);
 	con.query(sql, function(err, result) {
-	try {
-			sqlresult = JSON.parse(JSON.stringify(result));
-			jsondata = sqlresult[0];
-			//console.log(jsondata);
-			res.send(jsondata.time_ready);
-			//res.end();
+		try {
+				sqlresult = JSON.parse(JSON.stringify(result));
+				jsondata = sqlresult[0];
+				//console.log(jsondata);
+				res.send(jsondata.time_ready);
+				//res.end();
 
-	} catch (err) {
-		console.log('error getTImeReady Request');
-		console.log(err);
-	}
+		} catch (err) {
+			console.log('error getTImeReady Request');
+			console.log(err);
+		}
 	});
 })
 
@@ -946,7 +921,13 @@ function getCodeEmailHTML(){
 }
 
 // Add the Time Ready in the SQL Table
-function addTimeReady(mkturk_id){
+function addTimeReady(mkturk_id, study){
+
+	if (study == 'wave2'){
+		wave2.addTimeReady(mkturk_id);
+		return;
+	}
+
 	var currentdate = new Date();
 	var next24hrdate = getFuture24Date(currentdate,24) // Date 24 hours from the currentdate object
 	//console.log('Updating Time Ready..' + next24hrdate);
@@ -956,12 +937,10 @@ function addTimeReady(mkturk_id){
 
 	console.log(sql);
 	con.query(sql, function (err, result) {
-
 		try {
 			console.log("Added time_ready for " + mkturk_id + ' at ' + next24hrdate);
 			//response.writeHead(301,{Location : '/tooearly?&mkturk_id=' + mkturk_id + '&timeleft=' + next24hrdate });
 			//response.end();
-
 		}
 		catch (err){
 			console.log("Failed Added time Ready..");
@@ -1416,6 +1395,42 @@ function uploadToCloudinary(file){
 	});
 }
 
+
+function sendEmails(mkturk_id, session, study){
+
+	if (study == "wave2"){
+		wave2.sendEmails(mkturk_id, session, study);
+		return
+	}
+
+	con.query('SELECT email,remind,time_ready FROM dot_probe1 WHERE mkturk_id = ?',[mkturk_id],function (err, result) {
+		try {
+			//console.log('sql output is not empty')
+			sqlresult = JSON.parse(JSON.stringify(result));
+			jsondata = sqlresult[0];
+			if (session == '2'){
+				console.log('sending code to ' + jsondata.email);
+				// If they gave an email addres, than we WILL email them the code
+				sendEmailCode(mkturk_id);
+				//res.writeHead(301,{Location : '/completed?&mkturk_id=' + mkturk_id});
+				//res.end();
+
+			} else if (session == '1'){
+				// redirect them to the tooearly page
+				// send Email if the subject gave email and marked the remind checkbox
+				sendEmailRemind(mkturk_id, study=study);
+				//res.writeHead(301,{Location : '/tooearly?&mkturk_id=' + mkturk_id + '&timeleft=' + jsondata.time_ready });
+				//res.end();
+
+			}
+		}
+		catch (TypeError) {
+			// No Email
+			// Do Nothing
+		}
+
+	});
+}
 
 // Module Exports
 module.exports = {

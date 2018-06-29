@@ -151,9 +151,27 @@
             var mkturkid = getQueryVariable('mkturk_id');
             var surveyname = getQueryVariable('survey');
 
+            var chickenVersion = ''
+
+            $.get('/getChickenTaskVersion?&mkturk_id=' + mkturkid + '&study=' + study, function(data) {
+                chickenVersion = data;
+            }); 
+
             survey.onComplete.add(function (result) {
                 postSurveyData(result.data, session, mkturkid,surveyname);
-                window.location.href = "/?session="+session+"&mkturk_id="+mkturkid+"&task=dotprobe" + "&study="+getQueryVariable('study');
+                // rerouting based on study:
+                switch (getQueryVariable('study')) {
+                    case 'wave1':
+                        window.location.href = "/?session="+session+"&mkturk_id="+mkturkid+"&task=dotprobe" + "&study="+getQueryVariable('study');
+                        break;
+                    case 'wave2':
+                        window.location.href = "/?session="+session+"&mkturk_id="+mkturkid+"&task=chicken" + "&version=" + chickenVersion + "&study="+getQueryVariable('study');
+                        break;
+                    default: // if Study is not specified... just routes to dotprove
+                        window.location.href = "/?session="+session+"&mkturk_id="+mkturkid+"&task=dotprobe" + "&study="+getQueryVariable('study');
+                        break;
+                }
+                
              });
 
             // Parse the URL 

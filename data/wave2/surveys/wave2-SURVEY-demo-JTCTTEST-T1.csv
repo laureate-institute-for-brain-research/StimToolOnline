@@ -1,0 +1,17 @@
+demo-JTCTTEST-T1-2018_6_29_17_32,User Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/11.1.1 Safari/605.1.15,IP: ::1
+QUESTION,RESULT,RT(ms)
+demps_lv10_gender,1,3616
+demps_lv10_hispanic_ethnicity,9,2343
+demps_lv10_race,demps_lv10_race___14,1254
+demps_lv10_engprimary,2,1813
+demps_lv10_intactfamorigin,1,2774
+demps_lv10_current_marital_status,4,1076
+demps_lv10_prevmarried,0,1590
+demps_lv10_nchild,1,1497
+demps_lv10_nsachild,1,1802
+demps_lv10_residence,3,1090
+demps_lv10_current_educational_attainment,4,1322
+demps_lv10_employment,10,1639
+demps_lv10_leftjobreason,4,1521
+mkturk_other,1,3269
+question1,2,3269
