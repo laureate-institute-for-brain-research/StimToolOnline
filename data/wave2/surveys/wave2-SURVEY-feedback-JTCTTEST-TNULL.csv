@@ -1,0 +1,7 @@
+feedback-JTCTTEST-TNULL-2018_6_29_19_56,User Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/11.1.1 Safari/605.1.15,IP: ::1
+QUESTION,RESULT,RT(ms)
+question1,2,8330
+question2,0,1738
+question3,w,2428
+question4,w,1109
+question5,w,873

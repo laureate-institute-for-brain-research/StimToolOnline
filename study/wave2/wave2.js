@@ -163,7 +163,7 @@ module.exports = {
 	},
 	sendEmails : function(mkturk_id, session, study) {
 		if (session == '2'){
-			console.log('sending code to ' + jsondata.email);
+			console.log('sending code to ' + mkturk_id);
 			// If they gave an email addres, than we WILL email them the code
 			sendEmailCode(mkturk_id);
 			//res.writeHead(301,{Location : '/completed?&mkturk_id=' + mkturk_id});
@@ -615,7 +615,8 @@ function getCodeEmailHTML(){
 				<table align="center" border="0" cellpadding="0" cellspacing="0" width="600" style="border: 1px solid #cccccc; border-collapse: collapse;">
 					<tr>
 						<td align="center" bgcolor="#FFFFFF" style="padding: 40px 0 30px 0; color: #153643; font-size: 28px; font-weight: bold; font-family: Arial, sans-serif;">
-							<center><a href="http://www.laureateinstitute.org/"><img class="logo" src="http://brainworkout.paulus.libr.net/images/logo.png"></a></center>
+						<center><a href="http://www.laureateinstitute.org/"><img class="logo" style = "width: 400px;
+						height: 70px;" src="http://brainworkout.paulus.libr.net/images/logo.png"></a></center>
 						</td>
 
 					</tr>

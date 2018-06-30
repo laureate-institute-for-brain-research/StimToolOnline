@@ -214,7 +214,16 @@ psy_load_bitmap("http://res.cloudinary.com/laureate-institute-for-brain-research
             // });
 
     function showEnd(){
-        window.location.replace("/tooearly?" + "&mkturk_id=" + mkturkid + '&study=' + getQueryVariable('study'));
+		// Redirection based on session
+		switch (getQueryVariable('session')){
+			case '1':
+				window.location.replace("/tooearly?" + "&mkturk_id=" + mkturkid + '&study=' + getQueryVariable('study'));
+				break;
+			case '2':
+				window.location.replace("/?" + "&mkturk_id=" + mkturkid + '&study=' + getQueryVariable('study') + '&survey=feedback');
+				break;
+		}
+		
     }
 </script>
 <div id='showdata'></div>

@@ -1,0 +1,15 @@
+panas-JTCTTEST-T2-2018_6_29_18_29,User Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/11.1.1 Safari/605.1.15,IP: ::1
+QUESTION,RESULT,RT(ms)
+panas_interested,1,1310
+panas_distressed,2,1214
+panas_ excited,3,1076
+panas_upset,3,1186
+panas_strong,3,1041
+panas_ guilty,2,1165
+panas_scared,1,1513
+panas_hostile,2,1240
+panas_enthusiastic,3,1132
+panas_proud,3,1245
+panas_ irritable,4,1166
+panas_alert,3,1255
+panas_ashamed,3,1006

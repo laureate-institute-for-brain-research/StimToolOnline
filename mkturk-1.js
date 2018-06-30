@@ -320,13 +320,14 @@ app.post('/saveChickenTask/', function(req, res) {
 	var session = q.session;
 	var study = q.study;
 	var mkturk_id = q.mkturk_id;
+	var version = q.version;
 	//var survey = q.survey;
 	var task = q.task;
 	var ipaddr = req.connection.remoteAddress;
 
 	data = req.body; // json input
 	content = data.content;  
-	var head1 = "Orginal File Name:,"+ 'CT-' + mkturk_id + '-' + file_date + '.csv'+ ',UserAGENT:' + req.headers['user-agent'] + ',IP: ' + ipaddr + ",Time:,"+file_date+",Parameter File:,None:FromPsyToolkit\n"
+	var head1 = "Version:," + version + ",Orginal File Name:,"+ 'CT-' + mkturk_id + '-T' + session + '.csv'+ ',UserAGENT:' + req.headers['user-agent'] + ',IP: ' + ipaddr + ",Time:,"+file_date+",Parameter File:,None:FromPsyToolkit\n"
     var head2 = "trial_type,trial_number,block_num,egg_x_position,egg_y_position,absolute_time_sec,response_time_sec,response,result\n"
 
 	var filename = 'data/' + study + '/tasks/'+ study + '-CT-' + mkturk_id + '-' + 'T' + session + '.csv'
@@ -875,7 +876,8 @@ function getCodeEmailHTML(){
 				<table align="center" border="0" cellpadding="0" cellspacing="0" width="600" style="border: 1px solid #cccccc; border-collapse: collapse;">
 					<tr>
 						<td align="center" bgcolor="#FFFFFF" style="padding: 40px 0 30px 0; color: #153643; font-size: 28px; font-weight: bold; font-family: Arial, sans-serif;">
-							<center><a href="http://www.laureateinstitute.org/"><img class="logo" src="http://brainworkout.paulus.libr.net/images/logo.png"></a></center>
+						<center><a href="http://www.laureateinstitute.org/"><img class="logo" style = "width: 400px;
+						height: 70px;" src="http://brainworkout.paulus.libr.net/images/logo.png"></a></center>
 						</td>
 
 					</tr>
