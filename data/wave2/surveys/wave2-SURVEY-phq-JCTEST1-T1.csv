@@ -1,0 +1,10 @@
+phq-JCTEST1-T1-2018_6_29_20_34,User Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/11.1.1 Safari/605.1.15,IP: ::1
+QUESTION,RESULT,RT(ms)
+phq_1,0,5143
+phq_2,0,1392
+phq_3,2,1027
+phq_4,3,933
+phq_5,2,960
+phq_6,3,913
+phq_7,3,878
+phq_8,3,940

@@ -413,8 +413,27 @@ function reRoute(con,mkturk_id,response){
 		}
 	});
 }
+// Returns the array of job, name and session
+// example: survey_demo_T2
 
+// return [survey, demo, 2]
+function parseKey(key){
+	job = key.substring(0,key.search("_"));
+	name = key.substring(key.search('_') + 1,key.lastIndexOf("_"));
+	session = key.substring(key.lastIndexOf('_') + 2,key.lastIndexOf('_') + 3);
+	return [job, name, session]
+}
+// Return True if the subject has past the 24 hour period
+function isReady(dateString){
+	date = new Date(dateString);
 
+	now = new Date();
+	if ( (date.getTime() - now.getTime()) <= 0){
+		return true;
+	} else {
+		return false;
+	}
+}
 
 // Function that adds the record to dp_status table
 function addRecordToStatusTable(id){
