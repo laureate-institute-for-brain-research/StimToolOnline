@@ -49,7 +49,7 @@
 
 
 	</style>
-	<title>LIBR Wave 2</title>
+	<title>MindReal</title>
 
 
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-alpha.4/css/materialize.min.css">
@@ -92,56 +92,42 @@
 		<br>
 		<center><a href="http://www.laureateinstitute.org/"><img class="logo" src="/images/logo.png"></a></center>
 		<hr style="border-top:5px solid #b1b3b6" />
+		<br>
+		<center><h1>MindReal</h1></center>
 
-	    <br>
-	    <hr style="border-top:3px solid #b1b3b6" />
-	    <br>
+			<br>
+			<br>
 	    <div class="row justify-content-md-center">
 
 		    <div class="col-md-7">
 		    	<div>
-					<form name="field" method='post' enctype="multipart/form-data" action="/wave2proceed">
+					<form name="field" method='post' enctype="multipart/form-data" action="/mindrealproceed">
 						<fieldset>
 							<div class="row">
 								<div class="input-field col s12 ">
-									<input type="text" class="validate" id="userID" class="validate" name="mkturk_id" required>
+									<input type="text" class="validate" id="userID" class="validate" name="subject" required>
 						        	<!-- <input id="last_name" type="text" class="validate"> -->
-						        	<label for="userID">Amazon Mechanical Turk ID</label>
-						        </div>
-					    	</div>
+						        	<label for="userID">Subject ID</label>
+									</div>
+							</div>
 
-					    	<div class="row">
-
-								<div class="input-field col s12">
-									<!-- <input type="text" class="validate" id="userID" class="validate" name="mkturk_id" > -->
-									<input type="email" id="userEmail" name="email" class="validate">
-						        	<!-- <input id="last_name" type="text" class="validate"> -->
-						        	<label for="userEmail">Email Address (Optional)</label>
-						        	<span class="helper-text">The email you provide will be deleted from the database once you have completed session 2</span>
-						        </div>
-					    	</div>
-
-					    	
+							<div class="row">
+								<center>
+									<p>
+										<label for="t1">
+											<input class="with-gap" id="t1" name="session" type="radio" value="1"/>
+											<span>T1</span>
+										</label>
+									</p>
+									<p>
+										<label for="t2">
+											<input class="with-gap" id="t2" name="session" type="radio" value="2"/>
+											<span>T2</span>
+										</label>
+									</p>								
+								</center>	
+							</div>
 							
-							<div class="row">
-								<!-- <input type="checkbox" id="remind" name="remind" class="checkbox-indigo" value="YES" checked>
-							    <input type="checkbox" class="filled-in checkbox-orange" id="filled-in-box" checked="checked" />
-								<label for="filled-in-box"></label> -->
-								
-
-								<label for="remind" >
-									<input type="checkbox" class="filled-in" id="remind" name="remind" value="YES" checked>
-									<span>Remind Me</span> 
-								</label>
-							</div>
-
-							<div class="row">
-								<label for="c2">
-									<input id="c2" type="checkbox" class="filled-in" name="consent" value="YES" required autofocus>
-									<span>I will do this task truthfully and to the best of my ability. Any information I provide may be used for research. I also hereby certify that I am over 18 years of age.
-									</span>
-								</label>
-							</div>
 
 							<div class="row">
 								
@@ -176,7 +162,7 @@
 
 	<footer>
 	  <div class="container" style="text-align:center">
-	    <p class="text-p">&copy; 2018 <a href="http://www.laureateinstitute.org">laureateinstitute.org</a>. All rights reserved.<br>Wave 2
+	    <p class="text-p">&copy; 2018 <a href="http://www.laureateinstitute.org">laureateinstitute.org</a>. All rights reserved.<br>MindReal
 	  </div>
 	</footer>
 </html>

@@ -23,8 +23,11 @@ var app = express();
 
 // This is the Module for wave2
 var wave2 = require('./study/wave2/wave2');
-
 var wave2route = wave2.routes(app)
+
+// Module for mindReal
+var mindreal = require('./study/mindreal/mindreal');
+var mindrealroute = mindreal.routes(app)
 
 // Connecting to database
 var con = mysql.createConnection({
@@ -233,6 +236,9 @@ app.post('/saveSurvey/', function(req, res) {
 		outputString = outputString + ques + ',' + ans + ',' + rt + '\n';
 	}
 	var filename = 'data/' + study + '/surveys/' + study +'-SURVEY-' + survey + '-' + mkturk_id + '-T' + session + '.csv'
+	if (study == 'mindreal'){
+		filename = 'data/' + study + '/surveys/' + study +'-SURVEY-' + survey + '-' + mkturk_id + '-T' + session + '-' + q.subsesssion + '.csv'
+	}
 	fs.writeFile(filename ,outputString, (err) => {  
 	    // throws an error, you could also catch it here
 	    if (err) throw err;
@@ -963,6 +969,11 @@ function updateStatus(mkturk_id, job,session,con,study){
 		return; 
 		// exit from the function since we don't want to run the 
 		// code snippet below 
+	}
+	if (study == 'mindreal'){
+		mindreal.updateStatus(mkturk_id, job,session)
+		return; 
+
 	}
 	
 	var jobToSqlColumn = {
