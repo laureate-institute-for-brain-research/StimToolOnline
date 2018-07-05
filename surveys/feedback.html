@@ -31,13 +31,22 @@
 
     </style>
         <title>Study Feedback</title>
-        <script src="https://unpkg.com/jquery"></script>
-        <script src="/bundles/prettydiff?v=E3KTA7j8SjgR8NaAhm1jADBJxbWj5Yx1GQ2EdHBzuxE1"></script>
+        <script
+			  src="https://code.jquery.com/jquery-3.3.1.min.js"
+			  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+              crossorigin="anonymous"></script>
 
-        <script src="https://unpkg.com/survey-jquery@0.12.10/survey.jquery.min.js"></script>
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 
-        <link rel="stylesheet" href="https://unpkg.com/bootstrap@3.3.7/dist/css/bootstrap.min.css">
-        <link rel="stylesheet" href="./index.css">
+        <!-- Optional theme -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+        <!-- Latest compiled and minified JavaScript -->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+        <link href="https://surveyjs.azureedge.net/1.0.30/survey.css" type="text/css" rel="stylesheet" />
+        <script src="https://surveyjs.azureedge.net/1.0.30/survey.jquery.min.js"></script>
 
     </head>
     <body>
@@ -156,9 +165,9 @@
             function postSurveyData(data, session, mkturkid, surveyname){
                 $.ajax({
                     type: 'POST',
+                    async: false,
                     url: 'saveSurvey/?session=' + session + '&mkturk_id=' + mkturkid + '&survey=' + surveyname + "&study=" + getQueryVariable('study'),
                     data: JSON.stringify(data), // or JSON.stringify ({name: 'jonas'}),
-                    success: function(data) { alert('data: ' + data); },
                     contentType: "application/json",
                     dataType: 'json'
                 });
