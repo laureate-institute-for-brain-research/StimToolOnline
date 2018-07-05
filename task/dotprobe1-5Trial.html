@@ -29,6 +29,31 @@
 .canvasboxstyle:fullscreen{display:flex;align-items:center;justify-content:center;}
 .canvasboxstyle:-moz-full-screen{display:flex;align-items:center;justify-content:center;}
 .canvasboxstyle{display:flex;align-items:center;justify-content:center;}
+
+.lds-dual-ring {
+  display: inline-block;
+  width: 64px;
+  height: 64px;
+}
+.lds-dual-ring:after {
+  content: " ";
+  display: block;
+  width: 46px;
+  height: 46px;
+  margin: 1px;
+  border-radius: 50%;
+  border: 5px solid rgb(0, 0, 0);
+  border-color: rgb(0, 0, 0) transparent rgb(0, 0, 0) transparent;
+  animation: lds-dual-ring 1.2s linear infinite;
+}
+@keyframes lds-dual-ring {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
 </style>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <link rel="stylesheet" href="https://unpkg.com/bootstrap@3.3.7/dist/css/bootstrap.min.css">
@@ -55,10 +80,11 @@
         </div>
 
     </div>
+    <center><div id="loader" class="lds-dual-ring">Saving data...</div></center>
 
 
 <script>
-
+    $("#loader").hide()
     function getQueryVariable(variable) {
 	    var query = window.location.search.substring(1);
 	    var vars = query.split('&');
@@ -118,7 +144,7 @@ psy_load_bitmap("http://brainworkout.paulus.libr.net/images/dotprobe_media/T0/A6
 	
 	//alert(toCSV(outputdata));
 	postData(toCSV(outputdata), session, mkturkid, task);
-	showEnd(mkturkid);
+	//showEnd(mkturkid);
 	//saveToFile(toCSV(outputdata));
 	break}}};
 
@@ -159,21 +185,24 @@ psy_load_bitmap("http://brainworkout.paulus.libr.net/images/dotprobe_media/T0/A6
 
 
     function postData(data, session, mkturkid, task){
+        $("#loader").show()
+        console.log(data);
         $.ajax({
             type: 'POST',
-            url: 'saveTask?session=' + session + '&mkturk_id=' + mkturkid + '&task=' + task,
+            async: false,
+            url: 'saveDPTask/?session=' + session + '&mkturk_id=' + mkturkid + '&task=' + task + '&study=' + getQueryVariable('study'),
             data: JSON.stringify({content : data}), // or JSON.stringify ({name: 'jonas'}),
-            success: function(data) { alert('data: ' + data); },
             contentType: "application/json",
             dataType: 'json'
         });
-    }
-            //     $.post('/getTimeReady?mkturk_id=' + mkturkid,function(result){
-            //      //alert(result);
-            //      window.location.replace("/tooearly?" + "&mkturk_id=" + mkturkid + "&timeleft=" + result);
-            //     //console.log('success?');
-            // });
+        showEnd(mkturkid);
 
+    }
+    //     $.post('/getTimeReady?mkturk_id=' + mkturkid,function(result){
+    //      //alert(result);
+    //      window.location.replace("/tooearly?" + "&mkturk_id=" + mkturkid + "&timeleft=" + result);
+    //     //console.log('success?');
+    // });
     function showEnd(mkturkid){
         window.location.replace("/tooearly?" + "&mkturk_id=" + mkturkid);
     }

@@ -57,8 +57,19 @@
 
 </style>
 <!-- Using Jquery Library CDN -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<link rel="stylesheet" href="https://unpkg.com/bootstrap@3.3.7/dist/css/bootstrap.min.css">
+<script src="https://code.jquery.com/jquery-3.3.1.min.js" 
+integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" 
+crossorigin="anonymous"></script>
+
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+<!-- Optional theme -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
 
 </head>
 <body onload="whenloaded()">
@@ -195,19 +206,20 @@ function getQueryVariable(variable) {
 }   
 function postData(data, session, mkturkid, task){
     $("#loader").show()
+    //console.log(data);
     $.ajax({
         type: 'POST',
+        async: false,
         url: 'saveDPTask/?session=' + session + '&mkturk_id=' + mkturkid + '&task=' + task + '&study=' + getQueryVariable('study'),
         data: JSON.stringify({content : data}), // or JSON.stringify ({name: 'jonas'}),
-        success: function(data) { alert('data: ' + data); },
         contentType: "application/json",
         dataType: 'json'
-    }).done(
-        showEnd()
-    )
+    });
+    showEnd(mkturkid);
+
 }
 // Redirects them to the feedback survey
-function showEnd(){
+function showEnd(mkturkid){
     window.location.replace("/?" + "&mkturk_id=" + mkturkid + '&study=' + getQueryVariable('study') + '&survey=feedback' );
     //$('#endSession').text('You have completed Session 1!\nComeback to brainworkout.paulus.libr.net after 24 hours to complete session 2!');
 }

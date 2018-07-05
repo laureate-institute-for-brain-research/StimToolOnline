@@ -1,0 +1,22 @@
+panas-JTFirefoxTest-T1-2018_7_5_16_23,User Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.12; rv:61.0) Gecko/20100101 Firefox/61.0,IP: ::1
+QUESTION,RESULT,RT(ms)
+panas_interested,0,4456
+panas_distressed,0,1684
+panas_ excited,0,1364
+panas_upset,0,1132
+panas_strong,0,1190
+panas_ guilty,0,1403
+panas_scared,0,1569
+panas_hostile,0,1254
+panas_enthusiastic,0,1416
+panas_proud,0,1322
+panas_ irritable,0,1283
+panas_alert,0,1277
+panas_ashamed,0,2068
+panas_inspired,0,1184
+panas_nervous,0,1306
+panas_determined,0,1239
+panas_attentive,0,1248
+panas_jittery,0,1241
+panas_active,0,1353
+panas_afraid,0,1812
