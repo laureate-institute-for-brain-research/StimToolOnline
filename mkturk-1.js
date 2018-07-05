@@ -1232,15 +1232,20 @@ function sendEmailRemind(mkturk_id,hours_away=30, study){
 			remind = jsondata.remind;
 			//deliverydate = jsondata.time_ready;
 
-			var currentdate = new Date();
+			//var currentdate = new Date();
 			// var emailaddress = getEmailAddress(mkturk_id, con);
 			// var remind = getRemind(mkturk_id, con);
-			var next24hrdate = getFormattedDate(getFuture24Date(currentdate,hours_away)); // will be delivery 30 hours from current datetime
+
+			// Old way of reminding... does seem to format nicely
+			//var next24hrdate = getFormattedDate(getFuture24Date(currentdate,hours_away)); // will be delivery 30 hours from current datetime
+
+			
+			var next24hrdate = getFuture24Date(new Date(),hours_away).toUTCString() // will be delivery 30 hours from current datetime
 
 			var mailgun = require("mailgun-js");
 			var api_key = 'key-fa2d65c78c52cfabac185c98eb95721e';
 			var DOMAIN = 'paulus.touthang.info';
-			var mailgun = require('mailgun-js')({apiKey: config.mailgun_api_key, domain: config.mailgun_domain});
+			var mailgun = require('mailgun-js')({apiKey: api_key, domain: DOMAIN});
 
 			var session2Link = 'http://brainworkout.paulus.libr.net/?session=2&mkturk_id=' + mkturk_id + '&survey=demo'+ '&study=' + study;
 			var body = 'Hi ' + mkturk_id + '! \n\nSession 2 of the LIBR brainworkout Amazon Mechanical Turk HIT is ready for you to complete!!!\n\n' + 'Click the link below to complete Session 2!\n\n'+ session2Link +'\n\nReminder: You MUST complete session 2 to receive payment for the HIT';
@@ -1416,36 +1421,48 @@ function sendEmails(mkturk_id, session, study){
 		return
 	}
 
-	con.query('SELECT email,remind,time_ready FROM dot_probe1 WHERE mkturk_id = ?',[mkturk_id],function (err, result) {
-		try {
-			//console.log('sql output is not empty')
-			sqlresult = JSON.parse(JSON.stringify(result));
-			jsondata = sqlresult[0];
-			if (session == '2'){
-				console.log('sending code to ' + jsondata.email);
-				// If they gave an email addres, than we WILL email them the code
-				sendEmailCode(mkturk_id);
-				//res.writeHead(301,{Location : '/completed?&mkturk_id=' + mkturk_id});
-				//res.end();
+	if (session == '2'){
+		console.log('session' + session)
+		sendEmailCode(mkturk_id);
+	} else if( session == '1'){
+		console.log('session' + session)
+		sendEmailRemind(mkturk_id, hours_away=30,study=study);
+	}
 
-			} else if (session == '1'){
-				// redirect them to the tooearly page
-				// send Email if the subject gave email and marked the remind checkbox
-				sendEmailRemind(mkturk_id, study=study);
-				//res.writeHead(301,{Location : '/tooearly?&mkturk_id=' + mkturk_id + '&timeleft=' + jsondata.time_ready });
-				//res.end();
+	// Depreciated Code since each function of email reminding and and sending code are both 
+	// Done in an sql query
 
-			}
-		}
-		catch (TypeError) {
-			// No Email
-			// Do Nothing
-		}
 
-	});
+	// con.query('SELECT email,remind,time_ready FROM dot_probe1 WHERE mkturk_id = ?',[mkturk_id],function (err, result) {
+	// 	try {
+	// 		//console.log('sql output is not empty')
+	// 		sqlresult = JSON.parse(JSON.stringify(result));
+	// 		jsondata = sqlresult[0];
+	// 		if (session == '2'){
+	// 			console.log('sending code to ' + jsondata.email);
+	// 			// If they gave an email addres, than we WILL email them the code
+	// 			sendEmailCode(mkturk_id);
+	// 			//res.writeHead(301,{Location : '/completed?&mkturk_id=' + mkturk_id});
+	// 			//res.end();
+
+	// 		} else if (session == '1'){
+	// 			// send Email if the subject gave email and marked the remind checkbox
+	// 			sendEmailRemind(mkturk_id, study=study);
+	// 			//res.writeHead(301,{Location : '/tooearly?&mkturk_id=' + mkturk_id + '&timeleft=' + jsondata.time_ready });
+	// 			//res.end();
+
+	// 		}
+	// 	}
+	// 	catch (TypeError) {
+	// 		// No Email
+	// 		// Do Nothing
+	// 	}
+
+	// });
 }
 
 // Module Exports
 module.exports = {
-	sendEmailRemind
+	sendEmailRemind,
+	sendEmails
 }
