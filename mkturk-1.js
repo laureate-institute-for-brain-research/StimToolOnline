@@ -329,12 +329,12 @@ app.post('/saveChickenTask/', function(req, res) {
 	var version = q.version;
 	//var survey = q.survey;
 	var task = q.task;
-	var ipaddr = req.connection.remoteAddress;
+	var ipaddr = requestIp.getClientIp(req)
 
 	data = req.body; // json input
 	content = data.content;  
 	var head1 = "Version:," + version + ",Orginal File Name:,"+ 'CT-' + mkturk_id + '-T' + session + '.csv'+ ',UserAGENT:' + req.headers['user-agent'] + ',IP: ' + ipaddr + ",Time:,"+file_date+",Parameter File:,None:FromPsyToolkit\n"
-    var head2 = "trial_type,trial_number,block_num,egg_x_position,egg_y_position,absolute_time_sec,response_time_sec,response,result\n"
+    var head2 = "trial_type,trial_number,block_num,egg_x_position,egg_y_position,absolute_time_sec,response_time_sec,response (1=left;2=right),result (1=correct;2=incorrect)\n"
 
 	var filename = 'data/' + study + '/tasks/'+ study + '-CT-' + mkturk_id + '-' + 'T' + session + '.csv'
 	fs.writeFile(filename, head1 + head2 + content, (err) => {
