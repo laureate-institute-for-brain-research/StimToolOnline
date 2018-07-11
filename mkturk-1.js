@@ -49,7 +49,7 @@ con.connect(function(err) {
 	if (!err)
 		console.log('wave1 db is Connected');
 	else
-		console.log('wave2 db connection err.');
+		console.log('wave1 db connection err.');
 
 });
 
