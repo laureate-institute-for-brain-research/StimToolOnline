@@ -1,0 +1,22 @@
+panas-WAVE2TESTSPACE-T1-2018_7_16_15_26,User Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.99 Safari/537.36,IP: ::1
+QUESTION,RESULT,RT(ms)
+panas_interested,0,2907
+panas_distressed,0,2681
+panas_ excited,0,2218
+panas_upset,1,1624
+panas_strong,0,3294
+panas_ guilty,2,1604
+panas_scared,0,1258
+panas_hostile,0,1484
+panas_enthusiastic,0,1374
+panas_proud,0,1578
+panas_ irritable,0,1749
+panas_alert,0,1292
+panas_ashamed,1,1362
+panas_inspired,3,1192
+panas_nervous,0,1313
+panas_determined,0,1246
+panas_attentive,0,1230
+panas_jittery,0,1316
+panas_active,0,1515
+panas_afraid,0,1211

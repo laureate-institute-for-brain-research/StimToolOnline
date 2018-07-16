@@ -1,0 +1,17 @@
+demo-WAVE2TESTSPACE-T1-2018_7_16_15_25,User Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.99 Safari/537.36,IP: ::1
+QUESTION,RESULT,RT(ms)
+demps_lv10_gender,1,8616
+age,32,2107
+demps_lv10_hispanic_ethnicity,7,1783
+demps_lv10_race,demps_lv10_race___14,1577
+demps_lv10_engprimary,2,1426
+demps_lv10_intactfamorigin,1,1177
+demps_lv10_current_marital_status,2,1073
+demps_lv10_prevmarried,0,1753
+demps_lv10_nchild,1,1502
+demps_lv10_nsachild,1,1607
+demps_lv10_residence,3,962
+demps_lv10_current_educational_attainment,2,1656
+demps_lv10_employment,14,1501
+demps_lv10_leftjobreason,7,1272
+mkturk_other,0,1322

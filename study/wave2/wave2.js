@@ -220,9 +220,11 @@ function insertNewData(fields,con, response){
 	// since each subject gets a random chicken task version
 	var chicken_version = Math.floor(Math.random() * 3) + 1
 
+	newMTURKID = fields.mkturk_id.replace(/\s+/, "");
+
 
 	data = {
-		mkturk_id : fields.mkturk_id,
+		mkturk_id : newMTURKID,
 		email : fields.email,
 		remind : fields.remind,
 		time_created : currentdate,
@@ -239,7 +241,7 @@ function insertNewData(fields,con, response){
 				// User already has ID on the database
 				console.log('Duplicate Entry on subjects Table');
 				// Duplicate so will reroute
-				reRoute(con, fields.mkturk_id,response);
+				reRoute(con, newMTURKID,response);
 			} else {
 				console.log(err);
 			}
@@ -248,9 +250,9 @@ function insertNewData(fields,con, response){
 		} else{
 			// get the result of the SQL Database
 			// 1st Time New User Login
-			addRecordToStatusTable(fields.mkturk_id);
+			addRecordToStatusTable(newMTURKID);
 			response.writeHead(301, {
-				Location: '/?study=wave2&session=1' + '&mkturk_id=' + fields.mkturk_id + '&survey=demo'
+				Location: '/?study=wave2&session=1' + '&mkturk_id=' + newMTURKID + '&survey=demo'
 			});
 			response.end();				
 		}
@@ -274,7 +276,8 @@ function reRoute(con,mkturk_id,response){
 		'status.survey_phq_T2,' +
 		'status.survey_oasis_T2,' +
 		'status.survey_panas_T2,' + 
-		'status.task_chicken_T2 ' +
+		'status.task_chicken_T2, ' +
+		'subjects.task_version ' + 
 		'FROM status ' + 
 		"LEFT JOIN subjects ON status.mkturk_id = subjects.mkturk_id " + 
 		"WHERE subjects.mkturk_id = ?", [mkturk_id])
@@ -309,8 +312,10 @@ function reRoute(con,mkturk_id,response){
 		  		jobs = parseKey(key);
 		  		var job = jobs[0];
 		  		var name = jobs[1];
-		  		var session = jobs[2];
-
+				var session = jobs[2];
+				chicken_version = obj['task_version']
+				
+				
 		  		// if (val == 'YES') {
 		  		// 	// store the key with the last 'YES' value column will be stored
 		  		// 	lastYesKey = key;
@@ -330,6 +335,13 @@ function reRoute(con,mkturk_id,response){
 		  			console.log('redirect..');
 		  			//response.redirect('/?&mkturk_id=' + mkturk_id + '&' + job + '=' + 'asi' + '&session=' + session)
 					// this.statusCode = 302;
+					
+					// If the job is a task, then redirect to their chicken version number
+					if (job == 'task'){
+						response.writeHead(301,{Location : '/?study=wave2&mkturk_id=' + mkturk_id + '&' + job + '=' + name + '&session=' + session + '&version=' + chicken_version });
+						response.end();
+					}
+
 					response.writeHead(301,{Location : '/?study=wave2&mkturk_id=' + mkturk_id + '&' + job + '=' + name + '&session=' + session });
 					response.end();
 		  			break;

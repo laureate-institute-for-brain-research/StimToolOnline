@@ -1334,9 +1334,12 @@ function insertNewData(fields,con, response){
 	var currentdate = new Date();
 	//var next24hrdate = getFuture24Date(currentdate,24)
 
+	//deleteing white space since some users are mistakenly entereing a space in the ID...
+	newMTURKID = fields.mkturk_id.replace(/\s+/, "");
+
 
 	data = {
-		mkturk_id : fields.mkturk_id,
+		mkturk_id : newMTURKID,
 		email : fields.email,
 		remind : fields.remind,
 		time_created : currentdate,
@@ -1353,7 +1356,7 @@ function insertNewData(fields,con, response){
 				// User already has ID on the database
 				console.log('Duplicate Entry on dot_probe1 Table');
 				// Duplicate so will reroute
-				reRoute(con, fields.mkturk_id,response);
+				reRoute(con, newMTURKID,response);
 			} else {
 				console.log(err);
 			}
@@ -1362,9 +1365,9 @@ function insertNewData(fields,con, response){
 		} else{
 			// get the result of the SQL Database
 			// 1st Time New User Login
-			addRecordToStatusTable(fields.mkturk_id,con);
+			addRecordToStatusTable(newMTURKID,con);
 			response.writeHead(301, {
-				Location: '/?study=wave1&session=1' + '&mkturk_id=' + fields.mkturk_id + '&survey=demo'
+				Location: '/?study=wave1&session=1' + '&mkturk_id=' + newMTURKID + '&survey=demo'
 			});
 			response.end();				
 		}
@@ -1386,7 +1389,7 @@ function processForm(req, response) {
     });
 
 
-    form.on('end', function () {
+    form.on('end', function (){
     	insertNewData(fields, con,response);
     });
 
