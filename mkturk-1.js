@@ -6,7 +6,7 @@
 var express = require('express');
 var bodyParser = require('body-parser');
 var formidable = require('formidable');
-const path = require('path');
+var path = require('path');
 var fs = require('fs');
 var url = require('url');
 var mysql = require('mysql');
@@ -15,6 +15,7 @@ const requestIp = require('request-ip');
 var SqlString = require('sqlstring');
 var cloudinary = require('cloudinary');
 var serveIndex = require('serve-index');
+const Json2csvParser = require('json2csv').Parser;
 
 // Configuration File for this Wave 1 Study
 var config = require('./study/wave1/wave1-config.json')
@@ -85,6 +86,7 @@ app.get('/',function (req, res) {
 	//console.log('session: ' + session, 'id: ' + mkturk_id, 'survey: ' + survey, 'task: ' + task)
 	//console.log(req.connection.remoteAddress)
 
+
 	if (survey == 'demo'){
 		displaySurveydemo(res);
 	} else if(survey == 'phq') {
@@ -109,6 +111,8 @@ app.get('/',function (req, res) {
 		displayChicken3(res);
 	} else if (ctversion == '0' && task == 'chicken'){
 		displayChicken0(res);
+	} else if (survey == 'datacamp'){
+		displayDataCampSurvey(res);
 	}
 
 	else if (task == 'test') {
@@ -236,16 +240,26 @@ app.post('/saveSurvey/', function(req, res) {
 		outputString = outputString + ques + ',' + ans + ',' + rt + '\n';
 	}
 	var filename = 'data/' + study + '/surveys/' + study +'-SURVEY-' + survey + '-' + mkturk_id + '-T' + session + '.csv'
-	if (study == 'mindreal'){
-		filename = 'data/' + study + '/surveys/' + study +'-SURVEY-' + survey + '-' + mkturk_id + '-T' + session + '-' + q.subsesssion + '.csv'
-	}
+
 	fs.writeFile(filename ,outputString, (err) => {  
 	    // throws an error, you could also catch it here
-	    if (err) throw err;
+	    if (err) {
+			console.log('err');
+		}
 	    // success case, the file was saved
 	    //console.log('File saved!');
 	    console.log("file saved");
 	});
+
+	// Copy the data to a shared folder in root to be accessed by other uses in the VM
+	fs.rename(filename, '/var/node_data/' + filename, (err) => {
+		if(err){
+			console.log('could not rename');
+			throw err;
+		} else {
+			console.log('rename/copy complete');
+		}
+	})
 	
 	//csv.write('surveys/data/' + survey +'-' + mkturk_id + '-T' + session + '.csv', req.body, {header: 'question'});
 	res.send('');
@@ -290,6 +304,16 @@ app.post('/saveDPTask/', function(req, res) {
 
 	});
 
+	// Copy the data to a shared folder in root to be accessed by other uses in the VM
+	fs.rename(filename, '/var/node_data/' + filename, (err) => {
+		if(err){
+			console.log('could not rename');
+			throw err;
+		} else {
+			console.log('rename/copy complete');
+		}
+	})
+
 	
 
 	// add Time Ready so that the ready time initiates once Task1 has been completed
@@ -312,6 +336,59 @@ app.post('/saveDPTask/', function(req, res) {
 	sendEmails(mkturk_id, session, study);
 	
 
+
+});
+
+app.post('/saveDC', function(req, res){
+	var d = new Date();
+	const fields = ['datacamp_response', 'datacamp_reason'];
+	const opts = { fields };
+	const transformOpts = { highWaterMark: 16384, encoding: 'utf-8' };
+
+	data = req.body; // json input
+
+	console.log(data)
+
+	//inputJSON = JSON.parse(data);
+
+	var month = d.getMonth() + 1 // on a separate since if we add, it concatenates the numbers
+	var file_date = d.getFullYear() + "_" + month + "_" + d.getDate() + "_" + d.getHours() + '_' + d.getMinutes()
+
+
+	randomNUM = Math.floor(Math.random() * 100000) + 1
+	outputPath = 'data/datacamp/dc-' + randomNUM + '.csv'
+
+	 
+	//const input = fs.createReadStream(data, { encoding: 'utf8' });
+	//const output = fs.createWriteStream(outputPath, { encoding: 'utf8' });
+	const json2csvParser = new Json2csvParser({ fields });
+	const csv = json2csvParser.parse(data);
+
+	//console.log(csv)
+
+	fs.stat(outputPath, function(err, stat) {
+		// file exists, genereate new random number
+		while(err == null){
+			randomNUM = Math.floor(Math.random() * 100000) + 1
+			outputPath = 'data/datacamp/dc-' + randomNUM + '.csv'
+		}
+		if(err.code == 'ENOENT') {
+			// file does not exist
+			fs.writeFile(outputPath, 'date:,' + file_date + '\n' + csv, (err) => {
+				if (err) throw err;
+				console.log(outputPath + ' DC saved!');
+		
+			});
+		} else {
+			console.log('Some other error: ', err.code);
+		}
+	});
+
+
+
+	res.send('saved DC')
+
+	//const processor = input.pipe(json2csv).pipe(output);
 
 });
 
@@ -342,6 +419,16 @@ app.post('/saveChickenTask/', function(req, res) {
 		console.log('Saved Chicken Task Data!');
 
 	});
+
+	// Copy the data to a shared folder in root to be accessed by other uses in the VM
+	fs.rename(filename, '/var/node_data/' + filename, (err) => {
+		if(err){
+			console.log('could not rename');
+			throw err;
+		} else {
+			console.log('rename/copy complete');
+		}
+	})
 	// add Time Ready so that the ready time initiates once Task1 has been completed
 	addTimeReady(mkturk_id, study);
 
@@ -701,6 +788,19 @@ function displayFeedback(res){
 		res.end();
 	});	
 }
+
+function displayDataCampSurvey(res){
+	fs.readFile('surveys/datacamp.html', function (err, data) {
+		// Write Header
+		res.writeHead(200, {
+			'Content-Type' : 'text/html'
+		});
+		// Wrte Body
+		res.write(data);
+		res.end();
+	});	
+}
+
 function displayTest(res){
 
 	fs.readFile('task/dotprobe1-5Trial.html', function (err, data) {
