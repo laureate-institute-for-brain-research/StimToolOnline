@@ -72,18 +72,20 @@
                 <div class="center-div" >
                     <br>
                     <p>
-                        DataCamp is an online data science learning platform that offers tutorials and courses in
-                        data science. Students can master data analysis from the comfort of their browser,
-                        an their own pace, and tailored to their needs and expertise.
+                        DataCamp is an online data science learning platform that offers practical hands on tutorials and courses in data science instructed by key figures.
+                        Scientists and researchers can master data analysis from the comfort of their browser, an their own pace, and tailored to their needs and expertise.
                     </p>
                     <br>
+                    <p>First few sessions in most courses are available free of charge as sample. You can take a look inside to have a better estimate about the structure of the courses.</p>
+                    <p>
+                            <a href="https://www.datacamp.com/courses">Click here for full list of courses</a>
+                        </p>
                    <img src="https://cdn.datacamp.com/main-app/assets/logos/python-r-sql-spark-grey-eb9a8135db0537c1bb8ab14dd7ae296db015c021cb01f3027a6e7946df3879f4.svg">
                    
                    <img src="https://cdn.datacamp.com/main-app/assets/logos/git-shell-spreadsheets-grey-1da3734aa17cfd0f4008b94d3feb0bffd0190938631a77b0daa402384c5228a0.svg">
                    <br>
-                   <p>
-                        <a href="https://www.datacamp.com/courses">Click here for full list of courses</a>
-                    </p>
+                  
+                   
                     <!-- <h2>DataCamp Survey</h2> -->
                     <div id="surveyElement"></div>
                     <div id="surveyResult"></div>  
@@ -127,26 +129,7 @@
             Survey.Survey.cssType = "bootstrap";
             Survey.defaultBootstrapCss.navigationButton = "btn btn-green";
 
-            var json = { completedHtml:"Thank You for your Reponse",
-                pages:[ 
-                    { name:"page1",
-                     elements:[
-                         {
-                            type:"radiogroup",
-                            name:"datacamp_response",
-                            title:"Would you be interested if LIBR provided access to courses on DataCamp?",
-                            isRequired:true,
-                            choices:["Yes","No"]
-                        },
-                        {
-                            type:"comment",
-                            name:"datacamp_reason",
-                            visibleIf:"{datacamp_response} = \"No\"",
-                            title:"Why not?",
-                            isRequired:true
-                        }]
-                    }]
-                }
+            var json = {completedHtml:"Thank You for your Reponse",pages:[{name:"page1",elements:[{type:"radiogroup",name:"datacamp_1",title:"Do you think that skills targeted in these courses are helpful for you?",isRequired:true,choices:["Yes","No"]},{type:"radiogroup",name:"datacamp_2",title:"Do you think that skills targeted in these courses are helpful for your students/colleagues",isRequired:true,choices:["Yes","No"]},{type:"radiogroup",name:"datacamp_3",title:"Would you be interested if LIBR provided access to courses on DataCamp?",isRequired:true,choices:["Yes","No"]},{type:"comment",name:"datacamp_3_reason",visibleIf:"{datacamp_3} = \"No\"",title:"Why not?",isRequired:true}]}]}
 
             window.survey = new Survey.Model(json);
             var timerID = null;
