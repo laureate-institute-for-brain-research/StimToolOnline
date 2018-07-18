@@ -72,18 +72,18 @@
                 <div class="center-div" >
                     <br>
                     <p>
-                        DataCamp is an online data science learning platform that offers practical hands on tutorials and courses in data science instructed by key figures.
-                        Scientists and researchers can master data analysis from the comfort of their browser, an their own pace, and tailored to their needs and expertise.
+                        <a href="https://www.datacamp.com/">DataCamp&copy;</a> is an online data science learning platform that offers practical hands on tutorials and courses in data science instructed by key figures.
+                        Scientists and researchers can master data analysis from the comfort of their browser, at their own pace, and tailored to their needs and expertise.
                     </p>
                     <br>
-                    <p>First few sessions in most courses are available free of charge as sample. You can take a look inside to have a better estimate about the structure of the courses.</p>
-                    <p>
-                            <a href="https://www.datacamp.com/courses">Click here for full list of courses</a>
-                        </p>
-                   <img src="https://cdn.datacamp.com/main-app/assets/logos/python-r-sql-spark-grey-eb9a8135db0537c1bb8ab14dd7ae296db015c021cb01f3027a6e7946df3879f4.svg">
+                    <img src="https://cdn.datacamp.com/main-app/assets/logos/python-r-sql-spark-grey-eb9a8135db0537c1bb8ab14dd7ae296db015c021cb01f3027a6e7946df3879f4.svg">
+                    <img style="padding-left: 50px" src="https://cdn.datacamp.com/main-app/assets/logos/git-shell-spreadsheets-grey-1da3734aa17cfd0f4008b94d3feb0bffd0190938631a77b0daa402384c5228a0.svg">
+                    <br>
+                    <p><a href="https://www.datacamp.com/courses">Click here for full list of courses</a></p>
+                    <br>
+                    <p>The first few sessions of most courses are available free of charge as a sample. You can take a look inside to have a better estimate about the structure of the courses.</p>
+                    
                    
-                   <img style="padding-left: 50px" src="https://cdn.datacamp.com/main-app/assets/logos/git-shell-spreadsheets-grey-1da3734aa17cfd0f4008b94d3feb0bffd0190938631a77b0daa402384c5228a0.svg">
-                   <br>
                   
                    
                     <!-- <h2>DataCamp Survey</h2> -->
@@ -129,7 +129,7 @@
             Survey.Survey.cssType = "bootstrap";
             Survey.defaultBootstrapCss.navigationButton = "btn btn-green";
 
-            var json = {completedHtml:"Thank You for your Reponse",pages:[{name:"page1",elements:[{type:"radiogroup",name:"datacamp_1",title:"Do you think that skills targeted in these courses are helpful for you?",isRequired:true,choices:["Yes","No"]},{type:"radiogroup",name:"datacamp_2",title:"Do you think that skills targeted in these courses are helpful for your students/colleagues",isRequired:true,choices:["Yes","No"]},{type:"radiogroup",name:"datacamp_3",title:"Would you be interested if LIBR provided access to courses on DataCamp?",isRequired:true,choices:["Yes","No"]},{type:"comment",name:"datacamp_3_reason",visibleIf:"{datacamp_3} = \"No\"",title:"Why not?",isRequired:true}]}]}
+            var json = {completedHtml:"Thank You for your Reponse",pages:[{name:"page1",elements:[{type:"rating",name:"datacamp_1",title:"How helpful do you think the skills targeted in these courses would be to you?",isRequired:true,rateValues:[{value:"1",text:"not very helpful"},{value:"2",text:"a little helpful"},{value:"3",text:"somewhat helpful"},{value:"4",text:"very helpful"},{value:"5",text:"extremely helpful"}]},{type:"rating",name:"datacamp_2",title:"How helpful do you think the skills targeted in these courses would be for your students/colleagues?",isRequired:true,rateValues:[{value:"1",text:"not very helpful"},{value:"2",text:"a little helpful"},{value:"3",text:"somewhat helpful"},{value:"4",text:"very helpful"},{value:"5",text:"extremely helpful"}]},{type:"rating",name:"datacamp_3",title:"How likely would it be for you to use DataCamp if it were provided by LIBR?",isRequired:true,rateValues:[{value:"1",text:"extremely unlikely"},{value:"2",text:"unlikely"},{value:"3",text:"neutral"},{value:"4",text:"likely"},{value:"5",text:"extremely likely"}]}]}]}
 
             window.survey = new Survey.Model(json);
             var timerID = null;
