@@ -241,6 +241,12 @@ app.post('/saveSurvey/', function(req, res) {
 	}
 	var filename = 'data/' + study + '/surveys/' + study +'-SURVEY-' + survey + '-' + mkturk_id + '-T' + session + '.csv'
 
+	// Don't delete this future james...
+	// mindreall needs to keep track of pre-post sessions for the ratings survey
+	if (study == 'mindreal'){
+		filename = 'data/' + study + '/surveys/' + study +'-SURVEY-' + survey + '-' + mkturk_id + '-T' + session + '-' + q.subsesssion + '.csv'	
+	}
+
 	fs.writeFile(filename ,outputString, (err) => {  
 	    // throws an error, you could also catch it here
 	    if (err) {
