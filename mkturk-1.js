@@ -347,7 +347,7 @@ app.post('/saveDPTask/', function(req, res) {
 
 app.post('/saveDC', function(req, res){
 	var d = new Date();
-	const fields = ['datacamp_1', 'datacamp_2','datacamp_3'];
+	const fields = ['datacamp_1', 'datacamp_2','datacamp_3','datacamp_4'];
 	const opts = { fields };
 	const transformOpts = { highWaterMark: 16384, encoding: 'utf-8' };
 
