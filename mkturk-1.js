@@ -246,7 +246,7 @@ app.post('/saveSurvey/', function(req, res) {
 	var month = d.getMonth() + 1 // on a separate since if we add, it concatenates the numbers
 	var file_date = d.getFullYear() + "_" + month + "_" + d.getDate() + "_" + d.getHours() + '_' + d.getMinutes()
 
-	outputString = survey + '-' + mkturk_id + '-' + 'T' + session + '-' + file_date + ',User Agent: ' + req.headers['user-agent'] +',IP: ' + ipaddr + '\n'
+	outputString = survey + '-' + mkturk_id + '-' + 'T' + session + '-' + file_date + ',\"User Agent: ' + req.headers['user-agent'] +'\",IP: ' + ipaddr + '\n'
 
 	outputString = outputString + 'QUESTION,RESULT,RT(ms)\n';
 
@@ -267,7 +267,7 @@ app.post('/saveSurvey/', function(req, res) {
 			ques = key;
 			ans = json[key];
 		}
-		outputString = outputString + ques + ',' + ans + ',' + rt + '\n';
+		outputString = outputString + ques + ',\"' + ans + '\",' + rt + '\n';
 	}
 	var filename = 'data/' + study + '/surveys/' + study +'-SURVEY-' + survey + '-' + mkturk_id + '-T' + session + '.csv'
 
@@ -277,6 +277,8 @@ app.post('/saveSurvey/', function(req, res) {
 		filename = 'data/' + study + '/surveys/' + study +'-SURVEY-' + survey + '-' + mkturk_id + '-T' + session + '-' + q.subsesssion + '.csv'	
 	}
 
+
+
 	fs.writeFile(filename ,outputString, (err) => {  
 	    // throws an error, you could also catch it here
 	    if (err) {
@@ -284,18 +286,20 @@ app.post('/saveSurvey/', function(req, res) {
 		}
 	    // success case, the file was saved
 	    //console.log('File saved!');
-	    console.log("file saved");
-	});
+		console.log("file saved");
 
-	// Copy the data to a shared folder in root to be accessed by other uses in the VM
-	fs.rename(filename, '/var/node_data/' + filename, (err) => {
-		if(err){
-			console.log('could not rename');
-			throw err;
-		} else {
-			console.log('rename/copy complete');
-		}
-	})
+		// Copy the data to a shared folder in root to be accessed by other uses in the VM
+		// This is done after writing the file
+		fs.copyFile(filename, '/var/node_data/' + filename, (err) => {
+			if(err){
+				console.log('could not copy');
+				throw err;
+			} else {
+				console.log('copy complete');
+			}
+		})
+	});
+	
 	
 	//csv.write('surveys/data/' + survey +'-' + mkturk_id + '-T' + session + '.csv', req.body, {header: 'question'});
 	res.send('');
@@ -337,18 +341,18 @@ app.post('/saveDPTask/', function(req, res) {
 	fs.writeFile(filename, head1 + head2 + content, (err) => {
 		if (err) throw err;
 		console.log(filename + ' DP saved!');
+		// Copy the data to a shared folder in root to be accessed by other uses in the VM
+		// This is done after writing the file
+		fs.copyFile(filename, '/var/node_data/' + filename, (err) => {
+			if(err){
+				console.log('could not copy');
+				throw err;
+			} else {
+				console.log('copy complete');
+			}
+		})
 
 	});
-
-	// Copy the data to a shared folder in root to be accessed by other uses in the VM
-	fs.rename(filename, '/var/node_data/' + filename, (err) => {
-		if(err){
-			console.log('could not rename');
-			throw err;
-		} else {
-			console.log('rename/copy complete');
-		}
-	})
 
 	
 
@@ -447,7 +451,7 @@ app.post('/saveChickenTask/', function(req, res) {
 
 	data = req.body; // json input
 	content = data.content;  
-	var head1 = "Version:," + version + ",Type:," + type + ",Orginal File Name:,"+ 'CT-' + mkturk_id + '-T' + session + '.csv'+ ',UserAGENT:' + req.headers['user-agent'] + ',IP: ' + ipaddr + ",Time:,"+file_date+",Parameter File:,None:FromPsyToolkit\n"
+	var head1 = "Version:," + version + ",Type:," + type + ",Orginal File Name:,"+ 'CT-' + mkturk_id + '-T' + session + '.csv'+ ',\"UserAGENT:' + req.headers['user-agent'] + '\",IP: ' + ipaddr + ",Time:,"+file_date+",Parameter File:,None:FromPsyToolkit\n"
     var head2 = "trial_type,trial_number,block_num,egg_x_position,egg_y_position,absolute_time_sec,response_time_sec,response (1=left;2=right),result (1=correct;2=incorrect)\n"
 
 	var filename = 'data/' + study + '/tasks/'+ study + '-CT-' + mkturk_id + '-' + 'T' + session + '.csv'
@@ -455,17 +459,18 @@ app.post('/saveChickenTask/', function(req, res) {
 		if (err) throw err;
 		console.log('Saved Chicken Task Data!');
 
-	});
+		// Copy the data to a shared folder in root to be accessed by other uses in the VM
+		// This is done after writing the file
+		fs.copyFile(filename, '/var/node_data/' + filename, (err) => {
+			if(err){
+				console.log('could not copy');
+				throw err;
+			} else {
+				console.log('copy complete');
+			}
+		})
 
-	// Copy the data to a shared folder in root to be accessed by other uses in the VM
-	fs.rename(filename, '/var/node_data/' + filename, (err) => {
-		if(err){
-			console.log('could not rename');
-			throw err;
-		} else {
-			console.log('rename/copy complete');
-		}
-	})
+	});
 	// add Time Ready so that the ready time initiates once Task1 has been completed
 	addTimeReady(mkturk_id, study);
 
