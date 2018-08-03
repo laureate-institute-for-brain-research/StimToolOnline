@@ -1,5 +1,5 @@
 # Brain Workout
-![alt text](tasks.png "Logo Title Text 1")
+![alt text](http://image.thum.io/get/http://brainworkout.paulus.libr.net/list/ "Logo Title Text 1")
 Mechanical Turk Web application for Online Tasks
 
 
