@@ -139,7 +139,10 @@ app.get('/',function (req, res) {
 			}
 		}
 
-	} else if (ctversion == '0' && task == 'chicken'){
+	} else if(task == 'gonogo') {
+		displayGoNoGo(res);
+	}
+	else if (ctversion == '0' && task == 'chicken'){
 		displayChicken0(res);
 	} else if (survey == 'datacamp'){
 		displayDataCampSurvey(res);
@@ -952,6 +955,18 @@ function displayChicken2estimate(res){
 
 function displayChicken3estimate(res){
 	fs.readFile('task/chicken_task/estimate_version/chicken4.html', function (err, data) {
+		// Write Header
+		res.writeHead(200, {
+			'Content-Type' : 'text/html'
+		});
+		// Wrte Body
+		res.write(data);
+		res.end();
+	});		
+}
+
+function displayGoNoGo(res){
+	fs.readFile('task/gonogo/gonogo.html', function (err, data) {
 		// Write Header
 		res.writeHead(200, {
 			'Content-Type' : 'text/html'
