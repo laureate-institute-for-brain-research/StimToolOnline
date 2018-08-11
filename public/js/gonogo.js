@@ -72,7 +72,7 @@ function getRandomIntInclusive(min, max) {
  */
 function getResult(type, pressed){
 
-    var rnd1 = Math.random(),
+    var rnd1 = Math.random()
     if (type == 'a'){
         // A: Go to Win Trial:
         // Pressed => 80% win : 20% neither
@@ -269,24 +269,7 @@ for (let i = 1; i < TOTAL_TRIAL_NUMBER + 1; i++){
         choices : [37,39], // 37: <-   39:->
     
         trial_duration : 1500,
-        data : {test_part : 'target_detection'},
-        on_finish : (data)=>{
-
-            if(data.key_press){
-                jsPsych.pauseExperiment();
-                jsPsych.addNodeToEndOfTimeline({
-                    timeline: [{
-                        type : 'html-keyboard-response',
-                        stimulus : '<div style="font-size:60px; color: rgb(255, 0, 0);">+</div>',
-                        choices: jsPsych.NO_KEYS,
-                        trial_duration: 1000,
-                        data: {trial_number :Trial_Number, test_part: 'fixation', duration : 1000}
-                    }]
-                    }, jsPsych.resumeExperiment)
-             }else {
-                console.log('No Go')
-            }
-        }
+        data : {test_part : 'target_detection'}
     }
 
     timeline.push(target_detection)
@@ -301,12 +284,28 @@ for (let i = 1; i < TOTAL_TRIAL_NUMBER + 1; i++){
 
     
 
-    var probability_outcome = {
+    var probability_outcome_win = {
+        type: "image-keyboard-response",
+        stimulus : '/images/gonogo_media/up_arrow.png',
+        trial_duration : 1000, 
+        choices : jsPsych.NO_KEYS,
+        data: {trial_number : Trial_Number,test_part: 'probability_outcome_win'}
+    }
+
+    var probability_outcome_lose = {
+        type: "image-keyboard-response",
+        stimulus : '/images/gonogo_media/down_arrow.png',
+        trial_duration : 1000, 
+        choices : jsPsych.NO_KEYS,
+        data: {trial_number : Trial_Number,test_part: 'probability_outcome_lose'}
+    }
+
+    var probability_outcome_neither = {
         type: "image-keyboard-response",
         stimulus : '/images/gonogo_media/rectangle.png',
         trial_duration : 1000, 
         choices : jsPsych.NO_KEYS,
-        data: {test_part: 'probability_outcome'}
+        data: {trial_number : Trial_Number,test_part: 'probability_outcome_neither'}
     }
 
     var wait_duration = getRandomIntInclusive(750,1500)
@@ -319,13 +318,56 @@ for (let i = 1; i < TOTAL_TRIAL_NUMBER + 1; i++){
         data: {trial_number : Trial_Number, test_part: 'posttrial_wait', duration : wait_duration}
     }
 
-    var outcome_trial_condition = {
-        timeline : [fixed_fixation,probability_outcome,posttrial_wait],
+    var outcome_trial_condition_win = {
+        timeline : [fixed_fixation,probability_outcome_win,posttrial_wait],
         conditional_function : () =>{
             var data = jsPsych.data.get().last(1).values()[0];
+            if(data.key_press){
+                if (getResult(type, true) == 'win'){
+                    return true;
+                } else {
+                    return false;
+                }
+            }
 
         }
     }
+
+    timeline.push(outcome_trial_condition_win)
+
+    var outcome_trial_condition_lose = {
+        timeline : [fixed_fixation,probability_outcome_lose,posttrial_wait],
+        conditional_function : () =>{
+            var data = jsPsych.data.get().last(1).values()[0];
+            if(data.key_press){
+                if (getResult(type, true) == 'lose'){
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+
+        }
+    }
+
+    timeline.push(outcome_trial_condition_lose)
+
+    var outcome_trial_condition_neither = {
+        timeline : [fixed_fixation,probability_outcome_lose,posttrial_wait],
+        conditional_function : () =>{
+            var data = jsPsych.data.get().last(1).values()[0];
+            if(data.key_press){
+                if (getResult(type, true) == 'neither'){
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+
+        }
+    }
+
+    timeline.push(outcome_trial_condition_neither)
 
     
     
@@ -335,28 +377,6 @@ for (let i = 1; i < TOTAL_TRIAL_NUMBER + 1; i++){
     // console.log('d: ' + d_type_total);
     
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-var trial_procedure = {
-    timeline : [fractal_cue,fixation,target_detection,fixed_fixation,probability_outcome,posttrial_wait],
-    repetitions: 2
-}
-
-//timeline.push(trial_procedure)
 
 
 /* test trials */
