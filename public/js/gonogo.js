@@ -43,7 +43,7 @@ var instructions = {
     show_page_number : true
 }
 
-//timeline.push(instructions)
+timeline.push(instructions)
 
 
 /**
@@ -249,6 +249,8 @@ for (let i = 1; i < TOTAL_TRIAL_NUMBER + 1; i++){
     }
     console.log(i + ' ' + type)
 
+    // Show Fractal Image
+    // Fractal Image meaning changes for every subject
     var fractal_cue = {
         type: "image-keyboard-response",
         stimulus : fractal_images[type],
@@ -257,9 +259,11 @@ for (let i = 1; i < TOTAL_TRIAL_NUMBER + 1; i++){
         data: {trial_number :Trial_Number, test_part: 'fractal_cue', result : type[0]},
     }
 
-
-
     timeline.push(fractal_cue)
+
+
+    // First Fixation After the Image
+    // Varies from 250 to 2000 ms
 
     var fixation_duration = getRandomIntInclusive(2000,250) // Get random delay from 250 >= x >= 2000
     var fixation = {
@@ -272,6 +276,17 @@ for (let i = 1; i < TOTAL_TRIAL_NUMBER + 1; i++){
     }
     timeline.push(fixation)
 
+
+    // Target Detection Task
+    // A circle is presented either on the left or right of screen depending on the trial type
+    // Subject must either press a key to classify a trial as a "Go"
+    // or NOT Press a key to classify a trial as "No Go"
+
+    // Once subject makes a decision and outcome of either:
+    // * win
+    // * lose
+    // * neither
+    // Will be saved as the result for the trial.
     var target_detection = {
         type : 'html-keyboard-response',
         stimulus : `
@@ -311,9 +326,8 @@ for (let i = 1; i < TOTAL_TRIAL_NUMBER + 1; i++){
     timeline.push(target_detection)
 
 
-    // Shows the Fixation after the target detection.
-    // This is also where we determine the probability Outcome
-    // 
+    // 2nd Fixation Point
+    // This is just fixation point that occurs 1000ms after the subject has made a response
     var fixed_fixation = {
         type : 'html-keyboard-response',
         stimulus : '<div style="font-size:60px; color: rgb(0, 0, 255);">+</div>',
@@ -324,6 +338,14 @@ for (let i = 1; i < TOTAL_TRIAL_NUMBER + 1; i++){
 
     timeline.push(fixed_fixation)
 
+
+    // Outcome Trial Conditions:
+    // The Image that should be displayed based on the result
+    // of the Target Detection Task Portion
+
+    // Each Outcome (win, lose, or neither)
+    // Will display depending on the result
+    
     var outcome_trial_condition_win = {
         timeline : [{
             type: "image-keyboard-response",
@@ -393,6 +415,10 @@ for (let i = 1; i < TOTAL_TRIAL_NUMBER + 1; i++){
 
     timeline.push(outcome_trial_condition_neither)
 
+
+    // Final Delay after the outcome
+    // The Duration ranges from 750 ms to 1500 ms
+
     var wait_duration = getRandomIntInclusive(750,1500)
 
     var posttrial_wait = {
@@ -454,6 +480,10 @@ for (let i = 1; i < TOTAL_TRIAL_NUMBER + 1; i++){
 // timeline.push(test_procedure);
 
 /* define debrief */
+
+
+// Probably not necessary but this shows the subject How many points he has accumulated
+// And also his average resopnse time
 
 var debrief_block = {
     type: "html-keyboard-response",
