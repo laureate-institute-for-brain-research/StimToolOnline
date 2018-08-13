@@ -1,4 +1,9 @@
 /* create timeline */
+// Paramaeters
+TOTAL_TRIAL_NUMBER = 5
+TOTAL_TRIALS_EACH = TOTAL_TRIAL_NUMBER / 4
+
+
 var timeline = [];
 
 timeline.push({
@@ -146,9 +151,7 @@ function getResult(type, pressed){
 }
 
 
-// Paramaeters
-TOTAL_TRIAL_NUMBER = 8
-TOTAL_TRIALS_EACH = TOTAL_TRIAL_NUMBER / 4
+
 
 // Data Preparation:
 a_type_total = 0 
@@ -183,6 +186,8 @@ circle_position = {
     'c' : 'left',
     'd' : 'right'
 }
+
+POINTS = 0
 
 
 // Make the Procedure for the Task!
@@ -267,13 +272,36 @@ for (let i = 1; i < TOTAL_TRIAL_NUMBER + 1; i++){
         </div>
         `,
         choices : [37,39], // 37: <-   39:->
-    
         trial_duration : 1500,
-        data : {test_part : 'target_detection'}
+        data : {trial_number : Trial_Number, test_part : 'target_detection'},
+        on_finish: function(data){
+            //var dataf = jsPsych.data.get().filter({'test_part': "target_detection"}).last(1).values()[0];
+            var outcome = ''
+            if(data.key_press){
+                outcome = getResult(type, true)
+            } else{
+                outcome = getResult(type, false)
+            }
+
+            data.outcome = outcome
+            if (outcome == 'win'){
+                POINTS++;
+                data.points = POINTS;
+            } else if (outcome == 'lose'){
+                POINTS--;
+                data.points = POINTS;
+            } else {
+                data.points = POINTS;
+            }
+        }
     }
 
     timeline.push(target_detection)
 
+
+    // Shows the Fixation after the target detection.
+    // This is also where we determine the probability Outcome
+    // 
     var fixed_fixation = {
         type : 'html-keyboard-response',
         stimulus : '<div style="font-size:60px; color: rgb(255, 0, 0);">+</div>',
@@ -282,31 +310,76 @@ for (let i = 1; i < TOTAL_TRIAL_NUMBER + 1; i++){
         data: {trial_number : Trial_Number, test_part: 'fixed_fixation', duration : 1000}
     }
 
-    
+    timeline.push(fixed_fixation)
 
-    var probability_outcome_win = {
-        type: "image-keyboard-response",
-        stimulus : '/images/gonogo_media/up_arrow.png',
-        trial_duration : 1000, 
-        choices : jsPsych.NO_KEYS,
-        data: {trial_number : Trial_Number,test_part: 'probability_outcome_win'}
+    var outcome_trial_condition_win = {
+        timeline : [{
+            type: "image-keyboard-response",
+            stimulus : '/images/gonogo_media/up_arrow.png',
+            trial_duration : 1000, 
+            choices : jsPsych.NO_KEYS,
+            data: {trial_number : Trial_Number,test_part: 'probability_outcome_win'}
+        }],
+        conditional_function : () =>{
+            var data = jsPsych.data.get().filter({'test_part': "target_detection"}).last(1).values()[0];
+            //console.log(data.trial_index + ': ' + 'Lose')
+            
+            if(data.outcome == 'win'){
+                return true
+            } else {
+                return false
+            }
+
+        }
     }
 
-    var probability_outcome_lose = {
-        type: "image-keyboard-response",
-        stimulus : '/images/gonogo_media/down_arrow.png',
-        trial_duration : 1000, 
-        choices : jsPsych.NO_KEYS,
-        data: {trial_number : Trial_Number,test_part: 'probability_outcome_lose'}
+    timeline.push(outcome_trial_condition_win)
+
+    var outcome_trial_condition_lose = {
+        timeline : [{
+            type: "image-keyboard-response",
+            stimulus : '/images/gonogo_media/down_arrow.png',
+            trial_duration : 1000, 
+            choices : jsPsych.NO_KEYS,
+            data: {trial_number : Trial_Number,test_part: 'probability_outcome_lose'}
+        }],
+        conditional_function : () =>{
+            // Only show sequene Lose part of the experiment if the target detection task portion had a button press
+            var data = jsPsych.data.get().filter({'test_part': "target_detection"}).last(1).values()[0];
+            //console.log(data.trial_index + ': ' + 'Lose')
+            if(data.outcome == 'lose'){
+                return true
+            } else {
+                return false
+            }
+
+        }
     }
 
-    var probability_outcome_neither = {
-        type: "image-keyboard-response",
-        stimulus : '/images/gonogo_media/rectangle.png',
-        trial_duration : 1000, 
-        choices : jsPsych.NO_KEYS,
-        data: {trial_number : Trial_Number,test_part: 'probability_outcome_neither'}
+    timeline.push(outcome_trial_condition_lose)
+
+    var outcome_trial_condition_neither = {
+        timeline : [{
+            type: "image-keyboard-response",
+            stimulus : '/images/gonogo_media/rectangle.png',
+            trial_duration : 1000, 
+            choices : jsPsych.NO_KEYS,
+            data: {trial_number : Trial_Number,test_part: 'probability_outcome_neither'}
+        }],
+        conditional_function : () =>{
+            // Only show sequene "Neither" part of the experiment if the target detection task portion had a button press
+            var data = jsPsych.data.get().filter({'test_part': "target_detection"}).last(1).values()[0];
+            //console.log(data.trial_index + ': ' + 'Neither')
+            if(data.outcome == 'neither'){
+                return true
+            } else {
+                return false
+            }
+
+        }
     }
+
+    timeline.push(outcome_trial_condition_neither)
 
     var wait_duration = getRandomIntInclusive(750,1500)
 
@@ -318,56 +391,7 @@ for (let i = 1; i < TOTAL_TRIAL_NUMBER + 1; i++){
         data: {trial_number : Trial_Number, test_part: 'posttrial_wait', duration : wait_duration}
     }
 
-    var outcome_trial_condition_win = {
-        timeline : [fixed_fixation,probability_outcome_win,posttrial_wait],
-        conditional_function : () =>{
-            var data = jsPsych.data.get().last(1).values()[0];
-            if(data.key_press){
-                if (getResult(type, true) == 'win'){
-                    return true;
-                } else {
-                    return false;
-                }
-            }
-
-        }
-    }
-
-    timeline.push(outcome_trial_condition_win)
-
-    var outcome_trial_condition_lose = {
-        timeline : [fixed_fixation,probability_outcome_lose,posttrial_wait],
-        conditional_function : () =>{
-            var data = jsPsych.data.get().last(1).values()[0];
-            if(data.key_press){
-                if (getResult(type, true) == 'lose'){
-                    return true;
-                } else {
-                    return false;
-                }
-            }
-
-        }
-    }
-
-    timeline.push(outcome_trial_condition_lose)
-
-    var outcome_trial_condition_neither = {
-        timeline : [fixed_fixation,probability_outcome_lose,posttrial_wait],
-        conditional_function : () =>{
-            var data = jsPsych.data.get().last(1).values()[0];
-            if(data.key_press){
-                if (getResult(type, true) == 'neither'){
-                    return true;
-                } else {
-                    return false;
-                }
-            }
-
-        }
-    }
-
-    timeline.push(outcome_trial_condition_neither)
+    timeline.push(posttrial_wait)
 
     
     
@@ -426,9 +450,11 @@ var debrief_block = {
     var trials = jsPsych.data.get().filter({test_part: 'test'});
     var correct_trials = trials.filter({correct: true});
     var accuracy = Math.round(correct_trials.count() / trials.count() * 100);
-    var rt = Math.round(correct_trials.select('rt').mean());
+    var rt = Math.round(jsPsych.data.get().filter({'test_part': "target_detection"}).select('rt').mean());
+    var points = jsPsych.data.get().filter({'test_part': "target_detection"}).last(1).values()[0].points;
+    //console.log(data);
 
-    return "<p>You responded correctly on "+accuracy+"% of the trials.</p>"+
+    return "<p>You Got "+points+" Points.</p>"+
     "<p>Your average response time was "+rt+"ms.</p>"+
     "<p>Press any key to complete the experiment. Thank you!</p>";
 
