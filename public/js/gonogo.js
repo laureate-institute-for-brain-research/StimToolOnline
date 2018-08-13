@@ -142,7 +142,7 @@ function getResult(type, pressed){
             }
         } else {
             if(rnd1 > .8){
-                return 'nothing'
+                return 'neither'
             } else {
                 return 'lose'
             }
@@ -164,6 +164,13 @@ d_type_total = 0
 
 fractal_order = ['a','b','c','d']
 
+decode_type = {
+    'a' : 'A: Go To Win',
+    'b' : 'B: Go to Avoid Losing',
+    'c' : 'C: No Go to Win',
+    'd' : 'D: No Go to Avoid Losing'
+}
+
 // A is always Go to Win
 // B is always Go to Avoid
 // C is always No Go to Win
@@ -171,7 +178,10 @@ fractal_order = ['a','b','c','d']
 
 fractal_images = {}
 //console.log(fractal_order)
-shuffle(fractal_order); //  shuffle this every time this page loads to so that 
+
+//  shuffle this every time this page loads to so that 
+// The meaning of each fractal image is different for each subject
+shuffle(fractal_order); 
 
 f_num = 1
 fractal_order.forEach((value) => {
@@ -244,7 +254,7 @@ for (let i = 1; i < TOTAL_TRIAL_NUMBER + 1; i++){
         stimulus : fractal_images[type],
         trial_duration : 1000, // show image for 1000 millisecond
         choices : jsPsych.NO_KEYS,
-        data: {trial_number :Trial_Number, test_part: 'fractal_cue'}
+        data: {trial_number :Trial_Number, test_part: 'fractal_cue', result : type[0]},
     }
 
 
@@ -284,6 +294,7 @@ for (let i = 1; i < TOTAL_TRIAL_NUMBER + 1; i++){
             }
 
             data.outcome = outcome
+            
             if (outcome == 'win'){
                 POINTS++;
                 data.points = POINTS;
@@ -293,6 +304,7 @@ for (let i = 1; i < TOTAL_TRIAL_NUMBER + 1; i++){
             } else {
                 data.points = POINTS;
             }
+            console.log(outcome + ' : ' + POINTS)
         }
     }
 
@@ -304,7 +316,7 @@ for (let i = 1; i < TOTAL_TRIAL_NUMBER + 1; i++){
     // 
     var fixed_fixation = {
         type : 'html-keyboard-response',
-        stimulus : '<div style="font-size:60px; color: rgb(255, 0, 0);">+</div>',
+        stimulus : '<div style="font-size:60px; color: rgb(0, 0, 255);">+</div>',
         choices: jsPsych.NO_KEYS,
         trial_duration: 1000,
         data: {trial_number : Trial_Number, test_part: 'fixed_fixation', duration : 1000}
@@ -404,41 +416,41 @@ for (let i = 1; i < TOTAL_TRIAL_NUMBER + 1; i++){
 
 
 /* test trials */
-var test_stimuli = [
-    { stimulus: "images/jspsychtest/blue.png", data: { test_part: 'test', correct_response: 'f' } },
-    { stimulus: "images/jspsychtest/orange.png", data: { test_part: 'test', correct_response: 'j' } }
-];
+// var test_stimuli = [
+//     { stimulus: "images/jspsychtest/blue.png", data: { test_part: 'test', correct_response: 'f' } },
+//     { stimulus: "images/jspsychtest/orange.png", data: { test_part: 'test', correct_response: 'j' } }
+// ];
 
-var fixation = {
-    type: 'html-keyboard-response',
-    stimulus: '<div style="font-size:60px; color: rgb(255, 255, 255);">+</div>',
-    choices: jsPsych.NO_KEYS,
-    trial_duration: function(){
-    return jsPsych.randomization.sampleWithoutReplacement([250, 500, 750, 1000, 1250, 1500, 1750, 2000], 1)[0];
-    },
-    data: {test_part: 'fixation' }
-}
+// var fixation = {
+//     type: 'html-keyboard-response',
+//     stimulus: '<div style="font-size:60px; color: rgb(255, 255, 255);">+</div>',
+//     choices: jsPsych.NO_KEYS,
+//     trial_duration: function(){
+//     return jsPsych.randomization.sampleWithoutReplacement([250, 500, 750, 1000, 1250, 1500, 1750, 2000], 1)[0];
+//     },
+//     data: {test_part: 'fixation' }
+// }
 
-var test = {
-    type: "image-keyboard-response",
-    stimulus: jsPsych.timelineVariable('stimulus'),
-    choices: ['f', 'j'],
-    data: jsPsych.timelineVariable('data'),
-    on_finish: function(data){
-        if(data.key_press){
-        console.log('pressed key' + data.key_press)
-        data.correct = data.key_press == jsPsych.pluginAPI.convertKeyCharacterToKeyCode(data.correct_response);
-        }
+// var test = {
+//     type: "image-keyboard-response",
+//     stimulus: jsPsych.timelineVariable('stimulus'),
+//     choices: ['f', 'j'],
+//     data: jsPsych.timelineVariable('data'),
+//     on_finish: function(data){
+//         if(data.key_press){
+//         console.log('pressed key' + data.key_press)
+//         data.correct = data.key_press == jsPsych.pluginAPI.convertKeyCharacterToKeyCode(data.correct_response);
+//         }
     
-    },
-}
+//     },
+// }
 
-var test_procedure = {
-    timeline: [fixation, test],
-    timeline_variables: test_stimuli,
-    repetitions: 1,
-    randomize_order: true
-}
+// var test_procedure = {
+//     timeline: [fixation, test],
+//     timeline_variables: test_stimuli,
+//     repetitions: 1,
+//     randomize_order: true
+// }
 // timeline.push(test_procedure);
 
 /* define debrief */
