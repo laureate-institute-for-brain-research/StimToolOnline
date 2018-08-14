@@ -1,4 +1,4 @@
-/* create timeline */
+
 // Paramaeters
 TOTAL_TRIAL_NUMBER = 5
 TOTAL_TRIALS_EACH = TOTAL_TRIAL_NUMBER / 4
@@ -78,7 +78,7 @@ function getRandomIntInclusive(min, max) {
 }
 
 /**
- * Returns either win, lose, neither
+ * Returns either win, lose, neither given a condition type and boolean variable
  * @param {String} type Trial Condition [a,b,c,d]
  * @param {Boolean} pressed Subject Response pressing the button or not
  */
