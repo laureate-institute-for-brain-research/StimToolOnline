@@ -8,7 +8,8 @@ var timeline = [];
 
 timeline.push({
     type: 'fullscreen',
-    fullscreen_mode: true
+    fullscreen_mode: true,
+
 });
 
 
@@ -18,7 +19,13 @@ var welcome = {
     type: "html-keyboard-response",
     stimulus: "<p>GoNoGo Task </p> <br><br><br><p> Press any key to begin.</p>",
     on_load : () => {
-    document.body.style.backgroundColor = "black";
+        document.body.style.backgroundColor = "black";
+        idsToHide = ['logo','nametitle','id_label','session_label','study_label']
+
+        idsToHide.forEach((element) =>{
+            document.getElementById(element).hidden = true;
+        });
+    
     //document.p.style.color = "white";
     }
 
@@ -179,7 +186,7 @@ decode_type = {
 fractal_images = {}
 //console.log(fractal_order)
 
-//  shuffle this every time this page loads to so that 
+// shuffle this every time this page loads to so that 
 // The meaning of each fractal image is different for each subject
 shuffle(fractal_order); 
 
@@ -485,6 +492,13 @@ for (let i = 1; i < TOTAL_TRIAL_NUMBER + 1; i++){
 // Probably not necessary but this shows the subject How many points he has accumulated
 // And also his average resopnse time
 
+
+// exit fullscreen mode
+timeline.push({
+    type: 'fullscreen',
+    fullscreen_mode: false
+  });
+
 var debrief_block = {
     type: "html-keyboard-response",
     stimulus: function() {
@@ -505,10 +519,12 @@ var debrief_block = {
 timeline.push(debrief_block);
 
 /* start the experiment */
+
+
 jsPsych.init({
     timeline: timeline,
     //display_element : 'taskdiv',
     on_finish: function() {
-    jsPsych.data.displayData();
+        jsPsych.data.displayData();
     }
 });

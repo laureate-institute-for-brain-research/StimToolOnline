@@ -222,6 +222,22 @@ app.get('/test', function(req,res){
 		res.end();
 	});	
 });
+
+app.get('/gonogo', function(req,res){
+	fs.readFile('task/gonogo/gonogo.html', function (err, data) {
+		// Write Header
+		res.writeHead(200, {
+			'Content-Type' : 'text/html'
+		});
+		// Wrte Body
+		res.write(data);
+		res.end();
+	});	
+});
+
+
+
+
 app.post('/wave1proceed', function (req, res) {
 
 	var q = url.parse(req.url, true).query;
@@ -966,7 +982,7 @@ function displayChicken3estimate(res){
 }
 
 function displayGoNoGo(res){
-	fs.readFile('task/gonogo/gonogo.html', function (err, data) {
+	fs.readFile('task/gonogo/container.html', function (err, data) {
 		// Write Header
 		res.writeHead(200, {
 			'Content-Type' : 'text/html'
