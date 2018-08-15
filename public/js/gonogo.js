@@ -1,5 +1,5 @@
 
-// Paramaeters
+// Parameters
 TOTAL_TRIAL_NUMBER = 5
 TOTAL_TRIALS_EACH = TOTAL_TRIAL_NUMBER / 4
 
@@ -20,13 +20,14 @@ var welcome = {
     stimulus: "<p>GoNoGo Task </p> <br><br><br><p> Press any key to begin.</p>",
     on_load : () => {
         document.body.style.backgroundColor = "black";
-        idsToHide = ['logo','nametitle','id_label','session_label','study_label']
 
-        idsToHide.forEach((element) =>{
-            document.getElementById(element).hidden = true;
-        });
+        // // Used to hide initial elements in the container
+        // idsToHide = ['logo','nametitle','id_label','session_label','study_label']
+
+        // idsToHide.forEach((element) =>{
+        //     document.getElementById(element).hidden = true;
+        // });
     
-    //document.p.style.color = "white";
     }
 
 };
@@ -526,5 +527,6 @@ jsPsych.init({
     //display_element : 'taskdiv',
     on_finish: function() {
         jsPsych.data.displayData();
-    }
+    },
+    //show_preload_progress_bar: true
 });
