@@ -1,6 +1,6 @@
 
 // Parameters
-TOTAL_TRIAL_NUMBER = 5
+TOTAL_TRIAL_NUMBER = 160
 TOTAL_TRIALS_EACH = TOTAL_TRIAL_NUMBER / 4
 
 
@@ -263,8 +263,9 @@ for (let i = 1; i < TOTAL_TRIAL_NUMBER + 1; i++){
         type: "image-keyboard-response",
         stimulus : fractal_images[type],
         trial_duration : 1000, // show image for 1000 millisecond
-        choices : jsPsych.NO_KEYS,
         data: {trial_number :Trial_Number, test_part: 'fractal_cue', result : type[0]},
+        choices : [37,39], // 37: <-   39:->
+        trial_duration : 1500,
     }
 
     timeline.push(fractal_cue)
@@ -331,6 +332,8 @@ for (let i = 1; i < TOTAL_TRIAL_NUMBER + 1; i++){
         }
     }
 
+    // Will skip this portion of the task so that subjects make a decision during
+    // The Fractal Cue part instead
     timeline.push(target_detection)
 
 
@@ -338,7 +341,7 @@ for (let i = 1; i < TOTAL_TRIAL_NUMBER + 1; i++){
     // This is just fixation point that occurs 1000ms after the subject has made a response
     var fixed_fixation = {
         type : 'html-keyboard-response',
-        stimulus : '<div style="font-size:60px; color: rgb(0, 0, 255);">+</div>',
+        stimulus : '<div style="font-size:60px; color: rgb(0, 0, 0);">+</div>',
         choices: jsPsych.NO_KEYS,
         trial_duration: 1000,
         data: {trial_number : Trial_Number, test_part: 'fixed_fixation', duration : 1000}

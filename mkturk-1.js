@@ -140,7 +140,12 @@ app.get('/',function (req, res) {
 		}
 
 	} else if(task == 'gonogo') {
-		displayGoNoGo(res);
+		if(q.version == 1){
+			displayGoNoGo(res, 1);
+		}else if (q.version == 2){
+			displayGoNoGo(res, 2);
+		}
+		
 	}
 	else if (ctversion == '0' && task == 'chicken'){
 		displayChicken0(res);
@@ -224,7 +229,10 @@ app.get('/test', function(req,res){
 });
 
 app.get('/gonogo', function(req,res){
-	fs.readFile('task/gonogo/gonogo.html', function (err, data) {
+	var q = url.parse(req.url, true).query;
+	//console.log(q.version);
+	fileurl  = 'task/gonogo/version_' + q.version.toString() + '/gonogo' + q.version.toString() + '.html'
+	fs.readFile(fileurl, function (err, data) {
 		// Write Header
 		res.writeHead(200, {
 			'Content-Type' : 'text/html'
@@ -471,7 +479,7 @@ app.post('/saveChickenTask/', function(req, res) {
 	data = req.body; // json input
 	content = data.content;  
 	var head1 = "Version:," + version + ",Type:," + type + ",Orginal File Name:,"+ 'CT-' + mkturk_id + '-T' + session + '.csv'+ ',\"UserAGENT:' + req.headers['user-agent'] + '\",IP: ' + ipaddr + ",Time:,"+file_date+",Parameter File:,None:FromPsyToolkit\n"
-    var head2 = "trial_type,trial_number,block_num,egg_x_position,egg_y_position,absolute_time_sec,response_time_sec,response (1=left;2=right),result (1=correct;2=incorrect)\n"
+    var head2 = "trial_type,trial_number,block_num,egg_x_position,egg_y_position,absolute_time_sec,response_time_sec,response (1=left;2=right),result (1=correct;2=incorrect), points\n"
 
 	var filename = 'data/' + study + '/tasks/'+ study + '-CT-' + mkturk_id + '-' + 'T' + session + '.csv'
 	fs.writeFile(filename, head1 + head2 + content, (err) => {
@@ -512,6 +520,8 @@ app.post('/saveChickenTask/', function(req, res) {
 	sendEmails(mkturk_id, session, study);
 
 });
+
+
 
 
 // Return Time Life given id
@@ -981,8 +991,8 @@ function displayChicken3estimate(res){
 	});		
 }
 
-function displayGoNoGo(res){
-	fs.readFile('task/gonogo/container.html', function (err, data) {
+function displayGoNoGo(res, versionnum){
+	fs.readFile('task/gonogo/version_' + versionnum + '/container' + versionnum +'.html', function (err, data) {
 		// Write Header
 		res.writeHead(200, {
 			'Content-Type' : 'text/html'

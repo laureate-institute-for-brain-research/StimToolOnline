@@ -70,7 +70,7 @@
 		
 		<div class="row">
 			<div class="col-md-10">
-				<h1 style="padding: 17px" >Go No Go Task</h1>
+				<h1 style="padding: 17px" >Go No Go Task: Version 1</h1>
 			</div>
 		</div>
 		<!-- <center><div id="loader" class="lds-dual-ring">Saving data...</div></center> -->
@@ -137,7 +137,7 @@
 	$("#session").text(session);
     $("#study").text(getQueryVariable('study'));
 
-    var taskurl = '/gonogo?mkturk_id=' + mkturkid + '&session=' + session + '&study=' + getQueryVariable('study')
+    var taskurl = '/gonogo?version=1&mkturk_id=' + mkturkid + '&session=' + session + '&study=' + getQueryVariable('study') 
     
     document.getElementById('inlineFrameExample').setAttribute('src',taskurl)
 </script>
