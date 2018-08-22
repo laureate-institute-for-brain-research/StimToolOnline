@@ -3,12 +3,66 @@
 TOTAL_TRIAL_NUMBER = 5
 TOTAL_TRIALS_EACH = TOTAL_TRIAL_NUMBER / 4
 
+function getQueryVariable(variable) {
+    var query = window.location.search.substring(1);
+    var vars = query.split('&');
+    for (var i = 0; i < vars.length; i++) {
+        var pair = vars[i].split('=');
+        if (decodeURIComponent(pair[0]) == variable) {
+            return decodeURIComponent(pair[1]);
+        }
+    }
+    return 'NULL'
+}
+
+/**
+ * Save the current trial to file on the server
+ */
+function saveData(){
+    row_data = jsPsych.data.get().last().json()
+    $.ajax({
+        type : 'post',
+        async : false,
+        url : '/saveGoNoGo?' + $.param(subjectinfo) ,
+        data : row_data,
+        contentType: "application/json",
+        dataType: 'json'
+    });
+    
+    console.log(row_data);
+}
+
+var id = getQueryVariable('mkturk_id')
+var study = getQueryVariable('study')
+var session = getQueryVariable('session')
+var version = getQueryVariable('version')
+
+var subjectinfo = {
+    id : id,
+    study :study,
+    session : session,
+    version : version
+}
+
 
 var timeline = [];
 
 timeline.push({
     type: 'fullscreen',
     fullscreen_mode: true,
+    on_finish: ()=>{
+        row_data = jsPsych.data.get().json()
+        $.ajax({
+            type : 'post',
+            async : false,
+            url : '/saveGoNoGo?' + $.param(subjectinfo) ,
+            data : row_data,
+            contentType: "application/json",
+            dataType: 'json'
+        });
+        
+        console.log(row_data);
+    }
 
 });
 
@@ -28,7 +82,8 @@ var welcome = {
         //     document.getElementById(element).hidden = true;
         // });
     
-    }
+    },
+    on_finish: saveData
 
 };
 timeline.push(welcome);
@@ -48,7 +103,8 @@ var instructions = {
     ],
     show_clickable_nav: true,
     allow_keys: true,
-    show_page_number : true
+    show_page_number : true,
+    on_finish: saveData
 }
 
 timeline.push(instructions)
@@ -288,6 +344,16 @@ for (let i = 1; i < TOTAL_TRIAL_NUMBER + 1; i++){
                 data.points = POINTS;
             }
             console.log(outcome + ' : ' + POINTS)
+            // save the data
+            row_data = jsPsych.data.get().last().json()
+            $.ajax({
+                type : 'post',
+                async : false,
+                url : '/saveGoNoGo?' + $.param(subjectinfo) ,
+                data : row_data,
+                contentType: "application/json",
+                dataType: 'json'
+            });
         }
     }
 
@@ -303,7 +369,8 @@ for (let i = 1; i < TOTAL_TRIAL_NUMBER + 1; i++){
         stimulus : '<div style="font-size:60px; color: rgb(255, 255, 255);">+</div>',
         choices: jsPsych.NO_KEYS,
         trial_duration: fixation_duration,
-        data: {trial_number :Trial_Number, test_part: 'fixation', duration : fixation_duration}
+        data: {trial_number :Trial_Number, test_part: 'fixation', duration : fixation_duration},
+        on_finish: saveData
 
     }
     timeline.push(fixation)
@@ -399,7 +466,8 @@ for (let i = 1; i < TOTAL_TRIAL_NUMBER + 1; i++){
                 return false
             }
 
-        }
+        },
+        on_finish: saveData
     }
 
     timeline.push(outcome_trial_condition_win)
@@ -422,7 +490,8 @@ for (let i = 1; i < TOTAL_TRIAL_NUMBER + 1; i++){
                 return false
             }
 
-        }
+        },
+        on_finish: saveData
     }
 
     timeline.push(outcome_trial_condition_lose)
@@ -445,7 +514,8 @@ for (let i = 1; i < TOTAL_TRIAL_NUMBER + 1; i++){
                 return false
             }
 
-        }
+        },
+        on_finish: saveData
     }
 
     timeline.push(outcome_trial_condition_neither)
@@ -461,7 +531,8 @@ for (let i = 1; i < TOTAL_TRIAL_NUMBER + 1; i++){
         stimulus : '',
         trial_duration : wait_duration, 
         choices : jsPsych.NO_KEYS,
-        data: {trial_number : Trial_Number, test_part: 'posttrial_wait', duration : wait_duration}
+        data: {trial_number : Trial_Number, test_part: 'posttrial_wait', duration : wait_duration},
+        on_finish: saveData
     }
 
     timeline.push(posttrial_wait)

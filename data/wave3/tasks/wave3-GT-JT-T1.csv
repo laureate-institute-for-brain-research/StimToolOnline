@@ -1,0 +1,25 @@
+Version:,2,Orginal File Name:,GT-JT-T1.csv,"UserAGENT:Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/68.0.3440.106 Safari/537.36",IP: ::1,Time:,2018_8_22_17_57,Parameter File:,None:FromjsPsych
+trial_index,trial_type,trial_number,event,condition,absolute_time_ms,response_time_ms,key_press,outcome,points
+0,fullscreen,,undefined,undefined,2885,undefined,undefined,undefined,undefined
+1,html-keyboard-response,,undefined,undefined,3904,986,32,undefined,undefined
+2,instructions,,undefined,undefined,5928,2016,undefined,undefined,undefined
+3,image-keyboard-response,1,fractal_cue,c,6057,60,39,win,1
+4,html-keyboard-response,1,fixation,,7575,,null,undefined,undefined
+5,image-keyboard-response,1,probability_outcome_win,,8586,,null,undefined,undefined
+6,html-keyboard-response,1,posttrial_wait,,9421,,null,undefined,undefined
+7,image-keyboard-response,2,fractal_cue,c,10930,,null,win,2
+8,html-keyboard-response,2,fixation,,11956,,null,undefined,undefined
+9,image-keyboard-response,2,probability_outcome_win,,12968,,null,undefined,undefined
+10,html-keyboard-response,2,posttrial_wait,,14331,,null,undefined,undefined
+11,image-keyboard-response,3,fractal_cue,b,14624,284,37,neither,2
+12,html-keyboard-response,3,fixation,,16364,,null,undefined,undefined
+13,image-keyboard-response,3,probability_outcome_neither,,17376,,null,undefined,undefined
+14,html-keyboard-response,3,posttrial_wait,,18209,,null,undefined,undefined
+15,image-keyboard-response,4,fractal_cue,d,19719,,null,neither,2
+16,html-keyboard-response,4,fixation,,21479,,null,undefined,undefined
+17,image-keyboard-response,4,probability_outcome_neither,,22489,,null,undefined,undefined
+18,html-keyboard-response,4,posttrial_wait,,23356,,null,undefined,undefined
+19,image-keyboard-response,5,fractal_cue,a,24866,,null,win,3
+20,html-keyboard-response,5,fixation,,25918,,null,undefined,undefined
+21,image-keyboard-response,5,probability_outcome_win,,26929,,null,undefined,undefined
+22,html-keyboard-response,5,posttrial_wait,,27935,,null,undefined,undefined
