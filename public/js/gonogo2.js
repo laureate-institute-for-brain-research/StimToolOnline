@@ -1,6 +1,6 @@
 
 // Parameters
-TOTAL_TRIAL_NUMBER = 5
+TOTAL_TRIAL_NUMBER = 160
 TOTAL_TRIALS_EACH = TOTAL_TRIAL_NUMBER / 4
 
 function getQueryVariable(variable) {
