@@ -522,6 +522,53 @@ app.post('/saveChickenTask/', function(req, res) {
 });
 
 
+// Save GoNoGo Task
+
+// Save The input of a file and if its' the same 
+// id, study, and session, APPEND it
+app.post('/saveGoNoGo', (req,res)=>{
+	var q = url.parse(req.url, true).query;
+
+	payload = req.body; // json input
+	var ipaddr = requestIp.getClientIp(req)
+	var d = new Date()
+	var month = d.getMonth() + 1 // on a separate since if we add, it concatenates the numbers
+	var file_date = d.getFullYear() + "_" + month + "_" + d.getDate() + "_" + d.getHours() + '_' + d.getMinutes()
+
+	data = payload[0]
+
+	filename  = 'data/wave3/tasks/wave3-GT-' + q.id + '-T' + q.session + '.csv'
+	var head1 = "Version:," + q.version + ",Orginal File Name:,"+ 'GT-' + q.id + '-T' + q.session + '.csv'+ ',\"UserAGENT:' + req.headers['user-agent'] + '\",IP: ' + ipaddr + ",Time:,"+file_date+",Parameter File:,None:FromjsPsych\n"
+	var head2 = "trial_index,trial_type,trial_number,event,condition,absolute_time_sec,response_time_sec,outcome,points\n"
+	var datarow = data.trial_index + ',' + data.trial_type + ',' + data.trial_number + ',' +
+		data.test_part + ',' + data.result + ',' + data.time_elapsed + ',' + 
+		data.rt + ',' + data.outcome + ',' + data.points + '\n'
+	// If File Exists, Append the payload
+	if (fs.existsSync(filename)){
+		fs.appendFile(filename, datarow.replace("null","").replace(undefined, ''), function (err) {
+			if (err) throw err;
+			console.log('Append GT data!');
+			console.log(datarow)
+		  });
+	} else {
+	// Create new File
+		fs.writeFile(filename, head1 + head2 + datarow.replace("null","").replace(undefined, ''), (err) => {
+			if (err) throw err;
+			console.log('New GT File Created');
+
+		});
+
+	}
+	// console.log(q);
+	// console.log(data.trial_index);
+	// console.log(data.trial_type);
+	// console.log(data.time_elapsed);
+	// console.log(data.internal_node_id);
+	res.send('Got the GoNoGo Task Data')
+
+});
+
+
 
 
 // Return Time Life given id
