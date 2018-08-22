@@ -539,10 +539,10 @@ app.post('/saveGoNoGo', (req,res)=>{
 
 	filename  = 'data/wave3/tasks/wave3-GT-' + q.id + '-T' + q.session + '.csv'
 	var head1 = "Version:," + q.version + ",Orginal File Name:,"+ 'GT-' + q.id + '-T' + q.session + '.csv'+ ',\"UserAGENT:' + req.headers['user-agent'] + '\",IP: ' + ipaddr + ",Time:,"+file_date+",Parameter File:,None:FromjsPsych\n"
-	var head2 = "trial_index,trial_type,trial_number,event,condition,absolute_time_sec,response_time_sec,outcome,points\n"
+	var head2 = "trial_index,trial_type,trial_number,event,condition,absolute_time_ms,response_time_ms,key_press,outcome,points\n"
 	var datarow = data.trial_index + ',' + data.trial_type + ',' + data.trial_number + ',' +
 		data.test_part + ',' + data.result + ',' + data.time_elapsed + ',' + 
-		data.rt + ',' + data.outcome + ',' + data.points + '\n'
+		data.rt + ',' + data.key_press + ',' + data.outcome + ',' + data.points + '\n'
 	// If File Exists, Append the payload
 	if (fs.existsSync(filename)){
 		fs.appendFile(filename, datarow.replace("null","").replace(undefined, ''), function (err) {
