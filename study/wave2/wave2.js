@@ -105,6 +105,8 @@ module.exports = {
 		var jobToSqlColumn = {
 			'demo_1' : 'survey_demo_T1',
 			'demo_2' : 'survey_demo_T2',
+			'panasx_1' : 'survey_panasx_T1',
+			'panasx_2' : 'survey_panasx_T2',
 			'phq_1' : 'survey_phq_T1',
 			'phq_2' : 'survey_phq_T2',
 			'oasis_1' : 'survey_oasis_T1',
@@ -267,15 +269,11 @@ function reRoute(con,mkturk_id,response){
 	console.log('reroute has been summoned :D')
 	// THIS function can only be run if user is already in the database
 	var sql = SqlString.format("SELECT status.survey_demo_T1, " +
-		"status.survey_phq_T1," +
-		"status.survey_oasis_T1," +
-		'status.survey_panas_T1,' +
+		"status.survey_panasx_T1," +
 		'status.task_chicken_T1,' +
 		'subjects.time_ready,' + 
 		'status.survey_demo_T2,' +
-		'status.survey_phq_T2,' +
-		'status.survey_oasis_T2,' +
-		'status.survey_panas_T2,' + 
+		'status.survey_panasx_T2,' +
 		'status.task_chicken_T2, ' +
 		'subjects.task_version ' + 
 		'FROM status ' + 

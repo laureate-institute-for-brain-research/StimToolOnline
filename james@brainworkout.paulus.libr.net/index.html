@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<style type="text/css">
+		@font-face {
+			font-family: gotham;
+			src: url(/gotham-book-regular.otf);
+		}
+
+		body {
+			background-color: #f2f0eb;
+		}
+
+		* {
+			font-family: Helvetica Neue;
+		}
+
+		a:link,
+		a:visited {
+			color: #5e3f99;
+		}
+
+		img {
+			max-width: 40%;
+			height: auto;
+		}
+
+		/* label focus color */
+
+		.input-field input:focus+label {
+			color: #f68826 !important;
+		}
+
+		/* label underline focus color */
+
+		.input-field input:focus {
+			border-bottom: 1px solid #f68826 !important;
+			box-shadow: 0 1px 0 0 #f68826 !important
+		}
+
+		[type="checkbox"].filled-in:checked+span:not(.lever):after {
+			top: 0;
+			width: 20px;
+			height: 20px;
+			border: 2px solid #f68826 !important;
+			background-color: #f68826 !important;
+			z-index: 0;
+		}
+
+		/*input[type=text]:focus {
+			border-color: 	#f68826;
+			box-shadow: 0 0 5px #f68826 !important;
+		}
+		input[type=email]:focus {
+			border-color: 	#f68826;
+			box-shadow: 0 0 5px #f68826 !important;
+		}*/
+	</style>
+	<title>LIBR Online Task</title>
+
+
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-alpha.4/css/materialize.min.css">
+
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb"
+	    crossorigin="anonymous">
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"></script>
+
+
+</head>
+
+
+<body>
+	<!-- <button type="button" data-toggle="modal" data-target="#exampleModal">Launch modal</button> -->
+
+	<!-- Modal -->
+	<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title alert alert-danger" id="exampleModalLabel">Please Wait!</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					Please Wait 24 Hours to perform session 2!
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+	<div class="container">
+		<br>
+
+		<center>
+			<a href="http://www.laureateinstitute.org/">
+				<img class="logo" src="/images/logo.png">
+			</a>
+		</center>
+		<hr style="border-top:5px solid #b1b3b6" />
+
+
+		<br>
+		<p>Martin Paulus, M.D. and his collaborators at the Laureate Institute for Brain Research (LIBR) are conducting a research
+			study to:
+			<ol style="padding-left: 60px;">
+				<li>evaluate the feasibility of collecting data from online psychological tasks completed on Amazon Mechanical Turk (MTurk)
+					and
+				</li>
+				<li>evaluate the test-retest reliability of tasks completed on MTurk. Approximately 200 people will participate in the study.
+				</li>
+			</ol>
+			<p style="text-autospace: none;">You are being asked to be in a research study that will try to test the feasibility and reliability of behavioral tasks
+				administered on Amazon Mechanical Turk (MTurk).</p>
+			<p style="text-autospace: none;">Your participation will involve self-report measures and a computer task and take about 40 minutes to complete in each
+				of two sessions, separated by at least 24 hours (80 minutes total). There will be approximately 200 participants in this
+				study.</p>
+			<p style="text-align: justify; tab-stops: -.5in;">There are no known risks associated with being in this research.</p>
+			<p>You may not receive a direct benefit if you agree to participate.&nbsp; However, people in the future may benefit from
+				the information obtained from this research.</p>
+			<p>Your alternative is to not participate in this study.&nbsp;</p>
+			<p>Contact Martin Paulus, M.D. at 918-502-5100 for questions, concerns or complaints about the research or if you think you
+				have been harmed as a result of joining this research.&nbsp;
+				<p>Contact the Western Institutional Review Board (WIRB) if you have questions about your rights as a research subject,
+					concerns, complaints or input: 1-800-562-4789.</p>
+				WIRB is a group of people who perform independent review of research.</p>
+			<p>The study staff will share the records generated from this research with the sponsor, regulatory agencies such as the
+				US Food and Drug Administration and the IRB. This information is shared so the research can be conducted and properly
+				monitored.&nbsp; The people receiving this information may not be required to protect it and your information may be
+				redisclosed without your permission.&nbsp; If you do not provide permission to use your information you cannot be in
+				the study.</p>
+			<p>This permission will not end unless you cancel it.&nbsp; You may cancel it by sending written notice to the study doctor
+				Martin Paulus, M.D. at 6655 South Yale Ave, Tulsa, OK 74136.&nbsp; Any information collected before you withdraw may
+				still be used.</p>
+			<p>Your decision to be in this study is voluntary.&nbsp; You will not be penalized or lose benefits if you decide not to
+				participate or if you decide to stop participating.&nbsp;</p>
+			<p>Upon completion of the two sessions, you will receive $6 for your time and effort.</p>
+			<br>
+			<h3>
+				<strong>Session 1: (~40 minutes)</strong>
+			</h3>
+			<p style="padding-left: 30px;">Part A: You will complete 4 Surveys that ask questions about your demographic information and psychological well-being.</p>
+			<ol style="padding-left: 60px;">
+				<li>Demographic Information</li>
+				<li>Patient Health Questionnaire (PHQ-8)</li>
+				<li>Overall Anxiety Severity and Impairment Scale (OASIS)</li>
+				<li>Positive and Negative Affect Schedule (PANAS)</li>
+			</ol>
+
+			<p style="padding-left: 30px;">Part B: You will complete the Chicken Task:</p>
+			<p style="padding-left: 40px;">
+				During the task, you will be shown images on the screen of two chickens. Using your keyboard, you will be asked to determine
+				which chicken laid the current egg. The exact instructions will be provided to you when you reach this portion of the
+				human intelligence task (HIT).</p>
+			<p style="padding-left: 40px;font-size: 20px;">
+					You may earn up to <strong >$6</strong> depending on your performance </p>
+
+			<br>
+
+			<br>
+			<h3>
+				<strong>Session 2: (~40 minutes, completed at least
+					<u>24 hours</u> after Session 1)</strong>
+			</h3>
+			<p style="padding-left: 30px;">For session 2, you will complete the same survey and task as session 1.</p>
+
+
+			<p>
+				<i>
+					<u>If you provide an email address, we will remind you when 24 hours have passed and it is time to complete Session 2.</u>
+				</i>
+				<br>
+				<strong>
+				After Session 2 is complete, you will be given a codefor your time and effort on Mechanical Turk.&nbsp;</strong></p>
+			<p style="padding-left: 30px;"></p>
+			</strong>
+			<p>Participation in research is voluntary. You may stop this HIT at any time when you feel uncomfortable. If you have any
+				questions, please contact LIBR at
+				<a href="mailto:jtouthang@libr.net?Subject=Amazon MKTURK%20TASK" target="_blank">jtouthang@libr.net</a>.</p>
+			<p>No personally identifiable information will be collected in this study except your email address if provided. If you do
+				provide an email address, we will delete it from the database once you have completed session 2!</p>
+
+			<h2 style="font-size: 20px; text-align: center;">
+				<strong>You must complete both sessions to receive payment.</strong>
+			</h2>
+
+			<br>
+			<hr style="border-top:3px solid #b1b3b6" />
+			<br>
+			<div class="row justify-content-md-center">
+
+				<div class="col-md-7">
+					<div>
+						<form name="field" method='post' enctype="multipart/form-data" action="/wave2proceed">
+							<fieldset>
+								<div class="row">
+									<div class="input-field col s12 ">
+										<input type="text" class="validate" id="userID" class="validate" name="mkturk_id" required>
+										<!-- <input id="last_name" type="text" class="validate"> -->
+										<label for="userID">Amazon Mechanical Turk ID</label>
+									</div>
+								</div>
+
+								<div class="row">
+
+									<div class="input-field col s12">
+										<!-- <input type="text" class="validate" id="userID" class="validate" name="mkturk_id" > -->
+										<input type="email" id="userEmail" name="email" class="validate">
+										<!-- <input id="last_name" type="text" class="validate"> -->
+										<label for="userEmail">Email Address (Optional)</label>
+										<span class="helper-text">The email you provide will be deleted from the database once you have completed session 2</span>
+									</div>
+								</div>
+
+
+
+								<div class="row">
+									<!-- <input type="checkbox" id="remind" name="remind" class="checkbox-indigo" value="YES" checked>
+							    <input type="checkbox" class="filled-in checkbox-orange" id="filled-in-box" checked="checked" />
+								<label for="filled-in-box"></label> -->
+
+
+									<label for="remind">
+										<input type="checkbox" class="filled-in" id="remind" name="remind" value="YES" checked>
+										<span>Remind Me</span>
+									</label>
+								</div>
+
+								<div class="row">
+									<label for="c2">
+										<input id="c2" type="checkbox" class="filled-in" name="consent" value="YES" required autofocus>
+										<span>I will do this task truthfully and to the best of my ability. Any information I provide may be used for research.
+											I also hereby certify that I am over 18 years of age.
+										</span>
+									</label>
+								</div>
+
+								<div class="row">
+
+									<input style="background-color: #f68826; border: #f68826; height: 50px" size="19" class="btn btn-lg btn-primary btn-block"
+									    type="submit" value="Proceed">
+
+								</div>
+							</fieldset>
+						</form>
+					</div>
+
+				</div>
+			</div>
+
+
+	</div>
+	<!-- End of Container -->
+
+	<script type="text/javascript">
+		//JS script
+	</script>
+
+
+	<!-- Optional JavaScript -->
+	<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+	    crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh"
+	    crossorigin="anonymous"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ"
+	    crossorigin="anonymous"></script>
+</body>
+<br>
+<br>
+
+<footer>
+	<div class="container" style="text-align:center">
+		<p class="text-p">&copy; 2018
+			<a href="http://www.laureateinstitute.org">laureateinstitute.org</a>. All rights reserved.
+			<br>Wave 2
+	</div>
+</footer>
+
+</html>

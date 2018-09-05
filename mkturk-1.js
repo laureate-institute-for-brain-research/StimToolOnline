@@ -98,6 +98,8 @@ app.get('/',function (req, res) {
 		displaySurveyasi(res);
 	} else if(survey == 'panas'){
 		displaySurveyPanas(res);
+	} else if(survey == 'panasx'){
+		displaySurveyPanasx(res);
 	} else if (survey == 'feedback') {
 		displayFeedback(res);
 	} else if (session == '1' && task == 'dotprobe'){
@@ -320,7 +322,7 @@ app.post('/saveSurvey/', function(req, res) {
 		fs.copyFile(filename, '/var/node_data/' + filename, (err) => {
 			if(err){
 				console.log('could not copy');
-				throw err;
+				//throw err;
 			} else {
 				console.log('copy complete');
 			}
@@ -885,6 +887,17 @@ function displaySurveyasi(res){
 }
 function displaySurveyPanas(res){
 	fs.readFile('surveys/panas.html', function (err, data) {
+		// Write Header
+		res.writeHead(200, {
+			'Content-Type' : 'text/html'
+		});
+		// Wrte Body
+		res.write(data);
+		res.end();
+	});	
+}
+function displaySurveyPanasx(res){
+	fs.readFile('surveys/panasx.html', function (err, data) {
 		// Write Header
 		res.writeHead(200, {
 			'Content-Type' : 'text/html'
