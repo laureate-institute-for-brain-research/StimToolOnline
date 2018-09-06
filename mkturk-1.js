@@ -682,6 +682,156 @@ app.get('/getPANAS', function(req, res) {
 
 })
 
+app.get('/getScores', (req, res)=>{
+	var q = url.parse(req.url, true).query;
+	var mkturk_id = q.mkturk_id;
+	var session = q.session;
+	var study = q.study;
+	var jsonReturn = {};
+	//var filename = 'data/' + study + '/surveys/' + study +'-SURVEY-' + 'panas' + '-' + mkturk_id + '-T' + session + '.csv'
+
+	jsonReturn['PANASX'] = { 
+		'T1' : getPANASXScore('data/' + study + '/surveys/' + study +'-SURVEY-' + 'panasx' + '-' + mkturk_id + '-T' + '1' + '.csv'),
+		'T2' : getPANASXScore('data/' + study + '/surveys/' + study +'-SURVEY-' + 'panasx' + '-' + mkturk_id + '-T' + '2' + '.csv')
+	}
+
+	res.send(jsonReturn);
+})
+
+/**
+ * This returns a json object of differente score types from PANAX form.
+ * @param {String} filename The Path to the panax output file
+ */
+function getPANASXScore(filename){
+	try {
+		stringContent = fs.readFileSync(filename).toString();
+	  } catch (err) {
+		return ({})
+	  }
+	var contents = toArrayfromCSVString(stringContent);
+	panasx_negaffect_score = [ 'panasx_afraid', 'panasx_scared', 'panasx_nervous', 'panasx_jittery', 'panasx_irritable', 'panasx_hostile', 'panasx_guilty', 'panasx_ashamed', 'panasx_upset', 'panasx_distressed']
+	panasx_posaffect_score = ['panasx_active', 'panasx_alert', 'panasx_attentive', 'panasx_determined', 'panasx_enthusiastic', 'panasx_excited', 'panasx_inspired', 'panasx_interested', 'panasx_proud', 'panasx_strong']
+	panasx_fear_score = ['panasx_afraid', 'panasx_scared', 'panasx_frightened', 'panasx_nervous', 'panasx_jittery', 'panasx_shaky']
+	panasx_hostility_score = ['panasx_angry', 'panasx_hostile', 'panasx_irritable', 'panasx_scornful', 'panasx_disgusted', 'panasx_loathing']
+	panasx_guilt_score = ['panasx_guilty', 'panasx_ashamed', 'panasx_blameworthy', 'panasx_angryself', 'panasx_disgustedself', 'panasx_dissatisfiedself']
+	panasx_sadness_score = ['panasx_sad', 'panasx_blue', 'panasx_downhearted', 'panasx_alone', 'panasx_lonely']
+	panasx_joviality_score = ['panasx_happy', 'panasx_joyful', 'panasx_delighted', 'panasx_cheerful', 'panasx_excited', 'panasx_enthusiastic', 'panasx_lively', 'panasx_energetic']
+	panasx_selfassurance_score = ['panasx_proud', 'panasx_strong', 'panasx_confident', 'panasx_bold', 'panasx_daring', 'panasx_fearless']
+	panasx_attentiveness_score = ['panasx_alert', 'panasx_attentive', 'panasx_concentrating', 'panasx_determined']
+	panasx_shyness_score = ['panasx_shy', 'panasx_bashful', 'panasx_sheepish', 'panasx_timid']
+	panasx_fatigue_score = ['panasx_sleepy', 'panasx_tired', 'panasx_sluggish', 'panasx_drowsy']
+	panasx_serenity_score = ['panasx_calm', 'panasx_relaxed', 'panasx_atease']
+	panasx_surprise_score = ['panasx_amazed', 'panasx_surprised', 'panasx_astonished']
+	
+	returnJSON = {}
+	returnJSON['panasx_negaffect_score'] = 0
+	for (var i = 2; i < contents.length - 1; i++){
+		if (panasx_negaffect_score.includes(contents[i][0])){
+			//console.log(contents[i][0] + ': ' + contents[i][1] + ': ' + parseInt(contents[i][1].replace('\"','')))
+			var value = parseInt(contents[i][1].replace('\"',''))
+			returnJSON['panasx_negaffect_score'] = returnJSON['panasx_negaffect_score'] + value
+		}
+	}
+	returnJSON['panasx_posaffect_score'] = 0
+	for (var i = 2; i < contents.length - 1; i++){
+		if (panasx_posaffect_score.includes(contents[i][0])){
+			//console.log(contents[i][0] + ': ' + contents[i][1] + ': ' + parseInt(contents[i][1].replace('\"','')))
+			var value = parseInt(contents[i][1].replace('\"',''))
+			returnJSON['panasx_posaffect_score'] = returnJSON['panasx_posaffect_score'] + value
+		}
+	}
+	returnJSON['panasx_fear_score'] = 0
+	for (var i = 2; i < contents.length - 1; i++){
+		if (panasx_fear_score.includes(contents[i][0])){
+			//console.log(contents[i][0] + ': ' + contents[i][1] + ': ' + parseInt(contents[i][1].replace('\"','')))
+			var value = parseInt(contents[i][1].replace('\"',''))
+			returnJSON['panasx_fear_score'] = returnJSON['panasx_fear_score'] + value
+		}
+	}
+	returnJSON['panasx_hostility_score'] = 0
+	for (var i = 2; i < contents.length - 1; i++){
+		if (panasx_hostility_score.includes(contents[i][0])){
+			//console.log(contents[i][0] + ': ' + contents[i][1] + ': ' + parseInt(contents[i][1].replace('\"','')))
+			var value = parseInt(contents[i][1].replace('\"',''))
+			returnJSON['panasx_hostility_score'] = returnJSON['panasx_hostility_score'] + value
+		}
+	}
+	returnJSON['panasx_guilt_score'] = 0
+	for (var i = 2; i < contents.length - 1; i++){
+		if (panasx_guilt_score.includes(contents[i][0])){
+			//console.log(contents[i][0] + ': ' + contents[i][1] + ': ' + parseInt(contents[i][1].replace('\"','')))
+			var value = parseInt(contents[i][1].replace('\"',''))
+			returnJSON['panasx_guilt_score'] = returnJSON['panasx_guilt_score'] + value
+		}
+	}
+	returnJSON['panasx_sadness_score'] = 0
+	for (var i = 2; i < contents.length - 1; i++){
+		if (panasx_sadness_score.includes(contents[i][0])){
+			//console.log(contents[i][0] + ': ' + contents[i][1] + ': ' + parseInt(contents[i][1].replace('\"','')))
+			var value = parseInt(contents[i][1].replace('\"',''))
+			returnJSON['panasx_sadness_score'] = returnJSON['panasx_sadness_score'] + value
+		}
+	}
+	returnJSON['panasx_joviality_score'] = 0
+	for (var i = 2; i < contents.length - 1; i++){
+		if (panasx_joviality_score.includes(contents[i][0])){
+			//console.log(contents[i][0] + ': ' + contents[i][1] + ': ' + parseInt(contents[i][1].replace('\"','')))
+			var value = parseInt(contents[i][1].replace('\"',''))
+			returnJSON['panasx_joviality_score'] = returnJSON['panasx_joviality_score'] + value
+		}
+	}
+	returnJSON['panasx_selfassurance_score'] = 0
+	for (var i = 2; i < contents.length - 1; i++){
+		if (panasx_selfassurance_score.includes(contents[i][0])){
+			//console.log(contents[i][0] + ': ' + contents[i][1] + ': ' + parseInt(contents[i][1].replace('\"','')))
+			var value = parseInt(contents[i][1].replace('\"',''))
+			returnJSON['panasx_selfassurance_score'] = returnJSON['panasx_selfassurance_score'] + value
+		}
+	}
+	returnJSON['panasx_attentiveness_score'] = 0
+	for (var i = 2; i < contents.length - 1; i++){
+		if (panasx_attentiveness_score.includes(contents[i][0])){
+			//console.log(contents[i][0] + ': ' + contents[i][1] + ': ' + parseInt(contents[i][1].replace('\"','')))
+			var value = parseInt(contents[i][1].replace('\"',''))
+			returnJSON['panasx_attentiveness_score'] = returnJSON['panasx_attentiveness_score'] + value
+		}
+	}
+	returnJSON['panasx_shyness_score'] = 0
+	for (var i = 2; i < contents.length - 1; i++){
+		if (panasx_shyness_score.includes(contents[i][0])){
+			//console.log(contents[i][0] + ': ' + contents[i][1] + ': ' + parseInt(contents[i][1].replace('\"','')))
+			var value = parseInt(contents[i][1].replace('\"',''))
+			returnJSON['panasx_shyness_score'] = returnJSON['panasx_shyness_score'] + value
+		}
+	}
+	returnJSON['panasx_fatigue_score'] = 0
+	for (var i = 2; i < contents.length - 1; i++){
+		if (panasx_fatigue_score.includes(contents[i][0])){
+			//console.log(contents[i][0] + ': ' + contents[i][1] + ': ' + parseInt(contents[i][1].replace('\"','')))
+			var value = parseInt(contents[i][1].replace('\"',''))
+			returnJSON['panasx_fatigue_score'] = returnJSON['panasx_fatigue_score'] + value
+		}
+	}
+	returnJSON['panasx_serenity_score'] = 0
+	for (var i = 2; i < contents.length - 1; i++){
+		if (panasx_serenity_score.includes(contents[i][0])){
+			//console.log(contents[i][0] + ': ' + contents[i][1] + ': ' + parseInt(contents[i][1].replace('\"','')))
+			var value = parseInt(contents[i][1].replace('\"',''))
+			returnJSON['panasx_serenity_score'] = returnJSON['panasx_serenity_score'] + value
+		}
+	}
+	returnJSON['panasx_surprise_score'] = 0
+	for (var i = 2; i < contents.length - 1; i++){
+		if (panasx_surprise_score.includes(contents[i][0])){
+			//console.log(contents[i][0] + ': ' + contents[i][1] + ': ' + parseInt(contents[i][1].replace('\"','')))
+			var value = parseInt(contents[i][1].replace('\"',''))
+			returnJSON['panasx_surprise_score'] = returnJSON['panasx_surprise_score'] + value
+		}
+	}	
+	return(returnJSON)
+
+}
+
 function getPANASPositive(filename){
 	var stringContent = fs.readFileSync(filename).toString();
 	var contents = toArrayfromCSVString(stringContent);
