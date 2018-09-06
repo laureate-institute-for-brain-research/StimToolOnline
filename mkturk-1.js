@@ -695,8 +695,44 @@ app.get('/getScores', (req, res)=>{
 		'T2' : getPANASXScore('data/' + study + '/surveys/' + study +'-SURVEY-' + 'panasx' + '-' + mkturk_id + '-T' + '2' + '.csv')
 	}
 
+	jsonReturn['ChickenTask'] = { 
+		'T1' : getChickenTaskScore('data/' + study + '/tasks/' + study +'-CT-' + mkturk_id + '-T' + '1' + '.csv'),
+		'T2' : getChickenTaskScore('data/' + study + '/tasks/' + study +'-Ct-' + mkturk_id + '-T' + '2' + '.csv')
+	}
+
+
+
 	res.send(jsonReturn);
 })
+
+function getChickenTaskScore(filename){
+	try {
+		stringContent = fs.readFileSync(filename).toString();
+	  } catch (err) {
+		return ({})
+	  }
+	var contents = toArrayfromCSVString(stringContent);
+	returnJSON = {}
+
+	returnJSON['points'] = '0'
+	returnJSON['avg_rt'] = 0
+	
+	for (var i = 2; i < contents.length - 1; i++){
+		if (contents[i][1] == "1200"){
+			returnJSON['points'] = contents[i][9]
+		}
+
+		if (contents[i][0]== 'main'){
+			returnJSON['avg_rt'] = returnJSON['avg_rt'] + parseFloat(contents[i][5].replace('\"',''))
+		}
+
+		
+	}
+	returnJSON['avg_rt'] = returnJSON['avg_rt'] / 1200
+	return(returnJSON)
+
+
+}
 
 /**
  * This returns a json object of differente score types from PANAX form.

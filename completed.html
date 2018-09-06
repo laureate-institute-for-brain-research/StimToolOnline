@@ -504,6 +504,14 @@
 
                 document.getElementById("panasSurprise1").innerHTML = data['PANASX']['T1'].panasx_surprise_score;
                 document.getElementById("panasSurprise2").innerHTML = data['PANASX']['T2'].panasx_surprise_score;
+
+
+                // Chicken Task
+                document.getElementById("CTPoints1").innerHTML = data['ChickenTask']['T1'].points;
+                document.getElementById("CTPoints2").innerHTML = data['ChickenTask']['T2'].points;
+
+                document.getElementById("CTRT1").innerHTML = data['ChickenTask']['T1'].avg_rt;
+                document.getElementById("CTRT2").innerHTML = data['ChickenTask']['T2'].avg_rt;
             });
             // $.get('/getPHQ?session=2&mkturk_id=' + mkturkid + '&study=' + study, function(data) {
             //     document.getElementById("phqscore2").innerHTML = data;
