@@ -174,7 +174,7 @@
 	</script>
 	<div id='cbox' class='canvasboxstyle' style='width:1366;height:768;border:0px
     solid black;background-color:black'><canvas
-		    tabindex='1' id="exp" width="1366" height="768" style="outline:none;
+		 tabindex='1' id="exp" width="1366" height="768" style="outline:none;
     background-color:black;border:none;padding:0;margin:0;"></canvas></div>
 	<script>
 		var click_to_start_text = Click to start;
@@ -1553,6 +1553,11 @@
 		var correctTrialShow = 10;
 		var correctTrialShowIncrement = 10;
 		var triangle_x_position = 75;
+		var left_chicken_x_position = -75;
+		var left_chicken_y_position = 0;
+		var right_chicken_x_position = 75;
+		var right_chicken_y_position = 0;
+		var give_feedback = 1;
 		var points = 0;
 		var pointsPractice = 0;
 		var soundoption = 0;
@@ -2737,7 +2742,9 @@
 						time = psy_time_since_start();
 						addoutput(current_block.substring(6, current_block.length) + " " + practiceTable[tablerow].c1 + " " +
 							practiceTable[tablerow].c2 + " " + practiceTable[tablerow].c3 + " " + practiceTable[tablerow].c4 + " " + time +
-							" " + keystatus.time + " " + (keystatus.key + 1) + " " + keystatus.status + " " + points);
+							" " + keystatus.time + " " + (keystatus.key + 1) + " " + keystatus.status + " " + points + " " +
+							left_chicken_x_position + " " + left_chicken_y_position + " " + right_chicken_x_position + " " +
+							right_chicken_y_position + " " + give_feedback);
 						task_trianglepractice.run();
 						break;
 					case 54:
@@ -2997,7 +3004,9 @@
 						time = psy_time_since_start();
 						addoutput(current_block.substring(6, current_block.length) + " " + myTable[tablerow].c1 + " " + myTable[
 								tablerow].c2 + " " + myTable[tablerow].c3 + " " + myTable[tablerow].c4 + " " + time + " " + keystatus.time +
-							" " + (keystatus.key + 1) + " " + keystatus.status + " " + points);
+							" " + (keystatus.key + 1) + " " + keystatus.status + " " + points + " " + left_chicken_x_position + " " +
+							left_chicken_y_position + " " + right_chicken_x_position + " " + right_chicken_y_position + " " +
+							give_feedback);
 						task_triangle.run();
 						break;
 					case 30:
@@ -3825,7 +3834,8 @@
 						break;
 					case 43:
 						task_quizQ.step++;
-						psy_add_text_rgb_db(mainfont, 30, 0, PSY_CENTRAL, PSY_CENTRAL, 255, 0, 0, "No, You should pick the NEXT egg", 0);
+						psy_add_text_rgb_db(mainfont, 30, 0, PSY_CENTRAL, PSY_CENTRAL, 255, 0, 0, "No, You should pick the CURRENT egg",
+							0);
 						psy_draw_all_db();
 						psy_delay(5e3);
 						break;
@@ -4305,9 +4315,6 @@
 						psy_clear_screen_db();
 						psy_add_text_rgb_db(0, 0, -200, PSY_CENTRAL, PSY_CENTRAL, 255, 255, 255,
 							"You will now take the practice session", 0);
-						psy_draw_all_db();
-						psy_add_text_rgb_db(0, 0, -100, PSY_CENTRAL, PSY_CENTRAL, 255, 255, 255,
-							"In this practice session, you will recieve feedback for every trial", 0);
 						psy_draw_all_db();
 						psy_add_text_rgb_db(0, 0, 250, PSY_CENTRAL, PSY_CENTRAL, 255, 255, 255,
 							"Press space bar of your keyboard to continue", 0);
@@ -4881,7 +4888,6 @@
 						break;
 					case 4:
 						showdata_html();
-
 						psy_exit_fullscreen();
 
 						postData(toCSV(outputdata), session, mkturkid, task);

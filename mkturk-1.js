@@ -142,11 +142,7 @@ app.get('/',function (req, res) {
 		}
 
 	} else if(task == 'gonogo') {
-		if(q.version == 1){
-			displayGoNoGo(res, 1);
-		}else if (q.version == 2){
-			displayGoNoGo(res, 2);
-		}
+		displayGoNoGo(res, q.version);
 		
 	}
 	else if (ctversion == '0' && task == 'chicken'){
@@ -481,7 +477,7 @@ app.post('/saveChickenTask/', function(req, res) {
 	data = req.body; // json input
 	content = data.content;  
 	var head1 = "Version:," + version + ",Type:," + type + ",Orginal File Name:,"+ 'CT-' + mkturk_id + '-T' + session + '.csv'+ ',\"UserAGENT:' + req.headers['user-agent'] + '\",IP: ' + ipaddr + ",Time:,"+file_date+",Parameter File:,None:FromPsyToolkit\n"
-    var head2 = "trial_type,trial_number,block_num,egg_x_position,egg_y_position,absolute_time_sec,response_time_sec,response (1=left;2=right),result (1=correct;2=incorrect), points\n"
+    var head2 = "trial_type,trial_number,block_num,egg_x_position,egg_y_position,absolute_time_sec,response_time_sec,response (1=left;2=right),result (1=correct;2=incorrect), points,left_chicken_x_position,left_chicken_y_position,right_chicken_x_position,right_chicken_y_position,give_feedback\n"
 
 	var filename = 'data/' + study + '/tasks/'+ study + '-CT-' + mkturk_id + '-' + 'T' + session + '.csv'
 	fs.writeFile(filename, head1 + head2 + content, (err) => {
