@@ -158,7 +158,7 @@
                 postSurveyData(result.data, session, mkturkid,surveyname);
                 switch (getQueryVariable('subsession')){
                     case 'pre':
-                        window.location.href = "/?session="+session+"&mkturk_id="+mkturkid+"&task=chicken"+"&study="+getQueryVariable('study') + '&version=' + chickenVersion;
+                        window.location.href = "/?session="+session+"&mkturk_id="+mkturkid+"&task=chicken"+"&study="+getQueryVariable('study') + '&pattern=' + chickenVersion;
                         break;
                     case 'post':
                         window.location.href = "/mindreal/complete?subject=" + getQueryVariable('subject') + '&session=' + getQueryVariable('session');

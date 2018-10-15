@@ -82,7 +82,7 @@ app.get('/',function (req, res) {
 	var task = q.task;
 	var study = q.study;
 
-	var ctversion = q.version;
+	var ctpattern = q.pattern;
 	var type = q.type;
 	//console.log('session: ' + session, 'id: ' + mkturk_id, 'survey: ' + survey, 'task: ' + task)
 	//console.log(req.connection.remoteAddress)
@@ -108,10 +108,10 @@ app.get('/',function (req, res) {
 		displayDotProbe2(res);
 	} else if (task == 'chicken'){
 
-		// Route Based on Chicken Version
+		// Route Based on Chicken pattern
 		if (type == 'estimate'){
 
-			switch(ctversion){
+			switch(ctpattern){
 				case '1':
 					displayChicken1estimate(res);
 					break;
@@ -126,7 +126,7 @@ app.get('/',function (req, res) {
 			}
 			
 		} else{
-			switch(ctversion){
+			switch(ctpattern){
 				case '1':
 					displayChicken1(res);
 					break;
@@ -145,7 +145,7 @@ app.get('/',function (req, res) {
 		displayGoNoGo(res, q.version);
 		
 	}
-	else if (ctversion == '0' && task == 'chicken'){
+	else if (ctpattern == '0' && task == 'chicken'){
 		displayChicken0(res);
 	} else if (survey == 'datacamp'){
 		displayDataCampSurvey(res);
@@ -468,7 +468,7 @@ app.post('/saveChickenTask/', function(req, res) {
 	var session = q.session;
 	var study = q.study;
 	var mkturk_id = q.mkturk_id;
-	var version = q.version;
+	var pattern = q.pattern;
 	//var survey = q.survey;
 	var task = q.task;
 	var ipaddr = requestIp.getClientIp(req)
@@ -476,8 +476,8 @@ app.post('/saveChickenTask/', function(req, res) {
 
 	data = req.body; // json input
 	content = data.content;  
-	var head1 = "Version:," + version + ",Type:," + type + ",Orginal File Name:,"+ 'CT-' + mkturk_id + '-T' + session + '.csv'+ ',\"UserAGENT:' + req.headers['user-agent'] + '\",IP: ' + ipaddr + ",Time:,"+file_date+",Parameter File:,None:FromPsyToolkit\n"
-    var head2 = "trial_type,trial_number,block_num,egg_x_position,egg_y_position,absolute_time_sec,response_time_sec,response (1=left;2=right),result (1=correct;2=incorrect), points,left_chicken_x_position,left_chicken_y_position,right_chicken_x_position,right_chicken_y_position,give_feedback\n"
+	var head1 = "Version,2.2.4," + "Pattern," + pattern + ",Type," + type + ",Orginal File Name,"+ 'CT-' + mkturk_id + '-T' + session + '.csv,'+ 'IP,' + ipaddr + ",Time,"+file_date+ ',chicken_left_x,-75,chicken_left_y,0,chicken_right_x,75,chicken_right_y,0,block1_sigma,33,block1_hazard,0.05,block2_sigma,140,block2_hazard,0.05,block3_sigma,33,block3_hazard,0.2,block4_sigma,140,block4_hazard,0.2,block5_sigma,33,block5_hazard,0.95,block6_sigma,140,block6_hazard,.95' + ",Parameter File,None:FromPsyToolkit" + ',UserAGENT,' + '\"' + req.headers['user-agent'] + '\"\n'
+    var head2 = "trial_type,trial_number,block_num,egg_x_position,egg_y_position,absolute_time_sec,response_time_sec,response,result,points,left_chicken_x_position,left_chicken_y_position,right_chicken_x_position,right_chicken_y_position,give_feedback\n"
 
 	var filename = 'data/' + study + '/tasks/'+ study + '-CT-' + mkturk_id + '-' + 'T' + session + '.csv'
 	fs.writeFile(filename, head1 + head2 + content, (err) => {
@@ -1150,7 +1150,7 @@ function displayDotProbe2(res){
 	});	
 }
 function displayChicken1(res){
-	fs.readFile('task/chicken_task/chicken134.html', function (err, data) {
+	fs.readFile('task/chicken_task/predict_version/chicken134.html', function (err, data) {
 		// Write Header
 		res.writeHead(200, {
 			'Content-Type' : 'text/html'
@@ -1161,7 +1161,7 @@ function displayChicken1(res){
 	});		
 }
 function displayChicken2(res){
-	fs.readFile('task/chicken_task/chicken145.html', function (err, data) {
+	fs.readFile('task/chicken_task/predict_version/chicken145.html', function (err, data) {
 		// Write Header
 		res.writeHead(200, {
 			'Content-Type' : 'text/html'
@@ -1174,7 +1174,7 @@ function displayChicken2(res){
 
 
 function displayChicken3(res){
-	fs.readFile('task/chicken_task/chicken4.html', function (err, data) {
+	fs.readFile('task/chicken_task/predict_version/chicken4.html', function (err, data) {
 		// Write Header
 		res.writeHead(200, {
 			'Content-Type' : 'text/html'
