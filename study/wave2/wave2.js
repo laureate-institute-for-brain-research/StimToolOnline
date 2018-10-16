@@ -212,6 +212,16 @@ function processForm(req, response) {
 	return fields
 }
 
+/**
+ * Returns equal 25 % probability for each of the 4 patterns
+ */
+function getRandomEqualProbabily(){
+	var num = Math.random();
+	if(num < 0.25) return 1;
+	else if (num < .5) return 2;
+	else if (num < .75) return 3;
+	else return 4;
+}
 
 function insertNewData(fields,con, response){
 	console.log("Trying to insert New Data to SQL Database!");
@@ -220,8 +230,14 @@ function insertNewData(fields,con, response){
 
 	// get version number for chicken tas
 	// since each subject gets a random chicken task version
-	var chicken_version = Math.floor(Math.random() * 3) + 1
 
+	// Modifed after 10/16/2018
+	// 
+	possiblePatterns = [1,2,3,4]
+	// Check the subjects table and see how much versions are already there.
+	//var chicken_version = Math.floor(Math.random() * 3) + 1
+	var chicken_version = getRandomEqualProbabily()
+	
 	newMTURKID = fields.mkturk_id.replace(/\s+/, "");
 
 
