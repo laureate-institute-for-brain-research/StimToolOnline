@@ -111,12 +111,8 @@ app.get('/',function (req, res) {
 		// Route Based on Chicken pattern
 		if (type == 'estimate'){
 
-			if (ctpattern == '1'){
-				displayChickenEstimate(res, '1');
-			} else if (ctpattern == '2'){
-				displayChickenEstimate(res, '2');
-			} else if (ctpattern == '3'){
-				displayChickenEstimate(res, '3');
+			if (q.pattern){
+				displayChickenEstimate(res, q.pattern);
 			} else {
 				displayChickenEstimate(res, '1');
 			}			
