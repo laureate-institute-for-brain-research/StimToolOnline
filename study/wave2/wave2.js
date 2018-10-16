@@ -231,13 +231,14 @@ function insertNewData(fields,con, response){
 	// get version number for chicken tas
 	// since each subject gets a random chicken task version
 
-	// Modifed after 10/16/2018
-	// 
-	possiblePatterns = [1,2,3,4]
 	// Check the subjects table and see how much versions are already there.
 	//var chicken_version = Math.floor(Math.random() * 3) + 1
+
+	// Modifed after 10/16/2018
+	// There is a 25% probabily for each of the 4 patterns so
+	// the 4 patterns should counter balance
 	var chicken_version = getRandomEqualProbabily()
-	
+
 	newMTURKID = fields.mkturk_id.replace(/\s+/, "");
 
 
