@@ -111,20 +111,15 @@ app.get('/',function (req, res) {
 		// Route Based on Chicken pattern
 		if (type == 'estimate'){
 
-			switch(ctpattern){
-				case '1':
-					displayChicken1estimate(res);
-					break;
-				case '2':
-					displayChicken2estimate(res);
-					break;
-				case '3':
-					displayChicken3estimate(res);
-					break;
-				default:
-					displayChicken1estimate(res);
-			}
-			
+			if (ctpattern == '1'){
+				displayChickenEstimate(res, '1');
+			} else if (ctpattern == '2'){
+				displayChickenEstimate(res, '2');
+			} else if (ctpattern == '3'){
+				displayChickenEstimate(res, '3');
+			} else {
+				displayChickenEstimate(res, '1');
+			}			
 		} else{
 			switch(ctpattern){
 				case '1':
@@ -1197,8 +1192,8 @@ function displayChicken0(res){
 }
 
 
-function displayChicken1estimate(res){
-	fs.readFile('task/chicken_task/estimate_version/chicken134.html', function (err, data) {
+function displayChickenEstimate(res, version){
+	fs.readFile('task/chicken_task/estimate_version/pattern_' + version + '.html', function (err, data) {
 		// Write Header
 		res.writeHead(200, {
 			'Content-Type' : 'text/html'
@@ -1206,32 +1201,9 @@ function displayChicken1estimate(res){
 		// Wrte Body
 		res.write(data);
 		res.end();
-	});		
+	});	
 }
 
-function displayChicken2estimate(res){
-	fs.readFile('task/chicken_task/estimate_version/chicken145.html', function (err, data) {
-		// Write Header
-		res.writeHead(200, {
-			'Content-Type' : 'text/html'
-		});
-		// Wrte Body
-		res.write(data);
-		res.end();
-	});		
-}
-
-function displayChicken3estimate(res){
-	fs.readFile('task/chicken_task/estimate_version/chicken4.html', function (err, data) {
-		// Write Header
-		res.writeHead(200, {
-			'Content-Type' : 'text/html'
-		});
-		// Wrte Body
-		res.write(data);
-		res.end();
-	});		
-}
 
 function displayGoNoGo(res, versionnum){
 	fs.readFile('task/gonogo/version_' + versionnum + '/container' + versionnum +'.html', function (err, data) {
