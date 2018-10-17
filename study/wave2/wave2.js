@@ -100,6 +100,19 @@ module.exports = {
 			});
 		})
 
+		// Test
+		for (let i = 0, p = Promise.resolve(); i < 100; i++) {
+			p = p.then(_ => new Promise(resolve =>
+				setTimeout(function () {
+					//console.log(i);
+					console.log(i + ': ' + getChickenVersion('test'))
+					resolve();
+				}, Math.random() * 1000)
+			));
+		}
+
+		
+
 	},
 	updateStatus : function(mkturk_id, job,session){
 		var jobToSqlColumn = {
@@ -212,15 +225,98 @@ function processForm(req, response) {
 	return fields
 }
 
+function UpdatePattern(versionReturn, study){
+	return new Promise(function(resove, reject){
+		sql = SqlString.format("UPDATE patterns SET `" + versionReturn.patternVersion + "` = ? WHERE study = ?",[versionReturn.patternCount + 1, study])
+		//console.log(sql)
+		con.query(sql, function(err, result){
+			if(err){
+				console.log('error updating patterns')
+				console.log(err)
+			} else {
+				console.log('updated the pattern Count')
+				resolve(versionReturn.patternVersion)
+			}
+		});
+	})
+}
+
+
 /**
- * Returns equal 25 % probability for each of the 4 patterns
+ * This function is used to test the Promises of the Pattern Assignment
+ * ******  Not actually used in production!! ***
+ * This creates a promise that gets the current 'state' of the 4 patterns
+ * Runs an infinite while loop that will not exit unless 1 of the 4 patterns is less than 25.
+ * This allows the pattern versions to be used at max 25 times each
+ * @param {String} study 
  */
-function getRandomEqualProbabily(){
-	var num = Math.random();
-	if(num < 0.25) return 1;
-	else if (num < .5) return 2;
-	else if (num < .75) return 3;
-	else return 4;
+function getChickenVersion(study){
+	// This function is used to tes
+	// Get the Patterns Used throughout
+	patternVersion = ''
+
+	var gotVersion = new Promise(function(resolve, reject){
+		con.query("SELECT * FROM patterns WHERE study = ?", study,function(err, result){
+			if(err){
+				console.log("error getting values from patterns table")
+				console.log(err)
+			} else {
+				// Success
+				patternsUses = result[0]
+				// infinite loop
+				while(true){
+					var randomNum = Math.floor(Math.random() * 4) + 1
+					//console.log(randomNum + ': ' + patternsUses[randomNum] )
+					if(parseInt(patternsUses[randomNum]) >= 25){
+						//If the current pattern is greater than 25,
+						// Do this loop again
+						continue
+					} else {
+						// Pattern # is less than 25, so we can use it
+						patternVersion = randomNum
+						// Then Increment and Update it
+						break;
+					}
+					
+				}
+				// Outside of the While Loop
+				// The Value in the Resolve is the JSON Object of the Pattern Version and the Pattern Count
+				resolve({
+					'patternVersion' : patternVersion,
+					'patternCount' : patternsUses[randomNum]
+				})
+			}
+		})
+	})
+
+	
+
+	// After Getting The Version UPDATE TABLE By incrementing the Count
+	gotVersion.then(
+		
+		function(version){
+			sql = SqlString.format("UPDATE patterns SET `" + version.patternVersion + "` = ? WHERE study = ?",[version.patternCount + 1, study])
+			//console.log(sql)
+			con.query(sql, function(err, result){
+				if(err){
+					console.log('error updating patterns')
+					console.log(err)
+				} else {
+					console.log('updated the pattern Count')
+					//resolve(versionReturn.patternVersion)
+				}
+			});
+			
+		}
+	)
+
+	// Aftter Getting the Version Update, return the version
+	gotVersion.then(
+		function(version){
+			console.log('Your Version Here: ' + version.patternVersion)
+		}
+	)
+	
 }
 
 function insertNewData(fields,con, response){
@@ -234,48 +330,113 @@ function insertNewData(fields,con, response){
 	// Check the subjects table and see how much versions are already there.
 	//var chicken_version = Math.floor(Math.random() * 3) + 1
 
-	// Modifed after 10/16/2018
-	// There is a 25% probabily for each of the 4 patterns so
-	// the 4 patterns should counter balance
-	var chicken_version = getRandomEqualProbabily()
+	// Modifed after 10/17/2018
+	// 4 Patterns should counter balance across the 100 subjects
 
-	newMTURKID = fields.mkturk_id.replace(/\s+/, "");
+	
+	var chicken_version = ''
+	var study = 'wave2'
 
-
-	data = {
-		mkturk_id : newMTURKID,
-		email : fields.email,
-		remind : fields.remind,
-		time_created : currentdate,
-		time_ready : null,
-		task_version : chicken_version
-	}
-
-	// //console.log(data);
-
-	con.query('INSERT INTO subjects SET ?', data, function (err, result) {
-		if (err){
-			if (err.code == 'ER_DUP_ENTRY'){
-				// Duplicate Entry
-				// User already has ID on the database
-				console.log('Duplicate Entry on subjects Table');
-				// Duplicate so will reroute
-				reRoute(con, newMTURKID,response);
+	var gotVersion = new Promise(function(resolve, reject){
+		con.query("SELECT * FROM patterns WHERE study = ?", study,function(err, result){
+			if(err){
+				console.log("error getting values from patterns table")
+				console.log(err)
 			} else {
-				console.log(err);
+				// Success
+				patternsUses = result[0]
+				// infinite loop
+				while(true){
+					var randomNum = Math.floor(Math.random() * 4) + 1
+					//console.log(randomNum + ': ' + patternsUses[randomNum] )
+					if(parseInt(patternsUses[randomNum]) >= 25){
+						//If the current pattern is greater than 25,
+						// Do this loop again
+						continue
+					} else {
+						// Pattern # is less than 25, so we can use it
+						patternVersion = randomNum
+						// Then Increment and Update it
+						break;
+					}
+					
+				}
+				// Outside of the While Loop
+				// The Value in the Resolve is the JSON Object of the Pattern Version and the Pattern Count
+				resolve({
+					'patternVersion' : patternVersion,
+					'patternCount' : patternsUses[randomNum]
+				})
 			}
-			//console.log(err);
-		
-		} else{
-			// get the result of the SQL Database
-			// 1st Time New User Login
-			addRecordToStatusTable(newMTURKID);
-			response.writeHead(301, {
-				Location: '/?study=wave2&session=1' + '&mkturk_id=' + newMTURKID + '&survey=demo'
+		})
+	})
+
+	
+
+	// After Getting The Version UPDATE TABLE By incrementing the Count
+	gotVersion.then(
+		function(version){
+			sql = SqlString.format("UPDATE patterns SET `" + version.patternVersion + "` = ? WHERE study = ?",[version.patternCount + 1, study])
+			//console.log(sql)
+			con.query(sql, function(err, result){
+				if(err){
+					console.log('error updating patterns')
+					console.log(err)
+				} else {
+					console.log('updated the pattern Count')
+					//resolve(versionReturn.patternVersion)
+				}
 			});
-			response.end();				
+			
 		}
-	});
+	)
+
+	// Aftter Getting the gotVersion Promise is resolved, then execute the rest
+	gotVersion.then(
+		function(version){
+			//console.log('Your Version Here: ' + version.patternVersion)
+
+
+			chicken_version = version.patternVersion
+			newMTURKID = fields.mkturk_id.replace(/\s+/, "");
+
+			data = {
+				mkturk_id : newMTURKID,
+				email : fields.email,
+				remind : fields.remind,
+				time_created : currentdate,
+				time_ready : null,
+				task_version : chicken_version
+			}
+			con.query('INSERT INTO subjects SET ?', data, function (err, result) {
+				if (err){
+					if (err.code == 'ER_DUP_ENTRY'){
+						// Duplicate Entry
+						// User already has ID on the database
+						console.log('Duplicate Entry on subjects Table');
+						// Duplicate so will reroute
+						reRoute(con, newMTURKID,response);
+					} else {
+						console.log(err);
+					}
+					//console.log(err);
+				
+				} else{
+					// get the result of the SQL Database
+					// 1st Time New User Login
+					addRecordToStatusTable(newMTURKID);
+					response.writeHead(301, {
+						Location: '/?study=wave2&session=1' + '&mkturk_id=' + newMTURKID + '&survey=demo'
+					});
+					response.end();				
+				}
+			});
+
+
+		}
+	)
+
+	
 }
 
 // Send the user to the survey or task that they have not completed yet
@@ -389,50 +550,6 @@ function reRoute(con,mkturk_id,response){
 
 		  	}
 
-		  	// Did all Session 1 and Session 2!!
-
-
-
-
-		  	// Route them to their last YES job
-		  	// if (lastSession == '1' && lastJob == 'task'){
-		  	// 	// need to check if it's been 24 hours
-		  	// 	if(isReady(timeReady)){
-		  	// 		res.writeHead(301, {
-		  	// 			Location: '/?session=2&mkturk_id=' + mkturk_id + '&' + job + '=' + name
-		  	// 		});
-			  //       res.end();	
-		  	// 	}else {
-		  	// 		// premature check. user is too early!
-		  	// 		res.writeHead(301, {
-		  	// 			Location: '/tooearly&mkturk_id=' + mkturk_id + '&timeleft=' + timeReady
-		  	// 		});
-			  //       res.end();	
-		  	// 	}
-
-		  	// } else if (lastSession == '1' && lastJob == 'survey'){
-
-	  		// 	// takes them to their last survey the didn't finish
-	  		// 	res.writeHead(301, {
-	  		// 		Location: '/?session=' + lastSession + '&mkturk_id=' + mkturk_id + '&' + job + '=' + name
-	  		// 	});
-		   //      res.end();	
-
-		  	// } else if (lastSession == '2' && lastJob == 'survey'){
-		  	
-		  	// 	res.writeHead(301, {
-	  		// 		Location: '/?session=' + lastSession + '&mkturk_id=' + mkturk_id + '&' + job + '=' + name
-	  		// 	});
-		   //      res.end();
-		  	// } else if (lastSession == '2' && lastJob == 'task'){
-		  	// 	// subject has completed any of them!!		  	}
-
-		  	// 	res.writeHead(301, {
-	  		// 		Location: '/?completed=' + lastSession + '&mkturk_id=' + mkturk_id
-	  		// 	});
-		   //      res.end();		  		
-		  	// }
-		  	// All Conditions have been a yes, user is finished with this HIT
 		}
 		catch (err) {
 			console.log(err);
