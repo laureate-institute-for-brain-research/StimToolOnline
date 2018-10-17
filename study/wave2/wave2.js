@@ -100,16 +100,16 @@ module.exports = {
 			});
 		})
 
-		// Test
-		for (let i = 0, p = Promise.resolve(); i < 100; i++) {
-			p = p.then(_ => new Promise(resolve =>
-				setTimeout(function () {
-					//console.log(i);
-					console.log(i + ': ' + getChickenVersion('test'))
-					resolve();
-				}, Math.random() * 1000)
-			));
-		}
+		// Testing function
+		// for (let i = 0, p = Promise.resolve(); i < 100; i++) {
+		// 	p = p.then(_ => new Promise(resolve =>
+		// 		setTimeout(function () {
+		// 			//console.log(i);
+		// 			console.log(i + ': ' + getChickenVersion('test'))
+		// 			resolve();
+		// 		}, Math.random() * 1000)
+		// 	));
+		// }
 
 		
 

@@ -4,89 +4,10 @@
 <head>
     <META CHARSET='UTF-8'>
     <title>CT | Estimate | Pattern 4</title>
-    <style>
-        @font-face {
-            font-family: gotham;
-            src: url(/gotham-book-regular.otf);
-        }
-
-        body {
-            background-color: #f2f0eb;
-        }
-
-        * {
-            font-family: Helvetica Neue;
-        }
-
-        a:link,
-        a:visited {
-            color: #5e3f99;
-        }
-
-        img {
-            max-width: 40%;
-            height: auto;
-        }
-
-        input[type=text]:focus {
-            border-color: #f68826;
-            box-shadow: 0 0 5px #f68826 !important;
-        }
-
-        input[type=email]:focus {
-            border-color: #f68826;
-            box-shadow: 0 0 5px #f68826 !important;
-        }
-
-        .canvasboxstyle:fullscreen {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .canvasboxstyle:-moz-full-screen {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .canvasboxstyle {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-
-        .lds-dual-ring {
-            display: inline-block;
-            width: 64px;
-            height: 64px;
-        }
-
-        .lds-dual-ring:after {
-            content: " ";
-            display: block;
-            width: 46px;
-            height: 46px;
-            margin: 1px;
-            border-radius: 50%;
-            border: 5px solid rgb(0, 0, 0);
-            border-color: rgb(0, 0, 0) transparent rgb(0, 0, 0) transparent;
-            animation: lds-dual-ring 1.2s linear infinite;
-        }
-
-        @keyframes lds-dual-ring {
-            0% {
-                transform: rotate(0deg);
-            }
-
-            100% {
-                transform: rotate(360deg);
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="/css/base.css">
     <!-- Using Jquery Library CDN -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="js/base.js"></script>
     <link rel="stylesheet" href="https://unpkg.com/bootstrap@3.3.7/dist/css/bootstrap.min.css">
 </head>
 
@@ -5414,104 +5335,16 @@
                         break;
                     case 4:
                         showdata_html();
-
                         psy_exit_fullscreen();
-
-                        postData(toCSV(outputdata), session, mkturkid, task);
-
-                        //saveToFile(toCSV(outputdata));
-                        break
+                        postData(toCSV(outputdata), session, mkturkid, task, '4', 'estimate');
+                        break;
                 }
             }
         };
-
-
         var session = getQueryVariable('session');
         //var mkturkid = getQueryVariable('mkturk_id');
         var task = getQueryVariable('task');
 
-        function toCSV(text) {
-            tmp = text.split(/\r?\n/);
-            out = "";
-            for (i = 0; i < tmp.length - 1; i++) {
-                tmp2 = tmp[i].split(/\s+/);
-                for (j = 0; j < tmp2.length; j++) {
-                    // multiplies the 5th and 6th column by .001 to turn into seconds
-                    // for absolute time and reaction time
-                    if (j == 5 || j == 6) {
-                        out = out + "" + (tmp2[j] * 0.001) + ","
-                    } else {
-                        out = out + "" + tmp2[j] + ","
-                    }
-
-                }
-                out = out + "\n"
-            }
-            return out
-        }
-
-        function getQueryVariable(variable) {
-            var query = window.location.search.substring(1);
-            var vars = query.split('&');
-            for (var i = 0; i < vars.length; i++) {
-                var pair = vars[i].split('=');
-                if (decodeURIComponent(pair[0]) == variable) {
-                    return decodeURIComponent(pair[1]);
-                }
-            }
-            return 'NULL'
-        }
-
-
-        function postData(data, session, mkturkid, task) {
-            $("#loader").show()
-            $.ajax({
-                type: 'POST',
-                url: 'saveChickenTask?session=' + session + '&mkturk_id=' + mkturkid + '&task=' + task +
-                    '&study=' +
-                    getQueryVariable('study') + '&pattern=4&type=estimate',
-                data: JSON.stringify({
-                    content: data
-                }), // or JSON.stringify ({name: 'jonas'}),
-                success: function (data) {
-                    alert('data: ' + data);
-                },
-                contentType: "application/json",
-                dataType: 'json'
-            }).ajaxComplete(
-                showEnd()
-            )
-        }
-        //     $.post('/getTimeReady?mkturk_id=' + mkturkid,function(result){
-        //      //alert(result);
-        //      window.location.replace("/tooearly?" + "&mkturk_id=" + mkturkid + "&timeleft=" + result);
-        //     //console.log('success?');
-        // });
-
-        function showEnd() {
-            // Redirection based on study
-            if (getQueryVariable('study') == 'mindreal') {
-                link = '/mindreal/rating/?subsession=post&study=mindreal&session=' + getQueryVariable('session') +
-                    '&subject=' +
-                    getQueryVariable('mkturk_id')
-                console.log(link);
-                window.location.replace(link);
-            } else {
-                switch (getQueryVariable('session')) {
-                    case '1':
-                        window.location.replace("/tooearly?" + "&mkturk_id=" + mkturkid + '&study=' + getQueryVariable(
-                            'study'));
-                        break;
-                    case '2':
-                        window.location.replace("/?" + "&mkturk_id=" + mkturkid + '&study=' + getQueryVariable('study') +
-                            '&survey=feedback');
-                        break;
-                }
-            }
-
-
-
-        }
     </script>
     <div id='showdata'></div>
     <div class="container-fluid">

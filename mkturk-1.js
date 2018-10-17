@@ -442,6 +442,7 @@ app.post('/saveDC', function(req, res){
 
 
 
+	
 	res.send('saved DC')
 
 	//const processor = input.pipe(json2csv).pipe(output);
@@ -480,7 +481,8 @@ app.post('/saveChickenTask/', function(req, res) {
 		fs.copyFile(filename, '/var/node_data/' + filename, (err) => {
 			if(err){
 				console.log('could not copy');
-				throw err;
+				//throw err;
+				console.log(err)
 			} else {
 				console.log('copy complete');
 			}
@@ -490,7 +492,7 @@ app.post('/saveChickenTask/', function(req, res) {
 	// add Time Ready so that the ready time initiates once Task1 has been completed
 	addTimeReady(mkturk_id, study);
 
-	res.send('Got the Chicken Task Data')
+	
 
 	// Run the plot script
 	//shell.cd('stats');
@@ -502,12 +504,19 @@ app.post('/saveChickenTask/', function(req, res) {
 	updateStatus(mkturk_id, task,session,con,study);
 
 	// upload to cloudinary
-	uploadToCloudinary(filename);
+	//uploadToCloudinary(filename);
 
 	// Send Emails
 	// // Send the Code by Email if they Include it
 	sendEmails(mkturk_id, session, study);
 
+
+	var response = {
+		status  : 200,
+		success : 'Chicken Task Data Saved Data Saved'
+	}
+
+	res.send(JSON.stringify(response))
 });
 
 
@@ -690,6 +699,11 @@ app.get('/getScores', (req, res)=>{
 
 
 	res.send(jsonReturn);
+})
+
+// 404 Page
+app.get('/*', (req, res)=>{
+	res.send('404. We cant find that bro.');
 })
 
 function getChickenTaskScore(filename){
