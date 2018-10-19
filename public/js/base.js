@@ -33,13 +33,13 @@ function showEnd() {
     }
 }
 
-function postData(data, session, mkturkid, task, pattern, type) {
+function postData(data, session, mkturkid, task, pattern, type, version) {
     console.log('Sending Data to backend')
     $("#loader").show()
     $.ajax({
         type: 'POST',
         url: 'saveChickenTask?session=' + session + '&mkturk_id=' + mkturkid + '&task=' + task + '&study=' +
-            getQueryVariable('study') + '&pattern=' + pattern + '&type=' + type,
+            getQueryVariable('study') + '&pattern=' + pattern + '&type=' + type + '&version=' + version,
         data: JSON.stringify({
             content: data
         }), // or JSON.stringify ({name: 'jonas'}),
