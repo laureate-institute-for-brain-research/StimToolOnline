@@ -2490,8 +2490,6 @@
 						break;
 					case 2:
 						task_trianglepractice.step++;
-						psy_add_centered_bitmap_db(white_chicken, triangle_x_position, 0, 0);
-						psy_draw_all_db();
 						task_trianglepractice.run();
 						break;
 					case 3:
@@ -2813,7 +2811,7 @@
 					case 37:
 						task_trianglepractice.step++;
 						if (!(trialCounter != correctTrialShow)) {
-							task_trianglepractice.step = 54
+							task_trianglepractice.step = 59
 						};
 						setTimeout("task_trianglepractice.run()", 0);
 						break;
@@ -2920,9 +2918,47 @@
 							" " + keystatus.time + " " + (keystatus.key + 1) + " " + keystatus.status + " " + points + " " +
 							left_chicken_x_position + " " + left_chicken_y_position + " " + right_chicken_x_position + " " +
 							right_chicken_y_position + " " + give_feedback);
-						task_trianglepractice.run();
+						if (!(keystatus.key + 1 == 1)) {
+							task_trianglepractice.step = 55
+						};
+						setTimeout("task_trianglepractice.run()", 0);
 						break;
 					case 54:
+						task_trianglepractice.step++;
+						triangle_x_position = -75;
+						psy_add_centered_bitmap_db(white_chicken, triangle_x_position, 0, 0);
+						psy_draw_all_db();
+						task_trianglepractice.run();
+						break;
+					case 55:
+						task_trianglepractice.step++;
+						if (!(keystatus.key + 1 == 2)) {
+							task_trianglepractice.step = 57
+						};
+						setTimeout("task_trianglepractice.run()", 0);
+						break;
+					case 56:
+						task_trianglepractice.step++;
+						triangle_x_position = 75;
+						psy_add_centered_bitmap_db(white_chicken, triangle_x_position, 0, 0);
+						psy_draw_all_db();
+						task_trianglepractice.run();
+						break;
+					case 57:
+						task_trianglepractice.step++;
+						psy_add_centered_bitmap_db(blue_chicken, -75, 0, 0);
+						psy_draw_all_db();
+						psy_add_centered_bitmap_db(yellow_chicken, 75, 0, 0);
+						psy_draw_all_db();
+						psy_add_centered_bitmap_db(egg_white, practiceTable[tablerow].c3, practiceTable[tablerow].c4, 0);
+						psy_draw_all_db();
+						psy_delay(300);
+						break;
+					case 58:
+						task_trianglepractice.step++;
+						task_trianglepractice.run();
+						break;
+					case 59:
 						task_trianglepractice.step++;
 						trialCounter = trialCounter + 1;
 						setTimeout(current_block + ".run()", 0);
@@ -3053,8 +3089,6 @@
 						break;
 					case 10:
 						task_triangle.step++;
-						psy_add_centered_bitmap_db(white_chicken, triangle_x_position, 0, 0);
-						psy_draw_all_db();
 						task_triangle.run();
 						break;
 					case 11:
@@ -3135,7 +3169,7 @@
 					case 21:
 						task_triangle.step++;
 						if (!(trialCounter != correctTrialShow)) {
-							task_triangle.step = 38
+							task_triangle.step = 39
 						};
 						setTimeout("task_triangle.run()", 0);
 						break;
@@ -3183,57 +3217,33 @@
 						break;
 					case 29:
 						task_triangle.step++;
-						if (!(keystatus.key + 1 == 1)) {
+						basketXposition = triangle_x_position;
+						if (!(keystatus.status == 1)) {
 							task_triangle.step = 31
 						};
 						setTimeout("task_triangle.run()", 0);
 						break;
 					case 30:
 						task_triangle.step++;
-						triangle_x_position = -75;
+						trialCorrect = trialCorrect + 1;
+						tbtresponse = 1;
 						task_triangle.run();
 						break;
 					case 31:
 						task_triangle.step++;
-						if (!(keystatus.key + 1 == 2)) {
+						if (!(keystatus.status != 1)) {
 							task_triangle.step = 33
 						};
 						setTimeout("task_triangle.run()", 0);
 						break;
 					case 32:
 						task_triangle.step++;
-						triangle_x_position = 75;
-						task_triangle.run();
-						break;
-					case 33:
-						task_triangle.step++;
-						basketXposition = triangle_x_position;
-						if (!(keystatus.status == 1)) {
-							task_triangle.step = 35
-						};
-						setTimeout("task_triangle.run()", 0);
-						break;
-					case 34:
-						task_triangle.step++;
-						trialCorrect = trialCorrect + 1;
-						tbtresponse = 1;
-						task_triangle.run();
-						break;
-					case 35:
-						task_triangle.step++;
-						if (!(keystatus.status != 1)) {
-							task_triangle.step = 37
-						};
-						setTimeout("task_triangle.run()", 0);
-						break;
-					case 36:
-						task_triangle.step++;
 						points = points - 1;
 						trialIncorrect = trialIncorrect + 1;
 						tbtresponse = 0;
 						task_triangle.run();
 						break;
-					case 37:
+					case 33:
 						task_triangle.step++;
 						time = psy_time_since_start();
 						addoutput(current_block.substring(6, current_block.length) + " " + myTable[tablerow].c1 + " " + myTable[
@@ -3241,9 +3251,47 @@
 							" " + (keystatus.key + 1) + " " + keystatus.status + " " + points + " " + left_chicken_x_position + " " +
 							left_chicken_y_position + " " + right_chicken_x_position + " " + right_chicken_y_position + " " +
 							give_feedback);
+						if (!(keystatus.key + 1 == 1)) {
+							task_triangle.step = 35
+						};
+						setTimeout("task_triangle.run()", 0);
+						break;
+					case 34:
+						task_triangle.step++;
+						triangle_x_position = -75;
+						psy_add_centered_bitmap_db(white_chicken, triangle_x_position, 0, 0);
+						psy_draw_all_db();
 						task_triangle.run();
 						break;
+					case 35:
+						task_triangle.step++;
+						if (!(keystatus.key + 1 == 2)) {
+							task_triangle.step = 37
+						};
+						setTimeout("task_triangle.run()", 0);
+						break;
+					case 36:
+						task_triangle.step++;
+						triangle_x_position = 75;
+						psy_add_centered_bitmap_db(white_chicken, triangle_x_position, 0, 0);
+						psy_draw_all_db();
+						task_triangle.run();
+						break;
+					case 37:
+						task_triangle.step++;
+						psy_add_centered_bitmap_db(blue_chicken, -75, 0, 0);
+						psy_draw_all_db();
+						psy_add_centered_bitmap_db(yellow_chicken, 75, 0, 0);
+						psy_draw_all_db();
+						psy_add_centered_bitmap_db(egg_white, myTable[tablerow].c3, myTable[tablerow].c4, 0);
+						psy_draw_all_db();
+						psy_delay(300);
+						break;
 					case 38:
+						task_triangle.step++;
+						task_triangle.run();
+						break;
+					case 39:
 						task_triangle.step++;
 						trialCounter = trialCounter + 1;
 						setTimeout(current_block + ".run()", 0);
@@ -5123,7 +5171,6 @@
 					case 4:
 						showdata_html();
 
-						psy_exit_fullscreen();
 						postData(toCSV(outputdata), session, mkturkid, task, '2', 'estimate');
 
 						//saveToFile(toCSV(outputdata));
@@ -5136,8 +5183,6 @@
 		var session = getQueryVariable('session');
 		//var mkturkid = getQueryVariable('mkturk_id');
 		var task = getQueryVariable('task');
-
-
 	</script>
 	<div id='showdata'></div>
 	<div class="container-fluid">
