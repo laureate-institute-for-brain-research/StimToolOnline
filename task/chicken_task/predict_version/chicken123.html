@@ -202,12 +202,12 @@ psy_load_bitmap("http://res.cloudinary.com/laureate-institute-for-brain-research
             type: 'POST',
             url: 'saveChickenTask?session=' + session + '&mkturk_id=' + mkturkid + '&task=' + task + '&study=' + getQueryVariable('study') + '&version=1',
             data: JSON.stringify({content : data}), // or JSON.stringify ({name: 'jonas'}),
-            success: function(data) { alert('data: ' + data); },
+            success: function(data) { 
+				showEnd()
+			},
             contentType: "application/json",
             dataType: 'json'
-        }).ajaxComplete(
-			showEnd()
-		)
+        })
     }
             //     $.post('/getTimeReady?mkturk_id=' + mkturkid,function(result){
             //      //alert(result);

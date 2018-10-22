@@ -156,24 +156,27 @@
 
             survey.onComplete.add(function (result) {
                 postSurveyData(result.data, session, mkturkid,surveyname);
-                switch (getQueryVariable('subsession')){
-                    case 'pre':
-                        window.location.href = "/?session="+session+"&mkturk_id="+mkturkid+"&task=chicken"+"&study="+getQueryVariable('study') + '&pattern=' + chickenVersion;
-                        break;
-                    case 'post':
-                        window.location.href = "/mindreal/complete?subject=" + getQueryVariable('subject') + '&session=' + getQueryVariable('session');
-                        break;
-                }    
              });
 
             // Parse the URL 
 
             function postSurveyData(data, session, mkturkid, surveyname){
+
                 $.ajax({
                     type: 'POST',
                     url: '/saveSurvey/?session=' + session + '&mkturk_id=' + mkturkid + '&survey=' + surveyname + '&study=' + getQueryVariable('study') + '&subsesssion=' + getQueryVariable('subsession'),
                     data: JSON.stringify(data), // or JSON.stringify ({name: 'jonas'}),
-                    success: function(data) { alert('data: ' + data); },
+                    success: function(result) {
+                        console.log(result);
+                        switch (getQueryVariable('subsession')){
+                            case 'pre':
+                                window.location.href = "/?session="+session+"&mkturk_id="+mkturkid+"&task=chicken"+"&study="+getQueryVariable('study') + '&pattern=' + chickenVersion;
+                                break;
+                            case 'post':
+                                window.location.href = "/mindreal/complete?subject=" + getQueryVariable('subject') + '&session=' + getQueryVariable('session');
+                                break;
+                        }   
+                    },
                     contentType: "application/json",
                     dataType: 'json'
                 });

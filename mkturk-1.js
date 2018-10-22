@@ -318,9 +318,6 @@ app.post('/saveSurvey/', function(req, res) {
 	
 	
 	//csv.write('surveys/data/' + survey +'-' + mkturk_id + '-T' + session + '.csv', req.body, {header: 'question'});
-	res.send('');
-
-	res.end('\n');
 
 	// Upload to Cloudinary
 	uploadToCloudinary(filename);
@@ -328,6 +325,13 @@ app.post('/saveSurvey/', function(req, res) {
 
 	// Update the Status Table in SQL
 	updateStatus(mkturk_id, survey,session,con, study);
+
+	var response = {
+		status  : 200,
+		success : 'Survey Data Saved'
+	}
+
+	res.send(JSON.stringify(response))
 
 	
 });

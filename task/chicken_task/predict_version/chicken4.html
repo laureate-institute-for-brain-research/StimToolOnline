@@ -4490,13 +4490,11 @@
 					content: data
 				}), // or JSON.stringify ({name: 'jonas'}),
 				success: function (data) {
-					alert('data: ' + data);
+					showEnd()
 				},
 				contentType: "application/json",
 				dataType: 'json'
-			}).ajaxComplete(
-				showEnd()
-			)
+			})
 		}
 		//     $.post('/getTimeReady?mkturk_id=' + mkturkid,function(result){
 		//      //alert(result);
