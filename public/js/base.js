@@ -64,7 +64,10 @@ function toCSV(text) {
             // for absolute time and reaction time
             if (j == 5 || j == 6) {
                 out = out + "" + (tmp2[j] * 0.001) + ","
-            } else {
+            } else if(j == tmp2.length - 1){
+                out = out + "" + tmp2[j] // don't put the last comma on the last column
+            }
+            else {
                 out = out + "" + tmp2[j] + ","
             }
 
