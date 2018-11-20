@@ -187,7 +187,7 @@ module.exports = {
 		} else if (session == '1'){
 			// redirect them to the tooearly page
 			// send Email if the subject gave email and marked the remind checkbox
-			sendEmailRemind(mkturk_id, study=study);
+			sendEmailRemind(mkturk_id, 30,study);
 			//res.writeHead(301,{Location : '/tooearly?&mkturk_id=' + mkturk_id + '&timeleft=' + jsondata.time_ready });
 			//res.end();
 
@@ -626,7 +626,7 @@ function getFormattedDate(dateobject){
 
 // Send Reminder Email at Futre Date Object
 // Uses Mailgun API to send email 24 hours after they were recorded in the Database
-function sendEmailRemind(mkturk_id,hours_away=30, study){
+function sendEmailRemind(mkturk_id,hours_away, study){
 	con.query('SELECT email, remind FROM subjects WHERE mkturk_id = ?',[mkturk_id], function(err, result) {
 		try {
 			sqlresult = JSON.parse(JSON.stringify(result));
