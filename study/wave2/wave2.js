@@ -347,8 +347,17 @@ function insertNewData(fields,con, response){
 				patternsUses = result[0]
 				// infinite loop
 				while(true){
+
+					if( parseInt(patternsUses[1]) == 25 && parseInt(patternsUses[2]) == 25  && parseInt(patternsUses[3]) == 25 && parseInt(patternsUses[4]) == 25){
+						patternVersion = 4 // All 4 patters are already 25 so just use pattern 4
+						randomNum = 4
+						console.log('All patterns taken')
+						break;
+					}
+
 					var randomNum = Math.floor(Math.random() * 4) + 1
 					//console.log(randomNum + ': ' + patternsUses[randomNum] )
+
 					if(parseInt(patternsUses[randomNum]) >= 25){
 						//If the current pattern is greater than 25,
 						// Do this loop again
