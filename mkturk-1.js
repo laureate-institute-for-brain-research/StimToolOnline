@@ -697,7 +697,7 @@ app.get('/getScores', (req, res)=>{
 
 	jsonReturn['ChickenTask'] = { 
 		'T1' : getChickenTaskScore('data/' + study + '/tasks/' + study +'-CT-' + mkturk_id + '-T' + '1' + '.csv'),
-		'T2' : getChickenTaskScore('data/' + study + '/tasks/' + study +'-Ct-' + mkturk_id + '-T' + '2' + '.csv')
+		'T2' : getChickenTaskScore('data/' + study + '/tasks/' + study +'-CT-' + mkturk_id + '-T' + '2' + '.csv')
 	}
 
 
