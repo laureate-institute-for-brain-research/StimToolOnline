@@ -48,6 +48,65 @@
 			z-index: 0;
 		}
 
+		/* Loading Css */
+		.lds-ellipsis {
+  display: none; 
+  margin: auto;
+  position: relative;
+  width: 10%;
+  height: 64px;
+}
+.lds-ellipsis div {
+  position: absolute;
+  top: 27px;
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: #f68826;
+  animation-timing-function: cubic-bezier(0, 1, 1, 0);
+}
+.lds-ellipsis div:nth-child(1) {
+  left: 6px;
+  animation: lds-ellipsis1 0.6s infinite;
+}
+.lds-ellipsis div:nth-child(2) {
+  left: 6px;
+  animation: lds-ellipsis2 0.6s infinite;
+}
+.lds-ellipsis div:nth-child(3) {
+  left: 26px;
+  animation: lds-ellipsis2 0.6s infinite;
+}
+.lds-ellipsis div:nth-child(4) {
+  left: 45px;
+  animation: lds-ellipsis3 0.6s infinite;
+}
+@keyframes lds-ellipsis1 {
+  0% {
+    transform: scale(0);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+@keyframes lds-ellipsis3 {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(0);
+  }
+}
+@keyframes lds-ellipsis2 {
+  0% {
+    transform: translate(0, 0);
+  }
+  100% {
+    transform: translate(19px, 0);
+  }
+}
+
+
 		/*input[type=text]:focus {
 			border-color: 	#f68826;
 			box-shadow: 0 0 5px #f68826 !important;
@@ -195,7 +254,7 @@
 
 				<div class="col-md-7">
 					<div>
-						<form name="field" method='post' enctype="multipart/form-data" action="/wave2proceed">
+						<form name="field" method='post' enctype="multipart/form-data" action="/wave2proceed" onsubmit="showLoader()">
 							<fieldset>
 								<div class="row">
 									<div class="input-field col s12 ">
@@ -240,10 +299,16 @@
 								</div>
 
 								<div class="row">
+										
 
-									<input style="background-color: #f68826; border: #f68826; height: 50px" size="19" class="btn btn-lg btn-primary btn-block"
-									    type="submit" value="Proceed">
-
+									<input id="proceeedButton" style="background-color: #f68826; border: #f68826; height: 50px" size="19" class="btn btn-lg btn-primary btn-block"
+										type="submit" value="Proceed" >
+								</div>
+								<div class="row">
+										
+									<div id="loader" class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
+										
+										
 								</div>
 							</fieldset>
 						</form>
@@ -258,6 +323,11 @@
 
 	<script type="text/javascript">
 		//JS script
+		// Show loader after submit
+		function showLoader(){
+			console.log('submitted')
+			document.getElementById('loader').style.display = 'inline-block'
+		}
 	</script>
 
 

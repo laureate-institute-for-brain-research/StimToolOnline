@@ -342,21 +342,21 @@ function insertNewData(fields,con, response){
 			if(err){
 				console.log("error getting values from patterns table")
 				console.log(err)
+				
 			} else {
 				// Success
 				patternsUses = result[0]
 				// infinite loop
 				while(true){
+					var randomNum = Math.floor(Math.random() * 4) + 1 // generate a new random number from 1 to 4
 
-					if( parseInt(patternsUses[1]) == 25 && parseInt(patternsUses[2]) == 25  && parseInt(patternsUses[3]) == 25 && parseInt(patternsUses[4]) == 25){
+					if( parseInt(patternsUses[1]) >= 25 && parseInt(patternsUses[2]) >= 25  && parseInt(patternsUses[3]) >= 25 && parseInt(patternsUses[4]) >= 25){
 						patternVersion = 4 // All 4 patters are already 25 so just use pattern 4
 						randomNum = 4
 						console.log('All patterns taken')
 						break;
 					}
 
-					var randomNum = Math.floor(Math.random() * 4) + 1
-					//console.log(randomNum + ': ' + patternsUses[randomNum] )
 
 					if(parseInt(patternsUses[randomNum]) >= 25){
 						//If the current pattern is greater than 25,
