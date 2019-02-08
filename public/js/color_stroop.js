@@ -1,0 +1,394 @@
+function getQueryVariable(variable) {
+    var query = window.location.search.substring(1);
+    var vars = query.split('&');
+    for (var i = 0; i < vars.length; i++) {
+        var pair = vars[i].split('=');
+        if (decodeURIComponent(pair[0]) == variable) {
+            return decodeURIComponent(pair[1]);
+        }
+    }
+    return 'NULL'
+}
+
+/**
+ * Save the current trial to file on the server
+ */
+function saveData(){
+    row_data = jsPsych.data.get().last().json()
+    $.ajax({
+        type : 'post',
+        async : false,
+        url : '/saveColorStroop?' + $.param(subjectinfo) ,
+        data : row_data,
+        contentType: "application/json",
+        dataType: 'json'
+    });
+    
+    console.log(row_data);
+}
+
+//var csv is the CSV file with headers
+function csvJSON(csv){
+    var lines=csv.split("\n");
+    var result = [];  
+    var headers=lines[0].split(",");
+
+    for(var i=1;i<lines.length;i++){  
+        var obj = {};
+        var currentline=lines[i].split(",");
+
+        for(var j=0;j<headers.length;j++){
+            obj[headers[j]] = currentline[j];
+        }  
+        result.push(obj);
+  
+    }
+    
+    //return result; //JavaScript object
+    return result; //JSON
+}
+
+var subject = getQueryVariable('subject')
+var study = getQueryVariable('study')
+var session = getQueryVariable('session')
+var version = getQueryVariable('version')
+
+var subjectinfo = {
+    subject : subject,
+    study :study,
+    session : session,
+    version : version
+}
+
+
+
+// TASK Logic
+var timeline = [];
+
+timeline.push({
+    type: 'fullscreen',
+    fullscreen_mode: true,
+    message: '<p>Press the button below to start experiment</p>',
+    on_finish: ()=>{
+        row_data = jsPsych.data.get().json()
+        $.ajax({
+            type : 'post',
+            async : false,
+            url : '/saveColorStroop?' + $.param(subjectinfo) ,
+            data : row_data,
+            contentType: "application/json",
+            dataType: 'json'
+        });
+        
+        console.log(row_data);
+    }
+    
+});
+
+
+/* define welcome message trial */
+var welcome = {
+    type: "html-keyboard-response",
+    stimulus: "<p>Color Naming Task</p><br><br><p> Press any key to begin.</p>",
+
+};
+timeline.push(welcome);
+
+// Audio Test
+var instructions = {
+
+    type: 'instructions',
+    pages: [
+        `<canvas id="vumeter" width="800" height="300"></canvas>
+        <br><br><p>Please click "Allow" for the microphone to begin.</p><p>
+        <br>Try speaking.<br>The VU meter should increase as you talk louder.
+        <br><br>If it works, continue. 
+        <br>If not, ask the administrator for help.</p>`,
+    ],
+    show_clickable_nav: true,
+    allow_keys: true,
+    show_page_number : true,
+    on_load: function(){
+        initAudio()
+        audioContext = new AudioContext();        
+    },
+    on_finish: saveData
+}
+
+timeline.push(instructions)
+
+// Instructions For the Task
+var instructions = {
+
+    type: 'instructions',
+    pages: [
+        `<div class="container"><p>For this task, you will say aloud the ink color of the words that are presented on the screen. 
+        <br>The words that come up will be presented in either red, blue, or green ink. 
+        <br><br>The words themselves will be either “red,” “blue,” or “green.” 
+        <br>Ignore reading the words themselves as the ink color will sometimes match the word and 
+        <br>will sometimes be different from the word.</p>`,
+        `<p>Example:<br>If you are shown:<br><font color="red">Red</font>
+        <br>The correct answer is red so you should say "red" aloud.</p>
+        <br><p>Example:<br>If you are shown:<br><font color="green">Blue </font>
+        <br>The correct answer is green so you should say "green" aloud.</p>
+        <br><p>Example:<br>If you are shown:<br><font color="blue">Blue </font>
+        <br>The correct answer is blue so you should say "blue" aloud.</p>
+        <br><p>Example:<br>If you are shown:<br><font color="red">Green </font>
+        <br>The correct answer is red so you should say "red" aloud.</p>`,
+        '<h2>Click next to begin the task</h2></a>'
+        
+    ],
+    show_clickable_nav: true,
+    allow_keys: true,
+    show_page_number : true,
+    on_finish: startRecording
+}
+
+timeline.push(instructions)
+
+
+
+if(subjectinfo.session != 'NULL'){
+    schedule_session = subjectinfo.session
+}else {
+    // Session not specified, use T1 instead
+    schedule_session = '1'
+}
+
+// Get Schedule
+new Promise(function(resolve, reject){
+    $.get('/schedules/color_stroop_T' + schedule_session + '.csv',function(data){
+        console.log(`session: ${schedule_session}`)
+        schedule = csvJSON(data)
+        resolve(schedule)
+    })
+})
+// Practice Session was removed
+// .then(function(schedule){
+//     // Practice Session
+//     schedule.forEach(function(element, idx){
+//         trial_number = idx + 1
+//         // Only using the first 10 trials
+//         if(trial_number > 10){
+//             return
+//         }
+//         console.log(trial_number)
+
+//         var fixation = {
+//             type : 'html-keyboard-response',
+//             stimulus : '<div style="font-size:60px">+</div>',
+//             choices: jsPsych.NO_KEYS,
+//             trial_duration: 1000,
+//             data: {trial_number :trial_number, test_part: 'fixation', duration : 1000},
+//             on_load: ()=>{
+//                 // document.body.style.backgroundColor = "grey";
+//                 // document.body.style.backgroundImage = "none";
+//             },
+//             // on_finish: saveData
+    
+//         }
+//         timeline.push(fixation)
+
+//         var word_response = {
+//             type : 'html-keyboard-response',
+//             stimulus : `
+//             <div>
+//                 <div style='font-size: 60px; color: ${element.ink_color}'>
+//                     ${element.word}
+//                 </div>
+//             </div>
+//             `,
+//             trial_duration : 2000,
+//             data : {trial_number : trial_number, 
+//                 test_part : 'word_response', 
+//                 word: element.word,
+//                 ink_color : element.ink_color,
+//                 congruency : element.congruency
+//             },
+//             response_ends_trial : false,
+//             on_load: function(){
+//                 console.log({
+//                     word: element.word,
+//                     ink: element.ink_color
+//                 })
+//             },
+//             on_finish: function(data){
+//             }
+//         }
+
+//         timeline.push(word_response)
+//     })
+
+//     return schedule
+// })
+.then(function(schedule){
+    // Main Session
+
+    schedule.forEach(function(element, idx){
+        trial_number = idx + 1
+        // Ignore empty fields
+        if(!element.direction && !element.congruency){
+            return
+        }
+        
+
+        /////////////   FOR TESTING LIMIT TO 4 Trials ///////////
+        ////////////////////////////////////////////////////////
+        
+        // if(idx < 29){
+        //     return
+        // }
+        ////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////
+
+        // console.log(idx)
+
+        var fixation = {
+            type : 'html-keyboard-response',
+            stimulus : '<div style="font-size:60px">+</div>',
+            choices: jsPsych.NO_KEYS,
+            trial_duration: 1000,
+            data: {trial_number :trial_number, test_part: 'fixation', duration : 1000},
+            on_load: ()=>{
+                // document.body.style.backgroundColor = "grey";
+                // document.body.style.backgroundImage = "none";
+            },
+            on_finish: saveData
+    
+        }
+        timeline.push(fixation)
+
+        var word_response = {
+            type : 'html-keyboard-response',
+            stimulus : `
+            <div>
+                <div style='font-size: 60px; color: ${element.ink_color}'>
+                    ${element.word}
+                </div>
+            </div>
+            `,
+            trial_duration : 2000,
+            data : {trial_number : trial_number, 
+                test_part : 'word_response', 
+                word: element.word,
+                ink_color : element.ink_color,
+                congruency : element.congruency
+            },
+            response_ends_trial : false,
+            on_load: function(){
+
+                console.log({
+                    word: element.word,
+                    ink: element.ink_color
+                })
+            },
+            on_finish: function(data){
+                
+                
+                // save data
+                row_data = jsPsych.data.get().last().json()
+                $.ajax({
+                    type : 'post',
+                    async : false,
+                    url : '/saveColorStroop?' + $.param(subjectinfo) ,
+                    data : row_data,
+                    contentType: "application/json",
+                    dataType: 'json'
+                });
+            }
+        }
+
+        timeline.push(word_response)
+
+
+        // Add Breaks for Every 30 Trials
+        // This is the block
+        block_number = 1
+        if( trial_number % 30 == 0 && trial_number != 180){
+            var block_break = {
+                type : 'html-keyboard-response',
+                stimulus : `
+                <div>
+                    <div style='font-size: 35px'>
+                        <span id="seconds">10</span> second break.
+                        <br>
+                        
+                    </div>
+                </div>
+                `,
+                trial_duration : 10000,
+                data : {trial_number : '', 
+                    test_part : 'break', 
+                    word: element.word,
+                    ink_color : element.ink_color,
+                    congruency : element.congruency
+                },
+                response_ends_trial : false,
+                on_finish: function(data){
+                    
+                        // save data
+                    row_data = jsPsych.data.get().last().json()
+                    $.ajax({
+                        type : 'post',
+                        async : false,
+                        url : '/saveColorStroop?' + $.param(subjectinfo) ,
+                        data : row_data,
+                        contentType: "application/json",
+                        dataType: 'json'
+                    });
+
+                    startRecording()
+                },
+                on_load: function(){
+                    stopRecording(block_number, 'color_stroop')
+                    block_number++
+                    timeleft = 9;
+                    
+                    document.getElementById("seconds").style.fontWeight = 'bold';
+                    document.getElementById("seconds").style.color = 'red';
+                    var downloadTimer = setInterval(function(){
+                        timeleft--;
+                        
+                        try{
+                            document.getElementById("seconds").innerHTML = timeleft;
+                        }catch(err){
+                            // error 
+                        }
+                        
+                        // console.log('timer: ' + timeleft);
+                        if(timeleft <= 0)
+                            clearInterval(downloadTimer);
+                        }
+                        ,1000);
+                }
+            }
+    
+            timeline.push(block_break)
+        }
+    })
+})
+.then((schedule)=>{
+    // exit fullscreen mode
+    timeline.push({
+        type: 'fullscreen',
+        fullscreen_mode: false,
+    });
+
+
+    jsPsych.init({
+        timeline: timeline,
+        //display_element : 'taskdiv',
+        on_finish: function() {
+            jsPsych.data.displayData();
+            // Should Redirect to the next task
+            // in 3 seconds
+            window.setTimeout(function(){ 
+                window.location = "/emotional_stroop?" + $.param(subjectinfo);
+            },3000);
+        
+        },
+        
+    });
+
+    console.log(timeline)
+})

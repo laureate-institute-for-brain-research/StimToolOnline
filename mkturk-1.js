@@ -30,6 +30,11 @@ var wave2route = wave2.routes(app)
 var mindreal = require('./study/mindreal/mindreal');
 var mindrealroute = mindreal.routes(app)
 
+
+// Module for Cognitive Control
+var cognitive_control = require('./study/cognitive_control/cognitive_control');
+var cognitive_control_route = cognitive_control.routes(app)
+
 // Connecting to database
 var con = mysql.createConnection({
      host		: config.mysql_host,
@@ -55,7 +60,14 @@ con.connect(function(err) {
 });
 
 
-app.use(bodyParser.json());
+// parse application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded({ extended: true, limit: '100mb' }))
+
+app.use(bodyParser.json({
+	limit : '100mb',
+	extended :true
+	
+}));
 app.use(express.static('public'));
 
 // Serve the static files
@@ -72,10 +84,7 @@ function setHeaders(res, filepath) {
 
 // ROUTES
 app.get('/',function (req, res) {
-	//console.log(req.clientIp);
-	// Parse URL
-
-    var q = url.parse(req.url, true).query;
+	var q = url.parse(req.url, true).query;
 	var session = q.session;
 	var mkturk_id = q.mkturk_id;
 	var survey = q.survey;
@@ -159,6 +168,7 @@ app.get('/',function (req, res) {
 	} else{
 		displayHome(res);
 	}
+
 });
 
 // Returning the get request when it has
@@ -231,6 +241,52 @@ app.get('/gonogo', function(req,res){
 		res.end();
 	});	
 });
+
+app.get('/flanker', function(req, res){
+	fileurl  = 'task/flanker/version1.html'
+	fs.readFile(fileurl, function (err, data) {
+		// Write Header
+		res.writeHead(200, {
+			'Content-Type' : 'text/html'
+		});
+		// Wrte Body
+		res.write(data);
+		res.end();
+	});	
+})
+
+app.get('/color_stroop', function(req, res){
+	fileurl  = 'task/color_stroop/version1.html'
+	fs.readFile(fileurl, function (err, data) {
+		// Write Header
+		res.writeHead(200, {
+			'Content-Type' : 'text/html'
+		});
+		// Wrte Body
+		res.write(data);
+		res.end();
+	});	
+})
+
+app.get('/emotional_stroop', function(req, res){
+	fileurl  = 'task/emotional_stroop/version1.html'
+	fs.readFile(fileurl, function (err, data) {
+		// Write Header
+		res.writeHead(200, {
+			'Content-Type' : 'text/html'
+		});
+		// Wrte Body
+		res.write(data);
+		res.end();
+	});	
+})
+
+
+app.get('/chicken_estimate', function(req ,res){
+	var q = url.parse(req.url, true).query;
+	displayChickenEstimate(res, q.pattern);
+})
+
 
 
 
@@ -571,6 +627,158 @@ app.post('/saveGoNoGo', (req,res)=>{
 });
 
 
+// Save Flanker Task
+
+// Save The input of a file and if its' the same 
+// id, study, and session, APPEND it
+app.post('/saveFlanker', (req,res)=>{
+	var q = url.parse(req.url, true).query;
+
+	payload = req.body; // json input
+	var ipaddr = requestIp.getClientIp(req)
+	var d = new Date()
+	var month = d.getMonth() + 1 // on a separate since if we add, it concatenates the numbers
+	var file_date = d.getFullYear() + "_" + month + "_" + d.getDate() + "_" + d.getHours() + '_' + d.getMinutes()
+
+	data = payload[0]
+
+	savePath = 'data/cognitive_control/tasks/flanker/'
+
+	filename  = savePath + 'cognitive_control-FL-' + q.subject + '-T' + q.session + '.csv'
+	var head1 = "Version:," + q.version + ",Orginal File Name:,"+ 'FL-' + q.subject + '-T' + q.session + '.csv'+ ',IP: ' + ipaddr + ",Time:,"+file_date+",Parameter File:,None:FromjsPsych,UserAGENT:\"" + req.headers['user-agent'] + "\"\n"
+	var head2 = "trial_index,trial_type,trial_number,event,direction,congruency,absolute_time_ms,response_time_ms,key_press,result\n"
+	var datarow = data.trial_index + ',' + data.symbol + ',' + data.trial_number + ',' +
+		data.test_part + ',' + data.direction + ',' + data.congruency + ',' + data.time_elapsed + ',' + 
+		data.rt + ',' + data.key_press + ',' + data.result + '\n'
+	// If File Exists, Append the payload
+	if (fs.existsSync(filename)){
+		fs.appendFile(filename, datarow.replace("null","").replace(undefined, ''), function (err) {
+			if (err) throw err;
+			console.log('Append FL data!');
+			console.log(datarow)
+		  });
+	} else {
+	// Create new File
+		fs.writeFile(filename, head1 + head2 + datarow.replace("null","").replace(undefined, ''), (err) => {
+			if (err) throw err;
+			console.log('New FL File Created');
+
+		});
+
+	}
+
+	res.send('Got the Flanker Task Data')
+
+});
+
+// Save Color Stroop Task
+
+// Save The input of a file and if its' the same 
+// id, study, and session, APPEND it
+app.post('/saveColorStroop', (req,res)=>{
+	var q = url.parse(req.url, true).query;
+
+	payload = req.body; // json input
+	var ipaddr = requestIp.getClientIp(req)
+	var d = new Date()
+	var month = d.getMonth() + 1 // on a separate since if we add, it concatenates the numbers
+	var file_date = d.getFullYear() + "_" + month + "_" + d.getDate() + "_" + d.getHours() + '_' + d.getMinutes()
+
+	data = payload[0]
+
+	savePath = 'data/cognitive_control/tasks/color_stroop/'
+
+	filename  = savePath + 'cognitive_control-Color_Stroop-' + q.subject + '-T' + q.session + '.csv'
+	var head1 = "Version:," + q.version + ",Orginal File Name:,"+ 'Color_Stroop-' + q.subject + '-T' + q.session + '.csv'+ ',IP: ' + ipaddr + ",Time:,"+file_date+",Parameter File:,None:FromjsPsych,UserAGENT:\"" + req.headers['user-agent'] + "\"\n"
+	var head2 = "trial_index,trial_type,trial_number,event,direction,congruency,absolute_time_ms\n"
+	var datarow = data.trial_index + ',' + data.symbol + ',' + data.trial_number + ',' +
+		data.test_part + ',' + data.direction + ',' + data.congruency + ',' + data.time_elapsed + ',' + 
+		'\n'
+	// If File Exists, Append the payload
+	if (fs.existsSync(filename)){
+		fs.appendFile(filename, datarow.replace("null","").replace(undefined, ''), function (err) {
+			if (err) throw err;
+			console.log('Appending ColorStroop data!');
+			console.log(datarow)
+		  });
+	} else {
+	// Create new File
+		fs.writeFile(filename, head1 + head2 + datarow.replace("null","").replace(undefined, ''), (err) => {
+			if (err) throw err;
+			console.log('New ColorStroop File Created');
+
+		});
+
+	}
+	res.send('Got the Color Stropp Task Data')
+});
+
+// Save Color Stroop Task
+
+// Save The input of a file and if its' the same 
+// id, study, and session, APPEND it
+app.post('/saveEmotionalStroop', (req,res)=>{
+	var q = url.parse(req.url, true).query;
+
+	payload = req.body; // json input
+	var ipaddr = requestIp.getClientIp(req)
+	var d = new Date()
+	var month = d.getMonth() + 1 // on a separate since if we add, it concatenates the numbers
+	var file_date = d.getFullYear() + "_" + month + "_" + d.getDate() + "_" + d.getHours() + '_' + d.getMinutes()
+
+	data = payload[0]
+
+	savePath = 'data/cognitive_control/tasks/emotional_stroop/'
+
+	filename  = savePath + 'cognitive_control-Emotional_Stroop-' + q.subject+ '-T' + q.session + '.csv'
+	var head1 = "Version:," + q.version + ",Orginal File Name:,"+ 'Emotional_Stroop-' + q.subject + '-T' + q.session + '.csv'+ ',IP: ' + ipaddr + ",Time:,"+file_date+",Parameter File:,None:FromjsPsych,UserAGENT:\"" + req.headers['user-agent'] + "\"\n"
+	var head2 = "trial_index,trial_type,trial_number,event,direction,congruency,absolute_time_ms\n"
+	var datarow = data.trial_index + ',' + data.symbol + ',' + data.trial_number + ',' +
+		data.test_part + ',' + data.direction + ',' + data.congruency + ',' + data.time_elapsed + ',' + 
+		'\n'
+	// If File Exists, Append the payload
+	if (fs.existsSync(filename)){
+		fs.appendFile(filename, datarow.replace("null","").replace(undefined, ''), function (err) {
+			if (err) throw err;
+			console.log('Appending Emotional Stroop data!');
+			console.log(datarow)
+		  });
+	} else {
+	// Create new File
+		fs.writeFile(filename, head1 + head2 + datarow.replace("null","").replace(undefined, ''), (err) => {
+			if (err) throw err;
+			console.log('New Emotional Stroop File Created');
+
+		});
+
+	}
+	res.send('Got the Emotional Stroop Task Data')
+});
+
+
+app.post('/saveAudio', (req,res)=>{
+	var q = url.parse(req.url, true).query;
+	console.log('saving Audio Post requested');
+	// console.log(req.body)
+	base64  = req.body.base64data
+
+	var data = base64.replace(/^data:audio\/\w+;base64,/, '');
+	// var buffer = new Buffer(req.body.audio, 'base64'); // decode
+
+	savePath = 'data/cognitive_control/audio/' + q.task + '/'
+	filename = savePath + q.task + '-' + q.subject + '-' + 'B' + q.block + '-' + 'T' + q.session + '.wav'
+
+	console.log('saving...' + filename);
+	fs.writeFile(filename, data, {encoding : 'base64'}, function(err){
+		if(err) {
+			console.log("err", err);
+		} else {
+			return res.json({'status': 'success'});
+		}
+  	}); 
+})
+
+
 
 
 // Return Time Life given id
@@ -699,9 +907,6 @@ app.get('/getScores', (req, res)=>{
 		'T1' : getChickenTaskScore('data/' + study + '/tasks/' + study +'-CT-' + mkturk_id + '-T' + '1' + '.csv'),
 		'T2' : getChickenTaskScore('data/' + study + '/tasks/' + study +'-CT-' + mkturk_id + '-T' + '2' + '.csv')
 	}
-
-
-
 	res.send(jsonReturn);
 })
 
@@ -730,13 +935,9 @@ function getChickenTaskScore(filename){
 		if (contents[i][0]== 'main'){
 			returnJSON['avg_rt'] = returnJSON['avg_rt'] + parseFloat(contents[i][5].replace('\"',''))
 		}
-
-		
 	}
 	returnJSON['avg_rt'] = returnJSON['avg_rt'] / 1200
 	return(returnJSON)
-
-
 }
 
 /**
@@ -944,10 +1145,7 @@ function getASIPhysical(filename){
 
 		}
 	}
-
 	return Total.toString();
-
-
 }
 
 function getASICognitive(filename) {
@@ -960,10 +1158,8 @@ function getASICognitive(filename) {
 		if (q_num.includes(i - 1)){
 			var value = parseInt(contents[i][1])
 			Total = Total + value;
-
 		}
 	}
-
 	return Total.toString();
 }
 
@@ -977,13 +1173,9 @@ function getASISocial(filename) {
 		if (q_num.includes(i - 1)){
 			var value = parseInt(contents[i][1])
 			Total = Total + value;
-
 		}
 	}
-
 	return Total.toString();
-
-
 }
 
 // Will return the phq score given the survey filename
@@ -1003,7 +1195,6 @@ function getPHQScore(filename){
 		// if (value != ''){
 		// 	Total = Total + parseInt(value)
 		// }
-
 	}
 	return Total.toString();
 
@@ -1169,6 +1360,7 @@ function displayChicken1(res){
 		res.end();
 	});		
 }
+
 function displayChicken2(res){
 	fs.readFile('task/chicken_task/predict_version/chicken145.html', function (err, data) {
 		// Write Header
@@ -1207,12 +1399,17 @@ function displayChicken0(res){
 
 
 function displayChickenEstimate(res, version){
-	fs.readFile('task/chicken_task/estimate_version/pattern_' + version + '.html', function (err, data) {
+	if(version == undefined){
+		version = '1'
+	}
+	filename = 'task/chicken_task/estimate_version/pattern_' + version + '.html'
+	fs.readFile(filename, function (err, data) {
 		// Write Header
 		res.writeHead(200, {
 			'Content-Type' : 'text/html'
 		});
 		// Wrte Body
+		// console.log(data)
 		res.write(data);
 		res.end();
 	});	

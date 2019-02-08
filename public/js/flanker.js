@@ -1,0 +1,401 @@
+function getQueryVariable(variable) {
+    var query = window.location.search.substring(1);
+    var vars = query.split('&');
+    for (var i = 0; i < vars.length; i++) {
+        var pair = vars[i].split('=');
+        if (decodeURIComponent(pair[0]) == variable) {
+            return decodeURIComponent(pair[1]);
+        }
+    }
+    return 'NULL'
+}
+
+/**
+ * Save the current trial to file on the server
+ */
+function saveData(){
+    row_data = jsPsych.data.get().last().json()
+    $.ajax({
+        type : 'post',
+        async : false,
+        url : '/saveFlanker?' + $.param(subjectinfo) ,
+        data : row_data,
+        contentType: "application/json",
+        dataType: 'json'
+    });
+    
+    console.log(row_data);
+}
+
+//var csv is the CSV file with headers
+function csvJSON(csv){
+
+    var lines=csv.split("\n");
+  
+    var result = [];
+  
+    var headers=lines[0].split(",");
+  
+    for(var i=1;i<lines.length;i++){
+  
+        var obj = {};
+        var currentline=lines[i].split(",");
+  
+        for(var j=0;j<headers.length;j++){
+            obj[headers[j]] = currentline[j];
+        }
+  
+        result.push(obj);
+  
+    }
+    
+    //return result; //JavaScript object
+    return result; //JSON
+}
+
+
+
+/**
+ * Returns 4 types of symbols.
+ * Left Congruency
+ * Left InCongruency
+ * Right Congruency
+ * Right Incongruency
+ * @param {String} direction 
+ * @param {String} congruency 
+ */
+function getSymbol(direction,congruency){
+    if(direction == 'left' && congruency == 'incongruent'){
+        return ">><>>"
+    }
+    if(direction == 'left' && congruency == 'congruent'){
+        return "<<<<<"
+    }
+    if(direction == 'right' && congruency == 'incongruent'){
+        return "<<><<"
+    }
+    if(direction == 'right' && congruency == 'congruent'){
+        return ">>>>>"
+    }
+}
+
+/**
+ * Returns True if the key press is the same direciton
+ * Returns False if thhe key press is different direction
+ * @param {String} direction either 'left' or 'right'
+ * @param {Integer} key_presss numeric code for entered key
+ */
+function isCorrect(direction, key_presss){
+    // 37 is <-
+    // 39 is ->
+    if(direction == 'left' && key_presss == 37){
+        return true
+    }
+    if(direction == 'right' && key_presss == 39){
+        return true
+    }
+    // Everything else is false
+    return false
+}
+
+var id = getQueryVariable('subject')
+var study = getQueryVariable('study')
+var session = getQueryVariable('session')
+var version = getQueryVariable('version')
+
+var subjectinfo = {
+    id : id,
+    study :study,
+    session : session,
+    version : version
+}
+
+
+var timeline = [];
+
+timeline.push({
+    type: 'fullscreen',
+    fullscreen_mode: true,
+    message: "<p>Press the button below to start the task</p>",
+    on_finish: ()=>{
+        row_data = jsPsych.data.get().json()
+        $.ajax({
+            type : 'post',
+            async : false,
+            url : '/saveFlanker?' + $.param(subjectinfo) ,
+            data : row_data,
+            contentType: "application/json",
+            dataType: 'json'
+        });
+        
+        console.log(row_data);
+    }
+    
+});
+
+
+/* define welcome message trial */
+var welcome = {
+    type: "html-keyboard-response",
+    stimulus: "<p>Arrow Task</p> <br><br><br><p> Press any key to begin.</p>",
+    on_load : () => {
+        // document.body.style.backgroundColor = "black"; // Turns the background to black
+
+        // // Used to hide initial elements in the container
+        // idsToHide = ['logo','nametitle','id_label','session_label','study_label']
+
+        // idsToHide.forEach((element) =>{
+        //     document.getElementById(element).hidden = true;
+        // });
+    
+    },
+    on_finish: saveData
+
+};
+timeline.push(welcome);
+
+
+// Instructions For the Task
+var instructions = {
+
+    type: 'instructions',
+    pages: [
+        '<div class="container"><p>For this task, please select either the left or right arrow key based on the direction of the middle arrow. </p><p>There will be two arrows on each side of the middle arrow. These will sometimes face the same direction as the middle arrow and sometimes not. </p><p>Ignore the direction of the arrows to the side of the middle arrow.”</p></div>',
+        `
+        <p>Example:<br> If you are shown:<br><div style="font-size:30px"> >>>>> </div>
+        <br>The Correct answer is the ">" arrow and you should click the right key.
+        <br>Remember to ignore the arrows to the side of the middle arrow.</p>
+
+        <br><p>Example:<br> If you are shown:<br><div style="font-size:30px"> >><>>  </div>
+        <br>The Correct answer is the "<" arrow and you should click the left key.
+        <br>Remember to ignore the arrows to the side of the middle arrow.</p>
+
+        <br><p>Example:<br> If you are shown:<br><div style="font-size:30px"> <<<<<   </div>
+        <br>The Correct answer is the "<" arrow and you should click the left key.
+        <br>Remember to ignore the arrows to the side of the middle arrow.</p>
+
+        <br><p>Example:<br> If you are shown:<br><div style="font-size:30px"> <<><<    </div>
+        <br>The Correct answer is the ">" arrow and you should click the right key.
+        <br>Remember to ignore the arrows to the side of the middle arrow.</p>
+        `,
+    ],
+    show_clickable_nav: true,
+    allow_keys: true,
+    show_page_number : true,
+    on_finish: saveData
+}
+
+timeline.push(instructions)
+
+if(subjectinfo.session != 'NULL'){
+    schedule_session = subjectinfo.session
+}else {
+    // Session not specified, use T1 instead
+    schedule_session = '1'
+}
+
+
+// Get Schedule
+$.get('/schedules/flanker_T' + schedule_session + '.csv',function(data){
+    console.log(`session: ${schedule_session}`)
+    
+    schedule = csvJSON(data)
+
+    // Iterate over the Schedule
+    schedule.forEach(function(element, idx){
+        trial_number = idx + 1
+        // Ignore empty fields
+        if(!element.direction && !element.congruency){
+            return
+        }
+        
+
+        /////////////   FOR TESTING LIMIT TO 4 Trials ///////////
+        ////////////////////////////////////////////////////////
+        // if(idx < 29){
+        //     return
+        // }
+        ////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////
+
+        // console.log(trial_number)
+
+        var fixation = {
+            type : 'html-keyboard-response',
+            stimulus : '<div style="font-size:60px">+</div>',
+            choices: jsPsych.NO_KEYS,
+            trial_duration: 1000,
+            data: {trial_number :trial_number, test_part: 'fixation', duration : 1000},
+            on_load: ()=>{
+                // document.body.style.backgroundColor = "grey";
+                // document.body.style.backgroundImage = "none";
+            },
+            on_finish: saveData
+    
+        }
+        timeline.push(fixation)
+
+
+        // Image-Response
+        // Show the symbol
+        // Get Response
+
+        symbol = getSymbol(element.direction, element.congruency)
+        var symbol_response = {
+            type : 'html-keyboard-response',
+            stimulus : `
+            <div>
+                <div style='font-size: 60px'>
+                    ${symbol}
+                </div>
+            </div>
+            `,
+            choices : [37,39], // 37: <-   39:->
+            trial_duration : 2000,
+            data : {trial_number : trial_number, 
+                test_part : 'symbol_response', 
+                symbol: symbol,
+                direction : element.direction,
+                congruency : element.congruency
+            },
+            response_ends_trial : false,
+            on_finish: function(data){
+                if(isCorrect(data.direction, data.key_press)){
+                    data.result = 'correct'
+                    
+                }else {
+                    data.result = 'incorrect'
+                }
+                
+                 // save data
+                row_data = jsPsych.data.get().last().json()
+                $.ajax({
+                    type : 'post',
+                    async : false,
+                    url : '/saveFlanker?' + $.param(subjectinfo) ,
+                    data : row_data,
+                    contentType: "application/json",
+                    dataType: 'json'
+                });
+            }
+        }
+
+        timeline.push(symbol_response)
+
+
+        // Add Breaks for Every 30 Trials
+        // This is the block
+        if( trial_number % 30 == 0 && trial_number != 180){
+            var block_break = {
+                type : 'html-keyboard-response',
+                stimulus : `
+                <div>
+                    <div style='font-size: 35px'>
+                        <span id="seconds">10</span> second break.
+                        <br>
+                        <br>
+                        or press the Space Bar to continue
+                    </div>
+                </div>
+                `,
+                choices : [32], // 32 is the space bar
+                trial_duration : 10000,
+                data : {trial_number : trial_number, 
+                    test_part : 'block_break', 
+                    symbol: symbol,
+                    direction : element.direction,
+                    congruency : element.congruency
+                },
+                response_ends_trial : true,
+                on_finish: function(data){
+                    
+                     // save data
+                    row_data = jsPsych.data.get().last().json()
+                    $.ajax({
+                        type : 'post',
+                        async : false,
+                        url : '/saveFlanker?' + $.param(subjectinfo) ,
+                        data : row_data,
+                        contentType: "application/json",
+                        dataType: 'json'
+                    });
+                },
+                on_load: function(){
+                    timeleft = 9;
+                    
+                    document.getElementById("seconds").style.fontWeight = 'bold';
+                    document.getElementById("seconds").style.color = 'red';
+                    var downloadTimer = setInterval(function(){
+                        timeleft--;
+                        
+                        try{
+                            document.getElementById("seconds").innerHTML = timeleft;
+                        }catch(err){
+                            // error 
+                        }
+                        
+                        // console.log('timer: ' + timeleft);
+                        if(timeleft <= 0)
+                            clearInterval(downloadTimer);
+                        }
+                        ,1000);
+                }
+            }
+    
+            timeline.push(block_break)
+        }
+
+        
+        
+    })
+
+    // exit fullscreen mode
+    timeline.push({
+        type: 'fullscreen',
+        fullscreen_mode: false
+    });
+
+
+    jsPsych.init({
+        timeline: timeline,
+        //display_element : 'taskdiv',
+        on_finish: function() {
+            jsPsych.data.displayData();
+            // Redirect to tnext next after 3 seconds
+            window.setTimeout(function(){ 
+                window.location = "/color_stroop?" + $.param(subjectinfo);
+            },3000);
+        },
+        // show_preload_progress_bar: true
+    });
+
+    console.log(timeline)
+
+
+
+})
+
+
+
+var debrief_block = {
+    type: "html-keyboard-response",
+    stimulus: function() {
+
+    var trials = jsPsych.data.get().filter({test_part: 'test'});
+    var correct_trials = trials.filter({correct: true});
+    var accuracy = Math.round(correct_trials.count() / trials.count() * 100);
+    var rt = Math.round(jsPsych.data.get().filter({'test_part': "target_detection"}).select('rt').mean());
+    var points = jsPsych.data.get().filter({'test_part': "target_detection"}).last(1).values()[0].points;
+    //console.log(data);
+
+    return "<p>You Got "+points+" Points.</p>"+
+    "<p>Your average response time was "+rt+"ms.</p>"+
+    "<p>Press any key to complete the experiment. Thank you!</p>";
+
+    }
+};
+// timeline.push(debrief_block);
+
+/* start the experiment */
+
+

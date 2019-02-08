@@ -351,8 +351,8 @@ function insertNewData(fields,con, response){
 					var randomNum = Math.floor(Math.random() * 4) + 1 // generate a new random number from 1 to 4
 
 					if( parseInt(patternsUses[1]) >= 25 && parseInt(patternsUses[2]) >= 25  && parseInt(patternsUses[3]) >= 25 && parseInt(patternsUses[4]) >= 25){
-						patternVersion = 4 // All 4 patters are already 25 so just use pattern 4
-						randomNum = 4
+						patternVersion = 2
+						randomNum = 2 // All 4 patters are already 25 so just use pattern 2
 						console.log('All patterns taken')
 						break;
 					}
@@ -523,7 +523,7 @@ function reRoute(con,mkturk_id,response){
 					
 					// If the job is a task, then redirect to their chicken version number
 					if (job == 'task'){
-						response.writeHead(301,{Location : '/?study=wave2&mkturk_id=' + mkturk_id + '&' + job + '=' + name + '&session=' + session + '&version=' + chicken_version + '&type=estimate' });
+						response.writeHead(301,{Location : '/?study=wave2&mkturk_id=' + mkturk_id + '&' + job + '=' + name + '&session=' + session + '&pattern=' + chicken_version + '&type=estimate' });
 						response.end();
 					}
 
