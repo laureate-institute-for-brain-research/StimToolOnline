@@ -123,19 +123,19 @@ var instructions = {
     type: 'instructions',
     pages: [
         `<div class="container"><p>For this task, you will say aloud the ink color of the words that are presented on the screen. 
-        <br>The words that come up will be presented in either red, blue, or green ink. 
-        <br><br>The words themselves will be either “red,” “blue,” or “green.” 
+        <br>The words that come up will be presented in either red, blue, or green ink.</p>`,
+        `<p>The words themselves will be either “red,” “blue,” or “green.” 
         <br>Ignore reading the words themselves as the ink color will sometimes match the word and 
         <br>will sometimes be different from the word.</p>`,
-        `<p>Example:<br>If you are shown:<br><font color="red">Red</font>
-        <br>The correct answer is red so you should say "red" aloud.</p>
-        <br><p>Example:<br>If you are shown:<br><font color="green">Blue </font>
-        <br>The correct answer is green so you should say "green" aloud.</p>
-        <br><p>Example:<br>If you are shown:<br><font color="blue">Blue </font>
-        <br>The correct answer is blue so you should say "blue" aloud.</p>
-        <br><p>Example:<br>If you are shown:<br><font color="red">Green </font>
+        `<p>Example 1:<br>If you are shown:<br><br><font color="red">Red</font><br>
         <br>The correct answer is red so you should say "red" aloud.</p>`,
-        '<h2>Click next to begin the task</h2></a>'
+        `<p>Example 2:<br>If you are shown:<br><br><font color="green">Blue </font><br>
+        <br>The correct answer is green so you should say "green" aloud.</p>`,
+        `<p>Example 3:<br>If you are shown:<br><br><font color="blue">Blue </font><br>
+        <br>The correct answer is blue so you should say "blue" aloud.</p>`,
+        `<p>Example 4:<br>If you are shown:<br><br><font color="red">Green </font><br>
+        <br>The correct answer is red so you should say "red" aloud.</p>`,
+        '<h2>Click next to begin the task</h2>'
         
     ],
     show_clickable_nav: true,

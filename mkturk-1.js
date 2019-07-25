@@ -125,6 +125,8 @@ app.get('/',function (req, res) {
 			} else {
 				displayChickenEstimate(res, '1');
 			}			
+		} else if(type == 'predict_2'){
+			displayChickenPredict2(res,ctpattern)
 		} else{
 			switch(ctpattern){
 				case '1':
@@ -282,13 +284,24 @@ app.get('/emotional_stroop', function(req, res){
 })
 
 
+app.get('/square_circle_rating', function(req, res){
+	fileurl  = 'surveys/square_circle.html'
+	fs.readFile(fileurl, function (err, data) {
+		// Write Header
+		res.writeHead(200, {
+			'Content-Type' : 'text/html'
+		});
+		// Wrte Body
+		res.write(data);
+		res.end();
+	});	
+})
+
+
 app.get('/chicken_estimate', function(req ,res){
 	var q = url.parse(req.url, true).query;
 	displayChickenEstimate(res, q.pattern);
 })
-
-
-
 
 
 app.post('/wave1proceed', function (req, res) {
@@ -499,13 +512,65 @@ app.post('/saveDC', function(req, res){
 			console.log('Some other error: ', err.code);
 		}
 	});
-
-
-
-	
 	res.send('saved DC')
 
-	//const processor = input.pipe(json2csv).pipe(output);
+});
+
+
+app.post('/saveSquareCircleRating', function(req, res){
+	var q = url.parse(req.url, true).query;
+	var d = new Date();
+	const fields = ['datacamp_1', 'datacamp_2','datacamp_3','datacamp_4'];
+	const opts = { fields };
+	const transformOpts = { highWaterMark: 16384, encoding: 'utf-8' };
+
+	data = req.body; // json input
+
+	// console.log(data)
+
+	//inputJSON = JSON.parse(data);
+
+	var month = d.getMonth() + 1 // on a separate since if we add, it concatenates the numbers
+	var file_date = d.getFullYear() + "_" + month + "_" + d.getDate() + "_" + d.getHours() + '_' + d.getMinutes()
+
+
+	randomNUM = Math.floor(Math.random() * 100000) + 1
+	if(q.id){
+		randomNUM = q.id
+	}
+	outputPath = 'data/square_circle_rating/sc-' + randomNUM + '.csv'
+
+	 
+	//const input = fs.createReadStream(data, { encoding: 'utf8' });
+	//const output = fs.createWriteStream(outputPath, { encoding: 'utf8' });
+	const json2csvParser = new Json2csvParser({ fields });
+	// const csv = json2csvParser.parse(data);
+  var csv = ''
+	Object.keys(data).forEach(function(key) {
+		csv = csv + key + ',' + data[key] + '\n'
+		// console.log(csv + key + ', Value : ' + data[key])
+	})
+
+	//console.log(csv)
+
+	fs.stat(outputPath, function(err, stat) {
+		// file exists, genereate new random number
+		while(err == null){
+			randomNUM = Math.floor(Math.random() * 100000) + 1
+			outputPath = 'data/square_circle_rating/sc-' + randomNUM + '.csv'
+		}
+		if(err.code == 'ENOENT') {
+			// file does not exist
+			fs.writeFile(outputPath, 'date:,' + file_date + '\n' + csv, (err) => {
+				if (err) throw err;
+				console.log(outputPath + ' SC saved!');
+		
+			});
+		} else {
+			console.log('Some other error: ', err.code);
+		}
+	});
+	res.send('saved SC')
 
 });
 
@@ -1403,6 +1468,23 @@ function displayChickenEstimate(res, version){
 		version = '1'
 	}
 	filename = 'task/chicken_task/estimate_version/pattern_' + version + '.html'
+	fs.readFile(filename, function (err, data) {
+		// Write Header
+		res.writeHead(200, {
+			'Content-Type' : 'text/html'
+		});
+		// Wrte Body
+		// console.log(data)
+		res.write(data);
+		res.end();
+	});	
+}
+
+function displayChickenPredict2(res,pattern){ 
+	if(!pattern){
+		pattern = '1'  // if pattern not specified then default is 1
+	}
+	filename = 'task/chicken_task/predict_version2/pattern_' + pattern + '.html'
 	fs.readFile(filename, function (err, data) {
 		// Write Header
 		res.writeHead(200, {

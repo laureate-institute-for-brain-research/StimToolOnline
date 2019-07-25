@@ -128,17 +128,16 @@ var instructions = {
     type: 'instructions',
     pages: [
         `<div class="container"><p>For this task, you will say aloud the ink color of the words that are presented on the screen.
-        <br>The words that come up will be presented in either red, blue, or green ink. 
-        <br>The words themselves will be either emotionally neutral words or emotionally negative words. 
+        <br>The words that come up will be presented in either red, blue, or green ink.</p>`,
+        `<p>The words themselves will be either emotionally neutral words or emotionally negative words. 
         <br>Ignore reading the words themselves.</p>`,
         `<p><span style="font-size: 200px;">⚠️</span></p><p>The emotionally negative words that are presented are highly negative and may lead to become uncomfortable or upset. 
         <br>Please let the administrator know if you would like to discontinue the task for this reason.
         <br><p>`,
-        `<p>Example:<br> If you are shown:<br><font color="red">car</font><br>The correct answer is red so you should say "red" aloud.
-        <br><br>Example:<br> If you are shown:<br><font color="green">bike </font><br>The correct answer is green so you should say "green" aloud.
-        <br><br>Example:<br> If you are shown:<br><font color="blue">sad </font><br>The correct answer is blue so you should say "blue" aloud.
-        <br><br>Example:<br> If you are shown:<br><font color="red">mad  </font><br>The correct answer is red so you should say "red" aloud.
-        <br></p>`,
+        `<p>Example 1:<br> If you are shown:<br><br><font color="red">car</font><br><br>The correct answer is red so you should say "red" aloud.</p>`,
+        `<p>Example 2:<br> If you are shown:<br><br><font color="green">bike </font><br><br>The correct answer is green so you should say "green" aloud.</p>`,
+        `<p>Example 3:<br> If you are shown:<br><br><font color="blue">sad </font><br><br>The correct answer is blue so you should say "blue" aloud.</p>`,
+        `<p>Example 4:<br> If you are shown:<br><br><font color="red">mad  </font><br><br>The correct answer is red so you should say "red" aloud.</p>`,
         '<h2>Click next to begin the task</h2></a>',
         
     ],

@@ -160,24 +160,23 @@ var instructions = {
 
     type: 'instructions',
     pages: [
-        '<div class="container"><p>For this task, please select either the left or right arrow key based on the direction of the middle arrow. </p><p>There will be two arrows on each side of the middle arrow. These will sometimes face the same direction as the middle arrow and sometimes not. </p><p>Ignore the direction of the arrows to the side of the middle arrow.”</p></div>',
-        `
-        <p>Example:<br> If you are shown:<br><div style="font-size:30px"> >>>>> </div>
+        `<div class="container"><p>For this task, please select either the left or right arrow key based on the direction of the middle arrow. 
+        </p><p>There will be two arrows on each side of the middle arrow. 
+        <br>These will sometimes face the same direction as the middle arrow and sometimes not. 
+        </p><p>Ignore the direction of the arrows to the side of the middle arrow.</p></div>`,
+        `<p>Example 1:<br> If you are shown:<br><div style="font-size:30px"> >>>>> </div>
         <br>The Correct answer is the ">" arrow and you should click the right key.
-        <br>Remember to ignore the arrows to the side of the middle arrow.</p>
-
-        <br><p>Example:<br> If you are shown:<br><div style="font-size:30px"> >><>>  </div>
+        <br>Remember to ignore the arrows to the side of the middle arrow.</p>`,
+        `<p>Example 2:<br> If you are shown:<br><div style="font-size:30px"> >><>>  </div>
         <br>The Correct answer is the "<" arrow and you should click the left key.
-        <br>Remember to ignore the arrows to the side of the middle arrow.</p>
-
-        <br><p>Example:<br> If you are shown:<br><div style="font-size:30px"> <<<<<   </div>
+        <br>Remember to ignore the arrows to the side of the middle arrow.</p>`,
+        `<p>Example 3:<br> If you are shown:<br><div style="font-size:30px"> <<<<<   </div>
         <br>The Correct answer is the "<" arrow and you should click the left key.
-        <br>Remember to ignore the arrows to the side of the middle arrow.</p>
-
-        <br><p>Example:<br> If you are shown:<br><div style="font-size:30px"> <<><<    </div>
+        <br>Remember to ignore the arrows to the side of the middle arrow.</p>`,
+        `<p>Example 4:<br> If you are shown:<br><div style="font-size:30px"> <<><<    </div>
         <br>The Correct answer is the ">" arrow and you should click the right key.
-        <br>Remember to ignore the arrows to the side of the middle arrow.</p>
-        `,
+        <br>Remember to ignore the arrows to the side of the middle arrow.</p>`,
+        '<h2>Click next to begin the task</h2>'
     ],
     show_clickable_nav: true,
     allow_keys: true,
