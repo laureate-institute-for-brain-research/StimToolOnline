@@ -131,6 +131,7 @@
 
 
 <body>
+	
 	<!-- <button type="button" data-toggle="modal" data-target="#exampleModal">Launch modal</button> -->
 
 	<!-- Modal -->
@@ -153,16 +154,40 @@
 		</div>
 	</div>
 
+	
+	
 
 	<div class="container">
+		
 		<br>
+		<!-- <button class="float-right btn" style="background-color: #f626b1; border: #f68826" onclick="window.location.href='/list'">Task List</button> -->
+		<div class="float-right btn-group" style="background-color: #f626b1; border: #f68826">
+			<button type="button" class="btn btn-danger" onclick="window.location.href='/list'"">Task List</button>
+			<button type="button" class="btn btn-danger dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+				<span class="sr-only">Toggle Dropdown</span>
+			</button>
+			<div class="dropdown-menu">
+				<a class="dropdown-item" href="/?task=dotprobe&session=1">Dot Probe</a>
+				<a class="dropdown-item" href="/?task=chicken&pattern=1">Chicken Task - Predict V1</a>
+				<a class="dropdown-item" href="/?task=chicken&pattern=1&type=predict_2">Chicken Task - Predict V2</a>
+				<a class="dropdown-item" href="/?task=chicken&pattern=1&type=estimate">Chicken Task - Estimate</a>
+				<a class="dropdown-item" href="/?task=gonogo&version=1">Go No Go</a>
+				<a class="dropdown-item" href="/flanker">Flanker Task</a>
+				<a class="dropdown-item" href="/color_stroop">Color Stroop Task</a>
+				<a class="dropdown-item" href="/emotional_stroop">Emotional Stroop Task</a>
+				<!-- <div class="dropdown-divider"></div> -->
+				<!-- <a class="dropdown-item" href="#">Separated link</a> -->
+			</div>
+		</div>
 
-		<center>
-			<a href="http://www.laureateinstitute.org/">
-				<img class="logo" src="/images/logo.png">
-			</a>
-		</center>
+		
+		<a href="http://www.laureateinstitute.org/">
+			<img class="logo" src="/images/logo.png">
+		</a>
+		
 		<hr style="border-top:5px solid #b1b3b6" />
+
+		
 
 
 		<br>
@@ -254,7 +279,7 @@
 
 				<div class="col-md-7">
 					<div>
-						<form name="field" method='post' enctype="multipart/form-data" action="/wave2proceed" onsubmit="showLoader()">
+						<form name="field" method='post' enctype="multipart/form-data" action="/wave3proceed" onsubmit="showLoader()">
 							<fieldset>
 								<div class="row">
 									<div class="input-field col s12 ">

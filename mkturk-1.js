@@ -22,9 +22,16 @@ var config = require('./study/wave1/wave1-config.json')
 
 var app = express();
 
+
+// STUDIES//
+
 // This is the Module for wave2
 var wave2 = require('./study/wave2/wave2');
 var wave2route = wave2.routes(app)
+
+// This is the Module for wave3
+var wave3 = require('./study/wave3/wave3');
+var wave3route = wave3.routes(app)
 
 // Module for mindReal
 var mindreal = require('./study/mindreal/mindreal');
