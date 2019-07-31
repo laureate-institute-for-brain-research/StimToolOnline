@@ -4861,7 +4861,7 @@
                     case 4:
                         // showdata_html();
                         psy_exit_fullscreen();
-                        showEnd();
+                        postData(toCSV(outputdata), session, mkturkid, task);
                         break
                 }
             }
@@ -4910,7 +4910,7 @@
                 type: 'POST',
                 url: 'saveChickenTask?session=' + session + '&mkturk_id=' + mkturkid + '&task=' + task +
                     '&study=' +
-                    getQueryVariable('study') + '&pattern=3&type=predict',
+                    getQueryVariable('study') + '&pattern=3&type=predict_2',
                 data: JSON.stringify({
                     content: data
                 }), // or JSON.stringify ({name: 'jonas'}),

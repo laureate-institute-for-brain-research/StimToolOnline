@@ -96,8 +96,12 @@
 
             // get time ready
 
-            if (getQueryVariable('study') == "wave2"){
-                $.get('/getTimeReadyWave2?mkturk_id=' + mkturkid + '&study=wave2' , function(data) {
+            if (getQueryVariable('study') == "wave2" || getQueryVariable('study') == "wave3"){
+                timeReadyURL = '/getTimeReadyWave2?mkturk_id=' + mkturkid + '&study=wave2'  // default is wave2
+                if(getQueryVariable('study') == "wave3"){
+                    timeReadyURL = '/getTimeReadyWave3?mkturk_id=' + mkturkid + '&study=wave3' 
+                }
+                $.get(timeReadyURL, function(data) {
                     timeleft = data;
                     //document.getElementById("phqscore").innerHTML = data;
                     //timeleft

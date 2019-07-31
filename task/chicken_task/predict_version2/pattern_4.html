@@ -4859,8 +4859,9 @@
                         block_main.start();
                         break;
                     case 4:
-                        showdata_html();
+                        
                         psy_exit_fullscreen();
+                        postData(toCSV(outputdata), session, mkturkid, task);
                         break
                 }
             }

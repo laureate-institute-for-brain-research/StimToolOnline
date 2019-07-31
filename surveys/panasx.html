@@ -1705,7 +1705,7 @@
         var surveyname = getQueryVariable('survey');
 
         var chickenVersion = ''
-        if (getQueryVariable('study') == 'wave2'){
+        if ( (getQueryVariable('study') == 'wave2') || (getQueryVariable('study') == 'wave3') ){
             $.get('/getChickenTaskVersion?&mkturk_id=' + mkturkid + '&study=' + study, function(data) {
                 chickenVersion = data;
             }); 
@@ -1722,6 +1722,9 @@
                         break;
                     case 'wave2':
                         window.location.href = "/?session="+session+"&mkturk_id="+mkturkid+"&task=chicken" + "&pattern=" + chickenVersion + "&study="+getQueryVariable('study') + "&type=estimate";
+                        break;
+                    case 'wave3':
+                        window.location.href = "/?session="+session+"&mkturk_id="+mkturkid+"&task=chicken" + "&pattern=" + chickenVersion + "&study="+getQueryVariable('study') + "&type=predict_2";
                         break;
                     default: // if Study is not specified... just routes to dotprove
                         window.location.href = "/?session="+session+"&mkturk_id="+mkturkid+"&task=dotprobe" + "&study="+getQueryVariable('study');

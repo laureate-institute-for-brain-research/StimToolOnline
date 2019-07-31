@@ -1672,6 +1672,11 @@ function addTimeReady(mkturk_id, study){
 		return;
 	}
 
+	if (study == 'wave3'){
+		wave3.addTimeReady(mkturk_id);
+		return;
+	}
+
 	var currentdate = new Date();
 	var next24hrdate = getFuture24Date(currentdate,24) // Date 24 hours from the currentdate object
 	//console.log('Updating Time Ready..' + next24hrdate);
@@ -1703,8 +1708,12 @@ function updateStatus(mkturk_id, job,session,con,study){
 	if (study == 'wave2'){
 		wave2.updateStatus(mkturk_id, job,session)
 		return; 
-		// exit from the function since we don't want to run the 
-		// code snippet below 
+		// exit from the function since we don't want to run the code snippet below 
+	}
+	if (study == 'wave3'){
+		wave3.updateStatus(mkturk_id, job,session)
+		return; 
+		// exit from the function since we don't want to run the code snippet below 
 	}
 	if (study == 'mindreal'){
 		mindreal.updateStatus(mkturk_id, job,session)

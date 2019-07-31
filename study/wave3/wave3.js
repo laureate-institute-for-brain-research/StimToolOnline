@@ -173,10 +173,10 @@ module.exports = {
 		var currentdate = new Date();
 		var next24hrdate = getFuture24Date(currentdate,24) // Date 24 hours from the currentdate object
 		//console.log('Updating Time Ready..' + next24hrdate);
-		sql = SqlString.format("INSERT INTO subjects (mkturk_id, time_ready) " +
+		sql = SqlString.format("INSERT INTO wave3.subjects (mkturk_id, time_ready) " +
 			"VALUES ( ? , \"" + next24hrdate  + "\" ) " + 
 			"ON DUPLICATE KEY UPDATE time_ready=\"" + next24hrdate + '\"', [mkturk_id,]);
-
+		console.log('Wave 3: adding time ready')
 		console.log(sql);
 		con.query(sql, function (err, result) {
 
@@ -353,73 +353,73 @@ function insertNewData(fields,con, response){
 	var chicken_version = ''
 	var study = 'wave3'
 
-	var waterfall = new Promise(function(resolve, reject){
-		sql = SqlString.format("SELECT mkturk_id from wave3.subjects WHERE mkturk_id = ?", fields.mkturk_id)
-		con.query(sql, function(err, result){
+	// var waterfall = new Promise(function(resolve, reject){
+	// 	sql = SqlString.format("SELECT mkturk_id from wave3.subjects WHERE mkturk_id = ?", fields.mkturk_id)
+	// 	con.query(sql, function(err, result){
+	// 		if(err){
+	// 			console.log("error getting id from patterns table")
+	// 			console.log(err)
+	// 		}else{
+	// 			if(result.length == 0){
+	// 				// Contineue	
+	// 				resolve()
+	// 			}else{
+	// 				// Id is already in table
+	// 				response.writeHead(301, {
+	// 					Location: '/wave3_already'
+	// 				});
+	// 				response.end();	
+	// 			}
+	// 		}
+	// 	})
+	// })
+
+	// waterfall.then(function(result){
+	// 	return 
+	new Promise(function(resolve, reject){
+		con.query("SELECT * FROM wave3.patterns", study,function(err, result){
 			if(err){
-				console.log("error getting id from patterns table")
+				console.log("error getting values from patterns table")
 				console.log(err)
-			}else{
-				if(result.length == 0){
-					// Contineue	
-					resolve()
-				}else{
-					// Id is already in table
-					response.writeHead(301, {
-						Location: '/wave3_already'
-					});
-					response.end();	
+				
+			} else {
+				// Success
+				patternsUses = result[0]
+				
+				// infinite loop
+				while(true){
+					var randomNum = Math.floor(Math.random() * 4) + 1 // generate a new random number from 1 to 4
+
+					if( parseInt(patternsUses[1]) >= 25 && parseInt(patternsUses[2]) >= 25  && parseInt(patternsUses[3]) >= 25 && parseInt(patternsUses[4]) >= 25){
+						patternVersion = 2
+						randomNum = 2 // All 4 patters are already 25 so just use pattern 2
+						console.log('All patterns taken')
+						break;
+					}
+
+
+					if(parseInt(patternsUses[randomNum]) >= 25){
+						//If the current pattern is greater than 25,
+						// Do this loop again
+						continue
+					} else {
+						// Pattern # is less than 25, so we can use it
+						patternVersion = randomNum
+						// Then Increment and Update it
+						break;
+					}
+					
 				}
+				// Outside of the While Loop
+				// The Value in the Resolve is the JSON Object of the Pattern Version and the Pattern Count
+				resolve({
+					'patternVersion' : patternVersion,
+					'patternCount' : patternsUses[randomNum]
+				})
 			}
 		})
 	})
-
-	waterfall.then(function(result){
-		return new Promise(function(resolve, reject){
-			con.query("SELECT * FROM wave3.patterns", study,function(err, result){
-				if(err){
-					console.log("error getting values from patterns table")
-					console.log(err)
-					
-				} else {
-					// Success
-					patternsUses = result[0]
-					
-					// infinite loop
-					while(true){
-						var randomNum = Math.floor(Math.random() * 4) + 1 // generate a new random number from 1 to 4
 	
-						if( parseInt(patternsUses[1]) >= 25 && parseInt(patternsUses[2]) >= 25  && parseInt(patternsUses[3]) >= 25 && parseInt(patternsUses[4]) >= 25){
-							patternVersion = 2
-							randomNum = 2 // All 4 patters are already 25 so just use pattern 2
-							console.log('All patterns taken')
-							break;
-						}
-	
-	
-						if(parseInt(patternsUses[randomNum]) >= 25){
-							//If the current pattern is greater than 25,
-							// Do this loop again
-							continue
-						} else {
-							// Pattern # is less than 25, so we can use it
-							patternVersion = randomNum
-							// Then Increment and Update it
-							break;
-						}
-						
-					}
-					// Outside of the While Loop
-					// The Value in the Resolve is the JSON Object of the Pattern Version and the Pattern Count
-					resolve({
-						'patternVersion' : patternVersion,
-						'patternCount' : patternsUses[randomNum]
-					})
-				}
-			})
-		})
-		
-	})
 
 	
 
