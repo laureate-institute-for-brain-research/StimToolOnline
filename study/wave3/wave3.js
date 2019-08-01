@@ -498,7 +498,7 @@ function insertNewData(fields,con, response){
 // reroute is done client side
 function reRoute(con,mkturk_id,response){
 
-	console.log('reroute has been summoned :D')
+	console.log('wave3: reroute has been summoned :D')
 	// THIS function can only be run if user is already in the database
 	var sql = SqlString.format("SELECT status.survey_demo_T1, " +
 		"status.survey_panasx_T1," +

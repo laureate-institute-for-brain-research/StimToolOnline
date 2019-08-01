@@ -103,7 +103,9 @@ ALTER TABLE dp_status
 CHANGE task_dp_T2 task_dotprobe_T2 varchar(45);
 
 # Need to rename column names since ASi will be replaced by PANAS
+ALTER TABLE dp_status CHANGE survey_asi_T1 survey_panas_T1 varchar(45);
 
+ALTER TABLE dp_status CHANGE survey_asi_T2 survey_panas_T2 varchar(45);
 
 
 # SHOW RECORDS IN THE TABLES
@@ -118,7 +120,17 @@ TRUNCATE dp_status;
 TRUNCATE dot_probe1;
 
 
+# Making mkturk_id nullable
+ALTER TABLE subjects MODIFY mkturk_id VARCHAR(45);
+
+
+# Making column uniq
+ALTER TABLE subjects ADD UNIQUE (mkturk_id);
+ 
+
+ALTER TABLE subjects ALTER task_version SET DEFAULT 1;
 
 ## CAREFUL WITH THESE QUERIES:!!
 
 DROP TABLE dp_status;
+
