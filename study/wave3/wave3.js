@@ -334,6 +334,16 @@ function getChickenVersion(study){
 	)
 	
 }
+/**
+ * Returns random tnteger given a min and max
+ * @param {Int32Array} min Minimum value of range
+ * @param {Int32Array} max Maximum value of range
+ */
+function getRandomInt(min, max) {
+	min = Math.ceil(min);
+	max = Math.floor(max);
+	return Math.floor(Math.random() * (max - min)) + min; //The maximum is exclusive and the minimum is inclusive
+  }
 
 function insertNewData(fields,con, response){
 	console.log("Trying to insert New Data to SQL Database!");
@@ -385,12 +395,15 @@ function insertNewData(fields,con, response){
 			} else {
 				// Success
 				patternsUses = result[0]
+				console.log(patternsUses)
 				
 				// infinite loop
 				while(true){
-					var randomNum = Math.floor(Math.random() * 4) + 1 // generate a new random number from 1 to 4
+					var randomNum = getRandomInt(1, 4)// generate a new random number from 1 to 4
 
-					if( parseInt(patternsUses[1]) >= 25 && parseInt(patternsUses[2]) >= 25  && parseInt(patternsUses[3]) >= 25 && parseInt(patternsUses[4]) >= 25){
+					console.log(randomNum)
+
+					if( parseInt(patternsUses['1']) >= 25 && parseInt(patternsUses['2']) >= 25  && parseInt(patternsUses['3']) >= 25 && parseInt(patternsUses['4']) >= 25){
 						patternVersion = 2
 						randomNum = 2 // All 4 patters are already 25 so just use pattern 2
 						console.log('All patterns taken')
@@ -428,7 +441,7 @@ function insertNewData(fields,con, response){
 		function(version){
 			console.log('Attempting to update pattern')
 			console.log(version)
-			sql = SqlString.format("UPDATE patterns SET `" + version.patternVersion + "` = ?",[version.patternCount + 1, study])
+			sql = SqlString.format("UPDATE patterns SET ?? = ?",[version.patternVersion, parseInt(version.patternCount) + 1])
 			//console.log(sql)
 			return new Promise(function(resolve, reject){
 				con.query(sql, function(err, result){
@@ -450,8 +463,6 @@ function insertNewData(fields,con, response){
 		function(version){
 			//console.log('Your Version Here: ' + version.patternVersion)
 
-
-			chicken_version = version.patternVersion
 			newMTURKID = fields.mkturk_id.replace(/\s+/, "");
 
 			data = {
@@ -460,7 +471,7 @@ function insertNewData(fields,con, response){
 				remind : fields.remind,
 				time_created : currentdate,
 				time_ready : null,
-				task_version : chicken_version
+				task_version : version
 			}
 			con.query('INSERT INTO subjects SET ?', data, function (err, result) {
 				if (err){

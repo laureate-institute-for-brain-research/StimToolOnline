@@ -2168,6 +2168,10 @@ function sendEmails(mkturk_id, session, study){
 		wave2.sendEmails(mkturk_id, session, study);
 		return
 	}
+	if (study == "wave3"){
+		wave3.sendEmails(mkturk_id, session, study);
+		return
+	}
 
 	if (session == '2'){
 		console.log('session' + session)
