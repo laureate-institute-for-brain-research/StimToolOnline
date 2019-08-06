@@ -39,6 +39,7 @@
             justify-content: center;
         }
     </style>
+
     <!-- Using Jquery Library CDN -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <link rel="stylesheet" href="https://unpkg.com/bootstrap@3.3.7/dist/css/bootstrap.min.css">
@@ -96,7 +97,6 @@
             $("#mkid").text(mkturkid);
             $("#session").text(session);
             $("#study").text(getQueryVariable('study'));
-
         function tmpmouse(e) {
             MouseX = e.clientX - c.getBoundingClientRect().left;
             MouseY = e.clientY - c.getBoundingClientRect().top;
@@ -1528,7 +1528,7 @@
         var slide18 = 32;
         var slide20 = 33;
         var slide21 = 34;
-        var slide22 = 35;
+        var quizSlide = 35;
         var slide23 = 36;
         var slide24 = 37;
         var slide25 = 38;
@@ -3720,15 +3720,15 @@
                         break;
                     case 41:
                         task_quizQ.step++;
-                        psy_add_centered_bitmap_db(slide22, PSY_CENTRAL, PSY_CENTRAL, 0);
+                        psy_add_centered_bitmap_db(quizSlide, PSY_CENTRAL, PSY_CENTRAL, 0);
                         psy_draw_all_db();
                         psy_keyboard(possiblekeys, 1, 1 - 1, 999999);
                         break;
                     case 42:
                         task_quizQ.step++;
-                        quizError = 0;
                         psy_add_centered_bitmap_db(background, PSY_CENTRAL, PSY_CENTRAL, 0);
                         psy_draw_all_db();
+                        quizError = 0;
                         psy_mouse_visibility(1);
                         psy_add_text_rgb_db(mainfont, -260, -300, PSY_CENTRAL, PSY_CENTRAL, 255, 255, 255,
                             "1. Your task is to pick the chicken that (will lay)/laid the ___ egg.", 0);
@@ -4017,107 +4017,6 @@
                 }
             }
         };
-        var block_instructions = {
-            blockname: "block_instructions",
-            step: 1,
-            trial_counter: 0,
-            start: function () {
-                block_instructions.step = 1;
-                current_block = "block_instructions";
-                psy_clear_stimulus_counters_db();
-                block_instructions.run()
-            },
-            run: function () {
-                current_block = block_instructions.blockname;
-                switch (block_instructions.step) {
-                    case 1:
-                        block_instructions.step++;
-                        psy_wait(slide1, 32);
-                        break;
-                    case 2:
-                        block_instructions.step++;
-                        psy_clear_screen_db();
-                        block_instructions.run();
-                        break;
-                    case 3:
-                        block_instructions.step++;
-                        psy_wait(slide2, 32);
-                        break;
-                    case 4:
-                        block_instructions.step++;
-                        psy_clear_screen_db();
-                        block_instructions.run();
-                        break;
-                    case 5:
-                        block_instructions.step++;
-                        psy_wait(slide3, 32);
-                        break;
-                    case 6:
-                        block_instructions.step++;
-                        psy_clear_screen_db();
-                        block_instructions.run();
-                        break;
-                    case 7:
-                        block_instructions.step++;
-                        psy_wait(slide4, 32);
-                        break;
-                    case 8:
-                        block_instructions.step++;
-                        psy_clear_screen_db();
-                        block_instructions.run();
-                        break;
-                    case 9:
-                        block_instructions.step++;
-                        psy_wait(slide5, 32);
-                        break;
-                    case 10:
-                        block_instructions.step++;
-                        psy_clear_screen_db();
-                        block_instructions.run();
-                        break;
-                    case 11:
-                        block_instructions.step++;
-                        psy_wait(slide7, 32);
-                        break;
-                    case 12:
-                        block_instructions.step++;
-                        psy_clear_screen_db();
-                        block_instructions.run();
-                        break;
-                    case 13:
-                        block_instructions.step++;
-                        psy_wait(slide8, 32);
-                        break;
-                    case 14:
-                        block_instructions.step++;
-                        psy_clear_screen_db();
-                        block_instructions.run();
-                        break;
-                    case 15:
-                        block_instructions.step++;
-                        psy_wait(slide9, 32);
-                        break;
-                    case 16:
-                        block_instructions.step++;
-                        psy_clear_screen_db();
-                        block_instructions.run();
-                        break;
-                    case 17:
-                        block_instructions.step++;
-                        psy_wait(slide10, 32);
-                        break;
-                    case 18:
-                        block_instructions.step++;
-                        psy_clear_screen_db();
-                        block_instructions.run();
-                        break;
-                    case 19:
-                        block_instructions.step++;
-                        setTimeout("blocks" + psy_blockorder + ".run()", 0);
-                        break
-                }
-            }
-        };
         var block_instructionsquiz = {
             blockname: "block_instructionsquiz",
             step: 1,
@@ -4208,19 +4107,13 @@
                         break;
                     case 11:
                         block_instructionsquiz.step++;
-                        psy_wait(slide11, 32);
-                        break;
-                    case 12:
-                        block_instructionsquiz.step++;
-                        psy_clear_screen_db();
-                        block_instructionsquiz.run();
-                        break;
-                    case 13:
-                        block_instructionsquiz.step++;
+                        psy_clear_stimulus_counters_db();
+                        psy_add_centered_bitmap_db(slide11, PSY_CENTRAL, PSY_CENTRAL);
+                        psy_draw_all_db();
                         quizError = 1;
                         setTimeout("block_instructionsquiz.run()", 0);
                         break;
-                    case 14:
+                    case 12:
                         block_instructionsquiz.step++;
                         psy_clear_screen_db();
                         block_instructionsquiz.max_trials_in_block = 999999;
@@ -4228,12 +4121,12 @@
                         if (block_instructionsquiz.criteria_fullfilled > 0 && block_instructionsquiz
                             .trial_counter <= block_instructionsquiz.max_trials_in_block) {
                             block_instructionsquiz.trial_counter++;
-                            task_quizQ.start(TRIAL_SELECTION_RANDOM)
+                            task_quizQ.start(TRIAL_SELECTION_FIXED_SEQUENCE)
                         } else {
                             setTimeout("block_instructionsquiz.run()", 0)
                         }
                         break;
-                    case 15:
+                    case 13:
                         block_instructionsquiz.step++;
                         block_instructionsquiz.trial_counter_per_task[0]--;
                         if (block_instructionsquiz.trial_counter_per_task[0] == 0 || block_instructionsquiz
@@ -4249,7 +4142,7 @@
                             setTimeout("block_instructionsquiz.run()", 0)
                         }
                         break;
-                    case 16:
+                    case 14:
                         block_instructionsquiz.step++;
                         psy_clear_screen_db();
                         psy_add_text_rgb_db(0, 0, -200, PSY_CENTRAL, PSY_CENTRAL, 255, 255, 255,
@@ -4260,7 +4153,7 @@
                         psy_draw_all_db();
                         psy_wait(0, 32);
                         break;
-                    case 17:
+                    case 15:
                         block_instructionsquiz.step++;
                         psy_clear_screen_db();
                         setTimeout("blocks" + psy_blockorder + ".run()", 0);
@@ -4457,7 +4350,7 @@
                         break;
                     case 2:
                         block_main.step++;
-                        trialCounter = 98;
+                        trialCounter = 1;
                         setTimeout("block_main.run()", 0);
                         break;
                     case 3:
@@ -4708,7 +4601,7 @@
                 "https://res.cloudinary.com/laureate-institute-for-brain-research/image/upload/v1533074944/Chicken_Task/instructions_estimate/Slide21.png"
                 );
             psy_load_bitmap(
-                "https://res.cloudinary.com/laureate-institute-for-brain-research/image/upload/v1533074945/Chicken_Task/instructions_estimate/Slide22.png"
+                "http://brainworkout.paulus.libr.net/images/chicken_media/instructions/Task_Instructions_yb/Slide29.png"
                 );
             psy_load_bitmap(
                 "https://res.cloudinary.com/laureate-institute-for-brain-research/image/upload/v1533074945/Chicken_Task/instructions_estimate/Slide23.png"
@@ -4859,7 +4752,6 @@
                         block_main.start();
                         break;
                     case 4:
-                        
                         psy_exit_fullscreen();
                         postData(toCSV(outputdata), session, mkturkid, task);
                         break
@@ -4954,8 +4846,10 @@
     <div class="container-fluid">
         <br>
         <center>
-            <p class="text-p">&copy; 2019 <a href="http://www.laureateinstitute.org">laureateinstitute.org</a>. All rights reserved.</p>
+            <p class="text-p">&copy; 2018 <a href="http://www.laureateinstitute.org">laureateinstitute.org</a>. All rights reserved.</p>
             <p>Wave 3  - Chicken Task Version 2 - Pattern 4</p>
         </center>
     </div>
+
+
 </html>

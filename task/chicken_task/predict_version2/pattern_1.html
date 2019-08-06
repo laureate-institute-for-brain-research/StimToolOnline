@@ -39,65 +39,64 @@
             justify-content: center;
         }
     </style>
+
     <!-- Using Jquery Library CDN -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <link rel="stylesheet" href="https://unpkg.com/bootstrap@3.3.7/dist/css/bootstrap.min.css">
-
 </head>
 
 <body onload="whenloaded()">
-    <center><a href="http://www.laureateinstitute.org/"><img class="logo" src="/images/logo.png"></a></center>
-    <div class="container-fluid">
-
-        <div class="row">
-            <div class="col-md-10">
-                <h1 style="padding: 17px">Chicken Task: Predict (2) - Version 1</h1>
+        <center><a href="http://www.laureateinstitute.org/"><img class="logo" src="/images/logo.png"></a></center>
+        <div class="container-fluid">
+    
+            <div class="row">
+                <div class="col-md-10">
+                    <h1 style="padding: 17px">Chicken Task: Predict (2) - Version 1</h1>
+                </div>
+            </div>
+            <center>
+                <div id="loader" class="lds-dual-ring">Saving data...</div>
+            </center>
+    
+    
+            <div class="row">
+                <p align="right" class="col-md-10">Subject ID:</p>
+                <a align="right" id="mkid"></a>
+            </div>
+    
+            <div class="row">
+                <p align="right" class="col-md-10">Session: </p>
+                <a align="right" id="session"></a>
+            </div>
+    
+            <div class="row">
+                <p align="right" class="col-md-10">Study: </p>
+                <a align="right" id="study"></a>
             </div>
         </div>
-        <center>
-            <div id="loader" class="lds-dual-ring">Saving data...</div>
-        </center>
-
-
-        <div class="row">
-            <p align="right" class="col-md-10">Subject ID:</p>
-            <a align="right" id="mkid"></a>
-        </div>
-
-        <div class="row">
-            <p align="right" class="col-md-10">Session: </p>
-            <a align="right" id="session"></a>
-        </div>
-
-        <div class="row">
-            <p align="right" class="col-md-10">Study: </p>
-            <a align="right" id="study"></a>
-        </div>
-    </div>
-
-    <script>
-        $("#loader").hide()
-
-        function getQueryVariable(variable) {
-            var query = window.location.search.substring(1);
-            var vars = query.split('&');
-            for (var i = 0; i < vars.length; i++) {
-                var pair = vars[i].split('=');
-                if (decodeURIComponent(pair[0]) == variable) {
-                    return decodeURIComponent(pair[1]);
+    
+        <script>
+            $("#loader").hide()
+    
+            function getQueryVariable(variable) {
+                var query = window.location.search.substring(1);
+                var vars = query.split('&');
+                for (var i = 0; i < vars.length; i++) {
+                    var pair = vars[i].split('=');
+                    if (decodeURIComponent(pair[0]) == variable) {
+                        return decodeURIComponent(pair[1]);
+                    }
                 }
+                return 'NULL'
             }
-            return 'NULL'
-        }
-
-        var session = getQueryVariable('session');
-        var mkturkid = getQueryVariable('mkturk_id');
-        //var mkturkid = getQueryVariable('mkturk_id');
-
-        $("#mkid").text(mkturkid);
-        $("#session").text(session);
-        $("#study").text(getQueryVariable('study'));
-
+    
+            var session = getQueryVariable('session');
+            var mkturkid = getQueryVariable('mkturk_id');
+            //var mkturkid = getQueryVariable('mkturk_id');
+    
+            $("#mkid").text(mkturkid);
+            $("#session").text(session);
+            $("#study").text(getQueryVariable('study'));
         function tmpmouse(e) {
             MouseX = e.clientX - c.getBoundingClientRect().left;
             MouseY = e.clientY - c.getBoundingClientRect().top;
@@ -1529,7 +1528,7 @@
         var slide18 = 32;
         var slide20 = 33;
         var slide21 = 34;
-        var slide22 = 35;
+        var quizSlide = 35;
         var slide23 = 36;
         var slide24 = 37;
         var slide25 = 38;
@@ -1652,8 +1651,7 @@
                 130, -73, 1, "MAIN", 0, 0, 0), new myTabletype(9, 1, 122, 4, 1, "MAIN", 0, 0, 0), new myTabletype(
                 10, 1, -102, 94, 1, "MAIN", 0, 0, 0), new myTabletype(11, 1, 28, 42, 1, "MAIN", 0, 0, 0),
             new myTabletype(12, 1, 212, 36, 1, "MAIN", 0, 0, 0), new myTabletype(13, 1, -6, -25, 1, "MAIN", 0, 0,
-                0), new myTabletype(14, 1, 130, 53, 1, "MAIN", 0, 0, 0), new myTabletype(15, 1, 186, 112, 1, "MAIN",
-                0,
+            0), new myTabletype(14, 1, 130, 53, 1, "MAIN", 0, 0, 0), new myTabletype(15, 1, 186, 112, 1, "MAIN", 0,
                 0, 0), new myTabletype(16, 1, 106, -188, 1, "MAIN", 0, 0, 0), new myTabletype(17, 1, -76, 80, 1,
                 "MAIN", 0, 0, 0), new myTabletype(18, 1, 38, -11, 1, "MAIN", 0, 0, 0), new myTabletype(19, 1, 291, -
                 58, 2, "MAIN", 0, 0, 0), new myTabletype(20, 1, -194, -269, 2, "MAIN", 0, 0, 0), new myTabletype(21,
@@ -1676,15 +1674,13 @@
                 7, 1, "MAIN", 0, 0, 0), new myTabletype(51, 1, 52, 14, 1, "MAIN", 0, 0, 0), new myTabletype(52, 1,
                 125, -139, 1, "MAIN", 0, 0, 0), new myTabletype(53, 1, 245, -154, 1, "MAIN", 0, 0, 0),
             new myTabletype(54, 1, 49, -70, 1, "MAIN", 0, 0, 0), new myTabletype(55, 1, 91, -36, 1, "MAIN", 0, 0,
-                0), new myTabletype(56, 1, 103, 11, 1, "MAIN", 0, 0, 0), new myTabletype(57, 1, 106, 18, 1, "MAIN",
-                0,
+            0), new myTabletype(56, 1, 103, 11, 1, "MAIN", 0, 0, 0), new myTabletype(57, 1, 106, 18, 1, "MAIN", 0,
                 0, 0), new myTabletype(58, 1, -80, 176, 1, "MAIN", 0, 0, 0), new myTabletype(59, 1, -131, 6, 1,
                 "MAIN", 0, 0, 0), new myTabletype(60, 1, -37, 117, 1, "MAIN", 0, 0, 0), new myTabletype(61, 1, 93, -
                 4, 1, "MAIN", 0, 0, 0), new myTabletype(62, 1, 136, 159, 1, "MAIN", 0, 0, 0), new myTabletype(63, 1,
                 17, -206, 1, "MAIN", 0, 0, 0), new myTabletype(64, 1, 226, -66, 1, "MAIN", 0, 0, 0),
             new myTabletype(65, 1, 59, 108, 1, "MAIN", 0, 0, 0), new myTabletype(66, 1, 77, -19, 1, "MAIN", 0, 0,
-                0), new myTabletype(67, 1, 54, 102, 1, "MAIN", 0, 0, 0), new myTabletype(68, 1, 90, 42, 1, "MAIN",
-                0, 0,
+            0), new myTabletype(67, 1, 54, 102, 1, "MAIN", 0, 0, 0), new myTabletype(68, 1, 90, 42, 1, "MAIN", 0, 0,
                 0), new myTabletype(69, 1, 152, 104, 1, "MAIN", 0, 0, 0), new myTabletype(70, 1, 148, 67, 1, "MAIN",
                 0, 0, 0), new myTabletype(71, 1, -24, 74, 1, "MAIN", 0, 0, 0), new myTabletype(72, 1, 243, 164, 1,
                 "MAIN", 0, 0, 0), new myTabletype(73, 1, -45, 109, 1, "MAIN", 0, 0, 0), new myTabletype(74, 1, 84,
@@ -1789,8 +1785,7 @@
                 "MAIN", 0, 0, 0), new myTabletype(250, 2, 169, -67, 1, "MAIN", 0, 0, 0), new myTabletype(251, 2, -
                 109, -111, 1, "MAIN", 0, 0, 0), new myTabletype(252, 2, 160, -125, 1, "MAIN", 0, 0, 0),
             new myTabletype(253, 2, 9, 76, 1, "MAIN", 0, 0, 0), new myTabletype(254, 2, -1, 104, 1, "MAIN", 0, 0,
-                0), new myTabletype(255, 2, 242, 38, 1, "MAIN", 0, 0, 0), new myTabletype(256, 2, -21, -328, 1,
-                "MAIN",
+            0), new myTabletype(255, 2, 242, 38, 1, "MAIN", 0, 0, 0), new myTabletype(256, 2, -21, -328, 1, "MAIN",
                 0, 0, 0), new myTabletype(257, 2, 14, 47, 1, "MAIN", 0, 0, 0), new myTabletype(258, 2, 80, 90, 1,
                 "MAIN", 0, 0, 0), new myTabletype(259, 2, 226, -107, 1, "MAIN", 0, 0, 0), new myTabletype(260, 2,
                 168, 7, 1, "MAIN", 0, 0, 0), new myTabletype(261, 2, 37, -298, 2, "MAIN", 0, 0, 0), new myTabletype(
@@ -1931,7 +1926,7 @@
                         if (task_trianglepractice.trial_selection == TRIAL_SELECTION_RANDOM_NEVER_REPEAT) {
                             tablerow = psy_random(0, 19);
                             while (tablerow == task_trianglepractice.current_trial) tablerow = psy_random(0,
-                                19);
+                            19);
                             task_trianglepractice.current_trial = tablerow
                         }
                         if (task_trianglepractice.trial_selection == TRIAL_SELECTION_FIXED_SEQUENCE) {
@@ -2064,7 +2059,7 @@
                     case 15:
                         task_trianglepractice.step++;
                         psy_add_text_rgb_db(0, -33, -300, PSY_CENTRAL, PSY_CENTRAL, 255, 255, 255, "Cents: ",
-                            0);
+                        0);
                         psy_draw_all_db();
                         psy_add_text_rgb_db(0, 30, -300, PSY_CENTRAL, PSY_CENTRAL, 255, 255, 255, points, 0);
                         psy_draw_all_db();
@@ -2128,9 +2123,9 @@
                         psy_add_centered_bitmap_db(yellow_small, -532, 315, 0);
                         psy_draw_all_db();
                         task_trianglepractice.calcualtedEggXPosition = Math.round(lastOneEggXPosition / 6 -
-                            545);
+                        545);
                         task_trianglepractice.calcualtedEggYPosition = Math.round(lastOneEggYPosition / 6 +
-                            315);
+                        315);
                         psy_add_centered_bitmap_db(egg_small, task_trianglepractice.calcualtedEggXPosition,
                             task_trianglepractice.calcualtedEggYPosition, 0);
                         psy_draw_all_db();
@@ -2182,9 +2177,9 @@
                         psy_add_centered_bitmap_db(yellow_small, -532, 167, 0);
                         psy_draw_all_db();
                         task_trianglepractice.calcualtedEggXPosition = Math.round(lastTwoEggXPosition / 6 -
-                            545);
+                        545);
                         task_trianglepractice.calcualtedEggYPosition = Math.round(lastTwoEggYPosition / 6 +
-                            167);
+                        167);
                         psy_add_centered_bitmap_db(egg_small, task_trianglepractice.calcualtedEggXPosition,
                             task_trianglepractice.calcualtedEggYPosition, 0);
                         psy_draw_all_db();
@@ -2913,7 +2908,7 @@
                         addoutput(current_block.substring(6, current_block.length) + " " + myTable[tablerow]
                             .c1 + " " + myTable[tablerow].c2 + " " + myTable[tablerow].c3 + " " + myTable[
                                 tablerow].c4 + " " + time + " " + keystatus.time + " " + (keystatus.key +
-                                1) + " " + keystatus.status + " " + points + " " + left_chicken_x_position +
+                            1) + " " + keystatus.status + " " + points + " " + left_chicken_x_position +
                             " " + left_chicken_y_position + " " + right_chicken_x_position + " " +
                             right_chicken_y_position + " " + give_feedback);
                         if (!(keystatus.key + 1 == 1)) {
@@ -3725,15 +3720,15 @@
                         break;
                     case 41:
                         task_quizQ.step++;
-                        psy_add_centered_bitmap_db(slide22, PSY_CENTRAL, PSY_CENTRAL, 0);
+                        psy_add_centered_bitmap_db(quizSlide, PSY_CENTRAL, PSY_CENTRAL, 0);
                         psy_draw_all_db();
                         psy_keyboard(possiblekeys, 1, 1 - 1, 999999);
                         break;
                     case 42:
                         task_quizQ.step++;
-                        quizError = 0;
                         psy_add_centered_bitmap_db(background, PSY_CENTRAL, PSY_CENTRAL, 0);
                         psy_draw_all_db();
+                        quizError = 0;
                         psy_mouse_visibility(1);
                         psy_add_text_rgb_db(mainfont, -260, -300, PSY_CENTRAL, PSY_CENTRAL, 255, 255, 255,
                             "1. Your task is to pick the chicken that (will lay)/laid the ___ egg.", 0);
@@ -4022,107 +4017,6 @@
                 }
             }
         };
-        var block_instructions = {
-            blockname: "block_instructions",
-            step: 1,
-            trial_counter: 0,
-            start: function () {
-                block_instructions.step = 1;
-                current_block = "block_instructions";
-                psy_clear_stimulus_counters_db();
-                block_instructions.run()
-            },
-            run: function () {
-                current_block = block_instructions.blockname;
-                switch (block_instructions.step) {
-                    case 1:
-                        block_instructions.step++;
-                        psy_wait(slide1, 32);
-                        break;
-                    case 2:
-                        block_instructions.step++;
-                        psy_clear_screen_db();
-                        block_instructions.run();
-                        break;
-                    case 3:
-                        block_instructions.step++;
-                        psy_wait(slide2, 32);
-                        break;
-                    case 4:
-                        block_instructions.step++;
-                        psy_clear_screen_db();
-                        block_instructions.run();
-                        break;
-                    case 5:
-                        block_instructions.step++;
-                        psy_wait(slide3, 32);
-                        break;
-                    case 6:
-                        block_instructions.step++;
-                        psy_clear_screen_db();
-                        block_instructions.run();
-                        break;
-                    case 7:
-                        block_instructions.step++;
-                        psy_wait(slide4, 32);
-                        break;
-                    case 8:
-                        block_instructions.step++;
-                        psy_clear_screen_db();
-                        block_instructions.run();
-                        break;
-                    case 9:
-                        block_instructions.step++;
-                        psy_wait(slide5, 32);
-                        break;
-                    case 10:
-                        block_instructions.step++;
-                        psy_clear_screen_db();
-                        block_instructions.run();
-                        break;
-                    case 11:
-                        block_instructions.step++;
-                        psy_wait(slide7, 32);
-                        break;
-                    case 12:
-                        block_instructions.step++;
-                        psy_clear_screen_db();
-                        block_instructions.run();
-                        break;
-                    case 13:
-                        block_instructions.step++;
-                        psy_wait(slide8, 32);
-                        break;
-                    case 14:
-                        block_instructions.step++;
-                        psy_clear_screen_db();
-                        block_instructions.run();
-                        break;
-                    case 15:
-                        block_instructions.step++;
-                        psy_wait(slide9, 32);
-                        break;
-                    case 16:
-                        block_instructions.step++;
-                        psy_clear_screen_db();
-                        block_instructions.run();
-                        break;
-                    case 17:
-                        block_instructions.step++;
-                        psy_wait(slide10, 32);
-                        break;
-                    case 18:
-                        block_instructions.step++;
-                        psy_clear_screen_db();
-                        block_instructions.run();
-                        break;
-                    case 19:
-                        block_instructions.step++;
-                        setTimeout("blocks" + psy_blockorder + ".run()", 0);
-                        break
-                }
-            }
-        };
         var block_instructionsquiz = {
             blockname: "block_instructionsquiz",
             step: 1,
@@ -4213,19 +4107,13 @@
                         break;
                     case 11:
                         block_instructionsquiz.step++;
-                        psy_wait(slide11, 32);
-                        break;
-                    case 12:
-                        block_instructionsquiz.step++;
-                        psy_clear_screen_db();
-                        block_instructionsquiz.run();
-                        break;
-                    case 13:
-                        block_instructionsquiz.step++;
+                        psy_clear_stimulus_counters_db();
+                        psy_add_centered_bitmap_db(slide11, PSY_CENTRAL, PSY_CENTRAL);
+                        psy_draw_all_db();
                         quizError = 1;
                         setTimeout("block_instructionsquiz.run()", 0);
                         break;
-                    case 14:
+                    case 12:
                         block_instructionsquiz.step++;
                         psy_clear_screen_db();
                         block_instructionsquiz.max_trials_in_block = 999999;
@@ -4233,12 +4121,12 @@
                         if (block_instructionsquiz.criteria_fullfilled > 0 && block_instructionsquiz
                             .trial_counter <= block_instructionsquiz.max_trials_in_block) {
                             block_instructionsquiz.trial_counter++;
-                            task_quizQ.start(TRIAL_SELECTION_RANDOM)
+                            task_quizQ.start(TRIAL_SELECTION_FIXED_SEQUENCE)
                         } else {
                             setTimeout("block_instructionsquiz.run()", 0)
                         }
                         break;
-                    case 15:
+                    case 13:
                         block_instructionsquiz.step++;
                         block_instructionsquiz.trial_counter_per_task[0]--;
                         if (block_instructionsquiz.trial_counter_per_task[0] == 0 || block_instructionsquiz
@@ -4254,7 +4142,7 @@
                             setTimeout("block_instructionsquiz.run()", 0)
                         }
                         break;
-                    case 16:
+                    case 14:
                         block_instructionsquiz.step++;
                         psy_clear_screen_db();
                         psy_add_text_rgb_db(0, 0, -200, PSY_CENTRAL, PSY_CENTRAL, 255, 255, 255,
@@ -4265,7 +4153,7 @@
                         psy_draw_all_db();
                         psy_wait(0, 32);
                         break;
-                    case 17:
+                    case 15:
                         block_instructionsquiz.step++;
                         psy_clear_screen_db();
                         setTimeout("blocks" + psy_blockorder + ".run()", 0);
@@ -4462,7 +4350,7 @@
                         break;
                     case 2:
                         block_main.step++;
-                        trialCounter = 98;
+                        trialCounter = 1;
                         setTimeout("block_main.run()", 0);
                         break;
                     case 3:
@@ -4616,232 +4504,232 @@
             psy_load_font("Arial", 13);
             psy_load_bitmap(
                 "https://res.cloudinary.com/laureate-institute-for-brain-research/image/upload/v1525367396/Chicken_Task/egg_brown.png"
-            );
+                );
             psy_load_bitmap(
                 "http://res.cloudinary.com/laureate-institute-for-brain-research/image/upload/v1527180146/Chicken_Task/chicken_select_sky_blue.png"
-            );
+                );
             psy_load_bitmap(
                 "http://res.cloudinary.com/laureate-institute-for-brain-research/image/upload/v1525367396/Chicken_Task/chicken_select_yellow.png"
-            );
+                );
             psy_load_bitmap("http://brainworkout.paulus.libr.net/images/chicken_media/egg_new.png");
             psy_load_bitmap(
                 "http://res.cloudinary.com/laureate-institute-for-brain-research/image/upload/v1527185863/Chicken_Task/basket0.png"
-            );
+                );
             psy_load_bitmap(
                 "https://res.cloudinary.com/laureate-institute-for-brain-research/image/upload/v1528330990/Chicken_Task/eggfill1.png"
-            );
+                );
             psy_load_bitmap(
                 "https://res.cloudinary.com/laureate-institute-for-brain-research/image/upload/v1528330990/Chicken_Task/eggfill2.png"
-            );
+                );
             psy_load_bitmap(
                 "https://res.cloudinary.com/laureate-institute-for-brain-research/image/upload/v1528332446/Chicken_Task/eggfillmask1.png"
-            );
+                );
             psy_load_bitmap(
                 "https://res.cloudinary.com/laureate-institute-for-brain-research/image/upload/v1525367396/Chicken_Task/chicken_select.png"
-            );
+                );
             psy_load_bitmap(
                 "https://res.cloudinary.com/laureate-institute-for-brain-research/image/upload/v1525367396/Chicken_Task/backg.png"
-            );
+                );
             psy_load_bitmap(
                 "https://res.cloudinary.com/laureate-institute-for-brain-research/image/upload/v1527180122/Chicken_Task/next.png"
-            );
+                );
             psy_load_bitmap(
                 "https://res.cloudinary.com/laureate-institute-for-brain-research/image/upload/v1525367397/Chicken_Task/exitbitmap2.png"
-            );
+                );
             psy_load_bitmap(
                 "https://res.cloudinary.com/laureate-institute-for-brain-research/image/upload/v1525367402/Chicken_Task/markingsymbol.png"
-            );
+                );
             psy_load_bitmap("http://brainworkout.paulus.libr.net/images/chicken_media/controls_transparent.png");
             psy_load_bitmap(
                 "https://res.cloudinary.com/laureate-institute-for-brain-research/image/upload/v1533074943/Chicken_Task/instructions_estimate/Slide01.png"
-            );
+                );
             psy_load_bitmap(
                 "https://res.cloudinary.com/laureate-institute-for-brain-research/image/upload/v1533074943/Chicken_Task/instructions_estimate/Slide02.png"
-            );
+                );
             psy_load_bitmap(
                 "https://res.cloudinary.com/laureate-institute-for-brain-research/image/upload/v1533074943/Chicken_Task/instructions_estimate/Slide03.png"
-            );
+                );
             psy_load_bitmap(
                 "https://res.cloudinary.com/laureate-institute-for-brain-research/image/upload/v1533074943/Chicken_Task/instructions_estimate/Slide04.png"
-            );
+                );
             psy_load_bitmap(
                 "https://res.cloudinary.com/laureate-institute-for-brain-research/image/upload/v1533074943/Chicken_Task/instructions_estimate/Slide05.png"
-            );
+                );
             psy_load_bitmap(
                 "https://res.cloudinary.com/laureate-institute-for-brain-research/image/upload/v1533074943/Chicken_Task/instructions_estimate/Slide06.png"
-            );
+                );
             psy_load_bitmap(
                 "https://res.cloudinary.com/laureate-institute-for-brain-research/image/upload/v1533074944/Chicken_Task/instructions_estimate/Slide07.png"
-            );
+                );
             psy_load_bitmap(
                 "https://res.cloudinary.com/laureate-institute-for-brain-research/image/upload/v1533074944/Chicken_Task/instructions_estimate/Slide08.png"
-            );
+                );
             psy_load_bitmap(
                 "https://res.cloudinary.com/laureate-institute-for-brain-research/image/upload/v1533074944/Chicken_Task/instructions_estimate/Slide09.png"
-            );
+                );
             psy_load_bitmap(
                 "https://res.cloudinary.com/laureate-institute-for-brain-research/image/upload/v1533074944/Chicken_Task/instructions_estimate/Slide10.png"
-            );
+                );
             psy_load_bitmap(
                 "https://res.cloudinary.com/laureate-institute-for-brain-research/image/upload/v1533074944/Chicken_Task/instructions_estimate/Slide11.png"
-            );
+                );
             psy_load_bitmap(
                 "https://res.cloudinary.com/laureate-institute-for-brain-research/image/upload/v1536171362/Chicken_Task/instructions_estimate/Slide12.png"
-            );
+                );
             psy_load_bitmap(
                 "https://res.cloudinary.com/laureate-institute-for-brain-research/image/upload/v1536171425/Chicken_Task/instructions_estimate/Slide13.png"
-            );
+                );
             psy_load_bitmap(
                 "https://res.cloudinary.com/laureate-institute-for-brain-research/image/upload/v1536171541/Chicken_Task/instructions_estimate/Slide14.png"
-            );
+                );
             psy_load_bitmap(
                 "https://res.cloudinary.com/laureate-institute-for-brain-research/image/upload/v1536171541/Chicken_Task/instructions_estimate/Slide15.png"
-            );
+                );
             psy_load_bitmap(
                 "https://res.cloudinary.com/laureate-institute-for-brain-research/image/upload/v1533074944/Chicken_Task/instructions_estimate/Slide16.png"
-            );
+                );
             psy_load_bitmap(
                 "http://brainworkout.paulus.libr.net/images/chicken_media/instructions/Task_Instructions_yb/Slide17.png"
-            );
+                );
             psy_load_bitmap(
                 "https://res.cloudinary.com/laureate-institute-for-brain-research/image/upload/v1536171616/Chicken_Task/instructions_estimate/Slide18.png"
-            );
+                );
             psy_load_bitmap(
                 "https://res.cloudinary.com/laureate-institute-for-brain-research/image/upload/v1533074945/Chicken_Task/instructions_estimate/Slide20.png"
-            );
+                );
             psy_load_bitmap(
                 "https://res.cloudinary.com/laureate-institute-for-brain-research/image/upload/v1533074944/Chicken_Task/instructions_estimate/Slide21.png"
-            );
+                );
             psy_load_bitmap(
-                "https://res.cloudinary.com/laureate-institute-for-brain-research/image/upload/v1533074945/Chicken_Task/instructions_estimate/Slide22.png"
-            );
+                "http://brainworkout.paulus.libr.net/images/chicken_media/instructions/Task_Instructions_yb/Slide29.png"
+                );
             psy_load_bitmap(
                 "https://res.cloudinary.com/laureate-institute-for-brain-research/image/upload/v1533074945/Chicken_Task/instructions_estimate/Slide23.png"
-            );
+                );
             psy_load_bitmap(
                 "https://res.cloudinary.com/laureate-institute-for-brain-research/image/upload/v1533074945/Chicken_Task/instructions_estimate/Slide24.png"
-            );
+                );
             psy_load_bitmap(
                 "https://res.cloudinary.com/laureate-institute-for-brain-research/image/upload/v1533074945/Chicken_Task/instructions_estimate/Slide25.png"
-            );
+                );
             psy_load_bitmap(
                 "https://res.cloudinary.com/laureate-institute-for-brain-research/image/upload/v1528410545/Chicken_Task/animation/egg1.png"
-            );
+                );
             psy_load_bitmap(
                 "https://res.cloudinary.com/laureate-institute-for-brain-research/image/upload/v1528410545/Chicken_Task/animation/egg2.png"
-            );
+                );
             psy_load_bitmap(
                 "https://res.cloudinary.com/laureate-institute-for-brain-research/image/upload/v1528410545/Chicken_Task/animation/egg3.png"
-            );
+                );
             psy_load_bitmap(
                 "https://res.cloudinary.com/laureate-institute-for-brain-research/image/upload/v1528410545/Chicken_Task/animation/egg4.png"
-            );
+                );
             psy_load_bitmap(
                 "https://res.cloudinary.com/laureate-institute-for-brain-research/image/upload/v1528410545/Chicken_Task/animation/egg5.png"
-            );
+                );
             psy_load_bitmap(
                 "https://res.cloudinary.com/laureate-institute-for-brain-research/image/upload/v1528410545/Chicken_Task/animation/egg6.png"
-            );
+                );
             psy_load_bitmap(
                 "https://res.cloudinary.com/laureate-institute-for-brain-research/image/upload/v1528404349/Chicken_Task/animation/egg6-0-mark.png"
-            );
+                );
             psy_load_bitmap(
                 "https://res.cloudinary.com/laureate-institute-for-brain-research/image/upload/v1528404349/Chicken_Task/animation/egg6-1.png"
-            );
+                );
             psy_load_bitmap(
                 "https://res.cloudinary.com/laureate-institute-for-brain-research/image/upload/v1528404349/Chicken_Task/animation/egg6-2.png"
-            );
+                );
             psy_load_bitmap(
                 "https://res.cloudinary.com/laureate-institute-for-brain-research/image/upload/v1528404349/Chicken_Task/animation/egg6-3.png"
-            );
+                );
             psy_load_bitmap(
                 "https://res.cloudinary.com/laureate-institute-for-brain-research/image/upload/v1528404350/Chicken_Task/animation/egg6-4.png"
-            );
+                );
             psy_load_bitmap(
                 "https://res.cloudinary.com/laureate-institute-for-brain-research/image/upload/v1528404350/Chicken_Task/animation/egg6-5.png"
-            );
+                );
             psy_load_bitmap(
                 "https://res.cloudinary.com/laureate-institute-for-brain-research/image/upload/v1528404350/Chicken_Task/animation/egg6-6.png"
-            );
+                );
             psy_load_bitmap(
                 "https://res.cloudinary.com/laureate-institute-for-brain-research/image/upload/v1528410545/Chicken_Task/animation/egg7.png"
-            );
+                );
             psy_load_bitmap(
                 "https://res.cloudinary.com/laureate-institute-for-brain-research/image/upload/v1528410545/Chicken_Task/animation/egg8.png"
-            );
+                );
             psy_load_bitmap(
                 "https://res.cloudinary.com/laureate-institute-for-brain-research/image/upload/v1528410545/Chicken_Task/animation/egg9.png"
-            );
+                );
             psy_load_bitmap(
                 "https://res.cloudinary.com/laureate-institute-for-brain-research/image/upload/v1528410545/Chicken_Task/animation/egg10.png"
-            );
+                );
             psy_load_bitmap(
                 "https://res.cloudinary.com/laureate-institute-for-brain-research/image/upload/v1528410545/Chicken_Task/animation/egg11.png"
-            );
+                );
             psy_load_bitmap(
                 "https://res.cloudinary.com/laureate-institute-for-brain-research/image/upload/v1528410545/Chicken_Task/animation/egg12.png"
-            );
+                );
             psy_load_bitmap(
                 "https://res.cloudinary.com/laureate-institute-for-brain-research/image/upload/v1528741980/Chicken_Task/slider/slider_orange.png"
-            );
+                );
             psy_load_bitmap(
                 "https://res.cloudinary.com/laureate-institute-for-brain-research/image/upload/v1528741980/Chicken_Task/slider/slider_green.png"
-            );
+                );
             psy_load_bitmap(
                 "https://res.cloudinary.com/laureate-institute-for-brain-research/image/upload/v1528743310/Chicken_Task/slider/slider_black.png"
-            );
+                );
             psy_load_bitmap(
                 "https://res.cloudinary.com/laureate-institute-for-brain-research/image/upload/v1528821993/Chicken_Task/egg_pile.png"
-            );
+                );
             psy_load_bitmap("https://www.dropbox.com/s/f90vx3n9d5ukj9m/backg_red.png?raw=1");
             psy_load_bitmap(
                 "https://res.cloudinary.com/laureate-institute-for-brain-research/image/upload/v1533244662/Chicken_Task/blue_white.png"
-            );
+                );
             psy_load_bitmap(
                 "https://res.cloudinary.com/laureate-institute-for-brain-research/image/upload/v1533244662/Chicken_Task/yellow_white.png"
-            );
+                );
             psy_load_bitmap(
                 "https://res.cloudinary.com/laureate-institute-for-brain-research/image/upload/v1534792934/Chicken_Task/chicken_select_yellow_small.png"
-            );
+                );
             psy_load_bitmap(
                 "https://res.cloudinary.com/laureate-institute-for-brain-research/image/upload/v1534793154/Chicken_Task/chicken_select_sky_blue_small.png"
-            );
+                );
             psy_load_bitmap(
                 "https://res.cloudinary.com/laureate-institute-for-brain-research/image/upload/v1534880029/chicken_select_small.png"
-            );
+                );
             psy_load_bitmap(
                 "https://res.cloudinary.com/laureate-institute-for-brain-research/image/upload/v1534787971/Chicken_Task/backg_small.png"
-            );
+                );
             psy_load_bitmap(
                 "https://res.cloudinary.com/laureate-institute-for-brain-research/image/upload/v1534792993/Chicken_Task/egg_small.png"
-            );
+                );
             psy_load_bitmap(
                 "http://res.cloudinary.com/laureate-institute-for-brain-research/image/upload/v1536171197/Chicken_Task/instructions_estimate/past_trial_slide.png"
-            );
+                );
             psy_load_bitmap(
                 "http://brainworkout.paulus.libr.net/images/chicken_media/instructions/Task_Instructions_yb/Slide25.png"
-            );
+                );
             psy_load_bitmap(
                 "http://brainworkout.paulus.libr.net/images/chicken_media/instructions/Task_Instructions_yb/Slide21.png"
-            );
+                );
             psy_load_bitmap(
                 "https://res.cloudinary.com/laureate-institute-for-brain-research/image/upload/v1539620781/Chicken_Task/instructions_estimate/change_to_low_sigma.png"
-            );
+                );
             psy_load_bitmap(
                 "https://res.cloudinary.com/laureate-institute-for-brain-research/image/upload/v1539622488/Chicken_Task/instructions_estimate/change_to_high_sigma.png"
-            );
+                );
             psy_load_bitmap(
                 "https://res.cloudinary.com/laureate-institute-for-brain-research/image/upload/v1539705982/Chicken_Task/sigma/sigma_low_blue.png"
-            );
+                );
             psy_load_bitmap(
                 "https://res.cloudinary.com/laureate-institute-for-brain-research/image/upload/v1539705982/Chicken_Task/sigma/sigma_low_yellow.png"
-            );
+                );
             psy_load_bitmap(
                 "https://res.cloudinary.com/laureate-institute-for-brain-research/image/upload/v1539705982/Chicken_Task/sigma/sigma_high_blue.png"
-            );
+                );
             psy_load_bitmap(
                 "https://res.cloudinary.com/laureate-institute-for-brain-research/image/upload/v1539705982/Chicken_Task/sigma/sigma_high_yellow.png"
-            );
+                );
             psy_load_bitmap(
                 "http://brainworkout.paulus.libr.net/images/chicken_media/Distribution_Images/PNG/dist_110_by.png");
             psy_load_bitmap(
@@ -4864,7 +4752,6 @@
                         block_main.start();
                         break;
                     case 4:
-                        // showdata_html();
                         psy_exit_fullscreen();
                         postData(toCSV(outputdata), session, mkturkid, task);
                         break
@@ -4959,10 +4846,10 @@
     <div class="container-fluid">
         <br>
         <center>
-            <p class="text-p">&copy; 2019 <a href="http://www.laureateinstitute.org">laureateinstitute.org</a>. All rights reserved.</p>
+            <p class="text-p">&copy; 2018 <a href="http://www.laureateinstitute.org">laureateinstitute.org</a>. All rights reserved.</p>
             <p>Wave 3  - Chicken Task Version 2 - Pattern 1</p>
         </center>
     </div>
-</body>
+
 
 </html>

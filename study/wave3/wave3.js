@@ -31,6 +31,8 @@ con.connect(function(err) {
 
 });
 
+
+// The Functions below are exported when module is imported
 module.exports = {
 
 	routes : function(app){
