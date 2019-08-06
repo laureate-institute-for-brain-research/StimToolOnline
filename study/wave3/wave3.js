@@ -116,6 +116,9 @@ module.exports = {
 			});
 		})
 
+	
+
+
 		// Testing function
 		// for (let i = 0, p = Promise.resolve(); i < 100; i++) {
 		// 	p = p.then(_ => new Promise(resolve =>
@@ -748,8 +751,8 @@ function sendEmailCode(mkturk_id){
 			  from: 'James <jtouthang@libr.net>',
 			  to: emailaddress,
 			  subject: 'Mechanical Turk Survey Code!',
-			  text: 'Hello!\n\nYour Survey Code is: 11853\n\nFrom all of us at LIBR,\nThank you for your participation.',
-			  html : getCodeEmailHTML()
+			  text: 'Hello!\n\nYour Survey Code is: '+ config.survey_code + '\n\nFrom all of us at LIBR,\nThank you for your participation.',
+			  html : getCodeEmailHTML(config.survey_code)
 			};
 
 			if (emailaddress != null && remind == 'YES'){
@@ -827,7 +830,7 @@ function getRemindHTML(mkturk_id, study){
 	</html>`
 }
 
-function getCodeEmailHTML(){
+function getCodeEmailHTML(code){
 	return `
 	<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -866,7 +869,7 @@ function getCodeEmailHTML(){
 
 								<tr>
 									<td style="padding: 20px 0 30px 0; color: #153643; font-family: Arial, sans-serif; font-size: 50px; line-height: 20px;">
-										<center>11853</center>
+										<center>${code}</center>
 									</td>
 
 								</tr>
