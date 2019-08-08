@@ -2349,87 +2349,80 @@
                         break;
                     case 45:
                         task_trianglepractice.step++;
-                        if (!(trialCounter != correctTrialShow)) {
-                            task_trianglepractice.step = 63
-                        };
-                        setTimeout("task_trianglepractice.run()", 0);
+                        psy_add_centered_bitmap_db(egg_white, practiceTable[tablerow].c3, practiceTable[
+                            tablerow].c4, 0);
+                        psy_draw_all_db();
+                        psy_delay(250);
                         break;
                     case 46:
                         task_trianglepractice.step++;
-                        psy_add_centered_bitmap_db(egg_white, practiceTable[tablerow].c3, practiceTable[
-                            tablerow].c4, 0);
+                        psy_clear_stimuli1(-1);
                         psy_draw_all_db();
                         psy_delay(250);
                         break;
                     case 47:
                         task_trianglepractice.step++;
-                        psy_clear_stimuli1(-1);
+                        psy_add_centered_bitmap_db(egg_white, practiceTable[tablerow].c3, practiceTable[
+                            tablerow].c4, 0);
                         psy_draw_all_db();
                         psy_delay(250);
                         break;
                     case 48:
                         task_trianglepractice.step++;
-                        psy_add_centered_bitmap_db(egg_white, practiceTable[tablerow].c3, practiceTable[
-                            tablerow].c4, 0);
+                        psy_clear_stimuli1(-1);
                         psy_draw_all_db();
                         psy_delay(250);
                         break;
                     case 49:
                         task_trianglepractice.step++;
-                        psy_clear_stimuli1(-1);
-                        psy_draw_all_db();
-                        psy_delay(250);
-                        break;
-                    case 50:
-                        task_trianglepractice.step++;
                         psy_add_centered_bitmap_db(egg_white, practiceTable[tablerow].c3, practiceTable[
                             tablerow].c4, 0);
                         psy_draw_all_db();
                         psy_delay(250);
                         break;
-                    case 51:
+                    case 50:
                         task_trianglepractice.step++;
                         psy_clear_stimuli1(-1);
                         psy_draw_all_db();
                         psy_delay(250);
                         break;
-                    case 52:
+                    case 51:
                         task_trianglepractice.step++;
                         psy_add_centered_bitmap_db(egg_white, practiceTable[tablerow].c3, practiceTable[
                             tablerow].c4, 0);
                         psy_draw_all_db();
                         psy_keyboard(possiblekeys, 2, practiceTable[tablerow].c5 - 1, 9999999);
                         break;
-                    case 53:
+                    case 52:
                         task_trianglepractice.step++;
                         keypressed = practiceTable[tablerow].c5;
                         basketXposition = triangle_x_position;
                         if (!(keystatus.status == 1)) {
-                            task_trianglepractice.step = 55
+                            task_trianglepractice.step = 54
                         };
                         setTimeout("task_trianglepractice.run()", 0);
                         break;
-                    case 54:
+                    case 53:
                         task_trianglepractice.step++;
                         trialCorrect = trialCorrect + 1;
                         tbtresponse = 1;
                         task_trianglepractice.run();
                         break;
-                    case 55:
+                    case 54:
                         task_trianglepractice.step++;
                         if (!(keystatus.status != 1)) {
-                            task_trianglepractice.step = 57
+                            task_trianglepractice.step = 56
                         };
                         setTimeout("task_trianglepractice.run()", 0);
                         break;
-                    case 56:
+                    case 55:
                         task_trianglepractice.step++;
                         points = points - 1;
                         trialIncorrect = trialIncorrect + 1;
                         tbtresponse = 0;
                         task_trianglepractice.run();
                         break;
-                    case 57:
+                    case 56:
                         task_trianglepractice.step++;
                         time = psy_time_since_start();
                         addoutput(current_block.substring(6, current_block.length) + " " + practiceTable[
@@ -2439,32 +2432,32 @@
                             points + " " + left_chicken_x_position + " " + left_chicken_y_position + " " +
                             right_chicken_x_position + " " + right_chicken_y_position + " " + give_feedback);
                         if (!(keystatus.key + 1 == 1)) {
-                            task_trianglepractice.step = 59
+                            task_trianglepractice.step = 58
                         };
                         setTimeout("task_trianglepractice.run()", 0);
                         break;
-                    case 58:
+                    case 57:
                         task_trianglepractice.step++;
                         triangle_x_position = -75;
                         psy_add_centered_bitmap_db(white_chicken, triangle_x_position, 0, 0);
                         psy_draw_all_db();
                         task_trianglepractice.run();
                         break;
-                    case 59:
+                    case 58:
                         task_trianglepractice.step++;
                         if (!(keystatus.key + 1 == 2)) {
-                            task_trianglepractice.step = 61
+                            task_trianglepractice.step = 60
                         };
                         setTimeout("task_trianglepractice.run()", 0);
                         break;
-                    case 60:
+                    case 59:
                         task_trianglepractice.step++;
                         triangle_x_position = 75;
                         psy_add_centered_bitmap_db(white_chicken, triangle_x_position, 0, 0);
                         psy_draw_all_db();
                         task_trianglepractice.run();
                         break;
-                    case 61:
+                    case 60:
                         task_trianglepractice.step++;
                         psy_add_centered_bitmap_db(blue_chicken, -75, 0, 0);
                         psy_draw_all_db();
@@ -2475,11 +2468,7 @@
                         psy_draw_all_db();
                         psy_delay(300);
                         break;
-                    case 62:
-                        task_trianglepractice.step++;
-                        task_trianglepractice.run();
-                        break;
-                    case 63:
+                    case 61:
                         task_trianglepractice.step++;
                         trialCounter = trialCounter + 1;
                         setTimeout(current_block + ".run()", 0);
@@ -2827,82 +2816,75 @@
                         break;
                     case 30:
                         task_triangle.step++;
-                        if (!(trialCounter != correctTrialShow)) {
-                            task_triangle.step = 48
-                        };
-                        setTimeout("task_triangle.run()", 0);
+                        psy_add_centered_bitmap_db(egg_white, myTable[tablerow].c3, myTable[tablerow].c4, 0);
+                        psy_draw_all_db();
+                        psy_delay(250);
                         break;
                     case 31:
                         task_triangle.step++;
-                        psy_add_centered_bitmap_db(egg_white, myTable[tablerow].c3, myTable[tablerow].c4, 0);
+                        psy_clear_stimuli1(-1);
                         psy_draw_all_db();
                         psy_delay(250);
                         break;
                     case 32:
                         task_triangle.step++;
-                        psy_clear_stimuli1(-1);
+                        psy_add_centered_bitmap_db(egg_white, myTable[tablerow].c3, myTable[tablerow].c4, 0);
                         psy_draw_all_db();
                         psy_delay(250);
                         break;
                     case 33:
                         task_triangle.step++;
-                        psy_add_centered_bitmap_db(egg_white, myTable[tablerow].c3, myTable[tablerow].c4, 0);
+                        psy_clear_stimuli1(-1);
                         psy_draw_all_db();
                         psy_delay(250);
                         break;
                     case 34:
                         task_triangle.step++;
-                        psy_clear_stimuli1(-1);
+                        psy_add_centered_bitmap_db(egg_white, myTable[tablerow].c3, myTable[tablerow].c4, 0);
                         psy_draw_all_db();
                         psy_delay(250);
                         break;
                     case 35:
                         task_triangle.step++;
-                        psy_add_centered_bitmap_db(egg_white, myTable[tablerow].c3, myTable[tablerow].c4, 0);
+                        psy_clear_stimuli1(-1);
                         psy_draw_all_db();
                         psy_delay(250);
                         break;
                     case 36:
                         task_triangle.step++;
-                        psy_clear_stimuli1(-1);
-                        psy_draw_all_db();
-                        psy_delay(250);
-                        break;
-                    case 37:
-                        task_triangle.step++;
                         psy_add_centered_bitmap_db(egg_white, myTable[tablerow].c3, myTable[tablerow].c4, 0);
                         psy_draw_all_db();
                         psy_keyboard(possiblekeys, 2, myTable[tablerow].c5 - 1, 9999999);
                         break;
-                    case 38:
+                    case 37:
                         task_triangle.step++;
                         basketXposition = triangle_x_position;
                         if (!(keystatus.status == 1)) {
-                            task_triangle.step = 40
+                            task_triangle.step = 39
                         };
                         setTimeout("task_triangle.run()", 0);
                         break;
-                    case 39:
+                    case 38:
                         task_triangle.step++;
                         trialCorrect = trialCorrect + 1;
                         tbtresponse = 1;
                         task_triangle.run();
                         break;
-                    case 40:
+                    case 39:
                         task_triangle.step++;
                         if (!(keystatus.status != 1)) {
-                            task_triangle.step = 42
+                            task_triangle.step = 41
                         };
                         setTimeout("task_triangle.run()", 0);
                         break;
-                    case 41:
+                    case 40:
                         task_triangle.step++;
                         points = points - 1;
                         trialIncorrect = trialIncorrect + 1;
                         tbtresponse = 0;
                         task_triangle.run();
                         break;
-                    case 42:
+                    case 41:
                         task_triangle.step++;
                         time = psy_time_since_start();
                         addoutput(current_block.substring(6, current_block.length) + " " + myTable[tablerow]
@@ -2912,32 +2894,32 @@
                             " " + left_chicken_y_position + " " + right_chicken_x_position + " " +
                             right_chicken_y_position + " " + give_feedback);
                         if (!(keystatus.key + 1 == 1)) {
-                            task_triangle.step = 44
+                            task_triangle.step = 43
                         };
                         setTimeout("task_triangle.run()", 0);
                         break;
-                    case 43:
+                    case 42:
                         task_triangle.step++;
                         triangle_x_position = -75;
                         psy_add_centered_bitmap_db(white_chicken, triangle_x_position, 0, 0);
                         psy_draw_all_db();
                         task_triangle.run();
                         break;
-                    case 44:
+                    case 43:
                         task_triangle.step++;
                         if (!(keystatus.key + 1 == 2)) {
-                            task_triangle.step = 46
+                            task_triangle.step = 45
                         };
                         setTimeout("task_triangle.run()", 0);
                         break;
-                    case 45:
+                    case 44:
                         task_triangle.step++;
                         triangle_x_position = 75;
                         psy_add_centered_bitmap_db(white_chicken, triangle_x_position, 0, 0);
                         psy_draw_all_db();
                         task_triangle.run();
                         break;
-                    case 46:
+                    case 45:
                         task_triangle.step++;
                         psy_add_centered_bitmap_db(blue_chicken, -75, 0, 0);
                         psy_draw_all_db();
@@ -2947,11 +2929,7 @@
                         psy_draw_all_db();
                         psy_delay(300);
                         break;
-                    case 47:
-                        task_triangle.step++;
-                        task_triangle.run();
-                        break;
-                    case 48:
+                    case 46:
                         task_triangle.step++;
                         trialCounter = trialCounter + 1;
                         setTimeout(current_block + ".run()", 0);
