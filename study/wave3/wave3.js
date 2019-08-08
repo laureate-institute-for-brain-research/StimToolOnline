@@ -584,7 +584,7 @@ function reRoute(con,mkturk_id,response){
 					
 					// If the job is a task, then redirect to their chicken version number
 					if (job == 'task'){
-						response.writeHead(301,{Location : '/?study=wave3&mkturk_id=' + mkturk_id + '&' + job + '=' + name + '&session=' + session + '&pattern=' + chicken_version + '&type=estimate' });
+						response.writeHead(301,{Location : '/?study=wave3&mkturk_id=' + mkturk_id + '&' + job + '=' + name + '&session=' + session + '&pattern=' + chicken_version + '&type=predict_2' });
 						response.end();
 					}
 
