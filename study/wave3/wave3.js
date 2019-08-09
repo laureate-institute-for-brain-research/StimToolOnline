@@ -74,7 +74,7 @@ module.exports = {
 		});
 
 		// Get the Chicken Task Version given the MTurk id
-		app.get('/getChickenTaskVersion', function (req, res){
+		app.get('/getChickenTaskVersion3', function (req, res){
 			var q = url.parse(req.url, true).query;
 			//console.log('getting version number')
 			// var session = q.session;

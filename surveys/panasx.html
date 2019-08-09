@@ -1705,11 +1705,19 @@
         var surveyname = getQueryVariable('survey');
 
         var chickenVersion = ''
-        if ( (getQueryVariable('study') == 'wave2') || (getQueryVariable('study') == 'wave3') ){
+        if ( getQueryVariable('study') == 'wave2' ){
             $.get('/getChickenTaskVersion?&mkturk_id=' + mkturkid + '&study=' + study, function(data) {
                 chickenVersion = data;
             }); 
         }
+
+        if ( getQueryVariable('study') == 'wave3'){
+            $.get('/getChickenTaskVersion3?&mkturk_id=' + mkturkid + '&study=' + study, function(data) {
+                chickenVersion = data;
+            }); 
+        }
+
+     
 
         
 
