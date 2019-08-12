@@ -601,7 +601,7 @@ app.post('/saveChickenTask/', function(req, res) {
 	data = req.body; // json input
 	content = data.content;  
 	var head1 = "Version," + q.version + "," + "Pattern," + pattern + ",Type," + type + ",Orginal_File_Name,"+ 'CT-' + mkturk_id + '-T' + session + '.csv,'+ 'IP,' + ipaddr + ",Time,"+file_date+ ',chicken_left_x,-75,chicken_left_y,0,chicken_right_x,75,chicken_right_y,0,block1_sigma,110,block1_hazard,0.05,block2_sigma,160,block2_hazard,0.05,block3_sigma,110,block3_hazard,0.95,block4_sigma,160,block4_hazard,0.95' + ",Parameter_File,None:FromPsyToolkit" + ',UserAGENT,' + '\"' + req.headers['user-agent'].replace(' ','_') + '\"\n'
-    var head2 = "trial_type,trial_number,block_num,egg_x_position,egg_y_position,absolute_time_sec,response_time_sec,response,result,correct_response,points,left_chicken_x_position,left_chicken_y_position,right_chicken_x_position,right_chicken_y_position,give_feedback\n"
+    var head2 = "trial_type,trial_number,block_num,egg_x_position,egg_y_position,absolute_time_sec,response_time_sec,response,current_chicken,next_chicken,correct,points,left_chicken_x_position,left_chicken_y_position,right_chicken_x_position,right_chicken_y_position,give_feedback\n"
 
 	var filename = 'data/' + study + '/tasks/'+ study + '-CT-' + mkturk_id + '-' + 'T' + session + '.csv'
 	fs.writeFile(filename, head1 + head2 + content, (err) => {

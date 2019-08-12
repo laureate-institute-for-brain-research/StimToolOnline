@@ -1574,6 +1574,9 @@
         var sigma_high_yellow = 78;
         var background_sigma_110 = 79;
         var background_sigma_160 = 80;
+        var green_check = 81;
+        var error = 82;
+        var next_egg_text = 83;
         var mainfont = 0;
         var mysmallfont = 1;
         var practiceTrial = 0;
@@ -1588,7 +1591,7 @@
         var left_chicken_y_position = 0;
         var right_chicken_x_position = 75;
         var right_chicken_y_position = 0;
-        var give_feedback = 1;
+        var give_feedback = 0;
         var points = 0;
         var pointsPractice = 0;
         var soundoption = 0;
@@ -1617,12 +1620,19 @@
         var lastOneEggYPosition = 0;
         var lastEggXPosition = 0;
         var lastEggYPosition = 0;
+        var lastFiveStatus = 0;
+        var lastFourStatus = 0;
+        var lastThreeStatus = 0;
+        var lastTwoStatus = 0;
+        var lastOneStatus = 0;
         var lastFourKeyPressed = 0;
         var lastThreeKeyPressed = 0;
         var lastTwoKeyPressed = 0;
         var lastOneKeyPressed = 0;
         var keypressed = 0;
         var time = 0;
+        var correct_map = 0;
+        var lastStatus = 0;
         var multiplier = 0;
         var accuracy = 0;
         var percentAccuracy = 0;
@@ -1633,7 +1643,7 @@
         var general_trial_counter = 0;
         var selectedoncecount_table_myTable = 0;
 
-        function myTabletype(x1, x2, x3, x4, x5, x6, x7, x8, xselected) {
+        function myTabletype(x1, x2, x3, x4, x5, x6, x7, x8, x9, xselected) {
             this.c1 = x1;
             this.c2 = x2;
             this.c3 = x3;
@@ -1642,236 +1652,248 @@
             this.c6 = x6;
             this.c7 = x7;
             this.c8 = x8;
+            this.c9 = x9;
             this.selected = xselected
         }
-        var myTable = [new myTabletype(1, 1, 146, 169, 1, "MAIN", 0, 0, 0), new myTabletype(2, 1, -143, -58, 1, "MAIN",
-                0, 0, 0), new myTabletype(3, 1, 153, -54, 1, "MAIN", 0, 0, 0), new myTabletype(4, 1, 361, -144, 1,
-                "MAIN", 0, 0, 0), new myTabletype(5, 1, 72, -1, 1, "MAIN", 0, 0, 0), new myTabletype(6, 1, 79, 107,
-                1, "MAIN", 0, 0, 0), new myTabletype(7, 1, 95, -193, 1, "MAIN", 0, 0, 0), new myTabletype(8, 1, -
-                130, -73, 1, "MAIN", 0, 0, 0), new myTabletype(9, 1, 122, 4, 1, "MAIN", 0, 0, 0), new myTabletype(
-                10, 1, -102, 94, 1, "MAIN", 0, 0, 0), new myTabletype(11, 1, 28, 42, 1, "MAIN", 0, 0, 0),
-            new myTabletype(12, 1, 212, 36, 1, "MAIN", 0, 0, 0), new myTabletype(13, 1, -6, -25, 1, "MAIN", 0, 0,
-            0), new myTabletype(14, 1, 130, 53, 1, "MAIN", 0, 0, 0), new myTabletype(15, 1, 186, 112, 1, "MAIN", 0,
-                0, 0), new myTabletype(16, 1, 106, -188, 1, "MAIN", 0, 0, 0), new myTabletype(17, 1, -76, 80, 1,
-                "MAIN", 0, 0, 0), new myTabletype(18, 1, 38, -11, 1, "MAIN", 0, 0, 0), new myTabletype(19, 1, 291, -
-                58, 2, "MAIN", 0, 0, 0), new myTabletype(20, 1, -194, -269, 2, "MAIN", 0, 0, 0), new myTabletype(21,
-                1, 35, -152, 2, "MAIN", 0, 0, 0), new myTabletype(22, 1, -44, 187, 2, "MAIN", 0, 0, 0),
-            new myTabletype(23, 1, -241, -76, 2, "MAIN", 0, 0, 0), new myTabletype(24, 1, -139, -119, 1, "MAIN", 0,
-                0, 0), new myTabletype(25, 1, -148, -50, 1, "MAIN", 0, 0, 0), new myTabletype(26, 1, 45, -82, 1,
-                "MAIN", 0, 0, 0), new myTabletype(27, 1, 14, 14, 1, "MAIN", 0, 0, 0), new myTabletype(28, 1, 88,
-                167, 1, "MAIN", 0, 0, 0), new myTabletype(29, 1, 157, -65, 1, "MAIN", 0, 0, 0), new myTabletype(30,
-                1, 252, 17, 1, "MAIN", 0, 0, 0), new myTabletype(31, 1, 45, -126, 1, "MAIN", 0, 0, 0),
-            new myTabletype(32, 1, 164, 167, 1, "MAIN", 0, 0, 0), new myTabletype(33, 1, 130, 21, 1, "MAIN", 0, 0,
-                0), new myTabletype(34, 1, 127, -119, 1, "MAIN", 0, 0, 0), new myTabletype(35, 1, 13, 99, 1, "MAIN",
-                0, 0, 0), new myTabletype(36, 1, -35, 132, 1, "MAIN", 0, 0, 0), new myTabletype(37, 1, -46, 18, 1,
-                "MAIN", 0, 0, 0), new myTabletype(38, 1, -8, -180, 1, "MAIN", 0, 0, 0), new myTabletype(39, 1, 110,
-                196, 1, "MAIN", 0, 0, 0), new myTabletype(40, 1, 159, 34, 1, "MAIN", 0, 0, 0), new myTabletype(41,
-                1, 111, 129, 1, "MAIN", 0, 0, 0), new myTabletype(42, 1, 15, -61, 1, "MAIN", 0, 0, 0),
-            new myTabletype(43, 1, 274, -44, 1, "MAIN", 0, 0, 0), new myTabletype(44, 1, 242, 12, 1, "MAIN", 0, 0,
-                0), new myTabletype(45, 1, 36, 122, 1, "MAIN", 0, 0, 0), new myTabletype(46, 1, -16, 16, 1, "MAIN",
-                0, 0, 0), new myTabletype(47, 1, 89, -138, 1, "MAIN", 0, 0, 0), new myTabletype(48, 1, 214, 29, 1,
-                "MAIN", 0, 0, 0), new myTabletype(49, 1, 112, 179, 1, "MAIN", 0, 0, 0), new myTabletype(50, 1, 136,
-                7, 1, "MAIN", 0, 0, 0), new myTabletype(51, 1, 52, 14, 1, "MAIN", 0, 0, 0), new myTabletype(52, 1,
-                125, -139, 1, "MAIN", 0, 0, 0), new myTabletype(53, 1, 245, -154, 1, "MAIN", 0, 0, 0),
-            new myTabletype(54, 1, 49, -70, 1, "MAIN", 0, 0, 0), new myTabletype(55, 1, 91, -36, 1, "MAIN", 0, 0,
-            0), new myTabletype(56, 1, 103, 11, 1, "MAIN", 0, 0, 0), new myTabletype(57, 1, 106, 18, 1, "MAIN", 0,
-                0, 0), new myTabletype(58, 1, -80, 176, 1, "MAIN", 0, 0, 0), new myTabletype(59, 1, -131, 6, 1,
-                "MAIN", 0, 0, 0), new myTabletype(60, 1, -37, 117, 1, "MAIN", 0, 0, 0), new myTabletype(61, 1, 93, -
-                4, 1, "MAIN", 0, 0, 0), new myTabletype(62, 1, 136, 159, 1, "MAIN", 0, 0, 0), new myTabletype(63, 1,
-                17, -206, 1, "MAIN", 0, 0, 0), new myTabletype(64, 1, 226, -66, 1, "MAIN", 0, 0, 0),
-            new myTabletype(65, 1, 59, 108, 1, "MAIN", 0, 0, 0), new myTabletype(66, 1, 77, -19, 1, "MAIN", 0, 0,
-            0), new myTabletype(67, 1, 54, 102, 1, "MAIN", 0, 0, 0), new myTabletype(68, 1, 90, 42, 1, "MAIN", 0, 0,
-                0), new myTabletype(69, 1, 152, 104, 1, "MAIN", 0, 0, 0), new myTabletype(70, 1, 148, 67, 1, "MAIN",
-                0, 0, 0), new myTabletype(71, 1, -24, 74, 1, "MAIN", 0, 0, 0), new myTabletype(72, 1, 243, 164, 1,
-                "MAIN", 0, 0, 0), new myTabletype(73, 1, -45, 109, 1, "MAIN", 0, 0, 0), new myTabletype(74, 1, 84,
-                109, 1, "MAIN", 0, 0, 0), new myTabletype(75, 1, 45, 2, 2, "MAIN", 0, 0, 0), new myTabletype(76, 1,
-                107, -64, 2, "MAIN", 0, 0, 0), new myTabletype(77, 1, -342, -73, 2, "MAIN", 0, 0, 0),
-            new myTabletype(78, 1, -122, 83, 2, "MAIN", 0, 0, 0), new myTabletype(79, 1, 64, -268, 2, "MAIN", 0, 0,
-                0), new myTabletype(80, 1, -170, -144, 2, "MAIN", 0, 0, 0), new myTabletype(81, 1, -150, -106, 2,
-                "MAIN", 0, 0, 0), new myTabletype(82, 1, -85, -27, 2, "MAIN", 0, 0, 0), new myTabletype(83, 1, 89, -
-                289, 2, "MAIN", 0, 0, 0), new myTabletype(84, 1, -145, 138, 2, "MAIN", 0, 0, 0), new myTabletype(85,
-                1, -124, 66, 2, "MAIN", 0, 0, 0), new myTabletype(86, 1, -123, 218, 1, "MAIN", 0, 0, 0),
-            new myTabletype(87, 1, -40, 117, 1, "MAIN", 0, 0, 0), new myTabletype(88, 1, 67, 113, 1, "MAIN", 0, 0,
-                0), new myTabletype(89, 1, -6, 248, 1, "MAIN", 0, 0, 0), new myTabletype(90, 1, 83, -63, 1, "MAIN",
-                0, 0, 0), new myTabletype(91, 1, 119, -165, 1, "MAIN", 0, 0, 0), new myTabletype(92, 1, 237, -26, 1,
-                "MAIN", 0, 0, 0), new myTabletype(93, 1, 109, -91, 1, "MAIN", 0, 0, 0), new myTabletype(94, 1, 8, -
-                28, 2, "MAIN", 0, 0, 0), new myTabletype(95, 1, 168, -116, 2, "MAIN", 0, 0, 0), new myTabletype(96,
-                1, 166, 62, 2, "MAIN", 0, 0, 0), new myTabletype(97, 1, 35, 56, 2, "MAIN", 0, 0, 0),
-            new myTabletype(98, 1, -33, -3, 2, "MAIN", 0, 0, 0), new myTabletype(99, 1, 6, 34, 2, "MAIN", 0, 0, 0),
-            new myTabletype(100, 1, 89, -16, 1, "MAIN", 0, 0, 0), new myTabletype(101, 3, -157, 109, 1, "MAIN", 0,
-                0, 0), new myTabletype(102, 3, 4, 31, 2, "MAIN", 0, 0, 0), new myTabletype(103, 3, -13, 84, 1,
-                "MAIN", 0, 0, 0), new myTabletype(104, 3, 248, 49, 2, "MAIN", 0, 0, 0), new myTabletype(105, 3, 4,
-                71, 1, "MAIN", 0, 0, 0), new myTabletype(106, 3, 158, -5, 2, "MAIN", 0, 0, 0), new myTabletype(107,
-                3, -185, 24, 1, "MAIN", 0, 0, 0), new myTabletype(108, 3, 106, -30, 2, "MAIN", 0, 0, 0),
-            new myTabletype(109, 3, -23, 66, 1, "MAIN", 0, 0, 0), new myTabletype(110, 3, 98, -148, 2, "MAIN", 0, 0,
-                0), new myTabletype(111, 3, -281, 80, 1, "MAIN", 0, 0, 0), new myTabletype(112, 3, 87, 110, 2,
-                "MAIN", 0, 0, 0), new myTabletype(113, 3, -97, 82, 1, "MAIN", 0, 0, 0), new myTabletype(114, 3, 125,
-                -11, 2, "MAIN", 0, 0, 0), new myTabletype(115, 3, -200, 56, 1, "MAIN", 0, 0, 0), new myTabletype(
-                116, 3, 8, -85, 2, "MAIN", 0, 0, 0), new myTabletype(117, 3, -164, 92, 2, "MAIN", 0, 0, 0),
-            new myTabletype(118, 3, -215, -121, 1, "MAIN", 0, 0, 0), new myTabletype(119, 3, 243, 65, 2, "MAIN", 0,
-                0, 0), new myTabletype(120, 3, -14, 59, 1, "MAIN", 0, 0, 0), new myTabletype(121, 3, 92, 45, 2,
-                "MAIN", 0, 0, 0), new myTabletype(122, 3, -14, -49, 1, "MAIN", 0, 0, 0), new myTabletype(123, 3,
-                141, 84, 2, "MAIN", 0, 0, 0), new myTabletype(124, 3, -151, -202, 1, "MAIN", 0, 0, 0),
-            new myTabletype(125, 3, 27, 85, 2, "MAIN", 0, 0, 0), new myTabletype(126, 3, -34, 21, 1, "MAIN", 0, 0,
-                0), new myTabletype(127, 3, 116, 116, 2, "MAIN", 0, 0, 0), new myTabletype(128, 3, -46, 22, 1,
-                "MAIN", 0, 0, 0), new myTabletype(129, 3, -176, 202, 2, "MAIN", 0, 0, 0), new myTabletype(130, 3, -
-                89, -104, 1, "MAIN", 0, 0, 0), new myTabletype(131, 3, -48, 67, 2, "MAIN", 0, 0, 0),
-            new myTabletype(132, 3, 162, -97, 1, "MAIN", 0, 0, 0), new myTabletype(133, 3, 72, -14, 2, "MAIN", 0, 0,
-                0), new myTabletype(134, 3, -167, 82, 1, "MAIN", 0, 0, 0), new myTabletype(135, 3, -70, 69, 2,
-                "MAIN", 0, 0, 0), new myTabletype(136, 3, -73, 229, 1, "MAIN", 0, 0, 0), new myTabletype(137, 3,
-                343, -39, 2, "MAIN", 0, 0, 0), new myTabletype(138, 3, -117, 141, 1, "MAIN", 0, 0, 0),
-            new myTabletype(139, 3, -108, -28, 2, "MAIN", 0, 0, 0), new myTabletype(140, 3, -116, -77, 1, "MAIN", 0,
-                0, 0), new myTabletype(141, 3, 113, -179, 1, "MAIN", 0, 0, 0), new myTabletype(142, 3, 257, 18, 2,
-                "MAIN", 0, 0, 0), new myTabletype(143, 3, -57, -57, 1, "MAIN", 0, 0, 0), new myTabletype(144, 3,
-                128, 93, 2, "MAIN", 0, 0, 0), new myTabletype(145, 3, -107, -58, 1, "MAIN", 0, 0, 0),
-            new myTabletype(146, 3, 41, -52, 2, "MAIN", 0, 0, 0), new myTabletype(147, 3, -170, 39, 1, "MAIN", 0, 0,
-                0), new myTabletype(148, 3, 14, 189, 2, "MAIN", 0, 0, 0), new myTabletype(149, 3, -61, -120, 1,
-                "MAIN", 0, 0, 0), new myTabletype(150, 3, 149, 112, 2, "MAIN", 0, 0, 0), new myTabletype(151, 3, 55,
-                96, 2, "MAIN", 0, 0, 0), new myTabletype(152, 3, 29, -24, 1, "MAIN", 0, 0, 0), new myTabletype(153,
-                3, -13, 74, 2, "MAIN", 0, 0, 0), new myTabletype(154, 3, -53, -31, 1, "MAIN", 0, 0, 0),
-            new myTabletype(155, 3, 62, 261, 2, "MAIN", 0, 0, 0), new myTabletype(156, 3, -156, -12, 1, "MAIN", 0,
-                0, 0), new myTabletype(157, 3, 151, 9, 2, "MAIN", 0, 0, 0), new myTabletype(158, 3, -54, -36, 1,
-                "MAIN", 0, 0, 0), new myTabletype(159, 3, 41, -186, 2, "MAIN", 0, 0, 0), new myTabletype(160, 3, 44,
-                -29, 1, "MAIN", 0, 0, 0), new myTabletype(161, 3, 85, 26, 2, "MAIN", 0, 0, 0), new myTabletype(162,
-                3, 56, 165, 1, "MAIN", 0, 0, 0), new myTabletype(163, 3, 42, 54, 2, "MAIN", 0, 0, 0),
-            new myTabletype(164, 3, -35, -21, 1, "MAIN", 0, 0, 0), new myTabletype(165, 3, -32, 7, 2, "MAIN", 0, 0,
-                0), new myTabletype(166, 3, -115, 36, 1, "MAIN", 0, 0, 0), new myTabletype(167, 3, 206, -42, 1,
-                "MAIN", 0, 0, 0), new myTabletype(168, 3, 228, 75, 2, "MAIN", 0, 0, 0), new myTabletype(169, 3, -97,
-                179, 1, "MAIN", 0, 0, 0), new myTabletype(170, 3, 40, -40, 2, "MAIN", 0, 0, 0), new myTabletype(171,
-                3, 10, 133, 1, "MAIN", 0, 0, 0), new myTabletype(172, 3, 46, 96, 2, "MAIN", 0, 0, 0),
-            new myTabletype(173, 3, 1, 59, 1, "MAIN", 0, 0, 0), new myTabletype(174, 3, 55, 12, 2, "MAIN", 0, 0, 0),
-            new myTabletype(175, 3, -268, 37, 2, "MAIN", 0, 0, 0), new myTabletype(176, 3, -3, -24, 1, "MAIN", 0, 0,
-                0), new myTabletype(177, 3, 134, 202, 2, "MAIN", 0, 0, 0), new myTabletype(178, 3, 3, -79, 1,
-                "MAIN", 0, 0, 0), new myTabletype(179, 3, -25, 125, 2, "MAIN", 0, 0, 0), new myTabletype(180, 3, -
-                173, 170, 1, "MAIN", 0, 0, 0), new myTabletype(181, 3, 65, -36, 2, "MAIN", 0, 0, 0),
-            new myTabletype(182, 3, -159, 128, 1, "MAIN", 0, 0, 0), new myTabletype(183, 3, 104, 16, 2, "MAIN", 0,
-                0, 0), new myTabletype(184, 3, -158, 7, 1, "MAIN", 0, 0, 0), new myTabletype(185, 3, 146, -8, 2,
-                "MAIN", 0, 0, 0), new myTabletype(186, 3, -150, -178, 1, "MAIN", 0, 0, 0), new myTabletype(187, 3, -
-                231, 60, 2, "MAIN", 0, 0, 0), new myTabletype(188, 3, -231, 159, 1, "MAIN", 0, 0, 0),
-            new myTabletype(189, 3, 119, -78, 2, "MAIN", 0, 0, 0), new myTabletype(190, 3, -41, 93, 1, "MAIN", 0, 0,
-                0), new myTabletype(191, 3, 113, -9, 2, "MAIN", 0, 0, 0), new myTabletype(192, 3, -161, -120, 1,
-                "MAIN", 0, 0, 0), new myTabletype(193, 3, 186, 110, 2, "MAIN", 0, 0, 0), new myTabletype(194, 3, -
-                83, 185, 1, "MAIN", 0, 0, 0), new myTabletype(195, 3, 17, -87, 2, "MAIN", 0, 0, 0), new myTabletype(
-                196, 3, -130, 24, 1, "MAIN", 0, 0, 0), new myTabletype(197, 3, 18, -158, 2, "MAIN", 0, 0, 0),
-            new myTabletype(198, 3, -47, -5, 1, "MAIN", 0, 0, 0), new myTabletype(199, 3, 207, 53, 2, "MAIN", 0, 0,
-                0), new myTabletype(200, 3, -186, 193, 1, "MAIN", 0, 0, 0), new myTabletype(201, 2, 45, 88, 2,
-                "MAIN", 0, 0, 0), new myTabletype(202, 2, -64, 67, 2, "MAIN", 0, 0, 0), new myTabletype(203, 2, -
-                117, 291, 2, "MAIN", 0, 0, 0), new myTabletype(204, 2, 74, -40, 2, "MAIN", 0, 0, 0),
-            new myTabletype(205, 2, 127, -47, 2, "MAIN", 0, 0, 0), new myTabletype(206, 2, 139, -19, 2, "MAIN", 0,
-                0, 0), new myTabletype(207, 2, -233, -16, 2, "MAIN", 0, 0, 0), new myTabletype(208, 2, -161, -364,
-                2, "MAIN", 0, 0, 0), new myTabletype(209, 2, -347, -103, 2, "MAIN", 0, 0, 0), new myTabletype(210,
-                2, -113, 48, 2, "MAIN", 0, 0, 0), new myTabletype(211, 2, -8, -1, 2, "MAIN", 0, 0, 0),
-            new myTabletype(212, 2, -96, -128, 1, "MAIN", 0, 0, 0), new myTabletype(213, 2, 258, -106, 1, "MAIN", 0,
-                0, 0), new myTabletype(214, 2, -51, -57, 1, "MAIN", 0, 0, 0), new myTabletype(215, 2, 117, -128, 1,
-                "MAIN", 0, 0, 0), new myTabletype(216, 2, 15, -82, 1, "MAIN", 0, 0, 0), new myTabletype(217, 2, 263,
-                -86, 1, "MAIN", 0, 0, 0), new myTabletype(218, 2, 123, 143, 1, "MAIN", 0, 0, 0), new myTabletype(
-                219, 2, 388, 163, 1, "MAIN", 0, 0, 0), new myTabletype(220, 2, -98, 149, 2, "MAIN", 0, 0, 0),
-            new myTabletype(221, 2, 234, 68, 2, "MAIN", 0, 0, 0), new myTabletype(222, 2, -140, -113, 2, "MAIN", 0,
-                0, 0), new myTabletype(223, 2, -249, 154, 2, "MAIN", 0, 0, 0), new myTabletype(224, 2, 16, -50, 2,
-                "MAIN", 0, 0, 0), new myTabletype(225, 2, -51, 4, 2, "MAIN", 0, 0, 0), new myTabletype(226, 2, 13,
-                214, 2, "MAIN", 0, 0, 0), new myTabletype(227, 2, -26, 13, 2, "MAIN", 0, 0, 0), new myTabletype(228,
-                2, -36, 40, 2, "MAIN", 0, 0, 0), new myTabletype(229, 2, -415, -226, 2, "MAIN", 0, 0, 0),
-            new myTabletype(230, 2, -191, 78, 2, "MAIN", 0, 0, 0), new myTabletype(231, 2, -169, -157, 2, "MAIN", 0,
-                0, 0), new myTabletype(232, 2, -131, 162, 2, "MAIN", 0, 0, 0), new myTabletype(233, 2, -147, -30, 2,
-                "MAIN", 0, 0, 0), new myTabletype(234, 2, -9, -358, 2, "MAIN", 0, 0, 0), new myTabletype(235, 2, 21,
-                -57, 2, "MAIN", 0, 0, 0), new myTabletype(236, 2, -256, -36, 2, "MAIN", 0, 0, 0), new myTabletype(
-                237, 2, 35, 78, 2, "MAIN", 0, 0, 0), new myTabletype(238, 2, 19, 107, 2, "MAIN", 0, 0, 0),
-            new myTabletype(239, 2, 1, -52, 2, "MAIN", 0, 0, 0), new myTabletype(240, 2, -302, 162, 2, "MAIN", 0, 0,
-                0), new myTabletype(241, 2, -5, -380, 2, "MAIN", 0, 1, 0), new myTabletype(242, 2, -62, -114, 2,
-                "MAIN", 0, 0, 0), new myTabletype(243, 2, 79, -178, 2, "MAIN", 0, 0, 0), new myTabletype(244, 2,
-                210, -201, 2, "MAIN", 0, 0, 0), new myTabletype(245, 2, 179, 154, 1, "MAIN", 0, 0, 0),
-            new myTabletype(246, 2, 141, 133, 1, "MAIN", 0, 0, 0), new myTabletype(247, 2, 83, -124, 1, "MAIN", 0,
-                0, 0), new myTabletype(248, 2, 120, 188, 1, "MAIN", 0, 0, 0), new myTabletype(249, 2, 330, 16, 1,
-                "MAIN", 0, 0, 0), new myTabletype(250, 2, 169, -67, 1, "MAIN", 0, 0, 0), new myTabletype(251, 2, -
-                109, -111, 1, "MAIN", 0, 0, 0), new myTabletype(252, 2, 160, -125, 1, "MAIN", 0, 0, 0),
-            new myTabletype(253, 2, 9, 76, 1, "MAIN", 0, 0, 0), new myTabletype(254, 2, -1, 104, 1, "MAIN", 0, 0,
-            0), new myTabletype(255, 2, 242, 38, 1, "MAIN", 0, 0, 0), new myTabletype(256, 2, -21, -328, 1, "MAIN",
-                0, 0, 0), new myTabletype(257, 2, 14, 47, 1, "MAIN", 0, 0, 0), new myTabletype(258, 2, 80, 90, 1,
-                "MAIN", 0, 0, 0), new myTabletype(259, 2, 226, -107, 1, "MAIN", 0, 0, 0), new myTabletype(260, 2,
-                168, 7, 1, "MAIN", 0, 0, 0), new myTabletype(261, 2, 37, -298, 2, "MAIN", 0, 0, 0), new myTabletype(
-                262, 2, -57, -197, 2, "MAIN", 0, 0, 0), new myTabletype(263, 2, -75, -52, 2, "MAIN", 0, 0, 0),
-            new myTabletype(264, 2, 26, -50, 2, "MAIN", 0, 0, 0), new myTabletype(265, 2, -253, 56, 2, "MAIN", 0, 0,
-                0), new myTabletype(266, 2, -307, -190, 2, "MAIN", 0, 0, 0), new myTabletype(267, 2, -151, -55, 2,
-                "MAIN", 0, 0, 0), new myTabletype(268, 2, 120, -78, 2, "MAIN", 0, 0, 0), new myTabletype(269, 2, -
-                128, 84, 2, "MAIN", 0, 0, 0), new myTabletype(270, 2, 165, 227, 2, "MAIN", 0, 0, 0),
-            new myTabletype(271, 2, -521, 275, 2, "MAIN", 0, 0, 0), new myTabletype(272, 2, -329, -251, 2, "MAIN",
-                0, 0, 0), new myTabletype(273, 2, -95, -8, 2, "MAIN", 0, 0, 0), new myTabletype(274, 2, 67, -178, 2,
-                "MAIN", 0, 0, 0), new myTabletype(275, 2, -86, -10, 2, "MAIN", 0, 0, 0), new myTabletype(276, 2, -
-                90, 68, 2, "MAIN", 0, 0, 0), new myTabletype(277, 2, -94, 13, 2, "MAIN", 0, 0, 0), new myTabletype(
-                278, 2, -357, -8, 2, "MAIN", 0, 0, 0), new myTabletype(279, 2, 110, 237, 2, "MAIN", 0, 0, 0),
-            new myTabletype(280, 2, -184, 115, 2, "MAIN", 0, 0, 0), new myTabletype(281, 2, 99, -44, 2, "MAIN", 0,
-                0, 0), new myTabletype(282, 2, -86, 4, 2, "MAIN", 0, 0, 0), new myTabletype(283, 2, 96, 139, 2,
-                "MAIN", 0, 0, 0), new myTabletype(284, 2, -20, 98, 2, "MAIN", 0, 0, 0), new myTabletype(285, 2, -92,
-                -68, 1, "MAIN", 0, 0, 0), new myTabletype(286, 2, 31, -284, 1, "MAIN", 0, 0, 0), new myTabletype(
-                287, 2, -111, -190, 1, "MAIN", 0, 0, 0), new myTabletype(288, 2, -47, 23, 1, "MAIN", 0, 0, 0),
-            new myTabletype(289, 2, -30, -286, 1, "MAIN", 0, 0, 0), new myTabletype(290, 2, 51, -24, 1, "MAIN", 0,
-                0, 0), new myTabletype(291, 2, 393, -73, 1, "MAIN", 0, 0, 0), new myTabletype(292, 2, -33, 160, 1,
-                "MAIN", 0, 0, 0), new myTabletype(293, 2, 28, -211, 1, "MAIN", 0, 0, 0), new myTabletype(294, 2, -
-                253, -309, 1, "MAIN", 0, 0, 0), new myTabletype(295, 2, 171, -67, 1, "MAIN", 0, 0, 0),
-            new myTabletype(296, 2, -177, 102, 1, "MAIN", 0, 0, 0), new myTabletype(297, 2, -70, 171, 1, "MAIN", 0,
-                0, 0), new myTabletype(298, 2, 242, -145, 1, "MAIN", 0, 0, 0), new myTabletype(299, 2, -262, 75, 1,
-                "MAIN", 0, 0, 0), new myTabletype(300, 2, 90, -178, 1, "MAIN", 0, 0, 0), new myTabletype(301, 4, -
-                13, 22, 2, "MAIN", 0, 0, 0), new myTabletype(302, 4, 174, 4, 1, "MAIN", 0, 0, 0), new myTabletype(
-                303, 4, 245, -31, 2, "MAIN", 0, 0, 0), new myTabletype(304, 4, 188, 210, 1, "MAIN", 0, 0, 0),
-            new myTabletype(305, 4, -9, 190, 2, "MAIN", 0, 0, 0), new myTabletype(306, 4, -159, 23, 1, "MAIN", 0, 0,
-                0), new myTabletype(307, 4, 162, -137, 2, "MAIN", 0, 0, 0), new myTabletype(308, 4, -114, -188, 1,
-                "MAIN", 0, 0, 0), new myTabletype(309, 4, -16, 46, 1, "MAIN", 0, 0, 0), new myTabletype(310, 4, 130,
-                -102, 2, "MAIN", 0, 0, 0), new myTabletype(311, 4, -341, 76, 1, "MAIN", 0, 0, 0), new myTabletype(
-                312, 4, 160, -62, 2, "MAIN", 0, 0, 0), new myTabletype(313, 4, -189, 124, 1, "MAIN", 0, 0, 0),
-            new myTabletype(314, 4, 233, 33, 2, "MAIN", 0, 0, 0), new myTabletype(315, 4, -307, 160, 1, "MAIN", 0,
-                0, 0), new myTabletype(316, 4, 304, -357, 2, "MAIN", 0, 0, 0), new myTabletype(317, 4, -17, -36, 1,
-                "MAIN", 0, 0, 0), new myTabletype(318, 4, 285, 355, 2, "MAIN", 0, 0, 0), new myTabletype(319, 4, -
-                187, -380, 1, "MAIN", 0, 1, 0), new myTabletype(320, 4, -10, 135, 2, "MAIN", 0, 0, 0),
-            new myTabletype(321, 4, -251, 67, 1, "MAIN", 0, 0, 0), new myTabletype(322, 4, 51, 206, 2, "MAIN", 0, 0,
-                0), new myTabletype(323, 4, -132, -28, 2, "MAIN", 0, 0, 0), new myTabletype(324, 4, -265, 190, 1,
-                "MAIN", 0, 0, 0), new myTabletype(325, 4, -113, 195, 2, "MAIN", 0, 0, 0), new myTabletype(326, 4, -
-                26, 31, 2, "MAIN", 0, 0, 0), new myTabletype(327, 4, -29, -186, 1, "MAIN", 0, 0, 0),
-            new myTabletype(328, 4, 37, 146, 2, "MAIN", 0, 0, 0), new myTabletype(329, 4, -126, -156, 1, "MAIN", 0,
-                0, 0), new myTabletype(330, 4, 79, -22, 2, "MAIN", 0, 0, 0), new myTabletype(331, 4, -192, 152, 1,
-                "MAIN", 0, 0, 0), new myTabletype(332, 4, 10, 175, 2, "MAIN", 0, 0, 0), new myTabletype(333, 4, -
-                289, -56, 1, "MAIN", 0, 0, 0), new myTabletype(334, 4, -6, 100, 2, "MAIN", 0, 0, 0),
-            new myTabletype(335, 4, 14, -247, 1, "MAIN", 0, 0, 0), new myTabletype(336, 4, 240, -76, 2, "MAIN", 0,
-                0, 0), new myTabletype(337, 4, -38, 235, 1, "MAIN", 0, 0, 0), new myTabletype(338, 4, 220, 215, 2,
-                "MAIN", 0, 0, 0), new myTabletype(339, 4, -1, 107, 1, "MAIN", 0, 0, 0), new myTabletype(340, 4, 139,
-                -23, 1, "MAIN", 0, 0, 0), new myTabletype(341, 4, -129, 136, 2, "MAIN", 0, 0, 0), new myTabletype(
-                342, 4, -124, -4, 1, "MAIN", 0, 0, 0), new myTabletype(343, 4, 107, 27, 2, "MAIN", 0, 0, 0),
-            new myTabletype(344, 4, -110, 14, 1, "MAIN", 0, 0, 0), new myTabletype(345, 4, 14, -124, 2, "MAIN", 0,
-                0, 0), new myTabletype(346, 4, 156, 116, 1, "MAIN", 0, 0, 0), new myTabletype(347, 4, 286, -171, 2,
-                "MAIN", 0, 0, 0), new myTabletype(348, 4, -171, 124, 1, "MAIN", 0, 0, 0), new myTabletype(349, 4, -
-                213, -154, 2, "MAIN", 0, 0, 0), new myTabletype(350, 4, -125, -116, 1, "MAIN", 0, 0, 0),
-            new myTabletype(351, 4, -14, -380, 2, "MAIN", 0, 1, 0), new myTabletype(352, 4, 44, -25, 1, "MAIN", 0,
-                0, 0), new myTabletype(353, 4, -19, 30, 2, "MAIN", 0, 0, 0), new myTabletype(354, 4, -27, 132, 1,
-                "MAIN", 0, 0, 0), new myTabletype(355, 4, 1, 210, 2, "MAIN", 0, 0, 0), new myTabletype(356, 4, -402,
-                -238, 1, "MAIN", 0, 0, 0), new myTabletype(357, 4, 228, 158, 2, "MAIN", 0, 0, 0), new myTabletype(
-                358, 4, -345, -74, 1, "MAIN", 0, 0, 0), new myTabletype(359, 4, -301, -12, 2, "MAIN", 0, 0, 0),
-            new myTabletype(360, 4, -181, -17, 1, "MAIN", 0, 0, 0), new myTabletype(361, 4, 42, -72, 2, "MAIN", 0,
-                0, 0), new myTabletype(362, 4, 71, -142, 1, "MAIN", 0, 0, 0), new myTabletype(363, 4, 211, 45, 2,
-                "MAIN", 0, 0, 0), new myTabletype(364, 4, 32, 130, 1, "MAIN", 0, 0, 0), new myTabletype(365, 4, 232,
-                -202, 2, "MAIN", 0, 0, 0), new myTabletype(366, 4, 8, -3, 1, "MAIN", 0, 0, 0), new myTabletype(367,
-                4, -13, -101, 2, "MAIN", 0, 0, 0), new myTabletype(368, 4, 25, 175, 1, "MAIN", 0, 0, 0),
-            new myTabletype(369, 4, -34, 79, 2, "MAIN", 0, 0, 0), new myTabletype(370, 4, -230, 241, 1, "MAIN", 0,
-                0, 0), new myTabletype(371, 4, 130, -248, 2, "MAIN", 0, 0, 0), new myTabletype(372, 4, 21, 165, 1,
-                "MAIN", 0, 0, 0), new myTabletype(373, 4, 99, 26, 2, "MAIN", 0, 0, 0), new myTabletype(374, 4, -222,
-                -116, 1, "MAIN", 0, 0, 0), new myTabletype(375, 4, 86, 78, 2, "MAIN", 0, 0, 0), new myTabletype(376,
-                4, 77, 251, 1, "MAIN", 0, 0, 0), new myTabletype(377, 4, -533, 257, 2, "MAIN", 0, 0, 0),
-            new myTabletype(378, 4, -157, 132, 1, "MAIN", 0, 0, 0), new myTabletype(379, 4, -105, -159, 2, "MAIN",
-                0, 0, 0), new myTabletype(380, 4, -30, 50, 1, "MAIN", 0, 0, 0), new myTabletype(381, 4, -63, 55, 1,
-                "MAIN", 0, 0, 0), new myTabletype(382, 4, 178, 199, 2, "MAIN", 0, 0, 0), new myTabletype(383, 4, -
-                375, -26, 1, "MAIN", 0, 0, 0), new myTabletype(384, 4, -156, 2, 2, "MAIN", 0, 0, 0),
-            new myTabletype(385, 4, -291, -105, 1, "MAIN", 0, 0, 0), new myTabletype(386, 4, -92, 107, 2, "MAIN", 0,
-                0, 0), new myTabletype(387, 4, 100, -34, 1, "MAIN", 0, 0, 0), new myTabletype(388, 4, 50, 30, 2,
-                "MAIN", 0, 0, 0), new myTabletype(389, 4, 36, -75, 1, "MAIN", 0, 0, 0), new myTabletype(390, 4, -
-                131, 8, 2, "MAIN", 0, 0, 0), new myTabletype(391, 4, -270, -173, 1, "MAIN", 0, 0, 0),
-            new myTabletype(392, 4, 178, 26, 2, "MAIN", 0, 0, 0), new myTabletype(393, 4, 131, -96, 1, "MAIN", 0, 0,
-                0), new myTabletype(394, 4, 12, 112, 2, "MAIN", 0, 0, 0), new myTabletype(395, 4, -250, 296, 1,
-                "MAIN", 0, 0, 0), new myTabletype(396, 4, 368, 135, 2, "MAIN", 0, 0, 0), new myTabletype(397, 4, -
-                72, -179, 1, "MAIN", 0, 0, 0), new myTabletype(398, 4, -26, -57, 2, "MAIN", 0, 0, 0),
-            new myTabletype(399, 4, -152, -258, 1, "MAIN", 0, 0, 0), new myTabletype(400, 4, -17, 2, 1, "MAIN", 0,
-                0, 0)
+        var myTable = [new myTabletype(1, 1, 146, 169, 1, 1, "MAIN", 0, 0, 0), new myTabletype(2, 1, -143, -58, 1, 1,
+                "MAIN", 0, 0, 0), new myTabletype(3, 1, 153, -54, 1, 1, "MAIN", 0, 0, 0), new myTabletype(4, 1, 361,
+                -144, 1, 1, "MAIN", 0, 0, 0), new myTabletype(5, 1, 72, -1, 1, 1, "MAIN", 0, 0, 0), new myTabletype(
+                6, 1, 79, 107, 1, 1, "MAIN", 0, 0, 0), new myTabletype(7, 1, 95, -193, 1, 1, "MAIN", 0, 0, 0),
+            new myTabletype(8, 1, -130, -73, 1, 1, "MAIN", 0, 0, 0), new myTabletype(9, 1, 122, 4, 1, 1, "MAIN", 0,
+                0, 0), new myTabletype(10, 1, -102, 94, 1, 1, "MAIN", 0, 0, 0), new myTabletype(11, 1, 28, 42, 1, 1,
+                "MAIN", 0, 0, 0), new myTabletype(12, 1, 212, 36, 1, 1, "MAIN", 0, 0, 0), new myTabletype(13, 1, -6,
+                -25, 1, 1, "MAIN", 0, 0, 0), new myTabletype(14, 1, 130, 53, 1, 1, "MAIN", 0, 0, 0),
+            new myTabletype(15, 1, 186, 112, 1, 1, "MAIN", 0, 0, 0), new myTabletype(16, 1, 106, -188, 1, 1, "MAIN",
+                0, 0, 0), new myTabletype(17, 1, -76, 80, 1, 1, "MAIN", 0, 0, 0), new myTabletype(18, 1, 38, -11, 1,
+                1, "MAIN", 0, 0, 0), new myTabletype(19, 1, 291, -58, 1, 1, "MAIN", 0, 0, 0), new myTabletype(20, 1,
+                -148, -269, 1, 2, "MAIN", 0, 0, 0), new myTabletype(21, 1, -194, -152, 2, 2, "MAIN", 0, 0, 0),
+            new myTabletype(22, 1, 35, 187, 2, 2, "MAIN", 0, 0, 0), new myTabletype(23, 1, -44, -76, 2, 2, "MAIN",
+                0, 0, 0), new myTabletype(24, 1, -241, -119, 2, 2, "MAIN", 0, 0, 0), new myTabletype(25, 1, -139, -
+                50, 2, 1, "MAIN", 0, 0, 0), new myTabletype(26, 1, 45, -82, 1, 1, "MAIN", 0, 0, 0), new myTabletype(
+                27, 1, 14, 14, 1, 1, "MAIN", 0, 0, 0), new myTabletype(28, 1, 88, 167, 1, 1, "MAIN", 0, 0, 0),
+            new myTabletype(29, 1, 157, -65, 1, 1, "MAIN", 0, 0, 0), new myTabletype(30, 1, 252, 17, 1, 1, "MAIN",
+                0, 0, 0), new myTabletype(31, 1, 45, -126, 1, 1, "MAIN", 0, 0, 0), new myTabletype(32, 1, 164, 167,
+                1, 1, "MAIN", 0, 0, 0), new myTabletype(33, 1, 130, 21, 1, 1, "MAIN", 0, 0, 0), new myTabletype(34,
+                1, 127, -119, 1, 1, "MAIN", 0, 0, 0), new myTabletype(35, 1, 13, 99, 1, 1, "MAIN", 0, 0, 0),
+            new myTabletype(36, 1, -35, 132, 1, 1, "MAIN", 0, 0, 0), new myTabletype(37, 1, -46, 18, 1, 1, "MAIN",
+                0, 0, 0), new myTabletype(38, 1, -8, -180, 1, 1, "MAIN", 0, 0, 0), new myTabletype(39, 1, 110, 196,
+                1, 1, "MAIN", 0, 0, 0), new myTabletype(40, 1, 159, 34, 1, 1, "MAIN", 0, 0, 0), new myTabletype(41,
+                1, 111, 129, 1, 1, "MAIN", 0, 0, 0), new myTabletype(42, 1, 15, -61, 1, 1, "MAIN", 0, 0, 0),
+            new myTabletype(43, 1, 274, -44, 1, 1, "MAIN", 0, 0, 0), new myTabletype(44, 1, 242, 12, 1, 1, "MAIN",
+                0, 0, 0), new myTabletype(45, 1, 36, 122, 1, 1, "MAIN", 0, 0, 0), new myTabletype(46, 1, -16, 16, 1,
+                1, "MAIN", 0, 0, 0), new myTabletype(47, 1, 89, -138, 1, 1, "MAIN", 0, 0, 0), new myTabletype(48, 1,
+                214, 29, 1, 1, "MAIN", 0, 0, 0), new myTabletype(49, 1, 112, 179, 1, 1, "MAIN", 0, 0, 0),
+            new myTabletype(50, 1, 136, 7, 1, 1, "MAIN", 0, 0, 0), new myTabletype(51, 1, 52, 14, 1, 1, "MAIN", 0,
+                0, 0), new myTabletype(52, 1, 125, -139, 1, 1, "MAIN", 0, 0, 0), new myTabletype(53, 1, 245, -154,
+                1, 1, "MAIN", 0, 0, 0), new myTabletype(54, 1, 49, -70, 1, 1, "MAIN", 0, 0, 0), new myTabletype(55,
+                1, 91, -36, 1, 1, "MAIN", 0, 0, 0), new myTabletype(56, 1, 103, 11, 1, 1, "MAIN", 0, 0, 0),
+            new myTabletype(57, 1, 106, 18, 1, 1, "MAIN", 0, 0, 0), new myTabletype(58, 1, -80, 176, 1, 1, "MAIN",
+                0, 0, 0), new myTabletype(59, 1, -131, 6, 1, 1, "MAIN", 0, 0, 0), new myTabletype(60, 1, -37, 117,
+                1, 1, "MAIN", 0, 0, 0), new myTabletype(61, 1, 93, -4, 1, 1, "MAIN", 0, 0, 0), new myTabletype(62,
+                1, 136, 159, 1, 1, "MAIN", 0, 0, 0), new myTabletype(63, 1, 17, -206, 1, 1, "MAIN", 0, 0, 0),
+            new myTabletype(64, 1, 226, -66, 1, 1, "MAIN", 0, 0, 0), new myTabletype(65, 1, 59, 108, 1, 1, "MAIN",
+                0, 0, 0), new myTabletype(66, 1, 77, -19, 1, 1, "MAIN", 0, 0, 0), new myTabletype(67, 1, 54, 102, 1,
+                1, "MAIN", 0, 0, 0), new myTabletype(68, 1, 90, 42, 1, 1, "MAIN", 0, 0, 0), new myTabletype(69, 1,
+                152, 104, 1, 1, "MAIN", 0, 0, 0), new myTabletype(70, 1, 148, 67, 1, 1, "MAIN", 0, 0, 0),
+            new myTabletype(71, 1, -24, 74, 1, 1, "MAIN", 0, 0, 0), new myTabletype(72, 1, 243, 164, 1, 1, "MAIN",
+                0, 0, 0), new myTabletype(73, 1, -45, 109, 1, 1, "MAIN", 0, 0, 0), new myTabletype(74, 1, 84, 109,
+                1, 1, "MAIN", 0, 0, 0), new myTabletype(75, 1, 45, 2, 1, 1, "MAIN", 0, 0, 0), new myTabletype(76, 1,
+                -40, -64, 1, 2, "MAIN", 0, 0, 0), new myTabletype(77, 1, 107, -73, 2, 2, "MAIN", 0, 0, 0),
+            new myTabletype(78, 1, -342, 83, 2, 2, "MAIN", 0, 0, 0), new myTabletype(79, 1, -122, -268, 2, 2,
+                "MAIN", 0, 0, 0), new myTabletype(80, 1, 64, -144, 2, 2, "MAIN", 0, 0, 0), new myTabletype(81, 1, -
+                170, -106, 2, 2, "MAIN", 0, 0, 0), new myTabletype(82, 1, -150, -27, 2, 2, "MAIN", 0, 0, 0),
+            new myTabletype(83, 1, -85, -289, 2, 2, "MAIN", 0, 0, 0), new myTabletype(84, 1, 89, 138, 2, 2, "MAIN",
+                0, 0, 0), new myTabletype(85, 1, -145, 66, 2, 2, "MAIN", 0, 0, 0), new myTabletype(86, 1, -124, 218,
+                2, 2, "MAIN", 0, 0, 0), new myTabletype(87, 1, -123, 117, 2, 1, "MAIN", 0, 0, 0), new myTabletype(
+                88, 1, 67, 113, 1, 1, "MAIN", 0, 0, 0), new myTabletype(89, 1, -6, 248, 1, 1, "MAIN", 0, 0, 0),
+            new myTabletype(90, 1, 83, -63, 1, 1, "MAIN", 0, 0, 0), new myTabletype(91, 1, 119, -165, 1, 1, "MAIN",
+                0, 0, 0), new myTabletype(92, 1, 237, -26, 1, 1, "MAIN", 0, 0, 0), new myTabletype(93, 1, 109, -91,
+                1, 1, "MAIN", 0, 0, 0), new myTabletype(94, 1, 8, -28, 1, 1, "MAIN", 0, 0, 0), new myTabletype(95,
+                1, 32, -116, 1, 2, "MAIN", 0, 0, 0), new myTabletype(96, 1, 168, 62, 2, 2, "MAIN", 0, 0, 0),
+            new myTabletype(97, 1, 166, 56, 2, 2, "MAIN", 0, 0, 0), new myTabletype(98, 1, 35, -3, 2, 2, "MAIN", 0,
+                0, 0), new myTabletype(99, 1, -33, 34, 2, 2, "MAIN", 0, 0, 0), new myTabletype(100, 1, 6, -16, 2, 2,
+                "MAIN", 0, 0, 0), new myTabletype(101, 3, 4, 109, 1, 2, "MAIN", 0, 0, 0), new myTabletype(102, 3, -
+                157, 31, 2, 1, "MAIN", 0, 0, 0), new myTabletype(103, 3, 248, 84, 1, 2, "MAIN", 0, 0, 0),
+            new myTabletype(104, 3, -13, 49, 2, 1, "MAIN", 0, 0, 0), new myTabletype(105, 3, 158, 71, 1, 2, "MAIN",
+                0, 0, 0), new myTabletype(106, 3, 4, -5, 2, 1, "MAIN", 0, 0, 0), new myTabletype(107, 3, 106, 24, 1,
+                2, "MAIN", 0, 0, 0), new myTabletype(108, 3, -185, -30, 2, 1, "MAIN", 0, 0, 0), new myTabletype(109,
+                3, 98, 66, 1, 2, "MAIN", 0, 0, 0), new myTabletype(110, 3, -23, -148, 2, 1, "MAIN", 0, 0, 0),
+            new myTabletype(111, 3, 87, 80, 1, 2, "MAIN", 0, 0, 0), new myTabletype(112, 3, -281, 110, 2, 1, "MAIN",
+                0, 0, 0), new myTabletype(113, 3, 125, 82, 1, 2, "MAIN", 0, 0, 0), new myTabletype(114, 3, -97, -11,
+                2, 1, "MAIN", 0, 0, 0), new myTabletype(115, 3, 8, 56, 1, 2, "MAIN", 0, 0, 0), new myTabletype(116,
+                3, -200, -85, 2, 1, "MAIN", 0, 0, 0), new myTabletype(117, 3, 243, 92, 1, 2, "MAIN", 0, 0, 0),
+            new myTabletype(118, 3, -164, -121, 2, 2, "MAIN", 0, 0, 0), new myTabletype(119, 3, -215, 65, 2, 1,
+                "MAIN", 0, 0, 0), new myTabletype(120, 3, 92, 59, 1, 2, "MAIN", 0, 0, 0), new myTabletype(121, 3, -
+                14, 45, 2, 1, "MAIN", 0, 0, 0), new myTabletype(122, 3, 141, -49, 1, 2, "MAIN", 0, 0, 0),
+            new myTabletype(123, 3, -14, 84, 2, 1, "MAIN", 0, 0, 0), new myTabletype(124, 3, 27, -202, 1, 2, "MAIN",
+                0, 0, 0), new myTabletype(125, 3, -151, 85, 2, 1, "MAIN", 0, 0, 0), new myTabletype(126, 3, 116, 21,
+                1, 2, "MAIN", 0, 0, 0), new myTabletype(127, 3, -34, 116, 2, 1, "MAIN", 0, 0, 0), new myTabletype(
+                128, 3, -176, 22, 1, 2, "MAIN", 0, 0, 0), new myTabletype(129, 3, -46, 202, 2, 1, "MAIN", 0, 0, 0),
+            new myTabletype(130, 3, -48, -104, 1, 2, "MAIN", 0, 0, 0), new myTabletype(131, 3, -89, 67, 2, 1,
+                "MAIN", 0, 0, 0), new myTabletype(132, 3, 72, -97, 1, 2, "MAIN", 0, 0, 0), new myTabletype(133, 3,
+                162, -14, 2, 1, "MAIN", 0, 0, 0), new myTabletype(134, 3, -70, 82, 1, 2, "MAIN", 0, 0, 0),
+            new myTabletype(135, 3, -167, 69, 2, 1, "MAIN", 0, 0, 0), new myTabletype(136, 3, 343, 229, 1, 2,
+                "MAIN", 0, 0, 0), new myTabletype(137, 3, -73, -39, 2, 1, "MAIN", 0, 0, 0), new myTabletype(138, 3,
+                -108, 141, 1, 2, "MAIN", 0, 0, 0), new myTabletype(139, 3, -117, -28, 2, 1, "MAIN", 0, 0, 0),
+            new myTabletype(140, 3, 113, -77, 1, 2, "MAIN", 0, 0, 0), new myTabletype(141, 3, -116, -179, 2, 1,
+                "MAIN", 0, 0, 0), new myTabletype(142, 3, 257, 18, 1, 1, "MAIN", 0, 0, 0), new myTabletype(143, 3,
+                128, -57, 1, 2, "MAIN", 0, 0, 0), new myTabletype(144, 3, -57, 93, 2, 1, "MAIN", 0, 0, 0),
+            new myTabletype(145, 3, 41, -58, 1, 2, "MAIN", 0, 0, 0), new myTabletype(146, 3, -107, -52, 2, 1,
+                "MAIN", 0, 0, 0), new myTabletype(147, 3, 14, 39, 1, 2, "MAIN", 0, 0, 0), new myTabletype(148, 3, -
+                170, 189, 2, 1, "MAIN", 0, 0, 0), new myTabletype(149, 3, 149, -120, 1, 2, "MAIN", 0, 0, 0),
+            new myTabletype(150, 3, -61, 112, 2, 1, "MAIN", 0, 0, 0), new myTabletype(151, 3, -13, 96, 1, 2, "MAIN",
+                0, 0, 0), new myTabletype(152, 3, 55, -24, 2, 2, "MAIN", 0, 0, 0), new myTabletype(153, 3, 29, 74,
+                2, 1, "MAIN", 0, 0, 0), new myTabletype(154, 3, 62, -31, 1, 2, "MAIN", 0, 0, 0), new myTabletype(
+                155, 3, -53, 261, 2, 1, "MAIN", 0, 0, 0), new myTabletype(156, 3, 151, -12, 1, 2, "MAIN", 0, 0, 0),
+            new myTabletype(157, 3, -156, 9, 2, 1, "MAIN", 0, 0, 0), new myTabletype(158, 3, 41, -36, 1, 2, "MAIN",
+                0, 0, 0), new myTabletype(159, 3, -54, -186, 2, 1, "MAIN", 0, 0, 0), new myTabletype(160, 3, 85, -
+                29, 1, 2, "MAIN", 0, 0, 0), new myTabletype(161, 3, 44, 26, 2, 1, "MAIN", 0, 0, 0), new myTabletype(
+                162, 3, 42, 165, 1, 2, "MAIN", 0, 0, 0), new myTabletype(163, 3, 56, 54, 2, 1, "MAIN", 0, 0, 0),
+            new myTabletype(164, 3, -32, -21, 1, 2, "MAIN", 0, 0, 0), new myTabletype(165, 3, -35, 7, 2, 1, "MAIN",
+                0, 0, 0), new myTabletype(166, 3, 206, 36, 1, 2, "MAIN", 0, 0, 0), new myTabletype(167, 3, -115, -
+                42, 2, 1, "MAIN", 0, 0, 0), new myTabletype(168, 3, 228, 75, 1, 1, "MAIN", 0, 0, 0),
+            new myTabletype(169, 3, 40, 179, 1, 2, "MAIN", 0, 0, 0), new myTabletype(170, 3, -97, -40, 2, 1, "MAIN",
+                0, 0, 0), new myTabletype(171, 3, 46, 133, 1, 2, "MAIN", 0, 0, 0), new myTabletype(172, 3, 10, 96,
+                2, 1, "MAIN", 0, 0, 0), new myTabletype(173, 3, 55, 59, 1, 2, "MAIN", 0, 0, 0), new myTabletype(174,
+                3, 1, 12, 2, 1, "MAIN", 0, 0, 0), new myTabletype(175, 3, 134, 37, 1, 2, "MAIN", 0, 0, 0),
+            new myTabletype(176, 3, -268, -24, 2, 2, "MAIN", 0, 0, 0), new myTabletype(177, 3, -3, 202, 2, 1,
+                "MAIN", 0, 0, 0), new myTabletype(178, 3, -25, -79, 1, 2, "MAIN", 0, 0, 0), new myTabletype(179, 3,
+                3, 125, 2, 1, "MAIN", 0, 0, 0), new myTabletype(180, 3, 65, 170, 1, 2, "MAIN", 0, 0, 0),
+            new myTabletype(181, 3, -173, -36, 2, 1, "MAIN", 0, 0, 0), new myTabletype(182, 3, 104, 128, 1, 2,
+                "MAIN", 0, 0, 0), new myTabletype(183, 3, -159, 16, 2, 1, "MAIN", 0, 0, 0), new myTabletype(184, 3,
+                146, 7, 1, 2, "MAIN", 0, 0, 0), new myTabletype(185, 3, -158, -8, 2, 1, "MAIN", 0, 0, 0),
+            new myTabletype(186, 3, -231, -178, 1, 2, "MAIN", 0, 0, 0), new myTabletype(187, 3, -150, 60, 2, 1,
+                "MAIN", 0, 0, 0), new myTabletype(188, 3, 119, 159, 1, 2, "MAIN", 0, 0, 0), new myTabletype(189, 3,
+                -231, -78, 2, 1, "MAIN", 0, 0, 0), new myTabletype(190, 3, 113, 93, 1, 2, "MAIN", 0, 0, 0),
+            new myTabletype(191, 3, -41, -9, 2, 1, "MAIN", 0, 0, 0), new myTabletype(192, 3, 186, -120, 1, 2,
+                "MAIN", 0, 0, 0), new myTabletype(193, 3, -161, 110, 2, 1, "MAIN", 0, 0, 0), new myTabletype(194, 3,
+                17, 185, 1, 2, "MAIN", 0, 0, 0), new myTabletype(195, 3, -83, -87, 2, 1, "MAIN", 0, 0, 0),
+            new myTabletype(196, 3, 18, 24, 1, 2, "MAIN", 0, 0, 0), new myTabletype(197, 3, -130, -158, 2, 1,
+                "MAIN", 0, 0, 0), new myTabletype(198, 3, 207, -5, 1, 2, "MAIN", 0, 0, 0), new myTabletype(199, 3, -
+                47, 53, 2, 1, "MAIN", 0, 0, 0), new myTabletype(200, 3, -97, 193, 1, 2, "MAIN", 0, 0, 0),
+            new myTabletype(201, 2, 45, 88, 2, 2, "MAIN", 0, 0, 0), new myTabletype(202, 2, -64, 67, 2, 2, "MAIN",
+                0, 0, 0), new myTabletype(203, 2, -117, 291, 2, 2, "MAIN", 0, 0, 0), new myTabletype(204, 2, 74, -
+                40, 2, 2, "MAIN", 0, 0, 0), new myTabletype(205, 2, 127, -47, 2, 2, "MAIN", 0, 0, 0),
+            new myTabletype(206, 2, 139, -19, 2, 2, "MAIN", 0, 0, 0), new myTabletype(207, 2, -233, -16, 2, 2,
+                "MAIN", 0, 0, 0), new myTabletype(208, 2, -161, -364, 2, 2, "MAIN", 0, 0, 0), new myTabletype(209,
+                2, -347, -103, 2, 2, "MAIN", 0, 0, 0), new myTabletype(210, 2, -113, 48, 2, 2, "MAIN", 0, 0, 0),
+            new myTabletype(211, 2, -8, -1, 2, 2, "MAIN", 0, 0, 0), new myTabletype(212, 2, -96, -128, 2, 2, "MAIN",
+                0, 0, 0), new myTabletype(213, 2, 234, -106, 2, 1, "MAIN", 0, 0, 0), new myTabletype(214, 2, 258, -
+                57, 1, 1, "MAIN", 0, 0, 0), new myTabletype(215, 2, -51, -128, 1, 1, "MAIN", 0, 0, 0),
+            new myTabletype(216, 2, 117, -82, 1, 1, "MAIN", 0, 0, 0), new myTabletype(217, 2, 15, -86, 1, 1, "MAIN",
+                0, 0, 0), new myTabletype(218, 2, 263, 143, 1, 1, "MAIN", 0, 0, 0), new myTabletype(219, 2, 123,
+                163, 1, 1, "MAIN", 0, 0, 0), new myTabletype(220, 2, 388, 149, 1, 1, "MAIN", 0, 0, 0),
+            new myTabletype(221, 2, -98, 68, 1, 2, "MAIN", 0, 0, 0), new myTabletype(222, 2, -140, -113, 2, 2,
+                "MAIN", 0, 0, 0), new myTabletype(223, 2, -249, 154, 2, 2, "MAIN", 0, 0, 0), new myTabletype(224, 2,
+                16, -50, 2, 2, "MAIN", 0, 0, 0), new myTabletype(225, 2, -51, 4, 2, 2, "MAIN", 0, 0, 0),
+            new myTabletype(226, 2, 13, 214, 2, 2, "MAIN", 0, 0, 0), new myTabletype(227, 2, -26, 13, 2, 2, "MAIN",
+                0, 0, 0), new myTabletype(228, 2, -36, 40, 2, 2, "MAIN", 0, 0, 0), new myTabletype(229, 2, -415, -
+                226, 2, 2, "MAIN", 0, 0, 0), new myTabletype(230, 2, -191, 78, 2, 2, "MAIN", 0, 0, 0),
+            new myTabletype(231, 2, -169, -157, 2, 2, "MAIN", 0, 0, 0), new myTabletype(232, 2, -131, 162, 2, 2,
+                "MAIN", 0, 0, 0), new myTabletype(233, 2, -147, -30, 2, 2, "MAIN", 0, 0, 0), new myTabletype(234, 2,
+                -9, -358, 2, 2, "MAIN", 0, 0, 0), new myTabletype(235, 2, 21, -57, 2, 2, "MAIN", 0, 0, 0),
+            new myTabletype(236, 2, -256, -36, 2, 2, "MAIN", 0, 0, 0), new myTabletype(237, 2, 35, 78, 2, 2, "MAIN",
+                0, 0, 0), new myTabletype(238, 2, 19, 107, 2, 2, "MAIN", 0, 0, 0), new myTabletype(239, 2, 1, -52,
+                2, 2, "MAIN", 0, 0, 0), new myTabletype(240, 2, -302, 162, 2, 2, "MAIN", 0, 0, 0), new myTabletype(
+                241, 2, -5, -380, 2, 2, "MAIN", 0, 1, 0), new myTabletype(242, 2, -62, -114, 2, 2, "MAIN", 0, 0, 0),
+            new myTabletype(243, 2, 79, -178, 2, 2, "MAIN", 0, 0, 0), new myTabletype(244, 2, 210, -201, 2, 2,
+                "MAIN", 0, 0, 0), new myTabletype(245, 2, 179, 154, 2, 2, "MAIN", 0, 0, 0), new myTabletype(246, 2,
+                -57, 133, 2, 1, "MAIN", 0, 0, 0), new myTabletype(247, 2, 141, -124, 1, 1, "MAIN", 0, 0, 0),
+            new myTabletype(248, 2, 83, 188, 1, 1, "MAIN", 0, 0, 0), new myTabletype(249, 2, 120, 16, 1, 1, "MAIN",
+                0, 0, 0), new myTabletype(250, 2, 330, -67, 1, 1, "MAIN", 0, 0, 0), new myTabletype(251, 2, 169, -
+                111, 1, 1, "MAIN", 0, 0, 0), new myTabletype(252, 2, -109, -125, 1, 1, "MAIN", 0, 0, 0),
+            new myTabletype(253, 2, 160, 76, 1, 1, "MAIN", 0, 0, 0), new myTabletype(254, 2, 9, 104, 1, 1, "MAIN",
+                0, 0, 0), new myTabletype(255, 2, -1, 38, 1, 1, "MAIN", 0, 0, 0), new myTabletype(256, 2, 242, -328,
+                1, 1, "MAIN", 0, 0, 0), new myTabletype(257, 2, -21, 47, 1, 1, "MAIN", 0, 0, 0), new myTabletype(
+                258, 2, 14, 90, 1, 1, "MAIN", 0, 0, 0), new myTabletype(259, 2, 80, -107, 1, 1, "MAIN", 0, 0, 0),
+            new myTabletype(260, 2, 226, 7, 1, 1, "MAIN", 0, 0, 0), new myTabletype(261, 2, 168, -298, 1, 1, "MAIN",
+                0, 0, 0), new myTabletype(262, 2, 37, -197, 1, 2, "MAIN", 0, 0, 0), new myTabletype(263, 2, -75, -
+                52, 2, 2, "MAIN", 0, 0, 0), new myTabletype(264, 2, 26, -50, 2, 2, "MAIN", 0, 0, 0),
+            new myTabletype(265, 2, -253, 56, 2, 2, "MAIN", 0, 0, 0), new myTabletype(266, 2, -307, -190, 2, 2,
+                "MAIN", 0, 0, 0), new myTabletype(267, 2, -151, -55, 2, 2, "MAIN", 0, 0, 0), new myTabletype(268, 2,
+                120, -78, 2, 2, "MAIN", 0, 0, 0), new myTabletype(269, 2, -128, 84, 2, 2, "MAIN", 0, 0, 0),
+            new myTabletype(270, 2, 165, 227, 2, 2, "MAIN", 0, 0, 0), new myTabletype(271, 2, -521, 275, 2, 2,
+                "MAIN", 0, 0, 0), new myTabletype(272, 2, -329, -251, 2, 2, "MAIN", 0, 0, 0), new myTabletype(273,
+                2, -95, -8, 2, 2, "MAIN", 0, 0, 0), new myTabletype(274, 2, 67, -178, 2, 2, "MAIN", 0, 0, 0),
+            new myTabletype(275, 2, -86, -10, 2, 2, "MAIN", 0, 0, 0), new myTabletype(276, 2, -90, 68, 2, 2, "MAIN",
+                0, 0, 0), new myTabletype(277, 2, -94, 13, 2, 2, "MAIN", 0, 0, 0), new myTabletype(278, 2, -357, -8,
+                2, 2, "MAIN", 0, 0, 0), new myTabletype(279, 2, 110, 237, 2, 2, "MAIN", 0, 0, 0), new myTabletype(
+                280, 2, -184, 115, 2, 2, "MAIN", 0, 0, 0), new myTabletype(281, 2, 99, -44, 2, 2, "MAIN", 0, 0, 0),
+            new myTabletype(282, 2, -86, 4, 2, 2, "MAIN", 0, 0, 0), new myTabletype(283, 2, 96, 139, 2, 2, "MAIN",
+                0, 0, 0), new myTabletype(284, 2, -20, 98, 2, 2, "MAIN", 0, 0, 0), new myTabletype(285, 2, -92, -68,
+                2, 2, "MAIN", 0, 0, 0), new myTabletype(286, 2, -39, -284, 2, 1, "MAIN", 0, 0, 0), new myTabletype(
+                287, 2, 31, -190, 1, 1, "MAIN", 0, 0, 0), new myTabletype(288, 2, -111, 23, 1, 1, "MAIN", 0, 0, 0),
+            new myTabletype(289, 2, -47, -286, 1, 1, "MAIN", 0, 0, 0), new myTabletype(290, 2, -30, -24, 1, 1,
+                "MAIN", 0, 0, 0), new myTabletype(291, 2, 51, -73, 1, 1, "MAIN", 0, 0, 0), new myTabletype(292, 2,
+                393, 160, 1, 1, "MAIN", 0, 0, 0), new myTabletype(293, 2, -33, -211, 1, 1, "MAIN", 0, 0, 0),
+            new myTabletype(294, 2, 28, -309, 1, 1, "MAIN", 0, 0, 0), new myTabletype(295, 2, -253, -67, 1, 1,
+                "MAIN", 0, 0, 0), new myTabletype(296, 2, 171, 102, 1, 1, "MAIN", 0, 0, 0), new myTabletype(297, 2,
+                -177, 171, 1, 1, "MAIN", 0, 0, 0), new myTabletype(298, 2, -70, -145, 1, 1, "MAIN", 0, 0, 0),
+            new myTabletype(299, 2, 242, 75, 1, 1, "MAIN", 0, 0, 0), new myTabletype(300, 2, -262, -178, 1, 1,
+                "MAIN", 0, 0, 0), new myTabletype(301, 4, 174, 22, 2, 1, "MAIN", 0, 0, 0), new myTabletype(302, 4, -
+                13, 4, 1, 2, "MAIN", 0, 0, 0), new myTabletype(303, 4, 188, -31, 2, 1, "MAIN", 0, 0, 0),
+            new myTabletype(304, 4, 245, 210, 1, 2, "MAIN", 0, 0, 0), new myTabletype(305, 4, -159, 190, 2, 1,
+                "MAIN", 0, 0, 0), new myTabletype(306, 4, -9, 23, 1, 2, "MAIN", 0, 0, 0), new myTabletype(307, 4, -
+                114, -137, 2, 1, "MAIN", 0, 0, 0), new myTabletype(308, 4, 162, -188, 1, 2, "MAIN", 0, 0, 0),
+            new myTabletype(309, 4, -341, 46, 2, 1, "MAIN", 0, 0, 0), new myTabletype(310, 4, -16, -102, 1, 1,
+                "MAIN", 0, 0, 0), new myTabletype(311, 4, 130, 76, 1, 2, "MAIN", 0, 0, 0), new myTabletype(312, 4, -
+                189, -62, 2, 1, "MAIN", 0, 0, 0), new myTabletype(313, 4, 160, 124, 1, 2, "MAIN", 0, 0, 0),
+            new myTabletype(314, 4, -307, 33, 2, 1, "MAIN", 0, 0, 0), new myTabletype(315, 4, 233, 160, 1, 2,
+                "MAIN", 0, 0, 0), new myTabletype(316, 4, -17, -357, 2, 1, "MAIN", 0, 0, 0), new myTabletype(317, 4,
+                304, -36, 1, 2, "MAIN", 0, 0, 0), new myTabletype(318, 4, -187, 355, 2, 1, "MAIN", 0, 0, 0),
+            new myTabletype(319, 4, 285, -380, 1, 2, "MAIN", 0, 1, 0), new myTabletype(320, 4, -251, 135, 2, 1,
+                "MAIN", 0, 0, 0), new myTabletype(321, 4, -10, 67, 1, 2, "MAIN", 0, 0, 0), new myTabletype(322, 4, -
+                132, 206, 2, 1, "MAIN", 0, 0, 0), new myTabletype(323, 4, 51, -28, 1, 2, "MAIN", 0, 0, 0),
+            new myTabletype(324, 4, -265, 190, 2, 2, "MAIN", 0, 0, 0), new myTabletype(325, 4, -26, 195, 2, 1,
+                "MAIN", 0, 0, 0), new myTabletype(326, 4, -113, 31, 1, 2, "MAIN", 0, 0, 0), new myTabletype(327, 4,
+                -29, -186, 2, 2, "MAIN", 0, 0, 0), new myTabletype(328, 4, -126, 146, 2, 1, "MAIN", 0, 0, 0),
+            new myTabletype(329, 4, 37, -156, 1, 2, "MAIN", 0, 0, 0), new myTabletype(330, 4, -192, -22, 2, 1,
+                "MAIN", 0, 0, 0), new myTabletype(331, 4, 79, 152, 1, 2, "MAIN", 0, 0, 0), new myTabletype(332, 4, -
+                289, 175, 2, 1, "MAIN", 0, 0, 0), new myTabletype(333, 4, 10, -56, 1, 2, "MAIN", 0, 0, 0),
+            new myTabletype(334, 4, 14, 100, 2, 1, "MAIN", 0, 0, 0), new myTabletype(335, 4, -6, -247, 1, 2, "MAIN",
+                0, 0, 0), new myTabletype(336, 4, -38, -76, 2, 1, "MAIN", 0, 0, 0), new myTabletype(337, 4, 240,
+                235, 1, 2, "MAIN", 0, 0, 0), new myTabletype(338, 4, -1, 215, 2, 1, "MAIN", 0, 0, 0),
+            new myTabletype(339, 4, 220, 107, 1, 2, "MAIN", 0, 0, 0), new myTabletype(340, 4, -124, -23, 2, 1,
+                "MAIN", 0, 0, 0), new myTabletype(341, 4, 139, 136, 1, 1, "MAIN", 0, 0, 0), new myTabletype(342, 4,
+                -129, -4, 1, 2, "MAIN", 0, 0, 0), new myTabletype(343, 4, -110, 27, 2, 1, "MAIN", 0, 0, 0),
+            new myTabletype(344, 4, 107, 14, 1, 2, "MAIN", 0, 0, 0), new myTabletype(345, 4, 156, -124, 2, 1,
+                "MAIN", 0, 0, 0), new myTabletype(346, 4, 14, 116, 1, 2, "MAIN", 0, 0, 0), new myTabletype(347, 4, -
+                171, -171, 2, 1, "MAIN", 0, 0, 0), new myTabletype(348, 4, 286, 124, 1, 2, "MAIN", 0, 0, 0),
+            new myTabletype(349, 4, -125, -154, 2, 1, "MAIN", 0, 0, 0), new myTabletype(350, 4, -213, -116, 1, 2,
+                "MAIN", 0, 0, 0), new myTabletype(351, 4, 44, -380, 2, 1, "MAIN", 0, 1, 0), new myTabletype(352, 4,
+                -14, -25, 1, 2, "MAIN", 0, 0, 0), new myTabletype(353, 4, -27, 30, 2, 1, "MAIN", 0, 0, 0),
+            new myTabletype(354, 4, -19, 132, 1, 2, "MAIN", 0, 0, 0), new myTabletype(355, 4, -402, 210, 2, 1,
+                "MAIN", 0, 0, 0), new myTabletype(356, 4, 1, -238, 1, 2, "MAIN", 0, 0, 0), new myTabletype(357, 4, -
+                345, 158, 2, 1, "MAIN", 0, 0, 0), new myTabletype(358, 4, 228, -74, 1, 2, "MAIN", 0, 0, 0),
+            new myTabletype(359, 4, -181, -12, 2, 1, "MAIN", 0, 0, 0), new myTabletype(360, 4, -301, -17, 1, 2,
+                "MAIN", 0, 0, 0), new myTabletype(361, 4, 71, -72, 2, 1, "MAIN", 0, 0, 0), new myTabletype(362, 4,
+                42, -142, 1, 2, "MAIN", 0, 0, 0), new myTabletype(363, 4, 32, 45, 2, 1, "MAIN", 0, 0, 0),
+            new myTabletype(364, 4, 211, 130, 1, 2, "MAIN", 0, 0, 0), new myTabletype(365, 4, 8, -202, 2, 1, "MAIN",
+                0, 0, 0), new myTabletype(366, 4, 232, -3, 1, 2, "MAIN", 0, 0, 0), new myTabletype(367, 4, 25, -101,
+                2, 1, "MAIN", 0, 0, 0), new myTabletype(368, 4, -13, 175, 1, 2, "MAIN", 0, 0, 0), new myTabletype(
+                369, 4, -230, 79, 2, 1, "MAIN", 0, 0, 0), new myTabletype(370, 4, -34, 241, 1, 2, "MAIN", 0, 0, 0),
+            new myTabletype(371, 4, 21, -248, 2, 1, "MAIN", 0, 0, 0), new myTabletype(372, 4, 130, 165, 1, 2,
+                "MAIN", 0, 0, 0), new myTabletype(373, 4, -222, 26, 2, 1, "MAIN", 0, 0, 0), new myTabletype(374, 4,
+                99, -116, 1, 2, "MAIN", 0, 0, 0), new myTabletype(375, 4, 77, 78, 2, 1, "MAIN", 0, 0, 0),
+            new myTabletype(376, 4, 86, 251, 1, 2, "MAIN", 0, 0, 0), new myTabletype(377, 4, -157, 257, 2, 1,
+                "MAIN", 0, 0, 0), new myTabletype(378, 4, -533, 132, 1, 2, "MAIN", 0, 0, 0), new myTabletype(379, 4,
+                -30, -159, 2, 1, "MAIN", 0, 0, 0), new myTabletype(380, 4, -105, 50, 1, 2, "MAIN", 0, 0, 0),
+            new myTabletype(381, 4, -375, 55, 2, 1, "MAIN", 0, 0, 0), new myTabletype(382, 4, -63, 199, 1, 1,
+                "MAIN", 0, 0, 0), new myTabletype(383, 4, 178, -26, 1, 2, "MAIN", 0, 0, 0), new myTabletype(384, 4,
+                -291, 2, 2, 1, "MAIN", 0, 0, 0), new myTabletype(385, 4, -156, -105, 1, 2, "MAIN", 0, 0, 0),
+            new myTabletype(386, 4, 100, 107, 2, 1, "MAIN", 0, 0, 0), new myTabletype(387, 4, -92, -34, 1, 2,
+                "MAIN", 0, 0, 0), new myTabletype(388, 4, 36, 30, 2, 1, "MAIN", 0, 0, 0), new myTabletype(389, 4,
+                50, -75, 1, 2, "MAIN", 0, 0, 0), new myTabletype(390, 4, -270, 8, 2, 1, "MAIN", 0, 0, 0),
+            new myTabletype(391, 4, -131, -173, 1, 2, "MAIN", 0, 0, 0), new myTabletype(392, 4, 131, 26, 2, 1,
+                "MAIN", 0, 0, 0), new myTabletype(393, 4, 178, -96, 1, 2, "MAIN", 0, 0, 0), new myTabletype(394, 4,
+                -250, 112, 2, 1, "MAIN", 0, 0, 0), new myTabletype(395, 4, 12, 296, 1, 2, "MAIN", 0, 0, 0),
+            new myTabletype(396, 4, -72, 135, 2, 1, "MAIN", 0, 0, 0), new myTabletype(397, 4, 368, -179, 1, 2,
+                "MAIN", 0, 0, 0), new myTabletype(398, 4, -152, -57, 2, 1, "MAIN", 0, 0, 0), new myTabletype(399, 4,
+                -26, -258, 1, 2, "MAIN", 0, 0, 0), new myTabletype(400, 4, -223, 2, 2, 1, "MAIN", 0, 0, 0)
         ];
         var selectedoncecount_table_practiceTable = 0;
 
-        function practiceTabletype(x1, x2, x3, x4, x5, x6, x7, x8, xselected) {
+        function practiceTabletype(x1, x2, x3, x4, x5, x6, x7, x8, x9, xselected) {
             this.c1 = x1;
             this.c2 = x2;
             this.c3 = x3;
@@ -1880,21 +1902,23 @@
             this.c6 = x6;
             this.c7 = x7;
             this.c8 = x8;
+            this.c9 = x9;
             this.selected = xselected
         }
-        var practiceTable = [new practiceTabletype(1, 1, 35, -119, 1, "MAIN", 0, 0, 0), new practiceTabletype(2, 1, -
-                241, 31, 1, "MAIN", 0, 0, 0), new practiceTabletype(3, 1, 107, -64, 1, "MAIN", 0, 0, 0),
-            new practiceTabletype(4, 1, -122, -267, 1, "MAIN", 0, 0, 0), new practiceTabletype(5, 1, -170, 139, 1,
-                "MAIN", 0, 0, 0), new practiceTabletype(6, 1, -85, -75, 2, "MAIN", 0, 0, 0), new practiceTabletype(
-                7, 1, 5, 164, 2, "MAIN", 0, 0, 0), new practiceTabletype(8, 1, 27, -49, 2, "MAIN", 0, 0, 0),
-            new practiceTabletype(9, 1, 316, 243, 2, "MAIN", 0, 0, 0), new practiceTabletype(10, 1, 117, 110, 2,
-                "MAIN", 0, 0, 0), new practiceTabletype(11, 1, 239, 81, 2, "MAIN", 0, 0, 0), new practiceTabletype(
-                12, 1, 204, -103, 2, "MAIN", 0, 0, 0), new practiceTabletype(13, 1, 5, -138, 2, "MAIN", 0, 0, 0),
-            new practiceTabletype(14, 1, -82, 100, 1, "MAIN", 0, 0, 0), new practiceTabletype(15, 1, -170, -15, 1,
-                "MAIN", 0, 0, 0), new practiceTabletype(16, 1, -383, -28, 1, "MAIN", 0, 0, 0),
-            new practiceTabletype(17, 1, -152, -195, 1, "MAIN", 0, 0, 0), new practiceTabletype(18, 1, -94, 102, 1,
-                "MAIN", 0, 0, 0), new practiceTabletype(19, 1, 1, 1, 1, "MAIN", 0, 0, 0), new practiceTabletype(20,
-                1, -44, -97, 1, "MAIN", 0, 0, 0)
+        var practiceTable = [new practiceTabletype(1, 1, 146, 169, 1, 1, "MAIN", 0, 0, 0), new practiceTabletype(2, 1, -
+                143, -58, 1, 1, "MAIN", 0, 0, 0), new practiceTabletype(3, 1, 153, -54, 1, 1, "MAIN", 0, 0, 0),
+            new practiceTabletype(4, 1, 361, -144, 1, 1, "MAIN", 0, 0, 0), new practiceTabletype(5, 1, 72, -1, 1, 1,
+                "MAIN", 0, 0, 0), new practiceTabletype(6, 1, 79, 107, 1, 1, "MAIN", 0, 0, 0),
+            new practiceTabletype(7, 1, 95, -193, 1, 1, "MAIN", 0, 0, 0), new practiceTabletype(8, 1, -130, -73, 1,
+                1, "MAIN", 0, 0, 0), new practiceTabletype(9, 1, 122, 4, 1, 1, "MAIN", 0, 0, 0),
+            new practiceTabletype(10, 1, -102, 94, 1, 1, "MAIN", 0, 0, 0), new practiceTabletype(11, 1, 28, 42, 1,
+                1, "MAIN", 0, 0, 0), new practiceTabletype(12, 1, 212, 36, 1, 1, "MAIN", 0, 0, 0),
+            new practiceTabletype(13, 1, -6, -25, 1, 1, "MAIN", 0, 0, 0), new practiceTabletype(14, 1, 130, 53, 1,
+                1, "MAIN", 0, 0, 0), new practiceTabletype(15, 1, 186, 112, 1, 1, "MAIN", 0, 0, 0),
+            new practiceTabletype(16, 1, 106, -188, 1, 1, "MAIN", 0, 0, 0), new practiceTabletype(17, 1, -76, 80, 1,
+                1, "MAIN", 0, 0, 0), new practiceTabletype(18, 1, 38, -11, 1, 1, "MAIN", 0, 0, 0),
+            new practiceTabletype(19, 1, 291, -58, 1, 1, "MAIN", 0, 0, 0), new practiceTabletype(20, 1, -148, -269,
+                1, 2, "MAIN", 0, 0, 0)
         ];
         var task_trianglepractice = {
             step: 1,
@@ -2078,12 +2102,17 @@
                         lastOneEggYPosition = lastEggYPosition;
                         lastEggXPosition = practiceTable[tablerow].c3;
                         lastEggYPosition = practiceTable[tablerow].c4;
+                        lastFiveStatus = lastFourStatus;
+                        lastFourStatus = lastThreeStatus;
+                        lastThreeStatus = lastTwoStatus;
+                        lastTwoStatus = lastOneStatus;
+                        lastOneStatus = lastStatus;
                         lastFourKeyPressed = lastThreeKeyPressed;
                         lastThreeKeyPressed = lastTwoKeyPressed;
                         lastTwoKeyPressed = lastOneKeyPressed;
                         lastOneKeyPressed = keypressed;
                         if (!(trialCounter > 1)) {
-                            task_trianglepractice.step = 21
+                            task_trianglepractice.step = 25
                         };
                         setTimeout("task_trianglepractice.run()", 0);
                         break;
@@ -2132,16 +2161,42 @@
                         psy_add_centered_bitmap_db(egg_small, task_trianglepractice.calcualtedEggXPosition,
                             task_trianglepractice.calcualtedEggYPosition, 0);
                         psy_draw_all_db();
-                        task_trianglepractice.run();
-                        break;
-                    case 21:
-                        task_trianglepractice.step++;
-                        if (!(trialCounter > 2)) {
-                            task_trianglepractice.step = 27
+                        if (!(lastOneStatus == 1)) {
+                            task_trianglepractice.step = 22
                         };
                         setTimeout("task_trianglepractice.run()", 0);
                         break;
+                    case 21:
+                        task_trianglepractice.step++;
+                        psy_add_centered_bitmap_db(green_check, -400, 315, 0);
+                        psy_draw_all_db();
+                        task_trianglepractice.run();
+                        break;
                     case 22:
+                        task_trianglepractice.step++;
+                        if (!(lastOneStatus != 1)) {
+                            task_trianglepractice.step = 24
+                        };
+                        setTimeout("task_trianglepractice.run()", 0);
+                        break;
+                    case 23:
+                        task_trianglepractice.step++;
+                        psy_add_centered_bitmap_db(error, -400, 315, 0);
+                        psy_draw_all_db();
+                        task_trianglepractice.run();
+                        break;
+                    case 24:
+                        task_trianglepractice.step++;
+                        task_trianglepractice.run();
+                        break;
+                    case 25:
+                        task_trianglepractice.step++;
+                        if (!(trialCounter > 2)) {
+                            task_trianglepractice.step = 35
+                        };
+                        setTimeout("task_trianglepractice.run()", 0);
+                        break;
+                    case 26:
                         task_trianglepractice.step++;
                         task_trianglepractice.lastTrial = Math.round(trialCounter - 2);
                         psy_add_text_rgb_db(mysmallfont, -690, 167, PSY_CENTRAL, PSY_CENTRAL, 255, 255, 255,
@@ -2150,30 +2205,30 @@
                         psy_add_centered_bitmap_db(backg_small, -545, 167, 0);
                         psy_draw_all_db();
                         if (!(lastTwoKeyPressed == 1)) {
-                            task_trianglepractice.step = 24
+                            task_trianglepractice.step = 28
                         };
                         setTimeout("task_trianglepractice.run()", 0);
                         break;
-                    case 23:
+                    case 27:
                         task_trianglepractice.step++;
                         psy_add_centered_bitmap_db(white_small, -558, 167, 0);
                         psy_draw_all_db();
                         task_trianglepractice.run();
                         break;
-                    case 24:
+                    case 28:
                         task_trianglepractice.step++;
                         if (!(lastTwoKeyPressed == 2)) {
-                            task_trianglepractice.step = 26
+                            task_trianglepractice.step = 30
                         };
                         setTimeout("task_trianglepractice.run()", 0);
                         break;
-                    case 25:
+                    case 29:
                         task_trianglepractice.step++;
                         psy_add_centered_bitmap_db(white_small, -532, 167, 0);
                         psy_draw_all_db();
                         task_trianglepractice.run();
                         break;
-                    case 26:
+                    case 30:
                         task_trianglepractice.step++;
                         psy_add_centered_bitmap_db(blue_small, -558, 167, 0);
                         psy_draw_all_db();
@@ -2186,16 +2241,42 @@
                         psy_add_centered_bitmap_db(egg_small, task_trianglepractice.calcualtedEggXPosition,
                             task_trianglepractice.calcualtedEggYPosition, 0);
                         psy_draw_all_db();
-                        task_trianglepractice.run();
-                        break;
-                    case 27:
-                        task_trianglepractice.step++;
-                        if (!(trialCounter > 3)) {
-                            task_trianglepractice.step = 33
+                        if (!(lastTwoStatus == 1)) {
+                            task_trianglepractice.step = 32
                         };
                         setTimeout("task_trianglepractice.run()", 0);
                         break;
-                    case 28:
+                    case 31:
+                        task_trianglepractice.step++;
+                        psy_add_centered_bitmap_db(green_check, -400, 167, 0);
+                        psy_draw_all_db();
+                        task_trianglepractice.run();
+                        break;
+                    case 32:
+                        task_trianglepractice.step++;
+                        if (!(lastTwoStatus != 1)) {
+                            task_trianglepractice.step = 34
+                        };
+                        setTimeout("task_trianglepractice.run()", 0);
+                        break;
+                    case 33:
+                        task_trianglepractice.step++;
+                        psy_add_centered_bitmap_db(error, -400, 167, 0);
+                        psy_draw_all_db();
+                        task_trianglepractice.run();
+                        break;
+                    case 34:
+                        task_trianglepractice.step++;
+                        task_trianglepractice.run();
+                        break;
+                    case 35:
+                        task_trianglepractice.step++;
+                        if (!(trialCounter > 3)) {
+                            task_trianglepractice.step = 45
+                        };
+                        setTimeout("task_trianglepractice.run()", 0);
+                        break;
+                    case 36:
                         task_trianglepractice.step++;
                         task_trianglepractice.lastTrial = Math.round(trialCounter - 3);
                         psy_add_text_rgb_db(mysmallfont, -690, 19, PSY_CENTRAL, PSY_CENTRAL, 255, 255, 255,
@@ -2204,30 +2285,30 @@
                         psy_add_centered_bitmap_db(backg_small, -545, 19, 0);
                         psy_draw_all_db();
                         if (!(lastThreeKeyPressed == 1)) {
-                            task_trianglepractice.step = 30
+                            task_trianglepractice.step = 38
                         };
                         setTimeout("task_trianglepractice.run()", 0);
                         break;
-                    case 29:
+                    case 37:
                         task_trianglepractice.step++;
                         psy_add_centered_bitmap_db(white_small, -558, 19, 0);
                         psy_draw_all_db();
                         task_trianglepractice.run();
                         break;
-                    case 30:
+                    case 38:
                         task_trianglepractice.step++;
                         if (!(lastThreeKeyPressed == 2)) {
-                            task_trianglepractice.step = 32
+                            task_trianglepractice.step = 40
                         };
                         setTimeout("task_trianglepractice.run()", 0);
                         break;
-                    case 31:
+                    case 39:
                         task_trianglepractice.step++;
                         psy_add_centered_bitmap_db(white_small, -532, 19, 0);
                         psy_draw_all_db();
                         task_trianglepractice.run();
                         break;
-                    case 32:
+                    case 40:
                         task_trianglepractice.step++;
                         psy_add_centered_bitmap_db(blue_small, -558, 19, 0);
                         psy_draw_all_db();
@@ -2240,16 +2321,42 @@
                         psy_add_centered_bitmap_db(egg_small, task_trianglepractice.calcualtedEggXPosition,
                             task_trianglepractice.calcualtedEggYPosition, 0);
                         psy_draw_all_db();
-                        task_trianglepractice.run();
-                        break;
-                    case 33:
-                        task_trianglepractice.step++;
-                        if (!(trialCounter > 4)) {
-                            task_trianglepractice.step = 39
+                        if (!(lastThreeStatus == 1)) {
+                            task_trianglepractice.step = 42
                         };
                         setTimeout("task_trianglepractice.run()", 0);
                         break;
-                    case 34:
+                    case 41:
+                        task_trianglepractice.step++;
+                        psy_add_centered_bitmap_db(green_check, -400, 19, 0);
+                        psy_draw_all_db();
+                        task_trianglepractice.run();
+                        break;
+                    case 42:
+                        task_trianglepractice.step++;
+                        if (!(lastThreeStatus != 1)) {
+                            task_trianglepractice.step = 44
+                        };
+                        setTimeout("task_trianglepractice.run()", 0);
+                        break;
+                    case 43:
+                        task_trianglepractice.step++;
+                        psy_add_centered_bitmap_db(error, -400, 19, 0);
+                        psy_draw_all_db();
+                        task_trianglepractice.run();
+                        break;
+                    case 44:
+                        task_trianglepractice.step++;
+                        task_trianglepractice.run();
+                        break;
+                    case 45:
+                        task_trianglepractice.step++;
+                        if (!(trialCounter > 4)) {
+                            task_trianglepractice.step = 55
+                        };
+                        setTimeout("task_trianglepractice.run()", 0);
+                        break;
+                    case 46:
                         task_trianglepractice.step++;
                         task_trianglepractice.lastTrial = Math.round(trialCounter - 4);
                         psy_add_text_rgb_db(mysmallfont, -690, -129, PSY_CENTRAL, PSY_CENTRAL, 255, 255, 255,
@@ -2258,30 +2365,30 @@
                         psy_add_centered_bitmap_db(backg_small, -545, -129, 0);
                         psy_draw_all_db();
                         if (!(lastFourKeyPressed == 1)) {
-                            task_trianglepractice.step = 36
+                            task_trianglepractice.step = 48
                         };
                         setTimeout("task_trianglepractice.run()", 0);
                         break;
-                    case 35:
+                    case 47:
                         task_trianglepractice.step++;
                         psy_add_centered_bitmap_db(white_small, -558, -129, 0);
                         psy_draw_all_db();
                         task_trianglepractice.run();
                         break;
-                    case 36:
+                    case 48:
                         task_trianglepractice.step++;
                         if (!(lastFourKeyPressed == 2)) {
-                            task_trianglepractice.step = 38
+                            task_trianglepractice.step = 50
                         };
                         setTimeout("task_trianglepractice.run()", 0);
                         break;
-                    case 37:
+                    case 49:
                         task_trianglepractice.step++;
                         psy_add_centered_bitmap_db(white_small, -532, -129, 0);
                         psy_draw_all_db();
                         task_trianglepractice.run();
                         break;
-                    case 38:
+                    case 50:
                         task_trianglepractice.step++;
                         psy_add_centered_bitmap_db(blue_small, -558, -129, 0);
                         psy_draw_all_db();
@@ -2294,16 +2401,42 @@
                         psy_add_centered_bitmap_db(egg_small, task_trianglepractice.calcualtedEggXPosition,
                             task_trianglepractice.calcualtedEggYPosition, 0);
                         psy_draw_all_db();
-                        task_trianglepractice.run();
-                        break;
-                    case 39:
-                        task_trianglepractice.step++;
-                        if (!(trialCounter > 5)) {
-                            task_trianglepractice.step = 45
+                        if (!(lastFourStatus == 1)) {
+                            task_trianglepractice.step = 52
                         };
                         setTimeout("task_trianglepractice.run()", 0);
                         break;
-                    case 40:
+                    case 51:
+                        task_trianglepractice.step++;
+                        psy_add_centered_bitmap_db(green_check, -400, -129, 0);
+                        psy_draw_all_db();
+                        task_trianglepractice.run();
+                        break;
+                    case 52:
+                        task_trianglepractice.step++;
+                        if (!(lastFourStatus != 1)) {
+                            task_trianglepractice.step = 54
+                        };
+                        setTimeout("task_trianglepractice.run()", 0);
+                        break;
+                    case 53:
+                        task_trianglepractice.step++;
+                        psy_add_centered_bitmap_db(error, -400, -129, 0);
+                        psy_draw_all_db();
+                        task_trianglepractice.run();
+                        break;
+                    case 54:
+                        task_trianglepractice.step++;
+                        task_trianglepractice.run();
+                        break;
+                    case 55:
+                        task_trianglepractice.step++;
+                        if (!(trialCounter > 5)) {
+                            task_trianglepractice.step = 65
+                        };
+                        setTimeout("task_trianglepractice.run()", 0);
+                        break;
+                    case 56:
                         task_trianglepractice.step++;
                         task_trianglepractice.lastTrial = Math.round(trialCounter - 5);
                         psy_add_text_rgb_db(mysmallfont, -690, -277, PSY_CENTRAL, PSY_CENTRAL, 255, 255, 255,
@@ -2312,175 +2445,225 @@
                         psy_add_centered_bitmap_db(backg_small, -545, -277, 0);
                         psy_draw_all_db();
                         if (!(lastFourKeyPressed == 1)) {
-                            task_trianglepractice.step = 42
+                            task_trianglepractice.step = 58
                         };
                         setTimeout("task_trianglepractice.run()", 0);
                         break;
-                    case 41:
+                    case 57:
                         task_trianglepractice.step++;
                         psy_add_centered_bitmap_db(white_small, -558, -277, 0);
                         psy_draw_all_db();
                         task_trianglepractice.run();
                         break;
-                    case 42:
+                    case 58:
                         task_trianglepractice.step++;
                         if (!(lastFourKeyPressed == 2)) {
-                            task_trianglepractice.step = 44
+                            task_trianglepractice.step = 60
                         };
                         setTimeout("task_trianglepractice.run()", 0);
                         break;
-                    case 43:
+                    case 59:
                         task_trianglepractice.step++;
                         psy_add_centered_bitmap_db(white_small, -532, -277, 0);
                         psy_draw_all_db();
                         task_trianglepractice.run();
                         break;
-                    case 44:
+                    case 60:
                         task_trianglepractice.step++;
                         psy_add_centered_bitmap_db(blue_small, -558, -277, 0);
                         psy_draw_all_db();
                         psy_add_centered_bitmap_db(yellow_small, -532, -277, 0);
                         psy_draw_all_db();
-                        task_trianglepractice.calcualtedEggXPosition = Math.round(lastFourEggXPosition / 6 -
+                        task_trianglepractice.calcualtedEggXPosition = Math.round(lastFiveEggXPosition / 6 -
                             545);
-                        task_trianglepractice.calcualtedEggYPosition = Math.round(lastFourEggYPosition / 6 -
+                        task_trianglepractice.calcualtedEggYPosition = Math.round(lastFiveEggYPosition / 6 -
                             277);
                         psy_add_centered_bitmap_db(egg_small, task_trianglepractice.calcualtedEggXPosition,
                             task_trianglepractice.calcualtedEggYPosition, 0);
                         psy_draw_all_db();
+                        if (!(lastFiveStatus == 1)) {
+                            task_trianglepractice.step = 62
+                        };
+                        setTimeout("task_trianglepractice.run()", 0);
+                        break;
+                    case 61:
+                        task_trianglepractice.step++;
+                        psy_add_centered_bitmap_db(green_check, -400, -277, 0);
+                        psy_draw_all_db();
                         task_trianglepractice.run();
                         break;
-                    case 45:
+                    case 62:
+                        task_trianglepractice.step++;
+                        if (!(lastFiveStatus != 1)) {
+                            task_trianglepractice.step = 64
+                        };
+                        setTimeout("task_trianglepractice.run()", 0);
+                        break;
+                    case 63:
+                        task_trianglepractice.step++;
+                        psy_add_centered_bitmap_db(error, -400, -277, 0);
+                        psy_draw_all_db();
+                        task_trianglepractice.run();
+                        break;
+                    case 64:
+                        task_trianglepractice.step++;
+                        task_trianglepractice.run();
+                        break;
+                    case 65:
                         task_trianglepractice.step++;
                         psy_add_centered_bitmap_db(egg_white, practiceTable[tablerow].c3, practiceTable[
                             tablerow].c4, 0);
                         psy_draw_all_db();
                         psy_delay(250);
                         break;
-                    case 46:
+                    case 66:
                         task_trianglepractice.step++;
                         psy_clear_stimuli1(-1);
                         psy_draw_all_db();
                         psy_delay(250);
                         break;
-                    case 47:
+                    case 67:
                         task_trianglepractice.step++;
                         psy_add_centered_bitmap_db(egg_white, practiceTable[tablerow].c3, practiceTable[
                             tablerow].c4, 0);
                         psy_draw_all_db();
                         psy_delay(250);
                         break;
-                    case 48:
+                    case 68:
                         task_trianglepractice.step++;
                         psy_clear_stimuli1(-1);
                         psy_draw_all_db();
                         psy_delay(250);
                         break;
-                    case 49:
+                    case 69:
                         task_trianglepractice.step++;
                         psy_add_centered_bitmap_db(egg_white, practiceTable[tablerow].c3, practiceTable[
                             tablerow].c4, 0);
                         psy_draw_all_db();
                         psy_delay(250);
                         break;
-                    case 50:
+                    case 70:
                         task_trianglepractice.step++;
                         psy_clear_stimuli1(-1);
                         psy_draw_all_db();
                         psy_delay(250);
                         break;
-                    case 51:
+                    case 71:
                         task_trianglepractice.step++;
                         psy_add_centered_bitmap_db(egg_white, practiceTable[tablerow].c3, practiceTable[
                             tablerow].c4, 0);
                         psy_draw_all_db();
-                        psy_add_text_rgb_db(mysmallfont, 0, -270, PSY_CENTRAL, PSY_CENTRAL, 255, 255, 255,
-                            "Which chicken will lay the next egg?", 0);
+                        psy_add_centered_bitmap_db(next_egg_text, 0, 270, 0);
                         psy_draw_all_db();
-                        psy_keyboard(possiblekeys, 3, practiceTable[tablerow].c5 - 1, 9999999);
+                        psy_keyboard(possiblekeys, 3, practiceTable[tablerow].c6 - 1, 9999999);
                         break;
-                    case 52:
+                    case 72:
                         task_trianglepractice.step++;
                         if (!(keystatus.key + 1 == 3)) {
-                            task_trianglepractice.step = 55
+                            task_trianglepractice.step = 75
                         };
                         setTimeout("task_trianglepractice.run()", 0);
                         break;
-                    case 53:
+                    case 73:
                         task_trianglepractice.step++;
-                        psy_keyboard(possiblekeys, 3, practiceTable[tablerow].c5 - 1, 9999999);
+                        psy_keyboard(possiblekeys, 3, practiceTable[tablerow].c6 - 1, 9999999);
                         break;
-                    case 54:
+                    case 74:
                         task_trianglepractice.step++;
-                        task_trianglepractice.step = 52;
+                        task_trianglepractice.step = 72;
                         task_trianglepractice.run();
                         break;
-                    case 55:
+                    case 75:
                         task_trianglepractice.step++;
-                        keypressed = practiceTable[tablerow].c5;
+                        keypressed = keystatus.key + 1;
                         basketXposition = triangle_x_position;
                         if (!(keystatus.status == 1)) {
-                            task_trianglepractice.step = 57
+                            task_trianglepractice.step = 77
                         };
                         setTimeout("task_trianglepractice.run()", 0);
                         break;
-                    case 56:
+                    case 76:
                         task_trianglepractice.step++;
                         trialCorrect = trialCorrect + 1;
                         tbtresponse = 1;
                         task_trianglepractice.run();
                         break;
-                    case 57:
+                    case 77:
                         task_trianglepractice.step++;
                         if (!(keystatus.status != 1)) {
-                            task_trianglepractice.step = 59
+                            task_trianglepractice.step = 79
                         };
                         setTimeout("task_trianglepractice.run()", 0);
                         break;
-                    case 58:
+                    case 78:
                         task_trianglepractice.step++;
                         points = points - 1;
                         trialIncorrect = trialIncorrect + 1;
                         tbtresponse = 0;
                         task_trianglepractice.run();
                         break;
-                    case 59:
+                    case 79:
                         task_trianglepractice.step++;
                         time = psy_time_since_start();
+                        correct_map = 0;
+                        if (!(keystatus.status == 1)) {
+                            task_trianglepractice.step = 81
+                        };
+                        setTimeout("task_trianglepractice.run()", 0);
+                        break;
+                    case 80:
+                        task_trianglepractice.step++;
+                        correct_map = 1;
+                        task_trianglepractice.run();
+                        break;
+                    case 81:
+                        task_trianglepractice.step++;
+                        if (!(keystatus.status != 1)) {
+                            task_trianglepractice.step = 83
+                        };
+                        setTimeout("task_trianglepractice.run()", 0);
+                        break;
+                    case 82:
+                        task_trianglepractice.step++;
+                        correct_map = 0;
+                        task_trianglepractice.run();
+                        break;
+                    case 83:
+                        task_trianglepractice.step++;
                         addoutput(current_block.substring(6, current_block.length) + " " + practiceTable[
                                 tablerow].c1 + " " + practiceTable[tablerow].c2 + " " + practiceTable[
                                 tablerow].c3 + " " + practiceTable[tablerow].c4 + " " + time + " " +
                             keystatus.time + " " + (keystatus.key + 1) + " " + practiceTable[tablerow].c5 +
-                            " " + keystatus.status + " " + points + " " + left_chicken_x_position + " " +
-                            left_chicken_y_position + " " + right_chicken_x_position + " " +
-                            right_chicken_y_position + " " + give_feedback);
+                            " " + practiceTable[tablerow].c6 + " " + correct_map + " " + points + " " +
+                            left_chicken_x_position + " " + left_chicken_y_position + " " +
+                            right_chicken_x_position + " " + right_chicken_y_position + " " + give_feedback);
                         if (!(keystatus.key + 1 == 1)) {
-                            task_trianglepractice.step = 61
+                            task_trianglepractice.step = 85
                         };
                         setTimeout("task_trianglepractice.run()", 0);
                         break;
-                    case 60:
+                    case 84:
                         task_trianglepractice.step++;
                         triangle_x_position = -75;
                         psy_add_centered_bitmap_db(white_chicken, triangle_x_position, 0, 0);
                         psy_draw_all_db();
                         task_trianglepractice.run();
                         break;
-                    case 61:
+                    case 85:
                         task_trianglepractice.step++;
                         if (!(keystatus.key + 1 == 2)) {
-                            task_trianglepractice.step = 63
+                            task_trianglepractice.step = 87
                         };
                         setTimeout("task_trianglepractice.run()", 0);
                         break;
-                    case 62:
+                    case 86:
                         task_trianglepractice.step++;
                         triangle_x_position = 75;
                         psy_add_centered_bitmap_db(white_chicken, triangle_x_position, 0, 0);
                         psy_draw_all_db();
                         task_trianglepractice.run();
                         break;
-                    case 63:
+                    case 87:
                         task_trianglepractice.step++;
                         psy_add_centered_bitmap_db(blue_chicken, -75, 0, 0);
                         psy_draw_all_db();
@@ -2491,8 +2674,9 @@
                         psy_draw_all_db();
                         psy_delay(300);
                         break;
-                    case 64:
+                    case 88:
                         task_trianglepractice.step++;
+                        lastStatus = keystatus.status;
                         trialCounter = trialCounter + 1;
                         setTimeout(current_block + ".run()", 0);
                         break
@@ -2946,10 +3130,9 @@
                         task_triangle.step++;
                         psy_add_centered_bitmap_db(egg_white, myTable[tablerow].c3, myTable[tablerow].c4, 0);
                         psy_draw_all_db();
-                        psy_add_text_rgb_db(mainfont, 0, -270, PSY_CENTRAL, PSY_CENTRAL, 255, 255, 255,
-                            "Which chicken will lay the next egg?", 0);
+                        psy_add_centered_bitmap_db(next_egg_text, 0, 270, 0);
                         psy_draw_all_db();
-                        psy_keyboard(possiblekeys, 3, myTable[tablerow].c5 - 1, 9999999);
+                        psy_keyboard(possiblekeys, 3, myTable[tablerow].c6 - 1, 9999999);
                         break;
                     case 46:
                         task_triangle.step++;
@@ -2960,7 +3143,7 @@
                         break;
                     case 47:
                         task_triangle.step++;
-                        psy_keyboard(possiblekeys, 3, myTable[tablerow].c5 - 1, 9999999);
+                        psy_keyboard(possiblekeys, 3, myTable[tablerow].c6 - 1, 9999999);
                         break;
                     case 48:
                         task_triangle.step++;
@@ -2998,39 +3181,65 @@
                     case 53:
                         task_triangle.step++;
                         time = psy_time_since_start();
-                        addoutput(current_block.substring(6, current_block.length) + " " + myTable[tablerow]
-                            .c1 + " " + myTable[tablerow].c2 + " " + myTable[tablerow].c3 + " " + myTable[
-                                tablerow].c4 + " " + time + " " + keystatus.time + " " + (keystatus.key +
-                            1) + " " + myTable[tablerow].c5 + " " + keystatus.status + " " + points + " " +
-                            left_chicken_x_position + " " + left_chicken_y_position + " " +
-                            right_chicken_x_position + " " + right_chicken_y_position + " " + give_feedback);
-                        if (!(keystatus.key + 1 == 1)) {
+                        correct_map = 0;
+                        if (!(keystatus.status == 1)) {
                             task_triangle.step = 55
                         };
                         setTimeout("task_triangle.run()", 0);
                         break;
                     case 54:
                         task_triangle.step++;
-                        triangle_x_position = -75;
-                        psy_add_centered_bitmap_db(white_chicken, triangle_x_position, 0, 0);
-                        psy_draw_all_db();
+                        correct_map = 1;
                         task_triangle.run();
                         break;
                     case 55:
                         task_triangle.step++;
-                        if (!(keystatus.key + 1 == 2)) {
+                        if (!(keystatus.status != 1)) {
                             task_triangle.step = 57
                         };
                         setTimeout("task_triangle.run()", 0);
                         break;
                     case 56:
                         task_triangle.step++;
+                        correct_map = 0;
+                        task_triangle.run();
+                        break;
+                    case 57:
+                        task_triangle.step++;
+                        addoutput(current_block.substring(6, current_block.length) + " " + myTable[tablerow]
+                            .c1 + " " + myTable[tablerow].c2 + " " + myTable[tablerow].c3 + " " + myTable[
+                                tablerow].c4 + " " + time + " " + keystatus.time + " " + (keystatus.key +
+                            1) + " " + myTable[tablerow].c5 + " " + myTable[tablerow].c6 + " " +
+                            correct_map + " " + points + " " + left_chicken_x_position + " " +
+                            left_chicken_y_position + " " + right_chicken_x_position + " " +
+                            right_chicken_y_position + " " + give_feedback);
+                        if (!(keystatus.key + 1 == 1)) {
+                            task_triangle.step = 59
+                        };
+                        setTimeout("task_triangle.run()", 0);
+                        break;
+                    case 58:
+                        task_triangle.step++;
+                        triangle_x_position = -75;
+                        psy_add_centered_bitmap_db(white_chicken, triangle_x_position, 0, 0);
+                        psy_draw_all_db();
+                        task_triangle.run();
+                        break;
+                    case 59:
+                        task_triangle.step++;
+                        if (!(keystatus.key + 1 == 2)) {
+                            task_triangle.step = 61
+                        };
+                        setTimeout("task_triangle.run()", 0);
+                        break;
+                    case 60:
+                        task_triangle.step++;
                         triangle_x_position = 75;
                         psy_add_centered_bitmap_db(white_chicken, triangle_x_position, 0, 0);
                         psy_draw_all_db();
                         task_triangle.run();
                         break;
-                    case 57:
+                    case 61:
                         task_triangle.step++;
                         psy_add_centered_bitmap_db(blue_chicken, -75, 0, 0);
                         psy_draw_all_db();
@@ -3040,7 +3249,7 @@
                         psy_draw_all_db();
                         psy_delay(300);
                         break;
-                    case 58:
+                    case 62:
                         task_triangle.step++;
                         trialCounter = trialCounter + 1;
                         setTimeout(current_block + ".run()", 0);
@@ -4789,9 +4998,7 @@
             psy_load_bitmap(
                 "https://res.cloudinary.com/laureate-institute-for-brain-research/image/upload/v1534793154/Chicken_Task/chicken_select_sky_blue_small.png"
                 );
-            psy_load_bitmap(
-                "https://res.cloudinary.com/laureate-institute-for-brain-research/image/upload/v1534880029/chicken_select_small.png"
-                );
+            psy_load_bitmap("http://brainworkout.paulus.libr.net/images/chicken_media/select_small_oval.png");
             psy_load_bitmap(
                 "https://res.cloudinary.com/laureate-institute-for-brain-research/image/upload/v1534787971/Chicken_Task/backg_small.png"
                 );
@@ -4799,7 +5006,7 @@
                 "https://res.cloudinary.com/laureate-institute-for-brain-research/image/upload/v1534792993/Chicken_Task/egg_small.png"
                 );
             psy_load_bitmap(
-                "http://res.cloudinary.com/laureate-institute-for-brain-research/image/upload/v1536171197/Chicken_Task/instructions_estimate/past_trial_slide.png"
+                "http://brainworkout.paulus.libr.net/images/chicken_media/instructions/Task_Instructions_yb/last_trial_slide.png"
                 );
             psy_load_bitmap(
                 "http://brainworkout.paulus.libr.net/images/chicken_media/instructions/Task_Instructions_yb/Slide25.png"
@@ -4829,6 +5036,9 @@
                 "http://brainworkout.paulus.libr.net/images/chicken_media/Distribution_Images/PNG/dist_110_by.png");
             psy_load_bitmap(
                 "http://brainworkout.paulus.libr.net/images/chicken_media/Distribution_Images/PNG/dist_160_by.png");
+            psy_load_bitmap("http://brainworkout.paulus.libr.net/images/chicken_media/check.png");
+            psy_load_bitmap("http://brainworkout.paulus.libr.net/images/chicken_media/error.png");
+            psy_load_bitmap("http://brainworkout.paulus.libr.net/images/chicken_media/next_egg_text.png");
             when_stimuli_loaded_do("blocks" + psy_blockorder + ".run()")
         }
         var blocks1 = {
@@ -4896,7 +5106,8 @@
             $.ajax({
                 type: 'POST',
                 url: 'saveChickenTask?session=' + session + '&mkturk_id=' + mkturkid + '&task=' + task +
-                    '&study=' + getQueryVariable('study') + '&pattern=1&type=predict_2&version=3.0.1',
+                    '&study=' +
+                    getQueryVariable('study') + '&pattern=1&type=predict_2&version=3.0.2',
                 data: JSON.stringify({
                     content: data
                 }), // or JSON.stringify ({name: 'jonas'}),
