@@ -1000,15 +1000,21 @@ function getChickenTaskScore(filename){
 	returnJSON['avg_rt'] = 0
 	
 	for (var i = 2; i < contents.length - 1; i++){
-		if (contents[i][1] == "1200"){
+
+		if (filename.includes('wave2') && contents[i][1] == "1200"){
 			returnJSON['points'] = contents[i][9]
 		}
+		if (filename.includes('wave3') && contents[i][1] == "400"){
+			returnJSON['points'] = contents[i][11]
+		}
+		
 
 		if (contents[i][0]== 'main'){
 			returnJSON['avg_rt'] = returnJSON['avg_rt'] + parseFloat(contents[i][5].replace('\"',''))
 		}
 	}
 	returnJSON['avg_rt'] = returnJSON['avg_rt'] / 1200
+	console.log(returnJSON)
 	return(returnJSON)
 }
 

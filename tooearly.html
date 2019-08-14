@@ -52,6 +52,11 @@
                 <hr style="border-top:5px solid #b1b3b6" />
                 <br>
                 <h1 style="padding: 17px" >Thank you for completing Session 1!</h1>
+                <br>
+                <blockquote class="imgur-embed-pub" lang="en" data-id="dQViAfZ">
+                    <a href="//imgur.com/dQViAfZ">Emu playing with a sprinkler</a>
+                </blockquote>
+                <script async src="//s.imgur.com/min/embed.js" charset="utf-8"></script>
                 <p id='mkturk_id'></p>
                 <p> Please Log back in:</p>
                 <p style="color:red;font-size: 60px;font-weight: bold" id="demo"></p> 
@@ -61,6 +66,7 @@
                 <p style="color:red;font-size: 20px; font-weight: : bold">You must complete session 2 to receive payment for HIT</p>
                 <br>
                 <br>
+                
 
             </div>
         </center>
@@ -136,55 +142,12 @@
                         }
                     }, 500);
                 });
-            } else {
-                $.get('/getTimeReady?mkturk_id=' + mkturkid + '&study=' + getQueryVariable('study') , function(data) {
-                    timeleft = data;
-                    //document.getElementById("phqscore").innerHTML = data;
-
-                    //timeleft
-                    var countDownDate = new Date(decodeURIComponent(timeleft)).getTime();
-
-                    // Update the count down every 1 second
-                    var x = setInterval(function() {
-
-
-                        // Get todays date and time
-                        var now = new Date().getTime();
-                        
-                        // Find the distance between now an the count down date
-                        var distance = countDownDate - now;
-                        
-                        // Time calculations for days, hours, minutes and seconds
-                        var days = Math.floor(distance / (1000 * 60 * 60 * 24));
-                        var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                        var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-                        var seconds = Math.floor((distance % (1000 * 60)) / 1000);
-                        
-                        // Output the result in an element with id="demo"
-                        document.getElementById("demo").innerHTML = hours + "h "
-                        + minutes + "m " + seconds + "s ";
-                        
-                        // If the count down is over, write some text
-                        // If the count down is over, redirect to session 2
-                        if (distance < 0) {
-                            clearInterval(x);
-                            window.location.href = "/?session=2"+"&mkturk_id="+mkturkid+"&survey=demo" + "&study=" + getQueryVariable('study');
-                            document.getElementById("demo").innerHTML = "EXPIRED";
-                        }
-                    }, 500);
-                });
             }
     
             
 
             
             //$("#timeleft").text(timeleft);
-        </script>
-        <script>
-            // Set the date we're counting down to
-
-            // date format: "Sep 5, 2018 15:37:25"
-
         </script>
 
     </body>
