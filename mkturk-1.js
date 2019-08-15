@@ -621,8 +621,11 @@ app.post('/saveChickenTask/', function(req, res) {
 		})
 
 	});
-	// add Time Ready so that the ready time initiates once Task1 has been completed
-	addTimeReady(mkturk_id, study);
+	// add Time Ready on session 1 only o that the ready time initiates once Task1 has been completed
+	if (session == '1'){
+		addTimeReady(mkturk_id, study);
+	}
+	
 
 	
 

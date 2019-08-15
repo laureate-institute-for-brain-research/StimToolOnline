@@ -499,6 +499,8 @@ function reRoute(con,mkturk_id,response){
 		  		var name = jobs[1];
 				var session = jobs[2];
 				chicken_version = obj['task_version']
+
+				console.log(job + ', ' + name + ' ' + session)
 				
 				
 		  		// if (val == 'YES') {
