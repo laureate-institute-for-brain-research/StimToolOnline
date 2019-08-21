@@ -816,7 +816,7 @@
         survey.onComplete.add(function (result) {
             //result.preventDefault();
             postSurveyData(result.data, session, mkturkid, surveyname);
-            window.location.replace("/?session=" + session + "&mkturk_id=" + mkturkid + "&survey=phq" +
+            window.location.replace("/?session=" + session + "&mkturk_id=" + mkturkid + "&survey=assessment" +
                 "&study=" + getQueryVariable('study'));
         });
 

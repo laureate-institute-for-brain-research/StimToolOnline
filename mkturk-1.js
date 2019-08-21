@@ -112,6 +112,8 @@ app.get('/',function (req, res) {
 		displaySurveyoasis(res);
 	} else if (survey == 'asi') {
 		displaySurveyasi(res);
+	} else if (survey == 'assessment') {
+		displayAssessment(res);
 	} else if(survey == 'panas'){
 		displaySurveyPanas(res);
 	} else if(survey == 'panasx'){
@@ -1385,6 +1387,18 @@ function displayFeedback(res){
 
 function displayDataCampSurvey(res){
 	fs.readFile('surveys/datacamp.html', function (err, data) {
+		// Write Header
+		res.writeHead(200, {
+			'Content-Type' : 'text/html'
+		});
+		// Wrte Body
+		res.write(data);
+		res.end();
+	});	
+}
+
+function displayAssessment(res){
+	fs.readFile('surveys/asessment_questions.html', function (err, data) {
 		// Write Header
 		res.writeHead(200, {
 			'Content-Type' : 'text/html'
