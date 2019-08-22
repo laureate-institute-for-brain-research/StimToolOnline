@@ -135,7 +135,7 @@ app.get('/',function (req, res) {
 				displayChickenEstimate(res, '1');
 			}			
 		} else if(type == 'predict_2'){
-			displayChickenPredict2(res,ctpattern)
+			displayChickenPredict2(res,ctpattern, q.version)
 		} else{
 			switch(ctpattern){
 				case '1':
@@ -1510,11 +1510,19 @@ function displayChickenEstimate(res, version){
 	});	
 }
 
-function displayChickenPredict2(res,pattern){ 
+function displayChickenPredict2(res,pattern, version){ 
 	if(!pattern){
 		pattern = '1'  // if pattern not specified then default is 1
 	}
-	filename = 'task/chicken_task/predict_version2/pattern_' + pattern + '.html'
+
+	// If Version is specified, show them the folder
+	if (version){
+		filename = 'task/chicken_task/predict_version2/' + version + '/pattern_' + pattern + '.html'
+	} else {
+	// Use the most recent in the root_folder
+		filename = 'task/chicken_task/predict_version2/pattern_' + pattern + '.html'
+	}
+	
 	fs.readFile(filename, function (err, data) {
 		// Write Header
 		res.writeHead(200, {

@@ -3,7 +3,7 @@
 
 <head>
     <META CHARSET='UTF-8'>
-    <title>Chicken Task: Predict</title>
+    <title>PsyToolkit run experiment</title>
     <style>
         img {
 			max-width: 40%;
@@ -51,7 +51,7 @@
     
             <div class="row">
                 <div class="col-md-10">
-                    <h1 style="padding: 17px">Chicken Task: Predict: Type 2 - Pattern 2</h1>
+                    <h1 style="padding: 17px">Chicken Task: Predict Version 2 - Pattern 4</h1>
                 </div>
             </div>
             <center>
@@ -92,6 +92,8 @@
     
             var session = getQueryVariable('session');
             var mkturkid = getQueryVariable('mkturk_id');
+            //var mkturkid = getQueryVariable('mkturk_id');
+    
             $("#mkid").text(mkturkid);
             $("#session").text(session);
             $("#study").text(getQueryVariable('study'));
@@ -1630,13 +1632,7 @@
         var keypressed = 0;
         var time = 0;
         var correct_map = 0;
-        var block1Correct = 0;
         var lastStatus = 0;
-        var repeatblock1 = 0;
-        var block1CountShow = 0;
-        var block2Correct = 0;
-        var repeatblock2 = 0;
-        var block2CountShow = 0;
         var multiplier = 0;
         var accuracy = 0;
         var percentAccuracy = 0;
@@ -1775,130 +1771,130 @@
                 0, 0, 0), new myTabletype(195, 1, 72, 65, 1, 2, "MAIN", 0, 0, 0), new myTabletype(196, 1, 79, 282,
                 2, 2, "MAIN", 0, 0, 0), new myTabletype(197, 1, 252, 26, 2, 2, "MAIN", 0, 0, 0), new myTabletype(
                 198, 1, 105, 19, 2, 2, "MAIN", 0, 0, 0), new myTabletype(199, 1, -78, -69, 2, 2, "MAIN", 0, 0, 0),
-            new myTabletype(200, 1, -65, 100, 2, 2, "MAIN", 0, 0, 0), new myTabletype(201, 4, 120, 59, 2, 1, "MAIN",
-                0, 0, 0), new myTabletype(202, 4, -136, -172, 1, 2, "MAIN", 0, 0, 0), new myTabletype(203, 4, -154,
-                1, 2, 1, "MAIN", 0, 0, 0), new myTabletype(204, 4, 226, 128, 1, 2, "MAIN", 0, 0, 0),
-            new myTabletype(205, 4, -9, 49, 2, 1, "MAIN", 0, 0, 0), new myTabletype(206, 4, -318, -368, 1, 2,
-                "MAIN", 0, 0, 0), new myTabletype(207, 4, 277, 54, 2, 1, "MAIN", 0, 0, 0), new myTabletype(208, 4, -
-                313, -35, 1, 2, "MAIN", 0, 0, 0), new myTabletype(209, 4, -17, -139, 2, 1, "MAIN", 0, 0, 0),
-            new myTabletype(210, 4, -125, -309, 1, 1, "MAIN", 0, 0, 0), new myTabletype(211, 4, -344, 143, 1, 2,
-                "MAIN", 0, 0, 0), new myTabletype(212, 4, -249, -90, 2, 1, "MAIN", 0, 0, 0), new myTabletype(213, 4,
-                -99, -131, 1, 2, "MAIN", 0, 0, 0), new myTabletype(214, 4, 148, 163, 2, 1, "MAIN", 0, 0, 0),
-            new myTabletype(215, 4, -60, -189, 1, 2, "MAIN", 0, 0, 0), new myTabletype(216, 4, 73, -53, 2, 1,
-                "MAIN", 0, 0, 0), new myTabletype(217, 4, -25, -32, 1, 2, "MAIN", 0, 0, 0), new myTabletype(218, 4,
-                214, 29, 2, 1, "MAIN", 0, 0, 0), new myTabletype(219, 4, 195, 19, 1, 2, "MAIN", 0, 0, 0),
-            new myTabletype(220, 4, 312, 83, 2, 1, "MAIN", 0, 0, 0), new myTabletype(221, 4, -183, 115, 1, 2,
-                "MAIN", 0, 0, 0), new myTabletype(222, 4, 264, 199, 2, 1, "MAIN", 0, 0, 0), new myTabletype(223, 4,
-                -163, -380, 1, 2, "MAIN", 0, 1, 0), new myTabletype(224, 4, 244, 231, 2, 2, "MAIN", 0, 0, 0),
-            new myTabletype(225, 4, 212, -234, 2, 1, "MAIN", 0, 0, 0), new myTabletype(226, 4, 22, 276, 1, 2,
-                "MAIN", 0, 0, 0), new myTabletype(227, 4, -50, -236, 2, 2, "MAIN", 0, 0, 0), new myTabletype(228, 4,
-                41, 64, 2, 1, "MAIN", 0, 0, 0), new myTabletype(229, 4, 42, 204, 1, 2, "MAIN", 0, 0, 0),
-            new myTabletype(230, 4, 238, 314, 2, 1, "MAIN", 0, 0, 0), new myTabletype(231, 4, -125, 88, 1, 2,
-                "MAIN", 0, 0, 0), new myTabletype(232, 4, 76, 225, 2, 1, "MAIN", 0, 0, 0), new myTabletype(233, 4, -
-                67, -164, 1, 2, "MAIN", 0, 0, 0), new myTabletype(234, 4, -84, -15, 2, 1, "MAIN", 0, 0, 0),
-            new myTabletype(235, 4, -97, 132, 1, 2, "MAIN", 0, 0, 0), new myTabletype(236, 4, -50, 63, 2, 1, "MAIN",
-                0, 0, 0), new myTabletype(237, 4, 49, -26, 1, 2, "MAIN", 0, 0, 0), new myTabletype(238, 4, 17, -39,
-                2, 1, "MAIN", 0, 0, 0), new myTabletype(239, 4, -24, 349, 1, 2, "MAIN", 0, 0, 0), new myTabletype(
-                240, 4, 194, 117, 2, 1, "MAIN", 0, 0, 0), new myTabletype(241, 4, 9, 16, 1, 1, "MAIN", 0, 0, 0),
-            new myTabletype(242, 4, 157, -156, 1, 2, "MAIN", 0, 0, 0), new myTabletype(243, 4, 105, 200, 2, 1,
-                "MAIN", 0, 0, 0), new myTabletype(244, 4, -273, 1, 1, 2, "MAIN", 0, 0, 0), new myTabletype(245, 4,
-                34, 165, 2, 1, "MAIN", 0, 0, 0), new myTabletype(246, 4, -306, 98, 1, 2, "MAIN", 0, 0, 0),
-            new myTabletype(247, 4, 47, 101, 2, 1, "MAIN", 0, 0, 0), new myTabletype(248, 4, -302, 2, 1, 2, "MAIN",
-                0, 0, 0), new myTabletype(249, 4, -23, 109, 2, 1, "MAIN", 0, 0, 0), new myTabletype(250, 4, 54, -8,
-                1, 2, "MAIN", 0, 0, 0), new myTabletype(251, 4, 393, -14, 2, 1, "MAIN", 0, 0, 0), new myTabletype(
-                252, 4, -37, -144, 1, 2, "MAIN", 0, 0, 0), new myTabletype(253, 4, -88, 66, 2, 1, "MAIN", 0, 0, 0),
-            new myTabletype(254, 4, -106, 14, 1, 2, "MAIN", 0, 0, 0), new myTabletype(255, 4, 148, 36, 2, 1, "MAIN",
-                0, 0, 0), new myTabletype(256, 4, -29, 224, 1, 2, "MAIN", 0, 0, 0), new myTabletype(257, 4, 315, 88,
-                2, 1, "MAIN", 0, 0, 0), new myTabletype(258, 4, -117, -253, 1, 2, "MAIN", 0, 0, 0), new myTabletype(
-                259, 4, -174, 6, 2, 1, "MAIN", 0, 0, 0), new myTabletype(260, 4, -452, 12, 1, 2, "MAIN", 0, 0, 0),
-            new myTabletype(261, 4, -162, 113, 2, 1, "MAIN", 0, 0, 0), new myTabletype(262, 4, 9, -200, 1, 2,
-                "MAIN", 0, 0, 0), new myTabletype(263, 4, 404, -267, 2, 1, "MAIN", 0, 0, 0), new myTabletype(264, 4,
-                -91, 19, 1, 2, "MAIN", 0, 0, 0), new myTabletype(265, 4, 62, 193, 2, 1, "MAIN", 0, 0, 0),
-            new myTabletype(266, 4, -100, 39, 1, 2, "MAIN", 0, 0, 0), new myTabletype(267, 4, 134, -80, 2, 1,
-                "MAIN", 0, 0, 0), new myTabletype(268, 4, -279, 84, 1, 2, "MAIN", 0, 0, 0), new myTabletype(269, 4,
-                -31, -141, 2, 1, "MAIN", 0, 0, 0), new myTabletype(270, 4, -20, -5, 1, 2, "MAIN", 0, 0, 0),
-            new myTabletype(271, 4, 119, 345, 2, 1, "MAIN", 0, 0, 0), new myTabletype(272, 4, -189, -28, 1, 2,
-                "MAIN", 0, 0, 0), new myTabletype(273, 4, 73, 158, 2, 1, "MAIN", 0, 0, 0), new myTabletype(274, 4, -
-                75, 55, 1, 2, "MAIN", 0, 0, 0), new myTabletype(275, 4, 152, 88, 2, 1, "MAIN", 0, 0, 0),
-            new myTabletype(276, 4, -74, 60, 1, 2, "MAIN", 0, 0, 0), new myTabletype(277, 4, 136, 15, 2, 1, "MAIN",
-                0, 0, 0), new myTabletype(278, 4, -80, -308, 1, 2, "MAIN", 0, 0, 0), new myTabletype(279, 4, -2,
-                157, 2, 1, "MAIN", 0, 0, 0), new myTabletype(280, 4, -297, -334, 1, 2, "MAIN", 0, 0, 0),
-            new myTabletype(281, 4, -40, 12, 2, 1, "MAIN", 0, 0, 0), new myTabletype(282, 4, -78, 21, 1, 1, "MAIN",
-                0, 0, 0), new myTabletype(283, 4, -221, -75, 1, 2, "MAIN", 0, 0, 0), new myTabletype(284, 4, 86, 31,
-                2, 1, "MAIN", 0, 0, 0), new myTabletype(285, 4, 65, -20, 1, 2, "MAIN", 0, 0, 0), new myTabletype(
-                286, 4, -20, 32, 2, 1, "MAIN", 0, 0, 0), new myTabletype(287, 4, -85, -57, 1, 2, "MAIN", 0, 0, 0),
-            new myTabletype(288, 4, 289, 20, 2, 1, "MAIN", 0, 0, 0), new myTabletype(289, 4, -150, 270, 1, 2,
-                "MAIN", 0, 0, 0), new myTabletype(290, 4, -12, -163, 2, 1, "MAIN", 0, 0, 0), new myTabletype(291, 4,
-                58, 67, 1, 2, "MAIN", 0, 0, 0), new myTabletype(292, 4, -71, -65, 2, 1, "MAIN", 0, 0, 0),
-            new myTabletype(293, 4, 25, 61, 1, 2, "MAIN", 0, 0, 0), new myTabletype(294, 4, -27, 166, 2, 1, "MAIN",
-                0, 0, 0), new myTabletype(295, 4, -336, 53, 1, 2, "MAIN", 0, 0, 0), new myTabletype(296, 4, 190, -
-                17, 2, 1, "MAIN", 0, 0, 0), new myTabletype(297, 4, -27, 237, 1, 2, "MAIN", 0, 0, 0),
-            new myTabletype(298, 4, -150, -39, 2, 1, "MAIN", 0, 0, 0), new myTabletype(299, 4, 26, 37, 1, 2, "MAIN",
-                0, 0, 0), new myTabletype(300, 4, 114, 162, 2, 1, "MAIN", 0, 0, 0), new myTabletype(301, 2, 166, -
-                120, 2, 2, "MAIN", 0, 0, 0), new myTabletype(302, 2, -85, 115, 2, 2, "MAIN", 0, 0, 0),
-            new myTabletype(303, 2, -224, 76, 2, 2, "MAIN", 0, 0, 0), new myTabletype(304, 2, -106, -32, 2, 2,
-                "MAIN", 0, 0, 0), new myTabletype(305, 2, -129, -129, 2, 2, "MAIN", 0, 0, 0), new myTabletype(306,
-                2, 164, 89, 2, 2, "MAIN", 0, 0, 0), new myTabletype(307, 2, 135, -111, 2, 2, "MAIN", 0, 0, 0),
-            new myTabletype(308, 2, 54, 42, 2, 2, "MAIN", 0, 0, 0), new myTabletype(309, 2, -60, 345, 2, 2, "MAIN",
-                0, 0, 0), new myTabletype(310, 2, 14, 2, 2, 2, "MAIN", 0, 0, 0), new myTabletype(311, 2, 101, -59,
-                2, 2, "MAIN", 0, 0, 0), new myTabletype(312, 2, -63, -47, 2, 2, "MAIN", 0, 0, 0), new myTabletype(
-                313, 2, 264, 20, 2, 1, "MAIN", 0, 0, 0), new myTabletype(314, 2, -43, 151, 1, 1, "MAIN", 0, 0, 0),
-            new myTabletype(315, 2, -45, -118, 1, 1, "MAIN", 0, 0, 0), new myTabletype(316, 2, 116, 174, 1, 1,
-                "MAIN", 0, 0, 0), new myTabletype(317, 2, -133, 58, 1, 1, "MAIN", 0, 0, 0), new myTabletype(318, 2,
-                49, -32, 1, 1, "MAIN", 0, 0, 0), new myTabletype(319, 2, -356, 110, 1, 1, "MAIN", 0, 0, 0),
-            new myTabletype(320, 2, 39, 105, 1, 1, "MAIN", 0, 0, 0), new myTabletype(321, 2, -197, -142, 1, 2,
-                "MAIN", 0, 0, 0), new myTabletype(322, 2, -34, -121, 2, 2, "MAIN", 0, 0, 0), new myTabletype(323, 2,
-                125, -227, 2, 2, "MAIN", 0, 0, 0), new myTabletype(324, 2, 64, -126, 2, 2, "MAIN", 0, 0, 0),
-            new myTabletype(325, 2, 116, -80, 2, 2, "MAIN", 0, 0, 0), new myTabletype(326, 2, 114, -162, 2, 2,
-                "MAIN", 0, 0, 0), new myTabletype(327, 2, 207, 62, 2, 2, "MAIN", 0, 0, 0), new myTabletype(328, 2, -
-                260, 315, 2, 2, "MAIN", 0, 0, 0), new myTabletype(329, 2, -38, 51, 2, 2, "MAIN", 0, 0, 0),
-            new myTabletype(330, 2, 210, -308, 2, 2, "MAIN", 0, 0, 0), new myTabletype(331, 2, 12, 213, 2, 2,
-                "MAIN", 0, 0, 0), new myTabletype(332, 2, 65, 34, 2, 2, "MAIN", 0, 0, 0), new myTabletype(333, 2,
-                216, 69, 2, 2, "MAIN", 0, 0, 0), new myTabletype(334, 2, 130, 55, 2, 2, "MAIN", 0, 0, 0),
-            new myTabletype(335, 2, 49, 202, 2, 2, "MAIN", 0, 0, 0), new myTabletype(336, 2, -57, 148, 2, 2, "MAIN",
-                0, 0, 0), new myTabletype(337, 2, 193, 257, 2, 2, "MAIN", 0, 0, 0), new myTabletype(338, 2, -263, -
-                65, 2, 2, "MAIN", 0, 0, 0), new myTabletype(339, 2, -114, 1, 2, 2, "MAIN", 0, 0, 0),
-            new myTabletype(340, 2, 307, 48, 2, 2, "MAIN", 0, 0, 0), new myTabletype(341, 2, 47, 26, 2, 2, "MAIN",
-                0, 0, 0), new myTabletype(342, 2, 121, 55, 2, 2, "MAIN", 0, 0, 0), new myTabletype(343, 2, 114, -
-                378, 2, 2, "MAIN", 0, 0, 0), new myTabletype(344, 2, 34, 99, 2, 2, "MAIN", 0, 0, 0),
-            new myTabletype(345, 2, 55, 157, 2, 2, "MAIN", 0, 0, 0), new myTabletype(346, 2, 439, 123, 2, 1, "MAIN",
-                0, 0, 0), new myTabletype(347, 2, -386, -15, 1, 1, "MAIN", 0, 0, 0), new myTabletype(348, 2, -351, -
-                54, 1, 1, "MAIN", 0, 0, 0), new myTabletype(349, 2, 134, 98, 1, 1, "MAIN", 0, 0, 0),
-            new myTabletype(350, 2, -24, 111, 1, 1, "MAIN", 0, 0, 0), new myTabletype(351, 2, 177, -103, 1, 1,
-                "MAIN", 0, 0, 0), new myTabletype(352, 2, -29, 121, 1, 1, "MAIN", 0, 0, 0), new myTabletype(353, 2,
-                -57, 33, 1, 1, "MAIN", 0, 0, 0), new myTabletype(354, 2, -173, 72, 1, 1, "MAIN", 0, 0, 0),
-            new myTabletype(355, 2, -51, 244, 1, 1, "MAIN", 0, 0, 0), new myTabletype(356, 2, -144, 96, 1, 1,
-                "MAIN", 0, 0, 0), new myTabletype(357, 2, -440, 60, 1, 1, "MAIN", 0, 0, 0), new myTabletype(358, 2,
-                -80, -179, 1, 1, "MAIN", 0, 0, 0), new myTabletype(359, 2, 315, -212, 1, 1, "MAIN", 0, 0, 0),
-            new myTabletype(360, 2, -20, -267, 1, 1, "MAIN", 0, 0, 0), new myTabletype(361, 2, 2, 265, 1, 1, "MAIN",
-                0, 0, 0), new myTabletype(362, 2, -163, -50, 1, 2, "MAIN", 0, 0, 0), new myTabletype(363, 2, -53,
-                108, 2, 2, "MAIN", 0, 0, 0), new myTabletype(364, 2, 186, -19, 2, 2, "MAIN", 0, 0, 0),
-            new myTabletype(365, 2, 89, -49, 2, 2, "MAIN", 0, 0, 0), new myTabletype(366, 2, -80, -49, 2, 2, "MAIN",
-                0, 0, 0), new myTabletype(367, 2, 298, 190, 2, 2, "MAIN", 0, 0, 0), new myTabletype(368, 2, 33, -51,
-                2, 2, "MAIN", 0, 0, 0), new myTabletype(369, 2, 161, -28, 2, 2, "MAIN", 0, 0, 0), new myTabletype(
-                370, 2, 61, -145, 2, 2, "MAIN", 0, 0, 0), new myTabletype(371, 2, 178, 42, 2, 2, "MAIN", 0, 0, 0),
-            new myTabletype(372, 2, 140, -380, 2, 2, "MAIN", 0, 1, 0), new myTabletype(373, 2, 236, 55, 2, 2,
-                "MAIN", 0, 0, 0), new myTabletype(374, 2, -8, -84, 2, 2, "MAIN", 0, 0, 0), new myTabletype(375, 2, -
-                175, 192, 2, 2, "MAIN", 0, 0, 0), new myTabletype(376, 2, 484, 261, 2, 2, "MAIN", 0, 0, 0),
-            new myTabletype(377, 2, 205, 76, 2, 2, "MAIN", 0, 0, 0), new myTabletype(378, 2, -36, -238, 2, 2,
-                "MAIN", 0, 0, 0), new myTabletype(379, 2, 133, 169, 2, 2, "MAIN", 0, 0, 0), new myTabletype(380, 2,
-                112, -29, 2, 2, "MAIN", 0, 0, 0), new myTabletype(381, 2, 28, 81, 2, 2, "MAIN", 0, 0, 0),
-            new myTabletype(382, 2, 69, -5, 2, 2, "MAIN", 0, 0, 0), new myTabletype(383, 2, 127, -168, 2, 2, "MAIN",
-                0, 0, 0), new myTabletype(384, 2, 352, 289, 2, 2, "MAIN", 0, 0, 0), new myTabletype(385, 2, 166, -
-                236, 2, 2, "MAIN", 0, 0, 0), new myTabletype(386, 2, 9, 108, 2, 1, "MAIN", 0, 0, 0),
-            new myTabletype(387, 2, -286, -154, 1, 1, "MAIN", 0, 0, 0), new myTabletype(388, 2, -19, -71, 1, 1,
-                "MAIN", 0, 0, 0), new myTabletype(389, 2, -173, -25, 1, 1, "MAIN", 0, 0, 0), new myTabletype(390, 2,
-                -19, -200, 1, 1, "MAIN", 0, 0, 0), new myTabletype(391, 2, -223, 171, 1, 1, "MAIN", 0, 0, 0),
-            new myTabletype(392, 2, -376, 72, 1, 1, "MAIN", 0, 0, 0), new myTabletype(393, 2, 42, -105, 1, 1,
-                "MAIN", 0, 0, 0), new myTabletype(394, 2, -172, -179, 1, 1, "MAIN", 0, 0, 0), new myTabletype(395,
-                2, -192, 227, 1, 1, "MAIN", 0, 0, 0), new myTabletype(396, 2, 17, -137, 1, 1, "MAIN", 0, 0, 0),
-            new myTabletype(397, 2, -113, 313, 1, 1, "MAIN", 0, 0, 0), new myTabletype(398, 2, 140, 123, 1, 1,
-                "MAIN", 0, 0, 0), new myTabletype(399, 2, -118, 52, 1, 1, "MAIN", 0, 0, 0), new myTabletype(400, 2,
-                -303, -140, 1, 1, "MAIN", 0, 0, 0)
+            new myTabletype(200, 1, -65, 100, 2, 2, "MAIN", 0, 0, 0), new myTabletype(201, 2, 166, -120, 2, 2,
+                "MAIN", 0, 0, 0), new myTabletype(202, 2, -85, 115, 2, 2, "MAIN", 0, 0, 0), new myTabletype(203, 2,
+                -224, 76, 2, 2, "MAIN", 0, 0, 0), new myTabletype(204, 2, -106, -32, 2, 2, "MAIN", 0, 0, 0),
+            new myTabletype(205, 2, -129, -129, 2, 2, "MAIN", 0, 0, 0), new myTabletype(206, 2, 164, 89, 2, 2,
+                "MAIN", 0, 0, 0), new myTabletype(207, 2, 135, -111, 2, 2, "MAIN", 0, 0, 0), new myTabletype(208, 2,
+                54, 42, 2, 2, "MAIN", 0, 0, 0), new myTabletype(209, 2, -60, 345, 2, 2, "MAIN", 0, 0, 0),
+            new myTabletype(210, 2, 14, 2, 2, 2, "MAIN", 0, 0, 0), new myTabletype(211, 2, 101, -59, 2, 2, "MAIN",
+                0, 0, 0), new myTabletype(212, 2, -63, -47, 2, 2, "MAIN", 0, 0, 0), new myTabletype(213, 2, 264, 20,
+                2, 1, "MAIN", 0, 0, 0), new myTabletype(214, 2, -43, 151, 1, 1, "MAIN", 0, 0, 0), new myTabletype(
+                215, 2, -45, -118, 1, 1, "MAIN", 0, 0, 0), new myTabletype(216, 2, 116, 174, 1, 1, "MAIN", 0, 0, 0),
+            new myTabletype(217, 2, -133, 58, 1, 1, "MAIN", 0, 0, 0), new myTabletype(218, 2, 49, -32, 1, 1, "MAIN",
+                0, 0, 0), new myTabletype(219, 2, -356, 110, 1, 1, "MAIN", 0, 0, 0), new myTabletype(220, 2, 39,
+                105, 1, 1, "MAIN", 0, 0, 0), new myTabletype(221, 2, -197, -142, 1, 2, "MAIN", 0, 0, 0),
+            new myTabletype(222, 2, -34, -121, 2, 2, "MAIN", 0, 0, 0), new myTabletype(223, 2, 125, -227, 2, 2,
+                "MAIN", 0, 0, 0), new myTabletype(224, 2, 64, -126, 2, 2, "MAIN", 0, 0, 0), new myTabletype(225, 2,
+                116, -80, 2, 2, "MAIN", 0, 0, 0), new myTabletype(226, 2, 114, -162, 2, 2, "MAIN", 0, 0, 0),
+            new myTabletype(227, 2, 207, 62, 2, 2, "MAIN", 0, 0, 0), new myTabletype(228, 2, -260, 315, 2, 2,
+                "MAIN", 0, 0, 0), new myTabletype(229, 2, -38, 51, 2, 2, "MAIN", 0, 0, 0), new myTabletype(230, 2,
+                210, -308, 2, 2, "MAIN", 0, 0, 0), new myTabletype(231, 2, 12, 213, 2, 2, "MAIN", 0, 0, 0),
+            new myTabletype(232, 2, 65, 34, 2, 2, "MAIN", 0, 0, 0), new myTabletype(233, 2, 216, 69, 2, 2, "MAIN",
+                0, 0, 0), new myTabletype(234, 2, 130, 55, 2, 2, "MAIN", 0, 0, 0), new myTabletype(235, 2, 49, 202,
+                2, 2, "MAIN", 0, 0, 0), new myTabletype(236, 2, -57, 148, 2, 2, "MAIN", 0, 0, 0), new myTabletype(
+                237, 2, 193, 257, 2, 2, "MAIN", 0, 0, 0), new myTabletype(238, 2, -263, -65, 2, 2, "MAIN", 0, 0, 0),
+            new myTabletype(239, 2, -114, 1, 2, 2, "MAIN", 0, 0, 0), new myTabletype(240, 2, 307, 48, 2, 2, "MAIN",
+                0, 0, 0), new myTabletype(241, 2, 47, 26, 2, 2, "MAIN", 0, 0, 0), new myTabletype(242, 2, 121, 55,
+                2, 2, "MAIN", 0, 0, 0), new myTabletype(243, 2, 114, -378, 2, 2, "MAIN", 0, 0, 0), new myTabletype(
+                244, 2, 34, 99, 2, 2, "MAIN", 0, 0, 0), new myTabletype(245, 2, 55, 157, 2, 2, "MAIN", 0, 0, 0),
+            new myTabletype(246, 2, 439, 123, 2, 1, "MAIN", 0, 0, 0), new myTabletype(247, 2, -386, -15, 1, 1,
+                "MAIN", 0, 0, 0), new myTabletype(248, 2, -351, -54, 1, 1, "MAIN", 0, 0, 0), new myTabletype(249, 2,
+                134, 98, 1, 1, "MAIN", 0, 0, 0), new myTabletype(250, 2, -24, 111, 1, 1, "MAIN", 0, 0, 0),
+            new myTabletype(251, 2, 177, -103, 1, 1, "MAIN", 0, 0, 0), new myTabletype(252, 2, -29, 121, 1, 1,
+                "MAIN", 0, 0, 0), new myTabletype(253, 2, -57, 33, 1, 1, "MAIN", 0, 0, 0), new myTabletype(254, 2, -
+                173, 72, 1, 1, "MAIN", 0, 0, 0), new myTabletype(255, 2, -51, 244, 1, 1, "MAIN", 0, 0, 0),
+            new myTabletype(256, 2, -144, 96, 1, 1, "MAIN", 0, 0, 0), new myTabletype(257, 2, -440, 60, 1, 1,
+                "MAIN", 0, 0, 0), new myTabletype(258, 2, -80, -179, 1, 1, "MAIN", 0, 0, 0), new myTabletype(259, 2,
+                315, -212, 1, 1, "MAIN", 0, 0, 0), new myTabletype(260, 2, -20, -267, 1, 1, "MAIN", 0, 0, 0),
+            new myTabletype(261, 2, 2, 265, 1, 1, "MAIN", 0, 0, 0), new myTabletype(262, 2, -163, -50, 1, 2, "MAIN",
+                0, 0, 0), new myTabletype(263, 2, -53, 108, 2, 2, "MAIN", 0, 0, 0), new myTabletype(264, 2, 186, -
+                19, 2, 2, "MAIN", 0, 0, 0), new myTabletype(265, 2, 89, -49, 2, 2, "MAIN", 0, 0, 0),
+            new myTabletype(266, 2, -80, -49, 2, 2, "MAIN", 0, 0, 0), new myTabletype(267, 2, 298, 190, 2, 2,
+                "MAIN", 0, 0, 0), new myTabletype(268, 2, 33, -51, 2, 2, "MAIN", 0, 0, 0), new myTabletype(269, 2,
+                161, -28, 2, 2, "MAIN", 0, 0, 0), new myTabletype(270, 2, 61, -145, 2, 2, "MAIN", 0, 0, 0),
+            new myTabletype(271, 2, 178, 42, 2, 2, "MAIN", 0, 0, 0), new myTabletype(272, 2, 140, -380, 2, 2,
+                "MAIN", 0, 1, 0), new myTabletype(273, 2, 236, 55, 2, 2, "MAIN", 0, 0, 0), new myTabletype(274, 2, -
+                8, -84, 2, 2, "MAIN", 0, 0, 0), new myTabletype(275, 2, -175, 192, 2, 2, "MAIN", 0, 0, 0),
+            new myTabletype(276, 2, 484, 261, 2, 2, "MAIN", 0, 0, 0), new myTabletype(277, 2, 205, 76, 2, 2, "MAIN",
+                0, 0, 0), new myTabletype(278, 2, -36, -238, 2, 2, "MAIN", 0, 0, 0), new myTabletype(279, 2, 133,
+                169, 2, 2, "MAIN", 0, 0, 0), new myTabletype(280, 2, 112, -29, 2, 2, "MAIN", 0, 0, 0),
+            new myTabletype(281, 2, 28, 81, 2, 2, "MAIN", 0, 0, 0), new myTabletype(282, 2, 69, -5, 2, 2, "MAIN", 0,
+                0, 0), new myTabletype(283, 2, 127, -168, 2, 2, "MAIN", 0, 0, 0), new myTabletype(284, 2, 352, 289,
+                2, 2, "MAIN", 0, 0, 0), new myTabletype(285, 2, 166, -236, 2, 2, "MAIN", 0, 0, 0), new myTabletype(
+                286, 2, 9, 108, 2, 1, "MAIN", 0, 0, 0), new myTabletype(287, 2, -286, -154, 1, 1, "MAIN", 0, 0, 0),
+            new myTabletype(288, 2, -19, -71, 1, 1, "MAIN", 0, 0, 0), new myTabletype(289, 2, -173, -25, 1, 1,
+                "MAIN", 0, 0, 0), new myTabletype(290, 2, -19, -200, 1, 1, "MAIN", 0, 0, 0), new myTabletype(291, 2,
+                -223, 171, 1, 1, "MAIN", 0, 0, 0), new myTabletype(292, 2, -376, 72, 1, 1, "MAIN", 0, 0, 0),
+            new myTabletype(293, 2, 42, -105, 1, 1, "MAIN", 0, 0, 0), new myTabletype(294, 2, -172, -179, 1, 1,
+                "MAIN", 0, 0, 0), new myTabletype(295, 2, -192, 227, 1, 1, "MAIN", 0, 0, 0), new myTabletype(296, 2,
+                17, -137, 1, 1, "MAIN", 0, 0, 0), new myTabletype(297, 2, -113, 313, 1, 1, "MAIN", 0, 0, 0),
+            new myTabletype(298, 2, 140, 123, 1, 1, "MAIN", 0, 0, 0), new myTabletype(299, 2, -118, 52, 1, 1,
+                "MAIN", 0, 0, 0), new myTabletype(300, 2, -303, -140, 1, 1, "MAIN", 0, 0, 0), new myTabletype(301,
+                4, 120, 59, 2, 1, "MAIN", 0, 0, 0), new myTabletype(302, 4, -136, -172, 1, 2, "MAIN", 0, 0, 0),
+            new myTabletype(303, 4, -154, 1, 2, 1, "MAIN", 0, 0, 0), new myTabletype(304, 4, 226, 128, 1, 2, "MAIN",
+                0, 0, 0), new myTabletype(305, 4, -9, 49, 2, 1, "MAIN", 0, 0, 0), new myTabletype(306, 4, -318, -
+                368, 1, 2, "MAIN", 0, 0, 0), new myTabletype(307, 4, 277, 54, 2, 1, "MAIN", 0, 0, 0),
+            new myTabletype(308, 4, -313, -35, 1, 2, "MAIN", 0, 0, 0), new myTabletype(309, 4, -17, -139, 2, 1,
+                "MAIN", 0, 0, 0), new myTabletype(310, 4, -125, -309, 1, 1, "MAIN", 0, 0, 0), new myTabletype(311,
+                4, -344, 143, 1, 2, "MAIN", 0, 0, 0), new myTabletype(312, 4, -249, -90, 2, 1, "MAIN", 0, 0, 0),
+            new myTabletype(313, 4, -99, -131, 1, 2, "MAIN", 0, 0, 0), new myTabletype(314, 4, 148, 163, 2, 1,
+                "MAIN", 0, 0, 0), new myTabletype(315, 4, -60, -189, 1, 2, "MAIN", 0, 0, 0), new myTabletype(316, 4,
+                73, -53, 2, 1, "MAIN", 0, 0, 0), new myTabletype(317, 4, -25, -32, 1, 2, "MAIN", 0, 0, 0),
+            new myTabletype(318, 4, 214, 29, 2, 1, "MAIN", 0, 0, 0), new myTabletype(319, 4, 195, 19, 1, 2, "MAIN",
+                0, 0, 0), new myTabletype(320, 4, 312, 83, 2, 1, "MAIN", 0, 0, 0), new myTabletype(321, 4, -183,
+                115, 1, 2, "MAIN", 0, 0, 0), new myTabletype(322, 4, 264, 199, 2, 1, "MAIN", 0, 0, 0),
+            new myTabletype(323, 4, -163, -380, 1, 2, "MAIN", 0, 1, 0), new myTabletype(324, 4, 244, 231, 2, 2,
+                "MAIN", 0, 0, 0), new myTabletype(325, 4, 212, -234, 2, 1, "MAIN", 0, 0, 0), new myTabletype(326, 4,
+                22, 276, 1, 2, "MAIN", 0, 0, 0), new myTabletype(327, 4, -50, -236, 2, 2, "MAIN", 0, 0, 0),
+            new myTabletype(328, 4, 41, 64, 2, 1, "MAIN", 0, 0, 0), new myTabletype(329, 4, 42, 204, 1, 2, "MAIN",
+                0, 0, 0), new myTabletype(330, 4, 238, 314, 2, 1, "MAIN", 0, 0, 0), new myTabletype(331, 4, -125,
+                88, 1, 2, "MAIN", 0, 0, 0), new myTabletype(332, 4, 76, 225, 2, 1, "MAIN", 0, 0, 0),
+            new myTabletype(333, 4, -67, -164, 1, 2, "MAIN", 0, 0, 0), new myTabletype(334, 4, -84, -15, 2, 1,
+                "MAIN", 0, 0, 0), new myTabletype(335, 4, -97, 132, 1, 2, "MAIN", 0, 0, 0), new myTabletype(336, 4,
+                -50, 63, 2, 1, "MAIN", 0, 0, 0), new myTabletype(337, 4, 49, -26, 1, 2, "MAIN", 0, 0, 0),
+            new myTabletype(338, 4, 17, -39, 2, 1, "MAIN", 0, 0, 0), new myTabletype(339, 4, -24, 349, 1, 2, "MAIN",
+                0, 0, 0), new myTabletype(340, 4, 194, 117, 2, 1, "MAIN", 0, 0, 0), new myTabletype(341, 4, 9, 16,
+                1, 1, "MAIN", 0, 0, 0), new myTabletype(342, 4, 157, -156, 1, 2, "MAIN", 0, 0, 0), new myTabletype(
+                343, 4, 105, 200, 2, 1, "MAIN", 0, 0, 0), new myTabletype(344, 4, -273, 1, 1, 2, "MAIN", 0, 0, 0),
+            new myTabletype(345, 4, 34, 165, 2, 1, "MAIN", 0, 0, 0), new myTabletype(346, 4, -306, 98, 1, 2, "MAIN",
+                0, 0, 0), new myTabletype(347, 4, 47, 101, 2, 1, "MAIN", 0, 0, 0), new myTabletype(348, 4, -302, 2,
+                1, 2, "MAIN", 0, 0, 0), new myTabletype(349, 4, -23, 109, 2, 1, "MAIN", 0, 0, 0), new myTabletype(
+                350, 4, 54, -8, 1, 2, "MAIN", 0, 0, 0), new myTabletype(351, 4, 393, -14, 2, 1, "MAIN", 0, 0, 0),
+            new myTabletype(352, 4, -37, -144, 1, 2, "MAIN", 0, 0, 0), new myTabletype(353, 4, -88, 66, 2, 1,
+                "MAIN", 0, 0, 0), new myTabletype(354, 4, -106, 14, 1, 2, "MAIN", 0, 0, 0), new myTabletype(355, 4,
+                148, 36, 2, 1, "MAIN", 0, 0, 0), new myTabletype(356, 4, -29, 224, 1, 2, "MAIN", 0, 0, 0),
+            new myTabletype(357, 4, 315, 88, 2, 1, "MAIN", 0, 0, 0), new myTabletype(358, 4, -117, -253, 1, 2,
+                "MAIN", 0, 0, 0), new myTabletype(359, 4, -174, 6, 2, 1, "MAIN", 0, 0, 0), new myTabletype(360, 4, -
+                452, 12, 1, 2, "MAIN", 0, 0, 0), new myTabletype(361, 4, -162, 113, 2, 1, "MAIN", 0, 0, 0),
+            new myTabletype(362, 4, 9, -200, 1, 2, "MAIN", 0, 0, 0), new myTabletype(363, 4, 404, -267, 2, 1,
+                "MAIN", 0, 0, 0), new myTabletype(364, 4, -91, 19, 1, 2, "MAIN", 0, 0, 0), new myTabletype(365, 4,
+                62, 193, 2, 1, "MAIN", 0, 0, 0), new myTabletype(366, 4, -100, 39, 1, 2, "MAIN", 0, 0, 0),
+            new myTabletype(367, 4, 134, -80, 2, 1, "MAIN", 0, 0, 0), new myTabletype(368, 4, -279, 84, 1, 2,
+                "MAIN", 0, 0, 0), new myTabletype(369, 4, -31, -141, 2, 1, "MAIN", 0, 0, 0), new myTabletype(370, 4,
+                -20, -5, 1, 2, "MAIN", 0, 0, 0), new myTabletype(371, 4, 119, 345, 2, 1, "MAIN", 0, 0, 0),
+            new myTabletype(372, 4, -189, -28, 1, 2, "MAIN", 0, 0, 0), new myTabletype(373, 4, 73, 158, 2, 1,
+                "MAIN", 0, 0, 0), new myTabletype(374, 4, -75, 55, 1, 2, "MAIN", 0, 0, 0), new myTabletype(375, 4,
+                152, 88, 2, 1, "MAIN", 0, 0, 0), new myTabletype(376, 4, -74, 60, 1, 2, "MAIN", 0, 0, 0),
+            new myTabletype(377, 4, 136, 15, 2, 1, "MAIN", 0, 0, 0), new myTabletype(378, 4, -80, -308, 1, 2,
+                "MAIN", 0, 0, 0), new myTabletype(379, 4, -2, 157, 2, 1, "MAIN", 0, 0, 0), new myTabletype(380, 4, -
+                297, -334, 1, 2, "MAIN", 0, 0, 0), new myTabletype(381, 4, -40, 12, 2, 1, "MAIN", 0, 0, 0),
+            new myTabletype(382, 4, -78, 21, 1, 1, "MAIN", 0, 0, 0), new myTabletype(383, 4, -221, -75, 1, 2,
+                "MAIN", 0, 0, 0), new myTabletype(384, 4, 86, 31, 2, 1, "MAIN", 0, 0, 0), new myTabletype(385, 4,
+                65, -20, 1, 2, "MAIN", 0, 0, 0), new myTabletype(386, 4, -20, 32, 2, 1, "MAIN", 0, 0, 0),
+            new myTabletype(387, 4, -85, -57, 1, 2, "MAIN", 0, 0, 0), new myTabletype(388, 4, 289, 20, 2, 1, "MAIN",
+                0, 0, 0), new myTabletype(389, 4, -150, 270, 1, 2, "MAIN", 0, 0, 0), new myTabletype(390, 4, -12, -
+                163, 2, 1, "MAIN", 0, 0, 0), new myTabletype(391, 4, 58, 67, 1, 2, "MAIN", 0, 0, 0),
+            new myTabletype(392, 4, -71, -65, 2, 1, "MAIN", 0, 0, 0), new myTabletype(393, 4, 25, 61, 1, 2, "MAIN",
+                0, 0, 0), new myTabletype(394, 4, -27, 166, 2, 1, "MAIN", 0, 0, 0), new myTabletype(395, 4, -336,
+                53, 1, 2, "MAIN", 0, 0, 0), new myTabletype(396, 4, 190, -17, 2, 1, "MAIN", 0, 0, 0),
+            new myTabletype(397, 4, -27, 237, 1, 2, "MAIN", 0, 0, 0), new myTabletype(398, 4, -150, -39, 2, 1,
+                "MAIN", 0, 0, 0), new myTabletype(399, 4, 26, 37, 1, 2, "MAIN", 0, 0, 0), new myTabletype(400, 4,
+                114, 162, 2, 1, "MAIN", 0, 0, 0)
         ];
-        var selectedoncecount_table_practiceTable1 = 0;
+        var selectedoncecount_table_practiceTable = 0;
 
-        function practiceTable1type(x1, x2, x3, x4, x5, x6, x7, x8, x9, xselected) {
+        function practiceTabletype(x1, x2, x3, x4, x5, x6, x7, x8, x9, xselected) {
             this.c1 = x1;
             this.c2 = x2;
             this.c3 = x3;
@@ -1910,183 +1906,145 @@
             this.c9 = x9;
             this.selected = xselected
         }
-        var practiceTable1 = [new practiceTable1type(1, 1, -151, 138, 1, 1, "MAIN", 0, 0, 0), new practiceTable1type(2,
-                1, 14, 183, 1, 1, "MAIN", 0, 0, 0), new practiceTable1type(3, 1, -194, -35, 1, 1, "MAIN", 0, 0, 0),
-            new practiceTable1type(4, 1, -208, -81, 1, 1, "MAIN", 0, 0, 0), new practiceTable1type(5, 1, -57, 230,
-                1, 1, "MAIN", 0, 0, 0), new practiceTable1type(6, 1, -214, 127, 1, 1, "MAIN", 0, 0, 0),
-            new practiceTable1type(7, 1, 55, 20, 1, 1, "MAIN", 0, 0, 0), new practiceTable1type(8, 1, 38, -37, 1, 1,
-                "MAIN", 0, 0, 0), new practiceTable1type(9, 1, -225, -119, 1, 1, "MAIN", 0, 0, 0),
-            new practiceTable1type(10, 1, -117, 42, 1, 1, "MAIN", 0, 0, 0), new practiceTable1type(11, 1, -293, 71,
-                1, 1, "MAIN", 0, 0, 0), new practiceTable1type(12, 1, 211, 78, 1, 1, "MAIN", 0, 0, 0),
-            new practiceTable1type(13, 1, -71, -3, 1, 1, "MAIN", 0, 0, 0), new practiceTable1type(14, 1, -280, 20,
-                1, 1, "MAIN", 0, 0, 0), new practiceTable1type(15, 1, -252, 47, 1, 2, "MAIN", 0, 0, 0),
-            new practiceTable1type(16, 1, 212, -47, 2, 2, "MAIN", 0, 0, 0), new practiceTable1type(17, 1, 130, -81,
-                2, 2, "MAIN", 0, 0, 0), new practiceTable1type(18, 1, 106, 111, 2, 2, "MAIN", 0, 0, 0),
-            new practiceTable1type(19, 1, 38, -151, 2, 2, "MAIN", 0, 0, 0), new practiceTable1type(20, 1, -148, 216,
-                2, 2, "MAIN", 0, 0, 0)
+        var practiceTable = [new practiceTabletype(1, 1, -109, 63, 1, 1, "MAIN", 0, 0, 0), new practiceTabletype(2, 1, -
+                35, 83, 1, 1, "MAIN", 0, 0, 0), new practiceTabletype(3, 1, -129, -16, 1, 1, "MAIN", 0, 0, 0),
+            new practiceTabletype(4, 1, -136, -37, 1, 1, "MAIN", 0, 0, 0), new practiceTabletype(5, 1, -67, 104, 1,
+                1, "MAIN", 0, 0, 0), new practiceTabletype(6, 1, -138, 58, 1, 1, "MAIN", 0, 0, 0),
+            new practiceTabletype(7, 1, -16, 9, 1, 1, "MAIN", 0, 0, 0), new practiceTabletype(8, 1, -23, -17, 1, 2,
+                "MAIN", 0, 0, 0), new practiceTabletype(9, 1, 7, -54, 2, 2, "MAIN", 0, 0, 0), new practiceTabletype(
+                10, 1, 56, 19, 2, 2, "MAIN", 0, 0, 0), new practiceTabletype(11, 1, -24, 32, 2, 2, "MAIN", 0, 0, 0),
+            new practiceTabletype(12, 1, 205, 36, 2, 2, "MAIN", 0, 0, 0), new practiceTabletype(13, 1, 77, -1, 2, 2,
+                "MAIN", 0, 0, 0), new practiceTabletype(14, 1, -18, 9, 2, 2, "MAIN", 0, 0, 0),
+            new practiceTabletype(15, 1, -5, 21, 2, 1, "MAIN", 0, 0, 0), new practiceTabletype(16, 1, -13, -21, 1,
+                1, "MAIN", 0, 0, 0), new practiceTabletype(17, 1, -50, -37, 1, 1, "MAIN", 0, 0, 0),
+            new practiceTabletype(18, 1, -61, 51, 1, 1, "MAIN", 0, 0, 0), new practiceTabletype(19, 1, -92, -69, 1,
+                1, "MAIN", 0, 0, 0), new practiceTabletype(20, 1, -176, 98, 1, 1, "MAIN", 0, 0, 0)
         ];
-        var selectedoncecount_table_practiceTable2 = 0;
-
-        function practiceTable2type(x1, x2, x3, x4, x5, x6, x7, x8, x9, xselected) {
-            this.c1 = x1;
-            this.c2 = x2;
-            this.c3 = x3;
-            this.c4 = x4;
-            this.c5 = x5;
-            this.c6 = x6;
-            this.c7 = x7;
-            this.c8 = x8;
-            this.c9 = x9;
-            this.selected = xselected
-        }
-        var practiceTable2 = [new practiceTable2type(1, 2, -21, 113, 2, 1, "MAIN", 0, 0, 0), new practiceTable2type(2,
-                2, 35, 352, 1, 2, "MAIN", 0, 0, 0), new practiceTable2type(3, 2, 42, -1, 2, 1, "MAIN", 0, 0, 0),
-            new practiceTable2type(4, 2, -221, -14, 1, 2, "MAIN", 0, 0, 0), new practiceTable2type(5, 2, 120, -15,
-                2, 1, "MAIN", 0, 0, 0), new practiceTable2type(6, 2, 18, 93, 1, 1, "MAIN", 0, 0, 0),
-            new practiceTable2type(7, 2, -302, -44, 1, 2, "MAIN", 0, 0, 0), new practiceTable2type(8, 2, 333, -107,
-                2, 1, "MAIN", 0, 0, 0), new practiceTable2type(9, 2, -16, 143, 1, 2, "MAIN", 0, 0, 0),
-            new practiceTable2type(10, 2, 76, -122, 2, 1, "MAIN", 0, 0, 0), new practiceTable2type(11, 2, -163, -
-                201, 1, 2, "MAIN", 0, 0, 0), new practiceTable2type(12, 2, 17, -39, 2, 1, "MAIN", 0, 0, 0),
-            new practiceTable2type(13, 2, -302, 153, 1, 2, "MAIN", 0, 0, 0), new practiceTable2type(14, 2, -145, -
-                138, 2, 1, "MAIN", 0, 0, 0), new practiceTable2type(15, 2, -55, -198, 1, 2, "MAIN", 0, 0, 0),
-            new practiceTable2type(16, 2, 196, -256, 2, 1, "MAIN", 0, 0, 0), new practiceTable2type(17, 2, -64, -39,
-                1, 2, "MAIN", 0, 0, 0), new practiceTable2type(18, 2, 6, 52, 2, 1, "MAIN", 0, 0, 0),
-            new practiceTable2type(19, 2, -106, 165, 1, 2, "MAIN", 0, 0, 0), new practiceTable2type(20, 2, 43, 95,
-                2, 1, "MAIN", 0, 0, 0)
-        ];
-        var task_trianglepractice_block1 = {
+        var task_trianglepractice = {
             step: 1,
             task_trial_selection: 0,
             current_trial: -1,
-            taskname: "task_trianglepractice_block1",
+            taskname: "task_trianglepractice",
             tasknumber: 1,
             start: function (trial_selection) {
-                task_trianglepractice_block1.trial_selection = trial_selection;
-                task_trianglepractice_block1.step = 1;
+                task_trianglepractice.trial_selection = trial_selection;
+                task_trianglepractice.step = 1;
                 psy_clear_stimulus_counters_db();
-                task_trianglepractice_block1.run()
+                task_trianglepractice.run()
             },
             lastTrial: 0,
             calcualtedEggXPosition: 0,
             calcualtedEggYPosition: 0,
             run: function () {
-                current_task = task_trianglepractice_block1.taskname;
-                switch (task_trianglepractice_block1.step) {
+                current_task = task_trianglepractice.taskname;
+                switch (task_trianglepractice.step) {
                     case 1:
-                        task_trianglepractice_block1.step++;
+                        task_trianglepractice.step++;
                         general_trial_counter++;
-                        task_trianglepractice_block1.lastTrial = task_trianglepractice_block1
-                            .calcualtedEggXPosition = task_trianglepractice_block1.calcualtedEggYPosition = 0;
-                        if (task_trianglepractice_block1.trial_selection == TRIAL_SELECTION_RANDOM) {
+                        task_trianglepractice.lastTrial = task_trianglepractice.calcualtedEggXPosition =
+                            task_trianglepractice.calcualtedEggYPosition = 0;
+                        if (task_trianglepractice.trial_selection == TRIAL_SELECTION_RANDOM) {
                             tablerow = psy_random(0, 19);
-                            task_trianglepractice_block1.current_trial = tablerow
+                            task_trianglepractice.current_trial = tablerow
                         }
-                        if (task_trianglepractice_block1.trial_selection ==
-                            TRIAL_SELECTION_RANDOM_NEVER_REPEAT) {
+                        if (task_trianglepractice.trial_selection == TRIAL_SELECTION_RANDOM_NEVER_REPEAT) {
                             tablerow = psy_random(0, 19);
-                            while (tablerow == task_trianglepractice_block1.current_trial) tablerow =
-                                psy_random(0, 19);
-                            task_trianglepractice_block1.current_trial = tablerow
+                            while (tablerow == task_trianglepractice.current_trial) tablerow = psy_random(0,
+                            19);
+                            task_trianglepractice.current_trial = tablerow
                         }
-                        if (task_trianglepractice_block1.trial_selection == TRIAL_SELECTION_FIXED_SEQUENCE) {
-                            task_trianglepractice_block1.current_trial++;
-                            if (task_trianglepractice_block1.current_trial == 20) task_trianglepractice_block1
-                                .current_trial = 0;
-                            tablerow = task_trianglepractice_block1.current_trial
+                        if (task_trianglepractice.trial_selection == TRIAL_SELECTION_FIXED_SEQUENCE) {
+                            task_trianglepractice.current_trial++;
+                            if (task_trianglepractice.current_trial == 20) task_trianglepractice.current_trial =
+                                0;
+                            tablerow = task_trianglepractice.current_trial
                         }
-                        if (task_trianglepractice_block1.trial_selection == TRIAL_SELECTION_REPEAT_ON_ERROR) {
-                            if (error_status != 0 && task_trianglepractice_block1.current_trial != -1) {
-                                tablerow = task_trianglepractice_block1.current_trial
+                        if (task_trianglepractice.trial_selection == TRIAL_SELECTION_REPEAT_ON_ERROR) {
+                            if (error_status != 0 && task_trianglepractice.current_trial != -1) {
+                                tablerow = task_trianglepractice.current_trial
                             } else {
                                 tablerow = psy_random(0, 19);
-                                task_trianglepractice_block1.current_trial = tablerow
+                                task_trianglepractice.current_trial = tablerow
                             }
                         }
-                        if (task_trianglepractice_block1.trial_selection == TRIAL_SELECTION_ONCE) {
-                            if (selectedoncecount_table_practiceTable1 == 20) {
-                                for (tmptr = 0; tmptr < 20; tmptr++) practiceTable1[tmptr].selected = 0;
-                                selectedoncecount_table_practiceTable1 = 0
+                        if (task_trianglepractice.trial_selection == TRIAL_SELECTION_ONCE) {
+                            if (selectedoncecount_table_practiceTable == 20) {
+                                for (tmptr = 0; tmptr < 20; tmptr++) practiceTable[tmptr].selected = 0;
+                                selectedoncecount_table_practiceTable = 0
                             }
                             tablerow = psy_random(0, 19);
-                            while (practiceTable1[tablerow].selected == 1 || tablerow ==
-                                task_trianglepractice_block1.current_trial) tablerow = psy_random(0, 19);
-                            task_trianglepractice_block1.current_trial = tablerow;
-                            selectedoncecount_table_practiceTable1++;
-                            practiceTable1[tablerow].selected = 1
+                            while (practiceTable[tablerow].selected == 1 || tablerow == task_trianglepractice
+                                .current_trial) tablerow = psy_random(0, 19);
+                            task_trianglepractice.current_trial = tablerow;
+                            selectedoncecount_table_practiceTable++;
+                            practiceTable[tablerow].selected = 1
                         }
                         error_status = 0;
                         possiblekeys = [37, 39, 32];
                         psy_mouse_visibility(0);
-                        if (!(repeatblock1 == 1)) {
-                            task_trianglepractice_block1.step = 102
+                        if (!(practiceTable[tablerow].c2 == 1)) {
+                            task_trianglepractice.step = 3
                         };
-                        setTimeout("task_trianglepractice_block1.run()", 0);
+                        setTimeout("task_trianglepractice.run()", 0);
                         break;
                     case 2:
-                        task_trianglepractice_block1.step++;
-                        if (!(practiceTable1[tablerow].c2 == 1)) {
-                            task_trianglepractice_block1.step = 4
-                        };
-                        setTimeout("task_trianglepractice_block1.run()", 0);
+                        task_trianglepractice.step++;
+                        psy_add_centered_bitmap_db(background_sigma_110, PSY_CENTRAL, PSY_CENTRAL, 0);
+                        psy_draw_all_db();
+                        task_trianglepractice.run();
                         break;
                     case 3:
-                        task_trianglepractice_block1.step++;
-                        psy_add_centered_bitmap_db(background_sigma_110, PSY_CENTRAL, PSY_CENTRAL, 0);
-                        psy_draw_all_db();
-                        task_trianglepractice_block1.run();
+                        task_trianglepractice.step++;
+                        if (!(practiceTable[tablerow].c2 == 3)) {
+                            task_trianglepractice.step = 5
+                        };
+                        setTimeout("task_trianglepractice.run()", 0);
                         break;
                     case 4:
-                        task_trianglepractice_block1.step++;
-                        if (!(practiceTable1[tablerow].c2 == 3)) {
-                            task_trianglepractice_block1.step = 6
-                        };
-                        setTimeout("task_trianglepractice_block1.run()", 0);
-                        break;
-                    case 5:
-                        task_trianglepractice_block1.step++;
+                        task_trianglepractice.step++;
                         psy_add_centered_bitmap_db(background_sigma_110, PSY_CENTRAL, PSY_CENTRAL, 0);
                         psy_draw_all_db();
-                        task_trianglepractice_block1.run();
+                        task_trianglepractice.run();
+                        break;
+                    case 5:
+                        task_trianglepractice.step++;
+                        if (!(practiceTable[tablerow].c2 == 2)) {
+                            task_trianglepractice.step = 7
+                        };
+                        setTimeout("task_trianglepractice.run()", 0);
                         break;
                     case 6:
-                        task_trianglepractice_block1.step++;
-                        if (!(practiceTable1[tablerow].c2 == 2)) {
-                            task_trianglepractice_block1.step = 8
-                        };
-                        setTimeout("task_trianglepractice_block1.run()", 0);
+                        task_trianglepractice.step++;
+                        psy_add_centered_bitmap_db(background_sigma_160, PSY_CENTRAL, PSY_CENTRAL, 0);
+                        psy_draw_all_db();
+                        task_trianglepractice.run();
                         break;
                     case 7:
-                        task_trianglepractice_block1.step++;
-                        psy_add_centered_bitmap_db(background_sigma_160, PSY_CENTRAL, PSY_CENTRAL, 0);
-                        psy_draw_all_db();
-                        task_trianglepractice_block1.run();
+                        task_trianglepractice.step++;
+                        if (!(practiceTable[tablerow].c2 == 4)) {
+                            task_trianglepractice.step = 9
+                        };
+                        setTimeout("task_trianglepractice.run()", 0);
                         break;
                     case 8:
-                        task_trianglepractice_block1.step++;
-                        if (!(practiceTable1[tablerow].c2 == 4)) {
-                            task_trianglepractice_block1.step = 10
-                        };
-                        setTimeout("task_trianglepractice_block1.run()", 0);
-                        break;
-                    case 9:
-                        task_trianglepractice_block1.step++;
+                        task_trianglepractice.step++;
                         psy_add_centered_bitmap_db(background_sigma_160, PSY_CENTRAL, PSY_CENTRAL, 0);
                         psy_draw_all_db();
-                        task_trianglepractice_block1.run();
+                        task_trianglepractice.run();
+                        break;
+                    case 9:
+                        task_trianglepractice.step++;
+                        if (!(trialCounter != 1)) {
+                            task_trianglepractice.step = 11
+                        };
+                        setTimeout("task_trianglepractice.run()", 0);
                         break;
                     case 10:
-                        task_trianglepractice_block1.step++;
-                        if (!(trialCounter != 1)) {
-                            task_trianglepractice_block1.step = 12
-                        };
-                        setTimeout("task_trianglepractice_block1.run()", 0);
+                        task_trianglepractice.step++;
+                        task_trianglepractice.run();
                         break;
                     case 11:
-                        task_trianglepractice_block1.step++;
-                        task_trianglepractice_block1.run();
-                        break;
-                    case 12:
-                        task_trianglepractice_block1.step++;
+                        task_trianglepractice.step++;
                         psy_add_centered_bitmap_db(blue_chicken, -75, 0, 0);
                         psy_draw_all_db();
                         psy_add_centered_bitmap_db(yellow_chicken, 75, 0, 0);
@@ -2097,36 +2055,36 @@
                             0);
                         psy_draw_all_db();
                         psy_add_text_rgb_db(0, -50, -375, PSY_CENTRAL, PSY_CENTRAL, 255, 255, 255,
-                            practiceTable1[tablerow].c1, 0);
+                            practiceTable[tablerow].c1, 0);
                         psy_draw_all_db();
                         psy_add_text_rgb_db(0, 0, -375, PSY_CENTRAL, PSY_CENTRAL, 255, 255, 255, " of ", 0);
                         psy_draw_all_db();
                         if (!(isPractice == 1)) {
-                            task_trianglepractice_block1.step = 14
+                            task_trianglepractice.step = 13
                         };
-                        setTimeout("task_trianglepractice_block1.run()", 0);
+                        setTimeout("task_trianglepractice.run()", 0);
                         break;
-                    case 13:
-                        task_trianglepractice_block1.step++;
+                    case 12:
+                        task_trianglepractice.step++;
                         psy_add_text_rgb_db(0, 50, -375, PSY_CENTRAL, PSY_CENTRAL, 255, 255, 255, "20", 0);
                         psy_draw_all_db();
-                        task_trianglepractice_block1.run();
+                        task_trianglepractice.run();
+                        break;
+                    case 13:
+                        task_trianglepractice.step++;
+                        if (!(isPractice == 0)) {
+                            task_trianglepractice.step = 15
+                        };
+                        setTimeout("task_trianglepractice.run()", 0);
                         break;
                     case 14:
-                        task_trianglepractice_block1.step++;
-                        if (!(isPractice == 0)) {
-                            task_trianglepractice_block1.step = 16
-                        };
-                        setTimeout("task_trianglepractice_block1.run()", 0);
-                        break;
-                    case 15:
-                        task_trianglepractice_block1.step++;
+                        task_trianglepractice.step++;
                         psy_add_text_rgb_db(0, 50, -375, PSY_CENTRAL, PSY_CENTRAL, 255, 255, 255, "400", 0);
                         psy_draw_all_db();
-                        task_trianglepractice_block1.run();
+                        task_trianglepractice.run();
                         break;
-                    case 16:
-                        task_trianglepractice_block1.step++;
+                    case 15:
+                        task_trianglepractice.step++;
                         psy_add_text_rgb_db(0, -33, -300, PSY_CENTRAL, PSY_CENTRAL, 255, 255, 255, "Cents: ",
                         0);
                         psy_draw_all_db();
@@ -2142,8 +2100,8 @@
                         lastTwoEggYPosition = lastOneEggYPosition;
                         lastOneEggXPosition = lastEggXPosition;
                         lastOneEggYPosition = lastEggYPosition;
-                        lastEggXPosition = practiceTable1[tablerow].c3;
-                        lastEggYPosition = practiceTable1[tablerow].c4;
+                        lastEggXPosition = practiceTable[tablerow].c3;
+                        lastEggYPosition = practiceTable[tablerow].c4;
                         lastFiveStatus = lastFourStatus;
                         lastFourStatus = lastThreeStatus;
                         lastThreeStatus = lastTwoStatus;
@@ -2154,1519 +2112,572 @@
                         lastTwoKeyPressed = lastOneKeyPressed;
                         lastOneKeyPressed = keypressed;
                         if (!(trialCounter > 1)) {
-                            task_trianglepractice_block1.step = 26
+                            task_trianglepractice.step = 25
                         };
-                        setTimeout("task_trianglepractice_block1.run()", 0);
-                        break;
-                    case 17:
-                        task_trianglepractice_block1.step++;
-                        task_trianglepractice_block1.lastTrial = Math.round(trialCounter - 1);
-                        psy_add_text_rgb_db(mysmallfont, -690, 315, PSY_CENTRAL, PSY_CENTRAL, 255, 255, 255,
-                            task_trianglepractice_block1.lastTrial, 0);
-                        psy_draw_all_db();
-                        psy_add_centered_bitmap_db(backg_small, -545, 315, 0);
-                        psy_draw_all_db();
-                        if (!(lastOneKeyPressed == 1)) {
-                            task_trianglepractice_block1.step = 19
-                        };
-                        setTimeout("task_trianglepractice_block1.run()", 0);
-                        break;
-                    case 18:
-                        task_trianglepractice_block1.step++;
-                        psy_add_centered_bitmap_db(white_small, -558, 315, 0);
-                        psy_draw_all_db();
-                        task_trianglepractice_block1.run();
-                        break;
-                    case 19:
-                        task_trianglepractice_block1.step++;
-                        if (!(lastOneKeyPressed == 2)) {
-                            task_trianglepractice_block1.step = 21
-                        };
-                        setTimeout("task_trianglepractice_block1.run()", 0);
-                        break;
-                    case 20:
-                        task_trianglepractice_block1.step++;
-                        psy_add_centered_bitmap_db(white_small, -532, 315, 0);
-                        psy_draw_all_db();
-                        task_trianglepractice_block1.run();
-                        break;
-                    case 21:
-                        task_trianglepractice_block1.step++;
-                        psy_add_centered_bitmap_db(blue_small, -558, 315, 0);
-                        psy_draw_all_db();
-                        psy_add_centered_bitmap_db(yellow_small, -532, 315, 0);
-                        psy_draw_all_db();
-                        task_trianglepractice_block1.calcualtedEggXPosition = Math.round(lastOneEggXPosition /
-                            6 - 545);
-                        task_trianglepractice_block1.calcualtedEggYPosition = Math.round(lastOneEggYPosition /
-                            6 + 315);
-                        psy_add_centered_bitmap_db(egg_small, task_trianglepractice_block1
-                            .calcualtedEggXPosition, task_trianglepractice_block1.calcualtedEggYPosition, 0);
-                        psy_draw_all_db();
-                        if (!(lastOneStatus == 1)) {
-                            task_trianglepractice_block1.step = 23
-                        };
-                        setTimeout("task_trianglepractice_block1.run()", 0);
-                        break;
-                    case 22:
-                        task_trianglepractice_block1.step++;
-                        psy_add_centered_bitmap_db(green_check, -400, 315, 0);
-                        psy_draw_all_db();
-                        task_trianglepractice_block1.run();
-                        break;
-                    case 23:
-                        task_trianglepractice_block1.step++;
-                        if (!(lastOneStatus != 1)) {
-                            task_trianglepractice_block1.step = 25
-                        };
-                        setTimeout("task_trianglepractice_block1.run()", 0);
-                        break;
-                    case 24:
-                        task_trianglepractice_block1.step++;
-                        psy_add_centered_bitmap_db(error, -400, 315, 0);
-                        psy_draw_all_db();
-                        task_trianglepractice_block1.run();
-                        break;
-                    case 25:
-                        task_trianglepractice_block1.step++;
-                        task_trianglepractice_block1.run();
-                        break;
-                    case 26:
-                        task_trianglepractice_block1.step++;
-                        if (!(trialCounter > 2)) {
-                            task_trianglepractice_block1.step = 36
-                        };
-                        setTimeout("task_trianglepractice_block1.run()", 0);
-                        break;
-                    case 27:
-                        task_trianglepractice_block1.step++;
-                        task_trianglepractice_block1.lastTrial = Math.round(trialCounter - 2);
-                        psy_add_text_rgb_db(mysmallfont, -690, 167, PSY_CENTRAL, PSY_CENTRAL, 255, 255, 255,
-                            task_trianglepractice_block1.lastTrial, 0);
-                        psy_draw_all_db();
-                        psy_add_centered_bitmap_db(backg_small, -545, 167, 0);
-                        psy_draw_all_db();
-                        if (!(lastTwoKeyPressed == 1)) {
-                            task_trianglepractice_block1.step = 29
-                        };
-                        setTimeout("task_trianglepractice_block1.run()", 0);
-                        break;
-                    case 28:
-                        task_trianglepractice_block1.step++;
-                        psy_add_centered_bitmap_db(white_small, -558, 167, 0);
-                        psy_draw_all_db();
-                        task_trianglepractice_block1.run();
-                        break;
-                    case 29:
-                        task_trianglepractice_block1.step++;
-                        if (!(lastTwoKeyPressed == 2)) {
-                            task_trianglepractice_block1.step = 31
-                        };
-                        setTimeout("task_trianglepractice_block1.run()", 0);
-                        break;
-                    case 30:
-                        task_trianglepractice_block1.step++;
-                        psy_add_centered_bitmap_db(white_small, -532, 167, 0);
-                        psy_draw_all_db();
-                        task_trianglepractice_block1.run();
-                        break;
-                    case 31:
-                        task_trianglepractice_block1.step++;
-                        psy_add_centered_bitmap_db(blue_small, -558, 167, 0);
-                        psy_draw_all_db();
-                        psy_add_centered_bitmap_db(yellow_small, -532, 167, 0);
-                        psy_draw_all_db();
-                        task_trianglepractice_block1.calcualtedEggXPosition = Math.round(lastTwoEggXPosition /
-                            6 - 545);
-                        task_trianglepractice_block1.calcualtedEggYPosition = Math.round(lastTwoEggYPosition /
-                            6 + 167);
-                        psy_add_centered_bitmap_db(egg_small, task_trianglepractice_block1
-                            .calcualtedEggXPosition, task_trianglepractice_block1.calcualtedEggYPosition, 0);
-                        psy_draw_all_db();
-                        if (!(lastTwoStatus == 1)) {
-                            task_trianglepractice_block1.step = 33
-                        };
-                        setTimeout("task_trianglepractice_block1.run()", 0);
-                        break;
-                    case 32:
-                        task_trianglepractice_block1.step++;
-                        psy_add_centered_bitmap_db(green_check, -400, 167, 0);
-                        psy_draw_all_db();
-                        task_trianglepractice_block1.run();
-                        break;
-                    case 33:
-                        task_trianglepractice_block1.step++;
-                        if (!(lastTwoStatus != 1)) {
-                            task_trianglepractice_block1.step = 35
-                        };
-                        setTimeout("task_trianglepractice_block1.run()", 0);
-                        break;
-                    case 34:
-                        task_trianglepractice_block1.step++;
-                        psy_add_centered_bitmap_db(error, -400, 167, 0);
-                        psy_draw_all_db();
-                        task_trianglepractice_block1.run();
-                        break;
-                    case 35:
-                        task_trianglepractice_block1.step++;
-                        task_trianglepractice_block1.run();
-                        break;
-                    case 36:
-                        task_trianglepractice_block1.step++;
-                        if (!(trialCounter > 3)) {
-                            task_trianglepractice_block1.step = 46
-                        };
-                        setTimeout("task_trianglepractice_block1.run()", 0);
-                        break;
-                    case 37:
-                        task_trianglepractice_block1.step++;
-                        task_trianglepractice_block1.lastTrial = Math.round(trialCounter - 3);
-                        psy_add_text_rgb_db(mysmallfont, -690, 19, PSY_CENTRAL, PSY_CENTRAL, 255, 255, 255,
-                            task_trianglepractice_block1.lastTrial, 0);
-                        psy_draw_all_db();
-                        psy_add_centered_bitmap_db(backg_small, -545, 19, 0);
-                        psy_draw_all_db();
-                        if (!(lastThreeKeyPressed == 1)) {
-                            task_trianglepractice_block1.step = 39
-                        };
-                        setTimeout("task_trianglepractice_block1.run()", 0);
-                        break;
-                    case 38:
-                        task_trianglepractice_block1.step++;
-                        psy_add_centered_bitmap_db(white_small, -558, 19, 0);
-                        psy_draw_all_db();
-                        task_trianglepractice_block1.run();
-                        break;
-                    case 39:
-                        task_trianglepractice_block1.step++;
-                        if (!(lastThreeKeyPressed == 2)) {
-                            task_trianglepractice_block1.step = 41
-                        };
-                        setTimeout("task_trianglepractice_block1.run()", 0);
-                        break;
-                    case 40:
-                        task_trianglepractice_block1.step++;
-                        psy_add_centered_bitmap_db(white_small, -532, 19, 0);
-                        psy_draw_all_db();
-                        task_trianglepractice_block1.run();
-                        break;
-                    case 41:
-                        task_trianglepractice_block1.step++;
-                        psy_add_centered_bitmap_db(blue_small, -558, 19, 0);
-                        psy_draw_all_db();
-                        psy_add_centered_bitmap_db(yellow_small, -532, 19, 0);
-                        psy_draw_all_db();
-                        task_trianglepractice_block1.calcualtedEggXPosition = Math.round(lastThreeEggXPosition /
-                            6 - 545);
-                        task_trianglepractice_block1.calcualtedEggYPosition = Math.round(lastThreeEggYPosition /
-                            6 + 19);
-                        psy_add_centered_bitmap_db(egg_small, task_trianglepractice_block1
-                            .calcualtedEggXPosition, task_trianglepractice_block1.calcualtedEggYPosition, 0);
-                        psy_draw_all_db();
-                        if (!(lastThreeStatus == 1)) {
-                            task_trianglepractice_block1.step = 43
-                        };
-                        setTimeout("task_trianglepractice_block1.run()", 0);
-                        break;
-                    case 42:
-                        task_trianglepractice_block1.step++;
-                        psy_add_centered_bitmap_db(green_check, -400, 19, 0);
-                        psy_draw_all_db();
-                        task_trianglepractice_block1.run();
-                        break;
-                    case 43:
-                        task_trianglepractice_block1.step++;
-                        if (!(lastThreeStatus != 1)) {
-                            task_trianglepractice_block1.step = 45
-                        };
-                        setTimeout("task_trianglepractice_block1.run()", 0);
-                        break;
-                    case 44:
-                        task_trianglepractice_block1.step++;
-                        psy_add_centered_bitmap_db(error, -400, 19, 0);
-                        psy_draw_all_db();
-                        task_trianglepractice_block1.run();
-                        break;
-                    case 45:
-                        task_trianglepractice_block1.step++;
-                        task_trianglepractice_block1.run();
-                        break;
-                    case 46:
-                        task_trianglepractice_block1.step++;
-                        if (!(trialCounter > 4)) {
-                            task_trianglepractice_block1.step = 56
-                        };
-                        setTimeout("task_trianglepractice_block1.run()", 0);
-                        break;
-                    case 47:
-                        task_trianglepractice_block1.step++;
-                        task_trianglepractice_block1.lastTrial = Math.round(trialCounter - 4);
-                        psy_add_text_rgb_db(mysmallfont, -690, -129, PSY_CENTRAL, PSY_CENTRAL, 255, 255, 255,
-                            task_trianglepractice_block1.lastTrial, 0);
-                        psy_draw_all_db();
-                        psy_add_centered_bitmap_db(backg_small, -545, -129, 0);
-                        psy_draw_all_db();
-                        if (!(lastFourKeyPressed == 1)) {
-                            task_trianglepractice_block1.step = 49
-                        };
-                        setTimeout("task_trianglepractice_block1.run()", 0);
-                        break;
-                    case 48:
-                        task_trianglepractice_block1.step++;
-                        psy_add_centered_bitmap_db(white_small, -558, -129, 0);
-                        psy_draw_all_db();
-                        task_trianglepractice_block1.run();
-                        break;
-                    case 49:
-                        task_trianglepractice_block1.step++;
-                        if (!(lastFourKeyPressed == 2)) {
-                            task_trianglepractice_block1.step = 51
-                        };
-                        setTimeout("task_trianglepractice_block1.run()", 0);
-                        break;
-                    case 50:
-                        task_trianglepractice_block1.step++;
-                        psy_add_centered_bitmap_db(white_small, -532, -129, 0);
-                        psy_draw_all_db();
-                        task_trianglepractice_block1.run();
-                        break;
-                    case 51:
-                        task_trianglepractice_block1.step++;
-                        psy_add_centered_bitmap_db(blue_small, -558, -129, 0);
-                        psy_draw_all_db();
-                        psy_add_centered_bitmap_db(yellow_small, -532, -129, 0);
-                        psy_draw_all_db();
-                        task_trianglepractice_block1.calcualtedEggXPosition = Math.round(lastFourEggXPosition /
-                            6 - 545);
-                        task_trianglepractice_block1.calcualtedEggYPosition = Math.round(lastFourEggYPosition /
-                            6 - 129);
-                        psy_add_centered_bitmap_db(egg_small, task_trianglepractice_block1
-                            .calcualtedEggXPosition, task_trianglepractice_block1.calcualtedEggYPosition, 0);
-                        psy_draw_all_db();
-                        if (!(lastFourStatus == 1)) {
-                            task_trianglepractice_block1.step = 53
-                        };
-                        setTimeout("task_trianglepractice_block1.run()", 0);
-                        break;
-                    case 52:
-                        task_trianglepractice_block1.step++;
-                        psy_add_centered_bitmap_db(green_check, -400, -129, 0);
-                        psy_draw_all_db();
-                        task_trianglepractice_block1.run();
-                        break;
-                    case 53:
-                        task_trianglepractice_block1.step++;
-                        if (!(lastFourStatus != 1)) {
-                            task_trianglepractice_block1.step = 55
-                        };
-                        setTimeout("task_trianglepractice_block1.run()", 0);
-                        break;
-                    case 54:
-                        task_trianglepractice_block1.step++;
-                        psy_add_centered_bitmap_db(error, -400, -129, 0);
-                        psy_draw_all_db();
-                        task_trianglepractice_block1.run();
-                        break;
-                    case 55:
-                        task_trianglepractice_block1.step++;
-                        task_trianglepractice_block1.run();
-                        break;
-                    case 56:
-                        task_trianglepractice_block1.step++;
-                        if (!(trialCounter > 5)) {
-                            task_trianglepractice_block1.step = 66
-                        };
-                        setTimeout("task_trianglepractice_block1.run()", 0);
-                        break;
-                    case 57:
-                        task_trianglepractice_block1.step++;
-                        task_trianglepractice_block1.lastTrial = Math.round(trialCounter - 5);
-                        psy_add_text_rgb_db(mysmallfont, -690, -277, PSY_CENTRAL, PSY_CENTRAL, 255, 255, 255,
-                            task_trianglepractice_block1.lastTrial, 0);
-                        psy_draw_all_db();
-                        psy_add_centered_bitmap_db(backg_small, -545, -277, 0);
-                        psy_draw_all_db();
-                        if (!(lastFourKeyPressed == 1)) {
-                            task_trianglepractice_block1.step = 59
-                        };
-                        setTimeout("task_trianglepractice_block1.run()", 0);
-                        break;
-                    case 58:
-                        task_trianglepractice_block1.step++;
-                        psy_add_centered_bitmap_db(white_small, -558, -277, 0);
-                        psy_draw_all_db();
-                        task_trianglepractice_block1.run();
-                        break;
-                    case 59:
-                        task_trianglepractice_block1.step++;
-                        if (!(lastFourKeyPressed == 2)) {
-                            task_trianglepractice_block1.step = 61
-                        };
-                        setTimeout("task_trianglepractice_block1.run()", 0);
-                        break;
-                    case 60:
-                        task_trianglepractice_block1.step++;
-                        psy_add_centered_bitmap_db(white_small, -532, -277, 0);
-                        psy_draw_all_db();
-                        task_trianglepractice_block1.run();
-                        break;
-                    case 61:
-                        task_trianglepractice_block1.step++;
-                        psy_add_centered_bitmap_db(blue_small, -558, -277, 0);
-                        psy_draw_all_db();
-                        psy_add_centered_bitmap_db(yellow_small, -532, -277, 0);
-                        psy_draw_all_db();
-                        task_trianglepractice_block1.calcualtedEggXPosition = Math.round(lastFiveEggXPosition /
-                            6 - 545);
-                        task_trianglepractice_block1.calcualtedEggYPosition = Math.round(lastFiveEggYPosition /
-                            6 - 277);
-                        psy_add_centered_bitmap_db(egg_small, task_trianglepractice_block1
-                            .calcualtedEggXPosition, task_trianglepractice_block1.calcualtedEggYPosition, 0);
-                        psy_draw_all_db();
-                        if (!(lastFiveStatus == 1)) {
-                            task_trianglepractice_block1.step = 63
-                        };
-                        setTimeout("task_trianglepractice_block1.run()", 0);
-                        break;
-                    case 62:
-                        task_trianglepractice_block1.step++;
-                        psy_add_centered_bitmap_db(green_check, -400, -277, 0);
-                        psy_draw_all_db();
-                        task_trianglepractice_block1.run();
-                        break;
-                    case 63:
-                        task_trianglepractice_block1.step++;
-                        if (!(lastFiveStatus != 1)) {
-                            task_trianglepractice_block1.step = 65
-                        };
-                        setTimeout("task_trianglepractice_block1.run()", 0);
-                        break;
-                    case 64:
-                        task_trianglepractice_block1.step++;
-                        psy_add_centered_bitmap_db(error, -400, -277, 0);
-                        psy_draw_all_db();
-                        task_trianglepractice_block1.run();
-                        break;
-                    case 65:
-                        task_trianglepractice_block1.step++;
-                        task_trianglepractice_block1.run();
-                        break;
-                    case 66:
-                        task_trianglepractice_block1.step++;
-                        psy_add_centered_bitmap_db(egg_white, practiceTable1[tablerow].c3, practiceTable1[
-                            tablerow].c4, 0);
-                        psy_draw_all_db();
-                        psy_delay(250);
-                        break;
-                    case 67:
-                        task_trianglepractice_block1.step++;
-                        psy_clear_stimuli1(-1);
-                        psy_draw_all_db();
-                        psy_delay(250);
-                        break;
-                    case 68:
-                        task_trianglepractice_block1.step++;
-                        psy_add_centered_bitmap_db(egg_white, practiceTable1[tablerow].c3, practiceTable1[
-                            tablerow].c4, 0);
-                        psy_draw_all_db();
-                        psy_delay(250);
-                        break;
-                    case 69:
-                        task_trianglepractice_block1.step++;
-                        psy_clear_stimuli1(-1);
-                        psy_draw_all_db();
-                        psy_delay(250);
-                        break;
-                    case 70:
-                        task_trianglepractice_block1.step++;
-                        psy_add_centered_bitmap_db(egg_white, practiceTable1[tablerow].c3, practiceTable1[
-                            tablerow].c4, 0);
-                        psy_draw_all_db();
-                        psy_delay(250);
-                        break;
-                    case 71:
-                        task_trianglepractice_block1.step++;
-                        psy_clear_stimuli1(-1);
-                        psy_draw_all_db();
-                        psy_delay(250);
-                        break;
-                    case 72:
-                        task_trianglepractice_block1.step++;
-                        psy_add_centered_bitmap_db(egg_white, practiceTable1[tablerow].c3, practiceTable1[
-                            tablerow].c4, 0);
-                        psy_draw_all_db();
-                        psy_add_centered_bitmap_db(next_egg_text, 0, 270, 0);
-                        psy_draw_all_db();
-                        psy_keyboard(possiblekeys, 3, practiceTable1[tablerow].c6 - 1, 9999999);
-                        break;
-                    case 73:
-                        task_trianglepractice_block1.step++;
-                        if (!(keystatus.key + 1 == 3)) {
-                            task_trianglepractice_block1.step = 76
-                        };
-                        setTimeout("task_trianglepractice_block1.run()", 0);
-                        break;
-                    case 74:
-                        task_trianglepractice_block1.step++;
-                        psy_keyboard(possiblekeys, 3, practiceTable1[tablerow].c6 - 1, 9999999);
-                        break;
-                    case 75:
-                        task_trianglepractice_block1.step++;
-                        task_trianglepractice_block1.step = 73;
-                        task_trianglepractice_block1.run();
-                        break;
-                    case 76:
-                        task_trianglepractice_block1.step++;
-                        keypressed = keystatus.key + 1;
-                        basketXposition = triangle_x_position;
-                        if (!(keystatus.status == 1)) {
-                            task_trianglepractice_block1.step = 78
-                        };
-                        setTimeout("task_trianglepractice_block1.run()", 0);
-                        break;
-                    case 77:
-                        task_trianglepractice_block1.step++;
-                        trialCorrect = trialCorrect + 1;
-                        tbtresponse = 1;
-                        task_trianglepractice_block1.run();
-                        break;
-                    case 78:
-                        task_trianglepractice_block1.step++;
-                        if (!(keystatus.status != 1)) {
-                            task_trianglepractice_block1.step = 80
-                        };
-                        setTimeout("task_trianglepractice_block1.run()", 0);
-                        break;
-                    case 79:
-                        task_trianglepractice_block1.step++;
-                        points = points - 1;
-                        trialIncorrect = trialIncorrect + 1;
-                        tbtresponse = 0;
-                        task_trianglepractice_block1.run();
-                        break;
-                    case 80:
-                        task_trianglepractice_block1.step++;
-                        time = psy_time_since_start();
-                        correct_map = 0;
-                        if (!(keystatus.status == 1)) {
-                            task_trianglepractice_block1.step = 82
-                        };
-                        setTimeout("task_trianglepractice_block1.run()", 0);
-                        break;
-                    case 81:
-                        task_trianglepractice_block1.step++;
-                        correct_map = 1;
-                        block1Correct = block1Correct + 1;
-                        task_trianglepractice_block1.run();
-                        break;
-                    case 82:
-                        task_trianglepractice_block1.step++;
-                        if (!(keystatus.status != 1)) {
-                            task_trianglepractice_block1.step = 84
-                        };
-                        setTimeout("task_trianglepractice_block1.run()", 0);
-                        break;
-                    case 83:
-                        task_trianglepractice_block1.step++;
-                        correct_map = 0;
-                        task_trianglepractice_block1.run();
-                        break;
-                    case 84:
-                        task_trianglepractice_block1.step++;
-                        addoutput(current_block.substring(6, current_block.length) + " " + practiceTable1[
-                                tablerow].c1 + " " + practiceTable1[tablerow].c2 + " " + practiceTable1[
-                                tablerow].c3 + " " + practiceTable1[tablerow].c4 + " " + time + " " +
-                            keystatus.time + " " + (keystatus.key + 1) + " " + practiceTable1[tablerow].c5 +
-                            " " + practiceTable1[tablerow].c6 + " " + correct_map + " " + points + " " +
-                            left_chicken_x_position + " " + left_chicken_y_position + " " +
-                            right_chicken_x_position + " " + right_chicken_y_position + " " + give_feedback);
-                        if (!(keystatus.key + 1 == 1)) {
-                            task_trianglepractice_block1.step = 86
-                        };
-                        setTimeout("task_trianglepractice_block1.run()", 0);
-                        break;
-                    case 85:
-                        task_trianglepractice_block1.step++;
-                        triangle_x_position = -75;
-                        psy_add_centered_bitmap_db(white_chicken, triangle_x_position, 0, 0);
-                        psy_draw_all_db();
-                        task_trianglepractice_block1.run();
-                        break;
-                    case 86:
-                        task_trianglepractice_block1.step++;
-                        if (!(keystatus.key + 1 == 2)) {
-                            task_trianglepractice_block1.step = 88
-                        };
-                        setTimeout("task_trianglepractice_block1.run()", 0);
-                        break;
-                    case 87:
-                        task_trianglepractice_block1.step++;
-                        triangle_x_position = 75;
-                        psy_add_centered_bitmap_db(white_chicken, triangle_x_position, 0, 0);
-                        psy_draw_all_db();
-                        task_trianglepractice_block1.run();
-                        break;
-                    case 88:
-                        task_trianglepractice_block1.step++;
-                        psy_add_centered_bitmap_db(blue_chicken, -75, 0, 0);
-                        psy_draw_all_db();
-                        psy_add_centered_bitmap_db(yellow_chicken, 75, 0, 0);
-                        psy_draw_all_db();
-                        psy_add_centered_bitmap_db(egg_white, practiceTable1[tablerow].c3, practiceTable1[
-                            tablerow].c4, 0);
-                        psy_draw_all_db();
-                        psy_delay(300);
-                        break;
-                    case 89:
-                        task_trianglepractice_block1.step++;
-                        lastStatus = keystatus.status;
-                        trialCounter = trialCounter + 1;
-                        if (!(practiceTable1[tablerow].c1 == 20)) {
-                            task_trianglepractice_block1.step = 101
-                        };
-                        setTimeout("task_trianglepractice_block1.run()", 0);
-                        break;
-                    case 90:
-                        task_trianglepractice_block1.step++;
-                        psy_add_centered_bitmap_db(background, PSY_CENTRAL, PSY_CENTRAL, 0);
-                        psy_draw_all_db();
-                        if (!(block1Correct < 12)) {
-                            task_trianglepractice_block1.step = 98
-                        };
-                        setTimeout("task_trianglepractice_block1.run()", 0);
-                        break;
-                    case 91:
-                        task_trianglepractice_block1.step++;
-                        if (!(block1CountShow == 1)) {
-                            task_trianglepractice_block1.step = 97
-                        };
-                        setTimeout("task_trianglepractice_block1.run()", 0);
-                        break;
-                    case 92:
-                        task_trianglepractice_block1.step++;
-                        psy_add_text_rgb_db(mainfont, 0, -40, PSY_CENTRAL, PSY_CENTRAL, 255, 255, 255,
-                            "Please Try Again :(", 0);
-                        psy_draw_all_db();
-                        psy_add_text_rgb_db(mainfont, 0, 20, PSY_CENTRAL, PSY_CENTRAL, 255, 255, 255,
-                            "You did not correctly predict 65% of the trials.", 0);
-                        psy_draw_all_db();
-                        points = 20;
-                        trialCounter = 1;
-                        block1Correct = 0;
-                        repeatblock1 = 1;
-                        block1CountShow = block1CountShow + 1;
-                        psy_add_text_rgb_db(mainfont, 0, 300, PSY_CENTRAL, PSY_CENTRAL, 255, 255, 255,
-                            "Press the Spacebar to continue", 0);
-                        psy_draw_all_db();
-                        psy_keyboard(possiblekeys, 3, 3 - 1, 999999);
-                        break;
-                    case 93:
-                        task_trianglepractice_block1.step++;
-                        if (!(keystatus.status != 1)) {
-                            task_trianglepractice_block1.step = 96
-                        };
-                        setTimeout("task_trianglepractice_block1.run()", 0);
-                        break;
-                    case 94:
-                        task_trianglepractice_block1.step++;
-                        psy_keyboard(possiblekeys, 3, 3 - 1, 999999);
-                        break;
-                    case 95:
-                        task_trianglepractice_block1.step++;
-                        task_trianglepractice_block1.step = 93;
-                        task_trianglepractice_block1.run();
-                        break;
-                    case 96:
-                        task_trianglepractice_block1.step++;
-                        task_trianglepractice_block1.run();
-                        break;
-                    case 97:
-                        task_trianglepractice_block1.step++;
-                        task_trianglepractice_block1.run();
-                        break;
-                    case 98:
-                        task_trianglepractice_block1.step++;
-                        if (!(block1Correct > 12)) {
-                            task_trianglepractice_block1.step = 100
-                        };
-                        setTimeout("task_trianglepractice_block1.run()", 0);
-                        break;
-                    case 99:
-                        task_trianglepractice_block1.step++;
-                        repeatblock1 = 0;
-                        task_trianglepractice_block1.run();
-                        break;
-                    case 100:
-                        task_trianglepractice_block1.step++;
-                        task_trianglepractice_block1.run();
-                        break;
-                    case 101:
-                        task_trianglepractice_block1.step++;
-                        task_trianglepractice_block1.run();
-                        break;
-                    case 102:
-                        task_trianglepractice_block1.step++;
-                        setTimeout(current_block + ".run()", 0);
-                        break
-                }
-            }
-        };
-        var task_trianglepractice_block2 = {
-            step: 1,
-            task_trial_selection: 0,
-            current_trial: -1,
-            taskname: "task_trianglepractice_block2",
-            tasknumber: 2,
-            start: function (trial_selection) {
-                task_trianglepractice_block2.trial_selection = trial_selection;
-                task_trianglepractice_block2.step = 1;
-                psy_clear_stimulus_counters_db();
-                task_trianglepractice_block2.run()
-            },
-            lastTrial: 0,
-            calcualtedEggXPosition: 0,
-            calcualtedEggYPosition: 0,
-            run: function () {
-                current_task = task_trianglepractice_block2.taskname;
-                switch (task_trianglepractice_block2.step) {
-                    case 1:
-                        task_trianglepractice_block2.step++;
-                        general_trial_counter++;
-                        task_trianglepractice_block2.lastTrial = task_trianglepractice_block2
-                            .calcualtedEggXPosition = task_trianglepractice_block2.calcualtedEggYPosition = 0;
-                        if (task_trianglepractice_block2.trial_selection == TRIAL_SELECTION_RANDOM) {
-                            tablerow = psy_random(0, 19);
-                            task_trianglepractice_block2.current_trial = tablerow
-                        }
-                        if (task_trianglepractice_block2.trial_selection ==
-                            TRIAL_SELECTION_RANDOM_NEVER_REPEAT) {
-                            tablerow = psy_random(0, 19);
-                            while (tablerow == task_trianglepractice_block2.current_trial) tablerow =
-                                psy_random(0, 19);
-                            task_trianglepractice_block2.current_trial = tablerow
-                        }
-                        if (task_trianglepractice_block2.trial_selection == TRIAL_SELECTION_FIXED_SEQUENCE) {
-                            task_trianglepractice_block2.current_trial++;
-                            if (task_trianglepractice_block2.current_trial == 20) task_trianglepractice_block2
-                                .current_trial = 0;
-                            tablerow = task_trianglepractice_block2.current_trial
-                        }
-                        if (task_trianglepractice_block2.trial_selection == TRIAL_SELECTION_REPEAT_ON_ERROR) {
-                            if (error_status != 0 && task_trianglepractice_block2.current_trial != -1) {
-                                tablerow = task_trianglepractice_block2.current_trial
-                            } else {
-                                tablerow = psy_random(0, 19);
-                                task_trianglepractice_block2.current_trial = tablerow
-                            }
-                        }
-                        if (task_trianglepractice_block2.trial_selection == TRIAL_SELECTION_ONCE) {
-                            if (selectedoncecount_table_practiceTable2 == 20) {
-                                for (tmptr = 0; tmptr < 20; tmptr++) practiceTable2[tmptr].selected = 0;
-                                selectedoncecount_table_practiceTable2 = 0
-                            }
-                            tablerow = psy_random(0, 19);
-                            while (practiceTable2[tablerow].selected == 1 || tablerow ==
-                                task_trianglepractice_block2.current_trial) tablerow = psy_random(0, 19);
-                            task_trianglepractice_block2.current_trial = tablerow;
-                            selectedoncecount_table_practiceTable2++;
-                            practiceTable2[tablerow].selected = 1
-                        }
-                        error_status = 0;
-                        possiblekeys = [37, 39, 32];
-                        psy_mouse_visibility(0);
-                        if (!(repeatblock2 == 1)) {
-                            task_trianglepractice_block2.step = 102
-                        };
-                        setTimeout("task_trianglepractice_block2.run()", 0);
-                        break;
-                    case 2:
-                        task_trianglepractice_block2.step++;
-                        if (!(practiceTable2[tablerow].c2 == 1)) {
-                            task_trianglepractice_block2.step = 4
-                        };
-                        setTimeout("task_trianglepractice_block2.run()", 0);
-                        break;
-                    case 3:
-                        task_trianglepractice_block2.step++;
-                        psy_add_centered_bitmap_db(background_sigma_110, PSY_CENTRAL, PSY_CENTRAL, 0);
-                        psy_draw_all_db();
-                        task_trianglepractice_block2.run();
-                        break;
-                    case 4:
-                        task_trianglepractice_block2.step++;
-                        if (!(practiceTable2[tablerow].c2 == 3)) {
-                            task_trianglepractice_block2.step = 6
-                        };
-                        setTimeout("task_trianglepractice_block2.run()", 0);
-                        break;
-                    case 5:
-                        task_trianglepractice_block2.step++;
-                        psy_add_centered_bitmap_db(background_sigma_110, PSY_CENTRAL, PSY_CENTRAL, 0);
-                        psy_draw_all_db();
-                        task_trianglepractice_block2.run();
-                        break;
-                    case 6:
-                        task_trianglepractice_block2.step++;
-                        if (!(practiceTable2[tablerow].c2 == 2)) {
-                            task_trianglepractice_block2.step = 8
-                        };
-                        setTimeout("task_trianglepractice_block2.run()", 0);
-                        break;
-                    case 7:
-                        task_trianglepractice_block2.step++;
-                        psy_add_centered_bitmap_db(background_sigma_160, PSY_CENTRAL, PSY_CENTRAL, 0);
-                        psy_draw_all_db();
-                        task_trianglepractice_block2.run();
-                        break;
-                    case 8:
-                        task_trianglepractice_block2.step++;
-                        if (!(practiceTable2[tablerow].c2 == 4)) {
-                            task_trianglepractice_block2.step = 10
-                        };
-                        setTimeout("task_trianglepractice_block2.run()", 0);
-                        break;
-                    case 9:
-                        task_trianglepractice_block2.step++;
-                        psy_add_centered_bitmap_db(background_sigma_160, PSY_CENTRAL, PSY_CENTRAL, 0);
-                        psy_draw_all_db();
-                        task_trianglepractice_block2.run();
-                        break;
-                    case 10:
-                        task_trianglepractice_block2.step++;
-                        if (!(trialCounter != 1)) {
-                            task_trianglepractice_block2.step = 12
-                        };
-                        setTimeout("task_trianglepractice_block2.run()", 0);
-                        break;
-                    case 11:
-                        task_trianglepractice_block2.step++;
-                        task_trianglepractice_block2.run();
-                        break;
-                    case 12:
-                        task_trianglepractice_block2.step++;
-                        psy_add_centered_bitmap_db(blue_chicken, -75, 0, 0);
-                        psy_draw_all_db();
-                        psy_add_centered_bitmap_db(yellow_chicken, 75, 0, 0);
-                        psy_draw_all_db();
-                        psy_add_centered_bitmap_db(controls, 0, 340, 0);
-                        psy_draw_all_db();
-                        psy_add_text_rgb_db(mainfont, -100, -375, PSY_CENTRAL, PSY_CENTRAL, 255, 255, 255,
-                            "Trial: ", 0);
-                        psy_draw_all_db();
-                        psy_add_text_rgb_db(mainfont, -50, -375, PSY_CENTRAL, PSY_CENTRAL, 255, 255, 255,
-                            practiceTable2[tablerow].c1, 0);
-                        psy_draw_all_db();
-                        psy_add_text_rgb_db(mainfont, 0, -375, PSY_CENTRAL, PSY_CENTRAL, 255, 255, 255, " of ",
-                            0);
-                        psy_draw_all_db();
-                        if (!(isPractice == 1)) {
-                            task_trianglepractice_block2.step = 14
-                        };
-                        setTimeout("task_trianglepractice_block2.run()", 0);
-                        break;
-                    case 13:
-                        task_trianglepractice_block2.step++;
-                        psy_add_text_rgb_db(mainfont, 50, -375, PSY_CENTRAL, PSY_CENTRAL, 255, 255, 255, "20",
-                            0);
-                        psy_draw_all_db();
-                        task_trianglepractice_block2.run();
-                        break;
-                    case 14:
-                        task_trianglepractice_block2.step++;
-                        if (!(isPractice == 0)) {
-                            task_trianglepractice_block2.step = 16
-                        };
-                        setTimeout("task_trianglepractice_block2.run()", 0);
-                        break;
-                    case 15:
-                        task_trianglepractice_block2.step++;
-                        psy_add_text_rgb_db(mainfont, 50, -375, PSY_CENTRAL, PSY_CENTRAL, 255, 255, 255, "400",
-                            0);
-                        psy_draw_all_db();
-                        task_trianglepractice_block2.run();
+                        setTimeout("task_trianglepractice.run()", 0);
                         break;
                     case 16:
-                        task_trianglepractice_block2.step++;
-                        psy_add_text_rgb_db(mainfont, -33, -300, PSY_CENTRAL, PSY_CENTRAL, 255, 255, 255,
-                            "Cents: ", 0);
-                        psy_draw_all_db();
-                        psy_add_text_rgb_db(mainfont, 30, -300, PSY_CENTRAL, PSY_CENTRAL, 255, 255, 255, points,
-                            0);
-                        psy_draw_all_db();
-                        lastFiveEggXPosition = lastFourEggXPosition;
-                        lastFiveEggYPosition = lastFourEggYPosition;
-                        lastFourEggXPosition = lastThreeEggXPosition;
-                        lastFourEggYPosition = lastThreeEggYPosition;
-                        lastThreeEggXPosition = lastTwoEggXPosition;
-                        lastThreeEggYPosition = lastTwoEggYPosition;
-                        lastTwoEggXPosition = lastOneEggXPosition;
-                        lastTwoEggYPosition = lastOneEggYPosition;
-                        lastOneEggXPosition = lastEggXPosition;
-                        lastOneEggYPosition = lastEggYPosition;
-                        lastEggXPosition = practiceTable2[tablerow].c3;
-                        lastEggYPosition = practiceTable2[tablerow].c4;
-                        lastFiveStatus = lastFourStatus;
-                        lastFourStatus = lastThreeStatus;
-                        lastThreeStatus = lastTwoStatus;
-                        lastTwoStatus = lastOneStatus;
-                        lastOneStatus = lastStatus;
-                        lastFourKeyPressed = lastThreeKeyPressed;
-                        lastThreeKeyPressed = lastTwoKeyPressed;
-                        lastTwoKeyPressed = lastOneKeyPressed;
-                        lastOneKeyPressed = keypressed;
-                        if (!(trialCounter > 1)) {
-                            task_trianglepractice_block2.step = 26
-                        };
-                        setTimeout("task_trianglepractice_block2.run()", 0);
-                        break;
-                    case 17:
-                        task_trianglepractice_block2.step++;
-                        task_trianglepractice_block2.lastTrial = Math.round(trialCounter - 1);
+                        task_trianglepractice.step++;
+                        task_trianglepractice.lastTrial = Math.round(trialCounter - 1);
                         psy_add_text_rgb_db(mysmallfont, -690, 315, PSY_CENTRAL, PSY_CENTRAL, 255, 255, 255,
-                            task_trianglepractice_block2.lastTrial, 0);
+                            task_trianglepractice.lastTrial, 0);
                         psy_draw_all_db();
                         psy_add_centered_bitmap_db(backg_small, -545, 315, 0);
                         psy_draw_all_db();
                         if (!(lastOneKeyPressed == 1)) {
-                            task_trianglepractice_block2.step = 19
+                            task_trianglepractice.step = 18
                         };
-                        setTimeout("task_trianglepractice_block2.run()", 0);
+                        setTimeout("task_trianglepractice.run()", 0);
                         break;
-                    case 18:
-                        task_trianglepractice_block2.step++;
+                    case 17:
+                        task_trianglepractice.step++;
                         psy_add_centered_bitmap_db(white_small, -558, 315, 0);
                         psy_draw_all_db();
-                        task_trianglepractice_block2.run();
+                        task_trianglepractice.run();
+                        break;
+                    case 18:
+                        task_trianglepractice.step++;
+                        if (!(lastOneKeyPressed == 2)) {
+                            task_trianglepractice.step = 20
+                        };
+                        setTimeout("task_trianglepractice.run()", 0);
                         break;
                     case 19:
-                        task_trianglepractice_block2.step++;
-                        if (!(lastOneKeyPressed == 2)) {
-                            task_trianglepractice_block2.step = 21
-                        };
-                        setTimeout("task_trianglepractice_block2.run()", 0);
-                        break;
-                    case 20:
-                        task_trianglepractice_block2.step++;
+                        task_trianglepractice.step++;
                         psy_add_centered_bitmap_db(white_small, -532, 315, 0);
                         psy_draw_all_db();
-                        task_trianglepractice_block2.run();
+                        task_trianglepractice.run();
                         break;
-                    case 21:
-                        task_trianglepractice_block2.step++;
+                    case 20:
+                        task_trianglepractice.step++;
                         psy_add_centered_bitmap_db(blue_small, -558, 315, 0);
                         psy_draw_all_db();
                         psy_add_centered_bitmap_db(yellow_small, -532, 315, 0);
                         psy_draw_all_db();
-                        task_trianglepractice_block2.calcualtedEggXPosition = Math.round(lastOneEggXPosition /
-                            6 - 545);
-                        task_trianglepractice_block2.calcualtedEggYPosition = Math.round(lastOneEggYPosition /
-                            6 + 315);
-                        psy_add_centered_bitmap_db(egg_small, task_trianglepractice_block2
-                            .calcualtedEggXPosition, task_trianglepractice_block2.calcualtedEggYPosition, 0);
+                        task_trianglepractice.calcualtedEggXPosition = Math.round(lastOneEggXPosition / 6 -
+                        545);
+                        task_trianglepractice.calcualtedEggYPosition = Math.round(lastOneEggYPosition / 6 +
+                        315);
+                        psy_add_centered_bitmap_db(egg_small, task_trianglepractice.calcualtedEggXPosition,
+                            task_trianglepractice.calcualtedEggYPosition, 0);
                         psy_draw_all_db();
                         if (!(lastOneStatus == 1)) {
-                            task_trianglepractice_block2.step = 23
+                            task_trianglepractice.step = 22
                         };
-                        setTimeout("task_trianglepractice_block2.run()", 0);
+                        setTimeout("task_trianglepractice.run()", 0);
                         break;
-                    case 22:
-                        task_trianglepractice_block2.step++;
+                    case 21:
+                        task_trianglepractice.step++;
                         psy_add_centered_bitmap_db(green_check, -400, 315, 0);
                         psy_draw_all_db();
-                        task_trianglepractice_block2.run();
+                        task_trianglepractice.run();
+                        break;
+                    case 22:
+                        task_trianglepractice.step++;
+                        if (!(lastOneStatus != 1)) {
+                            task_trianglepractice.step = 24
+                        };
+                        setTimeout("task_trianglepractice.run()", 0);
                         break;
                     case 23:
-                        task_trianglepractice_block2.step++;
-                        if (!(lastOneStatus != 1)) {
-                            task_trianglepractice_block2.step = 25
-                        };
-                        setTimeout("task_trianglepractice_block2.run()", 0);
-                        break;
-                    case 24:
-                        task_trianglepractice_block2.step++;
+                        task_trianglepractice.step++;
                         psy_add_centered_bitmap_db(error, -400, 315, 0);
                         psy_draw_all_db();
-                        task_trianglepractice_block2.run();
+                        task_trianglepractice.run();
+                        break;
+                    case 24:
+                        task_trianglepractice.step++;
+                        task_trianglepractice.run();
                         break;
                     case 25:
-                        task_trianglepractice_block2.step++;
-                        task_trianglepractice_block2.run();
+                        task_trianglepractice.step++;
+                        if (!(trialCounter > 2)) {
+                            task_trianglepractice.step = 35
+                        };
+                        setTimeout("task_trianglepractice.run()", 0);
                         break;
                     case 26:
-                        task_trianglepractice_block2.step++;
-                        if (!(trialCounter > 2)) {
-                            task_trianglepractice_block2.step = 36
-                        };
-                        setTimeout("task_trianglepractice_block2.run()", 0);
-                        break;
-                    case 27:
-                        task_trianglepractice_block2.step++;
-                        task_trianglepractice_block2.lastTrial = Math.round(trialCounter - 2);
+                        task_trianglepractice.step++;
+                        task_trianglepractice.lastTrial = Math.round(trialCounter - 2);
                         psy_add_text_rgb_db(mysmallfont, -690, 167, PSY_CENTRAL, PSY_CENTRAL, 255, 255, 255,
-                            task_trianglepractice_block2.lastTrial, 0);
+                            task_trianglepractice.lastTrial, 0);
                         psy_draw_all_db();
                         psy_add_centered_bitmap_db(backg_small, -545, 167, 0);
                         psy_draw_all_db();
                         if (!(lastTwoKeyPressed == 1)) {
-                            task_trianglepractice_block2.step = 29
+                            task_trianglepractice.step = 28
                         };
-                        setTimeout("task_trianglepractice_block2.run()", 0);
+                        setTimeout("task_trianglepractice.run()", 0);
                         break;
-                    case 28:
-                        task_trianglepractice_block2.step++;
+                    case 27:
+                        task_trianglepractice.step++;
                         psy_add_centered_bitmap_db(white_small, -558, 167, 0);
                         psy_draw_all_db();
-                        task_trianglepractice_block2.run();
+                        task_trianglepractice.run();
+                        break;
+                    case 28:
+                        task_trianglepractice.step++;
+                        if (!(lastTwoKeyPressed == 2)) {
+                            task_trianglepractice.step = 30
+                        };
+                        setTimeout("task_trianglepractice.run()", 0);
                         break;
                     case 29:
-                        task_trianglepractice_block2.step++;
-                        if (!(lastTwoKeyPressed == 2)) {
-                            task_trianglepractice_block2.step = 31
-                        };
-                        setTimeout("task_trianglepractice_block2.run()", 0);
-                        break;
-                    case 30:
-                        task_trianglepractice_block2.step++;
+                        task_trianglepractice.step++;
                         psy_add_centered_bitmap_db(white_small, -532, 167, 0);
                         psy_draw_all_db();
-                        task_trianglepractice_block2.run();
+                        task_trianglepractice.run();
                         break;
-                    case 31:
-                        task_trianglepractice_block2.step++;
+                    case 30:
+                        task_trianglepractice.step++;
                         psy_add_centered_bitmap_db(blue_small, -558, 167, 0);
                         psy_draw_all_db();
                         psy_add_centered_bitmap_db(yellow_small, -532, 167, 0);
                         psy_draw_all_db();
-                        task_trianglepractice_block2.calcualtedEggXPosition = Math.round(lastTwoEggXPosition /
-                            6 - 545);
-                        task_trianglepractice_block2.calcualtedEggYPosition = Math.round(lastTwoEggYPosition /
-                            6 + 167);
-                        psy_add_centered_bitmap_db(egg_small, task_trianglepractice_block2
-                            .calcualtedEggXPosition, task_trianglepractice_block2.calcualtedEggYPosition, 0);
+                        task_trianglepractice.calcualtedEggXPosition = Math.round(lastTwoEggXPosition / 6 -
+                        545);
+                        task_trianglepractice.calcualtedEggYPosition = Math.round(lastTwoEggYPosition / 6 +
+                        167);
+                        psy_add_centered_bitmap_db(egg_small, task_trianglepractice.calcualtedEggXPosition,
+                            task_trianglepractice.calcualtedEggYPosition, 0);
                         psy_draw_all_db();
                         if (!(lastTwoStatus == 1)) {
-                            task_trianglepractice_block2.step = 33
+                            task_trianglepractice.step = 32
                         };
-                        setTimeout("task_trianglepractice_block2.run()", 0);
+                        setTimeout("task_trianglepractice.run()", 0);
                         break;
-                    case 32:
-                        task_trianglepractice_block2.step++;
+                    case 31:
+                        task_trianglepractice.step++;
                         psy_add_centered_bitmap_db(green_check, -400, 167, 0);
                         psy_draw_all_db();
-                        task_trianglepractice_block2.run();
+                        task_trianglepractice.run();
+                        break;
+                    case 32:
+                        task_trianglepractice.step++;
+                        if (!(lastTwoStatus != 1)) {
+                            task_trianglepractice.step = 34
+                        };
+                        setTimeout("task_trianglepractice.run()", 0);
                         break;
                     case 33:
-                        task_trianglepractice_block2.step++;
-                        if (!(lastTwoStatus != 1)) {
-                            task_trianglepractice_block2.step = 35
-                        };
-                        setTimeout("task_trianglepractice_block2.run()", 0);
-                        break;
-                    case 34:
-                        task_trianglepractice_block2.step++;
+                        task_trianglepractice.step++;
                         psy_add_centered_bitmap_db(error, -400, 167, 0);
                         psy_draw_all_db();
-                        task_trianglepractice_block2.run();
+                        task_trianglepractice.run();
+                        break;
+                    case 34:
+                        task_trianglepractice.step++;
+                        task_trianglepractice.run();
                         break;
                     case 35:
-                        task_trianglepractice_block2.step++;
-                        task_trianglepractice_block2.run();
+                        task_trianglepractice.step++;
+                        if (!(trialCounter > 3)) {
+                            task_trianglepractice.step = 45
+                        };
+                        setTimeout("task_trianglepractice.run()", 0);
                         break;
                     case 36:
-                        task_trianglepractice_block2.step++;
-                        if (!(trialCounter > 3)) {
-                            task_trianglepractice_block2.step = 46
-                        };
-                        setTimeout("task_trianglepractice_block2.run()", 0);
-                        break;
-                    case 37:
-                        task_trianglepractice_block2.step++;
-                        task_trianglepractice_block2.lastTrial = Math.round(trialCounter - 3);
+                        task_trianglepractice.step++;
+                        task_trianglepractice.lastTrial = Math.round(trialCounter - 3);
                         psy_add_text_rgb_db(mysmallfont, -690, 19, PSY_CENTRAL, PSY_CENTRAL, 255, 255, 255,
-                            task_trianglepractice_block2.lastTrial, 0);
+                            task_trianglepractice.lastTrial, 0);
                         psy_draw_all_db();
                         psy_add_centered_bitmap_db(backg_small, -545, 19, 0);
                         psy_draw_all_db();
                         if (!(lastThreeKeyPressed == 1)) {
-                            task_trianglepractice_block2.step = 39
+                            task_trianglepractice.step = 38
                         };
-                        setTimeout("task_trianglepractice_block2.run()", 0);
+                        setTimeout("task_trianglepractice.run()", 0);
                         break;
-                    case 38:
-                        task_trianglepractice_block2.step++;
+                    case 37:
+                        task_trianglepractice.step++;
                         psy_add_centered_bitmap_db(white_small, -558, 19, 0);
                         psy_draw_all_db();
-                        task_trianglepractice_block2.run();
+                        task_trianglepractice.run();
+                        break;
+                    case 38:
+                        task_trianglepractice.step++;
+                        if (!(lastThreeKeyPressed == 2)) {
+                            task_trianglepractice.step = 40
+                        };
+                        setTimeout("task_trianglepractice.run()", 0);
                         break;
                     case 39:
-                        task_trianglepractice_block2.step++;
-                        if (!(lastThreeKeyPressed == 2)) {
-                            task_trianglepractice_block2.step = 41
-                        };
-                        setTimeout("task_trianglepractice_block2.run()", 0);
-                        break;
-                    case 40:
-                        task_trianglepractice_block2.step++;
+                        task_trianglepractice.step++;
                         psy_add_centered_bitmap_db(white_small, -532, 19, 0);
                         psy_draw_all_db();
-                        task_trianglepractice_block2.run();
+                        task_trianglepractice.run();
                         break;
-                    case 41:
-                        task_trianglepractice_block2.step++;
+                    case 40:
+                        task_trianglepractice.step++;
                         psy_add_centered_bitmap_db(blue_small, -558, 19, 0);
                         psy_draw_all_db();
                         psy_add_centered_bitmap_db(yellow_small, -532, 19, 0);
                         psy_draw_all_db();
-                        task_trianglepractice_block2.calcualtedEggXPosition = Math.round(lastThreeEggXPosition /
-                            6 - 545);
-                        task_trianglepractice_block2.calcualtedEggYPosition = Math.round(lastThreeEggYPosition /
-                            6 + 19);
-                        psy_add_centered_bitmap_db(egg_small, task_trianglepractice_block2
-                            .calcualtedEggXPosition, task_trianglepractice_block2.calcualtedEggYPosition, 0);
+                        task_trianglepractice.calcualtedEggXPosition = Math.round(lastThreeEggXPosition / 6 -
+                            545);
+                        task_trianglepractice.calcualtedEggYPosition = Math.round(lastThreeEggYPosition / 6 +
+                            19);
+                        psy_add_centered_bitmap_db(egg_small, task_trianglepractice.calcualtedEggXPosition,
+                            task_trianglepractice.calcualtedEggYPosition, 0);
                         psy_draw_all_db();
                         if (!(lastThreeStatus == 1)) {
-                            task_trianglepractice_block2.step = 43
+                            task_trianglepractice.step = 42
                         };
-                        setTimeout("task_trianglepractice_block2.run()", 0);
+                        setTimeout("task_trianglepractice.run()", 0);
                         break;
-                    case 42:
-                        task_trianglepractice_block2.step++;
+                    case 41:
+                        task_trianglepractice.step++;
                         psy_add_centered_bitmap_db(green_check, -400, 19, 0);
                         psy_draw_all_db();
-                        task_trianglepractice_block2.run();
+                        task_trianglepractice.run();
+                        break;
+                    case 42:
+                        task_trianglepractice.step++;
+                        if (!(lastThreeStatus != 1)) {
+                            task_trianglepractice.step = 44
+                        };
+                        setTimeout("task_trianglepractice.run()", 0);
                         break;
                     case 43:
-                        task_trianglepractice_block2.step++;
-                        if (!(lastThreeStatus != 1)) {
-                            task_trianglepractice_block2.step = 45
-                        };
-                        setTimeout("task_trianglepractice_block2.run()", 0);
-                        break;
-                    case 44:
-                        task_trianglepractice_block2.step++;
+                        task_trianglepractice.step++;
                         psy_add_centered_bitmap_db(error, -400, 19, 0);
                         psy_draw_all_db();
-                        task_trianglepractice_block2.run();
+                        task_trianglepractice.run();
+                        break;
+                    case 44:
+                        task_trianglepractice.step++;
+                        task_trianglepractice.run();
                         break;
                     case 45:
-                        task_trianglepractice_block2.step++;
-                        task_trianglepractice_block2.run();
+                        task_trianglepractice.step++;
+                        if (!(trialCounter > 4)) {
+                            task_trianglepractice.step = 55
+                        };
+                        setTimeout("task_trianglepractice.run()", 0);
                         break;
                     case 46:
-                        task_trianglepractice_block2.step++;
-                        if (!(trialCounter > 4)) {
-                            task_trianglepractice_block2.step = 56
-                        };
-                        setTimeout("task_trianglepractice_block2.run()", 0);
-                        break;
-                    case 47:
-                        task_trianglepractice_block2.step++;
-                        task_trianglepractice_block2.lastTrial = Math.round(trialCounter - 4);
+                        task_trianglepractice.step++;
+                        task_trianglepractice.lastTrial = Math.round(trialCounter - 4);
                         psy_add_text_rgb_db(mysmallfont, -690, -129, PSY_CENTRAL, PSY_CENTRAL, 255, 255, 255,
-                            task_trianglepractice_block2.lastTrial, 0);
+                            task_trianglepractice.lastTrial, 0);
                         psy_draw_all_db();
                         psy_add_centered_bitmap_db(backg_small, -545, -129, 0);
                         psy_draw_all_db();
                         if (!(lastFourKeyPressed == 1)) {
-                            task_trianglepractice_block2.step = 49
+                            task_trianglepractice.step = 48
                         };
-                        setTimeout("task_trianglepractice_block2.run()", 0);
+                        setTimeout("task_trianglepractice.run()", 0);
                         break;
-                    case 48:
-                        task_trianglepractice_block2.step++;
+                    case 47:
+                        task_trianglepractice.step++;
                         psy_add_centered_bitmap_db(white_small, -558, -129, 0);
                         psy_draw_all_db();
-                        task_trianglepractice_block2.run();
+                        task_trianglepractice.run();
+                        break;
+                    case 48:
+                        task_trianglepractice.step++;
+                        if (!(lastFourKeyPressed == 2)) {
+                            task_trianglepractice.step = 50
+                        };
+                        setTimeout("task_trianglepractice.run()", 0);
                         break;
                     case 49:
-                        task_trianglepractice_block2.step++;
-                        if (!(lastFourKeyPressed == 2)) {
-                            task_trianglepractice_block2.step = 51
-                        };
-                        setTimeout("task_trianglepractice_block2.run()", 0);
-                        break;
-                    case 50:
-                        task_trianglepractice_block2.step++;
+                        task_trianglepractice.step++;
                         psy_add_centered_bitmap_db(white_small, -532, -129, 0);
                         psy_draw_all_db();
-                        task_trianglepractice_block2.run();
+                        task_trianglepractice.run();
                         break;
-                    case 51:
-                        task_trianglepractice_block2.step++;
+                    case 50:
+                        task_trianglepractice.step++;
                         psy_add_centered_bitmap_db(blue_small, -558, -129, 0);
                         psy_draw_all_db();
                         psy_add_centered_bitmap_db(yellow_small, -532, -129, 0);
                         psy_draw_all_db();
-                        task_trianglepractice_block2.calcualtedEggXPosition = Math.round(lastFourEggXPosition /
-                            6 - 545);
-                        task_trianglepractice_block2.calcualtedEggYPosition = Math.round(lastFourEggYPosition /
-                            6 - 129);
-                        psy_add_centered_bitmap_db(egg_small, task_trianglepractice_block2
-                            .calcualtedEggXPosition, task_trianglepractice_block2.calcualtedEggYPosition, 0);
+                        task_trianglepractice.calcualtedEggXPosition = Math.round(lastFourEggXPosition / 6 -
+                            545);
+                        task_trianglepractice.calcualtedEggYPosition = Math.round(lastFourEggYPosition / 6 -
+                            129);
+                        psy_add_centered_bitmap_db(egg_small, task_trianglepractice.calcualtedEggXPosition,
+                            task_trianglepractice.calcualtedEggYPosition, 0);
                         psy_draw_all_db();
                         if (!(lastFourStatus == 1)) {
-                            task_trianglepractice_block2.step = 53
+                            task_trianglepractice.step = 52
                         };
-                        setTimeout("task_trianglepractice_block2.run()", 0);
+                        setTimeout("task_trianglepractice.run()", 0);
                         break;
-                    case 52:
-                        task_trianglepractice_block2.step++;
+                    case 51:
+                        task_trianglepractice.step++;
                         psy_add_centered_bitmap_db(green_check, -400, -129, 0);
                         psy_draw_all_db();
-                        task_trianglepractice_block2.run();
+                        task_trianglepractice.run();
+                        break;
+                    case 52:
+                        task_trianglepractice.step++;
+                        if (!(lastFourStatus != 1)) {
+                            task_trianglepractice.step = 54
+                        };
+                        setTimeout("task_trianglepractice.run()", 0);
                         break;
                     case 53:
-                        task_trianglepractice_block2.step++;
-                        if (!(lastFourStatus != 1)) {
-                            task_trianglepractice_block2.step = 55
-                        };
-                        setTimeout("task_trianglepractice_block2.run()", 0);
-                        break;
-                    case 54:
-                        task_trianglepractice_block2.step++;
+                        task_trianglepractice.step++;
                         psy_add_centered_bitmap_db(error, -400, -129, 0);
                         psy_draw_all_db();
-                        task_trianglepractice_block2.run();
+                        task_trianglepractice.run();
+                        break;
+                    case 54:
+                        task_trianglepractice.step++;
+                        task_trianglepractice.run();
                         break;
                     case 55:
-                        task_trianglepractice_block2.step++;
-                        task_trianglepractice_block2.run();
+                        task_trianglepractice.step++;
+                        if (!(trialCounter > 5)) {
+                            task_trianglepractice.step = 65
+                        };
+                        setTimeout("task_trianglepractice.run()", 0);
                         break;
                     case 56:
-                        task_trianglepractice_block2.step++;
-                        if (!(trialCounter > 5)) {
-                            task_trianglepractice_block2.step = 66
-                        };
-                        setTimeout("task_trianglepractice_block2.run()", 0);
-                        break;
-                    case 57:
-                        task_trianglepractice_block2.step++;
-                        task_trianglepractice_block2.lastTrial = Math.round(trialCounter - 5);
+                        task_trianglepractice.step++;
+                        task_trianglepractice.lastTrial = Math.round(trialCounter - 5);
                         psy_add_text_rgb_db(mysmallfont, -690, -277, PSY_CENTRAL, PSY_CENTRAL, 255, 255, 255,
-                            task_trianglepractice_block2.lastTrial, 0);
+                            task_trianglepractice.lastTrial, 0);
                         psy_draw_all_db();
                         psy_add_centered_bitmap_db(backg_small, -545, -277, 0);
                         psy_draw_all_db();
                         if (!(lastFourKeyPressed == 1)) {
-                            task_trianglepractice_block2.step = 59
+                            task_trianglepractice.step = 58
                         };
-                        setTimeout("task_trianglepractice_block2.run()", 0);
+                        setTimeout("task_trianglepractice.run()", 0);
                         break;
-                    case 58:
-                        task_trianglepractice_block2.step++;
+                    case 57:
+                        task_trianglepractice.step++;
                         psy_add_centered_bitmap_db(white_small, -558, -277, 0);
                         psy_draw_all_db();
-                        task_trianglepractice_block2.run();
+                        task_trianglepractice.run();
+                        break;
+                    case 58:
+                        task_trianglepractice.step++;
+                        if (!(lastFourKeyPressed == 2)) {
+                            task_trianglepractice.step = 60
+                        };
+                        setTimeout("task_trianglepractice.run()", 0);
                         break;
                     case 59:
-                        task_trianglepractice_block2.step++;
-                        if (!(lastFourKeyPressed == 2)) {
-                            task_trianglepractice_block2.step = 61
-                        };
-                        setTimeout("task_trianglepractice_block2.run()", 0);
-                        break;
-                    case 60:
-                        task_trianglepractice_block2.step++;
+                        task_trianglepractice.step++;
                         psy_add_centered_bitmap_db(white_small, -532, -277, 0);
                         psy_draw_all_db();
-                        task_trianglepractice_block2.run();
+                        task_trianglepractice.run();
                         break;
-                    case 61:
-                        task_trianglepractice_block2.step++;
+                    case 60:
+                        task_trianglepractice.step++;
                         psy_add_centered_bitmap_db(blue_small, -558, -277, 0);
                         psy_draw_all_db();
                         psy_add_centered_bitmap_db(yellow_small, -532, -277, 0);
                         psy_draw_all_db();
-                        task_trianglepractice_block2.calcualtedEggXPosition = Math.round(lastFiveEggXPosition /
-                            6 - 545);
-                        task_trianglepractice_block2.calcualtedEggYPosition = Math.round(lastFiveEggYPosition /
-                            6 - 277);
-                        psy_add_centered_bitmap_db(egg_small, task_trianglepractice_block2
-                            .calcualtedEggXPosition, task_trianglepractice_block2.calcualtedEggYPosition, 0);
+                        task_trianglepractice.calcualtedEggXPosition = Math.round(lastFiveEggXPosition / 6 -
+                            545);
+                        task_trianglepractice.calcualtedEggYPosition = Math.round(lastFiveEggYPosition / 6 -
+                            277);
+                        psy_add_centered_bitmap_db(egg_small, task_trianglepractice.calcualtedEggXPosition,
+                            task_trianglepractice.calcualtedEggYPosition, 0);
                         psy_draw_all_db();
                         if (!(lastFiveStatus == 1)) {
-                            task_trianglepractice_block2.step = 63
+                            task_trianglepractice.step = 62
                         };
-                        setTimeout("task_trianglepractice_block2.run()", 0);
+                        setTimeout("task_trianglepractice.run()", 0);
                         break;
-                    case 62:
-                        task_trianglepractice_block2.step++;
+                    case 61:
+                        task_trianglepractice.step++;
                         psy_add_centered_bitmap_db(green_check, -400, -277, 0);
                         psy_draw_all_db();
-                        task_trianglepractice_block2.run();
+                        task_trianglepractice.run();
+                        break;
+                    case 62:
+                        task_trianglepractice.step++;
+                        if (!(lastFiveStatus != 1)) {
+                            task_trianglepractice.step = 64
+                        };
+                        setTimeout("task_trianglepractice.run()", 0);
                         break;
                     case 63:
-                        task_trianglepractice_block2.step++;
-                        if (!(lastFiveStatus != 1)) {
-                            task_trianglepractice_block2.step = 65
-                        };
-                        setTimeout("task_trianglepractice_block2.run()", 0);
-                        break;
-                    case 64:
-                        task_trianglepractice_block2.step++;
+                        task_trianglepractice.step++;
                         psy_add_centered_bitmap_db(error, -400, -277, 0);
                         psy_draw_all_db();
-                        task_trianglepractice_block2.run();
+                        task_trianglepractice.run();
+                        break;
+                    case 64:
+                        task_trianglepractice.step++;
+                        task_trianglepractice.run();
                         break;
                     case 65:
-                        task_trianglepractice_block2.step++;
-                        task_trianglepractice_block2.run();
+                        task_trianglepractice.step++;
+                        psy_add_centered_bitmap_db(egg_white, practiceTable[tablerow].c3, practiceTable[
+                            tablerow].c4, 0);
+                        psy_draw_all_db();
+                        psy_delay(250);
                         break;
                     case 66:
-                        task_trianglepractice_block2.step++;
-                        psy_add_centered_bitmap_db(egg_white, practiceTable2[tablerow].c3, practiceTable2[
-                            tablerow].c4, 0);
+                        task_trianglepractice.step++;
+                        psy_clear_stimuli1(-1);
                         psy_draw_all_db();
                         psy_delay(250);
                         break;
                     case 67:
-                        task_trianglepractice_block2.step++;
-                        psy_clear_stimuli1(-1);
+                        task_trianglepractice.step++;
+                        psy_add_centered_bitmap_db(egg_white, practiceTable[tablerow].c3, practiceTable[
+                            tablerow].c4, 0);
                         psy_draw_all_db();
                         psy_delay(250);
                         break;
                     case 68:
-                        task_trianglepractice_block2.step++;
-                        psy_add_centered_bitmap_db(egg_white, practiceTable2[tablerow].c3, practiceTable2[
-                            tablerow].c4, 0);
+                        task_trianglepractice.step++;
+                        psy_clear_stimuli1(-1);
                         psy_draw_all_db();
                         psy_delay(250);
                         break;
                     case 69:
-                        task_trianglepractice_block2.step++;
-                        psy_clear_stimuli1(-1);
+                        task_trianglepractice.step++;
+                        psy_add_centered_bitmap_db(egg_white, practiceTable[tablerow].c3, practiceTable[
+                            tablerow].c4, 0);
                         psy_draw_all_db();
                         psy_delay(250);
                         break;
                     case 70:
-                        task_trianglepractice_block2.step++;
-                        psy_add_centered_bitmap_db(egg_white, practiceTable2[tablerow].c3, practiceTable2[
-                            tablerow].c4, 0);
-                        psy_draw_all_db();
-                        psy_delay(250);
-                        break;
-                    case 71:
-                        task_trianglepractice_block2.step++;
+                        task_trianglepractice.step++;
                         psy_clear_stimuli1(-1);
                         psy_draw_all_db();
                         psy_delay(250);
                         break;
-                    case 72:
-                        task_trianglepractice_block2.step++;
-                        psy_add_centered_bitmap_db(egg_white, practiceTable2[tablerow].c3, practiceTable2[
+                    case 71:
+                        task_trianglepractice.step++;
+                        psy_add_centered_bitmap_db(egg_white, practiceTable[tablerow].c3, practiceTable[
                             tablerow].c4, 0);
                         psy_draw_all_db();
                         psy_add_centered_bitmap_db(next_egg_text, 0, 270, 0);
                         psy_draw_all_db();
-                        psy_keyboard(possiblekeys, 3, practiceTable2[tablerow].c6 - 1, 9999999);
+                        psy_keyboard(possiblekeys, 3, practiceTable[tablerow].c6 - 1, 9999999);
+                        break;
+                    case 72:
+                        task_trianglepractice.step++;
+                        if (!(keystatus.key + 1 == 3)) {
+                            task_trianglepractice.step = 75
+                        };
+                        setTimeout("task_trianglepractice.run()", 0);
                         break;
                     case 73:
-                        task_trianglepractice_block2.step++;
-                        if (!(keystatus.key + 1 == 3)) {
-                            task_trianglepractice_block2.step = 76
-                        };
-                        setTimeout("task_trianglepractice_block2.run()", 0);
+                        task_trianglepractice.step++;
+                        psy_keyboard(possiblekeys, 3, practiceTable[tablerow].c6 - 1, 9999999);
                         break;
                     case 74:
-                        task_trianglepractice_block2.step++;
-                        psy_keyboard(possiblekeys, 3, practiceTable2[tablerow].c6 - 1, 9999999);
+                        task_trianglepractice.step++;
+                        task_trianglepractice.step = 72;
+                        task_trianglepractice.run();
                         break;
                     case 75:
-                        task_trianglepractice_block2.step++;
-                        task_trianglepractice_block2.step = 73;
-                        task_trianglepractice_block2.run();
-                        break;
-                    case 76:
-                        task_trianglepractice_block2.step++;
+                        task_trianglepractice.step++;
                         keypressed = keystatus.key + 1;
                         basketXposition = triangle_x_position;
                         if (!(keystatus.status == 1)) {
-                            task_trianglepractice_block2.step = 78
+                            task_trianglepractice.step = 77
                         };
-                        setTimeout("task_trianglepractice_block2.run()", 0);
+                        setTimeout("task_trianglepractice.run()", 0);
                         break;
-                    case 77:
-                        task_trianglepractice_block2.step++;
+                    case 76:
+                        task_trianglepractice.step++;
                         trialCorrect = trialCorrect + 1;
                         tbtresponse = 1;
-                        task_trianglepractice_block2.run();
+                        task_trianglepractice.run();
+                        break;
+                    case 77:
+                        task_trianglepractice.step++;
+                        if (!(keystatus.status != 1)) {
+                            task_trianglepractice.step = 79
+                        };
+                        setTimeout("task_trianglepractice.run()", 0);
                         break;
                     case 78:
-                        task_trianglepractice_block2.step++;
-                        if (!(keystatus.status != 1)) {
-                            task_trianglepractice_block2.step = 80
-                        };
-                        setTimeout("task_trianglepractice_block2.run()", 0);
-                        break;
-                    case 79:
-                        task_trianglepractice_block2.step++;
+                        task_trianglepractice.step++;
                         points = points - 1;
                         trialIncorrect = trialIncorrect + 1;
                         tbtresponse = 0;
-                        task_trianglepractice_block2.run();
+                        task_trianglepractice.run();
                         break;
-                    case 80:
-                        task_trianglepractice_block2.step++;
+                    case 79:
+                        task_trianglepractice.step++;
                         time = psy_time_since_start();
                         correct_map = 0;
                         if (!(keystatus.status == 1)) {
-                            task_trianglepractice_block2.step = 82
+                            task_trianglepractice.step = 81
                         };
-                        setTimeout("task_trianglepractice_block2.run()", 0);
+                        setTimeout("task_trianglepractice.run()", 0);
+                        break;
+                    case 80:
+                        task_trianglepractice.step++;
+                        correct_map = 1;
+                        task_trianglepractice.run();
                         break;
                     case 81:
-                        task_trianglepractice_block2.step++;
-                        correct_map = 1;
-                        block2Correct = block2Correct + 1;
-                        task_trianglepractice_block2.run();
+                        task_trianglepractice.step++;
+                        if (!(keystatus.status != 1)) {
+                            task_trianglepractice.step = 83
+                        };
+                        setTimeout("task_trianglepractice.run()", 0);
                         break;
                     case 82:
-                        task_trianglepractice_block2.step++;
-                        if (!(keystatus.status != 1)) {
-                            task_trianglepractice_block2.step = 84
-                        };
-                        setTimeout("task_trianglepractice_block2.run()", 0);
+                        task_trianglepractice.step++;
+                        correct_map = 0;
+                        task_trianglepractice.run();
                         break;
                     case 83:
-                        task_trianglepractice_block2.step++;
-                        correct_map = 0;
-                        task_trianglepractice_block2.run();
-                        break;
-                    case 84:
-                        task_trianglepractice_block2.step++;
-                        addoutput(current_block.substring(6, current_block.length) + " " + practiceTable2[
-                                tablerow].c1 + " " + practiceTable2[tablerow].c2 + " " + practiceTable2[
-                                tablerow].c3 + " " + practiceTable2[tablerow].c4 + " " + time + " " +
-                            keystatus.time + " " + (keystatus.key + 1) + " " + practiceTable2[tablerow].c5 +
-                            " " + practiceTable2[tablerow].c6 + " " + correct_map + " " + points + " " +
+                        task_trianglepractice.step++;
+                        addoutput(current_block.substring(6, current_block.length) + " " + practiceTable[
+                                tablerow].c1 + " " + practiceTable[tablerow].c2 + " " + practiceTable[
+                                tablerow].c3 + " " + practiceTable[tablerow].c4 + " " + time + " " +
+                            keystatus.time + " " + (keystatus.key + 1) + " " + practiceTable[tablerow].c5 +
+                            " " + practiceTable[tablerow].c6 + " " + correct_map + " " + points + " " +
                             left_chicken_x_position + " " + left_chicken_y_position + " " +
                             right_chicken_x_position + " " + right_chicken_y_position + " " + give_feedback);
                         if (!(keystatus.key + 1 == 1)) {
-                            task_trianglepractice_block2.step = 86
+                            task_trianglepractice.step = 85
                         };
-                        setTimeout("task_trianglepractice_block2.run()", 0);
+                        setTimeout("task_trianglepractice.run()", 0);
                         break;
-                    case 85:
-                        task_trianglepractice_block2.step++;
+                    case 84:
+                        task_trianglepractice.step++;
                         triangle_x_position = -75;
                         psy_add_centered_bitmap_db(white_chicken, triangle_x_position, 0, 0);
                         psy_draw_all_db();
-                        task_trianglepractice_block2.run();
+                        task_trianglepractice.run();
+                        break;
+                    case 85:
+                        task_trianglepractice.step++;
+                        if (!(keystatus.key + 1 == 2)) {
+                            task_trianglepractice.step = 87
+                        };
+                        setTimeout("task_trianglepractice.run()", 0);
                         break;
                     case 86:
-                        task_trianglepractice_block2.step++;
-                        if (!(keystatus.key + 1 == 2)) {
-                            task_trianglepractice_block2.step = 88
-                        };
-                        setTimeout("task_trianglepractice_block2.run()", 0);
-                        break;
-                    case 87:
-                        task_trianglepractice_block2.step++;
+                        task_trianglepractice.step++;
                         triangle_x_position = 75;
                         psy_add_centered_bitmap_db(white_chicken, triangle_x_position, 0, 0);
                         psy_draw_all_db();
-                        task_trianglepractice_block2.run();
+                        task_trianglepractice.run();
                         break;
-                    case 88:
-                        task_trianglepractice_block2.step++;
+                    case 87:
+                        task_trianglepractice.step++;
                         psy_add_centered_bitmap_db(blue_chicken, -75, 0, 0);
                         psy_draw_all_db();
                         psy_add_centered_bitmap_db(yellow_chicken, 75, 0, 0);
                         psy_draw_all_db();
-                        psy_add_centered_bitmap_db(egg_white, practiceTable2[tablerow].c3, practiceTable2[
+                        psy_add_centered_bitmap_db(egg_white, practiceTable[tablerow].c3, practiceTable[
                             tablerow].c4, 0);
                         psy_draw_all_db();
                         psy_delay(300);
                         break;
-                    case 89:
-                        task_trianglepractice_block2.step++;
+                    case 88:
+                        task_trianglepractice.step++;
                         lastStatus = keystatus.status;
                         trialCounter = trialCounter + 1;
-                        if (!(practiceTable2[tablerow].c1 == 20)) {
-                            task_trianglepractice_block2.step = 101
-                        };
-                        setTimeout("task_trianglepractice_block2.run()", 0);
-                        break;
-                    case 90:
-                        task_trianglepractice_block2.step++;
-                        psy_add_centered_bitmap_db(background, PSY_CENTRAL, PSY_CENTRAL, 0);
-                        psy_draw_all_db();
-                        if (!(block2Correct < 12)) {
-                            task_trianglepractice_block2.step = 98
-                        };
-                        setTimeout("task_trianglepractice_block2.run()", 0);
-                        break;
-                    case 91:
-                        task_trianglepractice_block2.step++;
-                        if (!(block2CountShow == 1)) {
-                            task_trianglepractice_block2.step = 97
-                        };
-                        setTimeout("task_trianglepractice_block2.run()", 0);
-                        break;
-                    case 92:
-                        task_trianglepractice_block2.step++;
-                        psy_add_text_rgb_db(mainfont, 0, -40, PSY_CENTRAL, PSY_CENTRAL, 255, 255, 255,
-                            "Please Try Again :(", 0);
-                        psy_draw_all_db();
-                        psy_add_text_rgb_db(mainfont, 0, 20, PSY_CENTRAL, PSY_CENTRAL, 255, 255, 255,
-                            "You did not correctly predict 65% of the trials.", 0);
-                        psy_draw_all_db();
-                        points = 20;
-                        trialCounter = 1;
-                        block2Correct = 0;
-                        repeatblock2 = 1;
-                        block2CountShow = block2CountShow + 1;
-                        psy_add_text_rgb_db(mainfont, 0, 300, PSY_CENTRAL, PSY_CENTRAL, 255, 255, 255,
-                            "Press the Spacebar to continue", 0);
-                        psy_draw_all_db();
-                        psy_keyboard(possiblekeys, 3, 3 - 1, 999999);
-                        break;
-                    case 93:
-                        task_trianglepractice_block2.step++;
-                        if (!(keystatus.status != 1)) {
-                            task_trianglepractice_block2.step = 96
-                        };
-                        setTimeout("task_trianglepractice_block2.run()", 0);
-                        break;
-                    case 94:
-                        task_trianglepractice_block2.step++;
-                        psy_keyboard(possiblekeys, 3, 3 - 1, 999999);
-                        break;
-                    case 95:
-                        task_trianglepractice_block2.step++;
-                        task_trianglepractice_block2.step = 93;
-                        task_trianglepractice_block2.run();
-                        break;
-                    case 96:
-                        task_trianglepractice_block2.step++;
-                        task_trianglepractice_block2.run();
-                        break;
-                    case 97:
-                        task_trianglepractice_block2.step++;
-                        task_trianglepractice_block2.run();
-                        break;
-                    case 98:
-                        task_trianglepractice_block2.step++;
-                        if (!(block2Correct > 12)) {
-                            task_trianglepractice_block2.step = 100
-                        };
-                        setTimeout("task_trianglepractice_block2.run()", 0);
-                        break;
-                    case 99:
-                        task_trianglepractice_block2.step++;
-                        repeatblock2 = 0;
-                        task_trianglepractice_block2.run();
-                        break;
-                    case 100:
-                        task_trianglepractice_block2.step++;
-                        task_trianglepractice_block2.run();
-                        break;
-                    case 101:
-                        task_trianglepractice_block2.step++;
-                        task_trianglepractice_block2.run();
-                        break;
-                    case 102:
-                        task_trianglepractice_block2.step++;
                         setTimeout(current_block + ".run()", 0);
                         break
                 }
@@ -3677,7 +2688,7 @@
             task_trial_selection: 0,
             current_trial: -1,
             taskname: "task_triangle",
-            tasknumber: 3,
+            tasknumber: 2,
             start: function (trial_selection) {
                 task_triangle.trial_selection = trial_selection;
                 task_triangle.step = 1;
@@ -4251,7 +3262,7 @@
             task_trial_selection: 0,
             current_trial: -1,
             taskname: "task_triangleDisperse",
-            tasknumber: 4,
+            tasknumber: 3,
             start: function (trial_selection) {
                 task_triangleDisperse.trial_selection = trial_selection;
                 task_triangleDisperse.step = 1;
@@ -4485,7 +3496,7 @@
             task_trial_selection: 0,
             current_trial: -1,
             taskname: "task_instructionAnimate",
-            tasknumber: 5,
+            tasknumber: 4,
             start: function (trial_selection) {
                 task_instructionAnimate.trial_selection = trial_selection;
                 task_instructionAnimate.step = 1;
@@ -4560,7 +3571,7 @@
             task_trial_selection: 0,
             current_trial: -1,
             taskname: "task_quizQ",
-            tasknumber: 6,
+            tasknumber: 5,
             start: function (trial_selection) {
                 task_quizQ.trial_selection = trial_selection;
                 task_quizQ.step = 1;
@@ -5263,7 +4274,7 @@
             task_trial_selection: 0,
             current_trial: -1,
             taskname: "task_soundOn",
-            tasknumber: 7,
+            tasknumber: 6,
             start: function (trial_selection) {
                 task_soundOn.trial_selection = trial_selection;
                 task_soundOn.step = 1;
@@ -5509,8 +4520,8 @@
                 }
             }
         };
-        var block_practice1 = {
-            blockname: "block_practice1",
+        var block_practice = {
+            blockname: "block_practice",
             step: 1,
             trial_counter: 0,
             trial_counter_per_task: [0],
@@ -5518,226 +4529,86 @@
             criteria_fullfilled: 1,
             choosetask: 0,
             start: function () {
-                block_practice1.step = 1;
-                current_block = "block_practice1";
-                block_practice1.trial_counter_per_task[0] = 40;
+                block_practice.step = 1;
+                current_block = "block_practice";
+                block_practice.trial_counter_per_task[0] = 20;
                 psy_clear_stimulus_counters_db();
-                block_practice1.run()
+                block_practice.run()
             },
             run: function () {
-                current_block = block_practice1.blockname;
-                switch (block_practice1.step) {
+                current_block = block_practice.blockname;
+                switch (block_practice.step) {
                     case 1:
-                        block_practice1.step++;
+                        block_practice.step++;
                         isPractice = 1;
-                        setTimeout("block_practice1.run()", 0);
+                        setTimeout("block_practice.run()", 0);
                         break;
                     case 2:
-                        block_practice1.step++;
+                        block_practice.step++;
                         trialCounter = 1;
-                        setTimeout("block_practice1.run()", 0);
+                        setTimeout("block_practice.run()", 0);
                         break;
                     case 3:
-                        block_practice1.step++;
-                        points = 20;
-                        setTimeout("block_practice1.run()", 0);
+                        block_practice.step++;
+                        points = 0;
+                        setTimeout("block_practice.run()", 0);
                         break;
                     case 4:
-                        block_practice1.step++;
+                        block_practice.step++;
                         lastpoint = 0;
-                        setTimeout("block_practice1.run()", 0);
+                        setTimeout("block_practice.run()", 0);
                         break;
                     case 5:
-                        block_practice1.step++;
+                        block_practice.step++;
                         pilecount = 0;
-                        setTimeout("block_practice1.run()", 0);
+                        setTimeout("block_practice.run()", 0);
                         break;
                     case 6:
-                        block_practice1.step++;
+                        block_practice.step++;
                         randpoints = 0;
-                        setTimeout("block_practice1.run()", 0);
+                        setTimeout("block_practice.run()", 0);
                         break;
                     case 7:
-                        block_practice1.step++;
+                        block_practice.step++;
                         previousEggXPosition = 2e3;
-                        setTimeout("block_practice1.run()", 0);
+                        setTimeout("block_practice.run()", 0);
                         break;
                     case 8:
-                        block_practice1.step++;
+                        block_practice.step++;
                         previousEggYPosition = 2e3;
-                        setTimeout("block_practice1.run()", 0);
+                        setTimeout("block_practice.run()", 0);
                         break;
                     case 9:
-                        block_practice1.step++;
-                        repeatblock1 = 1;
-                        setTimeout("block_practice1.run()", 0);
+                        block_practice.step++;
+                        psy_clear_screen_db();
+                        block_practice.max_trials_in_block = 999999;
+                        block_practice.criteria_fullfilled = 1;
+                        if (block_practice.criteria_fullfilled > 0 && block_practice.trial_counter <=
+                            block_practice.max_trials_in_block) {
+                            block_practice.trial_counter++;
+                            task_trianglepractice.start(TRIAL_SELECTION_FIXED_SEQUENCE)
+                        } else {
+                            setTimeout("block_practice.run()", 0)
+                        }
                         break;
                     case 10:
-                        block_practice1.step++;
-                        block1CountShow = 1;
-                        setTimeout("block_practice1.run()", 0);
-                        break;
-                    case 11:
-                        block_practice1.step++;
-                        block1Correct = 0;
-                        setTimeout("block_practice1.run()", 0);
-                        break;
-                    case 12:
-                        block_practice1.step++;
-                        psy_clear_screen_db();
-                        block_practice1.max_trials_in_block = 999999;
-                        block_practice1.criteria_fullfilled = 1;
-                        if (block_practice1.criteria_fullfilled > 0 && block_practice1.trial_counter <=
-                            block_practice1.max_trials_in_block) {
-                            block_practice1.trial_counter++;
-                            task_trianglepractice_block1.start(TRIAL_SELECTION_FIXED_SEQUENCE)
-                        } else {
-                            setTimeout("block_practice1.run()", 0)
-                        }
-                        break;
-                    case 13:
-                        block_practice1.step++;
-                        block_practice1.trial_counter_per_task[0]--;
-                        if (block_practice1.trial_counter_per_task[0] == 0 || block_practice1.trial_counter >=
-                            block_practice1.max_trials_in_block || tasklist_end_request == 1 ||
+                        block_practice.step++;
+                        block_practice.trial_counter_per_task[0]--;
+                        if (block_practice.trial_counter_per_task[0] == 0 || block_practice.trial_counter >=
+                            block_practice.max_trials_in_block || tasklist_end_request == 1 ||
                             experiment_end_request == 1) {
-                            block_practice1.criteria_fullfilled = 0;
+                            block_practice.criteria_fullfilled = 0;
                             tasklist_end_request = 0
                         }
-                        if (block_practice1.criteria_fullfilled == 1) {
-                            block_practice1.step = block_practice1.step - 2;
-                            setTimeout("block_practice1.run()", 0)
+                        if (block_practice.criteria_fullfilled == 1) {
+                            block_practice.step = block_practice.step - 2;
+                            setTimeout("block_practice.run()", 0)
                         } else {
-                            setTimeout("block_practice1.run()", 0)
+                            setTimeout("block_practice.run()", 0)
                         }
-                        break;
-                    case 14:
-                        block_practice1.step++;
-                        psy_clear_screen_db();
-                        psy_add_text_rgb_db(0, 0, 70, PSY_CENTRAL, PSY_CENTRAL, 255, 255, 255,
-                            "Now, you are entering a different coop with 2 new chickens.", 0);
-                        psy_draw_all_db();
-                        psy_add_text_rgb_db(0, 0, 110, PSY_CENTRAL, PSY_CENTRAL, 255, 255, 255,
-                            "These chickens may lay their eggs in a different pattern than the last two.", 0
-                            );
-                        psy_draw_all_db();
-                        psy_add_text_rgb_db(0, 0, 250, PSY_CENTRAL, PSY_CENTRAL, 255, 255, 255,
-                            "Press space bar of your keyboard to continue", 0);
-                        psy_draw_all_db();
-                        psy_wait(0, 32);
-                        break;
-                    case 15:
-                        block_practice1.step++;
-                        psy_clear_screen_db();
-                        setTimeout("blocks" + psy_blockorder + ".run()", 0);
-                        break
-                }
-            }
-        };
-        var block_practice2 = {
-            blockname: "block_practice2",
-            step: 1,
-            trial_counter: 0,
-            trial_counter_per_task: [0],
-            max_trials_in_block: 999999,
-            criteria_fullfilled: 1,
-            choosetask: 0,
-            start: function () {
-                block_practice2.step = 1;
-                current_block = "block_practice2";
-                block_practice2.trial_counter_per_task[0] = 40;
-                psy_clear_stimulus_counters_db();
-                block_practice2.run()
-            },
-            run: function () {
-                current_block = block_practice2.blockname;
-                switch (block_practice2.step) {
-                    case 1:
-                        block_practice2.step++;
-                        isPractice = 1;
-                        setTimeout("block_practice2.run()", 0);
-                        break;
-                    case 2:
-                        block_practice2.step++;
-                        trialCounter = 1;
-                        setTimeout("block_practice2.run()", 0);
-                        break;
-                    case 3:
-                        block_practice2.step++;
-                        points = 20;
-                        setTimeout("block_practice2.run()", 0);
-                        break;
-                    case 4:
-                        block_practice2.step++;
-                        lastpoint = 0;
-                        setTimeout("block_practice2.run()", 0);
-                        break;
-                    case 5:
-                        block_practice2.step++;
-                        pilecount = 0;
-                        setTimeout("block_practice2.run()", 0);
-                        break;
-                    case 6:
-                        block_practice2.step++;
-                        randpoints = 0;
-                        setTimeout("block_practice2.run()", 0);
-                        break;
-                    case 7:
-                        block_practice2.step++;
-                        previousEggXPosition = 2e3;
-                        setTimeout("block_practice2.run()", 0);
-                        break;
-                    case 8:
-                        block_practice2.step++;
-                        previousEggYPosition = 2e3;
-                        setTimeout("block_practice2.run()", 0);
-                        break;
-                    case 9:
-                        block_practice2.step++;
-                        repeatblock2 = 1;
-                        setTimeout("block_practice2.run()", 0);
-                        break;
-                    case 10:
-                        block_practice2.step++;
-                        block2CountShow = 1;
-                        setTimeout("block_practice2.run()", 0);
                         break;
                     case 11:
-                        block_practice2.step++;
-                        block2Correct = 0;
-                        setTimeout("block_practice2.run()", 0);
-                        break;
-                    case 12:
-                        block_practice2.step++;
-                        psy_clear_screen_db();
-                        block_practice2.max_trials_in_block = 999999;
-                        block_practice2.criteria_fullfilled = 1;
-                        if (block_practice2.criteria_fullfilled > 0 && block_practice2.trial_counter <=
-                            block_practice2.max_trials_in_block) {
-                            block_practice2.trial_counter++;
-                            task_trianglepractice_block2.start(TRIAL_SELECTION_FIXED_SEQUENCE)
-                        } else {
-                            setTimeout("block_practice2.run()", 0)
-                        }
-                        break;
-                    case 13:
-                        block_practice2.step++;
-                        block_practice2.trial_counter_per_task[0]--;
-                        if (block_practice2.trial_counter_per_task[0] == 0 || block_practice2.trial_counter >=
-                            block_practice2.max_trials_in_block || tasklist_end_request == 1 ||
-                            experiment_end_request == 1) {
-                            block_practice2.criteria_fullfilled = 0;
-                            tasklist_end_request = 0
-                        }
-                        if (block_practice2.criteria_fullfilled == 1) {
-                            block_practice2.step = block_practice2.step - 2;
-                            setTimeout("block_practice2.run()", 0)
-                        } else {
-                            setTimeout("block_practice2.run()", 0)
-                        }
-                        break;
-                    case 14:
-                        block_practice2.step++;
+                        block_practice.step++;
                         psy_clear_screen_db();
                         psy_add_text_rgb_db(0, 0, 0, PSY_CENTRAL, PSY_CENTRAL, 255, 255, 255,
                             "Great Job! Looks like you got the hang of it.", 0);
@@ -5750,8 +4621,8 @@
                         psy_draw_all_db();
                         psy_wait(0, 32);
                         break;
-                    case 15:
-                        block_practice2.step++;
+                    case 12:
+                        block_practice.step++;
                         psy_clear_screen_db();
                         setTimeout("blocks" + psy_blockorder + ".run()", 0);
                         break
@@ -6172,7 +5043,7 @@
         }
         var blocks1 = {
             blocknumber: 0,
-            nblocks: 4,
+            nblocks: 3,
             run: function () {
                 blocks1.blocknumber++;
                 switch (blocks1.blocknumber) {
@@ -6180,15 +5051,12 @@
                         block_instructionsquiz.start();
                         break;
                     case 2:
-                        block_practice1.start();
+                        block_practice.start();
                         break;
                     case 3:
-                        block_practice2.start();
-                        break;
-                    case 4:
                         block_main.start();
                         break;
-                    case 5:
+                    case 4:
                         psy_exit_fullscreen();
                         postData(toCSV(outputdata), session, mkturkid, task);
                         break
@@ -6239,7 +5107,7 @@
                 type: 'POST',
                 url: 'saveChickenTask?session=' + session + '&mkturk_id=' + mkturkid + '&task=' + task +
                     '&study=' +
-                    getQueryVariable('study') + '&pattern=2&type=predict_2&version=3.1',
+                    getQueryVariable('study') + '&pattern=4&type=predict_2&version=3.0.3',
                 data: JSON.stringify({
                     content: data
                 }), // or JSON.stringify ({name: 'jonas'}),
@@ -6283,8 +5151,7 @@
     <div class="container-fluid">
         <br>
         <center>
-            <p>Wave 3  - Chicken Task Version 2 - Pattern 2</p>
-            <p>3.1.0</p>
+            <p>Wave 3  - Chicken Task Version 2 - Pattern 4</p>
         </center>
     </div>
 
