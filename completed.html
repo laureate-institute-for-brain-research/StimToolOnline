@@ -104,9 +104,60 @@
                 Hi,<p id='mkturk_id' style="font-size: 30px;"></p>
                 <p>The code for this HIT is: </p>
                 <p><strong style="font-size: 70px">34234</strong></p>
-
             
                 <br>
+                <div class="table-responsive">
+                        <h2>HIT Summary</h2>
+                        <table class="table table-borderless" style="width: 20%;">
+                            <tbody>
+                                <tr>
+                                    <td>HIT Payout</td>
+                                    <td>$1.00</td>
+                                </tr>
+                                <tr>
+                                    <td>Session 1 Bonus</td>
+                                    <td id='CTPoints1Dollar'>$0</td>
+                                </tr>
+                                <tr>
+                                    <td>Session 2 Bonus</td>
+                                    <td id='CTPoints2Dollar'>$0</td>
+                                </tr>
+                                
+                                <tr style="font-weight: bold; ">
+                                    <td>Total</td>
+                                    <td id='TotalDollars'><$0</td>
+                                </tr>
+                            </tbody>
+    
+                        </table>
+                    </div>
+                <hr>
+
+                <h2>Chicken Task Score:</h2>
+                <div class="table-responsive">
+                    <table id="oasis" class="table table-condensed" style="width: 60%;">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>Session 1</th>
+                                <th>Session 2</th>
+                            </tr>
+                        </thead>
+                        <tbody style="font-size: 17px;">
+                            <tr>
+                                <td>Points (cents earned) </td>
+                                <td><strong id="CTPoints1">null</strong></td>
+                                <td><strong id="CTPoints2">null</strong></td>
+                            </tr>
+                            <tr>
+                                <td>Average Reaction Time (seconds)</td>
+                                <td><strong id="CTRT1">null</strong></td>
+                                <td><strong id="CTRT2">null</strong></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
                 <hr>
 
                 <h2>PANAS-X Score:</h2>
@@ -212,34 +263,6 @@
                         </tbody>
                     </table>
                 </div>
-
-                <hr> 
-                <h2>Chicken Task Score:</h2>
-                <div class="table-responsive">
-                    <table id="oasis" class="table table-condensed" style="width: 60%;">
-                        <thead>
-                            <tr>
-                                <th></th>
-                                <th>Session 1</th>
-                                <th>Session 2</th>
-                            </tr>
-                        </thead>
-                        <tbody style="font-size: 17px;">
-                            <tr>
-                                <td>Points (cents earned) </td>
-                                <td><strong id="CTPoints1">null</strong></td>
-                                <td><strong id="CTPoints2">null</strong></td>
-                            </tr>
-                            <tr>
-                                <td>Average Reaction Time</td>
-                                <td><strong id="CTRT1">null</strong></td>
-                                <td><strong id="CTRT2">null</strong></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-
-                <br>
                 <!-- Feed back Survey -->
                 <!-- <div class="row" style="width: 60%;">
                     <div id="surveyElement"></div>
@@ -255,7 +278,7 @@
         </center>
 
         <div class="container-fluid">
-            <center><p class="text-p">&copy; 2018 <a href="http://www.laureateinstitute.org">laureateinstitute.org</a>. All rights reserved.</center>
+            <center><p class="text-p"><a href="http://www.laureateinstitute.org">laureateinstitute.org</a></center>
         </div>
 
 
@@ -329,6 +352,19 @@
                 // Chicken Task
                 document.getElementById("CTPoints1").innerHTML = data['ChickenTask']['T1'].points;
                 document.getElementById("CTPoints2").innerHTML = data['ChickenTask']['T2'].points;
+
+
+                // Caldulcate Payout
+                session1Dollar = data['ChickenTask']['T1'].points / 100;
+                session2Dollar = data['ChickenTask']['T2'].points / 100;
+
+                document.getElementById("CTPoints1Dollar").innerHTML = '$' + session1Dollar;
+                document.getElementById("CTPoints2Dollar").innerHTML = '$' + session2Dollar;
+
+                totalDollars = 1 + session1Dollar + session2Dollar
+
+                document.getElementById("TotalDollars").innerHTML = '$' + totalDollars + '';
+
 
                 document.getElementById("CTRT1").innerHTML = data['ChickenTask']['T1'].avg_rt;
                 document.getElementById("CTRT2").innerHTML = data['ChickenTask']['T2'].avg_rt;

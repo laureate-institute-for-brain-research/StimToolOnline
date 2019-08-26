@@ -92,7 +92,6 @@
     
             var session = getQueryVariable('session');
             var mkturkid = getQueryVariable('mkturk_id');
-
             $("#mkid").text(mkturkid);
             $("#session").text(session);
             $("#study").text(getQueryVariable('study'));
@@ -5789,7 +5788,7 @@
                         break;
                     case 3:
                         block_main.step++;
-                        points = 500;
+                        points = 400;
                         setTimeout("block_main.run()", 0);
                         break;
                     case 4:
@@ -6240,7 +6239,7 @@
                 type: 'POST',
                 url: 'saveChickenTask?session=' + session + '&mkturk_id=' + mkturkid + '&task=' + task +
                     '&study=' +
-                    getQueryVariable('study') + '&pattern=3&type=predict_2&version=3.1',
+                    getQueryVariable('study') + '&pattern=3&type=predict_2&version=3.1.1',
                 data: JSON.stringify({
                     content: data
                 }), // or JSON.stringify ({name: 'jonas'}),
@@ -6285,7 +6284,7 @@
         <br>
         <center>
             <p>Wave 3  - Chicken Task Version 2 - Pattern 3</p>
-            <p>3.1.0</p>
+            <p>3.1.1</p>
         </center>
     </div>
 

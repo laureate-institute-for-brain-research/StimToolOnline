@@ -1015,10 +1015,10 @@ function getChickenTaskScore(filename){
 		
 
 		if (contents[i][0]== 'main'){
-			returnJSON['avg_rt'] = returnJSON['avg_rt'] + parseFloat(contents[i][5].replace('\"',''))
+			returnJSON['avg_rt'] = returnJSON['avg_rt'] + parseFloat(contents[i][6].replace('\"',''))
 		}
 	}
-	returnJSON['avg_rt'] = returnJSON['avg_rt'] / 1200
+	returnJSON['avg_rt'] = returnJSON['avg_rt'] / 400
 	console.log(returnJSON)
 	return(returnJSON)
 }
