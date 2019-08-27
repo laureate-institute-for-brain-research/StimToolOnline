@@ -361,13 +361,13 @@
                 document.getElementById("CTPoints1Dollar").innerHTML = '$' + session1Dollar;
                 document.getElementById("CTPoints2Dollar").innerHTML = '$' + session2Dollar;
 
-                totalDollars = (1 + session1Dollar + session2Dollar).toFixed(2)
+                totalDollars = (1.0 + parseFloat(session1Dollar) + parseFloat(session2Dollar)).toFixed(2)
 
                 document.getElementById("TotalDollars").innerHTML = '$' + totalDollars + '';
 
 
-                document.getElementById("CTRT1").innerHTML = data['ChickenTask']['T1'].avg_rt;
-                document.getElementById("CTRT2").innerHTML = data['ChickenTask']['T2'].avg_rt;
+                document.getElementById("CTRT1").innerHTML = (data['ChickenTask']['T1'].avg_rt).toFixed(3);
+                document.getElementById("CTRT2").innerHTML = (data['ChickenTask']['T2'].avg_rt).toFixed(3);
             });
         </script>
 
