@@ -133,7 +133,7 @@
                     </div>
                 <hr>
 
-                <h2>Chicken Task Score:</h2>
+                <h2>Chicken Task Summary:</h2>
                 <div class="table-responsive">
                     <table id="oasis" class="table table-condensed" style="width: 60%;">
                         <thead>
@@ -145,7 +145,7 @@
                         </thead>
                         <tbody style="font-size: 17px;">
                             <tr>
-                                <td>Points (cents earned) </td>
+                                <td>Cents earned</td>
                                 <td><strong id="CTPoints1">null</strong></td>
                                 <td><strong id="CTPoints2">null</strong></td>
                             </tr>
@@ -355,13 +355,13 @@
 
 
                 // Caldulcate Payout
-                session1Dollar = data['ChickenTask']['T1'].points / 100;
-                session2Dollar = data['ChickenTask']['T2'].points / 100;
+                session1Dollar = (data['ChickenTask']['T1'].points / 100).toFixed(2);
+                session2Dollar = (data['ChickenTask']['T2'].points / 100).toFixed(2);
 
                 document.getElementById("CTPoints1Dollar").innerHTML = '$' + session1Dollar;
                 document.getElementById("CTPoints2Dollar").innerHTML = '$' + session2Dollar;
 
-                totalDollars = 1 + session1Dollar + session2Dollar
+                totalDollars = (1 + session1Dollar + session2Dollar).toFixed(2)
 
                 document.getElementById("TotalDollars").innerHTML = '$' + totalDollars + '';
 
