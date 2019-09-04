@@ -238,6 +238,19 @@ app.get('/test', function(req,res){
 	});	
 });
 
+app.get('/exclude', function(req,res){
+	fs.readFile('exclude.html', function (err, data) {
+		// Write Header
+		res.writeHead(200, {
+			'Content-Type' : 'text/html'
+		});
+		// Wrte Body
+		res.write(data);
+		res.end();
+	});	
+});
+
+
 app.get('/gonogo', function(req,res){
 	var q = url.parse(req.url, true).query;
 	//console.log(q.version);
@@ -610,22 +623,25 @@ app.post('/saveChickenTask/', function(req, res) {
 		if (err) throw err;
 		console.log('Saved Chicken Task Data!');
 
-		// Copy the data to a shared folder in root to be accessed by other uses in the VM
-		// This is done after writing the file
-		fs.copyFile(filename, '/var/node_data/' + filename, (err) => {
-			if(err){
-				console.log('could not copy');
-				//throw err;
-				console.log(err)
-			} else {
-				console.log('copy complete');
-			}
-		})
+		// // Copy the data to a shared folder in root to be accessed by other uses in the VM
+		// // This is done after writing the file
+		// fs.copyFile(filename, '/var/node_data/' + filename, (err) => {
+		// 	if(err){
+		// 		console.log('could not copy');
+		// 		//throw err;
+		// 		console.log(err)
+		// 	} else {
+		// 		console.log('copy complete');
+		// 	}
+		// })
 
 	});
+
+	advance = true // advance if it's not a first session
 	// add Time Ready on session 1 only o that the ready time initiates once Task1 has been completed
 	if (session == '1'){
 		addTimeReady(mkturk_id, study);
+		advance = advanceAfterPractice(data.content)
 	}
 	
 
@@ -650,8 +666,11 @@ app.post('/saveChickenTask/', function(req, res) {
 
 	var response = {
 		status  : 200,
-		success : 'Chicken Task Data Saved Data Saved'
+		success : 'Chicken Task Data Saved Data Saved',
+		advance : advance
 	}
+
+	console.log(response)
 
 	res.send(JSON.stringify(response))
 });
@@ -1022,6 +1041,35 @@ function getChickenTaskScore(filename){
 	console.log(returnJSON)
 	return(returnJSON)
 }
+
+/**
+ * Returns True if they did poorly on task
+ * @param {JSON} ctcontent Chicken Task Data content from psytoolkit
+ */
+function advanceAfterPractice(ctcontent){
+	// console.log(ctcontent)
+	lines = ctcontent.split('\n')
+	practice1Point = 20
+	practice2Point = 20
+	for (var i = 0; i < lines.length; i++){
+		cols = lines[i].split(',')
+
+		if (cols[0] == 'practice1') {
+			practice1Point = cols[11]
+		}
+		if (cols[0] == 'practice2') {
+			practice2Point = cols[11]
+		}
+	}
+
+	// If They got less than 13 for either practice blocks, then did did poorlay
+	if ( (parseInt(practice1Point) <= 13) || (parseInt(practice2Point) <= 13)){
+		return false
+	}else {
+		return true
+	}
+}
+
 
 /**
  * This returns a json object of differente score types from PANAX form.
