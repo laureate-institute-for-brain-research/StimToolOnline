@@ -135,7 +135,7 @@ app.get('/',function (req, res) {
 				displayChickenEstimate(res, '1');
 			}			
 		} else if(type == 'predict_2'){
-			displayChickenPredict2(res,ctpattern, q.version)
+			displayChickenPredict2(res,ctpattern, q.version, q.session)
 		} else{
 			switch(ctpattern){
 				case '1':
@@ -645,8 +645,6 @@ app.post('/saveChickenTask/', function(req, res) {
 	}
 	
 
-	
-
 	// Run the plot script
 	//shell.cd('stats');
 	//shell.exec('python makeHTMLplot.py ' + mkturk_id);
@@ -1043,7 +1041,7 @@ function getChickenTaskScore(filename){
 }
 
 /**
- * Returns True if they did poorly on task
+ * Returns false if they did poorly on task
  * @param {JSON} ctcontent Chicken Task Data content from psytoolkit
  */
 function advanceAfterPractice(ctcontent){
@@ -1558,17 +1556,17 @@ function displayChickenEstimate(res, version){
 	});	
 }
 
-function displayChickenPredict2(res,pattern, version){ 
+function displayChickenPredict2(res,pattern, version, session){ 
 	if(!pattern){
 		pattern = '1'  // if pattern not specified then default is 1
 	}
 
 	// If Version is specified, show them the folder
-	if (version){
-		filename = 'task/chicken_task/predict_version2/' + version + '/pattern_' + pattern + '.html'
+	if ((version) && (session)){
+		filename = 'task/chicken_task/predict_version2/' + version + '/T' + session + '/pattern_' + pattern + '.html'
 	} else {
 	// Use the most recent in the root_folder
-		filename = 'task/chicken_task/predict_version2/pattern_' + pattern + '.html'
+		filename = 'task/chicken_task/predict_version2/T1/pattern_' + pattern + '.html'
 	}
 	
 	fs.readFile(filename, function (err, data) {
