@@ -6,10 +6,9 @@
     <title>Chicken Task: Predict</title>
     <style>
         img {
-            max-width: 40%;
-            height: auto;
-        }
-
+			max-width: 40%;
+			height: auto;
+		}
         .canvasboxstyle:fullscreen {
             display: flex;
             align-items: center;
@@ -47,64 +46,64 @@
 </head>
 
 <body onload="whenloaded()">
-    <center><a href="http://www.laureateinstitute.org/"><img class="logo" src="/images/logo.png"></a></center>
-    <div class="container-fluid">
-
-        <div class="row">
-            <div class="col-md-10">
-                <h1 style="padding: 17px">Chicken Task: Predict: Type 2 - Pattern <span id="pattern"></span></h1>
+        <center><a href="http://www.laureateinstitute.org/"><img class="logo" src="/images/logo.png"></a></center>
+        <div class="container-fluid">
+    
+            <div class="row">
+                <div class="col-md-10">
+                    <h1 style="padding: 17px">Chicken Task: Predict: Type 2 - Pattern <span id="pattern"></span></h1>
+                </div>
+            </div>
+            <center>
+                <div id="loader" class="lds-dual-ring">Saving data...</div>
+            </center>
+    
+    
+            <div class="row">
+                <p align="right" class="col-md-10">Subject ID:</p>
+                <a align="right" id="mkid"></a>
+            </div>
+    
+            <div class="row">
+                <p align="right" class="col-md-10">Session: </p>
+                <a align="right" id="session"></a>
+            </div>
+    
+            <div class="row">
+                <p align="right" class="col-md-10">Study: </p>
+                <a align="right" id="study"></a>
             </div>
         </div>
-        <center>
-            <div id="loader" class="lds-dual-ring">Saving data...</div>
-        </center>
-
-
-        <div class="row">
-            <p align="right" class="col-md-10">Subject ID:</p>
-            <a align="right" id="mkid"></a>
-        </div>
-
-        <div class="row">
-            <p align="right" class="col-md-10">Session: </p>
-            <a align="right" id="session"></a>
-        </div>
-
-        <div class="row">
-            <p align="right" class="col-md-10">Study: </p>
-            <a align="right" id="study"></a>
-        </div>
-    </div>
-
-    <script>
-        $("#loader").hide()
-
-        function getQueryVariable(variable) {
-            var query = window.location.search.substring(1);
-            var vars = query.split('&');
-            for (var i = 0; i < vars.length; i++) {
-                var pair = vars[i].split('=');
-                if (decodeURIComponent(pair[0]) == variable) {
-                    return decodeURIComponent(pair[1]);
+    
+        <script>
+            $("#loader").hide()
+    
+            function getQueryVariable(variable) {
+                var query = window.location.search.substring(1);
+                var vars = query.split('&');
+                for (var i = 0; i < vars.length; i++) {
+                    var pair = vars[i].split('=');
+                    if (decodeURIComponent(pair[0]) == variable) {
+                        return decodeURIComponent(pair[1]);
+                    }
                 }
+                return 'NULL'
             }
-            return 'NULL'
-        }
+    
+            var session = getQueryVariable('session');
+            var mkturkid = getQueryVariable('mkturk_id');
 
-        var session = getQueryVariable('session');
-        var mkturkid = getQueryVariable('mkturk_id');
+            var task_version = '3.1.3'
+            var pattern = '4'
 
-        var task_version = '3.1.3'
-        var pattern = '4'
-
-        // A $( document ).ready() block.
-        $(document).ready(function () {
-            $("#mkid").text(mkturkid);
-            $("#session").text(session);
-            $("#study").text(getQueryVariable('study'));
-            $('#task_version').text(task_version)
-            $('#pattern').text(pattern)
-        });
+            // A $( document ).ready() block.
+            $( document ).ready(function() {
+                $("#mkid").text(mkturkid);
+                $("#session").text(session);
+                $("#study").text(getQueryVariable('study'));
+                $('#task_version').text(task_version)
+                $('#pattern').text(pattern)
+            });
         function tmpmouse(e) {
             MouseX = e.clientX - c.getBoundingClientRect().left;
             MouseY = e.clientY - c.getBoundingClientRect().top;
@@ -2740,7 +2739,7 @@
                         task_trianglepractice_block1.step++;
                         psy_add_centered_bitmap_db(background, PSY_CENTRAL, PSY_CENTRAL, 0);
                         psy_draw_all_db();
-                        if (!(block1Correct < 12)) {
+                        if (!(block1Correct < 13)) {
                             task_trianglepractice_block1.step = 98
                         };
                         setTimeout("task_trianglepractice_block1.run()", 0);
@@ -2797,7 +2796,7 @@
                         break;
                     case 98:
                         task_trianglepractice_block1.step++;
-                        if (!(block1Correct > 12)) {
+                        if (!(block1Correct >= 13)) {
                             task_trianglepractice_block1.step = 100
                         };
                         setTimeout("task_trianglepractice_block1.run()", 0);
@@ -3647,7 +3646,7 @@
                         task_trianglepractice_block2.step++;
                         psy_add_centered_bitmap_db(background, PSY_CENTRAL, PSY_CENTRAL, 0);
                         psy_draw_all_db();
-                        if (!(block2Correct < 12)) {
+                        if (!(block2Correct < 13)) {
                             task_trianglepractice_block2.step = 104
                         };
                         setTimeout("task_trianglepractice_block2.run()", 0);
@@ -3704,7 +3703,7 @@
                         break;
                     case 104:
                         task_trianglepractice_block2.step++;
-                        if (!(block2Correct > 12)) {
+                        if (!(block2Correct >= 13)) {
                             task_trianglepractice_block2.step = 106
                         };
                         setTimeout("task_trianglepractice_block2.run()", 0);

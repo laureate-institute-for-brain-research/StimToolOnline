@@ -104,7 +104,6 @@
                 $('#task_version').text(task_version)
                 $('#pattern').text(pattern)
             });
-            
         function tmpmouse(e) {
             MouseX = e.clientX - c.getBoundingClientRect().left;
             MouseY = e.clientY - c.getBoundingClientRect().top;
@@ -2739,7 +2738,7 @@
                         task_trianglepractice_block1.step++;
                         psy_add_centered_bitmap_db(background, PSY_CENTRAL, PSY_CENTRAL, 0);
                         psy_draw_all_db();
-                        if (!(block1Correct < 12)) {
+                        if (!(block1Correct < 13)) {
                             task_trianglepractice_block1.step = 98
                         };
                         setTimeout("task_trianglepractice_block1.run()", 0);
@@ -2757,7 +2756,7 @@
                             "Please Try Again :(", 0);
                         psy_draw_all_db();
                         psy_add_text_rgb_db(mainfont, 0, 20, PSY_CENTRAL, PSY_CENTRAL, 255, 255, 255,
-                            "You did not correctly predict 65% of the trials.", 0);
+                            "You did not correctly predict at least 65% of the trials.", 0);
                         psy_draw_all_db();
                         points = 20;
                         trialCounter = 1;
@@ -2796,7 +2795,7 @@
                         break;
                     case 98:
                         task_trianglepractice_block1.step++;
-                        if (!(block1Correct > 12)) {
+                        if (!(block1Correct >= 13)) {
                             task_trianglepractice_block1.step = 100
                         };
                         setTimeout("task_trianglepractice_block1.run()", 0);
@@ -3645,7 +3644,7 @@
                         task_trianglepractice_block2.step++;
                         psy_add_centered_bitmap_db(background, PSY_CENTRAL, PSY_CENTRAL, 0);
                         psy_draw_all_db();
-                        if (!(block2Correct < 12)) {
+                        if (!(block2Correct < 13)) {
                             task_trianglepractice_block2.step = 104
                         };
                         setTimeout("task_trianglepractice_block2.run()", 0);
@@ -3702,7 +3701,7 @@
                         break;
                     case 104:
                         task_trianglepractice_block2.step++;
-                        if (!(block2Correct > 12)) {
+                        if (!(block2Correct >= 13)) {
                             task_trianglepractice_block2.step = 106
                         };
                         setTimeout("task_trianglepractice_block2.run()", 0);
