@@ -1061,7 +1061,7 @@ function advanceAfterPractice(ctcontent) {
     }
 
     // If They got less than 13 for either practice blocks, then did did poorlay
-    if ((parseInt(practice1Point) <= 13) || (parseInt(practice2Point) <= 13)) {
+    if ((parseInt(practice1Point) < 13) || (parseInt(practice2Point) < 13)) {
         return false
     } else {
         return true
