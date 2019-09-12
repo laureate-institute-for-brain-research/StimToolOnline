@@ -135,7 +135,7 @@ app.get('/', function(req, res) {
                 displayChickenEstimate(res, '1');
             }
         } else if (type == 'predict_2') {
-            displayChickenPredict2(res, ctpattern, q.version, q.session)
+            displayChickenPredict2(res, q)
         } else {
             switch (ctpattern) {
                 case '1':
@@ -1001,9 +1001,12 @@ app.get('/getScores', (req, res) => {
     res.send(jsonReturn);
 })
 
+
 // 404 Page
 app.get('/*', (req, res) => {
-    res.send('404. We cant find that bro.');
+    display404(res)
+    //es.send('404. We cant find that bro.');
+
 })
 
 function getChickenTaskScore(filename) {
@@ -1471,6 +1474,20 @@ function displayTest(res) {
     });
 }
 
+function display404(res) {
+
+    fs.readFile('404.html', function(err, data) {
+        // Write Header
+        res.writeHead(200, {
+            'Content-Type': 'text/html'
+        });
+        // Wrte Body
+        res.write(data);
+        res.end();
+    });
+}
+
+
 function displayDotProbe1(res) {
 
     fs.readFile('task/dotprobe1.html', function(err, data) {
@@ -1563,20 +1580,20 @@ function displayChickenEstimate(res, version) {
     });
 }
 
-function displayChickenPredict2(res, pattern, version, session) {
-    if (!pattern) {
-        pattern = '1' // if pattern not specified then default is 1
-    }
+function displayChickenPredict2(res, query) {
+
+    console.log(query)
 
     // If Version is specified, show them the folder
-    if (version) {
-        filename = 'task/chicken_task/predict_version2/' + version + '/pattern_' + pattern + '.html'
-    } else if (session) {
-        filename = 'task/chicken_task/predict_version2/T' + session + '/pattern_' + pattern + '.html'
+    if (query.version && query.pattern) {
+        filename = path.join('task','chicken_task', 'predict_version2', query.version, 'pattern_' + query.pattern + '.html' )
     } else {
         // Use the most recent in the root_folder
-        filename = 'task/chicken_task/predict_version2/T1/pattern_' + pattern + '.html'
+        // Default if other parameters aren't given
+        filename = 'task/chicken_task/predict_version2/T1/pattern_1.html'
     }
+
+    console.log(filename)
 
     fs.readFile(filename, function(err, data) {
         // Write Header
@@ -1587,7 +1604,16 @@ function displayChickenPredict2(res, pattern, version, session) {
         // console.log(data)
         res.write(data);
         res.end();
+
+        if (err) {
+            console.log('file does not exitss')
+            display404(res)
+        }
     });
+
+
+
+    
 }
 
 
