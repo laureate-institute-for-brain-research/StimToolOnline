@@ -538,6 +538,7 @@ function reRoute(con,mkturk_id,response){
 
 	con.query(sql,function (err, result) {
 
+		console.log(result)
 		try {
 		  	//console.log('sql output is not empty')
 		  	sqlresult = JSON.parse(JSON.stringify(result));
@@ -589,8 +590,11 @@ function reRoute(con,mkturk_id,response){
 					// this.statusCode = 302;
 					
 					// If the job is a task, then redirect to their chicken version number
-					if (job == 'task'){
-						response.writeHead(301,{Location : '/?study=wave3&mkturk_id=' + mkturk_id + '&' + job + '=' + name + '&session=' + session + '&pattern=' + chicken_version + '&type=predict_2' });
+					if ( (job == 'task') && (session == '1') ){
+						response.writeHead(301,{Location : '/?study=wave3&mkturk_id=' + mkturk_id + '&' + job + '=' + name + '&session=' + session + '&pattern=' + chicken_version + '&type=predict_2&version=3.1.3' });
+						response.end();
+					} else if ((job == 'task') && (session == '2')) {
+						response.writeHead(301,{Location : '/?study=wave3&mkturk_id=' + mkturk_id + '&' + job + '=' + name + '&session=' + session + '&pattern=' + chicken_version + '&type=predict_2&version=3.1.4' });
 						response.end();
 					}
 
