@@ -6364,7 +6364,7 @@
                     content: data
                 }), // or JSON.stringify ({name: 'jonas'}),
                 success: function (data) {
-                    showEnd()
+                    showEnd(data)
                 },
                 contentType: "application/json",
                 dataType: 'json'
@@ -6376,23 +6376,28 @@
         //     //console.log('success?');
         // });
 
-        function showEnd() {
+        function showEnd(data) {
             // Redirection based on study
             if (getQueryVariable('study') == 'mindreal') {
                 link = '/mindreal/rating/?subsession=post&study=mindreal&session=' + getQueryVariable('session') +
-                    '&subject=' +
-                    getQueryVariable('mkturk_id')
+                    '&subject=' + getQueryVariable('mkturk_id')
                 console.log(link);
                 window.location.replace(link);
             } else {
                 switch (getQueryVariable('session')) {
                     case '1':
-                        window.location.replace("/tooearly?" + "&mkturk_id=" + mkturkid + '&study=' + getQueryVariable(
-                            'study'));
+
+                        if (data.advance) {
+                            window.location.replace("/tooearly?" + "&mkturk_id=" + mkturkid + '&study=' +
+                                getQueryVariable('study'));
+                        } else {
+                            window.location.replace("/exclude?" + "&mkturk_id=" + mkturkid + '&study=' +
+                                getQueryVariable('study'));
+                        }
                         break;
                     case '2':
                         window.location.replace("/?" + "&mkturk_id=" + mkturkid + '&study=' + getQueryVariable(
-                            'study') +
+                                'study') +
                             '&survey=feedback');
                         break;
                 }
