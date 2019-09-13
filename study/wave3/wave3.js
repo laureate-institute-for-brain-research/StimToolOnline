@@ -10,6 +10,7 @@ var url = require('url');
 var mysql = require('mysql');
 var formidable = require('formidable');
 var SqlString = require('sqlstring');
+const path = require('path');
 
 // Configuration File for Wave 2 Study
 var config = require('./wave3-config.json')
@@ -116,6 +117,42 @@ module.exports = {
 					console.log(err);
 				}
 			});
+		})
+
+		app.get('/getTopWave3Points', function (req, res) {
+			// Returns JSON Ojbect of top 3 mturk workers
+			const directoryPath = path.join('data', 'wave3', 'tasks');
+			//passsing directoryPath and callback function
+
+			var scores = []
+			fs.readdir(directoryPath, function (err, files) {
+				//handling error
+				if (err) {
+					return console.log('Unable to scan directory: ' + err);
+				} 
+				//listing all files using forEach
+				files.forEach(function (file) {
+					// Do whatever you want to do with the file
+					console.log(file)
+					points = getChickenTaskScore(path.join(directoryPath, file))['points']
+					mturkid = file.split('-')[2]
+
+					// Skipu undefined variables
+					if ((typeof mturkid == 'undefined') || (typeof points == 'undefined')) {
+						return;
+					}
+
+					user =  {}
+					user['id'] = mturkid
+					user['points'] = points
+
+					scores.push(user)
+					
+				});
+				console.log(scores)
+				res.send(scores)
+			});
+			
 		})
 
 	
@@ -902,4 +939,45 @@ function getCodeEmailHTML(code){
 </body>
 </html>
 	`
+}
+
+function getChickenTaskScore(filename) {
+    try {
+        stringContent = fs.readFileSync(filename).toString();
+    } catch (err) {
+        return ({})
+    }
+    var contents = toArrayfromCSVString(stringContent);
+    returnJSON = {}
+
+    returnJSON['points'] = '0'
+    returnJSON['avg_rt'] = 0
+
+    for (var i = 2; i < contents.length - 1; i++) {
+
+        if (filename.includes('wave2') && contents[i][1] == "1200") {
+            returnJSON['points'] = contents[i][9]
+        }
+        if (filename.includes('wave3') && contents[i][1] == "400") {
+            returnJSON['points'] = contents[i][11]
+        }
+
+
+        if (contents[i][0] == 'main') {
+            returnJSON['avg_rt'] = returnJSON['avg_rt'] + parseFloat(contents[i][6].replace('\"', ''))
+        }
+    }
+    returnJSON['avg_rt'] = returnJSON['avg_rt'] / 400
+    console.log(returnJSON)
+    return (returnJSON)
+}
+
+function toArrayfromCSVString(string) {
+    var line = string.split('\n');
+    var x = new Array(line.length);
+    for (var i = 0; i < line.length; i++) {
+        x[i] = line[i].split(',')
+    }
+
+    return x;
 }

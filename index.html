@@ -118,7 +118,7 @@
 	</style>
 	<title>LIBR Online Task</title>
 
-
+	
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-alpha.4/css/materialize.min.css">
 
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb"
@@ -342,10 +342,32 @@
 				</div>
 			</div>
 
+			<hr>
+			<div>
+				<center>
+					<h3>High Scores</h3>
+					<table class="table table-bordered table-dark" style="width: 500px;">
+						<tbody id="tbody"></tbody>
+					</table>
+				</center>
+			</div>
+
 
 	</div>
 	<!-- End of Container -->
 
+
+
+
+	<!-- Optional JavaScript -->
+	<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+	<script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh"
+	    crossorigin="anonymous"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ"
+		crossorigin="anonymous"></script>
+		
 	<script type="text/javascript">
 		//JS script
 		// Show loader after submit
@@ -353,18 +375,34 @@
 			console.log('submitted')
 			document.getElementById('loader').style.display = 'inline-block'
 		}
+
+		// Show top 10 users 
+		var globalCounter = 0;
+
+		$.get('/getTopWave3Points', function(result){
+			displayScores(result)
+		})
+
+		function displayScores(result){
+			result.sort(function(a, b){ return a.points - b.points; });
+			// console.log(result)
+			var tbody = document.getElementById('tbody');
+			for (var i = 0; i < Object.keys(result).length; i++) {
+
+				// Only First 10 of the json
+				if (i < 9) {
+					var tr = "<tr>";
+
+					tr += "<td>" + result[i].id + "</td>" + "<td>" + result[i].points.toString() + "</td></tr>";
+					tbody.innerHTML += tr;
+				}
+				
+			}
+		}
+
+	
+		
 	</script>
-
-
-	<!-- Optional JavaScript -->
-	<!-- jQuery first, then Popper.js, then Bootstrap JS -->
-
-	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
-	    crossorigin="anonymous"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh"
-	    crossorigin="anonymous"></script>
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ"
-	    crossorigin="anonymous"></script>
 </body>
 <br>
 <br>
