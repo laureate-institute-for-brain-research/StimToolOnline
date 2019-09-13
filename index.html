@@ -376,9 +376,6 @@
 			document.getElementById('loader').style.display = 'inline-block'
 		}
 
-		// Show top 10 users 
-		var globalCounter = 0;
-
 		$.get('/getTopWave3Points', function(result){
 			displayScores(result)
 		})
@@ -400,10 +397,7 @@
 				}
 				
 			}
-		}
-
-	
-		
+		}		
 	</script>
 </body>
 <br>

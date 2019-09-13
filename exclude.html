@@ -168,7 +168,15 @@
                     <div id="surveyElement"></div>
                     
                 </div>
-                <div ></div>
+                <hr>
+			    <div>
+                    <center>
+                        <h3>High Scores</h3>
+                        <table class="table table-bordered table-dark" style="width: 500px;">
+                            <tbody id="tbody"></tbody>
+                        </table>
+                    </center>
+                </div>
 
                 <br>
                 <p>If you have any questions please email us at <a
@@ -185,6 +193,30 @@
     </div>
 
     <script type="text/javascript">
+
+        $.get('/getTopWave3Points', function(result){
+            displayScores(result)
+        })
+
+        function displayScores(result){
+            result.sort(function(a, b){ return b.points - a.points; });
+            // console.log(result)
+            var tbody = document.getElementById('tbody');
+            var number = 1
+            for (var i = 0; i < Object.keys(result).length; i++) {
+
+                // Only First 10 of the json
+                if (i < 9 && parseInt(result[i].points) != 0) {
+                    var tr = "<tr>";
+
+                    tr +=  "<td>" + number + "</td>" + "<td>" + result[i].id + "</td>" + "<td>" + result[i].points.toString() + "</td></tr>";
+                    tbody.innerHTML += tr;
+                    number ++
+                }
+                
+            }
+        }
+
         Survey.Survey.cssType = "bootstrap";
         Survey.defaultBootstrapCss.navigationButton = "btn btn-green";
 
