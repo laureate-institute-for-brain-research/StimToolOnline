@@ -206,7 +206,7 @@
             for (var i = 0; i < Object.keys(result).length; i++) {
 
                 // Only First 10 of the json
-                if (i < 9 && parseInt(result[i].points) != 0) {
+                if (number <= 10 && parseInt(result[i].points) != 0) {
                     var tr = "<tr>";
 
                     tr +=  "<td>" + number + "</td>" + "<td>" + result[i].id + "</td>" + "<td>" + result[i].points.toString() + "</td></tr>";

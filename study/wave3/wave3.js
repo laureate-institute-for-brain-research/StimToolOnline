@@ -136,6 +136,7 @@ module.exports = {
 					console.log(file)
 					points = getChickenTaskScore(path.join(directoryPath, file))['points']
 					mturkid = file.split('-')[2]
+					session = file.split('-')[3]
 
 					// Skipu undefined variables
 					if ((typeof mturkid == 'undefined') || (typeof points == 'undefined')) {
@@ -145,6 +146,7 @@ module.exports = {
 					user =  {}
 					user['id'] = mturkid
 					user['points'] = points
+					user['session'] = session.replace('.csv','')
 
 					scores.push(user)
 					
