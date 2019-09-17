@@ -22,7 +22,7 @@
         }
 
         img {
-            max-width: 40%;
+            max-width: 30%;
             height: auto;
         }
 
@@ -61,7 +61,30 @@
 
 
     <center><a href="http://www.laureateinstitute.org/"><img class="logo" src="/images/logo.png"></a></center>
-
+    <br>
+    <br>
+    <!-- <center id="welcome_message" style="visibility: hidden">
+        <h1>Welcome Back!</h1>
+        <p>Please continue to with session 2!</p>
+    </center> -->
+    <!-- Modal -->
+    <div class="modal fade" id="welcome_message" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h1 class="modal-title" id="exampleModalLabel">Welcome Back!</h1>
+            </div>
+            <div class="modal-body">
+            <p>
+                For session 2, you will complete the same surveys and task as session 1.
+            </p>
+            </div>
+            <div class="modal-footer">
+            <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+        </div>
+    </div>
 
     <!-- Showing Time Elapsed
         <div style="position: fixed; left : 50% ;  background-color: #ff9900;"><center><p id="mkId"></p></center><p id="timeOutput"></p></div>
@@ -810,6 +833,11 @@
         var session = getQueryVariable('session');
         var mkturkid = getQueryVariable('mkturk_id');
         var surveyname = getQueryVariable('survey');
+
+        if(session == '2'){
+            // document.getElementById("welcome_message").style.visibility = "visible";
+            $('#welcome_message').modal({show: true})
+        }
 
 
 
