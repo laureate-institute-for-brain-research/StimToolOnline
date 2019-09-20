@@ -6,10 +6,9 @@
     <title>Chicken Task: Predict</title>
     <style>
         img {
-            max-width: 40%;
-            height: auto;
-        }
-
+			max-width: 40%;
+			height: auto;
+		}
         .canvasboxstyle:fullscreen {
             display: flex;
             align-items: center;
@@ -47,65 +46,64 @@
 </head>
 
 <body onload="whenloaded()">
-    <center><a href="http://www.laureateinstitute.org/"><img class="logo" src="/images/logo.png"></a></center>
-    <div class="container-fluid">
-
-        <div class="row">
-            <div class="col-md-10">
-                <h1 style="padding: 17px">Chicken Task: Predict: Type 2 - Pattern <span id="pattern"></span></h1>
+        <center><a href="http://www.laureateinstitute.org/"><img class="logo" src="/images/logo.png"></a></center>
+        <div class="container-fluid">
+    
+            <div class="row">
+                <div class="col-md-10">
+                    <h1 style="padding: 17px">Chicken Task: Predict: Type 2 - Pattern <span id="pattern"></span></h1>
+                </div>
+            </div>
+            <center>
+                <div id="loader" class="lds-dual-ring">Saving data...</div>
+            </center>
+    
+    
+            <div class="row">
+                <p align="right" class="col-md-10">Subject ID:</p>
+                <a align="right" id="mkid"></a>
+            </div>
+    
+            <div class="row">
+                <p align="right" class="col-md-10">Session: </p>
+                <a align="right" id="session"></a>
+            </div>
+    
+            <div class="row">
+                <p align="right" class="col-md-10">Study: </p>
+                <a align="right" id="study"></a>
             </div>
         </div>
-        <center>
-            <div id="loader" class="lds-dual-ring">Saving data...</div>
-        </center>
-
-
-        <div class="row">
-            <p align="right" class="col-md-10">Subject ID:</p>
-            <a align="right" id="mkid"></a>
-        </div>
-
-        <div class="row">
-            <p align="right" class="col-md-10">Session: </p>
-            <a align="right" id="session"></a>
-        </div>
-
-        <div class="row">
-            <p align="right" class="col-md-10">Study: </p>
-            <a align="right" id="study"></a>
-        </div>
-    </div>
-
-    <script>
-        $("#loader").hide()
-
-        function getQueryVariable(variable) {
-            var query = window.location.search.substring(1);
-            var vars = query.split('&');
-            for (var i = 0; i < vars.length; i++) {
-                var pair = vars[i].split('=');
-                if (decodeURIComponent(pair[0]) == variable) {
-                    return decodeURIComponent(pair[1]);
+    
+        <script>
+            $("#loader").hide()
+    
+            function getQueryVariable(variable) {
+                var query = window.location.search.substring(1);
+                var vars = query.split('&');
+                for (var i = 0; i < vars.length; i++) {
+                    var pair = vars[i].split('=');
+                    if (decodeURIComponent(pair[0]) == variable) {
+                        return decodeURIComponent(pair[1]);
+                    }
                 }
+                return 'NULL'
             }
-            return 'NULL'
-        }
+    
+            var session = getQueryVariable('session');
+            var mkturkid = getQueryVariable('mkturk_id');
 
-        var session = getQueryVariable('session');
-        var mkturkid = getQueryVariable('mkturk_id');
+            var task_version = '3.1.4'
+            var pattern = '3'
 
-        var task_version = '3.1.4'
-        var pattern = '3'
-
-        // A $( document ).ready() block.
-        $(document).ready(function () {
-            $("#mkid").text(mkturkid);
-            $("#session").text(session);
-            $("#study").text(getQueryVariable('study'));
-            $('#task_version').text(task_version)
-            $('#pattern').text(pattern)
-        });
-
+            // A $( document ).ready() block.
+            $( document ).ready(function() {
+                $("#mkid").text(mkturkid);
+                $("#session").text(session);
+                $("#study").text(getQueryVariable('study'));
+                $('#task_version').text(task_version)
+                $('#pattern').text(pattern)
+            });
         function tmpmouse(e) {
             MouseX = e.clientX - c.getBoundingClientRect().left;
             MouseY = e.clientY - c.getBoundingClientRect().top;
@@ -174,9 +172,17 @@
             bitmap: 0
         };
         var possiblekeys = new Array;
-        var readkeys_option_size = 0;
+        var readkeys_option_size = 5;
         var readkeys_option_show = 1;
+        var readkeys_option_show_x = 0;
+        var readkeys_option_show_y = 0;
         var readkeys_option_font = 0;
+        var readkeys_option_placeholders = 0;
+        var readkeys_option_placeholder_bitmap = -1;
+        var readkeys_option_placeholder_w = 0;
+        var readkeys_option_placeholder_h = 0;
+        var readkeys_option_spacing = 30;
+        var readkeys_option_font_color = [255, 255, 255];
         var mousestatus = {
             key: 0,
             status: 0,
@@ -297,6 +303,14 @@
             psy_readkey.keydowneventlistener = true
         }
 
+        function psy_expect_keyboard_readkeys() {
+            psy_readkeys.expect_keyboard = true;
+            window.addEventListener("keydown", readkeys_keydown, true);
+            window.addEventListener("keyup", readkeys_keyup, true);
+            psy_readkeys.keyupeventlistener = true;
+            psy_readkeys.keydowneventlistener = true
+        }
+
         function psy_expect_mouse() {
             psy_readkey.expect_mouse = true
         }
@@ -306,6 +320,12 @@
             psy_readkey.keys = possiblekeys;
             psy_expect_keyboard();
             psy_readkey.start(current_task, maxtime)
+        }
+
+        function psy_keyboard_readkeys(correct_word, maxtime) {
+            psy_expect_keyboard_readkeys();
+            psy_readkeys.correct_word = correct_word;
+            psy_readkeys.start(current_task, maxtime)
         }
         var psy_readkey = {
             lasttask: "",
@@ -372,66 +392,64 @@
             }
         };
         var psy_readkeys = {
+            x: 0,
+            y: 0,
+            expect_keyboard: false,
             lasttask: "",
             starttime: 0,
             readkeytimer: "",
             rt: 0,
             key: 0,
+            current_position: 0,
+            bitmap_number: [],
             status: 0,
-            keys: [],
-            expect_keyboard: false,
-            expect_mouse: false,
-            expectedkey: 0,
-            bitmap: 0,
-            bitmap_range: [-1, -1],
-            mouseovereventlistener: false,
-            mousedowneventlistener: false,
+            entered: "",
+            correct_word: "",
             keyupeventlistener: false,
             keydowneventlistener: false,
             start: function (task, maxtime) {
-                psy_readkey.rt = maxtime;
-                psy_readkey.starttime = (new Date).getTime();
-                psy_readkey.lasttask = task;
-                psy_readkey.readkeytimer = setTimeout("psy_readkey.timeout()", maxtime);
+                psy_readkeys.x = readkeys_option_show_x;
+                psy_readkeys.y = readkeys_option_show_y;
+                psy_readkeys.current_position = 0;
+                psy_readkeys.entered = "";
+                if (readkeys_option_placeholders == 1) {
+                    if (readkeys_option_placeholder_bitmap >= 0) {
+                        for (p = 0; p < readkeys_option_size; p++) psy_add_centered_bitmap_db(
+                            readkeys_option_placeholder_bitmap, psy_readkeys.x + p * 50, psy_readkeys.y, 0)
+                    } else {
+                        if (readkeys_option_placeholder_bitmap == -1) {
+                            for (p = 0; p < readkeys_option_size; p++) psy_add_centered_rectangle_rgb_db(
+                                psy_readkeys.x + p * readkeys_option_spacing, psy_readkeys.y,
+                                readkeys_option_placeholder_w, readkeys_option_placeholder_h, 100, 100, 255)
+                        }
+                    }
+                    psy_draw_all_db()
+                }
+                psy_readkeys.rt = maxtime;
+                psy_readkeys.starttime = (new Date).getTime();
+                psy_readkeys.lasttask = task;
+                psy_readkeys.readkeytimer = setTimeout("psy_readkeys.timeout()", maxtime);
                 keystatus.status = 3;
-                keystatus.bitmap = -1;
-                keystatus.time = maxtime;
-                keystatus.key = 0
+                keystatus.time = maxtime
             },
             stop: function () {
-                clearTimeout(psy_readkey.readkeytimer);
-                psy_readkey.expect_keyboard = false;
-                psy_readkey.expect_mouse = false;
-                if (psy_readkey.mouseovereventlistener == true) {
-                    window.removeEventListener("mousemove", getmouse_in_area, false);
-                    psy_readkey.mouseovereventlistener = false
+                if (psy_readkeys.entered == psy_readkeys.correct_word) keystatus.status = 1;
+                if (psy_readkeys.entered != psy_readkeys.correct_word) keystatus.status = 2;
+                clearTimeout(psy_readkeys.readkeytimer);
+                psy_readkeys.expect_keyboard = false;
+                if (psy_readkeys.keyupeventlistener == true) {
+                    window.removeEventListener("keyup", readkeys_keyup, false);
+                    psy_readkeys.keyupeventlistener = false
                 }
-                if (psy_readkey.mousedowneventlistener == true) {
-                    window.removeEventListener("mousedown", getmouseclick_in_area, false);
-                    psy_readkey.mousedowneventlistener = false
+                if (psy_readkeys.keydowneventlistener == true) {
+                    window.removeEventListener("keydown", readkeys_keydown, false);
+                    psy_readkeys.keydowneventlistener = false
                 }
-                if (psy_readkey.keyupeventlistener == true) {
-                    window.removeEventListener("keyup", getkeyup, false);
-                    psy_readkey.keyupeventlistener = false
-                }
-                if (psy_readkey.keydowneventlistener == true) {
-                    window.removeEventListener("keydown", getkeydown, false);
-                    psy_readkey.keydowneventlistener = false
-                }
-                setTimeout(psy_readkey.lasttask + ".run()", 0)
+                setTimeout(psy_readkeys.lasttask + ".run()", 0)
             },
             timeout: function () {
-                psy_readkey.expect_keyboard = false;
-                psy_readkey.expect_mouse = false;
-                if (psy_readkey.mouseovereventlistener == true) {
-                    window.removeEventListener("mousemove", getmouse_in_area, false);
-                    psy_readkey.mouseovereventlistener = false
-                }
-                if (psy_readkey.mousedowneventlistener == true) {
-                    window.removeEventListener("mousedown", getmouseclick_in_area, false);
-                    psy_readkey.mousedowneventlistener = false
-                }
-                setTimeout(psy_readkey.lasttask + ".run()", 0)
+                psy_readkeys.expect_keyboard = false;
+                setTimeout(psy_readkeys.lasttask + ".run()", 0)
             }
         };
         var pager_options = {
@@ -467,6 +485,63 @@
         function getkeyup(e) {
             if (inkeypress == 1) {
                 keystatus.totaltime = (new Date).getTime() - psy_readkey.starttime
+            }
+            inkeypress = 0
+        }
+
+        function readkeys_keydown(e) {
+            inkeypress++;
+            if (psy_readkeys.expect_keyboard == true && inkeypress == 1) {
+                keystatus.time = (new Date).getTime() - psy_readkeys.starttime;
+                switch (e.keyCode) {
+                    case 8:
+                        if (psy_readkeys.current_position > 0) {
+                            psy_readkeys.current_position--;
+                            psy_readkeys.entered = psy_readkeys.entered.slice(0, psy_readkeys.current_position);
+                            if (readkeys_option_show == 1) {
+                                psy_clear_stimuli1(psy_readkeys.bitmap_number[psy_readkeys.current_position]);
+                                psy_draw_all_db()
+                            }
+                        }
+                        break;
+                    case 13:
+                        psy_readkeys.expect_keyboard = false;
+                        psy_readkeys.stop();
+                        break;
+                    case 16:
+                        if (readkeys_option_show == 1) psy_draw_all_db();
+                        break;
+                    case 17:
+                        if (readkeys_option_show == 1) psy_draw_all_db();
+                        break;
+                    case 18:
+                        if (readkeys_option_show == 1) psy_draw_all_db();
+                        break;
+                    case 20:
+                        if (readkeys_option_show == 1) psy_draw_all_db();
+                        break;
+                    default:
+                        if (psy_readkeys.current_position < readkeys_option_size) {
+                            psy_readkeys.entered = psy_readkeys.entered + String.fromCharCode(e.keyCode);
+                            if (readkeys_option_show == 1) {
+                                psy_readkeys.bitmap_number[psy_readkeys.current_position] = psy_add_text_rgb_db(
+                                    readkeys_option_font, psy_readkeys.x + psy_readkeys.current_position *
+                                    readkeys_option_spacing, psy_readkeys.y, PSY_CENTRAL, PSY_CENTRAL,
+                                    readkeys_option_font_color[0], readkeys_option_font_color[1],
+                                    readkeys_option_font_color[2], String.fromCharCode(e.keyCode), 0);
+                                psy_draw_all_db()
+                            }
+                            psy_readkeys.current_position++
+                        }
+                }
+            } else {
+                inkeypress = 0
+            }
+        }
+
+        function readkeys_keyup(e) {
+            if (inkeypress == 1 && e.keyCode != 13) {
+                keystatus.totaltime = (new Date).getTime() - psy_readkeys.starttime
             }
             inkeypress = 0
         }
@@ -1586,7 +1661,6 @@
         var green_check = 81;
         var error = 82;
         var next_egg_text = 83;
-        var exclude_slide = 84;
         var mainfont = 0;
         var mysmallfont = 1;
         var practiceTrial = 0;
@@ -1646,11 +1720,9 @@
         var lastStatus = 0;
         var repeatblock1 = 0;
         var block1CountShow = 0;
-        var failPracticeBlock1 = 0;
         var block2Correct = 0;
         var repeatblock2 = 0;
         var block2CountShow = 0;
-        var failPracticeBlock2 = 0;
         var multiplier = 0;
         var accuracy = 0;
         var percentAccuracy = 0;
@@ -2606,6 +2678,9 @@
                         break;
                     case 72:
                         task_trianglepractice_block1.step++;
+                        psy_add_centered_bitmap_db(egg_white, practiceTable1[tablerow].c3, practiceTable1[
+                            tablerow].c4, 0);
+                        psy_draw_all_db();
                         psy_add_centered_bitmap_db(next_egg_text, 0, 270, 0);
                         psy_draw_all_db();
                         psy_keyboard(possiblekeys, 3, practiceTable1[tablerow].c6 - 1, 9999999);
@@ -2765,6 +2840,7 @@
                         trialCounter = 1;
                         block1Correct = 0;
                         repeatblock1 = 1;
+                        block1CountShow = block1CountShow + 1;
                         psy_add_text_rgb_db(mainfont, 0, 300, PSY_CENTRAL, PSY_CENTRAL, 255, 255, 255,
                             "Press the Spacebar to continue", 0);
                         psy_draw_all_db();
@@ -2792,8 +2868,6 @@
                         break;
                     case 97:
                         task_trianglepractice_block1.step++;
-                        block1CountShow = block1CountShow + 1;
-                        failPracticeBlock1 = 1;
                         task_trianglepractice_block1.run();
                         break;
                     case 98:
@@ -2806,7 +2880,6 @@
                     case 99:
                         task_trianglepractice_block1.step++;
                         repeatblock1 = 0;
-                        failPracticeBlock1 = 0;
                         task_trianglepractice_block1.run();
                         break;
                     case 100:
@@ -2887,122 +2960,75 @@
                         error_status = 0;
                         possiblekeys = [37, 39, 32];
                         psy_mouse_visibility(0);
-                        if (!(repeatblock2 == 1 && failPracticeBlock1 == 0)) {
-                            task_trianglepractice_block2.step = 108
+                        if (!(repeatblock2 == 1)) {
+                            task_trianglepractice_block2.step = 102
                         };
                         setTimeout("task_trianglepractice_block2.run()", 0);
                         break;
                     case 2:
                         task_trianglepractice_block2.step++;
-                        if (!(trialCounter == 1 && block2CountShow == 1)) {
-                            task_trianglepractice_block2.step = 8
+                        if (!(practiceTable2[tablerow].c2 == 1)) {
+                            task_trianglepractice_block2.step = 4
                         };
                         setTimeout("task_trianglepractice_block2.run()", 0);
                         break;
                     case 3:
                         task_trianglepractice_block2.step++;
-                        psy_add_text_rgb_db(mainfont, 0, 70, PSY_CENTRAL, PSY_CENTRAL, 255, 255, 255,
-                            "Now, you are entering a different coop with 2 new chickens.", 0);
+                        psy_add_centered_bitmap_db(background_sigma_110, PSY_CENTRAL, PSY_CENTRAL, 0);
                         psy_draw_all_db();
-                        psy_add_text_rgb_db(mainfont, 0, 110, PSY_CENTRAL, PSY_CENTRAL, 255, 255, 255,
-                            "These chickens may lay their eggs in a different pattern than the last two.", 0
-                            );
-                        psy_draw_all_db();
-                        psy_add_text_rgb_db(mainfont, 0, 250, PSY_CENTRAL, PSY_CENTRAL, 255, 255, 255,
-                            "Press space bar of your keyboard to continue", 0);
-                        psy_draw_all_db();
-                        psy_keyboard(possiblekeys, 3, 3 - 1, 999999);
+                        task_trianglepractice_block2.run();
                         break;
                     case 4:
                         task_trianglepractice_block2.step++;
-                        if (!(keystatus.status != 1)) {
-                            task_trianglepractice_block2.step = 7
+                        if (!(practiceTable2[tablerow].c2 == 3)) {
+                            task_trianglepractice_block2.step = 6
                         };
                         setTimeout("task_trianglepractice_block2.run()", 0);
                         break;
                     case 5:
                         task_trianglepractice_block2.step++;
-                        psy_keyboard(possiblekeys, 3, 3 - 1, 999999);
+                        psy_add_centered_bitmap_db(background_sigma_110, PSY_CENTRAL, PSY_CENTRAL, 0);
+                        psy_draw_all_db();
+                        task_trianglepractice_block2.run();
                         break;
                     case 6:
                         task_trianglepractice_block2.step++;
-                        task_trianglepractice_block2.step = 4;
-                        task_trianglepractice_block2.run();
+                        if (!(practiceTable2[tablerow].c2 == 2)) {
+                            task_trianglepractice_block2.step = 8
+                        };
+                        setTimeout("task_trianglepractice_block2.run()", 0);
                         break;
                     case 7:
                         task_trianglepractice_block2.step++;
-                        psy_clear_stimuli1(-1);
-                        psy_draw_all_db();
-                        psy_clear_stimuli1(-2);
-                        psy_draw_all_db();
-                        psy_clear_stimuli1(-3);
+                        psy_add_centered_bitmap_db(background_sigma_160, PSY_CENTRAL, PSY_CENTRAL, 0);
                         psy_draw_all_db();
                         task_trianglepractice_block2.run();
                         break;
                     case 8:
                         task_trianglepractice_block2.step++;
-                        if (!(practiceTable2[tablerow].c2 == 1)) {
+                        if (!(practiceTable2[tablerow].c2 == 4)) {
                             task_trianglepractice_block2.step = 10
                         };
                         setTimeout("task_trianglepractice_block2.run()", 0);
                         break;
                     case 9:
                         task_trianglepractice_block2.step++;
-                        psy_add_centered_bitmap_db(background_sigma_110, PSY_CENTRAL, PSY_CENTRAL, 0);
+                        psy_add_centered_bitmap_db(background_sigma_160, PSY_CENTRAL, PSY_CENTRAL, 0);
                         psy_draw_all_db();
                         task_trianglepractice_block2.run();
                         break;
                     case 10:
                         task_trianglepractice_block2.step++;
-                        if (!(practiceTable2[tablerow].c2 == 3)) {
+                        if (!(trialCounter != 1)) {
                             task_trianglepractice_block2.step = 12
                         };
                         setTimeout("task_trianglepractice_block2.run()", 0);
                         break;
                     case 11:
                         task_trianglepractice_block2.step++;
-                        psy_add_centered_bitmap_db(background_sigma_110, PSY_CENTRAL, PSY_CENTRAL, 0);
-                        psy_draw_all_db();
                         task_trianglepractice_block2.run();
                         break;
                     case 12:
-                        task_trianglepractice_block2.step++;
-                        if (!(practiceTable2[tablerow].c2 == 2)) {
-                            task_trianglepractice_block2.step = 14
-                        };
-                        setTimeout("task_trianglepractice_block2.run()", 0);
-                        break;
-                    case 13:
-                        task_trianglepractice_block2.step++;
-                        psy_add_centered_bitmap_db(background_sigma_160, PSY_CENTRAL, PSY_CENTRAL, 0);
-                        psy_draw_all_db();
-                        task_trianglepractice_block2.run();
-                        break;
-                    case 14:
-                        task_trianglepractice_block2.step++;
-                        if (!(practiceTable2[tablerow].c2 == 4)) {
-                            task_trianglepractice_block2.step = 16
-                        };
-                        setTimeout("task_trianglepractice_block2.run()", 0);
-                        break;
-                    case 15:
-                        task_trianglepractice_block2.step++;
-                        psy_add_centered_bitmap_db(background_sigma_160, PSY_CENTRAL, PSY_CENTRAL, 0);
-                        psy_draw_all_db();
-                        task_trianglepractice_block2.run();
-                        break;
-                    case 16:
-                        task_trianglepractice_block2.step++;
-                        if (!(trialCounter != 1)) {
-                            task_trianglepractice_block2.step = 18
-                        };
-                        setTimeout("task_trianglepractice_block2.run()", 0);
-                        break;
-                    case 17:
-                        task_trianglepractice_block2.step++;
-                        task_trianglepractice_block2.run();
-                        break;
-                    case 18:
                         task_trianglepractice_block2.step++;
                         psy_add_centered_bitmap_db(blue_chicken, -75, 0, 0);
                         psy_draw_all_db();
@@ -3020,32 +3046,32 @@
                             0);
                         psy_draw_all_db();
                         if (!(isPractice == 1)) {
-                            task_trianglepractice_block2.step = 20
+                            task_trianglepractice_block2.step = 14
                         };
                         setTimeout("task_trianglepractice_block2.run()", 0);
                         break;
-                    case 19:
+                    case 13:
                         task_trianglepractice_block2.step++;
                         psy_add_text_rgb_db(mainfont, 50, -375, PSY_CENTRAL, PSY_CENTRAL, 255, 255, 255, "20",
                             0);
                         psy_draw_all_db();
                         task_trianglepractice_block2.run();
                         break;
-                    case 20:
+                    case 14:
                         task_trianglepractice_block2.step++;
                         if (!(isPractice == 0)) {
-                            task_trianglepractice_block2.step = 22
+                            task_trianglepractice_block2.step = 16
                         };
                         setTimeout("task_trianglepractice_block2.run()", 0);
                         break;
-                    case 21:
+                    case 15:
                         task_trianglepractice_block2.step++;
                         psy_add_text_rgb_db(mainfont, 50, -375, PSY_CENTRAL, PSY_CENTRAL, 255, 255, 255, "400",
                             0);
                         psy_draw_all_db();
                         task_trianglepractice_block2.run();
                         break;
-                    case 22:
+                    case 16:
                         task_trianglepractice_block2.step++;
                         psy_add_text_rgb_db(mainfont, -33, -300, PSY_CENTRAL, PSY_CENTRAL, 255, 255, 255,
                             "Cents: ", 0);
@@ -3075,11 +3101,11 @@
                         lastTwoKeyPressed = lastOneKeyPressed;
                         lastOneKeyPressed = keypressed;
                         if (!(trialCounter > 1)) {
-                            task_trianglepractice_block2.step = 32
+                            task_trianglepractice_block2.step = 26
                         };
                         setTimeout("task_trianglepractice_block2.run()", 0);
                         break;
-                    case 23:
+                    case 17:
                         task_trianglepractice_block2.step++;
                         task_trianglepractice_block2.lastTrial = Math.round(trialCounter - 1);
                         psy_add_text_rgb_db(mysmallfont, -690, 315, PSY_CENTRAL, PSY_CENTRAL, 255, 255, 255,
@@ -3088,30 +3114,30 @@
                         psy_add_centered_bitmap_db(backg_small, -545, 315, 0);
                         psy_draw_all_db();
                         if (!(lastOneKeyPressed == 1)) {
-                            task_trianglepractice_block2.step = 25
+                            task_trianglepractice_block2.step = 19
                         };
                         setTimeout("task_trianglepractice_block2.run()", 0);
                         break;
-                    case 24:
+                    case 18:
                         task_trianglepractice_block2.step++;
                         psy_add_centered_bitmap_db(white_small, -558, 315, 0);
                         psy_draw_all_db();
                         task_trianglepractice_block2.run();
                         break;
-                    case 25:
+                    case 19:
                         task_trianglepractice_block2.step++;
                         if (!(lastOneKeyPressed == 2)) {
-                            task_trianglepractice_block2.step = 27
+                            task_trianglepractice_block2.step = 21
                         };
                         setTimeout("task_trianglepractice_block2.run()", 0);
                         break;
-                    case 26:
+                    case 20:
                         task_trianglepractice_block2.step++;
                         psy_add_centered_bitmap_db(white_small, -532, 315, 0);
                         psy_draw_all_db();
                         task_trianglepractice_block2.run();
                         break;
-                    case 27:
+                    case 21:
                         task_trianglepractice_block2.step++;
                         psy_add_centered_bitmap_db(blue_small, -558, 315, 0);
                         psy_draw_all_db();
@@ -3125,41 +3151,41 @@
                             .calcualtedEggXPosition, task_trianglepractice_block2.calcualtedEggYPosition, 0);
                         psy_draw_all_db();
                         if (!(lastOneStatus == 1)) {
-                            task_trianglepractice_block2.step = 29
+                            task_trianglepractice_block2.step = 23
                         };
                         setTimeout("task_trianglepractice_block2.run()", 0);
                         break;
-                    case 28:
+                    case 22:
                         task_trianglepractice_block2.step++;
                         psy_add_centered_bitmap_db(green_check, -400, 315, 0);
                         psy_draw_all_db();
                         task_trianglepractice_block2.run();
                         break;
-                    case 29:
+                    case 23:
                         task_trianglepractice_block2.step++;
                         if (!(lastOneStatus != 1)) {
-                            task_trianglepractice_block2.step = 31
+                            task_trianglepractice_block2.step = 25
                         };
                         setTimeout("task_trianglepractice_block2.run()", 0);
                         break;
-                    case 30:
+                    case 24:
                         task_trianglepractice_block2.step++;
                         psy_add_centered_bitmap_db(error, -400, 315, 0);
                         psy_draw_all_db();
                         task_trianglepractice_block2.run();
                         break;
-                    case 31:
+                    case 25:
                         task_trianglepractice_block2.step++;
                         task_trianglepractice_block2.run();
                         break;
-                    case 32:
+                    case 26:
                         task_trianglepractice_block2.step++;
                         if (!(trialCounter > 2)) {
-                            task_trianglepractice_block2.step = 42
+                            task_trianglepractice_block2.step = 36
                         };
                         setTimeout("task_trianglepractice_block2.run()", 0);
                         break;
-                    case 33:
+                    case 27:
                         task_trianglepractice_block2.step++;
                         task_trianglepractice_block2.lastTrial = Math.round(trialCounter - 2);
                         psy_add_text_rgb_db(mysmallfont, -690, 167, PSY_CENTRAL, PSY_CENTRAL, 255, 255, 255,
@@ -3168,30 +3194,30 @@
                         psy_add_centered_bitmap_db(backg_small, -545, 167, 0);
                         psy_draw_all_db();
                         if (!(lastTwoKeyPressed == 1)) {
-                            task_trianglepractice_block2.step = 35
+                            task_trianglepractice_block2.step = 29
                         };
                         setTimeout("task_trianglepractice_block2.run()", 0);
                         break;
-                    case 34:
+                    case 28:
                         task_trianglepractice_block2.step++;
                         psy_add_centered_bitmap_db(white_small, -558, 167, 0);
                         psy_draw_all_db();
                         task_trianglepractice_block2.run();
                         break;
-                    case 35:
+                    case 29:
                         task_trianglepractice_block2.step++;
                         if (!(lastTwoKeyPressed == 2)) {
-                            task_trianglepractice_block2.step = 37
+                            task_trianglepractice_block2.step = 31
                         };
                         setTimeout("task_trianglepractice_block2.run()", 0);
                         break;
-                    case 36:
+                    case 30:
                         task_trianglepractice_block2.step++;
                         psy_add_centered_bitmap_db(white_small, -532, 167, 0);
                         psy_draw_all_db();
                         task_trianglepractice_block2.run();
                         break;
-                    case 37:
+                    case 31:
                         task_trianglepractice_block2.step++;
                         psy_add_centered_bitmap_db(blue_small, -558, 167, 0);
                         psy_draw_all_db();
@@ -3205,41 +3231,41 @@
                             .calcualtedEggXPosition, task_trianglepractice_block2.calcualtedEggYPosition, 0);
                         psy_draw_all_db();
                         if (!(lastTwoStatus == 1)) {
-                            task_trianglepractice_block2.step = 39
+                            task_trianglepractice_block2.step = 33
                         };
                         setTimeout("task_trianglepractice_block2.run()", 0);
                         break;
-                    case 38:
+                    case 32:
                         task_trianglepractice_block2.step++;
                         psy_add_centered_bitmap_db(green_check, -400, 167, 0);
                         psy_draw_all_db();
                         task_trianglepractice_block2.run();
                         break;
-                    case 39:
+                    case 33:
                         task_trianglepractice_block2.step++;
                         if (!(lastTwoStatus != 1)) {
-                            task_trianglepractice_block2.step = 41
+                            task_trianglepractice_block2.step = 35
                         };
                         setTimeout("task_trianglepractice_block2.run()", 0);
                         break;
-                    case 40:
+                    case 34:
                         task_trianglepractice_block2.step++;
                         psy_add_centered_bitmap_db(error, -400, 167, 0);
                         psy_draw_all_db();
                         task_trianglepractice_block2.run();
                         break;
-                    case 41:
+                    case 35:
                         task_trianglepractice_block2.step++;
                         task_trianglepractice_block2.run();
                         break;
-                    case 42:
+                    case 36:
                         task_trianglepractice_block2.step++;
                         if (!(trialCounter > 3)) {
-                            task_trianglepractice_block2.step = 52
+                            task_trianglepractice_block2.step = 46
                         };
                         setTimeout("task_trianglepractice_block2.run()", 0);
                         break;
-                    case 43:
+                    case 37:
                         task_trianglepractice_block2.step++;
                         task_trianglepractice_block2.lastTrial = Math.round(trialCounter - 3);
                         psy_add_text_rgb_db(mysmallfont, -690, 19, PSY_CENTRAL, PSY_CENTRAL, 255, 255, 255,
@@ -3248,30 +3274,30 @@
                         psy_add_centered_bitmap_db(backg_small, -545, 19, 0);
                         psy_draw_all_db();
                         if (!(lastThreeKeyPressed == 1)) {
-                            task_trianglepractice_block2.step = 45
+                            task_trianglepractice_block2.step = 39
                         };
                         setTimeout("task_trianglepractice_block2.run()", 0);
                         break;
-                    case 44:
+                    case 38:
                         task_trianglepractice_block2.step++;
                         psy_add_centered_bitmap_db(white_small, -558, 19, 0);
                         psy_draw_all_db();
                         task_trianglepractice_block2.run();
                         break;
-                    case 45:
+                    case 39:
                         task_trianglepractice_block2.step++;
                         if (!(lastThreeKeyPressed == 2)) {
-                            task_trianglepractice_block2.step = 47
+                            task_trianglepractice_block2.step = 41
                         };
                         setTimeout("task_trianglepractice_block2.run()", 0);
                         break;
-                    case 46:
+                    case 40:
                         task_trianglepractice_block2.step++;
                         psy_add_centered_bitmap_db(white_small, -532, 19, 0);
                         psy_draw_all_db();
                         task_trianglepractice_block2.run();
                         break;
-                    case 47:
+                    case 41:
                         task_trianglepractice_block2.step++;
                         psy_add_centered_bitmap_db(blue_small, -558, 19, 0);
                         psy_draw_all_db();
@@ -3285,41 +3311,41 @@
                             .calcualtedEggXPosition, task_trianglepractice_block2.calcualtedEggYPosition, 0);
                         psy_draw_all_db();
                         if (!(lastThreeStatus == 1)) {
-                            task_trianglepractice_block2.step = 49
+                            task_trianglepractice_block2.step = 43
                         };
                         setTimeout("task_trianglepractice_block2.run()", 0);
                         break;
-                    case 48:
+                    case 42:
                         task_trianglepractice_block2.step++;
                         psy_add_centered_bitmap_db(green_check, -400, 19, 0);
                         psy_draw_all_db();
                         task_trianglepractice_block2.run();
                         break;
-                    case 49:
+                    case 43:
                         task_trianglepractice_block2.step++;
                         if (!(lastThreeStatus != 1)) {
-                            task_trianglepractice_block2.step = 51
+                            task_trianglepractice_block2.step = 45
                         };
                         setTimeout("task_trianglepractice_block2.run()", 0);
                         break;
-                    case 50:
+                    case 44:
                         task_trianglepractice_block2.step++;
                         psy_add_centered_bitmap_db(error, -400, 19, 0);
                         psy_draw_all_db();
                         task_trianglepractice_block2.run();
                         break;
-                    case 51:
+                    case 45:
                         task_trianglepractice_block2.step++;
                         task_trianglepractice_block2.run();
                         break;
-                    case 52:
+                    case 46:
                         task_trianglepractice_block2.step++;
                         if (!(trialCounter > 4)) {
-                            task_trianglepractice_block2.step = 62
+                            task_trianglepractice_block2.step = 56
                         };
                         setTimeout("task_trianglepractice_block2.run()", 0);
                         break;
-                    case 53:
+                    case 47:
                         task_trianglepractice_block2.step++;
                         task_trianglepractice_block2.lastTrial = Math.round(trialCounter - 4);
                         psy_add_text_rgb_db(mysmallfont, -690, -129, PSY_CENTRAL, PSY_CENTRAL, 255, 255, 255,
@@ -3328,30 +3354,30 @@
                         psy_add_centered_bitmap_db(backg_small, -545, -129, 0);
                         psy_draw_all_db();
                         if (!(lastFourKeyPressed == 1)) {
-                            task_trianglepractice_block2.step = 55
+                            task_trianglepractice_block2.step = 49
                         };
                         setTimeout("task_trianglepractice_block2.run()", 0);
                         break;
-                    case 54:
+                    case 48:
                         task_trianglepractice_block2.step++;
                         psy_add_centered_bitmap_db(white_small, -558, -129, 0);
                         psy_draw_all_db();
                         task_trianglepractice_block2.run();
                         break;
-                    case 55:
+                    case 49:
                         task_trianglepractice_block2.step++;
                         if (!(lastFourKeyPressed == 2)) {
-                            task_trianglepractice_block2.step = 57
+                            task_trianglepractice_block2.step = 51
                         };
                         setTimeout("task_trianglepractice_block2.run()", 0);
                         break;
-                    case 56:
+                    case 50:
                         task_trianglepractice_block2.step++;
                         psy_add_centered_bitmap_db(white_small, -532, -129, 0);
                         psy_draw_all_db();
                         task_trianglepractice_block2.run();
                         break;
-                    case 57:
+                    case 51:
                         task_trianglepractice_block2.step++;
                         psy_add_centered_bitmap_db(blue_small, -558, -129, 0);
                         psy_draw_all_db();
@@ -3365,41 +3391,41 @@
                             .calcualtedEggXPosition, task_trianglepractice_block2.calcualtedEggYPosition, 0);
                         psy_draw_all_db();
                         if (!(lastFourStatus == 1)) {
-                            task_trianglepractice_block2.step = 59
+                            task_trianglepractice_block2.step = 53
                         };
                         setTimeout("task_trianglepractice_block2.run()", 0);
                         break;
-                    case 58:
+                    case 52:
                         task_trianglepractice_block2.step++;
                         psy_add_centered_bitmap_db(green_check, -400, -129, 0);
                         psy_draw_all_db();
                         task_trianglepractice_block2.run();
                         break;
-                    case 59:
+                    case 53:
                         task_trianglepractice_block2.step++;
                         if (!(lastFourStatus != 1)) {
-                            task_trianglepractice_block2.step = 61
+                            task_trianglepractice_block2.step = 55
                         };
                         setTimeout("task_trianglepractice_block2.run()", 0);
                         break;
-                    case 60:
+                    case 54:
                         task_trianglepractice_block2.step++;
                         psy_add_centered_bitmap_db(error, -400, -129, 0);
                         psy_draw_all_db();
                         task_trianglepractice_block2.run();
                         break;
-                    case 61:
+                    case 55:
                         task_trianglepractice_block2.step++;
                         task_trianglepractice_block2.run();
                         break;
-                    case 62:
+                    case 56:
                         task_trianglepractice_block2.step++;
                         if (!(trialCounter > 5)) {
-                            task_trianglepractice_block2.step = 72
+                            task_trianglepractice_block2.step = 66
                         };
                         setTimeout("task_trianglepractice_block2.run()", 0);
                         break;
-                    case 63:
+                    case 57:
                         task_trianglepractice_block2.step++;
                         task_trianglepractice_block2.lastTrial = Math.round(trialCounter - 5);
                         psy_add_text_rgb_db(mysmallfont, -690, -277, PSY_CENTRAL, PSY_CENTRAL, 255, 255, 255,
@@ -3408,30 +3434,30 @@
                         psy_add_centered_bitmap_db(backg_small, -545, -277, 0);
                         psy_draw_all_db();
                         if (!(lastFourKeyPressed == 1)) {
-                            task_trianglepractice_block2.step = 65
+                            task_trianglepractice_block2.step = 59
                         };
                         setTimeout("task_trianglepractice_block2.run()", 0);
                         break;
-                    case 64:
+                    case 58:
                         task_trianglepractice_block2.step++;
                         psy_add_centered_bitmap_db(white_small, -558, -277, 0);
                         psy_draw_all_db();
                         task_trianglepractice_block2.run();
                         break;
-                    case 65:
+                    case 59:
                         task_trianglepractice_block2.step++;
                         if (!(lastFourKeyPressed == 2)) {
-                            task_trianglepractice_block2.step = 67
+                            task_trianglepractice_block2.step = 61
                         };
                         setTimeout("task_trianglepractice_block2.run()", 0);
                         break;
-                    case 66:
+                    case 60:
                         task_trianglepractice_block2.step++;
                         psy_add_centered_bitmap_db(white_small, -532, -277, 0);
                         psy_draw_all_db();
                         task_trianglepractice_block2.run();
                         break;
-                    case 67:
+                    case 61:
                         task_trianglepractice_block2.step++;
                         psy_add_centered_bitmap_db(blue_small, -558, -277, 0);
                         psy_draw_all_db();
@@ -3445,151 +3471,154 @@
                             .calcualtedEggXPosition, task_trianglepractice_block2.calcualtedEggYPosition, 0);
                         psy_draw_all_db();
                         if (!(lastFiveStatus == 1)) {
-                            task_trianglepractice_block2.step = 69
+                            task_trianglepractice_block2.step = 63
                         };
                         setTimeout("task_trianglepractice_block2.run()", 0);
                         break;
-                    case 68:
+                    case 62:
                         task_trianglepractice_block2.step++;
                         psy_add_centered_bitmap_db(green_check, -400, -277, 0);
                         psy_draw_all_db();
                         task_trianglepractice_block2.run();
                         break;
-                    case 69:
+                    case 63:
                         task_trianglepractice_block2.step++;
                         if (!(lastFiveStatus != 1)) {
-                            task_trianglepractice_block2.step = 71
+                            task_trianglepractice_block2.step = 65
                         };
                         setTimeout("task_trianglepractice_block2.run()", 0);
                         break;
-                    case 70:
+                    case 64:
                         task_trianglepractice_block2.step++;
                         psy_add_centered_bitmap_db(error, -400, -277, 0);
                         psy_draw_all_db();
                         task_trianglepractice_block2.run();
                         break;
-                    case 71:
+                    case 65:
                         task_trianglepractice_block2.step++;
                         task_trianglepractice_block2.run();
+                        break;
+                    case 66:
+                        task_trianglepractice_block2.step++;
+                        psy_add_centered_bitmap_db(egg_white, practiceTable2[tablerow].c3, practiceTable2[
+                            tablerow].c4, 0);
+                        psy_draw_all_db();
+                        psy_delay(250);
+                        break;
+                    case 67:
+                        task_trianglepractice_block2.step++;
+                        psy_clear_stimuli1(-1);
+                        psy_draw_all_db();
+                        psy_delay(250);
+                        break;
+                    case 68:
+                        task_trianglepractice_block2.step++;
+                        psy_add_centered_bitmap_db(egg_white, practiceTable2[tablerow].c3, practiceTable2[
+                            tablerow].c4, 0);
+                        psy_draw_all_db();
+                        psy_delay(250);
+                        break;
+                    case 69:
+                        task_trianglepractice_block2.step++;
+                        psy_clear_stimuli1(-1);
+                        psy_draw_all_db();
+                        psy_delay(250);
+                        break;
+                    case 70:
+                        task_trianglepractice_block2.step++;
+                        psy_add_centered_bitmap_db(egg_white, practiceTable2[tablerow].c3, practiceTable2[
+                            tablerow].c4, 0);
+                        psy_draw_all_db();
+                        psy_delay(250);
+                        break;
+                    case 71:
+                        task_trianglepractice_block2.step++;
+                        psy_clear_stimuli1(-1);
+                        psy_draw_all_db();
+                        psy_delay(250);
                         break;
                     case 72:
                         task_trianglepractice_block2.step++;
                         psy_add_centered_bitmap_db(egg_white, practiceTable2[tablerow].c3, practiceTable2[
                             tablerow].c4, 0);
                         psy_draw_all_db();
-                        psy_delay(250);
-                        break;
-                    case 73:
-                        task_trianglepractice_block2.step++;
-                        psy_clear_stimuli1(-1);
-                        psy_draw_all_db();
-                        psy_delay(250);
-                        break;
-                    case 74:
-                        task_trianglepractice_block2.step++;
-                        psy_add_centered_bitmap_db(egg_white, practiceTable2[tablerow].c3, practiceTable2[
-                            tablerow].c4, 0);
-                        psy_draw_all_db();
-                        psy_delay(250);
-                        break;
-                    case 75:
-                        task_trianglepractice_block2.step++;
-                        psy_clear_stimuli1(-1);
-                        psy_draw_all_db();
-                        psy_delay(250);
-                        break;
-                    case 76:
-                        task_trianglepractice_block2.step++;
-                        psy_add_centered_bitmap_db(egg_white, practiceTable2[tablerow].c3, practiceTable2[
-                            tablerow].c4, 0);
-                        psy_draw_all_db();
-                        psy_delay(250);
-                        break;
-                    case 77:
-                        task_trianglepractice_block2.step++;
-                        psy_clear_stimuli1(-1);
-                        psy_draw_all_db();
-                        psy_delay(250);
-                        break;
-                    case 78:
-                        task_trianglepractice_block2.step++;
                         psy_add_centered_bitmap_db(next_egg_text, 0, 270, 0);
                         psy_draw_all_db();
                         psy_keyboard(possiblekeys, 3, practiceTable2[tablerow].c6 - 1, 9999999);
                         break;
-                    case 79:
+                    case 73:
                         task_trianglepractice_block2.step++;
                         if (!(keystatus.key + 1 == 3)) {
-                            task_trianglepractice_block2.step = 82
+                            task_trianglepractice_block2.step = 76
                         };
                         setTimeout("task_trianglepractice_block2.run()", 0);
                         break;
-                    case 80:
+                    case 74:
                         task_trianglepractice_block2.step++;
                         psy_keyboard(possiblekeys, 3, practiceTable2[tablerow].c6 - 1, 9999999);
                         break;
-                    case 81:
+                    case 75:
                         task_trianglepractice_block2.step++;
-                        task_trianglepractice_block2.step = 79;
+                        task_trianglepractice_block2.step = 73;
                         task_trianglepractice_block2.run();
                         break;
-                    case 82:
+                    case 76:
                         task_trianglepractice_block2.step++;
                         keypressed = keystatus.key + 1;
                         basketXposition = triangle_x_position;
                         if (!(keystatus.status == 1)) {
-                            task_trianglepractice_block2.step = 84
+                            task_trianglepractice_block2.step = 78
                         };
                         setTimeout("task_trianglepractice_block2.run()", 0);
                         break;
-                    case 83:
+                    case 77:
                         task_trianglepractice_block2.step++;
                         trialCorrect = trialCorrect + 1;
                         tbtresponse = 1;
                         task_trianglepractice_block2.run();
                         break;
-                    case 84:
+                    case 78:
                         task_trianglepractice_block2.step++;
                         if (!(keystatus.status != 1)) {
-                            task_trianglepractice_block2.step = 86
+                            task_trianglepractice_block2.step = 80
                         };
                         setTimeout("task_trianglepractice_block2.run()", 0);
                         break;
-                    case 85:
+                    case 79:
                         task_trianglepractice_block2.step++;
                         points = points - 1;
                         trialIncorrect = trialIncorrect + 1;
                         tbtresponse = 0;
                         task_trianglepractice_block2.run();
                         break;
-                    case 86:
+                    case 80:
                         task_trianglepractice_block2.step++;
                         time = psy_time_since_start();
                         correct_map = 0;
                         if (!(keystatus.status == 1)) {
-                            task_trianglepractice_block2.step = 88
+                            task_trianglepractice_block2.step = 82
                         };
                         setTimeout("task_trianglepractice_block2.run()", 0);
                         break;
-                    case 87:
+                    case 81:
                         task_trianglepractice_block2.step++;
                         correct_map = 1;
                         block2Correct = block2Correct + 1;
                         task_trianglepractice_block2.run();
                         break;
-                    case 88:
+                    case 82:
                         task_trianglepractice_block2.step++;
                         if (!(keystatus.status != 1)) {
-                            task_trianglepractice_block2.step = 90
+                            task_trianglepractice_block2.step = 84
                         };
                         setTimeout("task_trianglepractice_block2.run()", 0);
                         break;
-                    case 89:
+                    case 83:
                         task_trianglepractice_block2.step++;
                         correct_map = 0;
                         task_trianglepractice_block2.run();
                         break;
-                    case 90:
+                    case 84:
                         task_trianglepractice_block2.step++;
                         addoutput(current_block.substring(6, current_block.length) + " " + practiceTable2[
                                 tablerow].c1 + " " + practiceTable2[tablerow].c2 + " " + practiceTable2[
@@ -3599,32 +3628,32 @@
                             left_chicken_x_position + " " + left_chicken_y_position + " " +
                             right_chicken_x_position + " " + right_chicken_y_position + " " + give_feedback);
                         if (!(keystatus.key + 1 == 1)) {
-                            task_trianglepractice_block2.step = 92
+                            task_trianglepractice_block2.step = 86
                         };
                         setTimeout("task_trianglepractice_block2.run()", 0);
                         break;
-                    case 91:
+                    case 85:
                         task_trianglepractice_block2.step++;
                         triangle_x_position = -75;
                         psy_add_centered_bitmap_db(white_chicken, triangle_x_position, 0, 0);
                         psy_draw_all_db();
                         task_trianglepractice_block2.run();
                         break;
-                    case 92:
+                    case 86:
                         task_trianglepractice_block2.step++;
                         if (!(keystatus.key + 1 == 2)) {
-                            task_trianglepractice_block2.step = 94
+                            task_trianglepractice_block2.step = 88
                         };
                         setTimeout("task_trianglepractice_block2.run()", 0);
                         break;
-                    case 93:
+                    case 87:
                         task_trianglepractice_block2.step++;
                         triangle_x_position = 75;
                         psy_add_centered_bitmap_db(white_chicken, triangle_x_position, 0, 0);
                         psy_draw_all_db();
                         task_trianglepractice_block2.run();
                         break;
-                    case 94:
+                    case 88:
                         task_trianglepractice_block2.step++;
                         psy_add_centered_bitmap_db(blue_chicken, -75, 0, 0);
                         psy_draw_all_db();
@@ -3635,32 +3664,32 @@
                         psy_draw_all_db();
                         psy_delay(300);
                         break;
-                    case 95:
+                    case 89:
                         task_trianglepractice_block2.step++;
                         lastStatus = keystatus.status;
                         trialCounter = trialCounter + 1;
                         if (!(practiceTable2[tablerow].c1 == 20)) {
-                            task_trianglepractice_block2.step = 107
+                            task_trianglepractice_block2.step = 101
                         };
                         setTimeout("task_trianglepractice_block2.run()", 0);
                         break;
-                    case 96:
+                    case 90:
                         task_trianglepractice_block2.step++;
                         psy_add_centered_bitmap_db(background, PSY_CENTRAL, PSY_CENTRAL, 0);
                         psy_draw_all_db();
                         if (!(block2Correct < 12)) {
-                            task_trianglepractice_block2.step = 104
+                            task_trianglepractice_block2.step = 98
                         };
                         setTimeout("task_trianglepractice_block2.run()", 0);
                         break;
-                    case 97:
+                    case 91:
                         task_trianglepractice_block2.step++;
                         if (!(block2CountShow == 1)) {
-                            task_trianglepractice_block2.step = 103
+                            task_trianglepractice_block2.step = 97
                         };
                         setTimeout("task_trianglepractice_block2.run()", 0);
                         break;
-                    case 98:
+                    case 92:
                         task_trianglepractice_block2.step++;
                         psy_add_text_rgb_db(mainfont, 0, -40, PSY_CENTRAL, PSY_CENTRAL, 255, 255, 255,
                             "Please Try Again :(", 0);
@@ -3672,59 +3701,57 @@
                         trialCounter = 1;
                         block2Correct = 0;
                         repeatblock2 = 1;
+                        block2CountShow = block2CountShow + 1;
                         psy_add_text_rgb_db(mainfont, 0, 300, PSY_CENTRAL, PSY_CENTRAL, 255, 255, 255,
                             "Press the Spacebar to continue", 0);
                         psy_draw_all_db();
                         psy_keyboard(possiblekeys, 3, 3 - 1, 999999);
                         break;
-                    case 99:
+                    case 93:
                         task_trianglepractice_block2.step++;
                         if (!(keystatus.status != 1)) {
-                            task_trianglepractice_block2.step = 102
+                            task_trianglepractice_block2.step = 96
                         };
                         setTimeout("task_trianglepractice_block2.run()", 0);
                         break;
-                    case 100:
+                    case 94:
                         task_trianglepractice_block2.step++;
                         psy_keyboard(possiblekeys, 3, 3 - 1, 999999);
                         break;
-                    case 101:
+                    case 95:
                         task_trianglepractice_block2.step++;
-                        task_trianglepractice_block2.step = 99;
+                        task_trianglepractice_block2.step = 93;
                         task_trianglepractice_block2.run();
                         break;
-                    case 102:
+                    case 96:
                         task_trianglepractice_block2.step++;
                         task_trianglepractice_block2.run();
                         break;
-                    case 103:
+                    case 97:
                         task_trianglepractice_block2.step++;
-                        block2CountShow = block2CountShow + 1;
-                        failPracticeBlock2 = 1;
                         task_trianglepractice_block2.run();
                         break;
-                    case 104:
+                    case 98:
                         task_trianglepractice_block2.step++;
                         if (!(block2Correct > 12)) {
-                            task_trianglepractice_block2.step = 106
+                            task_trianglepractice_block2.step = 100
                         };
                         setTimeout("task_trianglepractice_block2.run()", 0);
                         break;
-                    case 105:
+                    case 99:
                         task_trianglepractice_block2.step++;
                         repeatblock2 = 0;
-                        failPracticeBlock2 = 0;
                         task_trianglepractice_block2.run();
                         break;
-                    case 106:
+                    case 100:
                         task_trianglepractice_block2.step++;
                         task_trianglepractice_block2.run();
                         break;
-                    case 107:
+                    case 101:
                         task_trianglepractice_block2.step++;
                         task_trianglepractice_block2.run();
                         break;
-                    case 108:
+                    case 102:
                         task_trianglepractice_block2.step++;
                         setTimeout(current_block + ".run()", 0);
                         break
@@ -3785,260 +3812,207 @@
                         }
                         error_status = 0;
                         possiblekeys = [37, 39, 32];
-                        if (!(failPracticeBlock1 == 0 && failPracticeBlock2 == 0)) {
-                            task_triangle.step = 76
+                        psy_mouse_visibility(0);
+                        if (!(myTable[tablerow].c2 == 1)) {
+                            task_triangle.step = 3
                         };
                         setTimeout("task_triangle.run()", 0);
                         break;
                     case 2:
                         task_triangle.step++;
-                        if (!(trialCounter == 1)) {
-                            task_triangle.step = 8
-                        };
-                        setTimeout("task_triangle.run()", 0);
+                        psy_add_centered_bitmap_db(background_sigma_110, PSY_CENTRAL, PSY_CENTRAL, 0);
+                        psy_draw_all_db();
+                        task_triangle.run();
                         break;
                     case 3:
                         task_triangle.step++;
-                        psy_add_text_rgb_db(mainfont, 0, 0, PSY_CENTRAL, PSY_CENTRAL, 255, 255, 255,
-                            "Great Job! Looks like you got the hang of it.", 0);
-                        psy_draw_all_db();
-                        psy_add_text_rgb_db(mainfont, 0, 200, PSY_CENTRAL, PSY_CENTRAL, 255, 255, 255,
-                            "You will now begin the real session!", 0);
-                        psy_draw_all_db();
-                        psy_add_text_rgb_db(mainfont, 0, 250, PSY_CENTRAL, PSY_CENTRAL, 255, 255, 255,
-                            "Press space bar of your keyboard to continue", 0);
-                        psy_draw_all_db();
-                        psy_keyboard(possiblekeys, 3, 3 - 1, 99999);
+                        if (!(myTable[tablerow].c2 == 3)) {
+                            task_triangle.step = 5
+                        };
+                        setTimeout("task_triangle.run()", 0);
                         break;
                     case 4:
                         task_triangle.step++;
-                        if (!(keystatus.status != 1)) {
+                        psy_add_centered_bitmap_db(background_sigma_110, PSY_CENTRAL, PSY_CENTRAL, 0);
+                        psy_draw_all_db();
+                        task_triangle.run();
+                        break;
+                    case 5:
+                        task_triangle.step++;
+                        if (!(myTable[tablerow].c2 == 2)) {
                             task_triangle.step = 7
                         };
                         setTimeout("task_triangle.run()", 0);
                         break;
-                    case 5:
-                        task_triangle.step++;
-                        psy_keyboard(possiblekeys, 3, 3 - 1, 99999);
-                        break;
                     case 6:
                         task_triangle.step++;
-                        task_triangle.step = 4;
+                        psy_add_centered_bitmap_db(background_sigma_160, PSY_CENTRAL, PSY_CENTRAL, 0);
+                        psy_draw_all_db();
                         task_triangle.run();
                         break;
                     case 7:
                         task_triangle.step++;
-                        psy_clear_stimuli1(-1);
-                        psy_draw_all_db();
-                        psy_clear_stimuli1(-2);
-                        psy_draw_all_db();
-                        psy_clear_stimuli1(-3);
-                        psy_draw_all_db();
-                        task_triangle.run();
+                        if (!(myTable[tablerow].c2 == 4)) {
+                            task_triangle.step = 9
+                        };
+                        setTimeout("task_triangle.run()", 0);
                         break;
                     case 8:
                         task_triangle.step++;
-                        psy_mouse_visibility(0);
-                        if (!(myTable[tablerow].c2 == 1)) {
-                            task_triangle.step = 10
-                        };
-                        setTimeout("task_triangle.run()", 0);
+                        psy_add_centered_bitmap_db(background_sigma_160, PSY_CENTRAL, PSY_CENTRAL, 0);
+                        psy_draw_all_db();
+                        task_triangle.run();
                         break;
                     case 9:
                         task_triangle.step++;
-                        psy_add_centered_bitmap_db(background_sigma_110, PSY_CENTRAL, PSY_CENTRAL, 0);
-                        psy_draw_all_db();
-                        task_triangle.run();
-                        break;
-                    case 10:
-                        task_triangle.step++;
-                        if (!(myTable[tablerow].c2 == 3)) {
-                            task_triangle.step = 12
+                        if (!(myTable[tablerow].c1 == 101)) {
+                            task_triangle.step = 15
                         };
                         setTimeout("task_triangle.run()", 0);
                         break;
+                    case 10:
+                        task_triangle.step++;
+                        psy_add_centered_bitmap_db(background, PSY_CENTRAL, PSY_CENTRAL, 0);
+                        psy_draw_all_db();
+                        psy_add_text_rgb_db(mainfont, 0, -200, PSY_CENTRAL, PSY_CENTRAL, 255, 255, 255,
+                            "Great Job!", 0);
+                        psy_draw_all_db();
+                        psy_add_text_rgb_db(mainfont, -160, -100, PSY_CENTRAL, PSY_CENTRAL, 255, 255, 255,
+                            "You still have ", 0);
+                        psy_draw_all_db();
+                        psy_add_text_rgb_db(mainfont, -40, -100, PSY_CENTRAL, PSY_CENTRAL, 255, 0, 0, points,
+                        0);
+                        psy_draw_all_db();
+                        psy_add_text_rgb_db(mainfont, 100, -100, PSY_CENTRAL, PSY_CENTRAL, 255, 255, 255,
+                            "cents remaining!", 0);
+                        psy_draw_all_db();
+                        psy_add_text_rgb_db(mainfont, 0, 70, PSY_CENTRAL, PSY_CENTRAL, 255, 255, 255,
+                            "Now, you are entering a different coop with 2 new chickens.", 0);
+                        psy_draw_all_db();
+                        psy_add_text_rgb_db(mainfont, 0, 110, PSY_CENTRAL, PSY_CENTRAL, 255, 255, 255,
+                            "These chickens may lay their eggs in a different pattern than the last two.", 0
+                            );
+                        psy_draw_all_db();
+                        psy_add_text_rgb_db(mainfont, 0, 300, PSY_CENTRAL, PSY_CENTRAL, 255, 255, 255,
+                            "Press the Spacebar to continue", 0);
+                        psy_draw_all_db();
+                        psy_keyboard(possiblekeys, 3, 3 - 1, 999999);
+                        break;
                     case 11:
                         task_triangle.step++;
-                        psy_add_centered_bitmap_db(background_sigma_110, PSY_CENTRAL, PSY_CENTRAL, 0);
-                        psy_draw_all_db();
-                        task_triangle.run();
-                        break;
-                    case 12:
-                        task_triangle.step++;
-                        if (!(myTable[tablerow].c2 == 2)) {
+                        if (!(keystatus.status != 1)) {
                             task_triangle.step = 14
                         };
                         setTimeout("task_triangle.run()", 0);
                         break;
+                    case 12:
+                        task_triangle.step++;
+                        psy_keyboard(possiblekeys, 3, 3 - 1, 999999);
+                        break;
                     case 13:
                         task_triangle.step++;
-                        psy_add_centered_bitmap_db(background_sigma_160, PSY_CENTRAL, PSY_CENTRAL, 0);
-                        psy_draw_all_db();
+                        task_triangle.step = 11;
                         task_triangle.run();
                         break;
                     case 14:
                         task_triangle.step++;
-                        if (!(myTable[tablerow].c2 == 4)) {
-                            task_triangle.step = 16
-                        };
-                        setTimeout("task_triangle.run()", 0);
-                        break;
-                    case 15:
-                        task_triangle.step++;
-                        psy_add_centered_bitmap_db(background_sigma_160, PSY_CENTRAL, PSY_CENTRAL, 0);
+                        psy_clear_stimuli1(-1);
+                        psy_draw_all_db();
+                        psy_clear_stimuli1(-2);
+                        psy_draw_all_db();
+                        psy_clear_stimuli1(-3);
+                        psy_draw_all_db();
+                        psy_clear_stimuli1(-4);
+                        psy_draw_all_db();
+                        psy_clear_stimuli1(-5);
+                        psy_draw_all_db();
+                        psy_clear_stimuli1(-6);
+                        psy_draw_all_db();
+                        psy_clear_stimuli1(-7);
+                        psy_draw_all_db();
+                        psy_clear_stimuli1(-8);
                         psy_draw_all_db();
                         task_triangle.run();
                         break;
-                    case 16:
+                    case 15:
                         task_triangle.step++;
-                        if (!(myTable[tablerow].c1 == 101)) {
-                            task_triangle.step = 22
-                        };
-                        setTimeout("task_triangle.run()", 0);
-                        break;
-                    case 17:
-                        task_triangle.step++;
-                        psy_add_centered_bitmap_db(background, PSY_CENTRAL, PSY_CENTRAL, 0);
-                        psy_draw_all_db();
-                        psy_add_text_rgb_db(mainfont, 0, -200, PSY_CENTRAL, PSY_CENTRAL, 255, 255, 255,
-                            "Great Job!", 0);
-                        psy_draw_all_db();
-                        psy_add_text_rgb_db(mainfont, -160, -100, PSY_CENTRAL, PSY_CENTRAL, 255, 255, 255,
-                            "You still have ", 0);
-                        psy_draw_all_db();
-                        psy_add_text_rgb_db(mainfont, -40, -100, PSY_CENTRAL, PSY_CENTRAL, 255, 0, 0, points,
-                        0);
-                        psy_draw_all_db();
-                        psy_add_text_rgb_db(mainfont, 100, -100, PSY_CENTRAL, PSY_CENTRAL, 255, 255, 255,
-                            "cents remaining!", 0);
-                        psy_draw_all_db();
-                        psy_add_text_rgb_db(mainfont, 0, 70, PSY_CENTRAL, PSY_CENTRAL, 255, 255, 255,
-                            "Now, you are entering a different coop with 2 new chickens.", 0);
-                        psy_draw_all_db();
-                        psy_add_text_rgb_db(mainfont, 0, 110, PSY_CENTRAL, PSY_CENTRAL, 255, 255, 255,
-                            "These chickens may lay their eggs in a different pattern than the last two.", 0
-                            );
-                        psy_draw_all_db();
-                        psy_add_text_rgb_db(mainfont, 0, 300, PSY_CENTRAL, PSY_CENTRAL, 255, 255, 255,
-                            "Press the Spacebar to continue", 0);
-                        psy_draw_all_db();
-                        psy_keyboard(possiblekeys, 3, 3 - 1, 999999);
-                        break;
-                    case 18:
-                        task_triangle.step++;
-                        if (!(keystatus.status != 1)) {
+                        if (!(myTable[tablerow].c1 == 201)) {
                             task_triangle.step = 21
                         };
                         setTimeout("task_triangle.run()", 0);
                         break;
-                    case 19:
+                    case 16:
+                        task_triangle.step++;
+                        psy_add_centered_bitmap_db(background, PSY_CENTRAL, PSY_CENTRAL, 0);
+                        psy_draw_all_db();
+                        psy_add_text_rgb_db(mainfont, 0, -200, PSY_CENTRAL, PSY_CENTRAL, 255, 255, 255,
+                            "Great Job!", 0);
+                        psy_draw_all_db();
+                        psy_add_text_rgb_db(mainfont, -160, -100, PSY_CENTRAL, PSY_CENTRAL, 255, 255, 255,
+                            "You still have ", 0);
+                        psy_draw_all_db();
+                        psy_add_text_rgb_db(mainfont, -40, -100, PSY_CENTRAL, PSY_CENTRAL, 255, 0, 0, points,
+                        0);
+                        psy_draw_all_db();
+                        psy_add_text_rgb_db(mainfont, 100, -100, PSY_CENTRAL, PSY_CENTRAL, 255, 255, 255,
+                            "cents remaining!", 0);
+                        psy_draw_all_db();
+                        psy_add_text_rgb_db(mainfont, 0, 70, PSY_CENTRAL, PSY_CENTRAL, 255, 255, 255,
+                            "Now, you are entering a different coop with 2 new chickens.", 0);
+                        psy_draw_all_db();
+                        psy_add_text_rgb_db(mainfont, 0, 110, PSY_CENTRAL, PSY_CENTRAL, 255, 255, 255,
+                            "These chickens may lay their eggs in a different pattern than the last two.", 0
+                            );
+                        psy_draw_all_db();
+                        psy_add_text_rgb_db(mainfont, 0, 300, PSY_CENTRAL, PSY_CENTRAL, 255, 255, 255,
+                            "Press the Spacebar to continue", 0);
+                        psy_draw_all_db();
+                        psy_keyboard(possiblekeys, 3, 3 - 1, 999999);
+                        break;
+                    case 17:
+                        task_triangle.step++;
+                        if (!(keystatus.status != 1)) {
+                            task_triangle.step = 20
+                        };
+                        setTimeout("task_triangle.run()", 0);
+                        break;
+                    case 18:
                         task_triangle.step++;
                         psy_keyboard(possiblekeys, 3, 3 - 1, 999999);
                         break;
+                    case 19:
+                        task_triangle.step++;
+                        task_triangle.step = 17;
+                        task_triangle.run();
+                        break;
                     case 20:
                         task_triangle.step++;
-                        task_triangle.step = 18;
+                        psy_clear_stimuli1(-1);
+                        psy_draw_all_db();
+                        psy_clear_stimuli1(-2);
+                        psy_draw_all_db();
+                        psy_clear_stimuli1(-3);
+                        psy_draw_all_db();
+                        psy_clear_stimuli1(-4);
+                        psy_draw_all_db();
+                        psy_clear_stimuli1(-5);
+                        psy_draw_all_db();
+                        psy_clear_stimuli1(-6);
+                        psy_draw_all_db();
+                        psy_clear_stimuli1(-7);
+                        psy_draw_all_db();
+                        psy_clear_stimuli1(-8);
+                        psy_draw_all_db();
                         task_triangle.run();
                         break;
                     case 21:
                         task_triangle.step++;
-                        psy_clear_stimuli1(-1);
-                        psy_draw_all_db();
-                        psy_clear_stimuli1(-2);
-                        psy_draw_all_db();
-                        psy_clear_stimuli1(-3);
-                        psy_draw_all_db();
-                        psy_clear_stimuli1(-4);
-                        psy_draw_all_db();
-                        psy_clear_stimuli1(-5);
-                        psy_draw_all_db();
-                        psy_clear_stimuli1(-6);
-                        psy_draw_all_db();
-                        psy_clear_stimuli1(-7);
-                        psy_draw_all_db();
-                        psy_clear_stimuli1(-8);
-                        psy_draw_all_db();
-                        task_triangle.run();
-                        break;
-                    case 22:
-                        task_triangle.step++;
-                        if (!(myTable[tablerow].c1 == 201)) {
-                            task_triangle.step = 28
-                        };
-                        setTimeout("task_triangle.run()", 0);
-                        break;
-                    case 23:
-                        task_triangle.step++;
-                        psy_add_centered_bitmap_db(background, PSY_CENTRAL, PSY_CENTRAL, 0);
-                        psy_draw_all_db();
-                        psy_add_text_rgb_db(mainfont, 0, -200, PSY_CENTRAL, PSY_CENTRAL, 255, 255, 255,
-                            "Great Job!", 0);
-                        psy_draw_all_db();
-                        psy_add_text_rgb_db(mainfont, -160, -100, PSY_CENTRAL, PSY_CENTRAL, 255, 255, 255,
-                            "You still have ", 0);
-                        psy_draw_all_db();
-                        psy_add_text_rgb_db(mainfont, -40, -100, PSY_CENTRAL, PSY_CENTRAL, 255, 0, 0, points,
-                        0);
-                        psy_draw_all_db();
-                        psy_add_text_rgb_db(mainfont, 100, -100, PSY_CENTRAL, PSY_CENTRAL, 255, 255, 255,
-                            "cents remaining!", 0);
-                        psy_draw_all_db();
-                        psy_add_text_rgb_db(mainfont, 0, 70, PSY_CENTRAL, PSY_CENTRAL, 255, 255, 255,
-                            "Now, you are entering a different coop with 2 new chickens.", 0);
-                        psy_draw_all_db();
-                        psy_add_text_rgb_db(mainfont, 0, 110, PSY_CENTRAL, PSY_CENTRAL, 255, 255, 255,
-                            "These chickens may lay their eggs in a different pattern than the last two.", 0
-                            );
-                        psy_draw_all_db();
-                        psy_add_text_rgb_db(mainfont, 0, 300, PSY_CENTRAL, PSY_CENTRAL, 255, 255, 255,
-                            "Press the Spacebar to continue", 0);
-                        psy_draw_all_db();
-                        psy_keyboard(possiblekeys, 3, 3 - 1, 999999);
-                        break;
-                    case 24:
-                        task_triangle.step++;
-                        if (!(keystatus.status != 1)) {
+                        if (!(myTable[tablerow].c1 == 301)) {
                             task_triangle.step = 27
                         };
                         setTimeout("task_triangle.run()", 0);
                         break;
-                    case 25:
-                        task_triangle.step++;
-                        psy_keyboard(possiblekeys, 3, 3 - 1, 999999);
-                        break;
-                    case 26:
-                        task_triangle.step++;
-                        task_triangle.step = 24;
-                        task_triangle.run();
-                        break;
-                    case 27:
-                        task_triangle.step++;
-                        psy_clear_stimuli1(-1);
-                        psy_draw_all_db();
-                        psy_clear_stimuli1(-2);
-                        psy_draw_all_db();
-                        psy_clear_stimuli1(-3);
-                        psy_draw_all_db();
-                        psy_clear_stimuli1(-4);
-                        psy_draw_all_db();
-                        psy_clear_stimuli1(-5);
-                        psy_draw_all_db();
-                        psy_clear_stimuli1(-6);
-                        psy_draw_all_db();
-                        psy_clear_stimuli1(-7);
-                        psy_draw_all_db();
-                        psy_clear_stimuli1(-8);
-                        psy_draw_all_db();
-                        task_triangle.run();
-                        break;
-                    case 28:
-                        task_triangle.step++;
-                        if (!(myTable[tablerow].c1 == 301)) {
-                            task_triangle.step = 34
-                        };
-                        setTimeout("task_triangle.run()", 0);
-                        break;
-                    case 29:
+                    case 22:
                         task_triangle.step++;
                         psy_add_centered_bitmap_db(background, PSY_CENTRAL, PSY_CENTRAL, 0);
                         psy_draw_all_db();
@@ -4066,23 +4040,23 @@
                         psy_draw_all_db();
                         psy_keyboard(possiblekeys, 3, 3 - 1, 999999);
                         break;
-                    case 30:
+                    case 23:
                         task_triangle.step++;
                         if (!(keystatus.status != 1)) {
-                            task_triangle.step = 33
+                            task_triangle.step = 26
                         };
                         setTimeout("task_triangle.run()", 0);
                         break;
-                    case 31:
+                    case 24:
                         task_triangle.step++;
                         psy_keyboard(possiblekeys, 3, 3 - 1, 999999);
                         break;
-                    case 32:
+                    case 25:
                         task_triangle.step++;
-                        task_triangle.step = 30;
+                        task_triangle.step = 23;
                         task_triangle.run();
                         break;
-                    case 33:
+                    case 26:
                         task_triangle.step++;
                         psy_clear_stimuli1(-1);
                         psy_draw_all_db();
@@ -4102,18 +4076,18 @@
                         psy_draw_all_db();
                         task_triangle.run();
                         break;
-                    case 34:
+                    case 27:
                         task_triangle.step++;
                         if (!(trialCounter != 1)) {
-                            task_triangle.step = 36
+                            task_triangle.step = 29
                         };
                         setTimeout("task_triangle.run()", 0);
                         break;
-                    case 35:
+                    case 28:
                         task_triangle.step++;
                         task_triangle.run();
                         break;
-                    case 36:
+                    case 29:
                         task_triangle.step++;
                         psy_add_centered_bitmap_db(blue_chicken, -75, 0, 0);
                         psy_draw_all_db();
@@ -4131,179 +4105,181 @@
                             0);
                         psy_draw_all_db();
                         if (!(isPractice == 1)) {
-                            task_triangle.step = 38
+                            task_triangle.step = 31
                         };
                         setTimeout("task_triangle.run()", 0);
                         break;
-                    case 37:
+                    case 30:
                         task_triangle.step++;
                         psy_add_text_rgb_db(mainfont, 50, -375, PSY_CENTRAL, PSY_CENTRAL, 255, 255, 255, "20",
                             0);
                         psy_draw_all_db();
                         task_triangle.run();
                         break;
-                    case 38:
+                    case 31:
                         task_triangle.step++;
                         if (!(isPractice == 0)) {
-                            task_triangle.step = 40
+                            task_triangle.step = 33
                         };
                         setTimeout("task_triangle.run()", 0);
                         break;
-                    case 39:
+                    case 32:
                         task_triangle.step++;
                         psy_add_text_rgb_db(mainfont, 50, -375, PSY_CENTRAL, PSY_CENTRAL, 255, 255, 255, "400",
                             0);
                         psy_draw_all_db();
                         task_triangle.run();
                         break;
-                    case 40:
+                    case 33:
                         task_triangle.step++;
                         previousEggXPosition = myTable[tablerow].c3;
                         previousEggYPosition = myTable[tablerow].c4;
                         if (!(trialCounter != 0)) {
-                            task_triangle.step = 44
+                            task_triangle.step = 37
                         };
                         setTimeout("task_triangle.run()", 0);
+                        break;
+                    case 34:
+                        task_triangle.step++;
+                        if (!(trialCounter != correctTrialShow)) {
+                            task_triangle.step = 36
+                        };
+                        setTimeout("task_triangle.run()", 0);
+                        break;
+                    case 35:
+                        task_triangle.step++;
+                        task_triangle.run();
+                        break;
+                    case 36:
+                        task_triangle.step++;
+                        task_triangle.run();
+                        break;
+                    case 37:
+                        task_triangle.step++;
+                        if (!(trialCounter == correctTrialShow)) {
+                            task_triangle.step = 39
+                        };
+                        setTimeout("task_triangle.run()", 0);
+                        break;
+                    case 38:
+                        task_triangle.step++;
+                        task_triangle.run();
+                        break;
+                    case 39:
+                        task_triangle.step++;
+                        psy_add_centered_bitmap_db(egg_white, myTable[tablerow].c3, myTable[tablerow].c4, 0);
+                        psy_draw_all_db();
+                        psy_delay(250);
+                        break;
+                    case 40:
+                        task_triangle.step++;
+                        psy_clear_stimuli1(-1);
+                        psy_draw_all_db();
+                        psy_delay(250);
                         break;
                     case 41:
                         task_triangle.step++;
-                        if (!(trialCounter != correctTrialShow)) {
-                            task_triangle.step = 43
-                        };
-                        setTimeout("task_triangle.run()", 0);
+                        psy_add_centered_bitmap_db(egg_white, myTable[tablerow].c3, myTable[tablerow].c4, 0);
+                        psy_draw_all_db();
+                        psy_delay(250);
                         break;
                     case 42:
                         task_triangle.step++;
-                        task_triangle.run();
+                        psy_clear_stimuli1(-1);
+                        psy_draw_all_db();
+                        psy_delay(250);
                         break;
                     case 43:
                         task_triangle.step++;
-                        task_triangle.run();
+                        psy_add_centered_bitmap_db(egg_white, myTable[tablerow].c3, myTable[tablerow].c4, 0);
+                        psy_draw_all_db();
+                        psy_delay(250);
                         break;
                     case 44:
                         task_triangle.step++;
-                        if (!(trialCounter == correctTrialShow)) {
-                            task_triangle.step = 46
-                        };
-                        setTimeout("task_triangle.run()", 0);
+                        psy_clear_stimuli1(-1);
+                        psy_draw_all_db();
+                        psy_delay(250);
                         break;
                     case 45:
                         task_triangle.step++;
-                        task_triangle.run();
-                        break;
-                    case 46:
-                        task_triangle.step++;
                         psy_add_centered_bitmap_db(egg_white, myTable[tablerow].c3, myTable[tablerow].c4, 0);
                         psy_draw_all_db();
-                        psy_delay(250);
-                        break;
-                    case 47:
-                        task_triangle.step++;
-                        psy_clear_stimuli1(-1);
-                        psy_draw_all_db();
-                        psy_delay(250);
-                        break;
-                    case 48:
-                        task_triangle.step++;
-                        psy_add_centered_bitmap_db(egg_white, myTable[tablerow].c3, myTable[tablerow].c4, 0);
-                        psy_draw_all_db();
-                        psy_delay(250);
-                        break;
-                    case 49:
-                        task_triangle.step++;
-                        psy_clear_stimuli1(-1);
-                        psy_draw_all_db();
-                        psy_delay(250);
-                        break;
-                    case 50:
-                        task_triangle.step++;
-                        psy_add_centered_bitmap_db(egg_white, myTable[tablerow].c3, myTable[tablerow].c4, 0);
-                        psy_draw_all_db();
-                        psy_delay(250);
-                        break;
-                    case 51:
-                        task_triangle.step++;
-                        psy_clear_stimuli1(-1);
-                        psy_draw_all_db();
-                        psy_delay(250);
-                        break;
-                    case 52:
-                        task_triangle.step++;
                         psy_add_centered_bitmap_db(next_egg_text, 0, 270, 0);
                         psy_draw_all_db();
                         psy_keyboard(possiblekeys, 3, myTable[tablerow].c6 - 1, 9999999);
                         break;
-                    case 53:
+                    case 46:
                         task_triangle.step++;
                         if (!(keystatus.key + 1 == 3)) {
-                            task_triangle.step = 56
+                            task_triangle.step = 49
                         };
                         setTimeout("task_triangle.run()", 0);
                         break;
-                    case 54:
+                    case 47:
                         task_triangle.step++;
                         psy_keyboard(possiblekeys, 3, myTable[tablerow].c6 - 1, 9999999);
                         break;
-                    case 55:
+                    case 48:
                         task_triangle.step++;
-                        task_triangle.step = 53;
+                        task_triangle.step = 46;
                         task_triangle.run();
                         break;
-                    case 56:
+                    case 49:
                         task_triangle.step++;
                         basketXposition = triangle_x_position;
                         if (!(keystatus.status == 1)) {
-                            task_triangle.step = 58
+                            task_triangle.step = 51
                         };
                         setTimeout("task_triangle.run()", 0);
                         break;
-                    case 57:
+                    case 50:
                         task_triangle.step++;
                         trialCorrect = trialCorrect + 1;
                         tbtresponse = 1;
                         task_triangle.run();
                         break;
-                    case 58:
+                    case 51:
                         task_triangle.step++;
                         if (!(keystatus.status != 1)) {
-                            task_triangle.step = 60
+                            task_triangle.step = 53
                         };
                         setTimeout("task_triangle.run()", 0);
                         break;
-                    case 59:
+                    case 52:
                         task_triangle.step++;
                         points = points - 1;
                         trialIncorrect = trialIncorrect + 1;
                         tbtresponse = 0;
                         task_triangle.run();
                         break;
-                    case 60:
+                    case 53:
                         task_triangle.step++;
                         time = psy_time_since_start();
                         correct_map = 0;
                         if (!(keystatus.status == 1)) {
-                            task_triangle.step = 62
+                            task_triangle.step = 55
                         };
                         setTimeout("task_triangle.run()", 0);
                         break;
-                    case 61:
+                    case 54:
                         task_triangle.step++;
                         correct_map = 1;
                         task_triangle.run();
                         break;
-                    case 62:
+                    case 55:
                         task_triangle.step++;
                         if (!(keystatus.status != 1)) {
-                            task_triangle.step = 64
+                            task_triangle.step = 57
                         };
                         setTimeout("task_triangle.run()", 0);
                         break;
-                    case 63:
+                    case 56:
                         task_triangle.step++;
                         correct_map = 0;
                         task_triangle.run();
                         break;
-                    case 64:
+                    case 57:
                         task_triangle.step++;
                         addoutput(current_block.substring(6, current_block.length) + " " + myTable[tablerow]
                             .c1 + " " + myTable[tablerow].c2 + " " + myTable[tablerow].c3 + " " + myTable[
@@ -4313,32 +4289,32 @@
                             left_chicken_y_position + " " + right_chicken_x_position + " " +
                             right_chicken_y_position + " " + give_feedback);
                         if (!(keystatus.key + 1 == 1)) {
-                            task_triangle.step = 66
+                            task_triangle.step = 59
                         };
                         setTimeout("task_triangle.run()", 0);
                         break;
-                    case 65:
+                    case 58:
                         task_triangle.step++;
                         triangle_x_position = -75;
                         psy_add_centered_bitmap_db(white_chicken, triangle_x_position, 0, 0);
                         psy_draw_all_db();
                         task_triangle.run();
                         break;
-                    case 66:
+                    case 59:
                         task_triangle.step++;
                         if (!(keystatus.key + 1 == 2)) {
-                            task_triangle.step = 68
+                            task_triangle.step = 61
                         };
                         setTimeout("task_triangle.run()", 0);
                         break;
-                    case 67:
+                    case 60:
                         task_triangle.step++;
                         triangle_x_position = 75;
                         psy_add_centered_bitmap_db(white_chicken, triangle_x_position, 0, 0);
                         psy_draw_all_db();
                         task_triangle.run();
                         break;
-                    case 68:
+                    case 61:
                         task_triangle.step++;
                         psy_add_centered_bitmap_db(blue_chicken, -75, 0, 0);
                         psy_draw_all_db();
@@ -4348,59 +4324,9 @@
                         psy_draw_all_db();
                         psy_delay(300);
                         break;
-                    case 69:
+                    case 62:
                         task_triangle.step++;
                         trialCounter = trialCounter + 1;
-                        if (!(myTable[tablerow].c1 == 400)) {
-                            task_triangle.step = 75
-                        };
-                        setTimeout("task_triangle.run()", 0);
-                        break;
-                    case 70:
-                        task_triangle.step++;
-                        psy_add_text_rgb_db(mainfont, 0, -200, PSY_CENTRAL, PSY_CENTRAL, 255, 255, 255,
-                            "Thank You!", 0);
-                        psy_draw_all_db();
-                        psy_add_text_rgb_db(mainfont, 0, -100, PSY_CENTRAL, PSY_CENTRAL, 255, 255, 255,
-                            "You have completed this task!", 0);
-                        psy_draw_all_db();
-                        psy_add_text_rgb_db(mainfont, -50, 0, PSY_CENTRAL, PSY_CENTRAL, 255, 255, 255,
-                            "Your Bonus Cents: ", 0);
-                        psy_draw_all_db();
-                        psy_add_text_rgb_db(mainfont, 90, 0, PSY_CENTRAL, PSY_CENTRAL, 255, 255, 255, points,
-                        0);
-                        psy_draw_all_db();
-                        psy_add_text_rgb_db(mainfont, 0, 250, PSY_CENTRAL, PSY_CENTRAL, 255, 255, 255,
-                            "Press space bar of your keyboard to continue", 0);
-                        psy_draw_all_db();
-                        psy_keyboard(possiblekeys, 3, myTable[tablerow].c6 - 1, 9999999);
-                        break;
-                    case 71:
-                        task_triangle.step++;
-                        if (!(keystatus.key + 1 == 3)) {
-                            task_triangle.step = 74
-                        };
-                        setTimeout("task_triangle.run()", 0);
-                        break;
-                    case 72:
-                        task_triangle.step++;
-                        psy_keyboard(possiblekeys, 3, myTable[tablerow].c6 - 1, 9999999);
-                        break;
-                    case 73:
-                        task_triangle.step++;
-                        task_triangle.step = 71;
-                        task_triangle.run();
-                        break;
-                    case 74:
-                        task_triangle.step++;
-                        task_triangle.run();
-                        break;
-                    case 75:
-                        task_triangle.step++;
-                        task_triangle.run();
-                        break;
-                    case 76:
-                        task_triangle.step++;
                         setTimeout(current_block + ".run()", 0);
                         break
                 }
@@ -4736,7 +4662,7 @@
                         error_status = 0;
                         possiblekeys = [32];
                         if (!(quizError != 0)) {
-                            task_quizQ.step = 66
+                            task_quizQ.step = 65
                         };
                         setTimeout("task_quizQ.run()", 0);
                         break;
@@ -5155,35 +5081,29 @@
                         break;
                     case 39:
                         task_quizQ.step++;
-                        psy_add_centered_bitmap_db(exclude_slide, PSY_CENTRAL, PSY_CENTRAL, 0);
+                        psy_add_centered_bitmap_db(slide18, PSY_CENTRAL, PSY_CENTRAL, 0);
                         psy_draw_all_db();
                         psy_keyboard(possiblekeys, 1, 1 - 1, 999999);
                         break;
                     case 40:
                         task_quizQ.step++;
-                        psy_add_centered_bitmap_db(slide18, PSY_CENTRAL, PSY_CENTRAL, 0);
+                        psy_add_centered_bitmap_db(distribution_high, PSY_CENTRAL, PSY_CENTRAL, 0);
                         psy_draw_all_db();
                         psy_keyboard(possiblekeys, 1, 1 - 1, 999999);
                         break;
                     case 41:
                         task_quizQ.step++;
-                        psy_add_centered_bitmap_db(distribution_high, PSY_CENTRAL, PSY_CENTRAL, 0);
+                        psy_add_centered_bitmap_db(point_slide, PSY_CENTRAL, PSY_CENTRAL, 0);
                         psy_draw_all_db();
                         psy_keyboard(possiblekeys, 1, 1 - 1, 999999);
                         break;
                     case 42:
                         task_quizQ.step++;
-                        psy_add_centered_bitmap_db(point_slide, PSY_CENTRAL, PSY_CENTRAL, 0);
-                        psy_draw_all_db();
-                        psy_keyboard(possiblekeys, 1, 1 - 1, 999999);
-                        break;
-                    case 43:
-                        task_quizQ.step++;
                         psy_add_centered_bitmap_db(quizSlide, PSY_CENTRAL, PSY_CENTRAL, 0);
                         psy_draw_all_db();
                         psy_keyboard(possiblekeys, 1, 1 - 1, 999999);
                         break;
-                    case 44:
+                    case 43:
                         task_quizQ.step++;
                         psy_add_centered_bitmap_db(background, PSY_CENTRAL, PSY_CENTRAL, 0);
                         psy_draw_all_db();
@@ -5210,45 +5130,45 @@
                         choose.minselect = 1;
                         choose.maxselect = 1;
                         choose.mouse_select_bitmap = markSymbol;
-                        psy_choose(99999, 81, 85, next, exitbitmap2, 350, 250);
+                        psy_choose(99999, 80, 84, next, exitbitmap2, 350, 250);
                         break;
-                    case 45:
+                    case 44:
                         task_quizQ.step++;
-                        if (!(psy_chosen_objects[1 - 1] != 84)) {
-                            task_quizQ.step = 48
+                        if (!(psy_chosen_objects[1 - 1] != 83)) {
+                            task_quizQ.step = 47
                         };
                         setTimeout("task_quizQ.run()", 0);
                         break;
-                    case 46:
+                    case 45:
                         task_quizQ.step++;
                         psy_add_text_rgb_db(mainfont, 30, 0, PSY_CENTRAL, PSY_CENTRAL, 255, 0, 0,
                             "No, You should pick the NEXT egg", 0);
                         psy_draw_all_db();
                         psy_delay(5e3);
                         break;
-                    case 47:
+                    case 46:
                         task_quizQ.step++;
                         quizError = 1;
                         task_quizQ.run();
                         break;
-                    case 48:
+                    case 47:
                         task_quizQ.step++;
-                        if (!(psy_chosen_objects[1 - 1] == 84)) {
-                            task_quizQ.step = 51
+                        if (!(psy_chosen_objects[1 - 1] == 83)) {
+                            task_quizQ.step = 50
                         };
                         setTimeout("task_quizQ.run()", 0);
                         break;
-                    case 49:
+                    case 48:
                         task_quizQ.step++;
                         psy_add_text_rgb_db(mainfont, 0, 0, PSY_CENTRAL, PSY_CENTRAL, 0, 255, 0, "CORRECT!", 0);
                         psy_draw_all_db();
                         psy_delay(500);
                         break;
-                    case 50:
+                    case 49:
                         task_quizQ.step++;
                         task_quizQ.run();
                         break;
-                    case 51:
+                    case 50:
                         task_quizQ.step++;
                         psy_clear_stimuli1(-1);
                         psy_draw_all_db();
@@ -5282,45 +5202,45 @@
                         choose.minselect = 1;
                         choose.maxselect = 1;
                         choose.mouse_select_bitmap = markSymbol;
-                        psy_choose(99999, 88, 91, next, exitbitmap2, 350, 250);
+                        psy_choose(99999, 87, 90, next, exitbitmap2, 350, 250);
                         break;
-                    case 52:
+                    case 51:
                         task_quizQ.step++;
-                        if (!(psy_chosen_objects[1 - 1] != 88)) {
-                            task_quizQ.step = 55
+                        if (!(psy_chosen_objects[1 - 1] != 87)) {
+                            task_quizQ.step = 54
                         };
                         setTimeout("task_quizQ.run()", 0);
                         break;
-                    case 53:
+                    case 52:
                         task_quizQ.step++;
                         psy_add_text_rgb_db(mainfont, 30, 0, PSY_CENTRAL, PSY_CENTRAL, 255, 0, 0,
                             "No, You will get 0 point for a CORRECT prediction", 0);
                         psy_draw_all_db();
                         psy_delay(5e3);
                         break;
-                    case 54:
+                    case 53:
                         task_quizQ.step++;
                         quizError = 1;
                         task_quizQ.run();
                         break;
-                    case 55:
+                    case 54:
                         task_quizQ.step++;
-                        if (!(psy_chosen_objects[1 - 1] == 88)) {
-                            task_quizQ.step = 58
+                        if (!(psy_chosen_objects[1 - 1] == 87)) {
+                            task_quizQ.step = 57
                         };
                         setTimeout("task_quizQ.run()", 0);
                         break;
-                    case 56:
+                    case 55:
                         task_quizQ.step++;
                         psy_add_text_rgb_db(mainfont, 0, 0, PSY_CENTRAL, PSY_CENTRAL, 0, 255, 0, "CORRECT!", 0);
                         psy_draw_all_db();
                         psy_delay(500);
                         break;
-                    case 57:
+                    case 56:
                         task_quizQ.step++;
                         task_quizQ.run();
                         break;
-                    case 58:
+                    case 57:
                         task_quizQ.step++;
                         psy_clear_stimuli1(-1);
                         psy_draw_all_db();
@@ -5352,39 +5272,43 @@
                         choose.minselect = 1;
                         choose.maxselect = 1;
                         choose.mouse_select_bitmap = markSymbol;
-                        psy_choose(99999, 94, 97, next, exitbitmap2, 350, 250);
+                        psy_choose(99999, 93, 96, next, exitbitmap2, 350, 250);
                         break;
-                    case 59:
+                    case 58:
                         task_quizQ.step++;
-                        if (!(psy_chosen_objects[1 - 1] != 94)) {
-                            task_quizQ.step = 62
+                        if (!(psy_chosen_objects[1 - 1] != 93)) {
+                            task_quizQ.step = 61
                         };
                         setTimeout("task_quizQ.run()", 0);
                         break;
-                    case 60:
+                    case 59:
                         task_quizQ.step++;
                         psy_add_text_rgb_db(mainfont, 30, 0, PSY_CENTRAL, PSY_CENTRAL, 255, 0, 0,
                             "No, you will lose 1 point for an INCORRECT prediction", 0);
                         psy_draw_all_db();
                         psy_delay(5e3);
                         break;
-                    case 61:
+                    case 60:
                         task_quizQ.step++;
                         quizError = 1;
                         task_quizQ.run();
                         break;
-                    case 62:
+                    case 61:
                         task_quizQ.step++;
-                        if (!(psy_chosen_objects[1 - 1] == 94)) {
-                            task_quizQ.step = 65
+                        if (!(psy_chosen_objects[1 - 1] == 93)) {
+                            task_quizQ.step = 64
                         };
                         setTimeout("task_quizQ.run()", 0);
                         break;
-                    case 63:
+                    case 62:
                         task_quizQ.step++;
                         psy_add_text_rgb_db(mainfont, 0, 0, PSY_CENTRAL, PSY_CENTRAL, 0, 255, 0, "CORRECT!", 0);
                         psy_draw_all_db();
                         psy_delay(500);
+                        break;
+                    case 63:
+                        task_quizQ.step++;
+                        task_quizQ.run();
                         break;
                     case 64:
                         task_quizQ.step++;
@@ -5392,16 +5316,12 @@
                         break;
                     case 65:
                         task_quizQ.step++;
-                        task_quizQ.run();
-                        break;
-                    case 66:
-                        task_quizQ.step++;
                         if (!(quizError == 1)) {
-                            task_quizQ.step = 69
+                            task_quizQ.step = 68
                         };
                         setTimeout("task_quizQ.run()", 0);
                         break;
-                    case 67:
+                    case 66:
                         task_quizQ.step++;
                         psy_add_centered_bitmap_db(background, PSY_CENTRAL, PSY_CENTRAL, 0);
                         psy_draw_all_db();
@@ -5413,11 +5333,11 @@
                         psy_draw_all_db();
                         psy_delay(4e3);
                         break;
-                    case 68:
+                    case 67:
                         task_quizQ.step++;
                         task_quizQ.run();
                         break;
-                    case 69:
+                    case 68:
                         task_quizQ.step++;
                         setTimeout(current_block + ".run()", 0);
                         break
@@ -5780,6 +5700,21 @@
                     case 14:
                         block_practice1.step++;
                         psy_clear_screen_db();
+                        psy_add_text_rgb_db(0, 0, 70, PSY_CENTRAL, PSY_CENTRAL, 255, 255, 255,
+                            "Now, you are entering a different coop with 2 new chickens.", 0);
+                        psy_draw_all_db();
+                        psy_add_text_rgb_db(0, 0, 110, PSY_CENTRAL, PSY_CENTRAL, 255, 255, 255,
+                            "These chickens may lay their eggs in a different pattern than the last two.", 0
+                            );
+                        psy_draw_all_db();
+                        psy_add_text_rgb_db(0, 0, 250, PSY_CENTRAL, PSY_CENTRAL, 255, 255, 255,
+                            "Press space bar of your keyboard to continue", 0);
+                        psy_draw_all_db();
+                        psy_wait(0, 32);
+                        break;
+                    case 15:
+                        block_practice1.step++;
+                        psy_clear_screen_db();
                         setTimeout("blocks" + psy_blockorder + ".run()", 0);
                         break
                 }
@@ -5890,6 +5825,20 @@
                     case 14:
                         block_practice2.step++;
                         psy_clear_screen_db();
+                        psy_add_text_rgb_db(0, 0, 0, PSY_CENTRAL, PSY_CENTRAL, 255, 255, 255,
+                            "Great Job! Looks like you got the hang of it.", 0);
+                        psy_draw_all_db();
+                        psy_add_text_rgb_db(0, 0, 200, PSY_CENTRAL, PSY_CENTRAL, 255, 255, 255,
+                            "You will now begin the real session!", 0);
+                        psy_draw_all_db();
+                        psy_add_text_rgb_db(0, 0, 250, PSY_CENTRAL, PSY_CENTRAL, 255, 255, 255,
+                            "Press space bar of your keyboard to continue", 0);
+                        psy_draw_all_db();
+                        psy_wait(0, 32);
+                        break;
+                    case 15:
+                        block_practice2.step++;
+                        psy_clear_screen_db();
                         setTimeout("blocks" + psy_blockorder + ".run()", 0);
                         break
                 }
@@ -5977,6 +5926,26 @@
                         }
                         break;
                     case 10:
+                        block_main.step++;
+                        psy_clear_screen_db();
+                        psy_add_text_rgb_db(0, 0, -200, PSY_CENTRAL, PSY_CENTRAL, 255, 255, 255, "Thank You!",
+                            0);
+                        psy_draw_all_db();
+                        psy_add_text_rgb_db(0, 0, -100, PSY_CENTRAL, PSY_CENTRAL, 255, 255, 255,
+                            "You have completed this task!", 0);
+                        psy_draw_all_db();
+                        psy_add_text_rgb_db(0, -50, 0, PSY_CENTRAL, PSY_CENTRAL, 255, 255, 255,
+                            "Your Bonus Cents: ", 0);
+                        psy_draw_all_db();
+                        tmptext = "" + points + "";
+                        psy_add_text_rgb_db(0, 90, 0, PSY_CENTRAL, PSY_CENTRAL, 255, 255, 255, tmptext, 0);
+                        psy_draw_all_db();
+                        psy_add_text_rgb_db(0, 0, 250, PSY_CENTRAL, PSY_CENTRAL, 255, 255, 255,
+                            "Press space bar of your keyboard to continue", 0);
+                        psy_draw_all_db();
+                        psy_wait(0, 32);
+                        break;
+                    case 11:
                         block_main.step++;
                         psy_clear_screen_db();
                         setTimeout("blocks" + psy_blockorder + ".run()", 0);
@@ -6285,9 +6254,6 @@
             psy_load_bitmap("http://brainworkout.paulus.libr.net/images/chicken_media/check.png");
             psy_load_bitmap("http://brainworkout.paulus.libr.net/images/chicken_media/error.png");
             psy_load_bitmap("http://brainworkout.paulus.libr.net/images/chicken_media/next_egg_text.png");
-            psy_load_bitmap(
-                "http://brainworkout.paulus.libr.net/images/chicken_media/instructions/Task_Instructions_yb/exclude.png"
-                );
             when_stimuli_loaded_do("blocks" + psy_blockorder + ".run()")
         }
         var blocks1 = {

@@ -133,13 +133,13 @@ module.exports = {
 				//listing all files using forEach
 				files.forEach(function (file) {
 					// Do whatever you want to do with the file
-					console.log(file)
+					// console.log(file)
 					points = getChickenTaskScore(path.join(directoryPath, file))['points']
 					mturkid = file.split('-')[2]
 					session = file.split('-')[3]
 
 					// Skipu undefined variables
-					if ((typeof mturkid == 'undefined') || (typeof points == 'undefined')) {
+					if ((typeof mturkid == 'undefined') || (typeof points == 'undefined') || (points == '0')) {
 						return;
 					}
 
@@ -151,7 +151,7 @@ module.exports = {
 					scores.push(user)
 					
 				});
-				console.log(scores)
+				// console.log(scores)
 				res.send(scores)
 			});
 			
@@ -441,13 +441,14 @@ function insertNewData(fields,con, response){
 			} else {
 				// Success
 				patternsUses = result[0]
-				console.log(patternsUses)
+				// console.log(patternsUses)
 				
 				// infinite loop
+				console.log('Getting Random Pattern')
 				while(true){
-					var randomNum = getRandomInt(1, 4)// generate a new random number from 1 to 4
+					var randomNum = getRandomInt(1, 5)// generate a new random number from 1 to 4
 
-					console.log(randomNum)
+					// console.log(randomNum)
 
 					if( parseInt(patternsUses['1']) >= 25 && parseInt(patternsUses['2']) >= 25  && parseInt(patternsUses['3']) >= 25 && parseInt(patternsUses['4']) >= 25){
 						patternVersion = 2
@@ -551,7 +552,6 @@ function insertNewData(fields,con, response){
 }
 
 // Send the user to the survey or task that they have not completed yet
-// This function isn't used at the moment... 
 // reroute is done client side
 function reRoute(con,mkturk_id,response){
 
@@ -970,7 +970,7 @@ function getChickenTaskScore(filename) {
         }
     }
     returnJSON['avg_rt'] = returnJSON['avg_rt'] / 400
-    console.log(returnJSON)
+    // console.log(returnJSON)
     return (returnJSON)
 }
 
