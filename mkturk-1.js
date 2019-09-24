@@ -197,6 +197,22 @@ app.get('/completed', function(req, res) {
     displayCompleted(res);
 });
 
+app.get('/completedHIT', function(req, res) {
+    var q = url.parse(req.url, true).query;
+    var session = q.session;
+    var mkturk_id = q.mkturk_id;
+
+    fs.readFile('completedHIT.html', function(err, data) {
+        // Write Header
+        res.writeHead(200, {
+            'Content-Type': 'text/html'
+        });
+        // Wrte Body
+        res.write(data);
+        res.end();
+    });
+});
+
 
 // Page of all Task
 app.get('/list', function(req, res) {
@@ -408,7 +424,7 @@ app.post('/saveSurvey/', function(req, res) {
     //csv.write('surveys/data/' + survey +'-' + mkturk_id + '-T' + session + '.csv', req.body, {header: 'question'});
 
     // Upload to Cloudinary
-    uploadToCloudinary(filename);
+    // uploadToCloudinary(filename);
 
 
     // Update the Status Table in SQL
@@ -467,7 +483,7 @@ app.post('/saveDPTask/', function(req, res) {
     // add Time Ready so that the ready time initiates once Task1 has been completed
     addTimeReady(mkturk_id, study);
     // upload to cloudinary
-    uploadToCloudinary(filename);
+    // uploadToCloudinary(filename);
 
     res.send('Got the Data')
 
@@ -657,7 +673,7 @@ app.post('/saveChickenTask/', function(req, res) {
 
     // Send Emails
     // // Send the Code by Email if they Include it
-    sendEmails(mkturk_id, session, study);
+    sendEmails(mkturk_id, session, study, advance);
 
 
     var response = {
@@ -1001,6 +1017,7 @@ app.get('/getScores', (req, res) => {
     }
     res.send(jsonReturn);
 })
+
 
 
 // 404 Page
@@ -2276,14 +2293,14 @@ function uploadToCloudinary(file) {
 }
 
 
-function sendEmails(mkturk_id, session, study) {
+function sendEmails(mkturk_id, session, study, advance) {
 
     if (study == "wave2") {
         wave2.sendEmails(mkturk_id, session, study);
         return
     }
     if (study == "wave3") {
-        wave3.sendEmails(mkturk_id, session, study);
+        wave3.sendEmails(mkturk_id, session, study, advance);
         return
     }
 

@@ -238,7 +238,7 @@ module.exports = {
 			}
 		});
 	},
-	sendEmails : function(mkturk_id, session, study) {
+	sendEmails : function(mkturk_id, session, study, advance) {
 		if (session == '2'){
 			console.log('sending code to ' + mkturk_id);
 			// If they gave an email addres, than we WILL email them the code
@@ -246,7 +246,8 @@ module.exports = {
 			//res.writeHead(301,{Location : '/completed?&mkturk_id=' + mkturk_id});
 			//res.end();
 
-		} else if (session == '1'){
+		} else if (session == '1' && advance) {
+			console.log('sending email reminder to mailgun')
 			// redirect them to the tooearly page
 			// send Email if the subject gave email and marked the remind checkbox
 			sendEmailRemind(mkturk_id, 30,study);
@@ -572,6 +573,11 @@ function reRoute(con,mkturk_id,response){
 		"WHERE subjects.mkturk_id = ?", [mkturk_id])
 	
 	console.log(sql);
+	if (alreadyCompleted(mkturk_id)) {
+		console.log(`already completed HIT ${mkturk_id}`)
+		response.writeHead(301,{Location : '/completedHIT'});
+		response.end();
+	}
 
 	//response.redirect('/?mkturk_id=JT&survey=demo&session=1');
 
@@ -654,7 +660,7 @@ function reRoute(con,mkturk_id,response){
 		  			response.writeHead(301,{Location : '/tooearly?study=wave3&mkturk_id=' + mkturk_id + '&timeleft=' + val });
 					response.end();
 					break;
-		  		}else if (job == 'task' && session == '2') {
+		  		} else if (job == 'task' && session == '2') {
 
 		  			console.log('did all session 1 and 2!');
 				  	response.writeHead(301,{Location : '/completed?study=wave3&mkturk_id=' + mkturk_id });
@@ -696,6 +702,35 @@ function isReady(dateString){
 	} else {
 		return false;
 	}
+}
+
+// Return True if the subject already completed this HIT
+function alreadyCompleted(id) {
+	const directoryPath = path.join('data', 'wave3', 'tasks');
+
+	// If there is T2 ct data , then subject already did this HIT
+	if (fs.existsSync(path.join(directoryPath, 'wave3-CT-' + id + '-T2.csv' ))) {
+		//file exists
+		return true;
+	}
+
+	// if there is T1 ct data and did bad on practce, than subject already did this HIT
+	t1_filename = path.join(directoryPath, 'wave3-CT-' + id + '-T1.csv' )
+	if (fs.existsSync(t1_filename)) {
+		//file exists
+		score = getChickenTaskScore(t1_filename)['points']
+		if (parseInt(score) > 0) {
+			
+			return false;
+		} else {
+			console.log(`got exclude , points is ${score}`)
+			return true;
+		}
+
+		return true;
+	}
+
+	return false;
 }
 
 // Function that adds the record to dp_status table
