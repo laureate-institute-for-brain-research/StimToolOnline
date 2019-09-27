@@ -6306,7 +6306,7 @@
                         break;
                     case 5:
                         psy_exit_fullscreen();
-                        postData(toCSV(outputdata), session, mkturkid, task);
+                        postData(toCSV(outputdata), session, mkturkid, task,0);
                         break
                 }
             }
@@ -6349,7 +6349,7 @@
         }
 
 
-        function postData(data, session, mkturkid, task) {
+        function postData(data, session, mkturkid, task,errorCount) {
             $("#loader").show()
             $.ajax({
                 type: 'POST',
@@ -6361,6 +6361,12 @@
                 }), // or JSON.stringify ({name: 'jonas'}),
                 success: function (data) {
                     showEnd()
+                },
+                error: function(data){
+                    // Attempt to send data 3 times
+                    if (errorCount < 3){
+                        postData(data, session, mkturkid, task, errorCount++)
+                    }
                 },
                 contentType: "application/json",
                 dataType: 'json'
