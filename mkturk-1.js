@@ -650,12 +650,9 @@ app.post('/saveChickenTask/', function(req, res) {
         // })
 
     });
-
-    advance = true // advance if it's not a first session
         // add Time Ready on session 1 only o that the ready time initiates once Task1 has been completed
     if (session == '1') {
         addTimeReady(mkturk_id, study);
-        advance = advanceAfterPractice(data.content)
     }
 
 
@@ -675,16 +672,11 @@ app.post('/saveChickenTask/', function(req, res) {
     // // Send the Code by Email if they Include it
     sendEmails(mkturk_id, session, study, advance);
 
-
-    var response = {
+    res.send(JSON.stringify({
         status: 200,
         success: 'Chicken Task Data Saved Data Saved',
-        advance: advance
-    }
-
-    console.log(response)
-
-    res.send(JSON.stringify(response))
+        advance: advanceAfterPractice(data.content)
+    }))
 });
 
 
