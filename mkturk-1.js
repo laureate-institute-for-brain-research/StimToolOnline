@@ -650,9 +650,12 @@ app.post('/saveChickenTask/', function(req, res) {
         // })
 
     });
+
+    advance = true // advance if it's not a first session
         // add Time Ready on session 1 only o that the ready time initiates once Task1 has been completed
     if (session == '1') {
         addTimeReady(mkturk_id, study);
+        // advance = advanceAfterPractice(data.content)
     }
 
 
@@ -671,6 +674,11 @@ app.post('/saveChickenTask/', function(req, res) {
     // Send Emails
     // // Send the Code by Email if they Include it
     sendEmails(mkturk_id, session, study, advance);
+
+
+    var response = 
+
+    console.log(response)
 
     res.send(JSON.stringify({
         status: 200,
@@ -1056,26 +1064,35 @@ function getChickenTaskScore(filename) {
  */
 function advanceAfterPractice(ctcontent) {
     // console.log(ctcontent)
-    lines = ctcontent.split('\n')
-    practice1Point = 20
-    practice2Point = 20
-    for (var i = 0; i < lines.length; i++) {
-        cols = lines[i].split(',')
+    try {
+        
+        lines = ctcontent.split('\n')
+        practice1Point = 20
+        practice2Point = 20
+        for (var i = 0; i < lines.length; i++) {
+            cols = lines[i].split(',')
 
-        if (cols[0] == 'practice1') {
-            practice1Point = cols[11]
+            if (cols[0] == 'practice1') {
+                practice1Point = cols[11]
+            }
+            if (cols[0] == 'practice2') {
+                practice2Point = cols[11]
+            }
         }
-        if (cols[0] == 'practice2') {
-            practice2Point = cols[11]
-        }
-    }
 
-    // If They got less than 13 for either practice blocks, then did did poorlay
-    if ((parseInt(practice1Point) < 13) || (parseInt(practice2Point) < 13)) {
+        // If They got less than 13 for either practice blocks, then did did poorlay
+        if ((parseInt(practice1Point) < 13) || (parseInt(practice2Point) < 13)) {
+            return false
+        } else {
+            return true
+        }
+    } catch (err) {
+        // Given Data
+        console.log(ctcontent)
+        console.log(err)
         return false
-    } else {
-        return true
-    }
+      }
+    
 }
 
 
