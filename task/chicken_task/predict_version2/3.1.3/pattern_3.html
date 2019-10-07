@@ -6361,8 +6361,8 @@
                 data: JSON.stringify({
                     content: data
                 }), // or JSON.stringify ({name: 'jonas'}),
-                success: function (data) {
-                    showEnd()
+                success: function (result) {
+                    showEnd(result)
                 },
                 error: function(data){
                     // Attempt to send data 3 times

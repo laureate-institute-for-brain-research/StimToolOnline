@@ -651,7 +651,6 @@ app.post('/saveChickenTask/', function(req, res) {
 
     });
 
-    advance = true // advance if it's not a first session
         // add Time Ready on session 1 only o that the ready time initiates once Task1 has been completed
     if (session == '1') {
         addTimeReady(mkturk_id, study);
@@ -673,10 +672,7 @@ app.post('/saveChickenTask/', function(req, res) {
 
     // Send Emails
     // // Send the Code by Email if they Include it
-    sendEmails(mkturk_id, session, study, advance);
-
-
-    var response = 
+    sendEmails(mkturk_id, session, study, advanceAfterPractice(data.content));
 
     console.log(response)
 
