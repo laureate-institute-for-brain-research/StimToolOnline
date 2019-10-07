@@ -6364,7 +6364,7 @@
                 success: function (result) {
                     showEnd(result)
                 },
-                error: function(data){
+                error: function(result){
                     // Attempt to send data 3 times
                     if (errorCount < 3){
                         postData(data, session, mkturkid, task, errorCount++)
