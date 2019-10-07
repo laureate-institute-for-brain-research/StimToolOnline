@@ -674,13 +674,13 @@ app.post('/saveChickenTask/', function(req, res) {
     // // Send the Code by Email if they Include it
     sendEmails(mkturk_id, session, study, advanceAfterPractice(data.content));
 
-    console.log(response)
-
-    res.send(JSON.stringify({
+    response = {
         status: 200,
         success: 'Chicken Task Data Saved Data Saved',
         advance: advanceAfterPractice(data.content)
-    }))
+    }
+    console.log(response)
+    res.send(JSON.stringify(response))
 });
 
 
@@ -1060,6 +1060,7 @@ function getChickenTaskScore(filename) {
  */
 function advanceAfterPractice(ctcontent) {
     // console.log(ctcontent)
+    if (ctcontent == ""){ return false}
     try {
         
         lines = ctcontent.split('\n')
