@@ -155,6 +155,8 @@ app.get('/', function(req, res) {
     } else if (task == 'gonogo') {
         displayGoNoGo(res, q.version);
 
+    } else if (task == 'horizon') {
+        displayHorizon(res)
     } else if (ctpattern == '0' && task == 'chicken') {
         displayChicken0(res);
     } else if (survey == 'datacamp') {
@@ -1653,6 +1655,17 @@ function displayGoNoGo(res, versionnum) {
     });
 }
 
+function displayHorizon(res) {
+    fs.readFile('task/horizon/index.html', function(err, data) {
+        // Write Header
+        res.writeHead(200, {
+            'Content-Type': 'text/html'
+        });
+        // Wrte Body
+        res.write(data);
+        res.end();
+    });
+}
 function display24HourPage(res) {
     fs.readFile('tooearly.html', function(err, data) {
         // Write Header
