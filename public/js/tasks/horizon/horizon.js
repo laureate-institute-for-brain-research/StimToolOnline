@@ -10,10 +10,26 @@ import * as util from '/lib/util-2020.1.js';
 import * as visual from '/lib/visual-2020.1.js';
 import { Sound } from '/lib/sound-2020.1.js';
 
+var practice = false;
+
+
 // init psychoJS:
 const psychoJS = new PsychoJS({
 	debug: true
 });
+
+
+function getQueryVariable(variable) {
+    var query = window.location.search.substring(1);
+    var vars = query.split('&');
+    for (var i = 0; i < vars.length; i++) {
+        var pair = vars[i].split('=');
+        if (decodeURIComponent(pair[0]) == variable) {
+            return decodeURIComponent(pair[1]);
+        }
+    }
+    return 'NULL'
+}
 
 // open window:
 psychoJS.openWindow({
@@ -57,10 +73,11 @@ dialogCancelScheduler.add(quitPsychoJS, '', false);
 
 // psychoJS.start({expName, expInfo});
 psychoJS.start({
-	expName,
+	expName, 
 	expInfo,
 	resources: [
-		{ name: 'trialTypes.xls', path: 'resources/trialTypes.xls' }
+		{ name: 'game_type.xls', path: '/js/tasks/horizon/game_type.xls' },
+		{ name: 'game_type_practice.xls', path: '/js/tasks/horizon/game_type_practice.xls' }
 	]
 });
 
@@ -84,24 +101,61 @@ function updateInfo() {
 
 	return Scheduler.Event.NEXT;
 }
+var leftColor = '#56B4E9'
+var rightColor = '#E69F00'
+var rect_fillColor = '#009E73'
 
 var instructClock;
 var instrText;
 var ready;
 var trialClock;
 var word;
+
+// Bandit Texts
+var bandits = {
+	'left': {},
+	'right': {}
+}
+var y_pos = [.7,.6,.5,.4,.3,.2,.1,0,-.1,-.2, -.3]
+var bandits_rect = {
+	'left': {},
+	'right': {}
+}
+
+var horizon_map = {
+	'h1': 5,
+	'h6': 10
+}
+
+var bandit_left_up_handle;
+var bandit_left_down_handle;
+var bandit_right_up_handle;
+var bandit_right_down_handle;
+
+
+var currentTrialNumber;
+var gameNumtracker;
+var totalPoints = 0;
+var totalPointsTracker;
+
+
 var resp;
 var thanksClock;
 var thanksText;
 var globalClock;
 var routineTimer;
 function experimentInit() {
+	// Check if there is an practice
+	if (getQueryVariable('practice') == 'true') {
+		practice == true;
+		console.log("PRACTICE SESSION!")
+	}
 	// Initialize components for Routine "instruct"
 	instructClock = new util.Clock();
 	instrText = new visual.TextStim({
 		win: psychoJS.window,
 		name: 'instrText',
-		text: 'Stroop Instructions.\n\nIn this task, you will be presented with names of colors (red, green, and blue) displayed in different colors.\n\nYou must ignore the word itself and focus on the color instead. Press:\nLeft when the word is displayed in red\nDown when it is displayed in green\nRight when it is displayed in blue\n(Esc will abort the experiment)\n\nPress any key to start...',
+		text: 'Horizontal Task Instructions.\n\nIn this experiment we would like you to choose\nbetween two one-armed bandits of the sort you might find in a casino.',
 		font: 'Arial',
 		units: 'height',
 		pos: [0, 0], height: 0.05, wrapWidth: undefined, ori: 0,
@@ -113,6 +167,8 @@ function experimentInit() {
 
 	// Initialize components for Routine "trial"
 	trialClock = new util.Clock();
+
+	// Initial the Text Position of the Band
 	word = new visual.TextStim({
 		win: psychoJS.window,
 		name: 'word',
@@ -123,6 +179,188 @@ function experimentInit() {
 		color: new util.Color('white'), opacity: 1,
 		depth: 0.0
 	});
+
+	bandit_left_up_handle = new visual.ShapeStim({
+		win: psychoJS.window,
+		name: 'left_bandit_handle',
+		opacity: 1,
+		units: 'norm',
+		lineColor: new util.Color(leftColor),
+		fillColor: new util.Color(leftColor),
+		vertices: [
+			[-0.15, .48],
+			[-0.15, .52],
+			[-0.27, .70],
+			[-0.27, .73],
+			[-0.32, .73],
+			[-0.32, .73],
+			[-0.32, .64],
+			[-0.27, .64],
+			[-0.27, .66],
+		],
+		pos: [0,0],
+		closeShape: true,
+		ori: 0,
+		depth: 0
+	})
+
+	bandit_left_down_handle = new visual.ShapeStim({
+		win: psychoJS.window,
+		name: 'left_bandit_handle',
+		opacity: 1,
+		units: 'norm',
+		lineColor: new util.Color(leftColor),
+		fillColor: new util.Color(leftColor),
+		vertices: [
+			[-0.15, .48],
+			[-0.15, .52],
+			[-0.27, .40],
+			[-0.27, .43],
+			[-0.32, .43],
+			[-0.32, .43],
+			[-0.32, .34],
+			[-0.27, .34],
+			[-0.27, .36],
+		],
+		pos: [0,0],
+		closeShape: true,
+		ori: 0,
+		depth: 0
+	})
+
+	bandit_right_up_handle = new visual.ShapeStim({
+		win: psychoJS.window,
+		name: 'right_bandit_handle',
+		opacity: 1,
+		units: 'norm',
+		lineColor: new util.Color(rightColor),
+		fillColor: new util.Color(rightColor),
+		vertices: [
+			[0.15, .48],
+			[0.15, .52],
+			[0.27, .70],
+			[0.27, .73],
+			[0.32, .73],
+			[0.32, .73],
+			[0.32, .64],
+			[0.27, .64],
+			[0.27, .66],
+		],
+		pos: [0,0],
+		closeShape: true,
+		ori: 0,
+		depth: 0
+	})
+
+	bandit_right_down_handle = new visual.ShapeStim({
+		win: psychoJS.window,
+		name: 'right_bandit_handle',
+		opacity: 1,
+		units: 'norm',
+		lineColor: new util.Color(rightColor),
+		fillColor: new util.Color(rightColor),
+		vertices: [
+			[0.15, .48],
+			[0.15, .52],
+			[0.27, .40],
+			[0.27, .43],
+			[0.32, .43],
+			[0.32, .43],
+			[0.32, .34],
+			[0.27, .34],
+			[0.27, .36],
+		],
+		pos: [0,0],
+		closeShape: true,
+		ori: 0,
+		depth: 0
+	})
+
+
+	for (var i = 0; i <= 9; i++){
+		// Init Left textStims
+		bandits['left'][i] = new visual.TextStim({
+			win: psychoJS.window,
+			name: `left_bandit_${i}`,
+			text: 'XX',
+			fontFamily: 'Arial',
+			units: 'norm',
+			pos: [-0.1, y_pos[i]], height: 0.09, wrapWidth: undefined, ori: 0,
+			color: new util.Color('white'), opacity: 1,
+			depth: 0.0
+		});
+		// Init  Right TexStims
+		bandits['right'][i] = new visual.TextStim({
+			win: psychoJS.window,
+			name: `right_bandit_${i}`,
+			text: 'XX',
+			fontFamily: 'Arial',
+			units: 'norm',
+			pos: [0.1, y_pos[i]], height: 0.09, wrapWidth: undefined, ori: 0,
+			color: new util.Color('white'), opacity: 1,
+			depth: 0.0
+		});
+
+		// Rectangle LEFT BANDIT
+		bandits_rect['left'][i] = new visual.Rect({
+			win: psychoJS.window,
+			name: `left_bandit_rect_${i}`,
+			width: 0.09,
+			height: 0.09,
+			lineWidth: 3.5,
+			units: 'norm',
+			pos: [-0.1, y_pos[i] -.1 ], ori: 0,
+			lineColor: new util.Color(leftColor), opacity: 1,
+			depth: 0.0
+		});
+
+		bandits_rect['right'][i] = new visual.Rect({
+			win: psychoJS.window,
+			name: `right_bandit_rect_${i}`,
+			width: 0.09,
+			height: 0.09,
+			lineWidth: 3.5,
+			units: 'norm',
+			pos: [0.1, y_pos[i] -.1], ori: 0,
+			lineColor: new util.Color(rightColor), opacity: 1,
+			depth: 0.0
+		});
+
+	}
+
+	currentTrialNumber  = new visual.TextStim({
+		win: psychoJS.window,
+		name: 'trialTracker',
+		text: 'Trial Number: ',
+		font: 'Arial',
+		units: 'norm',
+		pos: [0, -.7], height: 0.08, wrapWidth: undefined, ori: 0,
+		color: new util.Color('white'), opacity: 1,
+		depth: 0.0
+	});
+
+	gameNumtracker = new visual.TextStim({
+		win: psychoJS.window,
+		name: 'gameTracker',
+		text: '1/80',
+		font: 'Arial',
+		units: 'norm',
+		pos: [0, -.8], height: 0.08, wrapWidth: undefined, ori: 0,
+		color: new util.Color('white'), opacity: 1,
+		depth: 0.0
+	});
+
+	totalPointsTracker = new visual.TextStim({
+		win: psychoJS.window,
+		name: 'pointsTracker',
+		text: 'Total Points: 0',
+		font: 'Arial',
+		units: 'norm',
+		pos: [0, -.9], height: 0.08, wrapWidth: undefined, ori: 0,
+		color: new util.Color('green'), opacity: 1,
+		depth: 0.0
+	});
+
 
 	resp = new core.Keyboard({ psychoJS, clock: new util.Clock(), waitForStart: true });
 
@@ -239,6 +477,24 @@ function instructRoutineEachFrame(trials) {
 }
 
 
+function clearBandits() {
+	for (var i = 0; i <= 9; i++) {
+		// Init Left textStims
+		bandits['left'][i].setAutoDraw(false)
+		bandits['right'][i].setAutoDraw(false)
+		bandits_rect['left'][i].setAutoDraw(false)
+		bandits_rect['right'][i].setAutoDraw(false)
+	}
+}
+
+function clearLevers() {
+	bandit_left_up_handle.setAutoDraw(false)
+	bandit_left_down_handle.setAutoDraw(false)
+
+	bandit_right_up_handle.setAutoDraw(false)
+	bandit_right_down_handle.setAutoDraw(false)
+	
+}
 function instructRoutineEnd(trials) {
 	return function () {
 		//------Ending Routine 'instruct'-------
@@ -256,15 +512,28 @@ function instructRoutineEnd(trials) {
 
 var trials;
 var currentLoop;
+var lastTrialKeyPressed;
 function trialsLoopBegin(thisScheduler) {
-	// set up handler to look after randomisation of conditions etc
-	trials = new TrialHandler({
-		psychoJS: psychoJS,
-		nReps: 2, method: TrialHandler.Method.RANDOM,
-		extraInfo: expInfo, originPath: undefined,
-		trialList: 'trialTypes.xls',
-		seed: undefined, name: 'trials'
-	});
+	// set up handler to look up the conditions
+
+	if (practice) {
+		trials = new TrialHandler({
+			psychoJS: psychoJS,
+			nReps: 1, method: TrialHandler.Method.SEQUENTIAL,
+			extraInfo: expInfo, originPath: undefined,
+			trialList: 'game_type_practice.xls',
+			seed: undefined, name: 'trials'
+		});
+	} else {
+		trials = new TrialHandler({
+			psychoJS: psychoJS,
+			nReps: 1, method: TrialHandler.Method.SEQUENTIAL,
+			extraInfo: expInfo, originPath: undefined,
+			trialList: 'game_type.xls',
+			seed: undefined, name: 'trials'
+		});
+	}
+	
 	psychoJS.experiment.addLoop(trials); // add the loop to the experiment
 	currentLoop = trials;  // we're now the current loop
 
@@ -290,6 +559,9 @@ function trialsLoopEnd() {
 }
 
 var trialComponents;
+var lastGameNumber;
+var lastTrial;
+var lastTrialPoints = 0;
 function trialRoutineBegin(trials) {
 	return function () {
 		//------Prepare to start Routine 'trial'-------
@@ -297,13 +569,34 @@ function trialRoutineBegin(trials) {
 		trialClock.reset(); // clock
 		frameN = -1;
 		// update component parameters for each repeat
-		word.setColor(new util.Color(letterColor));
-		word.setText(text);
+		// word.setColor(new util.Color(letterColor));
+
+		// If it's a new game, clear other texts
+		if (game_number != lastGameNumber) {
+			lastTrialKeyPressed = false;
+			bandits_rect['right'][trial_num].fillColor = false
+			bandits_rect['left'][trial_num].fillColor = false
+			clearBandits()
+		}
+
+		// Set components from last trial
+		
+
+		if (lastTrialKeyPressed) {
+			bandits_rect['right'][trial_num].fillColor = false
+			bandits_rect['left'][trial_num].fillColor = false
+		}
+		
+		currentTrialNumber.setText(`Trial Number: ${trial_num}`)
+		gameNumtracker.setText(`${game_number}/80`)
+		totalPointsTracker.setText(`Total Points: ${totalPoints}`)
+	
 		resp.keys = undefined;
 		resp.rt = undefined;
 		// keep track of which components have finished
 		trialComponents = [];
-		trialComponents.push(word);
+		// trialComponents.push(bandits['left'][trial_num]);
+		// trialComponents.push(left_bandit_0);
 		trialComponents.push(resp);
 
 		for (const thisComponent of trialComponents)
@@ -314,24 +607,99 @@ function trialRoutineBegin(trials) {
 	};
 }
 
+/**
+ * Returns true if this is the last trial
+ * @param {*} game_type 
+ * @param {*} trial_num 
+ */
+function isLastTrial(game_type, trial_num) {
+	if (game_type == 'h1' && trial_num == 4) return true
+	if (game_type == 'h6' && trial_num == 9) return true
+	return false
+}
 
+var showLastTrial;
+var time_continue;
+var now;
 function trialRoutineEachFrame(trials) {
 	return function () {
 		//------Loop for each frame of Routine 'trial'-------
 		let continueRoutine = true; // until we're told otherwise
+	
 		// get current time
 		t = trialClock.getTime();
 		frameN = frameN + 1;// number of completed frames (so 0 is the first frame)
-		// update/draw components on each frame
 
-		// *word* updates
-		if (t >= 0.5 && word.status === PsychoJS.Status.NOT_STARTED) {
+
+		// update/draw components on each frame
+		if (t >= 0.3) {
 			// keep track of start time/frame for later
-			word.tStart = t;  // (not accounting for frame time here)
-			word.frameNStart = frameN;  // exact frame index
-			word.setAutoDraw(true);
+			// word.tStart = t;  // (not accounting for frame time here)
+			// word.frameNStart = frameN;  // exact frame index
+			// word.setAutoDraw(true);
+
+		
+			
+			
+			for (var i = 0; i < horizon_map[game_type]; i++){
+				bandits_rect['left'][i].setAutoDraw(true)
+				bandits_rect['right'][i].setAutoDraw(true)
+			}
+
+			// Show only last Trials
+			for (var i = 0; i < trial_num; i++){
+				bandits['left'][i].setAutoDraw(true)
+				// Init  Right TexStims
+				bandits['right'][i].setAutoDraw(true)
+			}
+		
+			if (showLastTrial) {
+				bandits['left'][trial_num].setAutoDraw(true)
+				// Init  Right TexStims
+				bandits['right'][trial_num].setAutoDraw(true)
+				bandits_rect['right'][trial_num].fillColor = false
+				bandits_rect['left'][trial_num].fillColor = false
+
+				
+				if (trialClock.getTime() >= time_continue) {
+					showLastTrial = false
+					return Scheduler.Event.NEXT;
+				}
+		
+			}
+
+			// make sure the hanlds are down at the start of the trial
+			bandit_left_down_handle.setAutoDraw(false) 
+			bandit_right_down_handle.setAutoDraw(false)
+			
+			if (!showLastTrial) {
+				switch (force_pos) {
+					case 'R':
+						bandits_rect['right'][trial_num].fillColor = new util.Color(rect_fillColor)
+						break;
+					case 'L':
+						bandits_rect['left'][trial_num].fillColor = new util.Color(rect_fillColor)
+						break;
+					case 'X':
+						// Show both
+						bandits_rect['right'][trial_num].fillColor = new util.Color(rect_fillColor)
+						bandits_rect['left'][trial_num].fillColor = new util.Color(rect_fillColor)
+					default:
+					
+				}
+			}
+			
+			
+			bandit_left_up_handle.setAutoDraw(true)
+			bandit_right_up_handle.setAutoDraw(true)
+
+			currentTrialNumber.setAutoDraw(true)
+			// Draw the Tracker and Points Counter
+			gameNumtracker.setAutoDraw(true)
+			totalPointsTracker.setAutoDraw(true)
 		}
 
+		
 
 		// *resp* updates
 		if (t >= 0.5 && resp.status === PsychoJS.Status.NOT_STARTED) {
@@ -346,19 +714,64 @@ function trialRoutineEachFrame(trials) {
 		}
 
 		if (resp.status === PsychoJS.Status.STARTED) {
-			let theseKeys = resp.getKeys({ keyList: ['left', 'down', 'right'], waitRelease: false });
+			var keyList = []
+			switch (force_pos) {
+				case 'R':
+					keyList = ['right']
+					break;
+				case 'L':
+					keyList = ['left']
+					break;
+				case 'X':
+					keyList = ['left', 'right']
+				default:
+					keyList = ['left', 'right']
+			}
+			
+			
+			
+			let theseKeys = resp.getKeys({ keyList: keyList, waitRelease: false });
 
+			// After key is pressed, go to next routine
 			if (theseKeys.length > 0) {  // at least one key was pressed
 				resp.keys = theseKeys[0].name;  // just the last key pressed
 				resp.rt = theseKeys[0].rt;
-				// was this correct?
-				if (resp.keys == corrAns) {
-					resp.corr = 1;
-				} else {
-					resp.corr = 0;
+
+				lastTrialKeyPressed = resp.keys; // store the value globally
+				
+				if (resp.keys == 'left') {
+					bandits['left'][trial_num].setText(left_reward) 
+					// Set the other bandit as XX
+					bandits['right'][trial_num].setText('XX')
+					totalPoints = totalPoints + left_reward
+
+					// Animation for left Lever
+					bandit_left_up_handle.setAutoDraw(false)
+					bandit_left_down_handle.setAutoDraw(true)
 				}
-				// a response ends the routine
-				continueRoutine = false;
+				if (resp.keys == 'right') {
+					bandits['right'][trial_num].setText(right_reward) 
+					bandits['left'][trial_num].setText('XX')
+					totalPoints = totalPoints + right_reward
+
+					// Animatino for right lever
+					bandit_right_up_handle.setAutoDraw(false)
+					bandit_right_down_handle.setAutoDraw(true)
+				}
+				
+				// If it's the last trial, hang here for a second to show points
+				if (isLastTrial(game_type, trial_num)){
+					// wait a second
+					showLastTrial = true;
+					now = trialClock.getTime();
+					time_continue =  now + 1 // 1 second to show points then continue
+					
+				} else {
+					continueRoutine = false;
+					time_continue = 999999
+				}
+				
+				
 			}
 		}
 
@@ -372,7 +785,6 @@ function trialRoutineEachFrame(trials) {
 			return Scheduler.Event.NEXT;
 		}
 
-		continueRoutine = false;  // reverts to True if at least one component still running
 		for (const thisComponent of trialComponents)
 			if ('status' in thisComponent && thisComponent.status !== PsychoJS.Status.FINISHED) {
 				continueRoutine = true;
@@ -393,40 +805,58 @@ function trialRoutineEachFrame(trials) {
 function trialRoutineEnd(trials) {
 	return function () {
 		//------Ending Routine 'trial'-------
-		for (const thisComponent of trialComponents) {
-			if (typeof thisComponent.setAutoDraw === 'function') {
-				thisComponent.setAutoDraw(false);
-			}
+
+		if (resp.keys == 'left') {
+			
+			lastTrialPoints = left_reward
+
+		}
+		if (resp.keys == 'right') {
+			
+
+			lastTrialPoints = right_reward
 		}
 
+		lastGameNumber = game_number
+
 		// was no response the correct answer?!
-		if (resp.keys === undefined) {
-			if (['None', 'none', undefined].includes(corrAns)) {
-				resp.corr = 1;  // correct non-response
-			} else {
-				resp.corr = 0;  // failed to respond (incorrectly)
-			}
-		}
+		// if (resp.keys === undefined) {
+		// 	if (['None', 'none', undefined].includes(corrAns)) {
+		// 		resp.corr = 1;  // correct non-response
+		// 	} else {
+		// 		resp.corr = 0;  // failed to respond (incorrectly)
+		// 	}
+		// }
 		// store data for thisExp (ExperimentHandler)
 		psychoJS.experiment.addData('resp.keys', resp.keys);
-		psychoJS.experiment.addData('resp.corr', resp.corr);
+		psychoJS.experiment.addData('points', totalPoints);
+		// psychoJS.experiment.addData('resp.corr', resp.corr);
 		if (typeof resp.keys !== 'undefined') {  // we had a response
 			psychoJS.experiment.addData('resp.rt', resp.rt);
 			routineTimer.reset();
 		}
+		bandits_rect['right'][trial_num].fillColor = false
+		bandits_rect['left'][trial_num].fillColor = false
 
 		resp.stop();
 		// the Routine "trial" was not non-slip safe, so reset the non-slip timer
 		routineTimer.reset();
 
+
+
+
 		return Scheduler.Event.NEXT;
 	};
 }
+
 
 var thanksComponents;
 function thanksRoutineBegin(trials) {
 	return function () {
 		//------Prepare to start Routine 'thanks'-------
+		// Clear Trial Components
+		clearBandits()
+		clearLevers()
 		t = 0;
 		thanksClock.reset(); // clock
 		frameN = -1;

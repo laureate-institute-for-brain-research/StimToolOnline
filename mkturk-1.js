@@ -215,6 +215,18 @@ app.get('/completedHIT', function(req, res) {
     });
 });
 
+// Page of of Studies
+app.get('/studies', function(req, res) {
+    fs.readFile('studies.html', function(err, data) {
+        // Write Header
+        res.writeHead(200, {
+            'Content-Type': 'text/html'
+        });
+        // Wrte Body
+        res.write(data);
+        res.end();
+    });
+});
 
 // Page of all Task
 app.get('/list', function(req, res) {
