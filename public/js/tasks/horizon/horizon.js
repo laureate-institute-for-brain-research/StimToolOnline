@@ -11,8 +11,8 @@ import * as visual from '/lib/visual-2020.1.js';
 import { Sound } from '/lib/sound-2020.1.js';
 
 var practice = false;
-var LEFT_KEY = 'comma'
-var RIGHT_KEY = 'period'
+var LEFT_KEY = 'left'
+var RIGHT_KEY = 'right'
 
 
 // init psychoJS:
@@ -35,7 +35,7 @@ function getQueryVariable(variable) {
 
 // open window:
 psychoJS.openWindow({
-	fullscr: true,
+	fullscr: false,
 	color: new util.Color('black'),
 	units: 'height',
 	waitBlanking: true
@@ -65,12 +65,20 @@ flowScheduler.add(instruct_pagesLoopBegin, instruct_pagesLoopScheduler);
 flowScheduler.add(instruct_pagesLoopScheduler);
 flowScheduler.add(instruct_pagesLoopEnd);
 
-// Example Play
+// // // Example Play
 const example_playScheduler = new Scheduler(psychoJS);
 flowScheduler.add(trials_exampleLoopBegin, example_playScheduler);
 flowScheduler.add(example_playScheduler);
-flowScheduler.add(trialsLoopEnd);
-flowScheduler.add(goodLuckEachFrame());
+flowScheduler.add(exampleLoopEnd);
+
+// Ready Routine
+flowScheduler.add(readyRoutineBegin());
+flowScheduler.add(readyRoutineEachFrame());
+flowScheduler.add(readyRoutineEnd());
+
+// flowScheduler.add(thanksRoutineBegin());
+// flowScheduler.add(thanksRoutineEachFrame());
+// flowScheduler.add(thanksRoutineEnd());
 
 const trialsLoopScheduler = new Scheduler(psychoJS);
 flowScheduler.add(trialsLoopBegin, trialsLoopScheduler);
@@ -146,7 +154,7 @@ var bandits = {
 	'left': {},
 	'right': {}
 }
-var y_pos = [.7,.6,.5,.4,.3,.2,.1,0,-.1,-.2, -.3]
+var y_pos = [.6,.5,.4,.3,.2,.1,0,-.1,-.2, -.3, -.4]
 var bandits_rect = {
 	'left': {},
 	'right': {}
@@ -162,12 +170,14 @@ var bandit_left_down_handle;
 var bandit_right_up_handle;
 var bandit_right_down_handle;
 
-
+var example_trials;
 var currentTrialNumber;
 var gameNumtracker;
 var totalPoints = 0;
 var totalPointsTracker;
 
+var readyClock;
+var readyText;
 
 var resp;
 var thanksClock;
@@ -216,7 +226,7 @@ function experimentInit() {
 	
 	goodLuckStim = new visual.ImageStim({
 		win : psychoJS.window,
-		name : 'slide_stim', units : 'height', 
+		name : 'goood_slide_stim', units : 'height', 
 		image : '/js/tasks/horizon/media/horizonInstructions/Slide22.jpeg', mask : undefined,
 		ori : 0, pos : [0, 0],
 		color : new util.Color([1, 1, 1]), opacity : 1,
@@ -347,7 +357,7 @@ function experimentInit() {
 			text: 'XX',
 			fontFamily: 'Arial',
 			units: 'norm',
-			pos: [-0.1, y_pos[i]], height: 0.09, wrapWidth: undefined, ori: 0,
+			pos: [-0.1, y_pos[i] - .1], height: 0.09, wrapWidth: undefined, ori: 0,
 			color: new util.Color('white'), opacity: 1,
 			depth: 0.0
 		});
@@ -358,7 +368,7 @@ function experimentInit() {
 			text: 'XX',
 			fontFamily: 'Arial',
 			units: 'norm',
-			pos: [0.1, y_pos[i]], height: 0.09, wrapWidth: undefined, ori: 0,
+			pos: [0.1, y_pos[i] -.1], height: 0.09, wrapWidth: undefined, ori: 0,
 			color: new util.Color('white'), opacity: 1,
 			depth: 0.0
 		});
@@ -426,6 +436,8 @@ function experimentInit() {
 
 	resp = new core.Keyboard({ psychoJS, clock: new util.Clock(), waitForStart: true });
 
+	// Initiali comnponenents for Routine 'read'y
+	readyClock = new util.Clock();
 	// Initialize components for Routine "thanks"
 	thanksClock = new util.Clock();
 	thanksText = new visual.TextStim({
@@ -609,9 +621,10 @@ function instructRoutineEnd(trials) {
 var trials;
 var currentLoop;
 var lastTrialKeyPressed;
+var total_games;
 function trialsLoopBegin(thisScheduler) {
 	// set up handler to look up the conditions
-
+	total_games = 80
 	if (practice) {
 		trials = new TrialHandler({
 			psychoJS: psychoJS,
@@ -650,20 +663,21 @@ function trialsLoopBegin(thisScheduler) {
 }
 
 function trials_exampleLoopBegin(thisScheduler) {
+	total_games = 4
 	clearBandits()
-	trials = new TrialHandler({
+	example_trials = new TrialHandler({
 		psychoJS: psychoJS,
 		nReps: 1, method: TrialHandler.Method.SEQUENTIAL,
 		extraInfo: expInfo, originPath: undefined,
 		trialList: 'example_play.xls',
-		seed: undefined, name: 'trials'
+		seed: undefined, name: 'example_trials'
 	});
-	psychoJS.experiment.addLoop(trials); // add the loop to the experiment
-	currentLoop = trials;  // we're now the current loop
+	psychoJS.experiment.addLoop(example_trials); // add the loop to the experiment
+	currentLoop = example_trials;  // we're now the current loop
 
-	// Schedule all the trials in the trialList:
-	for (const thisTrial of trials) {
-		const snapshot = trials.getSnapshot();
+	// Schedule all the example_trials in the trialList:
+	for (const thisTrial of example_trials) {
+		const snapshot = example_trials.getSnapshot();
 
 		thisScheduler.add(importConditions(snapshot));
 		thisScheduler.add(trialRoutineBegin(snapshot));
@@ -672,10 +686,24 @@ function trials_exampleLoopBegin(thisScheduler) {
 		thisScheduler.add(endLoopIteration(thisScheduler, snapshot));
 	}
 
+	
+
 	return Scheduler.Event.NEXT;
 }
 function instruct_pagesLoopEnd() {
 	psychoJS.experiment.removeLoop(slides);
+	return Scheduler.Event.NEXT;
+}
+
+function exampleLoopEnd() {
+	totalPoints = 0
+	clearBandits()
+	clearLevers()
+	currentTrialNumber.setAutoDraw(false)
+	gameNumtracker.setAutoDraw(false)
+	totalPointsTracker.setAutoDraw(false)
+	slideStim.setAutoDraw(false)
+	psychoJS.experiment.removeLoop(example_trials);
 
 	return Scheduler.Event.NEXT;
 }
@@ -683,10 +711,12 @@ function instruct_pagesLoopEnd() {
 function trialsLoopEnd() {
 	totalPoints = 0
 	clearBandits()
+	clearLevers()
 	currentTrialNumber.setAutoDraw(false)
 	gameNumtracker.setAutoDraw(false)
 	totalPointsTracker.setAutoDraw(false)
 	slideStim.setAutoDraw(false)
+
 	psychoJS.experiment.removeLoop(trials);
 
 	return Scheduler.Event.NEXT;
@@ -704,6 +734,7 @@ function trialRoutineBegin(trials) {
 		frameN = -1;
 		// update component parameters for each repeat
 		// word.setColor(new util.Color(letterColor));
+
 
 		// If it's a new game, clear other texts
 		// console.log(lastGameNumber)
@@ -723,7 +754,7 @@ function trialRoutineBegin(trials) {
 		}
 		
 		currentTrialNumber.setText(`Trial Number: ${trial_num}`)
-		gameNumtracker.setText(`${game_number}/80`)
+		gameNumtracker.setText(`${game_number + 1}/${total_games}`)
 		totalPointsTracker.setText(`Total Points: ${totalPoints}`)
 	
 		resp.keys = undefined;
@@ -789,13 +820,6 @@ function trialRoutineEachFrame(trials) {
 			}
 		
 			if (showLastTrial) {
-				bandits['left'][trial_num].setAutoDraw(true)
-				// Init  Right TexStims
-				bandits['right'][trial_num].setAutoDraw(true)
-				bandits_rect['right'][trial_num].fillColor = false
-				bandits_rect['left'][trial_num].fillColor = false
-
-				
 				if (trialClock.getTime() >= time_continue) {
 					showLastTrial = false
 					return Scheduler.Event.NEXT;
@@ -832,6 +856,16 @@ function trialRoutineEachFrame(trials) {
 			// Draw the Tracker and Points Counter
 			gameNumtracker.setAutoDraw(true)
 			totalPointsTracker.setAutoDraw(true)
+		}
+
+		if (showLastTrial) {
+			bandits['left'][trial_num].setAutoDraw(true)
+			bandits['right'][trial_num].setAutoDraw(true)
+			if (trialClock.getTime() >= time_continue) {
+				showLastTrial = false
+				return Scheduler.Event.NEXT;
+			}
+	
 		}
 
 		
@@ -894,14 +928,18 @@ function trialRoutineEachFrame(trials) {
 					bandit_right_up_handle.setAutoDraw(false)
 					bandit_right_down_handle.setAutoDraw(true)
 				}
-				console.log(left_reward)
+				// console.log(left_reward)
 				
 				// If it's the last trial, hang here for a second to show points
 				if (isLastTrial(game_type, trial_num)){
 					// wait a second
 					showLastTrial = true;
+					bandits_rect['right'][trial_num].fillColor = false
+					bandits_rect['left'][trial_num].fillColor = false
+
+					
 					now = trialClock.getTime();
-					time_continue =  now + 1 // 1 second to show points then continue
+					time_continue = now + 1 // 1 second to show points then continue
 					
 				} else {
 					continueRoutine = false;
@@ -938,6 +976,11 @@ function trialRoutineEachFrame(trials) {
 	};
 }
 
+function exampleTrialEnd(trials) {
+	
+}
+
+
 var key_map = {
 	',': 'left',
 	'.': 'right',
@@ -948,18 +991,15 @@ var key_map = {
 	'comma': 'left',
 	'period': 'right'
 }
+
 function trialRoutineEnd(trials) {
 	return function () {
 		//------Ending Routine 'trial'-------
 
-		if (resp.keys == ',') {
-			
+		if (resp.keys == LEFT_KEY) {
 			lastTrialPoints = left_reward
-
 		}
-		if (resp.keys == '.') {
-			
-
+		if (resp.keys == RIGHT_KEY) {
 			lastTrialPoints = right_reward
 		}
 
@@ -988,13 +1028,78 @@ function trialRoutineEnd(trials) {
 		// the Routine "trial" was not non-slip safe, so reset the non-slip timer
 		routineTimer.reset();
 
-
-
+		return Scheduler.Event.NEXT;
+	};
+}
+var readyComponents;
+function readyRoutineBegin(trials) {
+	return function () {
+		//------Prepare to start Routine 'ready'-------
+		// Clear Trial Components
+		clearBandits()
+		clearLevers()
+		t = 0;
+		psychoJS.eventManager.clearEvents()
+		readyClock.reset(); // clock
+		frameN = -1;
+		routineTimer.add(2.000000);
+		// update component parameters for each repeat
+		// keep track of which components have finished
+		readyComponents = [];
+		readyComponents.push(goodLuckStim);
 
 		return Scheduler.Event.NEXT;
 	};
 }
 
+
+function readyRoutineEachFrame(trials) {
+	return function () {
+		//------Loop for each frame of Routine 'ready'-------
+		let continueRoutine = true; // until we're told otherwise
+		// get current time
+		t = readyClock.getTime();
+		// frameN = frameN + 1;// number of completed frames (so 0 is the first frame)
+		// update/draw components on each frame
+
+		// console.log('in ready routine')
+		goodLuckStim.setAutoDraw(true)
+
+		if (psychoJS.eventManager.getKeys({keyList:['right']}).length > 0) {
+			continueRoutine = false
+		}
+
+		// check for quit (typically the Esc key)
+		if (psychoJS.experiment.experimentEnded || psychoJS.eventManager.getKeys({ keyList: ['escape'] }).length > 0) {
+			return quitPsychoJS('The [Escape] key was pressed. Goodbye!', false);
+		}
+
+		// refresh the screen if continuing
+		if (continueRoutine) {
+			return Scheduler.Event.FLIP_REPEAT;
+		}
+		else {
+			return Scheduler.Event.NEXT;
+		}
+	};
+}
+
+
+
+function readyRoutineEnd(trials) {
+	return function () {
+		//------Ending Routine 'ready'-------
+		for (const thisComponent of readyComponents) {
+			if (typeof thisComponent.setAutoDraw === 'function') {
+				thisComponent.setAutoDraw(false);
+			}
+		}
+
+		return Scheduler.Event.NEXT;
+	};
+}
+
+// 
 
 var thanksComponents;
 function thanksRoutineBegin(trials) {
@@ -1081,71 +1186,6 @@ function thanksRoutineEnd(trials) {
 		}
 
 		return Scheduler.Event.NEXT;
-	};
-}
-
-
-
-function goodLuckEachFrame(trials) {
-	return function () {
-		//------Loop for each frame of Routine 'instruct'-------
-		let continueRoutine = true; // until we're told otherwise
-		// get current time
-		t = instructClock.getTime();
-		frameN = frameN + 1;// number of completed frames (so 0 is the first frame)
-		// update/draw components on each frame
-
-		// *instrText1* updates
-		if (t >= 0) {
-			goodLuckStim.setAutoDraw(true);
-		}
-
-		// *ready* updates
-		if (t >= 0 && ready.status === PsychoJS.Status.NOT_STARTED) {
-			// keep track of start time/frame for later
-			ready.tStart = t;  // (not accounting for frame time here)
-			ready.frameNStart = frameN;  // exact frame index
-
-			// keyboard checking is just starting
-			psychoJS.window.callOnFlip(function () { ready.clock.reset(); });  // t=0 on next screen flip
-			psychoJS.window.callOnFlip(function () { ready.start(); }); // start on screen flip
-			psychoJS.window.callOnFlip(function () { ready.clearEvents(); });
-		}
-
-		if (ready.status === PsychoJS.Status.STARTED) {
-			let theseKeys = ready.getKeys({ keyList: ['right'], waitRelease: false });
-
-			if (theseKeys.length > 0) {  // at least one key was pressed
-				// a response ends the routine
-				continueRoutine = false;
-				goodLuckStim.setAutoDraw(false)
-			}
-		}
-
-		// check for quit (typically the Esc key)
-		if (psychoJS.eventManager.getKeys({keyList:['escape']}).length > 0) {
-			return quitPsychoJS('The [Escape] key was pressed. Goodbye!', false);
-		}
-
-		// check if the Routine should terminate
-		if (!continueRoutine) {  // a component has requested a forced-end of Routine
-			return Scheduler.Event.NEXT;
-		}
-
-		continueRoutine = false;  // reverts to True if at least one component still running
-		for (const thisComponent of instructComponents)
-			if ('status' in thisComponent && thisComponent.status !== PsychoJS.Status.FINISHED) {
-				continueRoutine = true;
-				break;
-			}
-
-		// refresh the screen if continuing
-		if (continueRoutine) {
-			return Scheduler.Event.FLIP_REPEAT;
-		}
-		else {
-			return Scheduler.Event.NEXT;
-		}
 	};
 }
 
