@@ -137,6 +137,7 @@ function updateInfo() {
 var leftColor = '#56B4E9'
 var rightColor = '#E69F00'
 var rect_fillColor = '#009E73'
+var forced_fillColor = '#FF0000'
 
 
 var slideStim;
@@ -834,10 +835,10 @@ function trialRoutineEachFrame(trials) {
 			if (!showLastTrial) {
 				switch (force_pos) {
 					case 'R':
-						bandits_rect['right'][trial_num].fillColor = new util.Color(rect_fillColor)
+						bandits_rect['right'][trial_num].fillColor = new util.Color(forced_fillColor)
 						break;
 					case 'L':
-						bandits_rect['left'][trial_num].fillColor = new util.Color(rect_fillColor)
+						bandits_rect['left'][trial_num].fillColor = new util.Color(forced_fillColor)
 						break;
 					case 'X':
 						// Show both
