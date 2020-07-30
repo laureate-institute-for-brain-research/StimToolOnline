@@ -26,27 +26,92 @@
                     
                     <form class="form-signin">
                         <div class="form-label-group">
-                            <select class="form-control" onchange="goThere(this)">
+                            <select id='study-list' class="form-control">
                                 <option>Choose Study</option>
                                 <option value="AAC-BET">AAC-BET</option>
                                 <option value="BK_Pilot">BK_Pilot</option>
                             </select>
-                        
+                        </div>
+                        <br>
+                        <div class="row">
+                          <div class="col mx-auto">
+                            <button id='about' class="btn btn-secondary" >About</button>
+                            <button id='begin' class="btn btn-success" >Begin</button>
+                          </div>
                         </div>
                     </form>
-                </div>
-                <center></center>
+                  </div>
             </div>
           </div>
         </div>
-        
+
       </div>
 
+      <div id='info-container' class="container" style="display: none;">
+        <div class="row">
+          <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
+            <div class="card card-signin my-5">
+                <div class="card-body">
+                    <h5 id='info-title' class="card-title text-center">Online StimTool</h5>
+                    <p id='info-text' class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- <div id='info-container' class="container">
+        <div class="row">
+          <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
+            <div class="card card-signin my-5">
+                <div class="card-body">
+                    <center>&copy; Laureate Institute for Brain Research | 2020</center>
+                </div>
+            </div>
+          </div>
+        </div>
+      </div> -->
+
       <script>
-        function goThere(selectObject) {
-          var study = selectObject.value;  
-          window.location.href = '/studies#' + study;
-        }
+         document.getElementById("about").addEventListener("click", function(event){
+          event.preventDefault()
+          study = document.getElementById("study-list").value
+          // alert(study)
+          if (study == 'BK_Pilot'){
+            // window.location.href = "/studies";
+            document.getElementById('info-container').style.display = 'block';
+            document.getElementById('info-title').innerHTML = study + ' Task List';
+            document.getElementById('info-text').innerHTML = 'Text about BK_Pilot goes here';
+          }
+          else if (study == 'AAC-BET'){
+            // window.location.href = "/studies";
+            document.getElementById('info-container').style.display = 'block';
+            document.getElementById('info-title').innerHTML = study + ' Task List';
+            document.getElementById('info-text').innerHTML = 'Text about AAC-BET goes here';
+          }
+
+          else {
+            // window.location.href = "/studies";
+            document.getElementById('info-container').style.display = 'none';
+          
+          }
+        });
+
+
+        document.getElementById("begin").addEventListener("click", function(event){
+          event.preventDefault()
+          study = document.getElementById("study-list").value
+          // alert(study)
+          if (study == 'BK_Pilot'){
+            // window.location.href = "/studies";
+            window.location.href="/studies";
+          }
+          if (study == 'AAC-BET'){
+            // window.location.href = "/studies";
+            window.location.href="/studies";
+          }
+        });
+        
       </script>
 
       

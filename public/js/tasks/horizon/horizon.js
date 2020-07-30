@@ -977,10 +977,6 @@ function trialRoutineEachFrame(trials) {
 	};
 }
 
-function exampleTrialEnd(trials) {
-	
-}
-
 
 var key_map = {
 	',': 'left',
