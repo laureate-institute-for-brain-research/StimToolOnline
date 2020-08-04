@@ -154,7 +154,8 @@ app.get('/', function(req, res) {
 
     } else if (task == 'gonogo') {
         displayGoNoGo(res, q.version);
-
+    } else if (task == 'limited_offer') {
+        displayLimited_Offer(res)
     } else if (task == 'horizon') {
         displayHorizon(res)
     } else if (ctpattern == '0' && task == 'chicken') {
@@ -1667,6 +1668,18 @@ function displayGoNoGo(res, versionnum) {
     });
 }
 
+displayLimited_Offer
+function displayLimited_Offer(res) {
+    fs.readFile('task/limited_offer/index.html', function(err, data) {
+        // Write Header
+        res.writeHead(200, {
+            'Content-Type': 'text/html'
+        });
+        // Wrte Body
+        res.write(data);
+        res.end();
+    });
+}
 function displayHorizon(res) {
     fs.readFile('task/horizon/index.html', function(err, data) {
         // Write Header
