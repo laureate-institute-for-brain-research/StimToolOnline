@@ -40,7 +40,7 @@ function getQueryVariable(variable) {
 
 // open window:
 psychoJS.openWindow({
-	fullscr: false,
+	fullscr: true,
 	color: new util.Color('black'),
 	units: 'height',
 	waitBlanking: true
@@ -701,10 +701,14 @@ function trialRoutineBegin(trials) {
 
 		// Reset Trial Variables
 		pressed = false;
-		accepted = undefined;
-		waited = undefined;
-		missed = undefined;
+		accepted = false;
+		waited = false;
+		missed = false;
 		showed_missed = 0;
+
+		psychoJS.eventManager.clearEvents()
+
+		
 
 
 		// update component parameters for each repeat
@@ -713,7 +717,7 @@ function trialRoutineBegin(trials) {
 		offer_stim.setText(initial_offer + ' ¢') // Set the Current Offer
 		
 		
-		currentTrialNumber.setText(`Trial Number: ${trial_number}`)
+		currentTrialNumber.setText(`Trial Number: ${trial_number} / 108`)
 		totalPointsTracker.setText(`Total ¢: ${totalPoints}`)
 	
 		resp.keys = undefined;
@@ -779,6 +783,9 @@ function trialRoutineEachFrame(trials) {
 		// Orientation Screen ( 1000ms)
 		var orientation_screen_duration = 1
 		if (tp <= orientation_screen_duration) {
+			offer_rect.fillColor = new util.Color('white')
+			offer_rect.opacity = 1
+			offer_stim.color = new util.Color('black')
 			if (time_point == 0 || waited){
 				offer_rect.setAutoDraw(true)
 				offer_stim.setAutoDraw(true)
@@ -838,7 +845,8 @@ function trialRoutineEachFrame(trials) {
 			wait_text_stim.color = new util.Color('black')
 			
 		
-			psychoJS.eventManager.clearEvents()
+			
+			// resp.clearEvents()
 			let theseKeys = resp.getKeys({ keyList: keyList, waitRelease: false });
 			if (theseKeys.length > 0) {
 				resp.keys = theseKeys[0].name;  // just the last key pressed
@@ -918,9 +926,11 @@ function trialRoutineEachFrame(trials) {
 		//  time point end
 		if (tp >= orientation_screen_duration + decision_making_duration + button_press_duration + break_duration)  { 
 			timePointClock.reset();
+			psychoJS.eventManager.clearEvents()
 			console.log(`Finished timepoint ${time_point}`)
 			time_point++;
-			}
+			
+		}
 		
 
 		// When to Flip Screen
@@ -936,7 +946,8 @@ function trialRoutineEachFrame(trials) {
 		}
 
 		// Went through all timepoints. Go to next Trial Routine
-		if (time_point == trial_length) {
+		// / If accepted, go to the next trial
+		if ((time_point == trial_length) || accepted) {
 			continueRoutine = false
 
 			// Show Points Reset so next routine can show points won and ISI
@@ -948,7 +959,7 @@ function trialRoutineEachFrame(trials) {
 			if (current_point == 'X') {
 				current_point = 0
 			}
-			points_fixation_stim.setText(`You have won ${current_point} in this trial`)
+			points_fixation_stim.setText(`You have won ${current_point} ¢ in this trial`)
 
 			for (var i = 0; i < trial_length; i++){
 				boxes_rect[trial_length][i].setAutoDraw(false)
@@ -958,6 +969,12 @@ function trialRoutineEachFrame(trials) {
 			totalPointsTracker.setAutoDraw(false)
 			offer_stim.setAutoDraw(false)
 			offer_rect.setAutoDraw(false)
+
+			accept_rect_stim.setAutoDraw(false)
+			accept_text_stim.setAutoDraw(false)
+			
+			wait_rect_stim.setAutoDraw(false)
+			wait_text_stim.setAutoDraw(false)
 			
 		}
 
@@ -1041,8 +1058,8 @@ function trialRoutineEnd(trials) {
 
 		
 
-		if (offer_stim.getText() != 'X') {
-			totalPoints = totalPoints + offer_stim.getText().replace(' ¢', '')
+		if (!Number.isNaN(offer_stim.getText())) {
+			totalPoints = totalPoints + parseInt(offer_stim.getText().replace(' ¢', ''))
 		}
 		
 
