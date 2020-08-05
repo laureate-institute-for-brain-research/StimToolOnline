@@ -25,7 +25,6 @@ const psychoJS = new PsychoJS({
 	debug: false
 });
 
-console.log(window.location.hostname)
 function getQueryVariable(variable) {
     var query = window.location.search.substring(1);
     var vars = query.split('&');
@@ -102,7 +101,7 @@ dialogCancelScheduler.add(quitPsychoJS, '', false);
 
 // Add Slides to resources
 var resources = [
-	{ name: 'r1.xls', path: '/js/tasks/limited_offer/r1.xls' },
+	{ name: 'r_test.xls', path: '/js/tasks/limited_offer/r_test.xls' },
 	{ name: 'instruct_slide.xls', path: '/js/tasks/limited_offer/media/instruct_slide.xls' },
 ]
 
@@ -572,7 +571,7 @@ function trialsLoopBegin(thisScheduler) {
 		psychoJS: psychoJS,
 		nReps: 1, method: TrialHandler.Method.SEQUENTIAL,
 		extraInfo: expInfo, originPath: undefined,
-		trialList: 'r1.xls',
+		trialList: 'r_test.xls',
 		seed: undefined, name: 'trials'
 	});
 	
@@ -693,6 +692,7 @@ var waited;
 var missed;
 var pressed;
 var showed_missed;
+var saved;
 function trialRoutineBegin(trials) {
 	return function () {
 		//------Prepare to start Routine 'trial'-------
@@ -788,6 +788,8 @@ function trialRoutineEachFrame(trials) {
 		// Orientation Screen ( 1000ms)
 		var orientation_screen_duration = 1
 		if (tp <= orientation_screen_duration) {
+			saved = false
+			psychoJS.eventManager.clearEvents()
 			offer_rect.fillColor = new util.Color('white')
 			offer_rect.opacity = 1
 			offer_stim.color = new util.Color('black')
@@ -928,12 +930,33 @@ function trialRoutineEachFrame(trials) {
 
 		}
 
+		// Save Data
+		if ( (typeof resp.keys !== 'undefined') && !saved ) {  // we had a response
+			// psychoJS.experiment.addData('resp.rt', resp.rt);
+			psychoJS.experiment.addData(`resp_${time_point + 1}`, key_map[resp.keys]);
+			
+			psychoJS.experiment.addData(`rt_${time_point + 1}`, resp.rt);
+			resp.keys = undefined;
+			resp.rt = undefined;
+			saved = true
+			resp.stop();
+		}
+
+
 		//  time point end
 		if (tp >= orientation_screen_duration + decision_making_duration + button_press_duration + break_duration)  { 
+			
+			// console.log(`Finished timepoint ${time_point}`)
+			
+			// psychoJS.experiment.addData('timepoint_', time_point);
+			
+
 			timePointClock.reset();
 			psychoJS.eventManager.clearEvents()
-			console.log(`Finished timepoint ${time_point}`)
 			time_point++;
+			
+
+			
 			
 		}
 		
@@ -965,6 +988,7 @@ function trialRoutineEachFrame(trials) {
 				current_point = 0
 			}
 			points_fixation_stim.setText(`You have won ${current_point} ¢ in this trial`)
+			psychoJS.experiment.addData(`points_won`, current_point);
 
 			for (var i = 0; i < trial_length; i++){
 				boxes_rect[trial_length][i].setAutoDraw(false)
@@ -1062,7 +1086,7 @@ function trialRoutineEnd(trials) {
 	return function () {
 		//------Ending Routine 'trial'-------
 
-		
+		// Add Points at End
 		if (offer_stim.getText() != 'X') {
 			if (!Number.isNaN(offer_stim.getText())) {
 				console.log(offer_stim.getText())
@@ -1070,27 +1094,14 @@ function trialRoutineEnd(trials) {
 			}
 		}
 		
+
+		if (typeof resp.keys !== 'undefined') {  // we had a response
+			// psychoJS.experiment.addData('resp.rt', resp.rt);
+			routineTimer.reset();
+		}
+
+
 		
-
-		// was no response the correct answer?!
-		// if (resp.keys === undefined) {
-		// 	if (['None', 'none', undefined].includes(corrAns)) {
-		// 		resp.corr = 1;  // correct non-response
-		// 	} else {
-		// 		resp.corr = 0;  // failed to respond (incorrectly)
-		// 	}
-		// }
-		// store data for thisExp (ExperimentHandler)
-		psychoJS.experiment.addData('resp.keys', key_map[resp.keys]);
-		psychoJS.experiment.addData('points', totalPoints);
-		// psychoJS.experiment.addData('resp.corr', resp.corr);
-		if (typeof resp.keys !== 'undefined') {  // we had a response
-			psychoJS.experiment.addData('resp.rt', resp.rt);
-			routineTimer.reset();
-		}
-
-
-		resp.stop();
 		// the Routine "trial" was not non-slip safe, so reset the non-slip timer
 		routineTimer.reset();
 
@@ -1098,45 +1109,6 @@ function trialRoutineEnd(trials) {
 	};
 }
 
-function trialRoutineISI(trials) {
-	return function () {
-		//------Ending Routine 'trial'-------
-
-		if (resp.keys == LEFT_KEY) {
-			lastTrialPoints = left_reward
-		}
-		if (resp.keys == RIGHT_KEY) {
-			lastTrialPoints = right_reward
-		}
-
-		lastGameNumber = game_number
-
-		// was no response the correct answer?!
-		// if (resp.keys === undefined) {
-		// 	if (['None', 'none', undefined].includes(corrAns)) {
-		// 		resp.corr = 1;  // correct non-response
-		// 	} else {
-		// 		resp.corr = 0;  // failed to respond (incorrectly)
-		// 	}
-		// }
-		// store data for thisExp (ExperimentHandler)
-		psychoJS.experiment.addData('resp.keys', key_map[resp.keys]);
-		psychoJS.experiment.addData('points', totalPoints);
-		// psychoJS.experiment.addData('resp.corr', resp.corr);
-		if (typeof resp.keys !== 'undefined') {  // we had a response
-			psychoJS.experiment.addData('resp.rt', resp.rt);
-			routineTimer.reset();
-		}
-		bandits_rect['right'][trial_num].fillColor = false
-		bandits_rect['left'][trial_num].fillColor = false
-
-		resp.stop();
-		// the Routine "trial" was not non-slip safe, so reset the non-slip timer
-		routineTimer.reset();
-
-		return Scheduler.Event.NEXT;
-	};
-}
 var readyComponents;
 function readyRoutineBegin(trials) {
 	return function () {
@@ -1212,8 +1184,6 @@ function thanksRoutineBegin(trials) {
 	return function () {
 		//------Prepare to start Routine 'thanks'-------
 		// Clear Trial Components
-		clearBandits()
-		clearLevers()
 		t = 0;
 		thanksClock.reset(); // clock
 		frameN = -1;
