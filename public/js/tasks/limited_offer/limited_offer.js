@@ -25,7 +25,7 @@ const psychoJS = new PsychoJS({
 	debug: false
 });
 
-
+console.log(window.location.hostname)
 function getQueryVariable(variable) {
     var query = window.location.search.substring(1);
     var vars = query.split('&');
@@ -40,7 +40,7 @@ function getQueryVariable(variable) {
 
 // open window:
 psychoJS.openWindow({
-	fullscr: true,
+	fullscr: (window.location.hostname != 'localhost'), // not full screen at localhost
 	color: new util.Color('black'),
 	units: 'height',
 	waitBlanking: true
@@ -547,25 +547,6 @@ function instructSlideRoutineEachFrame(trials) {
 	};
 }
 
-
-function clearBandits() {
-	for (var i = 0; i <= 9; i++) {
-		// Init Left textStims
-		bandits['left'][i].setAutoDraw(false)
-		bandits['right'][i].setAutoDraw(false)
-		bandits_rect['left'][i].setAutoDraw(false)
-		bandits_rect['right'][i].setAutoDraw(false)
-	}
-}
-
-function clearLevers() {
-	bandit_left_up_handle.setAutoDraw(false)
-	bandit_left_down_handle.setAutoDraw(false)
-
-	bandit_right_up_handle.setAutoDraw(false)
-	bandit_right_down_handle.setAutoDraw(false)
-	
-}
 function instructRoutineEnd(trials) {
 	return function () {
 		//------Ending Routine 'instruct'-------
@@ -674,6 +655,30 @@ function trialsLoopEnd() {
 	psychoJS.experiment.removeLoop(trials);
 
 	return Scheduler.Event.NEXT;
+}
+
+/**
+ * Turn off all drawing componense
+ */
+function clearTrialComponenets() {
+	currentTrialNumber.setAutoDraw(false)
+	totalPointsTracker.setAutoDraw(false)
+
+	// Boxes
+	for (var key of Object.keys(boxes_rect[4])) {
+		// console.log(key + " -> " + p[key])
+		boxes_rect[4][key].setAutoDraw(false)
+	}
+
+	for (var key of Object.keys(boxes_rect[8])) {
+		// console.log(key + " -> " + p[key])
+		boxes_rect[8][key].setAutoDraw(false)
+	}
+
+	offer_stim.setAutoDraw(false)
+
+
+	
 }
 
 
@@ -1004,6 +1009,7 @@ function trialIsi(trials) {
 		//------Loop for each frame of Routine 'trial'-------
 		let continueRoutine = true; // until we're told otherwise
 		
+		clearTrialComponenets()
 	
 		// get current time
 		t_end = endClock.getTime();
@@ -1057,10 +1063,13 @@ function trialRoutineEnd(trials) {
 		//------Ending Routine 'trial'-------
 
 		
-
-		if (!Number.isNaN(offer_stim.getText())) {
-			totalPoints = totalPoints + parseInt(offer_stim.getText().replace(' ¢', ''))
+		if (offer_stim.getText() != 'X') {
+			if (!Number.isNaN(offer_stim.getText())) {
+				console.log(offer_stim.getText())
+				totalPoints = totalPoints + parseInt(offer_stim.getText().replace(' ¢', ''))
+			}
 		}
+		
 		
 
 		// was no response the correct answer?!
