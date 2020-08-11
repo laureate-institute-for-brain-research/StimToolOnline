@@ -67,13 +67,6 @@ window.onload = function () {
 		'/link?id=' + getQueryVariable('id') + '&index=' + parseInt(getQueryVariable('index')) + 1, // get next order.
 		'/' // cancellation url
 	)
-
-	console.log(psychoJS._completionUrl)
-	
-
-	
-
-	
 }
 
 
@@ -111,18 +104,20 @@ flowScheduler.add(instruct_pagesLoopScheduler);
 flowScheduler.add(instruct_pagesLoopEnd);
 
 // // // Example Play
-if (getQueryVariable('practice') != 'true') {
+if (getQueryVariable('run') == '1' ){
 	const example_playScheduler = new Scheduler(psychoJS);
 	flowScheduler.add(trials_exampleLoopBegin, example_playScheduler);
 	flowScheduler.add(example_playScheduler);
 	flowScheduler.add(exampleLoopEnd);
 
+	// Ready Routine
+	flowScheduler.add(readyRoutineBegin());
+	flowScheduler.add(readyRoutineEachFrame());
+	flowScheduler.add(readyRoutineEnd());
+
 }
 
-// Ready Routine
-flowScheduler.add(readyRoutineBegin());
-flowScheduler.add(readyRoutineEachFrame());
-flowScheduler.add(readyRoutineEnd());
+
 
 // flowScheduler.add(thanksRoutineBegin());
 // flowScheduler.add(thanksRoutineEachFrame());
@@ -146,11 +141,18 @@ var resources = [
 	{ name: 'game_type.xls', path: '/js/tasks/horizon/game_type.xls' },
 	{ name: 'game_type_practice.xls', path: '/js/tasks/horizon/game_type_practice.xls' },
 	{ name: 'instruct_slide.xls', path: '/js/tasks/horizon/media/instruct_slide.xls' },
-	{ name: 'example_play.xls', path: '/js/tasks/horizon/media/example_play.xls' }
+	{ name: 'example_play.xls', path: '/js/tasks/horizon/media/example_play.xls' },
+	{ name: 'instruct_slide_r2.xls', path: '/js/tasks/horizon/media/instruct_slide_r2.xls' },
 ]
 
 for (var i = 1; i <= 22; i++){
 	var imagePath = { name: `/js/tasks/horizon/media/horizonInstructions/Slide${i}.jpeg`, path: `/js/tasks/horizon/media/horizonInstructions/Slide${i}.jpeg` }
+	// console.log(i)
+	resources.push(imagePath)
+}
+
+for (var i = 1; i <= 2; i++){
+	var imagePath = { name: `/js/tasks/horizon/media/instructions_r2/${i}.jpg`, path: `/js/tasks/horizon/media/instructions_r2/${i}.jpg` }
 	// console.log(i)
 	resources.push(imagePath)
 }
@@ -501,6 +503,7 @@ function experimentInit() {
 function instruct_pagesLoopBegin(thisScheduler) {
 	// set up handler to look up the conditions
 
+	
 	slides = new TrialHandler({
 		psychoJS: psychoJS,
 		nReps: 1, method: TrialHandler.Method.SEQUENTIAL,
@@ -508,6 +511,16 @@ function instruct_pagesLoopBegin(thisScheduler) {
 		trialList: 'instruct_slide.xls',
 		seed: undefined, name: 'slides'
 	});
+
+	if (getQueryVariable('run') == '2') {
+		slides = new TrialHandler({
+			psychoJS: psychoJS,
+			nReps: 1, method: TrialHandler.Method.SEQUENTIAL,
+			extraInfo: expInfo, originPath: undefined,
+			trialList: 'instruct_slide_r2.xls',
+			seed: undefined, name: 'slides'
+		});
+	}
 
 	// console.log(slides)
 	
