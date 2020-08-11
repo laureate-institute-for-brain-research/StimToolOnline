@@ -36,22 +36,33 @@
         });
     </script>
     <!-- Modal Structure -->
-
+    <div id="modal1" class="modal">
+        <div class="modal-content">
+            <h4>Share</h4>
+            <a id="copyTarget">test</a> 
+            <br>
+            <button id='gotoLink' class="btn green">Go To Link</button>
+            <br>
+            {{!-- <button id='copylink' class="btn">Copy Link</button> --}}
+            
+            
+        </div>
+        <div class="modal-footer">
+            <a href="#!" class="modal-close waves-effect waves-green btn-flat">Close</a>
+        </div>
+    </div>
         <center><a href="http://www.laureateinstitute.org/"><img class="logo" src="/images/logo.png"></a></center>
-        
         <br>
         <hr style="border-top:3px solid #b1b3b6" />
-        
         <br>
-        
         <div class="container">
             <h3>Dashboard</h3>
             <div class="row">
-                <div class="col-sm"></div>
+                {{!-- <div class="col-sm"></div> --}}
                 <div class="col-sm">
                     <form id='adduser'>
-                        <div class="form-label-group col">
-                            <input type="text" name='subject' required>
+                        <div class="form-label-group col-sm">
+                            <input type="text" name='subject' required placeholder="i.e A1111">
                         </div>
                         <div class="form-label-group col">
                             <select id='study-list' name='study'>
@@ -74,7 +85,7 @@
                         </div>
                     </form>
                 </div>
-                <div class="col-sm"></div>
+                {{!-- <div class="col-sm"></div> --}}
             </div>
         </div>
         
@@ -99,7 +110,7 @@
                             <td><a class="waves-effect waves-light" href="">{{subject}}</a></td>
                             <td>{{study}}</td>
                             <td>{{session}}</td>
-                            <td><a class="waves-effect waves-light btn blue" href="/link?id={{link}}">Link</a></td>
+                            <td><a class="waves-effect waves-light btn blue" href="#modal1" onclick="shareModal('{{link}}')">Share</a></td>
                             <td>{{completed}}</td>
                             <td>{{createdAt}}</td>
                             <td>{{updatedAt}}</td> 
@@ -123,11 +134,6 @@
         </div> --}}
     </div>
     <div id="AutoLogOutContainer"></div>
-    {{!-- <video id="backgroundVideo" preload="auto" autoplay muted loop playbackRate=.5>
-        <source src="https://www.dropbox.com/s/oemwjd7fbqkvxm6/Life%20Chart_crop1.mp4?raw=1"
-            type="video/mp4"> Your browser does not support HTML5 video.
-    </video> --}}
-    
 
     <!-- this is my JS via cdn -->
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>

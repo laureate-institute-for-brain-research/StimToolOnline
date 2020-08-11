@@ -32,6 +32,36 @@ function getQueryVariable(variable) {
     }
     return 'NULL'
 }
+window.onload = function () {
+	var id = getQueryVariable('id')
+	if (!id){
+		return
+	}
+	$.ajax({
+		type: "POST",
+		url: '/getInfo',
+		data: { 'id': id},
+		dataType: 'JSON',
+		success: (values) => {
+			// console.log(values)
+			// set values if valid id
+			if (values.subject && values.session) {
+				expInfo.participant = values.subject
+				expInfo.session  = values.session
+			}
+		}
+	})
+	 	.done(
+			  function () {
+				// psychoJS.start({expName, expInfo});
+				psychoJS.start({
+					expName, 
+					expInfo,
+					resources: resources
+				});
+			}
+	)
+}
 
 // open window:
 psychoJS.openWindow({
@@ -43,9 +73,8 @@ psychoJS.openWindow({
 
 // store info about the experiment session:
 let expName = 'Horizon Task';  // from the Builder filename that created this script
-let expInfo = { 'session': '01', 'participant': '' };
+var expInfo = { 'session': '', 'participant': '' };
 
-// schedule the experiment:
 psychoJS.schedule(psychoJS.gui.DlgFromDict({
 	dictionary: expInfo,
 	title: expName
@@ -107,12 +136,7 @@ for (var i = 1; i <= 22; i++){
 	resources.push(imagePath)
 }
 
-// psychoJS.start({expName, expInfo});
-psychoJS.start({
-	expName, 
-	expInfo,
-	resources: resources
-});
+
 
 
 var frameDur;

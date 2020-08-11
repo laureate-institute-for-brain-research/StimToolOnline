@@ -37,6 +37,7 @@ module.exports = function (app){
     })
 
     // use this for verifcation
+    // Sends them to appropirate link
     app.get('/link', (req, res) => {
         id = req.query.id
 
@@ -44,29 +45,53 @@ module.exports = function (app){
             where: {
                 link: id
             }
-        }).then(
+        })
+            .then(
             function (link) {
                 if (link == null) {
-                    res.send('non matced')
+                    res.redirect('/');
                 } else {
                     // res.send(link)
-
+                    index = 0
+                    if (req.query.index){ index = req.query.index}
                     var json_link = './public/study/' + link.study + '_' + link.session + '.json'
-                    console.log(json_link)
+                    // console.log(json_link)
                     let session_file = require(json_link);
-                    res.redirect(session_file.order[0] + '&id=' + link.link);
+                    res.redirect(session_file.order[index] + '&id=' + link.link + '&index=' + index);
                 }
             },
             function (err) {
-                res.send('non matced')
+                res.redirect('/');
             }
         )
             .catch(error => {
                 console.log(error)
                 res.redirect('/');
         });
-            
+    })
+
+    // send dashboard info given link
+    app.post('/getInfo', (req, res)=>{
+        id = req.body.id
+
+        models.dashboard.find({
+            where: {
+                link: id
+            }
+        })
+            .then(
+                function (result) {
+                    if (result == null) {
+                        res.send({})
+                    } else {
+                        res.send(result)
+                    }
+                }
+        )
         
+            .catch(error => {
+            res.send({})
+        })
     })
 
 }

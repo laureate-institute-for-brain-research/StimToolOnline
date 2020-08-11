@@ -37,6 +37,41 @@ function getQueryVariable(variable) {
     return 'NULL'
 }
 
+window.onload = function () {
+	var id = getQueryVariable('id')
+	if (!id){
+		return
+	}
+	$.ajax({
+        type: "POST",
+        url: '/getInfo',
+		data: { 'id': id},
+		dataType: 'JSON',
+		success: (values) => {
+			// console.log(values)
+			// set values if valid id
+			if (values.subject && values.session) {
+				expInfo.participant = values.subject
+				expInfo.session  = values.session
+			}
+			
+			
+
+		}
+	})
+	 	.done(
+			  function () {
+				// psychoJS.start({expName, expInfo});
+				psychoJS.start({
+					expName, 
+					expInfo,
+					resources: resources
+				});
+			}
+	)
+	
+}
+
 // open window:
 psychoJS.openWindow({
 	fullscr: (window.location.hostname != 'localhost'), // not full screen at localhost
@@ -111,12 +146,12 @@ for (var i = 1; i <= 13; i++){
 	resources.push(imagePath)
 }
 
-// psychoJS.start({expName, expInfo});
-psychoJS.start({
-	expName, 
-	expInfo,
-	resources: resources
-});
+// // psychoJS.start({expName, expInfo});
+// psychoJS.start({
+// 	expName, 
+// 	expInfo,
+// 	resources: resources
+// });
 
 
 var frameDur;
