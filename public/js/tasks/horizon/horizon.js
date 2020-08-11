@@ -32,11 +32,12 @@ function getQueryVariable(variable) {
     }
     return 'NULL'
 }
+
+
 window.onload = function () {
 	var id = getQueryVariable('id')
-	if (!id){
-		return
-	}
+	
+	// exp Info if avaialable
 	$.ajax({
 		type: "POST",
 		url: '/getInfo',
@@ -51,8 +52,8 @@ window.onload = function () {
 			}
 		}
 	})
-	 	.done(
-			  function () {
+		.done(
+			function () {
 				// psychoJS.start({expName, expInfo});
 				psychoJS.start({
 					expName, 
@@ -61,7 +62,22 @@ window.onload = function () {
 				});
 			}
 	)
+	// Check if there is an practice
+	psychoJS.setRedirectUrls(
+		'/link?id=' + getQueryVariable('id') + '&index=' + parseInt(getQueryVariable('index')) + 1, // get next order.
+		'/' // cancellation url
+	)
+
+	console.log(psychoJS._completionUrl)
+	
+
+	
+
+	
 }
+
+
+
 
 // open window:
 psychoJS.openWindow({
@@ -95,10 +111,13 @@ flowScheduler.add(instruct_pagesLoopScheduler);
 flowScheduler.add(instruct_pagesLoopEnd);
 
 // // // Example Play
-const example_playScheduler = new Scheduler(psychoJS);
-flowScheduler.add(trials_exampleLoopBegin, example_playScheduler);
-flowScheduler.add(example_playScheduler);
-flowScheduler.add(exampleLoopEnd);
+if (getQueryVariable('practice') != 'true') {
+	const example_playScheduler = new Scheduler(psychoJS);
+	flowScheduler.add(trials_exampleLoopBegin, example_playScheduler);
+	flowScheduler.add(example_playScheduler);
+	flowScheduler.add(exampleLoopEnd);
+
+}
 
 // Ready Routine
 flowScheduler.add(readyRoutineBegin());
@@ -210,11 +229,7 @@ var thanksText;
 var globalClock;
 var routineTimer;
 function experimentInit() {
-	// Check if there is an practice
-	if (getQueryVariable('practice') == 'true') {
-		practice == true;
-		console.log("PRACTICE SESSION!")
-	}
+	
 	// Initialize components for Routine "instruct"
 	instructClock = new util.Clock();
 	instrText1 = new visual.TextStim({
@@ -650,7 +665,10 @@ var total_games;
 function trialsLoopBegin(thisScheduler) {
 	// set up handler to look up the conditions
 	total_games = 80
-	if (practice) {
+	if (getQueryVariable('practice') == 'true') {
+		total_games = 5
+		practice == true;
+		console.log('Practice Session')
 		trials = new TrialHandler({
 			psychoJS: psychoJS,
 			nReps: 1, method: TrialHandler.Method.SEQUENTIAL,
@@ -1255,6 +1273,8 @@ function quitPsychoJS(message, isCompleted) {
 	if (psychoJS.experiment.isEntryEmpty()) {
 		psychoJS.experiment.nextEntry();
 	}
+
+
 
 	psychoJS.window.close();
 	psychoJS.quit({ message: message, isCompleted: isCompleted });

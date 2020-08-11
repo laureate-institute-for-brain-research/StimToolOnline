@@ -41,6 +41,10 @@ module.exports = function (app){
     app.get('/link', (req, res) => {
         id = req.query.id
 
+        if (req.body.id) {
+            id = req.body.id
+        }
+
         models.dashboard.find({
             where: {
                 link: id
@@ -53,7 +57,7 @@ module.exports = function (app){
                 } else {
                     // res.send(link)
                     index = 0
-                    if (req.query.index){ index = req.query.index}
+                    if (req.query.index){ index = parseInt(req.query.index)}
                     var json_link = './public/study/' + link.study + '_' + link.session + '.json'
                     // console.log(json_link)
                     let session_file = require(json_link);
