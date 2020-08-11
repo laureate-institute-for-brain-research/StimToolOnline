@@ -1,0 +1,9 @@
+{
+    "order": [
+        "/?task=horizon&run=1",
+        "/?task=horizon&run=2",
+        "/?task=limited_offer&run=1",
+        "/completed"
+    ],
+    "fullscreen": true
+} 
