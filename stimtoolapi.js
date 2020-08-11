@@ -10,15 +10,29 @@ module.exports = function (app){
     app.post('/adduser', (req, res) => {
         console.log(req.body)
 
-        req.body.link = uuidv4(); // Create unique uuid for this user/stud/session
-
-        models.dashboard.create(req.body)
-            .then(() => {
-                console.log('sdf')
-                res.send({
-                    'message': 'ok'
-                })
+        models.dashboard.find({
+            where: req.body
         })
+            .then((result) => {
+                // console.log(result)
+                if (result == null) {
+                    req.body.link = uuidv4(); // Create unique uuid for this user/stud/session
+
+                    models.dashboard.create(req.body)
+                        .then(() => {
+                            res.send({
+                                'message': 'ok'
+                            })
+                    })
+                } else {
+                    // already have same subject, study, session
+                    res.send({
+                        'message': 'subject/study/session already exists'
+                    })
+                }
+            })
+
+        
         
     })
 
