@@ -1,0 +1,13 @@
+
+
+.page-footer {
+    text-align: center;
+    padding: 20px;
+    color: white;
+    background-color: black !important;
+    
+}
+.logo {
+    max-width: 20%;
+    height: auto;
+}

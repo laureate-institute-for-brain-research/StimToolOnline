@@ -101,7 +101,7 @@ dialogCancelScheduler.add(quitPsychoJS, '', false);
 
 // Add Slides to resources
 var resources = [
-	{ name: 'r_test.xls', path: '/js/tasks/limited_offer/r_test.xls' },
+	{ name: 'r1.xls', path: '/js/tasks/limited_offer/r1.xls' },
 	{ name: 'instruct_slide.xls', path: '/js/tasks/limited_offer/media/instruct_slide.xls' },
 ]
 
@@ -571,7 +571,7 @@ function trialsLoopBegin(thisScheduler) {
 		psychoJS: psychoJS,
 		nReps: 1, method: TrialHandler.Method.SEQUENTIAL,
 		extraInfo: expInfo, originPath: undefined,
-		trialList: 'r_test.xls',
+		trialList: 'r1.xls',
 		seed: undefined, name: 'trials'
 	});
 	

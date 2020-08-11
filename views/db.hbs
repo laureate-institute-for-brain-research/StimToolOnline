@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>StimTool | Dashboard</title>
+    <meta content="text/html; charset=UTF-8; X-Content-Type-Options=nosniff" http-equiv="Content-Type" />
+    <link rel="stylesheet" href="/css/db.css">
+    <link rel="shortcut icon" type="image/png" href="https://www.dropbox.com/s/adtwtls9yevcoda/LIBR_full_color_logo_highres_brain_only.png?raw=1" />
+    <!-- this is my CSS via cdn -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/css/materialize.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css"
+        integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+   
+   {{!-- CSS for Datatable --}}
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.css">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://kryogenix.org/code/browser/sorttable/sorttable.js"></script>
+
+    <style>
+        .pull-right {
+            float: right !important;
+        }
+    </style>
+</head>
+<body style='padding-top: 0px;'>
+    <script>
+        $(document).ready(function () {
+            //$('.modal').modal();
+            //this are my init
+            $('.datepicker').datepicker();
+            $('select').formSelect();
+            $('.modal').modal();
+        });
+    </script>
+    <!-- Modal Structure -->
+
+        <center><a href="http://www.laureateinstitute.org/"><img class="logo" src="/images/logo.png"></a></center>
+        
+        <br>
+        <hr style="border-top:3px solid #b1b3b6" />
+        
+        <br>
+        
+        <div class="container">
+            <h3>Dashboard</h3>
+            <div class="row">
+                <div class="col-sm"></div>
+                <div class="col-sm">
+                    <form id='adduser'>
+                        <div class="form-label-group col">
+                            <input type="text" name='subject' required>
+                        </div>
+                        <div class="form-label-group col">
+                            <select id='study-list' name='study'>
+                                <option>Choose Study</option>
+                                <option value="AAC-BET">AAC-BET</option>
+                                <option value="BK_Pilot">BK_Pilot</option>
+                            </select>
+                        </div>
+                        <br>
+                        <div class="form-label-group col">
+                            <select id='session-list' name='session'>
+                                <option>Choose Session</option>
+                                <option value="T1">T1</option>
+                                <option value="T2">T2</option>
+                            </select>
+                        </div>
+                        
+                        <div class="col mx-auto">
+                            <input type="submit" class="btn btn-success" value='Add User' >
+                        </div>
+                    </form>
+                </div>
+                <div class="col-sm"></div>
+            </div>
+        </div>
+        
+        <div class="container">
+             <hr>
+            <div class="row">
+                <table id="UsersTable" class="table table-dark display" border="1">
+                    <thead>
+                        <tr>
+                            <th id="subjectid">subject</th>
+                            <th>Study</th>
+                            <th>Session</th>
+                            <th>Link</th>
+                            <th>Completed</th>
+                            <th>Date Created</th>
+                            <th>updatedAt</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{#each users}}
+                        <tr>
+                            <td><a class="waves-effect waves-light" href="">{{subject}}</a></td>
+                            <td>{{study}}</td>
+                            <td>{{session}}</td>
+                            <td><a class="waves-effect waves-light btn blue" href="/link?id={{link}}">Link</a></td>
+                            <td>{{completed}}</td>
+                            <td>{{createdAt}}</td>
+                            <td>{{updatedAt}}</td> 
+                         
+                        </tr>
+                        {{/each}}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <br>
+        <br>
+
+        <br>
+        <br>
+        <br>
+        {{!-- <div style="text-align: center;">
+            <p style="bottom: 0;">&copy; 2020. All rights reserved.</p>
+            <p style="bottom: 0;">Laureate Institute for Brain Research</p>
+        </div> --}}
+    </div>
+    <div id="AutoLogOutContainer"></div>
+    {{!-- <video id="backgroundVideo" preload="auto" autoplay muted loop playbackRate=.5>
+        <source src="https://www.dropbox.com/s/oemwjd7fbqkvxm6/Life%20Chart_crop1.mp4?raw=1"
+            type="video/mp4"> Your browser does not support HTML5 video.
+    </video> --}}
+    
+
+    <!-- this is my JS via cdn -->
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"></script>
+    
+    {{!-- Data Table js --}}
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.js"></script>
+
+    {{!-- Chart JS --}}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js" integrity="sha256-R4pqcOYV8lt7snxMQO/HSbVCFRPMdrhAFMH+vr9giYI=" crossorigin="anonymous"></script>
+
+    <script src="/js/db.js"></script>
+</body>
+<footer class="page-footer">
+      &copy; 2020. All rights reserved <br>
+      Laureate Institute for Brain Research
+    </footer>
+</html>
