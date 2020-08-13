@@ -37,6 +37,19 @@ function getQueryVariable(variable) {
     return 'NULL'
 }
 
+function formatDate() {
+    var d = new Date(),
+        month = '' + (d.getMonth() + 1),
+        day = '' + d.getDate(),
+        year = d.getFullYear();
+
+    if (month.length < 2) month = '0' + month;
+    if (day.length < 2) day = '0' + day;
+
+    return [year, month, day].join('_');
+}
+
+
 window.onload = function () {
 	var id = getQueryVariable('id')
 	if (!id){
@@ -88,7 +101,7 @@ psychoJS.openWindow({
 
 // store info about the experiment session:
 let expName = 'Limited Offer';  // from the Builder filename that created this script
-let expInfo = { 'session': '01', 'participant': '' };
+var expInfo = { 'session': '', 'participant': '' , 'date' : formatDate(), 'study': ''};
 
 // schedule the experiment:
 psychoJS.schedule(psychoJS.gui.DlgFromDict({
@@ -1123,6 +1136,22 @@ var key_map = {
 	'period': 'right'
 }
 
+function sendData(trial_data) {
+	$.ajax({
+        type: "POST",
+        url: '/save',
+		data: {
+			"trials_data": trial_data,
+			"expInfo": expInfo
+		},
+		dataType: 'JSON',
+		success:function(data) {
+			console.log(data)
+		  }
+    })
+}
+
+
 function trialRoutineEnd(trials) {
 	return function () {
 		//------Ending Routine 'trial'-------
@@ -1145,6 +1174,9 @@ function trialRoutineEnd(trials) {
 		
 		// the Routine "trial" was not non-slip safe, so reset the non-slip timer
 		routineTimer.reset();
+
+		// Send Data
+		sendData(psychoJS.experiment._trialsData)
 
 		return Scheduler.Event.NEXT;
 	};

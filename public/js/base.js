@@ -13,6 +13,21 @@ function getQueryVariable(variable) {
     return 'NULL'
 }
 
+function sendData(trial_data) {
+	$.ajax({
+        type: "POST",
+        url: '/save',
+		data: {
+			"trials_data": trial_data,
+			"expInfo": expInfo
+		},
+		dataType: 'JSON',
+		success:function(data) {
+			console.log(data)
+		  }
+    })
+}
+
 function showEnd() {
     // Redirection based on study
     if (getQueryVariable('study') == 'mindreal') {
