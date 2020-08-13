@@ -20,6 +20,7 @@ form.addEventListener('submit', (event) => {
 });
 
 
+
 function copyToClipboard(elem) {
     // create hidden text element, if it doesn't already exist
   var targetId = "_hiddenCopyText_";
@@ -74,6 +75,35 @@ function copyToClipboard(elem) {
 
 
 function shareModal(uuid) {
+    var email_form = document.getElementById("email_form");
+
+    email_form.addEventListener('submit', (event) => {
+        event.preventDefault();
+
+        document.getElementById("loader").style.display = 'block'
+        var values = {
+            'id': uuid
+        };
+        $.each($('#email_form').serializeArray(), function (i, field) {
+            values[field.name] = field.value;
+        });
+        console.log(values)
+        $.ajax({
+            type: "POST",
+            url: '/share',
+            data: values,
+            dataType: 'JSON',
+            success: function (val) {
+                M.toast({ html: val.message })
+                
+                modal_elem = document.getElementById('modal1')
+                var instance = M.Modal.getInstance(modal_elem);
+                instance.close();
+            }
+        })
+
+    });
+
 
     var ulink = '/link?id=' + uuid
     // Create Copy Button
@@ -90,9 +120,6 @@ function shareModal(uuid) {
         // alert("Copied the text: " + link);
     })
         
-    
-        
-
     modal_elem = document.getElementById('modal1')
     var instance = M.Modal.getInstance(modal_elem);
     instance.open();

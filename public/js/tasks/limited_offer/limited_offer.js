@@ -847,6 +847,9 @@ function trialRoutineEachFrame(trials) {
 			offer_rect.fillColor = new util.Color('white')
 			offer_rect.opacity = 1
 			offer_stim.color = new util.Color('black')
+
+			wait_rect_stim.height = 
+			wait_rect_stim.width = 
 			if (time_point == 0 || waited){
 				offer_rect.setAutoDraw(true)
 				offer_stim.setAutoDraw(true)

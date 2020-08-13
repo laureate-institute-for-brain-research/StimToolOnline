@@ -38,8 +38,28 @@
     <!-- Modal Structure -->
     <div id="modal1" class="modal">
         <div class="modal-content">
-            <h4>Share</h4>
-            <a id="copyTarget">test</a> 
+            {{!-- <h4>Share</h4> --}}
+            <p>Use form below to email the link.</p>
+            <form id='email_form'>
+                <div class="form-label-group col-sm">
+                    <input type="email" name='to' required placeholder="to@test.com">
+                </div>
+                <div class="form-label-group col">
+                    <input type="email" name='from' required placeholder="from@test.com">
+                </div>
+                <br>
+                <div class="form-label-group col">
+                    <textarea name="body" rows="4" cols="50" placeholder="Write Message (optional)"></textarea>
+                </div>
+                <br>
+                <div class="col mx-auto">
+                    <input type="submit" class="waves-effect blue btn" value='Share' >
+                </div>
+                <div id='loader' style='display: none'class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
+            </form>
+            <hr style="border-top:3px solid #000000" />
+            <p>Or Copy the link below</p>
+            <a id="copyTarget"></a> 
             <br>
             <button id='gotoLink' class="btn green">Go To Link</button>
             <br>
@@ -47,9 +67,9 @@
             
             
         </div>
-        <div class="modal-footer">
+        {{!-- <div class="modal-footer">
             <a href="#!" class="modal-close waves-effect waves-green btn-flat">Close</a>
-        </div>
+        </div> --}}
     </div>
         <center><a href="http://www.laureateinstitute.org/"><img class="logo" src="/images/logo.png"></a></center>
         <br>
