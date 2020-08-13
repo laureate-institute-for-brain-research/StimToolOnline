@@ -311,7 +311,7 @@ function experimentInit() {
 	offer_rect= new visual.Rect({
 		win: psychoJS.window,
 		name: `offer_rect`,
-		width: 0.45,
+		width: 0.25,
 		height: 0.2,
 		lineWidth: 3.5,
 		units: 'norm',
@@ -851,6 +851,10 @@ function trialRoutineEachFrame(trials) {
 				offer_rect.setAutoDraw(true)
 				offer_stim.setAutoDraw(true)
 			}
+
+			// if (waited) {
+			// 	offer_rect.lineColor = new util.Color(boxColor)
+			// }
 	
 			if (!pressed && time_point > 0) {
 				offer_stim.setText('X')
@@ -928,6 +932,13 @@ function trialRoutineEachFrame(trials) {
 				if (resp.keys == RIGHT_KEY) {
 					waited = true
 					wait_rect_stim.lineColor = new util.Color(selectColor)
+
+
+					wait_rect_stim.color = new util.Color(selectColor)
+					wait_rect_stim.height += .1
+					wait_rect_stim.width += .1 
+
+					wait_text_stim.color = new util.Color(selectColor)
 					// totalPoints = totalPoints + offer_rect.text.replace(' ', '¢')
 				}
 				
@@ -966,6 +977,7 @@ function trialRoutineEachFrame(trials) {
 
 				accept_rect_stim.setAutoDraw(false)
 				accept_text_stim.setAutoDraw(false)
+				
 				
 				wait_rect_stim.setAutoDraw(false)
 				wait_text_stim.setAutoDraw(false)
