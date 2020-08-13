@@ -19,7 +19,6 @@ module.exports = function (app){
         //console.log('session: ' + session, 'id: ' + mkturk_id, 'survey: ' + survey, 'task: ' + task)
         //console.log(req.connection.remoteAddress)
 
-
         if (survey == 'demo') {
             displaySurveydemo(res);
         } else if (survey == 'phq') {

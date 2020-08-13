@@ -20,7 +20,7 @@ module.exports = function (app){
                 if (result == null) {
                     req.body.link = uuidv4(); // Create unique uuid for this user/stud/session
 
-                    models.dashboard.create(req.body)
+                    models.dashboard.create(req.sanitize(req.body))
                         .then(() => {
                             res.send({
                                 'message': 'ok'
@@ -41,7 +41,7 @@ module.exports = function (app){
     // use this for verifcation
     // Sends them to appropirate link
     app.get('/link', (req, res) => {
-        id = req.query.id
+        id = req.sanitize(req.query.id);
 
         if (req.body.id) {
             id = req.body.id
@@ -78,7 +78,7 @@ module.exports = function (app){
 
     // send dashboard info given link
     app.post('/getInfo', (req, res)=>{
-        id = req.body.id
+        id = req.sanitize(req.body.id);
 
         models.dashboard.find({
             where: {
@@ -137,7 +137,7 @@ module.exports = function (app){
     app.post('/share', (req, res)=>{
 
         // console.log(req.body)
-        id = req.body.id
+        id = req.sanitize(req.body.id);
 
         models.dashboard.find({
             where: {
@@ -156,11 +156,11 @@ module.exports = function (app){
                         
                         var ulink = 'https://brainworkout.paulus.libr.net/link?id=' + id
                         var data = {
-                            from: req.body.from,
-                            to: req.body.to,
+                            from: req.sanitize(req.body.from),
+                            to: req.sanitize(req.body.to),
                             subject: 'Shared Link',
                             text: `Hello!\n\nA link has been shared to you. Click the link to perform the task: ${ulink}\n\nThank you for your participation.`,
-                            html: sharedLinkHTMLTemplate(ulink, req.body.body) 
+                            html: sharedLinkHTMLTemplate(ulink, req.sanitize(req.body.body)) 
                         };
                         
                         console.log("Sending email: " + req.body.to);

@@ -17,6 +17,7 @@ var serveIndex = require('serve-index');
 const Json2csvParser = require('json2csv').Parser;
 
 var exphbs = require('express-handlebars')
+const expressSanitizer = require('express-sanitizer');
 
 const pino = require('pino')
 const expressPino = require('express-pino-logger')
@@ -26,6 +27,8 @@ const logger = pino({ level: process.env.LOG_LEVEL || 'info' })
 var config = require('./config/config.json')
 
 var app = express();
+
+
 
 
 // STUDIES//
@@ -89,6 +92,9 @@ app.use(bodyParser.json({
     extended: true
 
 }));
+
+app.use(expressSanitizer()); // use for sanitizing data
+
 app.use(express.static('public'));
 
 // Serve the static files
