@@ -20,7 +20,12 @@ module.exports = function (app){
                 if (result == null) {
                     req.body.link = uuidv4(); // Create unique uuid for this user/stud/session
 
-                    models.dashboard.create(req.sanitize(req.body))
+                    models.dashboard.create({
+                        subject: req.sanitize(req.body.subject),
+                        study: req.sanitize(req.body.study),
+                        session: req.sanitize(req.body.session),
+                        link: req.sanitize(req.body.link)
+                    })
                         .then(() => {
                             res.send({
                                 'message': 'ok'
