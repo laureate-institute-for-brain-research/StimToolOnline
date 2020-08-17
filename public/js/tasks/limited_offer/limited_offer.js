@@ -65,7 +65,8 @@ window.onload = function () {
 			// set values if valid id
 			if (values.subject && values.session) {
 				expInfo.participant = values.subject
-				expInfo.session  = values.session
+				expInfo.session = values.session
+				expInfo.study  = values.study
 			}
 		}
 	})
@@ -155,11 +156,11 @@ dialogCancelScheduler.add(quitPsychoJS, '', false);
 // Add Slides to resources
 var resources = [
 	{ name: 'r1.xls', path: '/js/tasks/limited_offer/r1.xls' },
-	{ name: 'instruct_slide.xls', path: '/js/tasks/limited_offer/media/instruct_slide.xls' },
+	{ name: 'AAC-BET_R1.xls', path: '/js/tasks/limited_offer/media/AAC-BET_R1.xls' }
 ]
 
 for (var i = 1; i <= 13; i++){
-	var imagePath = { name: `/js/tasks/limited_offer/media/limited_offer_instructions/Slide${i}.jpeg`, path: `/js/tasks/limited_offer/media/limited_offer_instructions/Slide${i}.jpeg` }
+	var imagePath = { name: `/js/tasks/limited_offer/media/AAC-BET_R1_instructions/Slide${i}.jpeg`, path: `/js/tasks/limited_offer/media/AAC-BET_R1_instructions/Slide${i}.jpeg` }
 	// console.log(i)
 	resources.push(imagePath)
 }
@@ -479,7 +480,7 @@ function instruct_pagesLoopBegin(thisScheduler) {
 		psychoJS: psychoJS,
 		nReps: 1, method: TrialHandler.Method.SEQUENTIAL,
 		extraInfo: expInfo, originPath: undefined,
-		trialList: 'instruct_slide.xls',
+		trialList: 'AAC-BET_R1.xls',
 		seed: undefined, name: 'slides'
 	});
 
