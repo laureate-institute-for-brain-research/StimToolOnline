@@ -56,8 +56,8 @@ window.onload = function () {
 		return
 	}
 	$.ajax({
-        type: "POST",
-        url: '/getInfo',
+		type: "POST",
+		url: '/getInfo',
 		data: { 'id': id},
 		dataType: 'JSON',
 		success: (values) => {
@@ -67,9 +67,6 @@ window.onload = function () {
 				expInfo.participant = values.subject
 				expInfo.session  = values.session
 			}
-			
-			
-
 		}
 	})
 	 	.done(
