@@ -17,8 +17,10 @@ var RIGHT_KEY = 'right'
 
 // init psychoJS:
 const psychoJS = new PsychoJS({
-	debug: false
+	debug: false,
 });
+
+
 
 
 function getQueryVariable(variable) {
@@ -59,8 +61,15 @@ window.onload = function () {
 				psychoJS.start({
 					expName, 
 					expInfo,
-					resources: resources
+					resources: resources,
 				});
+
+				// psychoJS._config.environment = ExperimentHandler.Environment.SERVER
+				psychoJS._config.experiment.saveFormat = undefined // don't save to client side
+
+				// console.log(psychoJS)
+
+				
 			}
 	)
 	// Check if there is an practice

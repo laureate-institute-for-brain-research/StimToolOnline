@@ -57,8 +57,7 @@ module.exports = function (app){
                 link: id
             }
         })
-            .then(
-            function (link) {
+            .then(function (link) {
                 if (link == null) {
                     res.redirect('/');
                 } else {
@@ -99,7 +98,6 @@ module.exports = function (app){
                     }
                 }
         )
-        
             .catch(error => {
             res.send({})
         })
@@ -113,9 +111,9 @@ module.exports = function (app){
         // Save to /data/folder based of study
         jsonexport(trials_data, function(err, csv) {
             if (err) return console.error(err);
+
+            // File name is by taskname, participant id, session and date 
             file_name = req.body.expInfo.task + '_' + req.body.expInfo.participant + '_' + req.body.expInfo.session + '_' + req.body.expInfo.date + '.csv'
-            // console.log(req.body.expInfo)
-            // console.log(file_name)
 
             path_to_save = `data/${req.body.expInfo.study}/${file_name}`
             fs.access(`data/${req.body.expInfo.study}`, error => {

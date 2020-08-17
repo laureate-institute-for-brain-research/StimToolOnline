@@ -1,0 +1,7 @@
+{
+    "experiment": {
+        "name": "horizon task",
+        "saveFormat" : "None"
+    },
+    "environment": ExperimentHandler.Environment.LOCAL,
+}

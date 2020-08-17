@@ -80,6 +80,8 @@ window.onload = function () {
 					expInfo,
 					resources: resources
 				});
+
+				psychoJS._config.experiment.saveFormat = undefined // don't save to client side
 			}
 	)
 
@@ -848,8 +850,8 @@ function trialRoutineEachFrame(trials) {
 			offer_rect.opacity = 1
 			offer_stim.color = new util.Color('black')
 
-			wait_rect_stim.height = 
-			wait_rect_stim.width = 
+			wait_rect_stim.height = 0.09
+			wait_rect_stim.width = 0.12
 			if (time_point == 0 || waited){
 				offer_rect.setAutoDraw(true)
 				offer_stim.setAutoDraw(true)
@@ -927,6 +929,9 @@ function trialRoutineEachFrame(trials) {
 					accept_rect_stim.fillColor = new util.Color(selectColor)
 					offer_rect.fillColor = new util.Color(selectColor)
 					offer_rect.opacity = .5
+
+					offer_stim.height += .02
+					offer_stim.width += .02
 					offer_stim.setAutoDraw(true)
 					accept_rect_stim.setAutoDraw(true)
 					offer_stim.color = new util.Color('white')
@@ -937,9 +942,9 @@ function trialRoutineEachFrame(trials) {
 					wait_rect_stim.lineColor = new util.Color(selectColor)
 
 
-					wait_rect_stim.color = new util.Color(selectColor)
-					wait_rect_stim.height += .1
-					wait_rect_stim.width += .1 
+					wait_rect_stim.fillColor = new util.Color(selectColor)
+					wait_rect_stim.height += .02
+					wait_rect_stim.width += .02
 
 					wait_text_stim.color = new util.Color(selectColor)
 					// totalPoints = totalPoints + offer_rect.text.replace(' ', '¢')

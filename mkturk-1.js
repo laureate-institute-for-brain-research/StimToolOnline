@@ -85,7 +85,11 @@ con.connect(function(err) {
 
 
 // parse application/x-www-form-urlencoded
-app.use(bodyParser.urlencoded({ extended: true, limit: '100mb' }))
+app.use(bodyParser.urlencoded({
+    extended: true,
+    parameterLimit: 1000000, // experiment with this parameter and tweak
+    limit: '100mb'
+}))
 
 app.use(bodyParser.json({
     limit: '100mb',
