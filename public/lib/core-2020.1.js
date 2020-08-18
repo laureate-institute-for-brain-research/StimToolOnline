@@ -860,7 +860,7 @@ class GUI
 						else
 						{
 							htmlCode += '<input type="text" name="' + key + '" id="' + keyId;
-							htmlCode += '" value="' + value + '" class="text ui-widget-content ui-corner-all">';
+							htmlCode += '" value="' + value + '" class="text ui-widget-content ui-corner-all"' + (value ? 'disabled': '')+ '>';
 						}
 					}
 				}

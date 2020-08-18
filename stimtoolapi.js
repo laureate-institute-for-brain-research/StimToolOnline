@@ -113,10 +113,10 @@ module.exports = function (app){
             if (err) return console.error(err);
 
             // File name is by taskname, participant id, session and date 
-            file_name = req.body.expInfo.task + '_' + req.body.expInfo.participant + '_' + req.body.expInfo.session + '_' + req.body.expInfo.date + '.csv'
+            file_name = req.sanitize(req.body.expInfo.task) + '_' + req.sanitize(req.body.expInfo.participant) + '_' + req.sanitize(req.body.expInfo.session) + '_' + req.sanitize(req.body.expInfo.date)+ '.csv'
 
-            path_to_save = `data/${req.body.expInfo.study}/${file_name}`
-            fs.access(`data/${req.body.expInfo.study}`, error => {
+            path_to_save = `data/${req.sanitize(req.body.expInfo.study)}/${file_name}`
+            fs.access(`data/${req.sanitize(req.body.expInfo.study)}`, error => {
                 if (!error) {
                     // The check succeeded
                     fs.writeFile(path_to_save, csv, function(err) {

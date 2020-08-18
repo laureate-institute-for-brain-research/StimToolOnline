@@ -52,31 +52,33 @@ window.onload = function () {
 				expInfo.participant = values.subject
 				expInfo.study = values.study
 				expInfo.session = values.session
+
+				// set next link
+				psychoJS.setRedirectUrls(
+					'/link?id=' +  values.link + '&index=' + parseInt(getQueryVariable('index')) + 1, // get next order.
+					'/' // cancellation url
+				)
+				
 			}
 		}
 	})
 		.done(
 			function () {
-				// psychoJS.start({expName, expInfo});
+
+
+				
 				psychoJS.start({
 					expName, 
 					expInfo,
 					resources: resources,
-				});
+				  })
+				  psychoJS._config.experiment.saveFormat = undefined // don't save to client side
 
-				// psychoJS._config.environment = ExperimentHandler.Environment.SERVER
-				psychoJS._config.experiment.saveFormat = undefined // don't save to client side
-
-				// console.log(psychoJS)
-
-				
 			}
 	)
-	// Check if there is an practice
-	psychoJS.setRedirectUrls(
-		'/link?id=' + getQueryVariable('id') + '&index=' + parseInt(getQueryVariable('index')) + 1, // get next order.
-		'/' // cancellation url
-	)
+	
+
+
 }
 
 function formatDate() {
@@ -94,20 +96,22 @@ function formatDate() {
 
 // open window:
 psychoJS.openWindow({
-	fullscr: true,
+	fullscr: (window.location.hostname != 'localhost'), // not full screen at localhost,
 	color: new util.Color('black'),
 	units: 'height',
 	waitBlanking: true
-});
-
+})
+	
 // store info about the experiment session:
 let expName = 'Horizon Task';  // from the Builder filename that created this script
 var expInfo = { 'session': '', 'participant': '' , 'date' : formatDate(), 'study': ''};
 
-psychoJS.schedule(psychoJS.gui.DlgFromDict({
+psychoJS.schedule(psychoJS._gui.DlgFromDict({
 	dictionary: expInfo,
 	title: expName
-}));
+}))
+
+
 
 const flowScheduler = new Scheduler(psychoJS);
 const dialogCancelScheduler = new Scheduler(psychoJS);

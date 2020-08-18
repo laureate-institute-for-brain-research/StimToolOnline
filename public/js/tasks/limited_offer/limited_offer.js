@@ -100,7 +100,7 @@ psychoJS.openWindow({
 });
 
 // store info about the experiment session:
-let expName = 'Limited Offer';  // from the Builder filename that created this script
+let expName = 'Limited Offer Task';  // from the Builder filename that created this script
 var expInfo = { 'session': '', 'participant': '' , 'date' : formatDate(), 'study': ''};
 
 // schedule the experiment:
@@ -206,7 +206,7 @@ var instrBelow;
 var ready;
 var trialClock;
 var timePointClock;
-var offer_stim;
+var offer_stim_text;
 var offer_rect;
 
 
@@ -297,7 +297,7 @@ function experimentInit() {
 	timePointClock = new util.Clock();
 
 	// Initial the Text Position of the Band
-	offer_stim = new visual.TextStim({
+	offer_stim_text = new visual.TextStim({
 		win: psychoJS.window,
 		name: 'offer',
 		text: 'X',
@@ -311,7 +311,7 @@ function experimentInit() {
 	offer_rect= new visual.Rect({
 		win: psychoJS.window,
 		name: `offer_rect`,
-		width: 0.25,
+		width: 0.28,
 		height: 0.2,
 		lineWidth: 3.5,
 		units: 'norm',
@@ -650,52 +650,11 @@ function trialsLoopBegin(thisScheduler) {
 	return Scheduler.Event.NEXT;
 }
 
-function trials_exampleLoopBegin(thisScheduler) {
-	total_games = 4
-	clearBandits()
-	example_trials = new TrialHandler({
-		psychoJS: psychoJS,
-		nReps: 1, method: TrialHandler.Method.SEQUENTIAL,
-		extraInfo: expInfo, originPath: undefined,
-		trialList: 'example_play.xls',
-		seed: undefined, name: 'example_trials'
-	});
-	psychoJS.experiment.addLoop(example_trials); // add the loop to the experiment
-	currentLoop = example_trials;  // we're now the current loop
-
-	// Schedule all the example_trials in the trialList:
-	for (const thisTrial of example_trials) {
-		const snapshot = example_trials.getSnapshot();
-
-		thisScheduler.add(importConditions(snapshot));
-		thisScheduler.add(trialRoutineBegin(snapshot));
-		thisScheduler.add(trialRoutineEachFrame(snapshot));
-		thisScheduler.add(trialIsi(snapshot));
-		thisScheduler.add(trialRoutineEnd(snapshot));
-		thisScheduler.add(endLoopIteration(thisScheduler, snapshot));
-	}
-
-	
-
-	return Scheduler.Event.NEXT;
-}
 function instruct_pagesLoopEnd() {
 	psychoJS.experiment.removeLoop(slides);
 	return Scheduler.Event.NEXT;
 }
 
-function exampleLoopEnd() {
-	totalPoints = 0
-	clearBandits()
-	clearLevers()
-	currentTrialNumber.setAutoDraw(false)
-	gameNumtracker.setAutoDraw(false)
-	totalPointsTracker.setAutoDraw(false)
-	slideStim.setAutoDraw(false)
-	psychoJS.experiment.removeLoop(example_trials);
-
-	return Scheduler.Event.NEXT;
-}
 
 // SHow the points in the trial 
 function trialsLoopEnd() {
@@ -728,7 +687,7 @@ function clearTrialComponenets() {
 		boxes_rect[8][key].setAutoDraw(false)
 	}
 
-	offer_stim.setAutoDraw(false)
+	offer_stim_text.setAutoDraw(false)
 
 
 	
@@ -773,7 +732,7 @@ function trialRoutineBegin(trials) {
 		// update component parameters for each repeat
 		// word.setColor(new util.Color(letterColor));
 		
-		offer_stim.setText(initial_offer + ' ¢') // Set the Current Offer
+		offer_stim_text.setText(initial_offer + ' ¢') // Set the Current Offer
 		
 		
 		currentTrialNumber.setText(`Trial Number: ${trial_number} / 108`)
@@ -828,10 +787,10 @@ function trialRoutineEachFrame(trials) {
 		// Withdraw or High offer depedning on schedule
 		if (waited) {
 			if ( (time_point + 1) == ts_high) {
-				offer_stim.setText(highOfferVal + ' ¢')
+				offer_stim_text.setText(highOfferVal + ' ¢')
 			}
 			if ( (time_point + 1) == ts_withdrawal) {
-				offer_stim.setText(0 + ' ¢')
+				offer_stim_text.setText(0 + ' ¢')
 			}
 		}
 		
@@ -843,16 +802,19 @@ function trialRoutineEachFrame(trials) {
 		var orientation_screen_duration = 1
 		if (tp <= orientation_screen_duration) {
 			saved = false
-			psychoJS.eventManager.clearEvents()
+			// psychoJS.eventManager.clearEvents()
+			// 
 			offer_rect.fillColor = new util.Color('white')
 			offer_rect.opacity = 1
-			offer_stim.color = new util.Color('black')
+			offer_stim_text.color = new util.Color('black')
 
 			wait_rect_stim.height = 0.09
 			wait_rect_stim.width = 0.12
+
+			offer_stim_text.height = 0.07
 			if (time_point == 0 || waited){
 				offer_rect.setAutoDraw(true)
-				offer_stim.setAutoDraw(true)
+				offer_stim_text.setAutoDraw(true)
 			}
 
 			// if (waited) {
@@ -860,14 +822,14 @@ function trialRoutineEachFrame(trials) {
 			// }
 	
 			if (!pressed && time_point > 0) {
-				offer_stim.setText('X')
+				offer_stim_text.setText('X')
 				offer_rect.setAutoDraw(false)
-				offer_stim.setAutoDraw(true)
+				offer_stim_text.setAutoDraw(true)
 			}
 	
 			if (accepted) {
 				offer_rect.setAutoDraw(true)
-				offer_stim.setAutoDraw(true)
+				offer_stim_text.setAutoDraw(true)
 				
 			}
 			
@@ -928,11 +890,11 @@ function trialRoutineEachFrame(trials) {
 					offer_rect.fillColor = new util.Color(selectColor)
 					offer_rect.opacity = .5
 
-					offer_stim.height += .02
-					offer_stim.width += .02
-					offer_stim.setAutoDraw(true)
+					offer_stim_text.height += .02
+					offer_stim_text.width += .02
+					offer_stim_text.setAutoDraw(true)
 					accept_rect_stim.setAutoDraw(true)
-					offer_stim.color = new util.Color('white')
+					offer_stim_text.color = new util.Color('white')
 					
 				}
 				if (resp.keys == RIGHT_KEY) {
@@ -961,11 +923,11 @@ function trialRoutineEachFrame(trials) {
 				if (showed_missed <= 0) {
 					// Only show this text 1 time. 
 					// Rest of the trial will be mared as ex
-					offer_stim.setText('Miss - Press Earlier \nOffer Lost')
+					offer_stim_text.setText('Miss - Press Earlier \nOffer Lost')
 					showed_missed = 1
 				}
-				offer_stim.setAutoDraw(true)
-				offer_stim.color = new util.Color('white')
+				offer_stim_text.setAutoDraw(true)
+				offer_stim_text.color = new util.Color('white')
 
 				accept_rect_stim.setAutoDraw(false)
 				accept_text_stim.setAutoDraw(false)
@@ -979,7 +941,7 @@ function trialRoutineEachFrame(trials) {
 			
 			if (waited) {
 				offer_rect.setAutoDraw(false)
-				offer_stim.setAutoDraw(false)
+				offer_stim_text.setAutoDraw(false)
 
 				accept_rect_stim.setAutoDraw(false)
 				accept_text_stim.setAutoDraw(false)
@@ -991,7 +953,7 @@ function trialRoutineEachFrame(trials) {
 
 			if (accepted) {
 				offer_rect.setAutoDraw(true)
-				offer_stim.setAutoDraw(true)
+				offer_stim_text.setAutoDraw(true)
 
 				accept_rect_stim.setAutoDraw(false)
 				accept_text_stim.setAutoDraw(false)
@@ -1055,7 +1017,7 @@ function trialRoutineEachFrame(trials) {
 			t_end = 0
 			t_isi = 0
 
-			var current_point = offer_stim.getText().replace(' ¢','')
+			var current_point = offer_stim_text.getText().replace(' ¢','')
 			if (current_point == 'X') {
 				current_point = 0
 			}
@@ -1068,7 +1030,7 @@ function trialRoutineEachFrame(trials) {
 
 			currentTrialNumber.setAutoDraw(false)
 			totalPointsTracker.setAutoDraw(false)
-			offer_stim.setAutoDraw(false)
+			offer_stim_text.setAutoDraw(false)
 			offer_rect.setAutoDraw(false)
 
 			accept_rect_stim.setAutoDraw(false)
@@ -1175,10 +1137,10 @@ function trialRoutineEnd(trials) {
 		//------Ending Routine 'trial'-------
 
 		// Add Points at End
-		if (offer_stim.getText() != 'X') {
-			if (!Number.isNaN(offer_stim.getText())) {
-				console.log(offer_stim.getText())
-				totalPoints = totalPoints + parseInt(offer_stim.getText().replace(' ¢', ''))
+		if (offer_stim_text.getText() != 'X') {
+			if (!Number.isNaN(offer_stim_text.getText())) {
+				console.log(offer_stim_text.getText())
+				totalPoints = totalPoints + parseInt(offer_stim_text.getText().replace(' ¢', ''))
 			}
 		}
 		
