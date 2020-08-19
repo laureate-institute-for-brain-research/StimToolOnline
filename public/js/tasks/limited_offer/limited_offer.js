@@ -808,7 +808,7 @@ function trialRoutineEachFrame(trials) {
 		// Orientation Screen ( 1000ms)
 		var orientation_screen_duration = 1
 		if (tp > 0  && tp <= 1) {
-			console.log('Orientation Screen')
+			// console.log('Orientation Screen')
 			psychoJS.eventManager.clearEvents()
 			saved = false
 			
@@ -837,7 +837,7 @@ function trialRoutineEachFrame(trials) {
 		// Make Decision (1500ms)
 		var decision_making_duration = 1.5
 		if (tp > 1  && tp <= 2.5){
-			console.log('Make Decision Screen')
+			// console.log('Make Decision Screen')
 			// console.log(trial_length)
 			// console.log(time_point)
 
@@ -863,7 +863,7 @@ function trialRoutineEachFrame(trials) {
 		var button_press_duration = 1
 		if (tp > 2.5  && tp <= 3.5){
 
-			console.log('Button Press Screen')
+			// console.log('Button Press Screen')
 			
 			if (!pressed) {
 				accept_rect_stim.fillColor = new util.Color('white')
@@ -922,7 +922,7 @@ function trialRoutineEachFrame(trials) {
 		// Break ( 1000ms)
 		var break_duration = 1
 		if (tp > 3.5  && tp <= 4.5){
-			console.log('Break Screen')
+			// console.log('Break Screen')
 			// console.log(resp.keys)
 
 			accept_rect_stim.setAutoDraw(false)
