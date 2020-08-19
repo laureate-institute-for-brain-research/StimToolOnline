@@ -194,14 +194,12 @@ function updateInfo() {
 }
 var boxColor = '#0074B7'
 var selectColor = '#0074B7'
-var forced_fillColor = '#FF0000'
 
 
 var slideStim;
 var goodLuckStim;
 var slides;
 var instructClock;
-var instrText1;
 var instrBelow;
 var ready;
 var trialClock;
@@ -231,27 +229,21 @@ var wait_text_stim;
 var wait_rect_stim;
 
 
-
-var bandit_left_up_handle;
-var bandit_left_down_handle;
-var bandit_right_up_handle;
-var bandit_right_down_handle;
-
-var example_trials;
 var currentTrialNumber;
-var gameNumtracker;
+
 var totalPoints = 0;
 var totalPointsTracker;
 
 var points_fixation_stim;
-var t_isi;
-var t_end;
 
-var isiClock;
-var endClock;
+var t_end;
+var t_isi;
 
 var readyClock;
-var readyText;
+var isiClock;
+var endClock;
+var gameNumtracker;
+
 
 var resp;
 var thanksClock;
@@ -617,8 +609,6 @@ function instructRoutineEnd(trials) {
 
 var trials;
 var currentLoop;
-var lastTrialKeyPressed;
-var total_games;
 function trialsLoopBegin(thisScheduler) {
 	// set up handler to look up the conditions
 	trials = new TrialHandler({
@@ -694,11 +684,6 @@ function clearTrialComponenets() {
 }
 
 
-var trialComponents;
-var lastGameNumber;
-var lastTrial;
-var lastTrialPoints = 0;
-
 var accepted;
 var waited;
 // var theseKeys;
@@ -747,20 +732,6 @@ function trialRoutineBegin(trials) {
 	};
 }
 
-/**
- * Returns true if this is the last trial
- * @param {*} game_type 
- * @param {*} trial_num 
- */
-function isLastTrial(game_type, trial_num) {
-	if (game_type == 'h1' && trial_num == 4) return true
-	if (game_type == 'h6' && trial_num == 9) return true
-	return false
-}
-
-var showLastTrial;
-var time_continue;
-var now;
 var time_point;
 var missed_timepoint;
 
@@ -1066,7 +1037,7 @@ function trialIsi(trials) {
 		// get current time
 		t_end = endClock.getTime();
 
-		points_fixation_stim.setAutoDraw(true)
+		points_fixation_stim.setAutoDraw(true) 
 
 		//  time point end
 		if (t_end >= fb_duration) { 
@@ -1157,74 +1128,7 @@ function trialRoutineEnd(trials) {
 }
 
 var readyComponents;
-function readyRoutineBegin(trials) {
-	return function () {
-		//------Prepare to start Routine 'ready'-------
-		// Clear Trial Components
-		clearBandits()
-		clearLevers()
-		t = 0;
-		psychoJS.eventManager.clearEvents()
-		readyClock.reset(); // clock
-		frameN = -1;
-		routineTimer.add(2.000000);
-		// update component parameters for each repeat
-		// keep track of which components have finished
-		readyComponents = [];
-		readyComponents.push(goodLuckStim);
 
-		return Scheduler.Event.NEXT;
-	};
-}
-
-
-function readyRoutineEachFrame(trials) {
-	return function () {
-		//------Loop for each frame of Routine 'ready'-------
-		let continueRoutine = true; // until we're told otherwise
-		// get current time
-		t = readyClock.getTime();
-		// frameN = frameN + 1;// number of completed frames (so 0 is the first frame)
-		// update/draw components on each frame
-
-		// console.log('in ready routine')
-		goodLuckStim.setAutoDraw(true)
-
-		if (psychoJS.eventManager.getKeys({keyList:['right']}).length > 0) {
-			continueRoutine = false
-		}
-
-		// check for quit (typically the Esc key)
-		if (psychoJS.experiment.experimentEnded || psychoJS.eventManager.getKeys({ keyList: ['escape'] }).length > 0) {
-			return quitPsychoJS('The [Escape] key was pressed. Goodbye!', false);
-		}
-
-		// refresh the screen if continuing
-		if (continueRoutine) {
-			return Scheduler.Event.FLIP_REPEAT;
-		}
-		else {
-			return Scheduler.Event.NEXT;
-		}
-	};
-}
-
-
-
-function readyRoutineEnd(trials) {
-	return function () {
-		//------Ending Routine 'ready'-------
-		for (const thisComponent of readyComponents) {
-			if (typeof thisComponent.setAutoDraw === 'function') {
-				thisComponent.setAutoDraw(false);
-			}
-		}
-
-		return Scheduler.Event.NEXT;
-	};
-}
-
-// 
 
 var thanksComponents;
 function thanksRoutineBegin(trials) {
