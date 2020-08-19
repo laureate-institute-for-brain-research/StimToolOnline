@@ -933,6 +933,8 @@ function trialRoutineEachFrame(trials) {
 
 			if (waited) {
 				offer_stim_text.setAutoDraw(false)
+			} else {
+				offer_stim_text.setAutoDraw(true)
 			}
 
 			if (!pressed) {
@@ -1007,7 +1009,8 @@ function trialRoutineEachFrame(trials) {
 			t_end = 0
 			t_isi = 0
 
-			var current_point = offer_stim_text.getText().replace(' ¢','')
+			// remove the cents symbolc of the text
+			var current_point = offer_stim_text.getText().split(' ')[0]
 			if (current_point == 'X') {
 				current_point = 0
 			}
@@ -1067,7 +1070,7 @@ function trialIsi(trials) {
 
 		//  time point end
 		if (t_end >= fb_duration) { 
-			points_fixation_stim.setText('X')
+			points_fixation_stim.setText('+')
 		}
 
 		if (t_end >= (fb_duration + (trial_isi / 1000))) {
