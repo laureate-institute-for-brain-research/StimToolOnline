@@ -691,6 +691,7 @@ var missed;
 var pressed;
 var showed_missed;
 var saved;
+var globalTrialNumber = 0;
 function trialRoutineBegin(trials) {
 	return function () {
 		//------Prepare to start Routine 'trial'-------
@@ -713,16 +714,16 @@ function trialRoutineBegin(trials) {
 
 		psychoJS.eventManager.clearEvents()
 
-		
-
 
 		// update component parameters for each repeat
 		// word.setColor(new util.Color(letterColor));
 		
 		offer_stim_text.setText(initial_offer + ' ¢') // Set the Current Offer
+
+		globalTrialNumber = globalTrialNumber + 1
 		
 		
-		currentTrialNumber.setText(`Trial Number: ${trial_number} / 108`)
+		currentTrialNumber.setText(`Trial Number: ${globalTrialNumber} / 108`)
 		totalPointsTracker.setText(`Total ¢: ${totalPoints}`)
 	
 		resp.keys = undefined;
