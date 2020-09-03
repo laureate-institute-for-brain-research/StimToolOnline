@@ -168,6 +168,7 @@ module.exports = function (app){
                         
                         console.log("Sending email: " + req.body.to);
                         // console.log(data)
+
                         mailgun.messages().send(data, function(error, body) {
                             // console.log(body);
                             res.send({'message': 'email sent!'})

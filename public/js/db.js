@@ -99,6 +99,13 @@ function shareModal(uuid) {
                 modal_elem = document.getElementById('modal1')
                 var instance = M.Modal.getInstance(modal_elem);
                 instance.close();
+
+                // Clear Elements
+                document.getElementById("loader").style.display = 'none'
+
+                document.getElementsByName('to')[0].value = ''
+                document.getElementsByName('from')[0].value = ''
+                document.getElementsByName('body')[0].value = ''
             }
         })
 
