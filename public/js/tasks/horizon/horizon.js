@@ -39,15 +39,21 @@ function getQueryVariable(variable) {
 window.onload = function () {
 	var id = getQueryVariable('id')
 	
-	// exp Info if avaialable
-	$.ajax({
-		type: "POST",
-		url: '/getInfo',
-		data: { 'id': id},
-		dataType: 'JSON',
-		success: (values) => {
-			// console.log(values)
-			// set values if valid id
+	// Get info Promize
+	const getInfoPromise = new Promise((resolve, reject) => {
+		$.ajax({
+			type: "POST",
+			url: '/getInfo',
+			data: { 'id': id },
+			dataType: 'JSON',
+			success: function (data) {
+				resolve(data)
+			}
+		})
+	})
+		// Read getINFO 
+		.then((values) => {
+			console.log(values)
 			if (values.subject && values.session && values.study) {
 				expInfo.participant = values.subject
 				expInfo.study = values.study
@@ -55,30 +61,74 @@ window.onload = function () {
 
 				// set next link
 				psychoJS.setRedirectUrls(
-					'/link?id=' +  values.link + '&index=' + parseInt(getQueryVariable('index')) + 1, // get next order.
+					'/link?id=' + values.link + '&index=' + parseInt(getQueryVariable('index')) + 1, // get next order.
 					'/' // cancellation url
 				)
-				
-			}
-		}
-	})
-		.done(
-			function () {
-
-
-				
-				psychoJS.start({
-					expName, 
-					expInfo,
-					resources: resources,
-				  })
-				  psychoJS._config.experiment.saveFormat = undefined // don't save to client side
 
 			}
-	)
+		
+			// Return AJAX Promise to get Confit Params
+			return new Promise((resolve, reject) => {
+				$.ajax({
+					type: 'GET',
+					url: '/js/tasks/horizon/' + getQueryVariable('run'),
+					dataType: 'json',
+					success: (data) => {
+						resolve(data)
+					}
+				})
+			})
+		
+		})
+		
+		// Read RUN Config
+		.then((values) => {
+			// console.log(values['instruct_schedule'])
+			resources.push({ name: 'run_schedules.xls', path: values['schedule'] })
+			resources.push({ name: 'instruct_schedule.csv', path: values['instruct_schedule'] })
+			return new Promise((resolve, reject) => {
+				$.ajax({
+					type: 'GET',
+					url: values['instruct_schedule'],
+					dataType: 'text',
+					async: false,
+					success: (data) => {
+						var out = [];
+						var allRows = data.split('\n'); // split rows at new line
+						
+						var headerRows = allRows[0].split(',');
+						
+						for (var i=1; i<allRows.length; i++) {
+							var obj = {};
+							var currentLine = allRows[i].split(',');
+							for(var j=0;j<headerRows.length;j++){
+								obj[headerRows[j]] = currentLine[j];
+							}
+							out.push(obj);
+							resources.push({ name: obj['instruct_slide'], path: obj['instruct_slide'] })
+							resources.push({ name: obj['audio_path'], path: obj['audio_path'] })
+						}
+						console.log(resources)
+						resolve(data)
+					}
+				})
+				
+			})
+		})
 	
-
-
+		.then((values) => {
+		
+			
+			psychoJS.start({
+				expName, 
+				expInfo,
+				resources: resources,
+			  })
+			psychoJS._config.experiment.saveFormat = undefined // don't save to client side
+			
+			console.log(psychoJS)
+		})
+	
 }
 
 function formatDate() {
@@ -162,24 +212,26 @@ dialogCancelScheduler.add(quitPsychoJS, '', false);
 
 // Add Slides to resources
 var resources = [
-	{ name: 'game_type.xls', path: '/js/tasks/horizon/game_type.xls' },
+	// { name: 'game_type.xls', path: '/js/tasks/horizon/game_type.xls' },
 	{ name: 'game_type_practice.xls', path: '/js/tasks/horizon/game_type_practice.xls' },
-	{ name: 'instruct_slide.xls', path: '/js/tasks/horizon/media/instruct_slide.xls' },
+	// { name: 'instruct_schedule.xls', path: '/js/tasks/horizon/media/instruct_schedule.xls' },
 	{ name: 'example_play.xls', path: '/js/tasks/horizon/media/example_play.xls' },
 	{ name: 'instruct_slide_r2.xls', path: '/js/tasks/horizon/media/instruct_slide_r2.xls' },
+	{ name: `/js/tasks/horizon/media/horizonInstructions/Slide22.jpeg`, path: `/js/tasks/horizon/media/horizonInstructions/Slide22.jpeg` }
+	// { name: '/js/tasks/horizon/media/instruction_audio/slide1_23m4a.m4a', path: '/js/tasks/horizon/media/instruction_audio/slide1_23m4a.m4a'}
 ]
 
-for (var i = 1; i <= 22; i++){
-	var imagePath = { name: `/js/tasks/horizon/media/horizonInstructions/Slide${i}.jpeg`, path: `/js/tasks/horizon/media/horizonInstructions/Slide${i}.jpeg` }
-	// console.log(i)
-	resources.push(imagePath)
-}
+// for (var i = 1; i <= 22; i++){
+// 	var imagePath = { name: `/js/tasks/horizon/media/horizonInstructions/Slide${i}.jpeg`, path: `/js/tasks/horizon/media/horizonInstructions/Slide${i}.jpeg` }
+// 	// console.log(i)
+// 	resources.push(imagePath)
+// }
 
-for (var i = 1; i <= 2; i++){
-	var imagePath = { name: `/js/tasks/horizon/media/instructions_r2/${i}.jpg`, path: `/js/tasks/horizon/media/instructions_r2/${i}.jpg` }
-	// console.log(i)
-	resources.push(imagePath)
-}
+// for (var i = 1; i <= 2; i++){
+// 	var imagePath = { name: `/js/tasks/horizon/media/instructions_r2/${i}.jpg`, path: `/js/tasks/horizon/media/instructions_r2/${i}.jpg` }
+// 	// console.log(i)
+// 	resources.push(imagePath)
+// }
 
 
 
@@ -248,6 +300,8 @@ var totalPointsTracker;
 
 var readyClock;
 var readyText;
+
+var track;
 
 var resp;
 var thanksClock;
@@ -509,13 +563,16 @@ function experimentInit() {
 	thanksText = new visual.TextStim({
 		win: psychoJS.window,
 		name: 'thanksText',
-		text: 'This is the end of the experiment.\n\nThanks!',
+		text: 'This is the end of the task run.\n\nThanks!',
 		font: 'Arial',
 		units: 'height',
 		pos: [0, 0], height: 0.05, wrapWidth: undefined, ori: 0,
 		color: new util.Color('white'), opacity: 1,
 		depth: 0.0
 	});
+
+	
+	  
 
 	// Create some handy timers
 	globalClock = new util.Clock();  // to track the time since experiment started
@@ -532,7 +589,7 @@ function instruct_pagesLoopBegin(thisScheduler) {
 		psychoJS: psychoJS,
 		nReps: 1, method: TrialHandler.Method.SEQUENTIAL,
 		extraInfo: expInfo, originPath: undefined,
-		trialList: 'instruct_slide.xls',
+		trialList: 'instruct_schedule.csv',
 		seed: undefined, name: 'slides'
 	});
 
@@ -585,6 +642,13 @@ function instructRoutineBegin(trials) {
 		instructComponents = [ slideStim];
 	
 		instructComponents.push(ready);
+		track = new Sound({
+			win: psychoJS.window,
+			value: audio_path
+		  });
+		// console.log(audio_path)
+		track.setVolume(1.0);
+		track.play();
 
 		for (const thisComponent of instructComponents)
 			if ('status' in thisComponent)
@@ -624,6 +688,10 @@ function instructSlideRoutineEachFrame(trials) {
 			psychoJS.window.callOnFlip(function () { ready.start(); }); // start on screen flip
 			psychoJS.window.callOnFlip(function () { ready.clearEvents(); });
 		}
+
+		// Play Audio If Exists
+		
+
 
 		if (ready.status === PsychoJS.Status.STARTED) {
 			let theseKeys = ready.getKeys({ keyList: ['right'], waitRelease: false });
@@ -718,7 +786,7 @@ function trialsLoopBegin(thisScheduler) {
 			psychoJS: psychoJS,
 			nReps: 1, method: TrialHandler.Method.SEQUENTIAL,
 			extraInfo: expInfo, originPath: undefined,
-			trialList: 'game_type.xls',
+			trialList: 'run_schedule.xls',
 			seed: undefined, name: 'trials'
 		});
 	}
