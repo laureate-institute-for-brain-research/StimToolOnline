@@ -266,7 +266,6 @@ var slideStim;
 var goodLuckStim;
 var slides;
 var instructClock;
-var instrText1;
 var instrBelow;
 var ready;
 var trialClock;
@@ -313,16 +312,6 @@ function experimentInit() {
 	
 	// Initialize components for Routine "instruct"
 	instructClock = new util.Clock();
-	instrText1 = new visual.TextStim({
-		win: psychoJS.window,
-		name: 'instrText1',
-		text: 'Horizontal Task Instructions.\n\nIn this experiment we would like you to choose\nbetween two one-armed bandits of the sort you might find in a casino.',
-		font: 'Arial',
-		units: 'height',
-		pos: [0, 0], height: 0.05, wrapWidth: undefined, ori: 0,
-		color: new util.Color('white'), opacity: 1,
-		depth: 0.0
-	});
 
 	instrBelow = new visual.TextStim({
 		win: psychoJS.window,

@@ -1,7 +1,7 @@
 {
     "order": [
-        "/?task=horizon&run=1",
-        "/?task=horizon&run=2",
+        "/?task=horizon&run=BK_Pilot_R1.json",
+        "/?task=horizon&run=BK_Pilot_R2.json",
         "/completed"
     ],
     "fullscreen": true
