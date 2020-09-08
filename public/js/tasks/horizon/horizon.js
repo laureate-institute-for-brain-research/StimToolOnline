@@ -11,8 +11,8 @@ import * as visual from '/lib/visual-2020.1.js';
 import { Sound } from '/lib/sound-2020.1.js';
 
 var practice = false;
-var LEFT_KEY = 'left'
-var RIGHT_KEY = 'right'
+var LEFT_KEY = 'comma'
+var RIGHT_KEY = 'period'
 
 
 // init psychoJS:
@@ -84,7 +84,7 @@ window.onload = function () {
 		// Read RUN Config
 		.then((values) => {
 			// console.log(values['instruct_schedule'])
-			resources.push({ name: 'run_schedules.xls', path: values['schedule'] })
+			resources.push({ name: 'run_schedule.xls', path: values['schedule'] })
 			resources.push({ name: 'instruct_schedule.csv', path: values['instruct_schedule'] })
 			return new Promise((resolve, reject) => {
 				$.ajax({
@@ -178,7 +178,7 @@ flowScheduler.add(instruct_pagesLoopScheduler);
 flowScheduler.add(instruct_pagesLoopEnd);
 
 // // // Example Play
-if (getQueryVariable('run') == '1' ){
+if (getQueryVariable('run').includes('R1') ){
 	const example_playScheduler = new Scheduler(psychoJS);
 	flowScheduler.add(trials_exampleLoopBegin, example_playScheduler);
 	flowScheduler.add(example_playScheduler);
@@ -217,7 +217,8 @@ var resources = [
 	// { name: 'instruct_schedule.xls', path: '/js/tasks/horizon/media/instruct_schedule.xls' },
 	{ name: 'example_play.xls', path: '/js/tasks/horizon/media/example_play.xls' },
 	{ name: 'instruct_slide_r2.xls', path: '/js/tasks/horizon/media/instruct_slide_r2.xls' },
-	{ name: `/js/tasks/horizon/media/horizonInstructions/Slide22.jpeg`, path: `/js/tasks/horizon/media/horizonInstructions/Slide22.jpeg` }
+	{ name: `/js/tasks/horizon/media/horizonInstructions/Slide22.jpeg`, path: `/js/tasks/horizon/media/horizonInstructions/Slide22.jpeg` },
+	{ name: `/js/tasks/horizon/media/instruction_audio/slide22.m4a`, path: `/js/tasks/horizon/media/instruction_audio/slide22.m4a` }
 	// { name: '/js/tasks/horizon/media/instruction_audio/slide1_23m4a.m4a', path: '/js/tasks/horizon/media/instruction_audio/slide1_23m4a.m4a'}
 ]
 
@@ -698,6 +699,7 @@ function instructSlideRoutineEachFrame(trials) {
 
 			if (theseKeys.length > 0) {  // at least one key was pressed
 				// a response ends the routine
+				track.stop();
 				continueRoutine = false;
 			}
 		}
@@ -1205,6 +1207,13 @@ function readyRoutineBegin(trials) {
 		psychoJS.eventManager.clearEvents()
 		readyClock.reset(); // clock
 		frameN = -1;
+		track = new Sound({
+			win: psychoJS.window,
+			value: '/js/tasks/horizon/media/instruction_audio/slide22.m4a'
+		  });
+		// console.log(audio_path)
+		track.setVolume(1.0);
+		track.play();
 		routineTimer.add(2.000000);
 		// update component parameters for each repeat
 		// keep track of which components have finished
@@ -1228,7 +1237,8 @@ function readyRoutineEachFrame(trials) {
 		// console.log('in ready routine')
 		goodLuckStim.setAutoDraw(true)
 
-		if (psychoJS.eventManager.getKeys({keyList:['right']}).length > 0) {
+		if (psychoJS.eventManager.getKeys({ keyList: ['right'] }).length > 0) {
+			track.stop();
 			continueRoutine = false
 		}
 
