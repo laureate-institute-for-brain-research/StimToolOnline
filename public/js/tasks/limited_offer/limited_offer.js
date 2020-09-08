@@ -690,6 +690,7 @@ var waited;
 var missed;
 var pressed;
 var showed_missed;
+var offer_withdrew;
 var saved;
 var globalTrialNumber = 0;
 function trialRoutineBegin(trials) {
@@ -709,6 +710,7 @@ function trialRoutineBegin(trials) {
 		waited = false;
 		missed = false;
 		showed_missed = false;
+		offer_withdrew = false;
 
 		missed_timepoint = [];
 
@@ -768,8 +770,10 @@ function trialRoutineEachFrame(trials) {
 			if ( (time_point + 1) == ts_high) {
 				offer_stim_text.setText(highOfferVal + ' ¢')
 			}
-			if ( (time_point + 1) == ts_withdrawal) {
+			if ((time_point + 1) == ts_withdrawal) {
+				offer_withdrew = true;
 				offer_stim_text.setText(0 + ' ¢')
+				// offer_stim_text.setText('Offer revoked')
 			}
 		}
 		
@@ -912,14 +916,16 @@ function trialRoutineEachFrame(trials) {
 			if (!pressed) {
 				missed = true
 				
+				offer_stim_text.setText('0')
 				// Show the text only once in that timepoint only
-				if (!showed_missed) {
-					// missed_timepoint.push(time_point)
-					offer_stim_text.setText('Miss - Press Earlier \nOffer Lost')
-					offer_stim_text.color = new util.Color('white')
-					offer_stim_text.setAutoDraw(true)
-					showed_missed = true
-				}
+				// if (!showed_missed) {
+				// 	// missed_timepoint.push(time_point)
+
+				// 	offer_stim_text.setText('Miss - Press Earlier \nOffer Lost')
+				// 	offer_stim_text.color = new util.Color('white')
+				// 	offer_stim_text.setAutoDraw(true)
+				// 	showed_missed = true
+				// }
 			}
 
 			
@@ -973,7 +979,7 @@ function trialRoutineEachFrame(trials) {
 
 		// Went through all timepoints. Go to next Trial Routine
 		// / If accepted, go to the next trial
-		if ((time_point == trial_length) || accepted) {
+		if ((time_point == trial_length) || accepted || missed || offer_withdrew) {
 			continueRoutine = false
 
 			// Show Points Reset so next routine can show points won and ISI
@@ -987,7 +993,17 @@ function trialRoutineEachFrame(trials) {
 				current_point = 0
 			}
 			//  to be displayed at trial end
-			points_fixation_stim.setText(`You have won ${current_point} ¢ in this trial`)
+			
+			if (missed) {
+				points_fixation_stim.setText(`Missed - Offer Lost \n\nYou have won ${current_point} ¢ in this trial`)
+			}
+			else if (offer_withdrew) {
+				points_fixation_stim.setText(`Offer Revoked \n\nYou have won ${current_point} ¢ in this trial`)
+			}
+			else {
+				points_fixation_stim.setText(`You have won ${current_point} ¢ in this trial`)
+			}
+			
 			psychoJS.experiment.addData(`points_won`, current_point);
 
 			for (var i = 0; i < trial_length; i++){
