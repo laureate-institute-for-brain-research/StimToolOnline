@@ -122,6 +122,7 @@ module.exports = function (app){
                     fs.writeFile(path_to_save, csv, function(err) {
                         if (err) return console.error(err);
                         console.log(`${path_to_save} saved`);
+                        
                     });
                 } else {
                     // The check failed
@@ -130,10 +131,12 @@ module.exports = function (app){
                     fs.writeFile(path_to_save, csv, function(err) {
                         if (err) return console.error(err);
                         console.log(`${path_to_save} saved`);
+                        
                     });
                 }
             });
-          });
+        });
+        res.send('data saved')
     })
 
     // send save info given link
