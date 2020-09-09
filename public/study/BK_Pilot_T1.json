@@ -2,7 +2,7 @@
     "order": [
         "/?task=horizon&run=BK_Pilot_R1.json",
         "/?task=horizon&run=BK_Pilot_R2.json",
-        "/completed"
+        "/completed?"
     ],
     "fullscreen": true
 } 

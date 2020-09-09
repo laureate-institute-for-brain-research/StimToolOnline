@@ -108,7 +108,7 @@ window.onload = function () {
 							resources.push({ name: obj['instruct_slide'], path: obj['instruct_slide'] })
 							resources.push({ name: obj['audio_path'], path: obj['audio_path'] })
 						}
-						console.log(resources)
+						// console.log(resources)
 						resolve(data)
 					}
 				})
@@ -126,7 +126,7 @@ window.onload = function () {
 			  })
 			psychoJS._config.experiment.saveFormat = undefined // don't save to client side
 			
-			console.log(psychoJS)
+			// console.log(psychoJS)
 		})
 	
 }
@@ -582,16 +582,6 @@ function instruct_pagesLoopBegin(thisScheduler) {
 		trialList: 'instruct_schedule.csv',
 		seed: undefined, name: 'slides'
 	});
-
-	if (getQueryVariable('run') == '2') {
-		slides = new TrialHandler({
-			psychoJS: psychoJS,
-			nReps: 1, method: TrialHandler.Method.SEQUENTIAL,
-			extraInfo: expInfo, originPath: undefined,
-			trialList: 'instruct_slide_r2.xls',
-			seed: undefined, name: 'slides'
-		});
-	}
 
 	// console.log(slides)
 	
