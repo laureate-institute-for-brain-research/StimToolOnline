@@ -66,7 +66,8 @@ window.onload = function () {
 			if (values.subject && values.session) {
 				expInfo.participant = values.subject
 				expInfo.session = values.session
-				expInfo.study  = values.study
+				expInfo.study = values.study
+				expInfo.run_id = getQueryVariable('run')
 			}
 		}
 	})
@@ -101,7 +102,7 @@ psychoJS.openWindow({
 
 // store info about the experiment session:
 let expName = 'Limited Offer Task';  // from the Builder filename that created this script
-var expInfo = { 'session': '', 'participant': '' , 'date' : formatDate(), 'study': ''};
+var expInfo = { 'participant': '' ,'session': '',  'run_id': '', 'date' : formatDate(), 'study': '', };
 
 // schedule the experiment:
 psychoJS.schedule(psychoJS.gui.DlgFromDict({
