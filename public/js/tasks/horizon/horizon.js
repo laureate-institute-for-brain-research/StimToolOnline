@@ -58,6 +58,7 @@ window.onload = function () {
 				expInfo.participant = values.subject
 				expInfo.study = values.study
 				expInfo.session = values.session
+				expInfo.run_id = getQueryVariable('run')
 
 				// set next link
 				psychoJS.setRedirectUrls(
@@ -154,7 +155,7 @@ psychoJS.openWindow({
 	
 // store info about the experiment session:
 let expName = 'Horizon Task';  // from the Builder filename that created this script
-var expInfo = { 'session': '', 'participant': '' , 'date' : formatDate(), 'study': ''};
+var expInfo = { 'participant': '' ,'session': '',  'run_id': '', 'date' : formatDate(), 'study': '', };
 
 psychoJS.schedule(psychoJS._gui.DlgFromDict({
 	dictionary: expInfo,
