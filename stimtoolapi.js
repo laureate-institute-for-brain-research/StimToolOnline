@@ -9,8 +9,13 @@ var models = require('./models')
 
 module.exports = function (app){
     // ROUTES
+
+    /**
+     * Adds user to database
+     * Returns json object with message and subject info json object
+     */
     app.post('/adduser', (req, res) => {
-        console.log(req.body)
+        // console.log(req.body)
 
         models.dashboard.find({
             where: req.body
@@ -29,21 +34,18 @@ module.exports = function (app){
                         .then(() => {
                             res.send({
                                 'message': 'ok',
-                                'link': '/link?index=0&id=' + req.body.link
+                                'info': req.body
                             })
                     })
                 } else {
                     // already have same subject, study, session
-                    console.log(result)
+                    // console.log(result)
                     res.send({
                         'message': 'subject/study/session already exists',
-                        'link': '/link?index=0&id=' + result.link
+                        'info': result
                     })
                 }
             })
-
-        
-        
     })
 
     // use this for verifcation

@@ -1,5 +1,6 @@
 /* ---- particles.js config ---- */
 
+
 particlesJS("particles-js", {
     "particles": {
         "number": {
@@ -127,6 +128,8 @@ $('#study-list').change(function () {
 document.getElementById("about").addEventListener("click", function(event){
     event.preventDefault()
     study = document.getElementById("study-list").value
+
+  
     // alert(study)
     if (study == 'BK_Pilot'){
         // window.location.href = "/studies";
@@ -151,38 +154,112 @@ document.getElementById("about").addEventListener("click", function(event){
 
 
 
-$(document).ready(() => {
-    var form = document.getElementById("adduser");
-    form.addEventListener('submit', (event) => {
-        event.preventDefault();
-        var values = {};
-        $.each($('#adduser').serializeArray(), function (i, field) {
-            values[field.name] = field.value;
-        });
-        // console.log(values)
+
+
+// Submit Logic
+document.getElementById('begin').addEventListener('click', (event) => {
+    event.preventDefault();
+    var values = {};
+    $.each($('#adduser').serializeArray(), function (i, field) {
+        values[field.name] = field.value;
+    });
+    // console.log(values)
+
+    
+    $.ajax({
+        type: "POST",
+        url: '/adduser',
+        data: values,
+        dataType: 'JSON',
+        success: function (result) {
+            console.log(result);
+            if (result.message == 'ok') {
+
+                next_link = '/link?index=0&id=' + result.info.link
+                window.location.replace(next_link);
+            } else {
+                // Open Modal to Confirm Already Exists Subject
+                $('#modalCenter').modal({});
+
+                document.getElementById('errorMessage').innerText = result.message;
+                document.getElementById('procceed_anyways').addEventListener('click', () => {
+                    next_link = '/link?index=0&id=' + result.info.link
+                    window.location.replace(next_link);
+                });
+            }
+        }
+    });
+
+});
+
+// Skip Logic.
+// Create Ability to skip to Run
+document.getElementById('skip').addEventListener('click', (event) => {
+    event.preventDefault();
+    var values = {};
+    $.each($('#adduser').serializeArray(), function (i, field) {
+        values[field.name] = field.value;
+    });
+    const adduser = new Promise((resolve, reject) => {
         $.ajax({
             type: "POST",
             url: '/adduser',
             data: values,
             dataType: 'JSON',
             success: function (result) {
-                console.log(result);
-                if (result.message == 'ok') {
-                    window.location.replace(result.link);
-                } else {
-                    // Open Modal to Confirm Already Exists Subject
-                    $('#modalCenter').modal({});
-
-                    document.getElementById('errorMessage').innerText = result.message;
-                    document.getElementById('procceed_anyways').addEventListener('click', () => {
-                        window.location.replace(result.link);
-                    });
-                }
+                resolve(result)
             }
         });
+    })
+        .then((result) => {
+            // Get The study list
+            return new Promise((resolve, reject) => {
+                url = '/study/' + result.info.study + '_' + result.info.session + '.json'
+                $.getJSON(url, function (data) {
+                    data.respond = result
+                    resolve(data)
+                });
+            })
+        })
+        .then((result) => {
+            // console.log(result)
+            $('#modalSkipCenter').modal({});
+            select_form = document.getElementById("run-list");
+            // Add element to selec for each order
+            for (var i = 0; i < result.order.length; i++){
+                select_op = document.createElement("option")
+                // console.log(elem)
+                elem = result.order[i]
+                select_op.value = elem
+                
+                if (elem.includes('completed')) {
+                    continue
+                }
+                select_op.appendChild( document.createTextNode(elem) );
 
-    });
+                // add opt to end of select box (sel)
+                select_form.appendChild(select_op);
+            }
+
+            $("#modalSkipCenter").on("hidden.bs.modal", function () {
+                // put your default event here
+                select_form.length = 0;
+            });
+
+            document.getElementById('skip_begn').addEventListener('click', event => {
+                event.preventDefault()
+                var run_val = select_form.options[select_form.selectedIndex].value;
+                var idx = select_form.options[select_form.selectedIndex].index - 1;
+                // console.log(result)
+                var link = run_val + '&id=' + result.respond.info.link + '&index=' + idx
+                window.location.replace(link);
+            })
+        })
+    
+
+
 });
+
 
 if(performance.navigation.type == 2){
     location.reload(true);

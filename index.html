@@ -51,7 +51,8 @@
                       <div class="row" id="about_begin_div" style="display: none;">
                         <div class="col mx-auto">
                           <button id='about' class="btn btn-secondary" data-toggle="tooltip" data-placement="left" title="Click to learn more information about the study">About</button>
-                          <button id='begin' type="submit" class="btn btn-success" data-toggle="tooltip" data-placement="right" title="Click to begin session">Begin</button>
+                          <button id='skip' class="btn btn-warning" data-toggle="tooltip" data-placement="right" title="Click to skip to a task run">Skip</button>
+                          <button id='begin' type="submit" class="btn btn-success float-right" data-toggle="tooltip" data-placement="right" title="Click to begin session">Begin</button>
                         </div>
                       </div>
                   </form>
@@ -74,11 +75,39 @@
           </div>
           <div class="modal-body">
             <p id='errorMessage' style="color: red"></p>
-            <p>Click "Proceed Anyways" to proceed regardless. Old files will not get overwritten.</p>
+            <p>Click "Proceed Anyways" to proceed regardless. Old files will not get overw</p>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
             <button type="button" id='procceed_anyways' class="btn btn-danger">Proceed Anyways</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Skip Modal -->
+    <div class="modal fade" id="modalSkipCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle">Skip</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body" id='modalskip_body'>
+            Select the task run to skip to.
+            <br>
+            <form id='run_form'>
+              <select id='run-list' required class="form-control" name='run'>
+                <option selected>Choose Run</option>
+              </select>
+            </form>
+            
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" value="Begin" id='skip_begn' class="btn btn-warning">Begin</button>
           </div>
         </div>
       </div>
