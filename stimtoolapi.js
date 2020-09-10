@@ -41,7 +41,7 @@ module.exports = function (app){
                     // already have same subject, study, session
                     // console.log(result)
                     res.send({
-                        'message': 'subject/study/session already exists',
+                        'message': 'subject/study/session already exists in database',
                         'info': result
                     })
                 }

@@ -278,3 +278,28 @@ if(performance.navigation.type == 2){
 //         window.location.href="/studies";
 //     }
 // }); 
+function getRandomSubarray(arr, size) {
+    var shuffled = arr.slice(0), i = arr.length, temp, index;
+    while (i--) {
+        index = Math.floor((i + 1) * Math.random());
+        temp = shuffled[index];
+        shuffled[index] = shuffled[i];
+        shuffled[i] = temp;
+    }
+    return shuffled.slice(0, size);
+  }
+ // set random background color
+colors = [
+    '#4b3064',
+    '#b61924',
+    '#e86638',
+    "#f0bd4a",
+    "#de1874",
+    "#b52236",
+    "#e85733",
+    "#7b8da7"
+]
+
+  var random_color = getRandomSubarray(colors, 1);
+  console.log(random_color)
+  document.getElementById('particles-js').style.backgroundColor = random_color[0]
