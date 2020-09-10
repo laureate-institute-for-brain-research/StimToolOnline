@@ -171,22 +171,19 @@ $(document).ready(() => {
                 if (result.message == 'ok') {
                     window.location.replace(result.link);
                 } else {
+                    // Open Modal to Confirm Already Exists Subject
+                    $('#modalCenter').modal({});
 
-                    if (confirm(result.message + ".\nPress Ok to overwrite and continue.") == true) {
+                    document.getElementById('errorMessage').innerText = result.message;
+                    document.getElementById('procceed_anyways').addEventListener('click', () => {
                         window.location.replace(result.link);
-                    }
-                    
-                    
-
-
-                    
+                    });
                 }
-                
             }
-        })
+        });
 
     });
-})
+});
 
 if(performance.navigation.type == 2){
     location.reload(true);
