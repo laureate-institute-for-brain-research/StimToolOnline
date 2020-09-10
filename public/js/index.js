@@ -144,7 +144,6 @@ document.getElementById("about").addEventListener("click", function(event){
     else {
         // window.location.href = "/studies";
         document.getElementById('info-container').style.display = 'none';
-
     }
 });
 
