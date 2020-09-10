@@ -28,13 +28,16 @@ module.exports = function (app){
                     })
                         .then(() => {
                             res.send({
-                                'message': 'ok'
+                                'message': 'ok',
+                                'link': '/link?index=0&id=' + req.body.link
                             })
                     })
                 } else {
                     // already have same subject, study, session
+                    console.log(result)
                     res.send({
-                        'message': 'subject/study/session already exists'
+                        'message': 'subject/study/session already exists',
+                        'link': '/link?index=0&id=' + result.link
                     })
                 }
             })

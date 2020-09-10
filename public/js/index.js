@@ -111,24 +111,97 @@ particlesJS("particles-js", {
     "retina_detect": true
 });
   
-  
-/* ---- stats.js config ---- */
-  
-var count_particles, stats, update;
-stats = new Stats;
-stats.setMode(0);
-stats.domElement.style.position = 'absolute';
-stats.domElement.style.left = '0px';
-stats.domElement.style.top = '0px';
-document.body.appendChild(stats.domElement);
-count_particles = document.querySelector('.js-count-particles');
-update = function() {
-    stats.begin();
-    stats.end();
-    if (window.pJSDom[0].pJS.particles && window.pJSDom[0].pJS.particles.array) {
-        count_particles.innerText = window.pJSDom[0].pJS.particles.array.length;
-    }
-    requestAnimationFrame(update);
-};
-requestAnimationFrame(update);
+// To Allow Tooltip on this page
+$(function () {
+    $('[data-toggle="tooltip"]').tooltip()
+})
 
+// When study list is change, than show input fields
+$('#study-list').change(function () {
+    document.getElementById('id_div').style.display = 'block';
+    document.getElementById('session_div').style.display = 'block';
+    document.getElementById('about_begin_div').style.display = 'block';
+})
+
+// About Function
+document.getElementById("about").addEventListener("click", function(event){
+    event.preventDefault()
+    study = document.getElementById("study-list").value
+    // alert(study)
+    if (study == 'BK_Pilot'){
+        // window.location.href = "/studies";
+        document.getElementById('info-container').style.display = 'block';
+        document.getElementById('info-title').innerHTML = study + ' Task List';
+        document.getElementById('info-text').innerHTML = "<p>This study includes the following tasks: <ul><li>Horizon Task - Run 1</li><li>Horizon Task - Run 2</li></ul></p>";
+    }
+    else if (study == 'AAC-BET'){
+        // window.location.href = "/studies";
+        document.getElementById('info-container').style.display = 'block';
+        document.getElementById('info-title').innerHTML = study + ' Task List';
+        document.getElementById('info-text').innerHTML = "<p>This study includes the following tasks: <ul><li>Horizon Task - Run 1</li><li>Horizon Task - Run 2</li><li>Limited Offer Task - Run 1</li></ul></p>";
+    }
+
+    else {
+        // window.location.href = "/studies";
+        document.getElementById('info-container').style.display = 'none';
+
+    }
+});
+
+
+
+
+
+$(document).ready(() => {
+    var form = document.getElementById("adduser");
+    form.addEventListener('submit', (event) => {
+        event.preventDefault();
+        var values = {};
+        $.each($('#adduser').serializeArray(), function (i, field) {
+            values[field.name] = field.value;
+        });
+        // console.log(values)
+        $.ajax({
+            type: "POST",
+            url: '/adduser',
+            data: values,
+            dataType: 'JSON',
+            success: function (result) {
+                console.log(result);
+                if (result.message == 'ok') {
+                    window.location.replace(result.link);
+                } else {
+
+                    if (confirm(result.message + ".\nPress Ok to overwrite and continue.") == true) {
+                        window.location.replace(result.link);
+                    }
+                    
+                    
+
+
+                    
+                }
+                
+            }
+        })
+
+    });
+})
+
+if(performance.navigation.type == 2){
+    location.reload(true);
+ }
+// // Begin Logic
+// document.getElementById("begin").addEventListener("click", function(event){
+//     event.preventDefault()
+//     study = document.getElementById("study-list").value;
+//     // alert(study)
+//     if (study == 'BK_Pilot'){
+//         // window.location.href = "/studies";
+//         window.location.href="/studies";
+//     }
+//     if (study == 'AAC-BET'){
+//         // window.location.href = "/studies";
+//         window.location.href="/studies";
+//     }
+// }); 
