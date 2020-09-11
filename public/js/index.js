@@ -150,12 +150,6 @@ document.getElementById("about").addEventListener("click", function(event){
     }
 });
 
-
-
-
-
-
-
 // Submit Logic
 document.getElementById('begin').addEventListener('click', (event) => {
     event.preventDefault();
