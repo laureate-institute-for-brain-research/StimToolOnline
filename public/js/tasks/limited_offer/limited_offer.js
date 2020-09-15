@@ -1,6 +1,7 @@
-﻿/*************** 
- * Limited Offer Task *
- ***************/
+﻿/**
+ * Limited Offer Task
+ * @author James Touthang <jtouthang@laureateinstitute.org>
+ */
 
 import { PsychoJS } from '/lib/core-2020.1.js';
 import * as core from '/lib/core-2020.1.js';
