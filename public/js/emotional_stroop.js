@@ -171,7 +171,7 @@ var instructions = {
         <br>The words that come up will be presented in either red, blue, or green ink.</p>`,
         `<p>The words themselves will be either emotionally neutral words or emotionally negative words. 
         <br>Ignore reading the words themselves.</p>`,
-        `<p><span style="font-size: 200px;">⚠️</span></p><p>The emotionally negative words that are presented are highly negative and may lead to become uncomfortable or upset. 
+        `<p><span style="font-size: 200px;">⚠️</span></p><p>The emotionally negative words that are presented are highly negative and may lead you to become uncomfortable or upset. 
         <br>Please let the administrator know if you would like to discontinue the task for this reason.
         <br><p>`,
         `<p>Example 1:<br> If you are shown:<br><br><font color="red">car</font><br><br>The correct answer is red so you should say "red" aloud.</p>`,
