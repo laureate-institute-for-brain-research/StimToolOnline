@@ -15,16 +15,34 @@ function getQueryVariable(variable) {
  */
 function saveData(){
     row_data = jsPsych.data.get().last().json()
+    trial_data = JSON.parse(jsPsych.data.get().json())
+    // $.ajax({
+    //     type : 'post',
+    //     async : false,
+    //     url : '/saveFlanker?' + $.param(expInfo) ,
+    //     data : row_data,
+    //     contentType: "application/json",
+    //     dataType: 'json'
+    // });
+
+    // console.log(trial_data)
+
     $.ajax({
-        type : 'post',
-        async : false,
-        url : '/saveFlanker?' + $.param(subjectinfo) ,
-        data : row_data,
-        contentType: "application/json",
-        dataType: 'json'
-    });
+        type: "POST",
+        url: '/save',
+        data: {
+            "trials_data": trial_data,
+            "expInfo": expInfo
+        },
+        dataType: 'JSON',
+        success:function(data) {
+            console.log(data)
+          }
+    })
+
     
-    console.log(row_data);
+    
+    // console.log(row_data);
 }
 
 //var csv is the CSV file with headers
@@ -103,11 +121,25 @@ var study = getQueryVariable('study')
 var session = getQueryVariable('session')
 var version = getQueryVariable('version')
 
-var subjectinfo = {
-    id : id,
-    study :study,
-    session : session,
-    version : version
+function formatDate() {
+    var d = new Date(),
+        month = '' + (d.getMonth() + 1),
+        day = '' + d.getDate(),
+        year = d.getFullYear();
+
+    if (month.length < 2) month = '0' + month;
+    if (day.length < 2) day = '0' + day;
+
+    return [year, month, day].join('_');
+}
+
+
+var expInfo = {
+    'participant' : getQueryVariable('subject'),
+    'study' :study,
+    'session' : session,
+    'version': version,
+    'date' : formatDate()
 }
 
 
@@ -122,13 +154,26 @@ timeline.push({
         $.ajax({
             type : 'post',
             async : false,
-            url : '/saveFlanker?' + $.param(subjectinfo) ,
+            url : '/saveFlanker?' + $.param(expInfo) ,
             data : row_data,
             contentType: "application/json",
             dataType: 'json'
         });
+
+        // $.ajax({
+        //     type: "POST",
+        //     url: '/save',
+        //     data: {
+        //         "trials_data": jsPsych.data.get().json(),
+        //         "expInfo": expInfo
+        //     },
+        //     dataType: 'JSON',
+        //     success:function(data) {
+        //         console.log(data)
+        //       }
+        // })
         
-        console.log(row_data);
+        // console.log(row_data);
     }
     
 });
@@ -186,17 +231,23 @@ var instructions = {
 
 timeline.push(instructions)
 
-if(subjectinfo.session != 'NULL'){
-    schedule_session = subjectinfo.session
+if(expInfo.session != 'NULL'){
+    schedule_session = expInfo.session
 }else {
     // Session not specified, use T1 instead
     schedule_session = '1'
 }
 
 
+//
+// window.onload = function () {
+//     var id = getQueryVariable('id')
+// }
+
+
 // Get Schedule
 $.get('/schedules/flanker_T' + schedule_session + '.csv',function(data){
-    console.log(`session: ${schedule_session}`)
+    // console.log(`session: ${schedule_session}`)
     
     schedule = csvJSON(data)
 
@@ -268,10 +319,11 @@ $.get('/schedules/flanker_T' + schedule_session + '.csv',function(data){
                 
                  // save data
                 row_data = jsPsych.data.get().last().json()
+                console.log(jsPsych.data.get().json())
                 $.ajax({
                     type : 'post',
-                    async : false,
-                    url : '/saveFlanker?' + $.param(subjectinfo) ,
+                    async : true,
+                    url : '/saveFlanker?' + $.param(expInfo) ,
                     data : row_data,
                     contentType: "application/json",
                     dataType: 'json'
@@ -313,7 +365,7 @@ $.get('/schedules/flanker_T' + schedule_session + '.csv',function(data){
                     $.ajax({
                         type : 'post',
                         async : false,
-                        url : '/saveFlanker?' + $.param(subjectinfo) ,
+                        url : '/saveFlanker?' + $.param(expInfo) ,
                         data : row_data,
                         contentType: "application/json",
                         dataType: 'json'
@@ -362,13 +414,13 @@ $.get('/schedules/flanker_T' + schedule_session + '.csv',function(data){
             jsPsych.data.displayData();
             // Redirect to tnext next after 3 seconds
             window.setTimeout(function(){ 
-                window.location = "/color_stroop?" + $.param(subjectinfo);
+                window.location = "/color_stroop?" + $.param(expInfo);
             },3000);
         },
         // show_preload_progress_bar: true
     });
 
-    console.log(timeline)
+    // console.log(timeline)
 
 
 

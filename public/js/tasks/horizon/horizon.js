@@ -1173,7 +1173,7 @@ function trialRoutineEnd(trials) {
 
 		// Send Data
 		sendData(psychoJS.experiment._trialsData)
-		// console.log(psychoJS.experiment._trialsData)
+		console.log(psychoJS.experiment._trialsData)
 
 		return Scheduler.Event.NEXT;
 	};

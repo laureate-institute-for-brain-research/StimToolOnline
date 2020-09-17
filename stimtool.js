@@ -1,26 +1,20 @@
-// Version Test 4 of the MkTurkd Application
+// Online StimTool
 // Written by James Touthang
-
-
 
 var express = require('express');
 var bodyParser = require('body-parser');
-var formidable = require('formidable');
 var path = require('path');
 
 var mysql = require('mysql');
 
-const requestIp = require('request-ip');
-var SqlString = require('sqlstring');
-var cloudinary = require('cloudinary');
 var serveIndex = require('serve-index');
+
 const Json2csvParser = require('json2csv').Parser;
 
 var exphbs = require('express-handlebars')
 const expressSanitizer = require('express-sanitizer');
 
 const pino = require('pino')
-const expressPino = require('express-pino-logger')
 const logger = pino({ level: process.env.LOG_LEVEL || 'info' })
 
 
@@ -68,11 +62,11 @@ var con = mysql.createConnection({
 });
 
 // Setup the configurations for CDN
-cloudinary.config({
-    cloud_name: config.cloudinary_name,
-    api_key: config.cloudinary_api_key,
-    api_secret: config.cloudinary_api_secret
-});
+// cloudinary.config({
+//     cloud_name: config.cloudinary_name,
+//     api_key: config.cloudinary_api_key,
+//     api_secret: config.cloudinary_api_secret
+// });
 
 
 con.connect(function(err) {

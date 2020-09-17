@@ -7,7 +7,6 @@
 
 var fs = require('fs');
 var url = require('url');
-var mysql = require('mysql');
 var formidable = require('formidable');
 var SqlString = require('sqlstring');
 const requestIp = require('request-ip');
