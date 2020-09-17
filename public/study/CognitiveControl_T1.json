@@ -1,7 +1,8 @@
 {
     "order": [
-        "/flanker?study=cognitive_control&session=1&version=",
-        "/color_stroop?&study=cognitive_control&session=T1&version=NULL?",
+        "/flanker?study=cognitive_control&session=1&version=1",
+        "/color_stroop?&study=cognitive_control&session=1&version=1",
+        "/emotional_stroop?&study=cognitive_control&session=1&version=1",
         "/completed?"
     ],
     "fullscreen": true

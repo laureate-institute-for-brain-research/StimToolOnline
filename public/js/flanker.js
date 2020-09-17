@@ -1,3 +1,18 @@
+/**
+ * Flanker Task
+ * Use for Cognitive Control Study
+ * @author James Touthang <jtouthang@laureateinstitute.org>
+ */
+
+
+// GLOBAL Variables
+var nextLink;
+
+/**
+ * Retrieves the URL query value.
+ * i.e. /?test=value : getQueryVariable('test') -> 'value'
+ * @param {String} variable URL quiery name we want to get teh value for
+ */
 function getQueryVariable(variable) {
     var query = window.location.search.substring(1);
     var vars = query.split('&');
@@ -123,18 +138,21 @@ var version = getQueryVariable('version')
 
 function formatDate() {
     var d = new Date(),
-        month = '' + (d.getMonth() + 1),
-        day = '' + d.getDate(),
-        year = d.getFullYear();
+    month = '' + (d.getMonth() + 1),
+    day = '' + d.getDate(),
+    year = d.getFullYear();
+    hour = d.getHours()
+    minutes = d.getMinutes()
 
     if (month.length < 2) month = '0' + month;
     if (day.length < 2) day = '0' + day;
 
-    return [year, month, day].join('_');
+    return [year, month, day, hour,minutes ].join('_');
 }
 
 
 var expInfo = {
+    'task': 'flanker',
     'participant' : getQueryVariable('subject'),
     'study' :study,
     'session' : session,
@@ -151,14 +169,14 @@ timeline.push({
     message: "<p>Press the button below to start the task</p>",
     on_finish: ()=>{
         row_data = jsPsych.data.get().json()
-        $.ajax({
-            type : 'post',
-            async : false,
-            url : '/saveFlanker?' + $.param(expInfo) ,
-            data : row_data,
-            contentType: "application/json",
-            dataType: 'json'
-        });
+        // $.ajax({
+        //     type : 'post',
+        //     async : false,
+        //     url : '/saveFlanker?' + $.param(expInfo) ,
+        //     data : row_data,
+        //     contentType: "application/json",
+        //     dataType: 'json'
+        // });
 
         // $.ajax({
         //     type: "POST",
@@ -240,36 +258,66 @@ if(expInfo.session != 'NULL'){
 
 
 //
-// window.onload = function () {
-//     var id = getQueryVariable('id')
-// }
+window.onload = function () {
+    var id = getQueryVariable('id')
+    // Get info Promize
+	const getInfoPromise = new Promise((resolve, reject) => {
+		$.ajax({
+			type: "POST",
+			url: '/getInfo',
+			data: { 'id': id },
+			dataType: 'JSON',
+			success: function (data) {
+				resolve(data)
+			}
+		})
+    })
+        // Read getINFO 
+		.then((values) => {
+			console.log(values)
+			if (values.subject && values.session && values.study) {
+				expInfo.participant = values.subject
+				expInfo.study = values.study
+				expInfo.session = values.session
+				expInfo.run_id = getQueryVariable('run')
 
+                // set next link
+                nextLink = '/link?id=' + values.link + '&index=' + parseInt(getQueryVariable('index')) + 1 // get next order.
+                console.log('Next Link: ' + nextLink)
 
-// Get Schedule
-$.get('/schedules/flanker_T' + schedule_session + '.csv',function(data){
-    // console.log(`session: ${schedule_session}`)
+                console.log('expInfo: ')
+                console.log(expInfo)
+
+            }
+            
+            // Return AJAX promise to get schedule
+            return new Promise((resolve, reject) => {
+                $.get('/schedules/flanker_T' + getQueryVariable('session') + '.csv', function (data) {
+                    resolve(data)
+                })
+            })
+		
+        })
     
-    schedule = csvJSON(data)
+        .then(data => {
+            schedule = csvJSON(data)
+            setupTask(schedule)
+        })
+}
 
+function setupTask(json_schedule) {
     // Iterate over the Schedule
-    schedule.forEach(function(element, idx){
+    json_schedule.forEach(function(element, idx){
         trial_number = idx + 1
         // Ignore empty fields
         if(!element.direction && !element.congruency){
             return
         }
         
-
-        /////////////   FOR TESTING LIMIT TO 4 Trials ///////////
-        ////////////////////////////////////////////////////////
-        // if(idx < 29){
-        //     return
-        // }
-        ////////////////////////////////////////////////////////
-        ////////////////////////////////////////////////////////
-
-        // console.log(trial_number)
-
+        // For Practice, only show 5 trials
+        if ( (getQueryVariable('practice') == 'true') && (idx >= 5)) {
+            return
+        }
         var fixation = {
             type : 'html-keyboard-response',
             stimulus : '<div style="font-size:60px">+</div>',
@@ -295,7 +343,7 @@ $.get('/schedules/flanker_T' + schedule_session + '.csv',function(data){
             type : 'html-keyboard-response',
             stimulus : `
             <div>
-                <div style='font-size: 60px'>
+                <div id="stim" style='font-size: 60px'>
                     ${symbol}
                 </div>
             </div>
@@ -316,10 +364,14 @@ $.get('/schedules/flanker_T' + schedule_session + '.csv',function(data){
                 }else {
                     data.result = 'incorrect'
                 }
+                if (data.key_press) {
+                    // Change Color after press
+                    // console.log(document.getElementById('stim'))
+                  }
                 
                  // save data
                 row_data = jsPsych.data.get().last().json()
-                console.log(jsPsych.data.get().json())
+                // console.log(jsPsych.data.get().json())
                 $.ajax({
                     type : 'post',
                     async : true,
@@ -406,26 +458,21 @@ $.get('/schedules/flanker_T' + schedule_session + '.csv',function(data){
         fullscreen_mode: false
     });
 
+    console.log('Timeline Length: ' + timeline.length)
 
+    /* start the experiment */
     jsPsych.init({
         timeline: timeline,
         //display_element : 'taskdiv',
         on_finish: function() {
-            jsPsych.data.displayData();
-            // Redirect to tnext next after 3 seconds
-            window.setTimeout(function(){ 
-                window.location = "/color_stroop?" + $.param(expInfo);
-            },3000);
+            // jsPsych.data.displayData();
+            // go to next link
+            window.location = nextLink
+            
         },
         // show_preload_progress_bar: true
     });
-
-    // console.log(timeline)
-
-
-
-})
-
+}
 
 
 var debrief_block = {
@@ -447,6 +494,6 @@ var debrief_block = {
 };
 // timeline.push(debrief_block);
 
-/* start the experiment */
+
 
 
