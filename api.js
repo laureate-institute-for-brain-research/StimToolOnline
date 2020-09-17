@@ -790,27 +790,27 @@ module.exports = function (app){
     });
 
 
-    app.post('/saveAudio', (req, res) => {
-        var q = url.parse(req.url, true).query;
-        console.log('saving Audio Post requested');
-        // console.log(req.body)
-        base64 = req.body.base64data
+    // app.post('/saveAudio', (req, res) => {
+    //     var q = url.parse(req.url, true).query;
+    //     console.log('saving Audio Post requested');
+    //     // console.log(req.body)
+    //     base64 = req.body.base64data
 
-        var data = base64.replace(/^data:audio\/\w+;base64,/, '');
-        // var buffer = new Buffer(req.body.audio, 'base64'); // decode
+    //     var data = base64.replace(/^data:audio\/\w+;base64,/, '');
+    //     // var buffer = new Buffer(req.body.audio, 'base64'); // decode
 
-        savePath = 'data/cognitive_control/audio/' + q.task + '/'
-        filename = savePath + q.task + '-' + q.subject + '-' + 'B' + q.block + '-' + 'T' + q.session + '.wav'
+    //     savePath = 'data/cognitive_control/audio/' + q.task + '/'
+    //     filename = savePath + q.task + '-' + q.subject + '-' + 'B' + q.block + '-' + 'T' + q.session + '.wav'
 
-        console.log('saving...' + filename);
-        fs.writeFile(filename, data, { encoding: 'base64' }, function(err) {
-            if (err) {
-                console.log("err", err);
-            } else {
-                return res.json({ 'status': 'success' });
-            }
-        });
-    })
+    //     console.log('saving...' + filename);
+    //     fs.writeFile(filename, data, { encoding: 'base64' }, function(err) {
+    //         if (err) {
+    //             console.log("err", err);
+    //         } else {
+    //             return res.json({ 'status': 'success' });
+    //         }
+    //     });
+    // })
 
 
 

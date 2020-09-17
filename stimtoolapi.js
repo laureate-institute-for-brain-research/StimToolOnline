@@ -144,6 +144,47 @@ module.exports = function (app){
         res.send('data saved')
     })
 
+    // save Audio
+    app.post('/saveAudio', (req, res) => {
+        var q = url.parse(req.url, true).query;
+        console.log('saving Audio Post requested');
+        // console.log(req.body)
+        base64 = req.body.base64data
+
+        var data = base64.replace(/^data:audio\/\w+;base64,/, '');
+        // var buffer = new Buffer(req.body.audio, 'base64'); // decode
+
+        savePath = 'data/cognitive_control/audio/' + q.task + '/'
+        
+        // filename = savePath + q.task + '-' + q.subject + '-' + 'B' + q.block + '-' + 'T' + q.session + '.wav'
+        file_name = req.sanitize(req.body.expInfo.task) + '_' + req.sanitize(req.body.expInfo.participant) +
+            '_B' + req.sanitize(req.body.expInfo.block) + '_' + req.sanitize(req.body.expInfo.session) +
+            '_' + req.sanitize(req.body.expInfo.date) + '.wav'
+        
+        path_to_save = `data/${req.sanitize(req.body.expInfo.study)}/${file_name}`
+        
+        fs.access(`data/${req.sanitize(req.body.expInfo.study)}`, error => {
+            if (!error) {
+                // The check succeeded
+                fs.writeFile(path_to_save, data, { encoding: 'base64' }, function(err) {
+                    if (err) {
+                        console.log("err", err);
+                    }
+                });
+            } else {
+                // The check failed
+                // meaning subject probably entered their own  study -_- or field is blank
+                path_to_save = `data/free/${file_name}`
+                fs.writeFile(path_to_save, data, { encoding: 'base64' }, function(err) {
+                    if (err) {
+                        console.log("err", err);
+                    }
+                });
+            }
+        });
+        res.send('audio saved')
+    })
+
     // send save info given link
     app.post('/share', (req, res)=>{
 

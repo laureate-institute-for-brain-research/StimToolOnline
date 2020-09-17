@@ -54,10 +54,10 @@ function doneEncoding(blob) {
     filename = task + "_B" + block + ".wav"
     // Recorder.setupDownload( blob, filename );
     recIndex++;
-    sendAudio(blob, filename)
+    sendAudio(blob)
 }
 
-function sendAudio(blob, filename) {
+function sendAudio(blob) {
     var reader = new FileReader();
     reader.readAsDataURL(blob); // turn blob to base64
     reader.onloadend = function () {
@@ -65,11 +65,11 @@ function sendAudio(blob, filename) {
         // console.log(base64data);
         $.ajax({
             type: 'POST',
-            async: false,
-            url: '/saveAudio?' + $.param(subjectinfo),
+            async: true,
+            url: '/saveAudio',
             data: {
-                base64data: base64data,
-                filename: filename
+                'base64data': base64data,
+                "expInfo": expInfo
             }
         });
 
@@ -100,11 +100,12 @@ function stopRecording(block_num, task_name) {
 
     // set block for naming
     block = block_num
-    subjectinfo.block = block_num
+    expInfo.block = block_num
+    // subjectinfo.block = block_num
 
     // set task for naming
     task = task_name
-    subjectinfo.task = task_name
+    // subjectinfo.task = task_name
 
 
     audioRecorder.getBuffers(gotBuffers);

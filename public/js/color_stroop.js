@@ -1,3 +1,19 @@
+/**
+ * Color Stroop Task
+ * Use for Cognitive Control Study
+ * @author James Touthang <jtouthang@laureateinstitute.org>
+ */
+
+
+// GLOBAL Variables
+var nextLink;
+
+
+/**
+ * Retrieves the URL query value.
+ * i.e. /?test=value : getQueryVariable('test') -> 'value'
+ * @param {String} variable URL quiery name we want to get teh value for
+ */
 function getQueryVariable(variable) {
     var query = window.location.search.substring(1);
     var vars = query.split('&');
@@ -15,16 +31,30 @@ function getQueryVariable(variable) {
  */
 function saveData(){
     row_data = jsPsych.data.get().last().json()
+    trial_data = JSON.parse(jsPsych.data.get().json())
+    // $.ajax({
+    //     type : 'post',
+    //     async : false,
+    //     url : '/saveColorStroop?' + $.param(expInfo) ,
+    //     data : row_data,
+    //     contentType: "application/json",
+    //     dataType: 'json'
+    // });
+
     $.ajax({
-        type : 'post',
-        async : false,
-        url : '/saveColorStroop?' + $.param(subjectinfo) ,
-        data : row_data,
-        contentType: "application/json",
-        dataType: 'json'
-    });
+        type: "POST",
+        url: '/save',
+        data: {
+            "trials_data": trial_data,
+            "expInfo": expInfo
+        },
+        dataType: 'JSON',
+        success:function(data) {
+            console.log(data)
+          }
+    })
     
-    console.log(row_data);
+    // console.log(row_data);
 }
 
 //var csv is the CSV file with headers
@@ -48,16 +78,32 @@ function csvJSON(csv){
     return result; //JSON
 }
 
+function formatDate() {
+    var d = new Date(),
+    month = '' + (d.getMonth() + 1),
+    day = '' + d.getDate(),
+    year = d.getFullYear();
+    hour = d.getHours()
+    minutes = d.getMinutes()
+
+    if (month.length < 2) month = '0' + month;
+    if (day.length < 2) day = '0' + day;
+
+    return [year, month, day, hour,minutes ].join('_');
+}
+
 var subject = getQueryVariable('subject')
 var study = getQueryVariable('study')
 var session = getQueryVariable('session')
 var version = getQueryVariable('version')
 
-var subjectinfo = {
-    subject : subject,
-    study :study,
-    session : session,
-    version : version
+var expInfo = {
+    'task': 'color_stroop',
+    'participant' : getQueryVariable('subject'),
+    'study' :study,
+    'session' : session,
+    'version': version,
+    'date' : formatDate()
 }
 
 
@@ -70,17 +116,17 @@ timeline.push({
     fullscreen_mode: true,
     message: '<p>Press the button below to start experiment</p>',
     on_finish: ()=>{
-        row_data = jsPsych.data.get().json()
-        $.ajax({
-            type : 'post',
-            async : false,
-            url : '/saveColorStroop?' + $.param(subjectinfo) ,
-            data : row_data,
-            contentType: "application/json",
-            dataType: 'json'
-        });
+        // row_data = jsPsych.data.get().json()
+        // $.ajax({
+        //     type : 'post',
+        //     async : false,
+        //     url : '/saveColorStroop?' + $.param(expInfo) ,
+        //     data : row_data,
+        //     contentType: "application/json",
+        //     dataType: 'json'
+        // });
         
-        console.log(row_data);
+        // console.log(row_data);
     }
     
 });
@@ -148,82 +194,72 @@ timeline.push(instructions)
 
 
 
-if(subjectinfo.session != 'NULL'){
-    schedule_session = subjectinfo.session
+if(expInfo.session != 'NULL'){
+    schedule_session = expInfo.session
 }else {
     // Session not specified, use T1 instead
     schedule_session = '1'
 }
 
-// Get Schedule
-new Promise(function(resolve, reject){
-    $.get('/schedules/color_stroop_T' + schedule_session + '.csv',function(data){
-        console.log(`session: ${schedule_session}`)
-        schedule = csvJSON(data)
-        resolve(schedule)
+window.onload = function () {
+    var id = getQueryVariable('id')
+    // Get info Promize
+	const getInfoPromise = new Promise((resolve, reject) => {
+		$.ajax({
+			type: "POST",
+			url: '/getInfo',
+			data: { 'id': id },
+			dataType: 'JSON',
+			success: function (data) {
+				resolve(data)
+			}
+		})
     })
-})
-// Practice Session was removed
-// .then(function(schedule){
-//     // Practice Session
-//     schedule.forEach(function(element, idx){
-//         trial_number = idx + 1
-//         // Only using the first 10 trials
-//         if(trial_number > 10){
-//             return
-//         }
-//         console.log(trial_number)
+        // Read getINFO 
+		.then((values) => {
+			console.log(values)
+			if (values.subject && values.session && values.study) {
+				expInfo.participant = values.subject
+				expInfo.study = values.study
+				expInfo.session = values.session
+				expInfo.run_id = getQueryVariable('run')
 
-//         var fixation = {
-//             type : 'html-keyboard-response',
-//             stimulus : '<div style="font-size:60px">+</div>',
-//             choices: jsPsych.NO_KEYS,
-//             trial_duration: 1000,
-//             data: {trial_number :trial_number, test_part: 'fixation', duration : 1000},
-//             on_load: ()=>{
-//                 // document.body.style.backgroundColor = "grey";
-//                 // document.body.style.backgroundImage = "none";
-//             },
-//             // on_finish: saveData
+                // set next link
+                nextLink = '/link?id=' + values.link + '&index=' + parseInt(getQueryVariable('index')) + 1 // get next order.
+                console.log('Next Link: ' + nextLink)
+
+                console.log('expInfo: ')
+                console.log(expInfo)
+
+            }
+            
+            // Return AJAX promise to get schedule
+            return new Promise((resolve, reject) => {
+                $.get('/schedules/color_stroop_T' + getQueryVariable('session') + '.csv', function (data) {
+                    resolve(data)
+                })
+            })
+		
+        })
     
-//         }
-//         timeline.push(fixation)
+        .then(data => {
+            schedule = csvJSON(data)
+            setupTask(schedule)
+        })
+}
 
-//         var word_response = {
-//             type : 'html-keyboard-response',
-//             stimulus : `
-//             <div>
-//                 <div style='font-size: 60px; color: ${element.ink_color}'>
-//                     ${element.word}
-//                 </div>
-//             </div>
-//             `,
-//             trial_duration : 2000,
-//             data : {trial_number : trial_number, 
-//                 test_part : 'word_response', 
-//                 word: element.word,
-//                 ink_color : element.ink_color,
-//                 congruency : element.congruency
-//             },
-//             response_ends_trial : false,
-//             on_load: function(){
-//                 console.log({
-//                     word: element.word,
-//                     ink: element.ink_color
-//                 })
-//             },
-//             on_finish: function(data){
-//             }
-//         }
 
-//         timeline.push(word_response)
+// // Get Schedule
+// new Promise(function(resolve, reject){
+//     $.get('/schedules/color_stroop_T' + schedule_session + '.csv',function(data){
+//         console.log(`session: ${schedule_session}`)
+//         schedule = csvJSON(data)
+//         resolve(schedule)
 //     })
-
-//     return schedule
 // })
-.then(function(schedule){
-    // Main Session
 
+    
+function setupTask(json_schedule) {
     schedule.forEach(function(element, idx){
         trial_number = idx + 1
         // Ignore empty fields
@@ -268,7 +304,8 @@ new Promise(function(resolve, reject){
             </div>
             `,
             trial_duration : 2000,
-            data : {trial_number : trial_number, 
+            data: {
+                trial_number: trial_number, 
                 test_part : 'word_response', 
                 word: element.word,
                 ink_color : element.ink_color,
@@ -278,23 +315,24 @@ new Promise(function(resolve, reject){
             on_load: function(){
 
                 console.log({
-                    word: element.word,
-                    ink: element.ink_color
+                    'word': element.word,
+                    'ink': element.ink_color,
+                    'trial_number': trial_number
                 })
             },
             on_finish: function(data){
                 
                 
                 // save data
-                row_data = jsPsych.data.get().last().json()
-                $.ajax({
-                    type : 'post',
-                    async : false,
-                    url : '/saveColorStroop?' + $.param(subjectinfo) ,
-                    data : row_data,
-                    contentType: "application/json",
-                    dataType: 'json'
-                });
+                // row_data = jsPsych.data.get().last().json()
+                // $.ajax({
+                //     type : 'post',
+                //     async : false,
+                //     url : '/saveColorStroop?' + $.param(expInfo) ,
+                //     data : row_data,
+                //     contentType: "application/json",
+                //     dataType: 'json'
+                // });
             }
         }
 
@@ -326,17 +364,17 @@ new Promise(function(resolve, reject){
                 response_ends_trial : false,
                 on_finish: function(data){
                     
-                        // save data
-                    row_data = jsPsych.data.get().last().json()
-                    $.ajax({
-                        type : 'post',
-                        async : false,
-                        url : '/saveColorStroop?' + $.param(subjectinfo) ,
-                        data : row_data,
-                        contentType: "application/json",
-                        dataType: 'json'
-                    });
-
+                    //     // save data
+                    // row_data = jsPsych.data.get().last().json()
+                    // $.ajax({
+                    //     type : 'post',
+                    //     async : false,
+                    //     url : '/saveColorStroop?' + $.param(expInfo) ,
+                    //     data : row_data,
+                    //     contentType: "application/json",
+                    //     dataType: 'json'
+                    // });
+                    // saveData()
                     startRecording()
                 },
                 on_load: function(){
@@ -364,31 +402,28 @@ new Promise(function(resolve, reject){
             }
     
             timeline.push(block_break)
+
+            
         }
     })
-})
-.then((schedule)=>{
-    // exit fullscreen mode
+
     timeline.push({
         type: 'fullscreen',
         fullscreen_mode: false,
     });
 
-
     jsPsych.init({
         timeline: timeline,
         //display_element : 'taskdiv',
         on_finish: function() {
-            jsPsych.data.displayData();
+            // jsPsych.data.displayData();
             // Should Redirect to the next task
             // in 3 seconds
             window.setTimeout(function(){ 
-                window.location = "/emotional_stroop?" + $.param(subjectinfo);
+                window.location = "/emotional_stroop?" + $.param(expInfo);
             },3000);
         
         },
         
     });
-
-    console.log(timeline)
-})
+}
