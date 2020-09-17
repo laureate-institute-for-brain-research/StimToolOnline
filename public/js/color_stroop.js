@@ -409,20 +409,17 @@ function setupTask(json_schedule) {
 
     timeline.push({
         type: 'fullscreen',
-        fullscreen_mode: false,
+        fullscreen_mode: true,
     });
 
     jsPsych.init({
         timeline: timeline,
         //display_element : 'taskdiv',
-        on_finish: function() {
+        on_finish: function () {
+            saveData()
             // jsPsych.data.displayData();
             // Should Redirect to the next task
-            // in 3 seconds
-            window.setTimeout(function(){ 
-                window.location = "/emotional_stroop?" + $.param(expInfo);
-            },3000);
-        
+            window.location = nextLink
         },
         
     });
