@@ -8,89 +8,6 @@
 // GLOBAL Variables
 var nextLink;
 
-
-/**
- * Retrieves the URL query value.
- * i.e. /?test=value : getQueryVariable('test') -> 'value'
- * @param {String} variable URL quiery name we want to get teh value for
- */
-function getQueryVariable(variable) {
-    var query = window.location.search.substring(1);
-    var vars = query.split('&');
-    for (var i = 0; i < vars.length; i++) {
-        var pair = vars[i].split('=');
-        if (decodeURIComponent(pair[0]) == variable) {
-            return decodeURIComponent(pair[1]);
-        }
-    }
-    return 'NULL'
-}
-
-/**
- * Save the current trial to file on the server
- */
-function saveData(){
-    row_data = jsPsych.data.get().last().json()
-    trial_data = JSON.parse(jsPsych.data.get().json())
-    // $.ajax({
-    //     type : 'post',
-    //     async : false,
-    //     url : '/saveEmotionalStroop?' + $.param(expInfo) ,
-    //     data : row_data,
-    //     contentType: "application/json",
-    //     dataType: 'json'
-    // });
-    
-    // console.log(row_data);
-
-    $.ajax({
-        type: "POST",
-        url: '/save',
-        data: {
-            "trials_data": trial_data,
-            "expInfo": expInfo
-        },
-        dataType: 'JSON',
-        success:function(data) {
-            console.log(data)
-          }
-    })
-}
-
-//var csv is the CSV file with headers
-function csvJSON(csv){
-    var lines=csv.split("\n");
-    var result = [];
-    var headers=lines[0].split(",");
-    for(var i=1;i<lines.length;i++){
-        var obj = {};
-        var currentline=lines[i].split(",");
-  
-        for(var j=0;j<headers.length;j++){
-            obj[headers[j]] = currentline[j];
-        }
-  
-        result.push(obj);
-  
-    }
-    
-    //return result; //JavaScript object
-    return result; //JSON
-}
-function formatDate() {
-    var d = new Date(),
-    month = '' + (d.getMonth() + 1),
-    day = '' + d.getDate(),
-    year = d.getFullYear();
-    hour = d.getHours()
-    minutes = d.getMinutes()
-
-    if (month.length < 2) month = '0' + month;
-    if (day.length < 2) day = '0' + day;
-
-    return [year, month, day, hour,minutes ].join('_');
-}
-
 var subject = getQueryVariable('subject')
 var study = getQueryVariable('study')
 var session = getQueryVariable('session')
@@ -323,18 +240,6 @@ function setupTask(json_schedule) {
                 })
             },
             on_finish: function(data){
-                
-                
-                // save data
-                // row_data = jsPsych.data.get().last().json()
-                // $.ajax({
-                //     type : 'post',
-                //     async : false,
-                //     url : '/saveEmotionalStroop?' + $.param(expInfo) ,
-                //     data : row_data,
-                //     contentType: "application/json",
-                //     dataType: 'json'
-                // });
             }
         }
 
@@ -418,8 +323,10 @@ function setupTask(json_schedule) {
         //display_element : 'taskdiv',
         on_finish: function() {
             // jsPsych.data.displayData();
-            // Should Redirect to the next task
+            stopRecording(block_number, 'emotional_stroop')
             saveData()
+
+            // Should Redirect to the next task
             window.location = nextLink
         
             
@@ -429,71 +336,3 @@ function setupTask(json_schedule) {
 
     
 }
-
-// // Get Schedule
-// new Promise(function(resolve, reject){
-//     $.get('/schedules/emotional_stroop_T' + schedule_session + '.csv',function(data){
-//         console.log(`session: ${schedule_session}`)
-//         schedule = csvJSON(data)
-//         resolve(schedule)
-//     })
-// })
-// Practices Session Removed
-// .then(function(schedule){
-//     // Practice Session
-//     schedule.forEach(function(element, idx){
-//         trial_number = idx + 1
-//         // Only using the first 10 trials
-//         if(trial_number > 10){
-//             return
-//         }
-//         console.log(trial_number)
-
-//         var fixation = {
-//             type : 'html-keyboard-response',
-//             stimulus : '<div style="font-size:60px">+</div>',
-//             choices: jsPsych.NO_KEYS,
-//             trial_duration: 1000,
-//             data: {trial_number :trial_number, test_part: 'fixation', duration : 1000},
-//             on_load: ()=>{
-//                 // document.body.style.backgroundColor = "grey";
-//                 // document.body.style.backgroundImage = "none";
-//             },
-//             // on_finish: saveData
-    
-//         }
-//         timeline.push(fixation)
-
-//         var word_response = {
-//             type : 'html-keyboard-response',
-//             stimulus : `
-//             <div>
-//                 <div style='font-size: 60px; color: ${element.ink_color}'>
-//                     ${element.word}
-//                 </div>
-//             </div>
-//             `,
-//             trial_duration : 2000,
-//             data : {trial_number : trial_number, 
-//                 test_part : 'word_response', 
-//                 word: element.word,
-//                 ink_color : element.ink_color,
-//                 congruency : element.congruency
-//             },
-//             response_ends_trial : false,
-//             on_load: function(){
-//                 console.log({
-//                     word: element.word,
-//                     ink: element.ink_color
-//                 })
-//             },
-//             on_finish: function(data){
-//             }
-//         }
-
-//         timeline.push(word_response)
-//     })
-
-//     return schedule
-// })
-
