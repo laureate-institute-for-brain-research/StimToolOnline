@@ -2,6 +2,8 @@
 var moment = require('moment')
 var pino = require('pino')
 const logger = pino({ level: process.env.LOG_LEVEL || 'info' })
+const path = require('path');
+const fs = require('fs');
 
 // import Models
 var models = require('../models')
@@ -39,4 +41,34 @@ exports.dashboard = function (req, res) {
         // Sends Nothing if not there
             logger.info(error)
         })
+}
+
+exports.studies = function (req, res) {
+    const directoryPath = path.join('public', 'study');
+    //passsing directoryPath and callback function
+    fs.readdir(directoryPath, function (err, files) {
+        //handling error
+        if (err) {
+            return console.log('Unable to scan directory: ' + err);
+        } 
+        //listing all files using forEach
+
+        studies = []
+        files.forEach(function (file) {
+            // Do whatever you want to do with the file
+            // console.log(file);
+            if (path.extname(file) == '.json') {
+                full_path  = path.join('public', 'study', file)
+                // const study_info = require(full_path);
+                let rawdata = fs.readFileSync(full_path);
+                let study_info = JSON.parse(rawdata);
+                // remove last link in the order
+                study_info.order.pop()
+                studies.push(study_info)
+            }
+        });
+        res.render('studies', { layout: false, studies: studies })
+
+    });
+    
 }

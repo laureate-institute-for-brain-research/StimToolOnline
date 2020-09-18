@@ -1,4 +1,5 @@
 {
+    "name": "BK_Pilot T1",
     "order": [
         "/?task=horizon&run=BK_Pilot_R1.json",
         "/?task=horizon&run=BK_Pilot_R2.json",

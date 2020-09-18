@@ -1,4 +1,5 @@
 {
+    "name": "BK_Pilot T2",
     "order": [
         "/?task=horizon&run=1",
         "/?task=horizon&run=2",

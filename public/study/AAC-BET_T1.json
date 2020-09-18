@@ -1,4 +1,5 @@
 {
+    "name": "AAC-BET T1",
     "order": [
         "/?task=horizon&run=AAC_BET_R1.json",
         "/?task=horizon&run=AAC_BET_R2.json",

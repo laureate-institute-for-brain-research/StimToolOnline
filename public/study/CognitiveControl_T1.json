@@ -1,4 +1,5 @@
 {
+    "name": "Cognitive Control T1",
     "order": [
         "/flanker?study=cognitive_control&session=1&version=1",
         "/color_stroop?&study=cognitive_control&session=1&version=1",
