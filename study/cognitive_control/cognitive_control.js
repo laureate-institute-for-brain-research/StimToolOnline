@@ -33,21 +33,21 @@ module.exports = {
 
 	routes : function(app){
 		// show index page for Wave-2
-		app.get('/cognitive_control', function (req, res) {
-			//var q = url.parse(req.url, true). query;
-			//var session = q.session;
-			//var mkturk_id = q.mkturk_id;
+		// app.get('/cognitive_control', function (req, res) {
+		// 	//var q = url.parse(req.url, true). query;
+		// 	//var session = q.session;
+		// 	//var mkturk_id = q.mkturk_id;
 
-			fs.readFile('study/cognitive_control/index.html', function (err, data) {
-				// Write Header
-				res.writeHead(200, {
-					'Content-Type' : 'text/html'
-				});
-				// Wrte Body
-				res.write(data);
-				res.end();
-			});
-		});
+		// 	fs.readFile('study/cognitive_control/index.html', function (err, data) {
+		// 		// Write Header
+		// 		res.writeHead(200, {
+		// 			'Content-Type' : 'text/html'
+		// 		});
+		// 		// Wrte Body
+		// 		res.write(data);
+		// 		res.end();
+		// 	});
+		// });
 
 		app.get('/cognitive_control/complete', function (req, res) {
 			//var q = url.parse(req.url, true). query;
