@@ -33,6 +33,7 @@
             $('.datepicker').datepicker();
             $('select').formSelect();
             $('.modal').modal();
+            $('#UsersTable').DataTable();
         });
     </script>
     <!-- Modal Structure -->
@@ -112,33 +113,36 @@
         <div class="container">
              <hr>
             <div class="row">
-                <table id="UsersTable" class="table table-dark display" border="1">
-                    <thead>
-                        <tr>
-                            <th id="subjectid">subject</th>
-                            <th>Study</th>
-                            <th>Session</th>
-                            <th>Link</th>
-                            <th>Completed</th>
-                            <th>Date Created</th>
-                            <th>updatedAt</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {{#each users}}
-                        <tr>
-                            <td><a class="waves-effect waves-light" href="">{{subject}}</a></td>
-                            <td>{{study}}</td>
-                            <td>{{session}}</td>
-                            <td><a class="waves-effect waves-light btn blue" href="#modal1" onclick="shareModal('{{link}}')">Share</a></td>
-                            <td>{{completed}}</td>
-                            <td>{{createdAt}}</td>
-                            <td>{{updatedAt}}</td> 
-                         
-                        </tr>
-                        {{/each}}
-                    </tbody>
-                </table>
+                <div class="col">
+                    <table id="UsersTable" class="table compact cell-border hover nowrap stripe">
+                        <thead>
+                            <tr>
+                                <th id="subjectid">subject</th>
+                                <th>Study</th>
+                                <th>Session</th>
+                                <th>Link</th>
+                                <th>Completed</th>
+                                <th>Date Created</th>
+                                <th>updatedAt</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {{#each users}}
+                            <tr>
+                                <td><a class="waves-effect waves-light" href="">{{subject}}</a></td>
+                                <td>{{study}}</td>
+                                <td>{{session}}</td>
+                                <td><a class="waves-effect waves-light btn blue" href="#modal1" onclick="shareModal('{{link}}')">Share</a></td>
+                                <td>{{completed}}</td>
+                                <td>{{createdAt}}</td>
+                                <td>{{updatedAt}}</td> 
+                            
+                            </tr>
+                            {{/each}}
+                        </tbody>
+                    </table>
+                </div>
+                
             </div>
         </div>
         
