@@ -71,14 +71,6 @@ function csvJSON(csv){
 function saveData(){
     row_data = jsPsych.data.get().last().json()
     trial_data = JSON.parse(jsPsych.data.get().json())
-    // $.ajax({
-    //     type : 'post',
-    //     async : false,
-    //     url : '/saveColorStroop?' + $.param(expInfo) ,
-    //     data : row_data,
-    //     contentType: "application/json",
-    //     dataType: 'json'
-    // });
 
     $.ajax({
         type: "POST",
