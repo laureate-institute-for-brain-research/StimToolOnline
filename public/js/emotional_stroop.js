@@ -22,8 +22,6 @@ var expInfo = {
     'date' : formatDate()
 }
 
-
-
 // TASK Logic
 var timeline = [];
 
@@ -31,20 +29,6 @@ timeline.push({
     type: 'fullscreen',
     fullscreen_mode: true,
     message: '<p>Press the button below to start experiment</p>',
-    on_finish: ()=>{
-        // row_data = jsPsych.data.get().json()
-        // $.ajax({
-        //     type : 'post',
-        //     async : false,
-        //     url : '/saveEmotionalStroop?' + $.param(expInfo) ,
-        //     data : row_data,
-        //     contentType: "application/json",
-        //     dataType: 'json'
-        // });
-        
-        // console.log(row_data);
-    }
-    
 });
 
 
@@ -106,25 +90,6 @@ var instructions = {
 
 timeline.push(instructions)
 
-// // Practice Sessiion for 5 trials
-// var practice_instructions = {
-
-//     type: 'instructions',
-//     pages: [
-//         '<h1>Practice Session:</h1><p>We will first go through a practice run of 10 trials to familiarize with the task</p>',
-//         '<h2>Click Next to begin the Practice Session</h2>'
-        
-//     ],
-//     show_clickable_nav: true,
-//     allow_keys: true,
-//     show_page_number : true,
-//     on_finish: ()=>{
-        
-//     }
-// }
-// timeline.push(practice_instructions)
-
-
 if(expInfo.session != 'NULL'){
     schedule_session = expInfo.session
 }else {
@@ -178,7 +143,6 @@ window.onload = function () {
             setupTask(schedule)
         })
 }
-
 
 function setupTask(json_schedule) {
     schedule.forEach(function(element, idx){
@@ -329,10 +293,8 @@ function setupTask(json_schedule) {
             // Should Redirect to the next task
             window.location = nextLink
         
-            
         },
         // show_preload_progress_bar: true
     });
 
-    
 }

@@ -4,11 +4,8 @@
  * @author James Touthang <jtouthang@laureateinstitute.org>
  */
 
-
 // GLOBAL Variables
 var nextLink;
-
-
 
 var subject = getQueryVariable('subject')
 var study = getQueryVariable('study')
@@ -23,8 +20,6 @@ var expInfo = {
     'version': version,
     'date' : formatDate()
 }
-
-
 
 // TASK Logic
 var timeline = [];
@@ -110,8 +105,6 @@ var instructions = {
 
 timeline.push(instructions)
 
-
-
 if(expInfo.session != 'NULL'){
     schedule_session = expInfo.session
 }else {
@@ -166,17 +159,6 @@ window.onload = function () {
         })
 }
 
-
-// // Get Schedule
-// new Promise(function(resolve, reject){
-//     $.get('/schedules/color_stroop_T' + schedule_session + '.csv',function(data){
-//         console.log(`session: ${schedule_session}`)
-//         schedule = csvJSON(data)
-//         resolve(schedule)
-//     })
-// })
-
-    
 function setupTask(json_schedule) {
     schedule.forEach(function(element, idx){
         trial_number = idx + 1
@@ -239,18 +221,7 @@ function setupTask(json_schedule) {
                 })
             },
             on_finish: function(data){
-                
-                
-                // save data
-                // row_data = jsPsych.data.get().last().json()
-                // $.ajax({
-                //     type : 'post',
-                //     async : false,
-                //     url : '/saveColorStroop?' + $.param(expInfo) ,
-                //     data : row_data,
-                //     contentType: "application/json",
-                //     dataType: 'json'
-                // });
+
             }
         }
 
@@ -281,18 +252,6 @@ function setupTask(json_schedule) {
                 },
                 response_ends_trial : false,
                 on_finish: function(data){
-                    
-                    //     // save data
-                    // row_data = jsPsych.data.get().last().json()
-                    // $.ajax({
-                    //     type : 'post',
-                    //     async : false,
-                    //     url : '/saveColorStroop?' + $.param(expInfo) ,
-                    //     data : row_data,
-                    //     contentType: "application/json",
-                    //     dataType: 'json'
-                    // });
-                    // saveData()
                     startRecording()
                 },
                 on_load: function(){
@@ -302,7 +261,7 @@ function setupTask(json_schedule) {
                     
                     document.getElementById("seconds").style.fontWeight = 'bold';
                     document.getElementById("seconds").style.color = 'red';
-                    var downloadTimer = setInterval(function(){
+                    var downloadTimer = setInterval( function(){
                         timeleft--;
                         
                         try{
@@ -315,13 +274,10 @@ function setupTask(json_schedule) {
                         if(timeleft <= 0)
                             clearInterval(downloadTimer);
                         }
-                        ,1000);
+                        , 1000);
                 }
             }
-    
             timeline.push(block_break)
-
-            
         }
     })
 
