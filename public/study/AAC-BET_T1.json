@@ -5,5 +5,6 @@
         "/?task=limited_offer&run=1",
         "/completed?"
     ],
-    "fullscreen": true
+    "fullscreen": true,
+    "text_html": "<p>This study includes the following tasks: <ul><li>Horizon Task - Run 1</li><li>Horizon Task - Run 2</li><li>Limited Offer Task - Run 1</li></ul></p>"
 } 

@@ -133,8 +133,8 @@ var authRoute = require('./routes/auth.js')(app)
 var apiRoute = require('./api.js')(app)
 
  /// IGNORE EVERYTHING AFTER HERE
- var server = app.listen(config.app_port, function() {
-    console.log('listening on port: ' + config.app_port.toString());
+var server = app.listen(config.app_port, function () {
+    logger.info('listening on port: ' + config.app_port.toString())
 });
 
 

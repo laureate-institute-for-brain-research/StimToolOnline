@@ -129,19 +129,13 @@ document.getElementById("about").addEventListener("click", function(event){
     event.preventDefault()
     study = document.getElementById("study-list").value
 
-  
-    // alert(study)
-    if (study == 'BK_Pilot'){
-        // window.location.href = "/studies";
-        document.getElementById('info-container').style.display = 'block';
-        document.getElementById('info-title').innerHTML = study + ' Task List';
-        document.getElementById('info-text').innerHTML = "<p>This study includes the following tasks: <ul><li>Horizon Task - Run 1</li><li>Horizon Task - Run 2</li></ul></p>";
-    }
-    else if (study == 'AAC-BET'){
-        // window.location.href = "/studies";
-        document.getElementById('info-container').style.display = 'block';
-        document.getElementById('info-title').innerHTML = study + ' Task List';
-        document.getElementById('info-text').innerHTML = "<p>This study includes the following tasks: <ul><li>Horizon Task - Run 1</li><li>Horizon Task - Run 2</li><li>Limited Offer Task - Run 1</li></ul></p>";
+    if (study) {
+        $.getJSON('/study/' + study + '_T1.json', data => {
+            document.getElementById('info-container').style.display = 'block';
+            document.getElementById('info-title').innerHTML = study + ' Task List';
+            // console.log(data)
+            document.getElementById('info-text').innerHTML = data['text_html']
+        })
     }
 
     else {

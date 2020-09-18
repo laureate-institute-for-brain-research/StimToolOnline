@@ -4,5 +4,6 @@
         "/?task=horizon&run=2",
         "/completed?"
     ],
-    "fullscreen": true
+    "fullscreen": true,
+    "text_html": "<p>This study includes the following tasks: <ul><li>Horizon Task - Run 1</li><li>Horizon Task - Run 2</li></ul></p>"
 } 
