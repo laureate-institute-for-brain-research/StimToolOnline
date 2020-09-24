@@ -49,9 +49,10 @@ window.onload = function () {
 
 				// set next link
 				psychoJS.setRedirectUrls(
-					'/link?id=' + values.link + '&index=' + parseInt(getQueryVariable('index')) + 1, // get next order.
+					'/link?id=' + values.link + '&index=' + (parseInt(getQueryVariable('index')) + 1), // get next order.
 					'/' // cancellation url
 				)
+				console.log(psychoJS)
 
 			}
 		
