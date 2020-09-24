@@ -64,7 +64,7 @@ window.onload = function () {
 
 	// Check if there is an practice
 	psychoJS.setRedirectUrls(
-		'/link?id=' + getQueryVariable('id') + '&index=' + parseInt(getQueryVariable('index')) + 1, // get next order.
+		'/link?id=' + getQueryVariable('id') + '&index=' + (parseInt(getQueryVariable('index')) + 1), // get next order.
 		'/' // cancellation url
 	)
 	

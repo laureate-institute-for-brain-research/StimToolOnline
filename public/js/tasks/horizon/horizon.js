@@ -52,7 +52,7 @@ window.onload = function () {
 					'/link?id=' + values.link + '&index=' + (parseInt(getQueryVariable('index')) + 1), // get next order.
 					'/' // cancellation url
 				)
-				console.log(psychoJS)
+				
 
 			}
 		
