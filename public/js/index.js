@@ -163,7 +163,7 @@ document.getElementById('begin').addEventListener('click', (event) => {
             console.log(result);
             if (result.message == 'ok') {
 
-                next_link = '/link?index=0&id=' + result.info.link
+                next_link = '/link?id=' + result.info.link
                 window.location.replace(next_link);
             } else {
                 // Open Modal to Confirm Already Exists Subject
@@ -171,7 +171,7 @@ document.getElementById('begin').addEventListener('click', (event) => {
 
                 document.getElementById('errorMessage').innerText = result.message;
                 document.getElementById('procceed_anyways').addEventListener('click', () => {
-                    next_link = '/link?index=0&id=' + result.info.link
+                    next_link = '/link?id=' + result.info.link
                     window.location.replace(next_link);
                 });
             }

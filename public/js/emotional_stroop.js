@@ -121,7 +121,7 @@ window.onload = function () {
 				expInfo.run_id = getQueryVariable('run')
 
                 // set next link
-                nextLink = '/link?id=' + values.link + '&index=' + parseInt(getQueryVariable('index')) + 1 // get next order.
+                nextLink = '/link?id=' + values.link + '&index=' + (parseInt(getQueryVariable('index')) + 1) // get next order.
                 console.log('Next Link: ' + nextLink)
 
                 console.log('expInfo: ')

@@ -68,11 +68,12 @@ module.exports = function (app){
                 } else {
                     // res.send(link)
                     index = 0
+                    // If index  paramater is set, than use that, if not, default is 0
                     if (req.query.index){ index = parseInt(req.query.index)}
                     var json_link = './public/study/' + link.study + '_' + link.session + '.json'
                     // console.log(json_link)
                     let session_file = require(json_link);
-                    res.redirect(session_file.order[index] + '&id=' + link.link + '&index=' + index);
+                    res.redirect(session_file.order[index] + '&id=' + link.link );
                 }
             },
             function (err) {

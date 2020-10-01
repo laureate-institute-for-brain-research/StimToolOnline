@@ -1,9 +1,9 @@
 {
     "name": "AAC-BET T2",
     "order": [
-        "/?task=horizon&run=AAC_BET_R1.json",
-        "/?task=horizon&run=AAC_BET_R2.json",
-        "/?task=limited_offer&run=1",
+        "/?index=0&task=horizon&run=AAC_BET_R1.json",
+        "/?index=1&task=horizon&run=AAC_BET_R2.json",
+        "/?index=2&task=limited_offer&run=1",
         "/completed?"
     ],
     "fullscreen": true,

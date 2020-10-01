@@ -1,8 +1,8 @@
 {
     "name": "BK_Pilot T2",
     "order": [
-        "/?task=horizon&run=BK_Pilot_R1.json",
-        "/?task=horizon&run=BK_Pilot_R2.json",
+        "/?index=0&task=horizon&run=BK_Pilot_R1.json",
+        "/?index=1&task=horizon&run=BK_Pilot_R2.json",
         "/completed?"
     ],
     "fullscreen": true,
