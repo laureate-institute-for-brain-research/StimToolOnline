@@ -542,7 +542,7 @@ function experimentInit() {
 	thanksText = new visual.TextStim({
 		win: psychoJS.window,
 		name: 'thanksText',
-		text: 'This is the end of the task run.\n\nThanks!',
+		text: 'This is the end of the task run.\n\nYouThanks!',
 		font: 'Arial',
 		units: 'height',
 		pos: [0, 0], height: 0.05, wrapWidth: undefined, ori: 0,
@@ -832,7 +832,6 @@ function exampleLoopEnd() {
 }
 
 function trialsLoopEnd() {
-	totalPoints = 0
 	clearBandits()
 	clearLevers()
 	currentTrialNumber.setAutoDraw(false)
@@ -1257,9 +1256,16 @@ function thanksRoutineBegin(trials) {
 		t = 0;
 		thanksClock.reset(); // clock
 		frameN = -1;
-		routineTimer.add(2.000000);
+		routineTimer.add(5.000000);
 		// update component parameters for each repeat
 		// keep track of which components have finished
+
+		// Show Final Points and money earned
+		console.log(totalPoints)
+		// 100 points = 10 cents
+		thanksText.setText(`This is the end of the task run.\n\n\n Total Points Earned: ${totalPoints} \n\n Tota Cents Earned: ${totalPoints / 10 }`)
+
+
 		thanksComponents = [];
 		thanksComponents.push(thanksText);
 
