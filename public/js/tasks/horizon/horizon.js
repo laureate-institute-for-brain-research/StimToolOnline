@@ -1256,14 +1256,14 @@ function thanksRoutineBegin(trials) {
 		t = 0;
 		thanksClock.reset(); // clock
 		frameN = -1;
-		routineTimer.add(5.000000);
+		routineTimer.add(13.000000);
 		// update component parameters for each repeat
 		// keep track of which components have finished
 
 		// Show Final Points and money earned
 		console.log(totalPoints)
 		// 100 points = 10 cents
-		thanksText.setText(`This is the end of the task run.\n\n\n Total Points Earned: ${totalPoints} \n\n Tota Cents Earned: ${totalPoints / 10 }`)
+		thanksText.setText(`This is the end of the task run.\n\n\n Total Points Earned: ${totalPoints} \n\n Tota Cents Earned: ${totalPoints / 10 } =  $${totalPoints / 1000}`)
 
 
 		thanksComponents = [];
