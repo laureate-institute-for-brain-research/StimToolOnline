@@ -611,13 +611,18 @@ function instructRoutineBegin(trials) {
 		instructComponents = [ slideStim];
 	
 		instructComponents.push(ready);
-		track = new Sound({
-			win: psychoJS.window,
-			value: audio_path
-		  });
-		// console.log(audio_path)
-		track.setVolume(1.0);
-		track.play();
+
+		if (audio_path) {
+			track = new Sound({
+				win: psychoJS.window,
+				value: audio_path
+			  });
+			// console.log(audio_path)
+			track.setVolume(1.0);
+			track.play();
+		}
+	
+		
 
 		for (const thisComponent of instructComponents)
 			if ('status' in thisComponent)
