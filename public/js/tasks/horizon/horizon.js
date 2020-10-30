@@ -25,6 +25,8 @@ const psychoJS = new PsychoJS({
 
 window.onload = function () {
 	var id = getQueryVariable('id')
+	var study = getQueryVariable('study')
+	
 	
 	// Get info Promize
 	const getInfoPromise = new Promise((resolve, reject) => {
@@ -106,8 +108,16 @@ window.onload = function () {
 		})
 	
 		.then((values) => {
-		
-			
+			// Query Preceeds /getInfo
+			if (getQueryVariable('participant')) expInfo.participant = getQueryVariable('participant')
+			if (getQueryVariable('session')) expInfo.session = getQueryVariable('session')
+			if (getQueryVariable('study')) expInfo.study = getQueryVariable('study')
+			if (getQueryVariable('run')) expInfo.run_id = getQueryVariable('run')
+
+			// If vanderbelt, send them to next run
+
+			console.log(expInfo)
+			// expInfo.study = study
 			psychoJS.start({
 				expName, 
 				expInfo,
@@ -242,6 +252,21 @@ function updateInfo() {
 
 	// add info from the URL:
 	util.addInfoFromUrl(expInfo);
+
+	if (getQueryVariable('study') == 'vanderbelt') {
+
+		if (getQueryVariable('run') == 'Vanderbelt_R2.json') {
+			psychoJS.setRedirectUrls(
+				`/completed`, // get next order.
+				'/' // cancellation url
+			)
+		} else {
+			psychoJS.setRedirectUrls(
+				`/?index=0&task=horizon&run=Vanderbelt_R2.json&study=vanderbelt&participant=${expInfo.participant}&session=${expInfo.session}`, // get next order.
+				'/' // cancellation url
+			)
+		}
+	}
 
 	return Scheduler.Event.NEXT;
 }
@@ -1256,13 +1281,13 @@ function thanksRoutineBegin(trials) {
 		t = 0;
 		thanksClock.reset(); // clock
 		frameN = -1;
-		routineTimer.add(13.000000);
+		routineTimer.add(20.000000);
 		// update component parameters for each repeat
 		// keep track of which components have finished
 
 		// Show Final Points and money earned
 		// 100 points = 10 cents
-		thanksText.setText(`This is the end of the task run.\n\n\n Total Points Earned: ${totalPoints} \n\n Total Cents Earned: ${totalPoints / 10 } =  $${totalPoints / 1000}`)
+		thanksText.setText(`This is the end of the task run.\n\n\n Total Points Earned: ${totalPoints} \n\n Total Cents Earned: ${totalPoints / 10 } =  $${ (totalPoints / 1000).toFixed(2)}`)
 
 
 		thanksComponents = [];

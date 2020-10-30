@@ -21,7 +21,7 @@ function getQueryVariable(variable) {
             return decodeURIComponent(pair[1]);
         }
     }
-    return 'NULL'
+    return null
 }
 
 
