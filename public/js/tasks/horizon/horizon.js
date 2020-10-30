@@ -262,7 +262,7 @@ function updateInfo() {
 			)
 		} else {
 			psychoJS.setRedirectUrls(
-				`/?index=0&task=horizon&run=Vanderbelt_R2.json&study=vanderbelt&participant=${expInfo.participant}&session=${expInfo.session}`, // get next order.
+				`/?task=horizon&run=Vanderbelt_R2.json&study=vanderbelt&participant=${expInfo.participant}&session=${expInfo.session}`, // get next order.
 				'/' // cancellation url
 			)
 		}
@@ -1182,13 +1182,13 @@ function trialRoutineEnd(trials) {
 		bandits_rect['right'][trial_num].fillColor = false
 		bandits_rect['left'][trial_num].fillColor = false
 
+		
+
 		resp.stop();
 		// the Routine "trial" was not non-slip safe, so reset the non-slip timer
 		routineTimer.reset();
 
-		// Send Data
-		sendData(psychoJS.experiment._trialsData)
-		// console.log(psychoJS.experiment._trialsData)
+		
 
 		return Scheduler.Event.NEXT;
 	};
@@ -1354,6 +1354,10 @@ function thanksRoutineEachFrame(trials) {
 
 function thanksRoutineEnd(trials) {
 	return function () {
+		// Last Save
+		// Send Data
+		sendData(psychoJS.experiment._trialsData)
+
 		//------Ending Routine 'thanks'-------
 		for (const thisComponent of thanksComponents) {
 			if (typeof thisComponent.setAutoDraw === 'function') {
@@ -1372,6 +1376,9 @@ function endLoopIteration(thisScheduler, loop = undefined) {
 	return function () {
 		if (typeof loop !== 'undefined')
 		{
+			// Send Data
+			sendData(psychoJS.experiment._trialsData)
+		// console.log(psychoJS.experiment._trialsData)
 			// ------Check if user ended loop early------
 			if (loop.finished)
 			{
