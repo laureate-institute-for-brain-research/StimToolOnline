@@ -1261,7 +1261,6 @@ function thanksRoutineBegin(trials) {
 		// keep track of which components have finished
 
 		// Show Final Points and money earned
-		console.log(totalPoints)
 		// 100 points = 10 cents
 		thanksText.setText(`This is the end of the task run.\n\n\n Total Points Earned: ${totalPoints} \n\n Total Cents Earned: ${totalPoints / 10 } =  $${totalPoints / 1000}`)
 

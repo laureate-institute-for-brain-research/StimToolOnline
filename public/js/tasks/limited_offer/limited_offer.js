@@ -397,7 +397,7 @@ function experimentInit() {
 	totalPointsTracker = new visual.TextStim({
 		win: psychoJS.window,
 		name: 'pointsTracker',
-		text: 'Total ¢: 0',
+		text: 'Total points: 0',
 		font: 'Arial',
 		units: 'norm',
 		pos: [0, -.9], height: 0.08, wrapWidth: undefined, ori: 0,
@@ -699,13 +699,13 @@ function trialRoutineBegin(trials) {
 		// update component parameters for each repeat
 		// word.setColor(new util.Color(letterColor));
 		
-		offer_stim_text.setText(initial_offer + ' ¢') // Set the Current Offer
+		offer_stim_text.setText(initial_offer + ' points') // Set the Current Offer
 
 		globalTrialNumber = globalTrialNumber + 1
 		
 		
 		currentTrialNumber.setText(`Trial Number: ${globalTrialNumber} / 108`)
-		totalPointsTracker.setText(`Total ¢: ${totalPoints}`)
+		totalPointsTracker.setText(`Total points: ${totalPoints}`)
 	
 		resp.keys = undefined;
 		resp.rt = undefined;
@@ -747,11 +747,11 @@ function trialRoutineEachFrame(trials) {
 		// Withdraw or High offer depedning on schedule
 		if (waited) {
 			if ( (time_point + 1) == ts_high) {
-				offer_stim_text.setText(highOfferVal + ' ¢')
+				offer_stim_text.setText(highOfferVal + ' points')
 			}
 			if ((time_point + 1) == ts_withdrawal) {
 				offer_withdrew = true;
-				offer_stim_text.setText(0 + ' ¢')
+				offer_stim_text.setText(0 + ' points')
 				// offer_stim_text.setText('Offer revoked')
 			}
 		}
@@ -865,7 +865,7 @@ function trialRoutineEachFrame(trials) {
 						wait_rect_stim.width += .02
 
 						wait_text_stim.color = new util.Color('white')
-						// totalPoints = totalPoints + offer_rect.text.replace(' ', '¢')
+						// totalPoints = totalPoints + offer_rect.text.replace(' ', 'points')
 					}
 					
 				} 
@@ -974,13 +974,13 @@ function trialRoutineEachFrame(trials) {
 			//  to be displayed at trial end
 			
 			if (missed) {
-				points_fixation_stim.setText(`Missed - Offer Lost \n\nYou have won ${current_point} ¢ in this trial`)
+				points_fixation_stim.setText(`Missed - Offer Lost \n\nYou have won ${current_point} points in this trial`)
 			}
 			else if (offer_withdrew) {
-				points_fixation_stim.setText(`Offer Revoked \n\nYou have won ${current_point} ¢ in this trial`)
+				points_fixation_stim.setText(`Offer Revoked \n\nYou have won ${current_point} points in this trial`)
 			}
 			else {
-				points_fixation_stim.setText(`You have won ${current_point} ¢ in this trial`)
+				points_fixation_stim.setText(`You have won ${current_point} points in this trial`)
 			}
 			
 			psychoJS.experiment.addData(`points_won`, current_point);
@@ -1101,7 +1101,7 @@ function trialRoutineEnd(trials) {
 		if (offer_stim_text.getText() != 'X') {
 			if (!Number.isNaN(offer_stim_text.getText())) {
 				console.log(offer_stim_text.getText())
-				totalPoints = totalPoints + parseInt(offer_stim_text.getText().replace(' ¢', ''))
+				totalPoints = totalPoints + parseInt(offer_stim_text.getText().replace(' points', ''))
 			}
 		}
 		
@@ -1134,7 +1134,11 @@ function thanksRoutineBegin(trials) {
 		t = 0;
 		thanksClock.reset(); // clock
 		frameN = -1;
-		routineTimer.add(2.000000);
+		routineTimer.add(13.000000);
+
+		// Show Final Points and money earned
+		// 100 points = 10 cents
+		thanksText.setText(`This is the end of the task run.\n\n\n Total Points Earned: ${totalPoints} \n\n Total Cents Earned: ${totalPoints / 10 } =  $${totalPoints / 1000}`)
 		// update component parameters for each repeat
 		// keep track of which components have finished
 		thanksComponents = [];
