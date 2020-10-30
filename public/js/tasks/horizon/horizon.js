@@ -1188,6 +1188,8 @@ function trialRoutineEnd(trials) {
 		// the Routine "trial" was not non-slip safe, so reset the non-slip timer
 		routineTimer.reset();
 
+
+
 		
 
 		return Scheduler.Event.NEXT;
@@ -1356,7 +1358,6 @@ function thanksRoutineEnd(trials) {
 	return function () {
 		// Last Save
 		// Send Data
-		sendData(psychoJS.experiment._trialsData)
 
 		//------Ending Routine 'thanks'-------
 		for (const thisComponent of thanksComponents) {
@@ -1376,8 +1377,8 @@ function endLoopIteration(thisScheduler, loop = undefined) {
 	return function () {
 		if (typeof loop !== 'undefined')
 		{
-			// Send Data
-			sendData(psychoJS.experiment._trialsData)
+			
+			
 		// console.log(psychoJS.experiment._trialsData)
 			// ------Check if user ended loop early------
 			if (loop.finished)
@@ -1388,8 +1389,13 @@ function endLoopIteration(thisScheduler, loop = undefined) {
 					psychoJS.experiment.nextEntry(loop);
 				}
 				thisScheduler.stop();
+
+				// Send Data at last loop 
+				sendData(psychoJS.experiment._trialsData)
 			} else
 			{
+				// Send Data for Every Trial
+				sendData(psychoJS.experiment._trialsData)
 				const thisTrial = loop.getCurrentTrial();
 				if (typeof thisTrial === 'undefined' || !('isTrials' in thisTrial) || thisTrial.isTrials)
 				{
