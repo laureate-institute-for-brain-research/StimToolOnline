@@ -255,17 +255,22 @@ function updateInfo() {
 
 	if (getQueryVariable('study') == 'vanderbelt') {
 
-		if (getQueryVariable('run') == 'Vanderbelt_R2.json') {
-			psychoJS.setRedirectUrls(
-				`/completed`, // get next order.
-				'/' // cancellation url
-			)
-		} else {
-			psychoJS.setRedirectUrls(
-				`/?task=horizon&run=Vanderbelt_R2.json&study=vanderbelt&participant=${expInfo.participant}&session=${expInfo.session}`, // get next order.
-				'/' // cancellation url
-			)
-		}
+		// Take Them to completion no 2nd run
+		psychoJS.setRedirectUrls(
+			`/completed`, // get next order.
+			'/' // cancellation url
+		)
+		// if (getQueryVariable('run') == 'Vanderbelt_R2.json') {
+		// 	psychoJS.setRedirectUrls(
+		// 		`/completed`, // get next order.
+		// 		'/' // cancellation url
+		// 	)
+		// } else {
+		// 	psychoJS.setRedirectUrls(
+		// 		`/?task=horizon&run=Vanderbelt_R2.json&study=vanderbelt&participant=${expInfo.participant}&session=${expInfo.session}`, // get next order.
+		// 		'/' // cancellation url
+		// 	)
+		// }
 	}
 
 	return Scheduler.Event.NEXT;
@@ -1283,14 +1288,20 @@ function thanksRoutineBegin(trials) {
 		t = 0;
 		thanksClock.reset(); // clock
 		frameN = -1;
-		routineTimer.add(20.000000);
+		routineTimer.add(25.000000);
 		// update component parameters for each repeat
 		// keep track of which components have finished
 
 		// Show Final Points and money earned
-		// 100 points = 10 cents
-		thanksText.setText(`This is the end of the task run.\n\n\n Total Points Earned: ${totalPoints} \n\n Total Cents Earned: ${totalPoints / 10 } =  $${ (totalPoints / 1000).toFixed(2)}`)
-
+		
+		if (getQueryVariable('study') == 'vanderbelt') {
+			// 1000 points = 10 cents
+			thanksText.setText(`This is the end of the task run.\n\n\n Total Points Earned: ${totalPoints} \n\n Total Cents Earned: ${totalPoints / 100 } =  $${ (totalPoints / 10000).toFixed(2)}`)
+		} else {
+			// 100 points = 10 cents
+			thanksText.setText(`This is the end of the task run.\n\n\n Total Points Earned: ${totalPoints} \n\n Total Cents Earned: ${totalPoints / 10 } =  $${ (totalPoints / 1000).toFixed(2)}`)
+		}
+		
 
 		thanksComponents = [];
 		thanksComponents.push(thanksText);
@@ -1335,15 +1346,13 @@ function thanksRoutineEachFrame(trials) {
 			return Scheduler.Event.NEXT;
 		}
 
-		continueRoutine = false;  // reverts to True if at least one component still running
-		for (const thisComponent of thanksComponents)
-			if ('status' in thisComponent && thisComponent.status !== PsychoJS.Status.FINISHED) {
-				continueRoutine = true;
-				break;
-			}
+		// Exit after XX seconds
+		if (t >= 20) {
+			continueRoutine = false
+		}
 
 		// refresh the screen if continuing
-		if (continueRoutine && routineTimer.getTime() > 0) {
+		if (continueRoutine) {
 			return Scheduler.Event.FLIP_REPEAT;
 		}
 		else {
