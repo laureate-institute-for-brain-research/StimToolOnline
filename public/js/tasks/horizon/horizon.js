@@ -1332,10 +1332,10 @@ function thanksRoutineEachFrame(trials) {
 			thanksText.setAutoDraw(true);
 		}
 
-		frameRemains = 0.0 + 2.0 - psychoJS.window.monitorFramePeriod * 0.75;  // most of one frame period left
-		if (thanksText.status === PsychoJS.Status.STARTED && t >= frameRemains) {
-			thanksText.setAutoDraw(false);
-		}
+		// frameRemains = 0.0 + 2.0 - psychoJS.window.monitorFramePeriod * 0.75;  // most of one frame period left
+		// if (thanksText.status === PsychoJS.Status.STARTED && t >= frameRemains) {
+		// 	thanksText.setAutoDraw(false);
+		// }
 		// check for quit (typically the Esc key)
 		if (psychoJS.experiment.experimentEnded || psychoJS.eventManager.getKeys({ keyList: ['escape'] }).length > 0) {
 			return quitPsychoJS('The [Escape] key was pressed. Goodbye!', false);
