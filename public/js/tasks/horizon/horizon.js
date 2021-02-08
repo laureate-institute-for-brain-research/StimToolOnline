@@ -77,6 +77,11 @@ window.onload = function () {
 			// console.log(values['instruct_schedule'])
 			resources.push({ name: 'run_schedule.xls', path: values['schedule'] })
 			resources.push({ name: 'instruct_schedule.csv', path: values['instruct_schedule'] })
+
+			// Add file paths to expInfo
+			if (values['schedule']) expInfo.task_schedule = values['schedule']
+			if (values['instruct_schedule']) expInfo.instruct_schedule = values['instruct_schedule']
+			
 			return new Promise((resolve, reject) => {
 				$.ajax({
 					type: 'GET',
@@ -100,6 +105,8 @@ window.onload = function () {
 							resources.push({ name: obj['audio_path'], path: obj['audio_path'] })
 						}
 						// console.log(resources)
+
+						
 						resolve(data)
 					}
 				})
@@ -113,6 +120,8 @@ window.onload = function () {
 			if (getQueryVariable('session')) expInfo.session = getQueryVariable('session')
 			if (getQueryVariable('study')) expInfo.study = getQueryVariable('study')
 			if (getQueryVariable('run')) expInfo.run_id = getQueryVariable('run')
+
+			
 
 			// If vanderbelt, send them to next run
 
@@ -1347,7 +1356,7 @@ function thanksRoutineEachFrame(trials) {
 		}
 
 		// Exit after XX seconds
-		if (t >= 20) {
+		if (t >= 15) {
 			continueRoutine = false
 		}
 
