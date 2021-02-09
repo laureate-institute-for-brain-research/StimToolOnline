@@ -180,10 +180,13 @@ flowScheduler.add(updateInfo); // add timeStamp
 flowScheduler.add(experimentInit);
 
 // instruction slide
-const instruct_pagesLoopScheduler = new Scheduler(psychoJS);
-flowScheduler.add(instruct_pagesLoopBegin, instruct_pagesLoopScheduler);
-flowScheduler.add(instruct_pagesLoopScheduler);
-flowScheduler.add(instruct_pagesLoopEnd);
+if (!getQueryVariable('skip_instructions')) {
+	const instruct_pagesLoopScheduler = new Scheduler(psychoJS);
+	flowScheduler.add(instruct_pagesLoopBegin, instruct_pagesLoopScheduler);
+	flowScheduler.add(instruct_pagesLoopScheduler);
+	flowScheduler.add(instruct_pagesLoopEnd);
+}
+
 
 // // // Example Play
 if (getQueryVariable('run').includes('R1') ){
@@ -948,6 +951,7 @@ function isLastTrial(game_type, trial_num) {
 var showLastTrial;
 var time_continue;
 var now;
+var theseKeys;
 function trialRoutineEachFrame(trials) {
 	return function () {
 		//------Loop for each frame of Routine 'trial'-------
@@ -1061,9 +1065,10 @@ function trialRoutineEachFrame(trials) {
 			
 			
 			let theseKeys = resp.getKeys({ keyList: keyList, waitRelease: false });
+			
 
 			// After key is pressed, go to next routine
-			if (theseKeys.length > 0) {  // at least one key was pressed
+			if (theseKeys && theseKeys.length > 0 && !showLastTrial) {  // at least one key was pressed
 				resp.keys = theseKeys[0].name;  // just the last key pressed
 				resp.rt = theseKeys[0].rt;
 
@@ -1090,7 +1095,7 @@ function trialRoutineEachFrame(trials) {
 					bandit_right_down_handle.setAutoDraw(true)
 				}
 				// console.log(left_reward)
-				
+
 				// If it's the last trial, hang here for a second to show points
 				if (isLastTrial(game_type, trial_num)){
 					// wait a second
@@ -1100,14 +1105,12 @@ function trialRoutineEachFrame(trials) {
 
 					
 					now = trialClock.getTime();
-					time_continue = now + 1 // 1 second to show points then continue
+					time_continue = now + 1.5 // 1 second to show points then continue
 					
 				} else {
 					continueRoutine = false;
 					time_continue = 999999
 				}
-				
-				
 			}
 		}
 
