@@ -87,3 +87,27 @@ function saveData(){
     
     // console.log(row_data);
 }
+
+/**
+ * Cleans resources, function basically makes sures there's no empty
+ * name and and path elements
+ * @param {Array} resources Array of raw resources with name and path element
+ */
+function sanitizeResources(resources) {
+    sanitized_resources = []
+
+    // Iterate over Array
+    for (const value of resources) {
+
+        // Iterave over object
+        empty = false // if there is an undefined value, skip over
+        for (var key in value) {
+            if (value[key] == undefined) {
+                empty = true
+            }
+        }
+
+        if (!empty) sanitized_resources.push(value) 
+      }
+    return(sanitized_resources)
+}

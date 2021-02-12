@@ -97,16 +97,15 @@ window.onload = function () {
 						for (var i=1; i<allRows.length; i++) {
 							var obj = {};
 							var currentLine = allRows[i].split(',');
-							for(var j=0;j<headerRows.length;j++){
+							for (var j = 0; j < headerRows.length; j++){
 								obj[headerRows[j]] = currentLine[j];
 							}
 							out.push(obj);
 							resources.push({ name: obj['instruct_slide'], path: obj['instruct_slide'] })
 							resources.push({ name: obj['audio_path'], path: obj['audio_path'] })
 						}
-						// console.log(resources)
+						console.log(resources)
 
-						
 						resolve(data)
 					}
 				})

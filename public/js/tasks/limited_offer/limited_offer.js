@@ -30,43 +30,128 @@ const psychoJS = new PsychoJS({
 
 window.onload = function () {
 	var id = getQueryVariable('id')
-	if (!id){
-		return
-	}
-	$.ajax({
-		type: "POST",
-		url: '/getInfo',
-		data: { 'id': id},
-		dataType: 'JSON',
-		success: (values) => {
-			// console.log(values)
-			// set values if valid id
-			if (values.subject && values.session) {
-				expInfo.participant = values.subject
-				expInfo.session = values.session
-				expInfo.study = values.study
-				expInfo.run_id = getQueryVariable('run')
+	var study = getQueryVariable('study')
+
+	// Get info Promize
+	const getInfoPromise = new Promise((resolve, reject) => {
+		$.ajax({
+			type: "POST",
+			url: '/getInfo',
+			data: { 'id': id },
+			dataType: 'JSON',
+			success: function (data) {
+				resolve(data)
 			}
-		}
+		})
 	})
-	 	.done(
-			  function () {
-				// psychoJS.start({expName, expInfo});
-				psychoJS.start({
-					expName, 
-					expInfo,
-					resources: resources
-				});
 
-				psychoJS._config.experiment.saveFormat = undefined // don't save to client side
+		// Read getINFO 
+		.then((values) => {
+			// console.log(values)
+			if (values.subject && values.session && values.study) {
+				expInfo.participant = values.subject
+				expInfo.study = values.study
+				expInfo.session = values.session
+				expInfo.run_id = getQueryVariable('run')
+
+				// set next link
+				psychoJS.setRedirectUrls(
+					'/link?id=' + values.link + '&index=' + (parseInt(getQueryVariable('index')) + 1), // get next order.
+					'/' // cancellation url
+				)
+				
+
 			}
-	)
+		
+			// Return AJAX Promise to get Confit Params
+			return new Promise((resolve, reject) => {
+				$.ajax({
+					type: 'GET',
+					url: '/js/tasks/limited_offer/' + getQueryVariable('run'),
+					dataType: 'json',
+					success: (data) => {
+						resolve(data)
+					}
+				})
+			})
+		
+		})
+	
+		// Read RUN Config
+		.then((values) => {
+			// console.log(values['instruct_schedule'])
+			resources.push({ name: 'run_schedule.xls', path: values['schedule'] })
+			resources.push({ name: 'instruct_schedule.csv', path: values['instruct_schedule'] })
 
-	// Check if there is an practice
-	psychoJS.setRedirectUrls(
-		'/link?id=' + getQueryVariable('id') + '&index=' + (parseInt(getQueryVariable('index')) + 1), // get next order.
-		'/' // cancellation url
-	)
+			// Add file paths to expInfo
+			if (values['schedule']) expInfo.task_schedule = values['schedule']
+			if (values['instruct_schedule']) expInfo.instruct_schedule = values['instruct_schedule']
+			
+			// Import the instruction slides
+			return new Promise((resolve, reject) => {
+				$.ajax({
+					type: 'GET',
+					url: values['instruct_schedule'],
+					dataType: 'text',
+					async: false,
+					success: (data) => {
+						var out = [];
+						var allRows = data.split('\n'); // split rows at new line
+						
+						var headerRows = allRows[0].split(',');
+
+						// console.log(headerRows)
+						
+						for (var i=1; i<allRows.length; i++) {
+							var obj = {};
+							var currentLine = allRows[i].split(',');
+							for (var j = 0; j < headerRows.length; j++){
+
+								// if (headerRows[j] == " ") {
+								// 	console.log('empyt string')
+								// }
+								obj[headerRows[j]] = currentLine[j];
+							}
+							out.push(obj);
+
+							if (obj['instruct_slide'] != "" || obj['instruct_slide'] != undefined ) resources.push({ name: obj['instruct_slide'], path: obj['instruct_slide'] })
+							if (obj['audio_path'] != "" || obj['audio_path'] != undefined ) resources.push({ name: obj['audio_path'], path: obj['audio_path'] })
+						}
+						// console.log(out)
+						// console.log(resources)
+						resolve(data)
+					}
+				})
+				
+			})
+		})
+	
+		
+		.then((values) => {
+			// Query Preceeds /getInfo
+			if (getQueryVariable('participant')) expInfo.participant = getQueryVariable('participant')
+			if (getQueryVariable('session')) expInfo.session = getQueryVariable('session')
+			if (getQueryVariable('study')) expInfo.study = getQueryVariable('study')
+			if (getQueryVariable('run')) expInfo.run_id = getQueryVariable('run')
+
+			
+
+			// If vanderbelt, send them to next run
+			console.log(expInfo)
+
+			// Sanitze the resources. Needs to be clean so that psychoJS doesn't complain
+			resources = sanitizeResources(resources)
+			console.log(resources)
+			// expInfo.study = study
+			psychoJS.start({
+				expName, 
+				expInfo,
+				resources: resources,
+			  })
+			psychoJS._config.experiment.saveFormat = undefined // don't save to client side
+			
+			// console.log(psychoJS)
+		})
 	
 }
 
@@ -134,15 +219,10 @@ dialogCancelScheduler.add(quitPsychoJS, '', false);
 
 // Add Slides to resources
 var resources = [
-	{ name: 'r1.xls', path: '/js/tasks/limited_offer/r1.xls' },
-	{ name: 'AAC-BET_R1.xls', path: '/js/tasks/limited_offer/media/AAC-BET_R1.xls' }
+	{name: 'r_test.xls', path: '/js/tasks/limited_offer/r_test.xls'}
 ]
 
-for (var i = 1; i <= 13; i++){
-	var imagePath = { name: `/js/tasks/limited_offer/media/AAC-BET_R1_instructions/Slide${i}.jpeg`, path: `/js/tasks/limited_offer/media/AAC-BET_R1_instructions/Slide${i}.jpeg` }
-	// console.log(i)
-	resources.push(imagePath)
-}
+
 
 // // psychoJS.start({expName, expInfo});
 // psychoJS.start({
@@ -447,11 +527,12 @@ function experimentInit() {
 function instruct_pagesLoopBegin(thisScheduler) {
 	// set up handler to look up the conditions
 
+	
 	slides = new TrialHandler({
 		psychoJS: psychoJS,
 		nReps: 1, method: TrialHandler.Method.SEQUENTIAL,
 		extraInfo: expInfo, originPath: undefined,
-		trialList: 'AAC-BET_R1.xls',
+		trialList: 'instruct_schedule.csv',
 		seed: undefined, name: 'slides'
 	});
 
@@ -589,14 +670,27 @@ function instructRoutineEnd(trials) {
 var trials;
 var currentLoop;
 function trialsLoopBegin(thisScheduler) {
-	// set up handler to look up the conditions
-	trials = new TrialHandler({
-		psychoJS: psychoJS,
-		nReps: 1, method: TrialHandler.Method.SEQUENTIAL,
-		extraInfo: expInfo, originPath: undefined,
-		trialList: 'r1.xls',
-		seed: undefined, name: 'trials'
-	});
+
+	if (getQueryVariable('practice') == 'true') {
+		practice == true;
+		console.log('Practice Session')
+		trials = new TrialHandler({
+			psychoJS: psychoJS,
+			nReps: 1, method: TrialHandler.Method.SEQUENTIAL,
+			extraInfo: expInfo, originPath: undefined,
+			trialList: 'r_test.xls',
+			seed: undefined, name: 'trials'
+		});
+	} else {
+		trials = new TrialHandler({
+			psychoJS: psychoJS,
+			nReps: 1, method: TrialHandler.Method.SEQUENTIAL,
+			extraInfo: expInfo, originPath: undefined,
+			trialList: 'run_schedule.xls',
+			seed: undefined, name: 'trials'
+		});
+	}
+
 	
 
 	// console.log(trials)
@@ -627,8 +721,6 @@ function instruct_pagesLoopEnd() {
 
 // SHow the points in the trial 
 function trialsLoopEnd() {
-	totalPoints = 0
-
 	currentTrialNumber.setAutoDraw(false)
 	totalPointsTracker.setAutoDraw(false)
 	slideStim.setAutoDraw(false)
