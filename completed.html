@@ -36,7 +36,7 @@
         <script src="https://unpkg.com/survey-jquery@0.12.10/survey.jquery.min.js"></script>
 
         <link rel="stylesheet" href="https://unpkg.com/bootstrap@3.3.7/dist/css/bootstrap.min.css">
-        <link rel="stylesheet" href="./index.css">
+        <!-- <link rel="stylesheet" href="./index.css"> -->
 
     </head>
     <style>
@@ -117,123 +117,6 @@
             <center><p class="text-p"><a href="http://www.laureateinstitute.org">laureateinstitute.org</a></center>
         </div>
 
-
-        <script type="text/javascript">
-
-            function getQueryVariable(variable) {
-                var query = window.location.search.substring(1);
-                var vars = query.split('&');
-                for (var i = 0; i < vars.length; i++) {
-                    var pair = vars[i].split('=');
-                    if (decodeURIComponent(pair[0]) == variable) {
-                        return decodeURIComponent(pair[1]);
-                    }
-                }
-                return 'NULL'
-            }
-
-            // Get Query Variables
-
-
-            var mkturkid = getQueryVariable('mkturk_id');
-            var timeleft = getQueryVariable('timeleft');
-            var study = getQueryVariable('study');
-
-
-            document.getElementById("mkturk_id").innerHTML = mkturkid;
-
-            $.get('/getTopWave3Points', function(result){
-                displayScores(result)
-            })
-
-            function displayScores(result){
-                result.sort(function(a, b){ return b.points - a.points; });
-                // console.log(result)
-                var tbody = document.getElementById('tbody');
-                var number = 1
-                for (var i = 0; i < Object.keys(result).length; i++) {
-
-                    // Only First 10 of the json
-                    if (number <= 10 && parseInt(result[i].points) != 0) {
-                        var tr = "<tr>";
-
-                        tr +=  "<td>" + number + "</td>" + 
-                        "<td>" + result[i].id + "</td>" + 
-                        "<td>" + result[i].session + "</td>" +
-                        "<td>" + result[i].points.toString() + "</td></tr>";
-                        tbody.innerHTML += tr;
-                        number ++
-                    }
-                    
-                }
-            }
-
-
-            // // get the scores
-            $.get('/getScores?&mkturk_id=' + mkturkid + '&study=' + study, function(data) {
-                document.getElementById("panasPositive1").innerHTML = data['PANASX']['T1'].panasx_posaffect_score;
-                document.getElementById("panasPositive2").innerHTML = data['PANASX']['T2'].panasx_posaffect_score;
-
-                document.getElementById("panasNegative1").innerHTML = data['PANASX']['T1'].panasx_negaffect_score;
-                document.getElementById("panasNegative2").innerHTML = data['PANASX']['T2'].panasx_negaffect_score;
-
-                document.getElementById("panasFear1").innerHTML = data['PANASX']['T1'].panasx_fear_score;
-                document.getElementById("panasFear2").innerHTML = data['PANASX']['T2'].panasx_fear_score;
-
-                document.getElementById("panasHostility1").innerHTML = data['PANASX']['T1'].panasx_hostility_score;
-                document.getElementById("panasHostility2").innerHTML = data['PANASX']['T2'].panasx_hostility_score;
-
-                document.getElementById("panasGuilt1").innerHTML = data['PANASX']['T1'].panasx_guilt_score;
-                document.getElementById("panasGuilt2").innerHTML = data['PANASX']['T2'].panasx_guilt_score;
-
-                document.getElementById("panasSadness1").innerHTML = data['PANASX']['T1'].panasx_sadness_score;
-                document.getElementById("panasSadness2").innerHTML = data['PANASX']['T2'].panasx_sadness_score;
-
-                document.getElementById("panasJoviality1").innerHTML = data['PANASX']['T1'].panasx_joviality_score;
-                document.getElementById("panasJoviality2").innerHTML = data['PANASX']['T2'].panasx_joviality_score;
-
-                document.getElementById("panasSelfAssurance1").innerHTML = data['PANASX']['T1'].panasx_selfassurance_score;
-                document.getElementById("panasSelfAssurance2").innerHTML = data['PANASX']['T2'].panasx_selfassurance_score;
-
-                document.getElementById("panasAttentiveness1").innerHTML = data['PANASX']['T1'].panasx_attentiveness_score;
-                document.getElementById("panasAttentiveness2").innerHTML = data['PANASX']['T2'].panasx_attentiveness_score;
-
-                document.getElementById("panasShyness1").innerHTML = data['PANASX']['T1'].panasx_shyness_score;
-                document.getElementById("panasShyness2").innerHTML = data['PANASX']['T2'].panasx_shyness_score;
-
-                document.getElementById("panasFatigue1").innerHTML = data['PANASX']['T1'].panasx_fatigue_score;
-                document.getElementById("panasFatigue2").innerHTML = data['PANASX']['T2'].panasx_fatigue_score;
-
-                document.getElementById("panasSerenity1").innerHTML = data['PANASX']['T1'].panasx_serenity_score;
-                document.getElementById("panasSerenity2").innerHTML = data['PANASX']['T2'].panasx_serenity_score;
-
-                document.getElementById("panasSurprise1").innerHTML = data['PANASX']['T1'].panasx_surprise_score;
-                document.getElementById("panasSurprise2").innerHTML = data['PANASX']['T2'].panasx_surprise_score;
-
-
-                // Chicken Task
-                document.getElementById("CTPoints1").innerHTML = data['ChickenTask']['T1'].points;
-                document.getElementById("CTPoints2").innerHTML = data['ChickenTask']['T2'].points;
-
-
-                // Caldulcate Payout
-                session1Dollar = (data['ChickenTask']['T1'].points / 100).toFixed(2);
-                session2Dollar = (data['ChickenTask']['T2'].points / 100).toFixed(2);
-
-                document.getElementById("CTPoints1Dollar").innerHTML = '$' + session1Dollar;
-                document.getElementById("CTPoints2Dollar").innerHTML = '$' + session2Dollar;
-
-                totalDollars = (1.0 + parseFloat(session1Dollar) + parseFloat(session2Dollar)).toFixed(2)
-
-                document.getElementById("TotalDollars").innerHTML = '$' + totalDollars + '';
-
-
-                document.getElementById("CTRT1").innerHTML = (data['ChickenTask']['T1'].avg_rt).toFixed(3);
-                document.getElementById("CTRT2").innerHTML = (data['ChickenTask']['T2'].avg_rt).toFixed(3);
-            });
-
-            
-        </script>
 
     </body>
 </html>
