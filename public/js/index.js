@@ -128,13 +128,15 @@ $('#study-list').change(function () {
 document.getElementById("about").addEventListener("click", function(event){
     event.preventDefault()
     study = document.getElementById("study-list").value
-
+    console.log(study)
     if (study) {
         $.getJSON('/study/' + study + '_T1.json', data => {
             document.getElementById('info-container').style.display = 'block';
             document.getElementById('info-title').innerHTML = study + ' Task List';
             // console.log(data)
             document.getElementById('info-text').innerHTML = data['text_html']
+
+            console.log(data)
         })
     }
 

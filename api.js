@@ -73,6 +73,8 @@ module.exports = function (app){
             displayLimited_Offer(res)
         } else if (task == 'horizon') {
             displayHorizon(res)
+        } else if (task == 'ncair') {
+            displayNCAIR(res)
         } else if (ctpattern == '0' && task == 'chicken') {
             displayChicken0(res);
         } else if (survey == 'datacamp') {
@@ -1597,6 +1599,18 @@ module.exports = function (app){
     }
     function displayHorizon(res) {
         fs.readFile('task/horizon/index.html', function(err, data) {
+            // Write Header
+            res.writeHead(200, {
+                'Content-Type': 'text/html'
+            });
+            // Wrte Body
+            res.write(data);
+            res.end();
+        });
+    }
+
+    function displayNCAIR(res) {
+        fs.readFile('task/ncair/index.html', function(err, data) {
             // Write Header
             res.writeHead(200, {
                 'Content-Type': 'text/html'
