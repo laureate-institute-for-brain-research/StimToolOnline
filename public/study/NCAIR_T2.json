@@ -2,8 +2,10 @@
     "name": "NCAIR T2",
     "order": [
         "/?index=0&task=ncair&run=NCAIR_R1.json",
+        "/?index=0&task=ncair&run=NCAIR_R2.json",
+        "/?index=0&task=ncair&run=NCAIR_R3.json",
         "/completed?"
     ],
     "fullscreen": true,
-    "text_html": "<p>This study includes the following tasks: <ul><li>NCAIR Task - Run 1</li></ul></p>"
+    "text_html": "<p>This study includes the following tasks: <ul><li>NCAIR Task - Run 1</li><li>NCAIR Task - Run 2</li><li>NCAIR Task - Run 3</li></ul></p>"
 } 
