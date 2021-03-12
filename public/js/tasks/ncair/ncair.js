@@ -30,7 +30,8 @@ var RIGHT_KEY = 'period'
 
 // init psychoJS:
 const psychoJS = new PsychoJS({
-	debug: false, 
+	debug: false,
+	collectIP: true
 });
 
 
@@ -460,8 +461,10 @@ function experimentInit() {
 
 	slider = new visual.Slider({
 		win: psychoJS.window,
-		name: 'slider', size: [.8, .05],
+		name: 'slider',
+		size: [.8, .03],
 		ticks: [...Array(5).keys()],
+		granularity: 0,
 		labels: [0,25,50,75,100],
 		pos: [0, 0], wrapWidth: undefined, ori: 0,
 		color: new util.Color('white'), opacity: 1,
@@ -704,7 +707,6 @@ function trialsLoopEnd() {
 
 var trialComponents;
 var media_type;
-var media_code;
 var trial_type;
 var medi_dict = {
 	'0': 'audio',
@@ -723,8 +725,13 @@ var rating_dict = {
 	'4': 'video'
 }
 var lastTrial;
-var lastTrialPoints = 0;
-var relatedness_form;
+
+/**
+ * This Function Routine is everything needed to prep the trials
+ * Use this to set text, iamges,video,slider and other necessary variables
+ * @param {*} trials 
+ * @returns 
+ */
 function trialRoutineBegin(trials) {
 	return function () {
 		//------Prepare to start Routine 'trial'-------
@@ -733,37 +740,44 @@ function trialRoutineBegin(trials) {
 		trialClock.reset(); // clock
 		frameN = -1;
 
-		console.log(stim_paths)
-		console.log(trial_type)
-		
+
 		// Medial Type
 		trial_type = medi_dict[TrialTypes.substring(2, 3)]
 		// Set Media_type
 		if (trial_type == 'audio' || trial_type == 'video' || trial_type == 'image') {
-			media_type == trial_type
+			media_type = trial_type
+			lastTrial = {
+				trial_type: trial_type, stim_paths: stim_paths
+			}
+
 		} else {
 			// Get from the first character '0_1'  -> '0'
 			media_type = rating_dict[TrialTypes.substring(0, 1)]
 		}
-		
+
+		console.log(stim_paths)
+		console.log(trial_type)
 
 		if (trial_type == 'audio') {
-			stim_text.setText('Press the Space Bar to play audio') 
+			slider.reset()
+			stim_text.setText('Press the Space Bar to play audio.') 
 			stim_text.height = .1
 			stim_text.pos = [0,0]
-			audio_stim = new Sound({
+			audio_stim = new sound.Sound({
 				win: psychoJS.window,
-				value: stim_paths
+				value: stim_paths,
+				audio_stim : 1.0
 			  });
-			// console.log(audio_path)
-			audio_stim.setVolume(1.0);
+			console.log(audio_path)
 
 			trialComponents.push(audio_stim);
+			trialComponents.push(stim_text);
 		}
 
 		if (trial_type == 'video') {
 			// video_stim.setMovie(stim_paths)
-			stim_text.setText('Press the Space Bar to play video') 
+			stim_text.setText('Press the Space Bar to play video.')
+			slider.reset()
 			stim_text.height = .1
 			stim_text.pos = [0,0]
 			video_stim = new visual.MovieStim({
@@ -776,52 +790,83 @@ function trialRoutineBegin(trials) {
 			});
 
 			trialComponents.push(video_stim);
+			trialComponents.push(stim_text);
 		}
 
 		if (trial_type == 'rating_relatedness') {
 			stim_text.setText(`Relatedness:\nIs this ${media_type} related to your identity as a native person?`)
 			stim_text.height = .1
-			stim_text.pos = [0,.5]
+			stim_text.pos = [0, .5]
+			stim_text.color = new util.Color('white')
 			related_no.image = 'no_button.png'
 			related_yes.image = 'yes_button.png'
 			trialComponents.push(related_no);
 			trialComponents.push(related_yes);
+			trialComponents.push(stim_text);
 		}
 
 		if (trial_type == 'rating_identity') {
+			slider.ticks = [...Array(5).keys()]
+			slider.labels = [0,25,50,75,100]
+			slider.granularity = 0
 			slider.reset()
 			next_text.image = 'next_button.png'
+			stim_text.setText(`Identity:\nHow much did this ${media_type} relate to your identity as a native person? `)
+			stim_text.height = .1
+			stim_text.pos = [0,.5]
+			stim_text.color = new util.Color('white')
 			trialComponents.push(slider);
 			trialComponents.push(next_text)
+			trialComponents.push(stim_text);
 		}
 
 		if (trial_type == 'rating_typicality') {
+			slider.ticks = [...Array(5).keys()]
+			slider.labels = [0, 25, 50, 75, 100]
+			slider.granularity = .1
 			slider.reset()
 			next_text.image = 'next_button.png'
+			stim_text.setText(`Typicality:\nHow likely is it for a native person to see/experience scenes like this?`)
+			stim_text.height = .1
+			stim_text.pos = [0, .5]
+			stim_text.color = new util.Color('white')
 			trialComponents.push(slider);
 			trialComponents.push(next_text)
+			trialComponents.push(stim_text);
 		}
 
 		if (trial_type == 'rating_valence') {
 			//ticks: [...Array(5).keys()],
 			//labels: [0,25,50,75,100],
-			slider.ticks = [...Array(5).keys()]
-			slider.labels = ['1 = negative','5 = neutral', '9 = positive' ]
+			slider.ticks = [...Array(9).keys()]
+			slider.labels = ['1 = negative', '5 = neutral', '9 = positive']
+			slider.granularity = 1
 			slider.reset()
+			stim_text.setText(`Valence:\nRate your mood in response to this ${media_type}.`)
+			stim_text.height = .1
+			stim_text.pos = [0, .5]
+			stim_text.color = new util.Color('white')
 			next_text.image = 'next_button.png'
 			trialComponents.push(slider);
 			trialComponents.push(next_text)
+			trialComponents.push(stim_text);
 		}
 
 		if (trial_type == 'rating_arousal') {
 			//ticks: [...Array(5).keys()],
 			//labels: [0,25,50,75,100],
-			slider.ticks = [...Array(5).keys()]
-			slider.labels = ['1 = calm','5 = middle', '9 = excited' ]
+			slider.ticks = [...Array(9).keys()]
+			slider.labels = ['1 = calm', '5 = middle', '9 = excited']
+			slider.granularity = 1
 			slider.reset()
+			stim_text.setText(`Arousal:\nRate your arousal in response to this ${media_type}.`)
+			stim_text.height = .1
+			stim_text.pos = [0, .5]
+			stim_text.color = new util.Color('white')
 			next_text.image = 'next_button.png'
 			trialComponents.push(slider);
 			trialComponents.push(next_text)
+			trialComponents.push(stim_text);
 		}
 
 		resp.keys = undefined;
@@ -838,32 +883,13 @@ function trialRoutineBegin(trials) {
 }
 
 /**
- * Returns true if this is the last trial
- * @param {*} game_type 
- * @param {*} trial_num 
- */
-function isLastTrial(game_type, trial_num) {
-	if (game_type == 'h1' && trial_num == 4) return true
-	if (game_type == 'h6' && trial_num == 9) return true
-	return false
-}
-
-var showLastTrial;
-var time_continue;
-var now;
-var theseKeys;
-var audio_stim_length;
-
-
-/**
  * For Audio Trials
  */
 function do_audio() {
 	if (audio_stim.status == PsychoJS.Status.NOT_STARTED) {
-		// console.log(ready.getKeys({ keyList: ['space'] }))
 		if (ready.getKeys({ keyList: ['space'] }).length > 0) {  // at least one key was pressed
 			// a response ends the routine
-			audio_stim_length = trialClock.getTime() + audio_stim.getDuration() // time it will end
+			next_progress = t + audio_stim.getDuration() // time it will end
 			audio_stim.play()
 			console.log('Audio playing')
 
@@ -873,11 +899,10 @@ function do_audio() {
 		}
 	}
 
-	if (t >= audio_stim_length) {
+	if (t >= next_progress) {
 		audio_stim.stop()
 		stim_text.color = new util.Color('white')
 		continueRoutine = false
-		return
 	}
 
 	stim_text.setAutoDraw(true)
@@ -889,15 +914,12 @@ function do_audio() {
 function do_video() {
 	
 	if (video_stim.status == PsychoJS.Status.NOT_STARTED) {
-		// console.log(ready.getKeys({ keyList: ['space'] }))
 		stim_text.setAutoDraw(true)
 		
 		if (ready.getKeys({ keyList: ['space'] }).length > 0) {  // at least one key was pressed
 			// a response ends the routine
 			stim_text.setAutoDraw(false)
 			video_stim.setAutoDraw(true);
-			// audio_stim_length = trialClock.getTime() + audio_stim.getDuration() // time it will end
-			// video_stim.play()
 			console.log('Video playing')
 				
 		}
@@ -906,25 +928,13 @@ function do_video() {
 	if (video_stim.status == PsychoJS.Status.FINISHED) {
 		video_stim.setAutoDraw(false);
 		continueRoutine = false
-		return
-	}
-
-	// if (t >= audio_stim_length) {
-	// 	audio_stim.stop()
-	// 	stim_text.color = new util.Color('white')
-	// 	continueRoutine = false 
-	// }
-	
-	
+	}	
 }
 
 /**
  * Rating Identity Trials
  */
 function do_rating_identity() {
-	stim_text.setText(`Identity:\nHow much did this ${media_type} relate to your identity as a native person? `)
-	stim_text.height = .1
-	stim_text.pos = [0,.5]
 	stim_text.setAutoDraw(true)
 
 	slider.setAutoDraw(true)
@@ -938,16 +948,12 @@ function do_rating_identity() {
 		// next_text.color = new util.Color('red')
 	}
 
-
 	if (t >= next_progress) {
 		continueRoutine = false
 	}
 }
 
 function do_rating_valence() {
-	stim_text.setText(`Valence:\nRate your mood in response to this ${media_type}.`)
-	stim_text.height = .1
-	stim_text.pos = [0,.5]
 	stim_text.setAutoDraw(true)
 
 	slider.setAutoDraw(true)
@@ -968,9 +974,6 @@ function do_rating_valence() {
 }
 
 function do_rating_arousal() {
-	stim_text.setText(`Arousal:\nRate your arousal in response to this ${media_type}.`)
-	stim_text.height = .1
-	stim_text.pos = [0,.5]
 	stim_text.setAutoDraw(true)
 
 	slider.setAutoDraw(true)
@@ -990,6 +993,7 @@ function do_rating_arousal() {
 }
 
 var next_progress;
+var related_response;
 function do_rating_relatedness() {
 	
 	stim_text.setAutoDraw(true)
@@ -1001,11 +1005,13 @@ function do_rating_relatedness() {
 		next_progress = t + .5 // Allow Delay second after mouse press
 		related_yes.image = 'yes_button_clicked.png'
 		related_yes.color = new util.Color('red')
+		related_response = 'yes'
 	}
 	if (mouse.isPressedIn(related_no)) {
 		next_progress = t + .5 // Allow Delay second after mouse press
 		related_no.image = 'no_button_clicked.png'
 		related_no.color = new util.Color('red')
+		related_response = 'no'
 	}
 
 	if (t >= next_progress) {
@@ -1013,9 +1019,6 @@ function do_rating_relatedness() {
 	}
 }
 function do_rating_typicality() {
-	stim_text.setText(`Typicality:\nHow likely is it for a native person to see/experience scenes like this?`)
-	stim_text.height = .1
-	stim_text.pos = [0,.5]
 	stim_text.setAutoDraw(true)
 
 	slider.setAutoDraw(true)
@@ -1102,26 +1105,41 @@ function trialRoutineEnd(trials) {
 		//------Ending Routine 'trial'-------
 
 		// store data for thisExp (ExperimentHandler)
-		// psychoJS.experiment.addData('resp.keys', key_map[resp.keys]);
-		// psychoJS.experiment.addData('points', totalPoints);
+
+		// Slider Response Based on Rating Type
+		var slider_result = slider.getRating()
+		if (trial_type == 'rating_identity' || trial_type == 'rating_typicality') {
+			slider_result = Math.round(slider_result * 25)
+		} else {
+			slider_result = slider_result + 1
+		}
+		psychoJS.experiment.addData('silder.rating', slider_result);
+		psychoJS.experiment.addData('trial_type', lastTrial.trial_type);
+		psychoJS.experiment.addData('stim_path', lastTrial.stim_paths);
+		psychoJS.experiment.addData('related_response', related_response);
 		// psychoJS.experiment.addData('resp.corr', resp.corr);
 
 		resp.stop();
 		// the Routine "trial" was not non-slip safe, so reset the non-slip timer
 		routineTimer.reset();
 		next_progress = undefined // resets the next progress
-		slider.rating = undefined
+		related_response = undefined // clear variable
 
 		for (const thisComponent of trialComponents) {
 			try {
 				thisComponent.stop()
+				
 			} catch (error) {
 				// console.log(error);
-			  }
-			thisComponent.setAutoDraw(false)
-		}
+			}
+			try {
+				thisComponent.setAutoDraw(false)
+			} catch (error) {
+				
+			}
 			
-
+		}
+		
 		return Scheduler.Event.NEXT;
 	};
 }
@@ -1134,7 +1152,6 @@ function thanksRoutineBegin(trials) {
 		t = 0;
 		thanksClock.reset(); // clock
 		frameN = -1;
-		routineTimer.add(2.000000);
 		// update component parameters for each repeat
 		// keep track of which components have finished
 
@@ -1168,12 +1185,6 @@ function thanksRoutineEachFrame(trials) {
 			thanksText.frameNStart = frameN;  // exact frame index
 			thanksText.setAutoDraw(true);
 		}
-
-		// frameRemains = 0.0 + 2.0 - psychoJS.window.monitorFramePeriod * 0.75;  // most of one frame period left
-		// if (thanksText.status === PsychoJS.Status.STARTED && t >= frameRemains) {
-		// 	thanksText.setAutoDraw(false);
-		// }
-		// check for quit (typically the Esc key)
 		if (psychoJS.experiment.experimentEnded || psychoJS.eventManager.getKeys({ keyList: ['escape'] }).length > 0) {
 			return quitPsychoJS('The [Escape] key was pressed. Goodbye!', false);
 		}
@@ -1184,7 +1195,7 @@ function thanksRoutineEachFrame(trials) {
 		}
 
 		// Exit after XX seconds
-		if (t >= 15) {
+		if (t >= 2) {
 			continueRoutine = false
 		}
 
