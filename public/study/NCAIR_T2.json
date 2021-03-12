@@ -2,8 +2,8 @@
     "name": "NCAIR T2",
     "order": [
         "/?index=0&task=ncair&run=NCAIR_R1.json",
-        "/?index=0&task=ncair&run=NCAIR_R2.json",
-        "/?index=0&task=ncair&run=NCAIR_R3.json",
+        "/?index=1&task=ncair&run=NCAIR_R2.json",
+        "/?index=2&task=ncair&run=NCAIR_R3.json",
         "/completed?"
     ],
     "fullscreen": true,

@@ -264,7 +264,12 @@ dialogCancelScheduler.add(quitPsychoJS, '', false);
 
 // Add Slides to resources
 var resources = [
-
+	{ name: 'next_button.png', path: 'js/tasks/ncair/media/next_button.png' },
+	{ name: 'yes_button.png', path: 'js/tasks/ncair/media/yes_button.png' },
+	{ name: 'no_button.png', path: 'js/tasks/ncair/media/no_button.png' },
+	{ name: 'no_button_clicked.png', path: 'js/tasks/ncair/media/no_button_clicked.png' },
+	{ name: 'yes_button_clicked.png', path: 'js/tasks/ncair/media/yes_button_clicked.png' },
+	{ name: 'next_button_clicked.png', path : 'js/tasks/ncair/media/next_button_clicked.png'}
 ]
 
 var frameDur;
@@ -411,35 +416,33 @@ function experimentInit() {
 
 
 
-	related_yes = new visual.TextStim({
+	related_yes = new visual.ImageStim({
 		win: psychoJS.window,
 		name: 'related_yes',
-		text: 'Yes',
-		font: 'Arial',
+		image: 'yes_button.png',
 		units: 'norm',
-		pos: [-.1, 0], height: 0.08, wrapWidth: undefined, ori: 0,
+		pos: [-.1, 0], height: 0.08,ori: 0,
+		color: new util.Color('white'), opacity: 1,
+		depth: 0.0
+		
+	})
+
+	related_no = new visual.ImageStim({
+		win: psychoJS.window,
+		name: 'related_no',
+		image: 'no_button.png',
+		units: 'norm',
+		pos: [.1, 0], height: 0.08,ori: 0,
 		color: new util.Color('white'), opacity: 1,
 		depth: 0.0
 	})
 
-	related_no = new visual.TextStim({
+	next_text = new visual.ImageStim({
 		win: psychoJS.window,
-		name: 'related_no',
-		text: 'No',
-		font: 'Arial',
+		name: 'next_text',
+		image: 'next_button.png',
 		units: 'norm',
-		pos: [.1, 0], height: 0.08, wrapWidth: undefined, ori: 0,
-		color: new util.Color('white'), opacity: 1,
-		depth: 0.0
-	})
-
-	next_text = new visual.TextStim({
-		win: psychoJS.window,
-		name: 'related_no',
-		text: 'Next',
-		font: 'Arial',
-		units: 'norm',
-		pos: [.8, -.8], height: 0.08, wrapWidth: undefined, ori: 0,
+		pos: [.8, -.8], height: 0.08,ori: 0,
 		color: new util.Color('white'), opacity: 1,
 		depth: 0.0
 	})
@@ -448,7 +451,8 @@ function experimentInit() {
 		win : psychoJS.window,
 		name : 'image_stim', units : 'height', 
 		image : undefined, mask : undefined,
-		ori : 0, pos : [0, 0],
+		ori: 0, pos: [0, 0],
+		size: [.2,.15],
 		color : new util.Color([1, 1, 1]), opacity : 1,
 		flipHoriz : false, flipVert : false,
 		texRes : 128, interpolate : true, depth : 0
@@ -693,11 +697,6 @@ function instruct_pagesLoopEnd() {
 
 
 function trialsLoopEnd() {
-	currentTrialNumber.setAutoDraw(false)
-	gameNumtracker.setAutoDraw(false)
-	totalPointsTracker.setAutoDraw(false)
-	slideStim.setAutoDraw(false)
-
 	psychoJS.experiment.removeLoop(trials);
 
 	return Scheduler.Event.NEXT;
@@ -749,6 +748,9 @@ function trialRoutineBegin(trials) {
 		
 
 		if (trial_type == 'audio') {
+			stim_text.setText('Press the Space Bar to play audio') 
+			stim_text.height = .1
+			stim_text.pos = [0,0]
 			audio_stim = new Sound({
 				win: psychoJS.window,
 				value: stim_paths
@@ -761,6 +763,9 @@ function trialRoutineBegin(trials) {
 
 		if (trial_type == 'video') {
 			// video_stim.setMovie(stim_paths)
+			stim_text.setText('Press the Space Bar to play video') 
+			stim_text.height = .1
+			stim_text.pos = [0,0]
 			video_stim = new visual.MovieStim({
 				win : psychoJS.window,
 				name : 'video_stim', units : 'height', 
@@ -774,11 +779,47 @@ function trialRoutineBegin(trials) {
 		}
 
 		if (trial_type == 'rating_relatedness') {
+			stim_text.setText(`Relatedness:\nIs this ${media_type} related to your identity as a native person?`)
+			stim_text.height = .1
+			stim_text.pos = [0,.5]
+			related_no.image = 'no_button.png'
+			related_yes.image = 'yes_button.png'
 			trialComponents.push(related_no);
 			trialComponents.push(related_yes);
 		}
 
-		if (trial_type == 'rating_idetntity') {
+		if (trial_type == 'rating_identity') {
+			slider.reset()
+			next_text.image = 'next_button.png'
+			trialComponents.push(slider);
+			trialComponents.push(next_text)
+		}
+
+		if (trial_type == 'rating_typicality') {
+			slider.reset()
+			next_text.image = 'next_button.png'
+			trialComponents.push(slider);
+			trialComponents.push(next_text)
+		}
+
+		if (trial_type == 'rating_valence') {
+			//ticks: [...Array(5).keys()],
+			//labels: [0,25,50,75,100],
+			slider.ticks = [...Array(5).keys()]
+			slider.labels = ['1 = negative','5 = neutral', '9 = positive' ]
+			slider.reset()
+			next_text.image = 'next_button.png'
+			trialComponents.push(slider);
+			trialComponents.push(next_text)
+		}
+
+		if (trial_type == 'rating_arousal') {
+			//ticks: [...Array(5).keys()],
+			//labels: [0,25,50,75,100],
+			slider.ticks = [...Array(5).keys()]
+			slider.labels = ['1 = calm','5 = middle', '9 = excited' ]
+			slider.reset()
+			next_text.image = 'next_button.png'
 			trialComponents.push(slider);
 			trialComponents.push(next_text)
 		}
@@ -819,8 +860,6 @@ var audio_stim_length;
  */
 function do_audio() {
 	if (audio_stim.status == PsychoJS.Status.NOT_STARTED) {
-		stim_text.setText('Press the Space Bar to play audio') 
-		stim_text.height = .1
 		// console.log(ready.getKeys({ keyList: ['space'] }))
 		if (ready.getKeys({ keyList: ['space'] }).length > 0) {  // at least one key was pressed
 			// a response ends the routine
@@ -850,8 +889,6 @@ function do_audio() {
 function do_video() {
 	
 	if (video_stim.status == PsychoJS.Status.NOT_STARTED) {
-		stim_text.setText('Press the Space Bar to play video') 
-		stim_text.height = .1
 		// console.log(ready.getKeys({ keyList: ['space'] }))
 		stim_text.setAutoDraw(true)
 		
@@ -896,9 +933,11 @@ function do_rating_identity() {
 		next_text.setAutoDraw(true)
 	}
 	if (mouse.isPressedIn(next_text)) {
-		var next_progress = t + .5 // Allow Delay second after mouse press
-		next_text.color = new util.Color('red')
+		next_progress = t + .5 // Allow Delay second after mouse presss. to show a that they've cliked
+		next_text.image = 'next_button_clicked.png'
+		// next_text.color = new util.Color('red')
 	}
+
 
 	if (t >= next_progress) {
 		continueRoutine = false
@@ -906,24 +945,53 @@ function do_rating_identity() {
 }
 
 function do_rating_valence() {
-	stim_text.setText(`Rate your mood in response to this ${media_type}.`)
+	stim_text.setText(`Valence:\nRate your mood in response to this ${media_type}.`)
 	stim_text.height = .1
 	stim_text.pos = [0,.5]
 	stim_text.setAutoDraw(true)
+
+	slider.setAutoDraw(true)
+
+	if (slider.getRating()) {
+		next_text.setAutoDraw(true)
+	}
+	if (mouse.isPressedIn(next_text)) {
+		next_progress = t + .5 // Allow Delay second after mouse presss. to show a that they've cliked
+		next_text.image = 'next_button_clicked.png'
+		// next_text.color = new util.Color('red')
+	}
+
+
+	if (t >= next_progress) {
+		continueRoutine = false
+	}
 }
 
 function do_rating_arousal() {
-	stim_text.setText(`Rate your arousal in response to this ${media_type}.`)
+	stim_text.setText(`Arousal:\nRate your arousal in response to this ${media_type}.`)
 	stim_text.height = .1
 	stim_text.pos = [0,.5]
-	stim_text.setAutoDraw(true)	
+	stim_text.setAutoDraw(true)
+
+	slider.setAutoDraw(true)
+
+	if (slider.getRating()) {
+		next_text.setAutoDraw(true)
+	}
+	if (mouse.isPressedIn(next_text)) {
+		next_progress = t + .5 // Allow Delay second after mouse presss. to show a that they've cliked
+		next_text.image = 'next_button_clicked.png'
+		// next_text.color = new util.Color('red')
+	}
+
+	if (t >= next_progress) {
+		continueRoutine = false
+	}
 }
 
 var next_progress;
 function do_rating_relatedness() {
-	stim_text.setText(`Relatedness:\nIs this ${media_type} related to your identity as a native person?`)
-	stim_text.height = .1
-	stim_text.pos = [0,.5]
+	
 	stim_text.setAutoDraw(true)
 
 	related_no.setAutoDraw(true)
@@ -931,10 +999,12 @@ function do_rating_relatedness() {
 
 	if (mouse.isPressedIn(related_yes)) {
 		next_progress = t + .5 // Allow Delay second after mouse press
+		related_yes.image = 'yes_button_clicked.png'
 		related_yes.color = new util.Color('red')
 	}
 	if (mouse.isPressedIn(related_no)) {
 		next_progress = t + .5 // Allow Delay second after mouse press
+		related_no.image = 'no_button_clicked.png'
 		related_no.color = new util.Color('red')
 	}
 
@@ -943,10 +1013,25 @@ function do_rating_relatedness() {
 	}
 }
 function do_rating_typicality() {
-	stim_text.setText(`How likely is it for a native person to see/experience scenes like this?`)
+	stim_text.setText(`Typicality:\nHow likely is it for a native person to see/experience scenes like this?`)
 	stim_text.height = .1
 	stim_text.pos = [0,.5]
 	stim_text.setAutoDraw(true)
+
+	slider.setAutoDraw(true)
+
+	if (slider.getRating()) {
+		next_text.setAutoDraw(true)
+	}
+	if (mouse.isPressedIn(next_text)) {
+		next_progress = t + .5 // Allow Delay second after mouse presss. to show a that they've cliked
+		next_text.image = 'next_button_clicked.png'
+		// next_text.color = new util.Color('red')
+	}
+
+	if (t >= next_progress) {
+		continueRoutine = false
+	}
 }
 
 function trialRoutineEachFrame(trials) {
@@ -1024,6 +1109,8 @@ function trialRoutineEnd(trials) {
 		resp.stop();
 		// the Routine "trial" was not non-slip safe, so reset the non-slip timer
 		routineTimer.reset();
+		next_progress = undefined // resets the next progress
+		slider.rating = undefined
 
 		for (const thisComponent of trialComponents) {
 			try {
@@ -1044,25 +1131,14 @@ function thanksRoutineBegin(trials) {
 	return function () {
 		//------Prepare to start Routine 'thanks'-------
 		// Clear Trial Components
-		clearBandits()
-		clearLevers()
 		t = 0;
 		thanksClock.reset(); // clock
 		frameN = -1;
-		routineTimer.add(25.000000);
+		routineTimer.add(2.000000);
 		// update component parameters for each repeat
 		// keep track of which components have finished
 
-		// Show Final Points and money earned
-		
-		if (getQueryVariable('study') == 'vanderbelt') {
-			// 1000 points = 10 cents
-			thanksText.setText(`This is the end of the task run.\n\n\n Total Points Earned: ${totalPoints} \n\n Total Cents Earned: ${totalPoints / 100 } =  $${ (totalPoints / 10000).toFixed(2)}`)
-		} else {
-			// 100 points = 10 cents
-			thanksText.setText(`This is the end of the task run.\n\n\n Total Points Earned: ${totalPoints} \n\n Total Cents Earned: ${totalPoints / 10 } =  $${ (totalPoints / 1000).toFixed(2)}`)
-		}
-		
+		thanksText.setText(`This is the end of the task run`)
 
 		thanksComponents = [];
 		thanksComponents.push(thanksText);
