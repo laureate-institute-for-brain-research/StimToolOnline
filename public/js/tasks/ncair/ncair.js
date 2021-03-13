@@ -277,7 +277,7 @@ var frameDur;
 function updateInfo() {
 	expInfo['date'] = util.MonotonicClock.getDateStr();  // add a simple timestamp
 	expInfo['expName'] = expName;
-	expInfo['psychopyVersion'] = '3.2.5';
+	expInfo['psychoJSVersion'] = '2021.1.2';
 	expInfo['OS'] = window.navigator.platform;
 
 	// store frame rate of monitor if we can measure it successfully
@@ -303,12 +303,13 @@ function updateInfo() {
 }
 
 var slideStim;
-var goodLuckStim;
 var slides;
 var instructClock;
 var instrBelow;
 var ready;
 var trialClock;
+
+var globalClock;
 
 var fixation;
 var audio_stim;
@@ -317,18 +318,11 @@ var video_stim;
 var image_stim;
 var related_no;
 var related_yes;
+var feedback_stim;
 
 var slider;
 var next_text;
 
-var example_trials;
-var currentTrialNumber;
-var gameNumtracker;
-var totalPoints = 0;
-var totalPointsTracker;
-
-var readyClock;
-var readyText;
 
 var track;
 
@@ -336,7 +330,7 @@ var resp;
 var mouse;
 var thanksClock;
 var thanksText;
-var globalClock;
+
 var routineTimer;
 function experimentInit() {
 	
@@ -371,17 +365,6 @@ function experimentInit() {
 	trialClock = new util.Clock();
 
 
-	currentTrialNumber  = new visual.TextStim({
-		win: psychoJS.window,
-		name: 'trialTracker',
-		text: 'Trial Number: ',
-		font: 'Arial',
-		units: 'norm',
-		pos: [0, -.7], height: 0.08, wrapWidth: undefined, ori: 0,
-		color: new util.Color('white'), opacity: 1,
-		depth: 0.0
-	});
-
 	fixation = new visual.TextStim({
 		win: psychoJS.window,
 		name: 'fixation',
@@ -397,7 +380,7 @@ function experimentInit() {
 		win: psychoJS.window,
 		name: 'fixation',
 		text: 'Press SpaceBar to play audio.',
-		font: 'Arial',
+		font: 'Arial',alignVert: 'center',alignHoriz: 'center',
 		units: 'norm',
 		pos: [0, 0], height: .1, wrapWidth: undefined, ori: 0,
 		color: new util.Color('white'), opacity: 1,
@@ -407,15 +390,13 @@ function experimentInit() {
 	
 	image_stim = new visual.ImageStim({
 		win : psychoJS.window,
-		name : 'image_stim', units : 'height', 
+		name : 'image_stim', units : 'norm', 
 		image : undefined, mask : undefined,
-		ori : 0, pos : [0, 0],
+		ori : 0, pos : [0, 0], size: [2,2],
 		color : new util.Color([1, 1, 1]), opacity : 1,
 		flipHoriz : false, flipVert : false,
 		texRes : 128, interpolate : true, depth : 0
 	});
-
-
 
 	related_yes = new visual.ImageStim({
 		win: psychoJS.window,
@@ -459,6 +440,18 @@ function experimentInit() {
 		texRes : 128, interpolate : true, depth : 0
 	});
 
+	feedback_stim = new visual.TextStim({
+		win: psychoJS.window,
+		name: 'feedback_stim',
+		text: 'Start Typing',
+		alignVert: 'center',alignHoriz: 'left',
+		font: 'Arial',
+		units: 'norm',
+		pos: [0, 0], height: .1, wrapWidth : true, ori: 0,
+		color: new util.Color('white'), opacity: 1,
+		depth: 0.0
+	});
+
 	slider = new visual.Slider({
 		win: psychoJS.window,
 		name: 'slider',
@@ -476,8 +469,7 @@ function experimentInit() {
 
 	mouse = new core.Mouse({win: psychoJS.window})
 
-	// Initiali comnponenents for Routine 'read'y
-	readyClock = new util.Clock();
+
 	// Initialize components for Routine "thanks"
 	thanksClock = new util.Clock();
 	thanksText = new visual.TextStim({
@@ -551,7 +543,7 @@ function instructRoutineBegin(trials) {
 		instructComponents.push(ready);
 
 		if (audio_path) {
-			track = new Sound({
+			track = new sound.Sound({
 				win: psychoJS.window,
 				value: audio_path
 			  });
@@ -661,6 +653,132 @@ function instructRoutineEnd(trials) {
 	};
 }
 
+
+/**
+ * Randomize the Order for each subject
+ * - For Audio, always alternate between comparator(1_0) and cultural(0_0)
+ * - For Video, always alternate between comparator and cultural
+ * - For Images,always alternate between comparator and cultural (blocks)
+ * @param {*} trial_list 
+ * @returns 
+ */
+function random_order(trial_list) {
+	var sorted_trial_list = []
+	var m_type;
+	var cultural_indexes = []
+	var comparator_indexes = []
+
+	// Break Apart by conditions
+	for (const idx in trial_list) {
+		if (trial_list[idx].TrialTypes.includes('0_0')) {
+			cultural_indexes.push(trial_list[idx])
+			m_type = 'audio'
+		}
+		if (trial_list[idx].TrialTypes.includes('0_1')) {
+			cultural_indexes.push(trial_list[idx])
+			m_type = 'video'
+		}
+		if (trial_list[idx].TrialTypes.includes('0_2')) {
+			cultural_indexes.push(trial_list[idx])
+			m_type = 'image'
+		}
+		if (trial_list[idx].TrialTypes.includes('1_0')) {
+			comparator_indexes.push(trial_list[idx])
+		}
+		if (trial_list[idx].TrialTypes.includes('1_1')) {
+			comparator_indexes.push(trial_list[idx])
+
+		}
+		if (trial_list[idx].TrialTypes.includes('1_2')) {
+			comparator_indexes.push(trial_list[idx])
+
+		}
+	}
+
+	// Shuffle each conditions
+	var random_cultural = cultural_indexes.sort(() => Math.random() - 0.5)
+	var random_comparator = comparator_indexes.sort(() => Math.random() - 0.5)
+
+
+	// Create new Schedule
+	console.log('Cultral Media: ' + random_cultural.length)
+	console.log('Comparator Media: ' + random_comparator.length)
+	var total_stims = random_cultural.length + random_comparator.length
+	var cultural_idx = 0
+	var comparator_idx = 0
+	console.log(m_type)
+	if (m_type == 'audio') {
+		// Alternate Addin
+		for (var i = 0; i < total_stims; i++){
+			if ((i % 2) == 0) {
+				sorted_trial_list.push(random_cultural[cultural_idx])
+				cultural_idx++;
+			} else {
+				sorted_trial_list.push(random_comparator[comparator_idx])
+				comparator_idx++;
+			}
+			sorted_trial_list.push({ TrialTypes: "2_6", Durations: 0, stim_paths: "None" })
+			sorted_trial_list.push({ TrialTypes: "2_3", Durations: 0, stim_paths: "None" })
+			sorted_trial_list.push({ TrialTypes: "2_7", Durations: 0, stim_paths: "None" })
+			sorted_trial_list.push({ TrialTypes: "2_4", Durations: 0, stim_paths: "None" })
+			sorted_trial_list.push({ TrialTypes: "2_5", Durations: 0, stim_paths: "None"})
+		}
+	}
+
+	if (m_type == 'video') {
+		// Alternate Addin
+		for (var i = 0; i < total_stims; i++){
+			if ((i % 2) == 0) {
+				sorted_trial_list.push(random_cultural[cultural_idx])
+				cultural_idx++;
+			} else {
+				sorted_trial_list.push(random_comparator[comparator_idx])
+				comparator_idx++;
+			}
+			sorted_trial_list.push({ TrialTypes: "4_6", Durations: 0, stim_paths: "None" })
+			sorted_trial_list.push({ TrialTypes: "4_3", Durations: 0, stim_paths: "None" })
+			sorted_trial_list.push({ TrialTypes: "4_7", Durations: 0, stim_paths: "None" })
+			sorted_trial_list.push({ TrialTypes: "4_4", Durations: 0, stim_paths: "None" })
+			sorted_trial_list.push({ TrialTypes: "4_5", Durations: 0, stim_paths: "None"})
+		}
+	}
+
+	if (m_type == 'image') {
+		// Alternate Addin
+		for (var i = 0; i < 24; i++){
+			if ((i % 2) == 0) {
+				sorted_trial_list.push(random_cultural[cultural_idx])
+				cultural_idx++;
+				sorted_trial_list.push(random_cultural[cultural_idx])
+				cultural_idx++;
+				sorted_trial_list.push(random_cultural[cultural_idx])
+				cultural_idx++;
+				sorted_trial_list.push(random_cultural[cultural_idx])
+				cultural_idx++;
+			} else {
+				sorted_trial_list.push(random_comparator[comparator_idx])
+				comparator_idx++;
+				sorted_trial_list.push(random_comparator[comparator_idx])
+				comparator_idx++;
+				sorted_trial_list.push(random_comparator[comparator_idx])
+				comparator_idx++;
+				sorted_trial_list.push(random_comparator[comparator_idx])
+				comparator_idx++;
+			}
+			sorted_trial_list.push({ TrialTypes: "3_6", Durations: 0, stim_paths: "None" })
+			sorted_trial_list.push({ TrialTypes: "3_3", Durations: 0, stim_paths: "None" })
+			sorted_trial_list.push({ TrialTypes: "3_7", Durations: 0, stim_paths: "None" })
+			sorted_trial_list.push({ TrialTypes: "3_4", Durations: 0, stim_paths: "None" })
+			sorted_trial_list.push({ TrialTypes: "3_5", Durations: 0, stim_paths: "None"})
+		}
+		// Add the feedback Trial
+		sorted_trial_list.push({ TrialTypes: "3_8", Durations: 0, stim_paths: "None"})
+	}
+
+	// return (trial_list.sort(() => Math.random() - 0.5))
+	return (sorted_trial_list)
+}
+
 var trials;
 var currentLoop;
 var lastTrialKeyPressed;
@@ -675,6 +793,13 @@ function trialsLoopBegin(thisScheduler) {
 		trialList: 'run_schedule.csv',
 		seed: undefined, name: 'trials'
 	});
+
+	//setting Up Schedule
+	// ToDO lop by alternating
+	console.log(trials._trialList)
+	trials._trialList = random_order(trials._trialList)
+
+	console.log(trials._trialList)
 
 	psychoJS.experiment.addLoop(trials); // add the loop to the experiment
 	currentLoop = trials;  // we're now the current loop
@@ -716,7 +841,8 @@ var medi_dict = {
 	'4': 'rating_valence',
 	'5': 'rating_arousal',
 	'6': 'rating_relatedness',
-	'7': 'rating_typicality'
+	'7': 'rating_typicality',
+	'8': 'general_feedback'
 }
 
 var rating_dict = {
@@ -762,7 +888,8 @@ function trialRoutineBegin(trials) {
 			slider.reset()
 			stim_text.setText('Press the Space Bar to play audio.') 
 			stim_text.height = .1
-			stim_text.pos = [0,0]
+			stim_text.pos = [0, 0]
+			stim_text.alignHoriz = 'center'
 			audio_stim = new sound.Sound({
 				win: psychoJS.window,
 				value: stim_paths,
@@ -775,11 +902,11 @@ function trialRoutineBegin(trials) {
 		}
 
 		if (trial_type == 'video') {
-			// video_stim.setMovie(stim_paths)
 			stim_text.setText('Press the Space Bar to play video.')
 			slider.reset()
 			stim_text.height = .1
-			stim_text.pos = [0,0]
+			stim_text.pos = [0, 0]
+			stim_text.alignHoriz = 'center'
 			video_stim = new visual.MovieStim({
 				win : psychoJS.window,
 				name : 'video_stim', units : 'height', 
@@ -793,8 +920,25 @@ function trialRoutineBegin(trials) {
 			trialComponents.push(stim_text);
 		}
 
+		if (trial_type == 'image') {
+			slider.reset()
+			stim_text.pos = [-.5, 0]
+			stim_text.alignHoriz = 'center'
+			image_stim.size = [1,1]
+			image_stim.image = stim_paths
+			next_text.image = 'next_button.png'
+			trialComponents.push(next_text)
+			trialComponents.push(image_stim);
+			trialComponents.push(stim_text);
+		}
+
 		if (trial_type == 'rating_relatedness') {
-			stim_text.setText(`Relatedness:\nIs this ${media_type} related to your identity as a native person?`)
+			if (lastTrial.trial_type== 'image') {
+				stim_text.setText(`Relatedness:\nAre these pictures related to your identity as a native person?`)
+			} else {
+				stim_text.setText(`Relatedness:\nIs this ${media_type} related to your identity as a native person?`)
+			}
+			
 			stim_text.height = .1
 			stim_text.pos = [0, .5]
 			stim_text.color = new util.Color('white')
@@ -811,7 +955,12 @@ function trialRoutineBegin(trials) {
 			slider.granularity = 0
 			slider.reset()
 			next_text.image = 'next_button.png'
-			stim_text.setText(`Identity:\nHow much did this ${media_type} relate to your identity as a native person? `)
+			if (lastTrial.trial_type== 'image'){
+				stim_text.setText(`Identity:\nHow much did these pictures relate to your identity as a native person?`)
+			} else {
+				stim_text.setText(`Identity:\nHow much did this ${media_type} relate to your identity as a native person? `)
+			}
+			
 			stim_text.height = .1
 			stim_text.pos = [0,.5]
 			stim_text.color = new util.Color('white')
@@ -842,7 +991,12 @@ function trialRoutineBegin(trials) {
 			slider.labels = ['1 = negative', '5 = neutral', '9 = positive']
 			slider.granularity = 1
 			slider.reset()
-			stim_text.setText(`Valence:\nRate your mood in response to this ${media_type}.`)
+			if (lastTrial.trial_type== 'image') {
+				stim_text.setText(`Valence:\nRate your mood in response to these pictures.`)
+			} else {
+				stim_text.setText(`Valence:\nRate your mood in response to this ${media_type}.`)
+			}
+			
 			stim_text.height = .1
 			stim_text.pos = [0, .5]
 			stim_text.color = new util.Color('white')
@@ -859,7 +1013,12 @@ function trialRoutineBegin(trials) {
 			slider.labels = ['1 = calm', '5 = middle', '9 = excited']
 			slider.granularity = 1
 			slider.reset()
-			stim_text.setText(`Arousal:\nRate your arousal in response to this ${media_type}.`)
+			if (lastTrial.trial_type== 'image') {
+				stim_text.setText(`Arousal:\nRate your arousal in response to these pictures.`)
+			} else {
+				stim_text.setText(`Arousal:\nRate your arousal in response to this ${media_type}.`)
+			}
+			
 			stim_text.height = .1
 			stim_text.pos = [0, .5]
 			stim_text.color = new util.Color('white')
@@ -867,6 +1026,19 @@ function trialRoutineBegin(trials) {
 			trialComponents.push(slider);
 			trialComponents.push(next_text)
 			trialComponents.push(stim_text);
+		}
+
+		if (trial_type == 'general_feedback') {
+			stim_text.setText(`General Feedback:\nThank you for participating in our study. Please take a moment to provide any comments or feedback regarding the study and the cultural pictures, music, and videos.`)
+			stim_text.alignHoriz = 'left'
+			stim_text.pos = [-.9, .5]
+			feedback_stim.alignHoriz = 'left'
+			feedback_stim.pos = [-.9, -.3]
+			feedback_stim.size = [-.9, .9]
+			feedback_stim.height = .05
+			trialComponents.push(stim_text);
+			trialComponents.push(next_text)
+			trialComponents.push(feedback_stim)
 		}
 
 		resp.keys = undefined;
@@ -929,6 +1101,37 @@ function do_video() {
 		video_stim.setAutoDraw(false);
 		continueRoutine = false
 	}	
+}
+
+var time_to_show_next;
+
+/**
+ * For Image Trials
+ * Show image at least 2 seconds, than allow user to progress (show next button)
+ */
+function do_image() {
+	
+	if (image_stim.status == PsychoJS.Status.NOT_STARTED) {
+		time_to_show_next = t + 2
+	}
+
+	if (t >= time_to_show_next) {
+		next_text.depth = 1
+		next_text.setAutoDraw(true)
+	}
+
+	if (mouse.isPressedIn(next_text)) {
+		next_progress = t + .5 // Allow Delay second after mouse presss. to show a that they've cliked
+		next_text.image = 'next_button_clicked.png'
+	}
+
+	if (t >= next_progress) {
+		continueRoutine = false
+	}
+
+	image_stim.setAutoDraw(true)
+
+
 }
 
 /**
@@ -1037,6 +1240,76 @@ function do_rating_typicality() {
 	}
 }
 
+var feedback_text = ''
+var keys;
+
+var keys_dict = {
+	'space': ' ',
+	'comma': ',',
+	'minus': '-',
+	'plus': '+',
+	'lshift': '',
+	'rshift': '',
+	'lcommand': '',
+	'rcommand': '',
+	'tab': '',
+	'undefined': '',
+	'semicolon': ';',
+	'return': '\n',
+	'capslock': '',
+	'period': '.',
+	'apostrophe': '\'',
+	'slash': '/',
+	'bracketleft': '[',
+	'bracketright': ']',
+	'right': '',
+	'left': '',
+	'up': '',
+	'down': '',
+	'backslash': '\\',
+	'lcontrol': '',
+	'rcontrol': '',
+	'escape': ''
+
+}
+function do_general_feedback() {
+
+	if (stim_text.status == PsychoJS.Status.NOT_STARTED) {
+		psychoJS.eventManager.clearEvents()
+	}
+	
+	let keys = psychoJS.eventManager.getKeys({})
+	if (keys.length > 0) {  // at least one key was pressed
+		// a response ends the routine
+		// console.log(feedback_text)
+		if (keys == 'backspace') {
+			feedback_text = feedback_text.slice(0, -1) 
+		} else if (keys in keys_dict) {
+			feedback_text = feedback_text + keys_dict[keys]
+		} else {
+			feedback_text = feedback_text + keys
+		}
+		
+		feedback_stim.setText(feedback_text)
+	}
+	if (feedback_text.length > 0) {
+		next_text.setAutoDraw(true)
+	}
+
+	if (mouse.isPressedIn(next_text)) {
+		next_progress = t + .5 // Allow Delay second after mouse presss. to show a that they've cliked
+		next_text.image = 'next_button_clicked.png'
+		// next_text.color = new util.Color('red')
+	}
+
+	if (t >= next_progress) {
+		continueRoutine = false
+	}
+
+	stim_text.setAutoDraw(true)
+	feedback_stim.setAutoDraw(true)
+}
+
 function trialRoutineEachFrame(trials) {
 	return function () {
 		//------Loop for each frame of Routine 'trial'-------
@@ -1054,13 +1327,14 @@ function trialRoutineEachFrame(trials) {
 		if (trial_type == 'rating_arousal') do_rating_arousal()
 		if (trial_type == 'rating_relatedness') do_rating_relatedness()
 		if (trial_type == 'rating_typicality') do_rating_typicality()
+		if (trial_type == 'general_feedback') do_general_feedback()
 
 		// check for quit (typically the Esc key)
 		if (psychoJS.eventManager.getKeys({keyList:['escape']}).length > 0) {
 			return quitPsychoJS('The [Escape] key was pressed. Goodbye!', false);
 		}
 		// Suer Skipped Trial Trial
-		if (psychoJS.eventManager.getKeys({keyList:['z']}).length > 0) {
+		if (trial_type != 'general_feedback' && psychoJS.eventManager.getKeys({keyList:['z']}).length > 0) {
 			return Scheduler.Event.NEXT;
 		}
 
@@ -1073,17 +1347,6 @@ function trialRoutineEachFrame(trials) {
 	};
 }
 
-
-var key_map = {
-	',': 'left',
-	'.': 'right',
-	'<': 'left',
-	'>': 'right',
-	'left': 'left',
-	'right': 'right',
-	'comma': 'left',
-	'period': 'right'
-}
 
 function sendData(trial_data) {
 	$.ajax({
@@ -1116,7 +1379,8 @@ function trialRoutineEnd(trials) {
 		psychoJS.experiment.addData('silder.rating', slider_result);
 		psychoJS.experiment.addData('trial_type', lastTrial.trial_type);
 		psychoJS.experiment.addData('stim_path', lastTrial.stim_paths);
-		psychoJS.experiment.addData('related_response', related_response);
+		psychoJS.experiment.addData('general_feedback', feedback_text);
+		
 		// psychoJS.experiment.addData('resp.corr', resp.corr);
 
 		resp.stop();
@@ -1280,8 +1544,8 @@ function quitPsychoJS(message, isCompleted) {
 	if (psychoJS.experiment.isEntryEmpty()) {
 		psychoJS.experiment.nextEntry();
 	}
-
-
+	// Send Last Data
+	sendData(psychoJS.experiment._trialsData)
 
 	psychoJS.window.close();
 	psychoJS.quit({ message: message, isCompleted: isCompleted });
