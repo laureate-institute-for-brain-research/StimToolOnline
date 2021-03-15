@@ -1060,7 +1060,7 @@ class GUI
 				{
 					logoUrl = self._psychoJS.config.experiment.license.institutionLogo;
 				}
-				let htmlCode = '<div style="padding-bottom: 0px" id="expDialog" title="' + title + '>';
+				let htmlCode = '<div style="padding-bottom: 0px" id="expDialog" title="' + title + '">';
 				if (typeof logoUrl === 'string')
 				{
 					htmlCode += '<img id="dialog-logo" class="logo" alt="logo" src="' + logoUrl + '">';

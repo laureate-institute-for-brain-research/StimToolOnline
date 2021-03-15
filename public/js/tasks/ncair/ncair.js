@@ -975,7 +975,12 @@ function trialRoutineBegin(trials) {
 			slider.granularity = .1
 			slider.reset()
 			next_text.image = 'next_button.png'
-			stim_text.setText(`Typicality:\nHow likely is it for a native person to see/experience scenes like this?`)
+			if (lastTrial.trial_type== 'image' ||lastTrial.trial_type== 'video' ){
+				stim_text.setText(`Typicality:\nHow likely is it for a native person to see/experience scenes like this?`)
+			} else {
+				stim_text.setText(`Typicality:\nHow likely is it for a native person to hear/experience sounds like this?`)
+			}
+			
 			stim_text.height = .1
 			stim_text.pos = [0, .5]
 			stim_text.color = new util.Color('white')
@@ -1141,7 +1146,6 @@ function do_rating_identity() {
 	stim_text.setAutoDraw(true)
 
 	slider.setAutoDraw(true)
-
 	if (slider.getRating()) {
 		next_text.setAutoDraw(true)
 	}
@@ -1160,8 +1164,7 @@ function do_rating_valence() {
 	stim_text.setAutoDraw(true)
 
 	slider.setAutoDraw(true)
-
-	if (slider.getRating()) {
+	if (slider.getRating() >= 0) {
 		next_text.setAutoDraw(true)
 	}
 	if (mouse.isPressedIn(next_text)) {
@@ -1180,8 +1183,7 @@ function do_rating_arousal() {
 	stim_text.setAutoDraw(true)
 
 	slider.setAutoDraw(true)
-
-	if (slider.getRating()) {
+	if (slider.getRating() >= 0) {
 		next_text.setAutoDraw(true)
 	}
 	if (mouse.isPressedIn(next_text)) {
@@ -1225,8 +1227,7 @@ function do_rating_typicality() {
 	stim_text.setAutoDraw(true)
 
 	slider.setAutoDraw(true)
-
-	if (slider.getRating()) {
+	if (slider.getRating() >= 0) {
 		next_text.setAutoDraw(true)
 	}
 	if (mouse.isPressedIn(next_text)) {
