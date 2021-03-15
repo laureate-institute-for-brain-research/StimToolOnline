@@ -1060,7 +1060,7 @@ class GUI
 				{
 					logoUrl = self._psychoJS.config.experiment.license.institutionLogo;
 				}
-				let htmlCode = '<div id="expDialog" title="' + title + '">';
+				let htmlCode = '<div style="padding-bottom: 0px" id="expDialog" title="' + title + '>';
 				if (typeof logoUrl === 'string')
 				{
 					htmlCode += '<img id="dialog-logo" class="logo" alt="logo" src="' + logoUrl + '">';
@@ -1116,8 +1116,8 @@ class GUI
 					}
 				);
 				htmlCode += '</form>';
-				htmlCode += '<hr><div id="progressMsg" class="progress">' + self._progressMsg + '</div>';
-				htmlCode += '<div id="progressbar"></div></div>';
+				htmlCode += '<div class="footer" style="position:sticky; bottom: 0;background: white"><hr><div id="progressMsg" class="progress">' + self._progressMsg + '</div>';
+				htmlCode += '<div id="progressbar"></div></div></div>';
 				const dialogElement = document.getElementById('root');
 				dialogElement.innerHTML = htmlCode;
 				if (typeof logoUrl === 'string')
@@ -1393,25 +1393,23 @@ class GUI
 	}
 	_updateOkButtonStatus(changeFocus = true)
 	{
-		if (this._psychoJS.getEnvironment() === ExperimentHandler.Environment.LOCAL || (this._allResourcesDownloaded && this._setRequiredKeys && this._setRequiredKeys.size >= this._requiredKeys.length))
+		if (this._allResourcesDownloaded)
 		{
-			if (changeFocus)
-		{
-			$("#buttonOk").button("option", "disabled", false).focus();
-		}
-		else
-		{
+			// Only disable when all resources are downloaded
+			if (changeFocus){
+				$("#buttonOk").button("option", "disabled", false).focus();
+			} else{
 				$("#buttonOk").button("option", "disabled", false);
 			}
-		}
-		else
-		{
+			console.log('do not disable')
+		} else {
+			console.log('disable')
 			$("#buttonOk").button("option", "disabled", true);
 		}
-		$("#buttonOk").hide(0, () =>
-		{
-			$("#buttonOk").show();
-		});
+		// $("#buttonOk").hide(0, () =>
+		// {
+		// 	$("#buttonOk").show();
+		// });
 	}
 	_estimateDialogScalingFactor()
 	{
