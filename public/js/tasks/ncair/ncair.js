@@ -909,9 +909,9 @@ function trialRoutineBegin(trials) {
 			stim_text.alignHoriz = 'center'
 			video_stim = new visual.MovieStim({
 				win : psychoJS.window,
-				name : 'video_stim', units : 'height', 
+				name : 'video_stim', units : 'norm', 
 				movie : stim_paths, 
-				ori : 0, pos : [0, 0],
+				ori : 0, pos : [0, 0],size:[2,2],
 				color: new util.Color('white'), opacity: 1,
 				loop: false,  noAudio: false,
 			});
