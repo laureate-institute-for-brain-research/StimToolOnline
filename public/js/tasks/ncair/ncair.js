@@ -319,6 +319,7 @@ var image_stim;
 var related_no;
 var related_yes;
 var feedback_stim;
+var footer_stim;
 
 var slider;
 var next_text;
@@ -448,6 +449,18 @@ function experimentInit() {
 		font: 'Arial',
 		units: 'norm',
 		pos: [0, 0], height: .1, wrapWidth : true, ori: 0,
+		color: new util.Color('white'), opacity: 1,
+		depth: 0.0
+	});
+
+	footer_stim = new visual.TextStim({
+		win: psychoJS.window,
+		name: 'footer_stim',
+		text: 'Click on the line to make your selection.',
+		alignVert: 'center',alignHoriz: 'center',
+		font: 'Arial',
+		units: 'norm',
+		pos: [0, -.8], height: .06, wrapWidth : true, ori: 0,
 		color: new util.Color('white'), opacity: 1,
 		depth: 0.0
 	});
@@ -967,6 +980,7 @@ function trialRoutineBegin(trials) {
 			trialComponents.push(slider);
 			trialComponents.push(next_text)
 			trialComponents.push(stim_text);
+			trialComponents.push(footer_stim);
 		}
 
 		if (trial_type == 'rating_typicality') {
@@ -976,9 +990,10 @@ function trialRoutineBegin(trials) {
 			slider.reset()
 			next_text.image = 'next_button.png'
 			if (lastTrial.trial_type== 'image' ||lastTrial.trial_type== 'video' ){
-				stim_text.setText(`Typicality:\nHow likely is it for a native person to see/experience scenes like this?`)
-			} else {
-				stim_text.setText(`Typicality:\nHow likely is it for a native person to hear/experience sounds like this?`)
+				stim_text.setText(`Typicality:\nHow likely is it for a native person to see/experience scenes like these?`)
+			}
+			if (lastTrial.trial_type== 'audio' ){
+				stim_text.setText(`Typicality:\nHow likely is it for a native person to hear/experience sounds like these?`)
 			}
 			
 			stim_text.height = .1
@@ -987,6 +1002,7 @@ function trialRoutineBegin(trials) {
 			trialComponents.push(slider);
 			trialComponents.push(next_text)
 			trialComponents.push(stim_text);
+			trialComponents.push(footer_stim);
 		}
 
 		if (trial_type == 'rating_valence') {
@@ -1009,6 +1025,7 @@ function trialRoutineBegin(trials) {
 			trialComponents.push(slider);
 			trialComponents.push(next_text)
 			trialComponents.push(stim_text);
+			trialComponents.push(footer_stim);
 		}
 
 		if (trial_type == 'rating_arousal') {
@@ -1031,6 +1048,7 @@ function trialRoutineBegin(trials) {
 			trialComponents.push(slider);
 			trialComponents.push(next_text)
 			trialComponents.push(stim_text);
+			trialComponents.push(footer_stim);
 		}
 
 		if (trial_type == 'general_feedback') {
@@ -1144,6 +1162,7 @@ function do_image() {
  */
 function do_rating_identity() {
 	stim_text.setAutoDraw(true)
+	footer_stim.setAutoDraw(true)
 
 	slider.setAutoDraw(true)
 	if (slider.getRating()) {
@@ -1162,6 +1181,7 @@ function do_rating_identity() {
 
 function do_rating_valence() {
 	stim_text.setAutoDraw(true)
+	footer_stim.setAutoDraw(true)
 
 	slider.setAutoDraw(true)
 	if (slider.getRating() >= 0) {
@@ -1181,6 +1201,7 @@ function do_rating_valence() {
 
 function do_rating_arousal() {
 	stim_text.setAutoDraw(true)
+	footer_stim.setAutoDraw(true)
 
 	slider.setAutoDraw(true)
 	if (slider.getRating() >= 0) {
@@ -1225,6 +1246,7 @@ function do_rating_relatedness() {
 }
 function do_rating_typicality() {
 	stim_text.setAutoDraw(true)
+	footer_stim.setAutoDraw(true)
 
 	slider.setAutoDraw(true)
 	if (slider.getRating() >= 0) {
@@ -1334,10 +1356,13 @@ function trialRoutineEachFrame(trials) {
 		if (psychoJS.eventManager.getKeys({keyList:['escape']}).length > 0) {
 			return quitPsychoJS('The [Escape] key was pressed. Goodbye!', false);
 		}
-		// Suer Skipped Trial Trial
-		if (trial_type != 'general_feedback' && psychoJS.eventManager.getKeys({keyList:['z']}).length > 0) {
-			return Scheduler.Event.NEXT;
+		// Allo skip trial only for developlment
+		if ((window.location.hostname == 'localhost')) {
+			if (trial_type != 'general_feedback' && psychoJS.eventManager.getKeys({keyList:['z']}).length > 0) {
+				return Scheduler.Event.NEXT;
+			}
 		}
+		
 
 		if (continueRoutine) {
 			return Scheduler.Event.FLIP_REPEAT;
