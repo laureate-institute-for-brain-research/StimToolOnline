@@ -270,7 +270,9 @@ var resources = [
 	{ name: 'no_button.png', path: 'js/tasks/ncair/media/no_button.png' },
 	{ name: 'no_button_clicked.png', path: 'js/tasks/ncair/media/no_button_clicked.png' },
 	{ name: 'yes_button_clicked.png', path: 'js/tasks/ncair/media/yes_button_clicked.png' },
-	{ name: 'next_button_clicked.png', path : 'js/tasks/ncair/media/next_button_clicked.png'}
+	{ name: 'next_button_clicked.png', path: 'js/tasks/ncair/media/next_button_clicked.png' },
+	{ name: 'calm_scale.png', path: 'js/tasks/ncair/media/sam_faces/calm_scale_with_dots.png' },
+	{ name: 'happy_scale.png', path : 'js/tasks/ncair/media/sam_faces/happy_scale_with_dots.png'}
 ]
 
 var frameDur;
@@ -320,6 +322,9 @@ var related_no;
 var related_yes;
 var feedback_stim;
 var footer_stim;
+
+var calm_scale;
+var happy_scale;
 
 var slider;
 var next_text;
@@ -436,6 +441,28 @@ function experimentInit() {
 		image : undefined, mask : undefined,
 		ori: 0, pos: [0, 0],
 		size: [.2,.15],
+		color : new util.Color([1, 1, 1]), opacity : 1,
+		flipHoriz : false, flipVert : false,
+		texRes : 128, interpolate : true, depth : 0
+	});
+
+	calm_scale = new visual.ImageStim({
+		win : psychoJS.window,
+		name : 'calm_scale', units : 'norm', 
+		image: 'calm_scale.png', mask : undefined,
+		ori: 0, pos: [0, .15],
+		size: [1.4,.5],
+		color : new util.Color([1, 1, 1]), opacity : 1,
+		flipHoriz : false, flipVert : false,
+		texRes : 128, interpolate : true, depth : 0
+	});
+
+	happy_scale = new visual.ImageStim({
+		win : psychoJS.window,
+		name : 'happy_scale', units : 'norm', 
+		image: 'happy_scale.png', mask : undefined,
+		ori: 0, pos: [0, 0],
+		size: [1.4,.5],
 		color : new util.Color([1, 1, 1]), opacity : 1,
 		flipHoriz : false, flipVert : false,
 		texRes : 128, interpolate : true, depth : 0
@@ -966,6 +993,7 @@ function trialRoutineBegin(trials) {
 			slider.ticks = [...Array(5).keys()]
 			slider.labels = [0,25,50,75,100]
 			slider.granularity = 0
+			slider.pos = [0,0]
 			slider.reset()
 			next_text.image = 'next_button.png'
 			if (lastTrial.trial_type== 'image'){
@@ -987,6 +1015,7 @@ function trialRoutineBegin(trials) {
 			slider.ticks = [...Array(5).keys()]
 			slider.labels = [0, 25, 50, 75, 100]
 			slider.granularity = .1
+			slider.pos = [0,0]
 			slider.reset()
 			next_text.image = 'next_button.png'
 			if (lastTrial.trial_type== 'image' ||lastTrial.trial_type== 'video' ){
@@ -1009,8 +1038,10 @@ function trialRoutineBegin(trials) {
 			//ticks: [...Array(5).keys()],
 			//labels: [0,25,50,75,100],
 			slider.ticks = [...Array(9).keys()]
-			slider.labels = ['1 = negative', '5 = neutral', '9 = positive']
+			slider.labels = ['negative', 'neutral', 'positive']
 			slider.granularity = 1
+			slider.pos = [0, -.15]
+			happy_scale.pos = [0,0]
 			slider.reset()
 			if (lastTrial.trial_type== 'image') {
 				stim_text.setText(`Valence:\nRate your mood in response to these pictures.`)
@@ -1026,13 +1057,15 @@ function trialRoutineBegin(trials) {
 			trialComponents.push(next_text)
 			trialComponents.push(stim_text);
 			trialComponents.push(footer_stim);
+			trialComponents.push(happy_scale);
 		}
 
 		if (trial_type == 'rating_arousal') {
 			//ticks: [...Array(5).keys()],
 			//labels: [0,25,50,75,100],
 			slider.ticks = [...Array(9).keys()]
-			slider.labels = ['1 = calm', '5 = middle', '9 = excited']
+			slider.labels = ['calm', 'middle', 'excited']
+			slider.pos = [0,-.15]
 			slider.granularity = 1
 			slider.reset()
 			if (lastTrial.trial_type== 'image') {
@@ -1042,6 +1075,7 @@ function trialRoutineBegin(trials) {
 			}
 			
 			stim_text.height = .1
+			calm_scale.pos = [0,0]
 			stim_text.pos = [0, .5]
 			stim_text.color = new util.Color('white')
 			next_text.image = 'next_button.png'
@@ -1049,6 +1083,7 @@ function trialRoutineBegin(trials) {
 			trialComponents.push(next_text)
 			trialComponents.push(stim_text);
 			trialComponents.push(footer_stim);
+			trialComponents.push(calm_scale);
 		}
 
 		if (trial_type == 'general_feedback') {
@@ -1183,6 +1218,8 @@ function do_rating_valence() {
 	stim_text.setAutoDraw(true)
 	footer_stim.setAutoDraw(true)
 
+	happy_scale.setAutoDraw(true)
+
 	slider.setAutoDraw(true)
 	if (slider.getRating() >= 0) {
 		next_text.setAutoDraw(true)
@@ -1201,6 +1238,7 @@ function do_rating_valence() {
 
 function do_rating_arousal() {
 	stim_text.setAutoDraw(true)
+	calm_scale.setAutoDraw(true)
 	footer_stim.setAutoDraw(true)
 
 	slider.setAutoDraw(true)

@@ -118,9 +118,15 @@ $(function () {
 })
 
 // When study list is change, than show input fields
+// Show Session based on study
 $('#study-list').change(function () {
     document.getElementById('id_div').style.display = 'block';
-    document.getElementById('session_div').style.display = 'block';
+
+    two_session_studies = ['AAC-BET', 'BK_Pilot', 'CognitiveControl']
+    if (two_session_studies.includes(document.getElementById('study-list').value)) {
+        document.getElementById('session_div').style.display = 'block';
+    }
+    
     document.getElementById('about_begin_div').style.display = 'block';
 })
 
