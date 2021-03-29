@@ -1440,6 +1440,8 @@ function trialRoutineEnd(trials) {
 		} else {
 			slider_result = slider_result + 1
 		}
+
+		psychoJS.experiment.addData('related_response', related_response);
 		psychoJS.experiment.addData('silder.rating', slider_result);
 		psychoJS.experiment.addData('trial_type', lastTrial.trial_type);
 		psychoJS.experiment.addData('stim_path', lastTrial.stim_paths);
