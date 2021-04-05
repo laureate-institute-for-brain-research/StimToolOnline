@@ -210,7 +210,7 @@ function formatDate() {
 
 // open window:
 psychoJS.openWindow({
-	fullscr: (window.location.hostname != 'localhost'), // not full screen at localhost,
+	fullscr: true, //(window.location.hostname != 'localhost'), // not full screen at localhost,
 	color: new util.Color('black'),
 	units: 'height',
 	waitBlanking: true
@@ -451,7 +451,7 @@ function experimentInit() {
 		name : 'calm_scale', units : 'norm', 
 		image: 'calm_scale.png', mask : undefined,
 		ori: 0, pos: [0, .15],
-		size: [1.4,.5],
+		size: [1.18,.5],
 		color : new util.Color([1, 1, 1]), opacity : 1,
 		flipHoriz : false, flipVert : false,
 		texRes : 128, interpolate : true, depth : 0
@@ -462,7 +462,7 @@ function experimentInit() {
 		name : 'happy_scale', units : 'norm', 
 		image: 'happy_scale.png', mask : undefined,
 		ori: 0, pos: [0, 0],
-		size: [1.4,.5],
+		size: [1.18,.5],
 		color : new util.Color([1, 1, 1]), opacity : 1,
 		flipHoriz : false, flipVert : false,
 		texRes : 128, interpolate : true, depth : 0
@@ -492,18 +492,17 @@ function experimentInit() {
 		depth: 0.0
 	});
 
-	slider = new visual.Slider({
-		win: psychoJS.window,
-		name: 'slider',
-		size: [.8, .03],
-		ticks: [...Array(5).keys()],
-		granularity: 0,
-		labels: [0,25,50,75,100],
-		pos: [0, 0], wrapWidth: undefined, ori: 0,
-		color: new util.Color('white'), opacity: 1,
-		depth: 0.0
-	});
-
+	// slider = new visual.Slider({
+	// 	win: psychoJS.window,
+	// 	name: 'slider',
+	// 	size: [.8, .03],
+	// 	ticks: [...Array(5).keys()],
+	// 	granularity: 0,
+	// 	labels: [0,25,50,75,100],
+	// 	pos: [0, 0], wrapWidth: undefined, ori: 0,
+	// 	color: new util.Color('white'), opacity: 1,
+	// 	depth: 0.0
+	// });
 
 	resp = new core.Keyboard({ psychoJS, clock: new util.Clock(), waitForStart: true });
 
@@ -720,7 +719,7 @@ function random_order(trial_list) {
 		}
 		if (trial_list[idx].TrialTypes.includes('0_2')) {
 			cultural_indexes.push(trial_list[idx])
-			m_type = 'image'
+			m_type = 'picture'
 		}
 		if (trial_list[idx].TrialTypes.includes('1_0')) {
 			comparator_indexes.push(trial_list[idx])
@@ -783,25 +782,13 @@ function random_order(trial_list) {
 		}
 	}
 
-	if (m_type == 'image') {
+	if (m_type == 'picture') {
 		// Alternate Addin
-		for (var i = 0; i < 24; i++){
+		for (var i = 0; i < total_stims; i++){
 			if ((i % 2) == 0) {
 				sorted_trial_list.push(random_cultural[cultural_idx])
 				cultural_idx++;
-				sorted_trial_list.push(random_cultural[cultural_idx])
-				cultural_idx++;
-				sorted_trial_list.push(random_cultural[cultural_idx])
-				cultural_idx++;
-				sorted_trial_list.push(random_cultural[cultural_idx])
-				cultural_idx++;
 			} else {
-				sorted_trial_list.push(random_comparator[comparator_idx])
-				comparator_idx++;
-				sorted_trial_list.push(random_comparator[comparator_idx])
-				comparator_idx++;
-				sorted_trial_list.push(random_comparator[comparator_idx])
-				comparator_idx++;
 				sorted_trial_list.push(random_comparator[comparator_idx])
 				comparator_idx++;
 			}
@@ -876,7 +863,7 @@ var trial_type;
 var medi_dict = {
 	'0': 'audio',
 	'1': 'video',
-	'2': 'image',
+	'2': 'picture',
 	'3': 'rating_identity',
 	'4': 'rating_valence',
 	'5': 'rating_arousal',
@@ -887,7 +874,7 @@ var medi_dict = {
 
 var rating_dict = {
 	'2': 'clip',
-	'3': 'image',
+	'3': 'picture',
 	'4': 'video'
 }
 var lastTrial;
@@ -910,7 +897,7 @@ function trialRoutineBegin(trials) {
 		// Medial Type
 		trial_type = medi_dict[TrialTypes.substring(2, 3)]
 		// Set Media_type
-		if (trial_type == 'audio' || trial_type == 'video' || trial_type == 'image') {
+		if (trial_type == 'audio' || trial_type == 'video' || trial_type == 'picture') {
 			media_type = trial_type
 			lastTrial = {
 				trial_type: trial_type, stim_paths: stim_paths
@@ -925,7 +912,7 @@ function trialRoutineBegin(trials) {
 		console.log(trial_type)
 
 		if (trial_type == 'audio') {
-			slider.reset()
+			
 			stim_text.setText('Press the Space Bar to play audio.') 
 			stim_text.height = .1
 			stim_text.pos = [0, 0]
@@ -943,7 +930,7 @@ function trialRoutineBegin(trials) {
 
 		if (trial_type == 'video') {
 			stim_text.setText('Press the Space Bar to play video.')
-			slider.reset()
+			
 			stim_text.height = .1
 			stim_text.pos = [0, 0]
 			stim_text.alignHoriz = 'center'
@@ -960,8 +947,8 @@ function trialRoutineBegin(trials) {
 			trialComponents.push(stim_text);
 		}
 
-		if (trial_type == 'image') {
-			slider.reset()
+		if (trial_type == 'picture') {
+			
 			stim_text.pos = [-.5, 0]
 			stim_text.alignHoriz = 'center'
 			image_stim.size = [1,1]
@@ -973,11 +960,7 @@ function trialRoutineBegin(trials) {
 		}
 
 		if (trial_type == 'rating_relatedness') {
-			if (lastTrial.trial_type== 'image') {
-				stim_text.setText(`Relatedness:\nAre these pictures related to your identity as a native person?`)
-			} else {
-				stim_text.setText(`Relatedness:\nIs this ${media_type} related to your identity as a native person?`)
-			}
+			stim_text.setText(`Relatedness:\nIs this ${media_type} related to your identity as a native person?`)
 			
 			stim_text.height = .1
 			stim_text.pos = [0, .5]
@@ -990,17 +973,24 @@ function trialRoutineBegin(trials) {
 		}
 
 		if (trial_type == 'rating_identity') {
-			slider.ticks = [...Array(5).keys()]
-			slider.labels = [0,25,50,75,100]
-			slider.granularity = 0
-			slider.pos = [0,0]
+			slider = new visual.Slider({
+				win: psychoJS.window,
+				name: 'slider',
+				size: [.8, .03],
+				ticks: [...Array(5).keys()],
+				granularity: 0,
+				labels: [0,25,50,75,100],
+				pos: [0, 0], wrapWidth: undefined, ori: 0,
+				color: new util.Color('white'), opacity: 1,
+				depth: 0.0
+			});
+			// slider.ticks = [...Array(5).keys()]
+			// slider.labels = [0,25,50,75,100]
+			// slider.granularity = 0
+			// slider.pos = [0,0]
 			slider.reset()
 			next_text.image = 'next_button.png'
-			if (lastTrial.trial_type== 'image'){
-				stim_text.setText(`Identity:\nHow much did these pictures relate to your identity as a native person?`)
-			} else {
-				stim_text.setText(`Identity:\nHow much did this ${media_type} relate to your identity as a native person? `)
-			}
+			stim_text.setText(`Identity:\nHow much did this ${media_type} relate to your identity as a native person? `)
 			
 			stim_text.height = .1
 			stim_text.pos = [0,.5]
@@ -1012,13 +1002,24 @@ function trialRoutineBegin(trials) {
 		}
 
 		if (trial_type == 'rating_typicality') {
-			slider.ticks = [...Array(5).keys()]
-			slider.labels = [0, 25, 50, 75, 100]
-			slider.granularity = .1
-			slider.pos = [0,0]
+			slider = new visual.Slider({
+				win: psychoJS.window,
+				name: 'slider',
+				size: [.8, .03],
+				ticks: [...Array(5).keys()],
+				granularity: .1,
+				labels: [0,25,50,75,100],
+				pos: [0, 0], wrapWidth: undefined, ori: 0,
+				color: new util.Color('white'), opacity: 1,
+				depth: 0.0
+			});
+			// slider.ticks = [...Array(5).keys()]
+			// slider.labels = [0, 25, 50, 75, 100]
+			// slider.granularity = .1
+			// slider.pos = [0,0]
 			slider.reset()
 			next_text.image = 'next_button.png'
-			if (lastTrial.trial_type== 'image' ||lastTrial.trial_type== 'video' ){
+			if (lastTrial.trial_type == 'picture' ||lastTrial.trial_type== 'video' ){
 				stim_text.setText(`Typicality:\nHow likely is it for a native person to see/experience scenes like these?`)
 			}
 			if (lastTrial.trial_type== 'audio' ){
@@ -1037,17 +1038,24 @@ function trialRoutineBegin(trials) {
 		if (trial_type == 'rating_valence') {
 			//ticks: [...Array(5).keys()],
 			//labels: [0,25,50,75,100],
-			slider.ticks = [...Array(9).keys()]
-			slider.labels = ['negative', 'neutral', 'positive']
-			slider.granularity = 1
-			slider.pos = [0, -.15]
+			slider = new visual.Slider({
+				win: psychoJS.window,
+				name: 'slider',
+				size: [.8, .03],
+				ticks: [...Array(9).keys()],
+				granularity: 1,
+				labels: ['negative', 'neutral', 'positive'],
+				pos: [0, -.15], wrapWidth: undefined, ori: 0,
+				color: new util.Color('white'), opacity: 1,
+				depth: 0.0
+			});
+			// slider.ticks = [...Array(9).keys()]
+			// slider.labels = ['negative', 'neutral', 'positive']
+			// slider.granularity = 1
+			// slider.pos = [0, -.15]
 			happy_scale.pos = [0,0]
 			slider.reset()
-			if (lastTrial.trial_type== 'image') {
-				stim_text.setText(`Valence:\nRate your mood in response to these pictures.`)
-			} else {
-				stim_text.setText(`Valence:\nRate your mood in response to this ${media_type}.`)
-			}
+			stim_text.setText(`Valence:\nRate your mood in response to this ${media_type}.`)
 			
 			stim_text.height = .1
 			stim_text.pos = [0, .5]
@@ -1063,16 +1071,23 @@ function trialRoutineBegin(trials) {
 		if (trial_type == 'rating_arousal') {
 			//ticks: [...Array(5).keys()],
 			//labels: [0,25,50,75,100],
-			slider.ticks = [...Array(9).keys()]
-			slider.labels = ['calm', 'middle', 'excited']
-			slider.pos = [0,-.15]
-			slider.granularity = 1
+			slider = new visual.Slider({
+				win: psychoJS.window,
+				name: 'slider',
+				size: [.8, .03],
+				ticks: [...Array(9).keys()],
+				granularity: 1,
+				labels: ['calm', 'middle', 'excited'],
+				pos: [0, -.15], wrapWidth: undefined, ori: 0,
+				color: new util.Color('white'), opacity: 1,
+				depth: 0.0
+			});
+			// slider.ticks = [...Array(9).keys()]
+			// slider.labels = ['calm', 'middle', 'excited']
+			// slider.pos = [0,-.15]
+			// slider.granularity = 1
 			slider.reset()
-			if (lastTrial.trial_type== 'image') {
-				stim_text.setText(`Arousal:\nRate your arousal in response to these pictures.`)
-			} else {
-				stim_text.setText(`Arousal:\nRate your arousal in response to this ${media_type}.`)
-			}
+			stim_text.setText(`Arousal:\nRate your arousal in response to this ${media_type}.`)
 			
 			stim_text.height = .1
 			calm_scale.pos = [0,0]
@@ -1382,7 +1397,7 @@ function trialRoutineEachFrame(trials) {
 		resp.clearEvents()
 		if (trial_type == 'audio') do_audio()
 		if (trial_type == 'video') do_video()
-		if (trial_type == 'image') do_image()
+		if (trial_type == 'picture') do_image()
 		if (trial_type == 'rating_identity') do_rating_identity()
 		if (trial_type == 'rating_valence') do_rating_valence()
 		if (trial_type == 'rating_arousal') do_rating_arousal()
@@ -1434,12 +1449,17 @@ function trialRoutineEnd(trials) {
 		// store data for thisExp (ExperimentHandler)
 
 		// Slider Response Based on Rating Type
-		var slider_result = slider.getRating()
+		var slider_result;
+
+		if (trial_type == 'rating_valence' || trial_type == 'rating_identity' || trial_type == 'rating_typicality') {
+			slider_result = slider.getRating()
 		if (trial_type == 'rating_identity' || trial_type == 'rating_typicality') {
 			slider_result = Math.round(slider_result * 25)
 		} else {
 			slider_result = slider_result + 1
 		}
+		}
+		
 
 		psychoJS.experiment.addData('related_response', related_response);
 		psychoJS.experiment.addData('silder.rating', slider_result);

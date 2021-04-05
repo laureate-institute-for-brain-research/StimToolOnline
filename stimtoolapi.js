@@ -113,7 +113,7 @@ module.exports = function (app){
     app.post('/save', (req, res)=>{
         trials_data = req.body.trials_data
 
-        console.log(trials_data)
+        // console.log(trials_data)
         // Save to /data/folder based of study
         jsonexport(trials_data, function(err, csv) {
             if (err) return console.error(err);
