@@ -1,6 +1,8 @@
 // Online StimTool
 // Written by James Touthang
 
+require('dotenv').config();// Load environment variables
+
 var express = require('express');
 var bodyParser = require('body-parser');
 var path = require('path');
@@ -134,6 +136,7 @@ var apiRoute = require('./api.js')(app)
 
  /// IGNORE EVERYTHING AFTER HERE
 var server = app.listen(config.app_port, function () {
+    logger.info('PRODUCTION_STIMTOOLONLINE: ' + process.env.NODE_ENV)
     logger.info('listening on port: ' + config.app_port.toString())
 });
 

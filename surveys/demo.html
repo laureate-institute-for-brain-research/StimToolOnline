@@ -27,12 +27,26 @@
             box-shadow: 0 0 5px #f68826 !important;
         }
 
-        .jumbotron {
+        .sv-root-modern .sv-container-modern {
+            color: white !important;
+            fill: white !important;
         }
+        .sv-radio__svg {
+            border-color: white !important;
+        }
+
+        .sv-root-modern .sv-radio--checked .sv-radio__svg  {
+            fill: white !important;
+        }
+
+        .sv-root-modern input.sv-text, textarea.sv-comment, select.sv-dropdown{
+            color: white !important;
+        }
+        
     </style>
     <title>Demographics Survey</title>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width">
     <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
         crossorigin="anonymous"></script>
 
@@ -44,8 +58,9 @@
     <!-- Latest compiled and minified JavaScript -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js" integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous"></script>
 
-    <link href="https://surveyjs.azureedge.net/1.0.30/survey.css" type="text/css" rel="stylesheet" />
-    <script src="https://surveyjs.azureedge.net/1.0.30/survey.jquery.min.js"></script>
+    <link href="https://unpkg.com/survey-knockout@1.8.41/modern.css" type="text/css" rel="stylesheet"/>
+    <script src="https://unpkg.com/jquery"></script>
+    <script src="https://unpkg.com/survey-jquery@1.8.41/survey.jquery.min.js"></script>
 
 </head>
 
@@ -112,11 +127,14 @@
     </div>
 
     <div class="jumbotron text-center" style="margin-bottom:0">
-        <p >&copy; 2020 <a href="http://www.laureateinstitute.org">laureateinstitute.org</a>. All rights reserved.
-      </div>
+        <p >&copy; 2021 <a href="http://www.laureateinstitute.org">laureateinstitute.org</a>. All rights reserved.
+    </div>
 
     <script type="text/javascript">
-        Survey.Survey.cssType = "bootstrap";
+        Survey
+            .StylesManager
+            .applyTheme("modern");
+        // Survey.Survey.cssType = "bootstrap";
         // Survey.defaultBootstrapCss.navigationButton = "btn";
 
         var json = {
@@ -764,8 +782,8 @@
                 }]
             }]
         }
-
         window.survey = new Survey.Model(json);
+
 
         var timerID = null;
 
@@ -845,10 +863,8 @@
             })
         }
 
-
-        $("#surveyElement").Survey({
-            model: survey
-        });
+        $("#surveyElement").Survey({model: survey});
+    
         $("#mkid").text(mkturkid);
         $("#session").text(session);
         $("#study").text(getQueryVariable('study'));
