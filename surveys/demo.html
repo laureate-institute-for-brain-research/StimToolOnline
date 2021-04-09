@@ -62,6 +62,8 @@
     <script src="https://unpkg.com/jquery"></script>
     <script src="https://unpkg.com/survey-jquery@1.8.41/survey.jquery.min.js"></script>
 
+    <script src="/js/stimToolLib.js"></script>
+
 </head>
 
 <body>
@@ -103,17 +105,17 @@
         <table class="table table-hover">
             <tbody>
                 <tr>
-                  <th scope="row">Mechanical Turk ID:</th>
+                  <th scope="row">ID:</th>
                   <td><a id="mkid"></a></td>
                 </tr>
                 <tr>
-                  <th scope="row">Session:</th>
-                  <td><a id="session"></a></td>
-                </tr>
-                <tr>
-                  <th scope="row">Study:</th>
-                  <td><a id="study"></a></td>
-                </tr>
+                    <th scope="row">Session:</th>
+                    <td><a id="session"></a></td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Study:</th>
+                    <td><a id="study"></a></td>
+                  </tr>
               </tbody>
         </table>
     
@@ -789,24 +791,24 @@
 
         lastpage = survey.currentPage;
 
-        function timerLoop(elapsed) {
-            var page = survey.currentPage; // page variable is the currentPage on the survey
-            if (!page) return;
-            if (lastpage != page) {
-                // set new start date
-                start = new Date().getTime(); // sets new start Date object when page has changed.
-                lastpage = page // sets the last page to currente page 
+        // function timerLoop(elapsed) {
+        //     var page = survey.currentPage; // page variable is the currentPage on the survey
+        //     if (!page) return;
+        //     if (lastpage != page) {
+        //         // set new start date
+        //         start = new Date().getTime(); // sets new start Date object when page has changed.
+        //         lastpage = page // sets the last page to currente page 
 
-            }
-            var valueName = "TRQ" + survey.pages.indexOf(page);
+        //     }
+        //     var valueName = "TRQ" + survey.pages.indexOf(page);
 
-            var ms = survey.getValue(valueName); // gets the value of the valuename. e.g: TRQ1
+        //     var ms = survey.getValue(valueName); // gets the value of the valuename. e.g: TRQ1
 
-            if (ms == null) ms = 0;
-            else ms = elapsed;
-            survey.setValue(valueName, ms);
-            $('#timeEl').text(elapsed + ' ms');
-        }
+        //     if (ms == null) ms = 0;
+        //     else ms = elapsed;
+        //     survey.setValue(valueName, ms);
+        //     $('#timeEl').text(elapsed + ' ms');
+        // }
 
         function getQueryVariable(variable) {
             var query = window.location.search.substring(1);
@@ -830,36 +832,48 @@
 
         // Get Query Variables
 
+        
+
         var session = getQueryVariable('session');
         var mkturkid = getQueryVariable('mkturk_id');
         var surveyname = getQueryVariable('survey');
 
-        if(session == '2'){
-            // document.getElementById("welcome_message").style.visibility = "visible";
-            $('#welcome_message').modal({show: true})
-        }
 
 
+        
+
+        var expInfo = { 'participant': mkturkid ,'session': session,  'task': surveyname, 'date' : formatDate(), 'study': 'driving1'};
 
         survey.onComplete.add(function (result) {
             //result.preventDefault();
-            postSurveyData(result.data, session, mkturkid, surveyname);
-            window.location.replace("/?session=" + session + "&mkturk_id=" + mkturkid + "&survey=assessment" +
+            postSurveyData(result.data, session, mkturkid);
+            window.location.replace("/?session=" + session + "&mkturk_id=" + mkturkid + "&survey=panasx" +
                 "&study=" + getQueryVariable('study'));
         });
 
 
-
-
-        function postSurveyData(data, session, mkturkid, surveyname) {
+        function postSurveyData(data, session, mkturkid) {
+            // $.ajax({
+            //     type: 'POST',
+            //     async: false,
+            //     url: 'saveSurvey/?session=' + session + '&mkturk_id=' + mkturkid + '&survey=' + surveyname +
+            //         "&study=" + getQueryVariable('study'),
+            //     data: JSON.stringify(data), // or JSON.stringify ({name: 'jonas'}),
+            //     contentType: "application/json",
+            //     dataType: 'json'
+            // })
+            
             $.ajax({
-                type: 'POST',
-                async: false,
-                url: 'saveSurvey/?session=' + session + '&mkturk_id=' + mkturkid + '&survey=' + surveyname +
-                    "&study=" + getQueryVariable('study'),
-                data: JSON.stringify(data), // or JSON.stringify ({name: 'jonas'}),
-                contentType: "application/json",
-                dataType: 'json'
+                type: "POST",
+                url: '/save',
+                data: {
+                    "trials_data": data,
+                    "expInfo": expInfo
+                },
+                dataType: 'JSON',
+                success:function(data) {
+                    console.log(data)
+                }
             })
         }
 
@@ -875,18 +889,18 @@
         var start = new Date().getTime(),
             elapsed = '0.0';
         // executes timerLoop every 5 ms
-        timerID = window.setInterval(function () {
+        // timerID = window.setInterval(function () {
 
-            var time = new Date().getTime() - start;
-            elapsed = Math.floor(time);
+        //     var time = new Date().getTime() - start;
+        //     elapsed = Math.floor(time);
 
-            //alert(elapsed);
-            //$('#timeEl').text(elapsed + ' ms');
+        //     //alert(elapsed);
+        //     //$('#timeEl').text(elapsed + ' ms');
 
-            //displayTime(1);
-            timerLoop(elapsed);
+        //     //displayTime(1);
+        //     timerLoop(elapsed);
 
-        }, 5);
+        // }, 5);
     </script>
 
 </body>

@@ -69,6 +69,8 @@
     <link href="https://unpkg.com/survey-knockout@1.8.41/modern.css" type="text/css" rel="stylesheet"/>
     <script src="https://unpkg.com/jquery"></script>
     <script src="https://unpkg.com/survey-jquery@1.8.41/survey.jquery.min.js"></script>
+
+    <script src="/js/stimToolLib.js"></script>
 </head>
 
 <body>
@@ -82,22 +84,22 @@
         <table class="table table-hover">
             <tbody>
                 <tr>
-                  <th scope="row">Mechanical Turk ID:</th>
+                  <th scope="row">ID:</th>
                   <td><a id="mkid"></a></td>
                 </tr>
                 <tr>
-                  <th scope="row">Session:</th>
-                  <td><a id="session"></a></td>
-                </tr>
-                <tr>
-                  <th scope="row">Study:</th>
-                  <td><a id="study"></a></td>
-                </tr>
+                    <th scope="row">Session:</th>
+                    <td><a id="session"></a></td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Study:</th>
+                    <td><a id="study"></a></td>
+                  </tr>
               </tbody>
         </table>
     
     </div>
-    <div class="container">
+    <div class="container" style="font-size: 19px; color: white; margin-top: 10px;">
         <p>How do you feel in <u>general</u>?</p>
         <p>Take your time and please respond as honestly as possible.</p>
     </div>
@@ -1722,7 +1724,7 @@
         }
 
      
-
+        var expInfo = { 'participant': mkturkid ,'session': session,  'task': surveyname, 'date' : formatDate(), 'study': 'driving1' };
         
 
         survey.onComplete.add(function (result) {
@@ -1740,7 +1742,7 @@
                         if (session == '2'){ window.location.href = "/?session="+session+"&mkturk_id="+mkturkid+"&task=chicken" + "&pattern=" + chickenVersion + "&study="+getQueryVariable('study') + "&type=predict_2&version=3.1.4"; }
                         break;
                     default: // if Study is not specified... just routes to dotprove
-                        window.location.href = "/?session="+session+"&mkturk_id="+mkturkid+"&task=dotprobe" + "&study="+getQueryVariable('study');
+                        window.location.href = `https://x0-29.psych.umn.edu/driving/#/?trials=3&id=${mkturkid}&time=3`;
                         break;
                 }
                       
@@ -1750,14 +1752,17 @@
 
         function postSurveyData(data, session, mkturkid, surveyname) {
             $.ajax({
-                type: 'POST',
-                async: false,
-                url: 'saveSurvey/?session=' + session + '&mkturk_id=' + mkturkid + '&survey=' + surveyname +
-                    "&study=" + getQueryVariable('study'),
-                data: JSON.stringify(data), // or JSON.stringify ({name: 'jonas'}),
-                contentType: "application/json",
-                dataType: 'json',
-            });
+                type: "POST",
+                url: '/save',
+                data: {
+                    "trials_data": data,
+                    "expInfo": expInfo
+                },
+                dataType: 'JSON',
+                success:function(data) {
+                    console.log(data)
+                }
+            })
         }
 
 
