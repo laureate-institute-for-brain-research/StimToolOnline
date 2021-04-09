@@ -120,7 +120,7 @@ module.exports = function (app){
 
             // File name is by taskname, participant id, session and date 
             file_name = req.sanitize(req.body.expInfo.task) + '_' + req.sanitize(req.body.expInfo.participant) + '_' + req.sanitize(req.body.expInfo.session) + '_' + req.sanitize(req.body.expInfo.date)+ '.csv'
-            if (process.env.PRODUCTION_STIMTOOLONLINE == 'development') {
+            if (process.env.NODE_ENV == 'development') {
                 path_to_save = `data/${req.sanitize(req.body.expInfo.study)}/${file_name}`
             } else {
                 path_to_save = `/media/stimtool_online/${req.sanitize(req.body.expInfo.study)}/${file_name}` // save results directly the cephfs local path
@@ -137,7 +137,7 @@ module.exports = function (app){
                 } else {
                     // The check failed
                     // meaning subject probably entered their own  study -_- or field is blank
-                    if (process.env.PRODUCTION_STIMTOOLONLINE == 'development') {
+                    if (process.env.NODE_ENV == 'development') {
                         path_to_save = `data/free/${file_name}`
                     } else {
                         path_to_save = `/media/stimtool_online/free/${file_name}`
