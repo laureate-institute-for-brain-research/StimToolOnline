@@ -106,7 +106,7 @@
             <tbody>
                 <tr>
                   <th scope="row">ID:</th>
-                  <td><a id="mkid"></a></td>
+                  <td><a id="participant"></a></td>
                 </tr>
                 <tr>
                     <th scope="row">Session:</th>
@@ -133,6 +133,11 @@
     </div>
 
     <script type="text/javascript">
+
+
+
+        
+            
         Survey
             .StylesManager
             .applyTheme("modern");
@@ -791,24 +796,6 @@
 
         lastpage = survey.currentPage;
 
-        // function timerLoop(elapsed) {
-        //     var page = survey.currentPage; // page variable is the currentPage on the survey
-        //     if (!page) return;
-        //     if (lastpage != page) {
-        //         // set new start date
-        //         start = new Date().getTime(); // sets new start Date object when page has changed.
-        //         lastpage = page // sets the last page to currente page 
-
-        //     }
-        //     var valueName = "TRQ" + survey.pages.indexOf(page);
-
-        //     var ms = survey.getValue(valueName); // gets the value of the valuename. e.g: TRQ1
-
-        //     if (ms == null) ms = 0;
-        //     else ms = elapsed;
-        //     survey.setValue(valueName, ms);
-        //     $('#timeEl').text(elapsed + ' ms');
-        // }
 
         function getQueryVariable(variable) {
             var query = window.location.search.substring(1);
@@ -822,8 +809,6 @@
             return 'NULL'
         }
 
-
-
         survey.showProgressBar = "bottom";
 
         survey.goNextPageAutomatic = false
@@ -831,37 +816,47 @@
         survey.showCompletedPage = false;
 
         // Get Query Variables
-
-        
-
-        var session = getQueryVariable('session');
-        var mkturkid = getQueryVariable('mkturk_id');
         var surveyname = getQueryVariable('survey');
 
+        var expInfo = { 'participant': '' ,'session': '',  'task': surveyname, 'date' : formatDate(), 'study': ''};
 
+        // Get info Promize
+        const getInfoPromise = new Promise((resolve, reject) => {
+            $.ajax({
+                type: "POST",
+                url: '/getInfo',
+                data: { 'id': getQueryVariable('id') },
+                dataType: 'JSON',
+                success: function (data) {
+                    resolve(data)
+                }
+            })
+        })
+            // Read getINFO 
+            .then((values) => {
+                console.log(values)
+                if (values.subject && values.session && values.study) {
+                    expInfo.participant = values.subject
+                    expInfo.study = values.study
+                    expInfo.session = values.session
+                    expInfo.run_id = getQueryVariable('run')
+                }
 
-        
+                survey.onComplete.add(function (result) {
+                    //result.preventDefault();
+                    postSurveyData(result.data, expInfo.session, expInfo.participant);
+                    window.location.replace('/link?id=' + values.link + '&index=' + (parseInt(getQueryVariable('index')) + 1))
+                });
 
-        var expInfo = { 'participant': mkturkid ,'session': session,  'task': surveyname, 'date' : formatDate(), 'study': 'driving1'};
+                $("#surveyElement").Survey({model: survey});
+    
+                $("#participant").text(expInfo.participant);
+                $("#session").text(expInfo.session);
+                $("#study").text(expInfo.study);
 
-        survey.onComplete.add(function (result) {
-            //result.preventDefault();
-            postSurveyData(result.data, session, mkturkid);
-            window.location.replace("/?session=" + session + "&mkturk_id=" + mkturkid + "&survey=panasx" +
-                "&study=" + getQueryVariable('study'));
-        });
-
+            })
 
         function postSurveyData(data, session, mkturkid) {
-            // $.ajax({
-            //     type: 'POST',
-            //     async: false,
-            //     url: 'saveSurvey/?session=' + session + '&mkturk_id=' + mkturkid + '&survey=' + surveyname +
-            //         "&study=" + getQueryVariable('study'),
-            //     data: JSON.stringify(data), // or JSON.stringify ({name: 'jonas'}),
-            //     contentType: "application/json",
-            //     dataType: 'json'
-            // })
             
             $.ajax({
                 type: "POST",
@@ -876,31 +871,6 @@
                 }
             })
         }
-
-        $("#surveyElement").Survey({model: survey});
-    
-        $("#mkid").text(mkturkid);
-        $("#session").text(session);
-        $("#study").text(getQueryVariable('study'));
-
-
-        //timerLoop(0);
-
-        var start = new Date().getTime(),
-            elapsed = '0.0';
-        // executes timerLoop every 5 ms
-        // timerID = window.setInterval(function () {
-
-        //     var time = new Date().getTime() - start;
-        //     elapsed = Math.floor(time);
-
-        //     //alert(elapsed);
-        //     //$('#timeEl').text(elapsed + ' ms');
-
-        //     //displayTime(1);
-        //     timerLoop(elapsed);
-
-        // }, 5);
     </script>
 
 </body>

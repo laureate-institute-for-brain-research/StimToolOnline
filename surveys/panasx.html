@@ -85,7 +85,7 @@
             <tbody>
                 <tr>
                   <th scope="row">ID:</th>
-                  <td><a id="mkid"></a></td>
+                  <td><a id="participant"></a></td>
                 </tr>
                 <tr>
                     <th scope="row">Session:</th>
@@ -1705,50 +1705,45 @@
         survey.showCompletedPage = false;
 
         // Get Query Variables
-
-        var session = getQueryVariable('session');
-        var mkturkid = getQueryVariable('mkturk_id');
         var surveyname = getQueryVariable('survey');
 
-        var chickenVersion = ''
-        if ( getQueryVariable('study') == 'wave2' ){
-            $.get('/getChickenTaskVersion?&mkturk_id=' + mkturkid + '&study=' + study, function(data) {
-                chickenVersion = data;
-            }); 
-        }
+        var expInfo = { 'participant': '' ,'session': '',  'task': surveyname, 'date' : formatDate(), 'study': ''};
 
-        if ( getQueryVariable('study') == 'wave3'){
-            $.get('/getChickenTaskVersion3?&mkturk_id=' + mkturkid + '&study=' + study, function(data) {
-                chickenVersion = data;
-            }); 
-        }
-
-     
-        var expInfo = { 'participant': mkturkid ,'session': session,  'task': surveyname, 'date' : formatDate(), 'study': 'driving1' };
-        
-
-        survey.onComplete.add(function (result) {
-            postSurveyData(result.data, session, mkturkid,surveyname);
-            // rerouting based on study:  
-            switch (getQueryVariable('study')) {
-                    case 'wave1':
-                        window.location.href = "/?session="+session+"&mkturk_id="+mkturkid+"&task=dotprobe" + "&study="+getQueryVariable('study');
-                        break;
-                    case 'wave2':
-                        window.location.href = "/?session="+session+"&mkturk_id="+mkturkid+"&task=chicken" + "&pattern=" + chickenVersion + "&study="+getQueryVariable('study') + "&type=estimate";
-                        break;
-                    case 'wave3':
-                        if (session == '1'){ window.location.href = "/?session="+session+"&mkturk_id="+mkturkid+"&task=chicken" + "&pattern=" + chickenVersion + "&study="+getQueryVariable('study') + "&type=predict_2&version=3.1.3"; }
-                        if (session == '2'){ window.location.href = "/?session="+session+"&mkturk_id="+mkturkid+"&task=chicken" + "&pattern=" + chickenVersion + "&study="+getQueryVariable('study') + "&type=predict_2&version=3.1.4"; }
-                        break;
-                    default: // if Study is not specified... just routes to dotprove
-                        window.location.href = `https://x0-29.psych.umn.edu/driving/#/?trials=3&id=${mkturkid}&time=3`;
-                        break;
+        // Get info Promize
+        const getInfoPromise = new Promise((resolve, reject) => {
+            $.ajax({
+                type: "POST",
+                url: '/getInfo',
+                data: { 'id': getQueryVariable('id') },
+                dataType: 'JSON',
+                success: function (data) {
+                    resolve(data)
                 }
-                      
-             });
+            })
+        })
+            // Read getINFO 
+            .then((values) => {
+                console.log(values)
+                if (values.subject && values.session && values.study) {
+                    expInfo.participant = values.subject
+                    expInfo.study = values.study
+                    expInfo.session = values.session
+                    expInfo.run_id = getQueryVariable('run')
+                }
 
+                survey.onComplete.add(function (result) {
+                    //result.preventDefault();
+                    postSurveyData(result.data, expInfo.session, expInfo.participant);
+                    window.location.replace('/link?id=' + values.link + '&index=' + (parseInt(getQueryVariable('index')) + 1))
+                });
 
+                $("#surveyElement").Survey({model: survey});
+    
+                $("#participant").text(expInfo.participant);
+                $("#session").text(expInfo.session);
+                $("#study").text(expInfo.study);
+
+            })
 
         function postSurveyData(data, session, mkturkid, surveyname) {
             $.ajax({
@@ -1764,14 +1759,6 @@
                 }
             })
         }
-
-
-        $("#surveyElement").Survey({
-            model: survey
-        });
-        $("#mkid").text(mkturkid);
-        $("#session").text(session);
-        $("#study").text(getQueryVariable('study'));
 
 
         var start = new Date().getTime(),

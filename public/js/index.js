@@ -247,6 +247,7 @@ document.getElementById('skip').addEventListener('click', (event) => {
                 select_form.length = 0;
             });
 
+            // Clicking the Begn button in the skip modal
             document.getElementById('skip_begn').addEventListener('click', event => {
                 event.preventDefault()
                 var run_val = select_form.options[select_form.selectedIndex].value;

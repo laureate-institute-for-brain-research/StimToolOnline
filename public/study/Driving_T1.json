@@ -1,0 +1,11 @@
+{
+    "name": "Driving",
+    "order": [
+        "/?index=0&survey=demo",
+        "/?index=1&survey=panasx",
+        "https://x0-29.psych.umn.edu/driving/#/?trials=3&id=abc1234&time=3", // need a way to send them to actual subject
+        "/completed?"
+    ],
+    "fullscreen": true,
+    "text_html": "<p>This study includes the following tasks: <ul><li>Demographics Survey</li><li>Panasx Survey</li><li>Driving Task</li></ul></p>"
+} 
