@@ -253,7 +253,12 @@ document.getElementById('skip').addEventListener('click', (event) => {
                 var run_val = select_form.options[select_form.selectedIndex].value;
                 var idx = select_form.options[select_form.selectedIndex].index - 1;
                 // console.log(result)
-                var link = run_val + '&id=' + result.respond.info.link + '&index=' + idx
+
+                if (result.respond.info.study == 'Driving') {
+                    var link = run_val + '&id=' + result.respond.info.subject + '&index=' + idx
+                } else {
+                    var link = run_val + '&id=' + result.respond.info.link + '&index=' + idx
+                }
                 window.location.replace(link);
             })
         })
