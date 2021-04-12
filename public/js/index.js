@@ -141,7 +141,7 @@ $('#study-list').change(function () {
 
     // Fire modal to aler user that this study is mobile
     if (document.getElementById('study-list').value == 'Driving') {
-        if (window.mobileCheck) {
+        if (window.mobileCheck()) {
             $('#modalMobileWarning').modal({});
         }
         

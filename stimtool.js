@@ -129,7 +129,6 @@ app.engine('hbs', exphbs({
 app.set('view engine', '.hbs')
 app.set('views', './views')
 
-console.log(process.env);
 
 var stimToolAPiRoute = require('./stimtoolapi.js')(app)
 var authRoute = require('./routes/auth.js')(app)
