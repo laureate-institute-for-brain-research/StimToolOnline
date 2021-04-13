@@ -57,10 +57,10 @@ models.sequelize.sync({ force: false }).then(function () {
 
 // Connecting to database
 var con = mysql.createConnection({
-    host: config.mysql_host,
-    user: config.mysql_user,
-    password: config.mysql_password,
-    database: config.mysql_database
+    host: process.env.MYSQL_HOST,
+    user: process.env.MYSQL_USER,
+    password: process.env.MYSQL_PASSWORD,
+    database: process.env.MYSQL_DATABASE
 });
 
 // Setup the configurations for CDN
@@ -135,9 +135,9 @@ var authRoute = require('./routes/auth.js')(app)
 var apiRoute = require('./api.js')(app)
 
  /// IGNORE EVERYTHING AFTER HERE
-var server = app.listen(config.app_port, function () {
+var server = app.listen(process.env.PORT, function () {
     logger.info('NODE_ENV: ' + process.env.NODE_ENV)
-    logger.info('listening on port: ' + config.app_port.toString())
+    logger.info('listening on port: ' + process.env.PORT.toString())
 });
 
 
