@@ -8,11 +8,13 @@ var config = require(path.join(__dirname, '..', 'config', 'config.json'))
 var opts = {
     host: config.mysql_host,
     dialect: 'mysql',
+    operatorsAliases: false,
     logging: false,
     force: true,
     define: {
         freezeTableName: true
-    }
+    },
+    
 }
 
 var sequelize = new Sequelize(config.mysql_database, config.mysql_user, config.mysql_password, opts)
@@ -25,7 +27,8 @@ fs
         return (file.indexOf('.') !== 0) && (file !== 'index.js')
     })
     .forEach(function (file) {
-        var model = sequelize.import(path.join(__dirname, file))
+        // var model = sequelize.import(path.join(__dirname, file))
+        const model = require(path.join(__dirname, file))(sequelize, Sequelize.DataTypes)
 
         db[model.name] = model
     })

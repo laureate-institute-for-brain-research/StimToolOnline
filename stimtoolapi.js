@@ -4,6 +4,8 @@ var url = require('url');
 const path = require('path');
 const { v4: uuidv4 } = require('uuid');
 const jsonexport = require('jsonexport');
+const pino = require('pino')
+const logger = pino({ level: process.env.LOG_LEVEL || 'info' })
 
 var models = require('./models')
 
@@ -17,7 +19,7 @@ module.exports = function (app){
     app.post('/adduser', (req, res) => {
         // console.log(req.body)
 
-        models.dashboard.find({
+        models.dashboard.findOne({
             where: req.body
         })
             .then((result) => {
@@ -57,7 +59,7 @@ module.exports = function (app){
             id = req.body.id
         }
 
-        models.dashboard.find({
+        models.dashboard.findOne({
             where: {
                 link: id
             }
@@ -81,7 +83,7 @@ module.exports = function (app){
             }
         )
             .catch(error => {
-                console.log(error)
+                logger.error(error)
                 res.redirect('/');
         });
     })
@@ -90,7 +92,7 @@ module.exports = function (app){
     app.post('/getInfo', (req, res)=>{
         id = req.sanitize(req.body.id);
 
-        models.dashboard.find({
+        models.dashboard.findOne({
             where: {
                 link: id
             }
@@ -131,7 +133,7 @@ module.exports = function (app){
                     // The check succeeded
                     fs.writeFile(path_to_save, csv, function(err) {
                         if (err) return console.error(err);
-                        console.log(`${path_to_save} saved`);
+                        logger.info(`${path_to_save} saved`);
                         
                     });
                 } else {
@@ -145,7 +147,7 @@ module.exports = function (app){
                     
                     fs.writeFile(path_to_save, csv, function(err) {
                         if (err) return console.error(err);
-                        console.log(`${path_to_save} saved`);
+                        logger.info(`${path_to_save} saved`);
                         
                     });
                 }
@@ -157,7 +159,7 @@ module.exports = function (app){
     // save Audio
     app.post('/saveAudio', (req, res) => {
         var q = url.parse(req.url, true).query;
-        console.log('saving Audio Post requested');
+        logger.info('saving Audio Post requested');
         // console.log(req.body)
         base64 = req.body.base64data
 
@@ -182,7 +184,7 @@ module.exports = function (app){
                 // The check succeeded
                 fs.writeFile(path_to_save, data, { encoding: 'base64' }, function(err) {
                     if (err) {
-                        console.log("err", err);
+                        logger.error("err", err);
                     }
                 });
             } else {
@@ -195,7 +197,7 @@ module.exports = function (app){
                 }
                 fs.writeFile(path_to_save, data, { encoding: 'base64' }, function(err) {
                     if (err) {
-                        console.log("err", err);
+                        logger.error("err", err);
                     }
                 });
             }
@@ -209,7 +211,7 @@ module.exports = function (app){
         // console.log(req.body)
         id = req.sanitize(req.body.id);
 
-        models.dashboard.find({
+        models.dashboard.findOne({
             where: {
                 link: id
             }
@@ -233,11 +235,11 @@ module.exports = function (app){
                             html: sharedLinkHTMLTemplate(ulink, req.sanitize(req.body.body)) 
                         };
                         
-                        console.log("Sending email: " + req.body.to);
-                        // console.log(data)
+                        logger.info("Sending email: " + req.body.to);
+                        // logger.info(data)
 
                         mailgun.messages().send(data, function(error, body) {
-                            // console.log(body);
+                            // logger.info(body);
                             res.send({'message': 'email sent!'})
                         });
                         
@@ -248,7 +250,7 @@ module.exports = function (app){
         )
         
             .catch(error => {
-                console.log(error)
+                logger.info(error)
                 res.send({'message': 'error sending email'})
             })
         

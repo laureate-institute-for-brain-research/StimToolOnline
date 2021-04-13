@@ -85,7 +85,7 @@ module.exports = function (app){
         } else if ((q.name == 'email') && (q.type == 'code')) {
 
             // for some reason.. this doesn't work
-            console.log('Test Email Code....');
+            logger.info('Test Email Code....');
             sendEmailCode(mkturk_id);
             res.send('Tried to send code email..');
 
@@ -198,7 +198,7 @@ module.exports = function (app){
 
     app.get('/gonogo', function(req, res) {
         var q = url.parse(req.url, true).query;
-        //console.log(q.version);
+        //logger.info(q.version);
         fileurl = 'task/gonogo/version_' + q.version.toString() + '/gonogo' + q.version.toString() + '.html'
         fs.readFile(fileurl, function(err, data) {
             // Write Header
@@ -294,7 +294,7 @@ module.exports = function (app){
         var ipaddr = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
 
         json = req.body;
-        console.log(json);
+        logger.info(json);
         var month = d.getMonth() + 1 // on a separate since if we add, it concatenates the numbers
         var file_date = d.getFullYear() + "_" + month + "_" + d.getDate() + "_" + d.getHours() + '_' + d.getMinutes()
 
@@ -334,20 +334,20 @@ module.exports = function (app){
         fs.writeFile(filename, outputString, (err) => {
             // throws an error, you could also catch it here
             if (err) {
-                console.log('err');
+                logger.error('err', err);
             }
             // success case, the file was saved
             //console.log('File saved!');
-            console.log("file saved");
+            logger.info("file saved");
 
             // Copy the data to a shared folder in root to be accessed by other uses in the VM
             // This is done after writing the file
             fs.copyFile(filename, '/var/node_data/' + filename, (err) => {
                 if (err) {
-                    console.log('could not copy');
+                    logger.error('could not copy', err);
                     //throw err;
                 } else {
-                    console.log('copy complete');
+                    logger.info('copy complete');
                 }
             })
         });

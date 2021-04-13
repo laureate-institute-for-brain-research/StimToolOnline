@@ -73,9 +73,9 @@ var con = mysql.createConnection({
 
 con.connect(function(err) {
     if (!err)
-        console.log('wave1 db is Connected');
+        logger.info('wave1 db is Connected');
     else
-        console.log('wave1 db connection err.');
+        logger.info('wave1 db connection err.');
 
 });
 

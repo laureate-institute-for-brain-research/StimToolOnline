@@ -32,7 +32,7 @@
     "pino": "^6.5.0",
     "request-ip": "^2.0.2",
     "sanitize": "^2.1.0",
-    "sequelize": "^4.42.0",
+    "sequelize": "^6.6.2",
     "serve-index": "^1.9.1",
     "shelljs": "^0.8.1",
     "sql": "^0.78.0",
