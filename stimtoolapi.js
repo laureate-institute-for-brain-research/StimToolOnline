@@ -122,11 +122,8 @@ module.exports = function (app){
 
             // File name is by taskname, participant id, session and date 
             file_name = req.sanitize(req.body.expInfo.task) + '_' + req.sanitize(req.body.expInfo.participant) + '_' + req.sanitize(req.body.expInfo.session) + '_' + req.sanitize(req.body.expInfo.date)+ '.csv'
-            if (process.env.NODE_ENV == 'development') {
-                path_to_save = `data/${req.sanitize(req.body.expInfo.study)}/${file_name}`
-            } else {
-                path_to_save = `/media/stimtool_online/${req.sanitize(req.body.expInfo.study)}/${file_name}` // save results directly the cephfs local path
-            }
+
+            path_to_save = `${process.env.DATA_PATH}/${req.sanitize(req.body.expInfo.study)}/${file_name}` // save results directly the cephfs local path
             
             fs.access(path.dirname(path_to_save), error => {
                 if (!error) {
@@ -139,11 +136,7 @@ module.exports = function (app){
                 } else {
                     // The check failed
                     // meaning subject probably entered their own  study -_- or field is blank
-                    if (process.env.NODE_ENV == 'development') {
-                        path_to_save = `data/free/${file_name}`
-                    } else {
-                        path_to_save = `/media/stimtool_online/free/${file_name}`
-                    }
+                    path_to_save = `${process.env.DATA_PATH}/free/${file_name}`
                     
                     fs.writeFile(path_to_save, csv, function(err) {
                         if (err) return console.error(err);
@@ -173,13 +166,8 @@ module.exports = function (app){
             '_B' + req.sanitize(req.body.expInfo.block) + '_' + req.sanitize(req.body.expInfo.session) +
             '_' + req.sanitize(req.body.expInfo.date) + '.wav'
         
-        if (process.env.NODE_ENV == 'development') {
-            path_to_save = `data/${req.sanitize(req.body.expInfo.study)}/${file_name}`
-        } else {
-            path_to_save = `/media/stimtool_online/${req.sanitize(req.body.expInfo.study)}/${file_name}` // save results directly the cephfs local path
-        }
-        
-        fs.access(`data/${req.sanitize(req.body.expInfo.study)}`, error => {
+        path_to_save = `${process.env.DATA_PATH}/${req.sanitize(req.body.expInfo.study)}/${file_name}` // save results directly the cephfs local path
+        fs.access(path.dirname(path_to_save), error => {
             if (!error) {
                 // The check succeeded
                 fs.writeFile(path_to_save, data, { encoding: 'base64' }, function(err) {
@@ -190,11 +178,8 @@ module.exports = function (app){
             } else {
                 // The check failed
                 // meaning subject probably entered their own  study -_- or field is blank
-                if (process.env.NODE_ENV == 'development') {
-                    path_to_save = `data/free/${file_name}`
-                } else {
-                    path_to_save = `/media/stimtool_online/free/${file_name}`
-                }
+                
+                path_to_save = `${process.env.DATA_PATH}/free/${file_name}`
                 fs.writeFile(path_to_save, data, { encoding: 'base64' }, function(err) {
                     if (err) {
                         logger.error("err", err);
