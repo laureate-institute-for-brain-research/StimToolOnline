@@ -346,27 +346,6 @@
                     }]
                 }]
             }, {
-                name: "page5",
-                elements: [{
-                    type: "radiogroup",
-                    name: "demps_lv10_intactfamorigin",
-                    title: "Were you raised in an intact family of origin?",
-                    choices: [{
-                        value: "1",
-                        text: "Yes"
-                    }, {
-                        value: "0",
-                        text: "No"
-                    }]
-                }, {
-                    type: "comment",
-                    name: "demps_lv10_intactfamorigindesc",
-                    visible: false,
-                    visibleIf: "{demps_lv10_intactfamorigin} = 0",
-                    title: "If not, please describe\t",
-                    isRequired: true
-                }]
-            }, {
                 name: "page6",
                 elements: [{
                     type: "radiogroup",
@@ -792,9 +771,26 @@
         window.survey = new Survey.Model(json);
 
 
-        var timerID = null;
-
+        // Recor the response time or how long they spent on a page
         lastpage = survey.currentPage;
+        function timerLoop(elapsed) {
+            var page = survey.currentPage; // page variable is the currentPage on the survey
+            if (!page) return;
+            if (lastpage != page) {
+                // set new start date
+                start = new Date().getTime(); // sets new start Date object when page has changed.
+                lastpage = page // sets the last page to currente page 
+
+            }
+            var valueName = "TRQ" + survey.pages.indexOf(page);
+
+            var ms = survey.getValue(valueName); // gets the value of the valuename. e.g: TRQ1
+
+            if (ms == null) ms = 0;
+            else ms = elapsed;
+            survey.setValue(valueName, ms);
+            $('#timeEl').text(elapsed + ' ms');
+        }
 
 
         function getQueryVariable(variable) {
@@ -871,6 +867,23 @@
                 }
             })
         }
+
+        var start = new Date().getTime(),
+            elapsed = '0.0';
+
+        // executes timerCallback every 100 ms
+        timerID = window.setInterval(function () {
+
+            var time = new Date().getTime() - start;
+            elapsed = Math.floor(time);
+
+            //alert(elapsed);
+            //$('#timeEl').text(elapsed + ' ms');
+
+            //displayTime(1);
+            timerLoop(elapsed);
+
+        }, 5);
     </script>
 
 </body>
