@@ -75,6 +75,8 @@ module.exports = function (app){
             displayHorizon(res)
         } else if (task == 'ncair') {
             displayNCAIR(res)
+        } else if (task == 'driving') {
+            displayDriving(res)
         } else if (ctpattern == '0' && task == 'chicken') {
             displayChicken0(res);
         } else if (survey == 'datacamp') {
@@ -1611,6 +1613,17 @@ module.exports = function (app){
 
     function displayNCAIR(res) {
         fs.readFile('task/ncair/index.html', function(err, data) {
+            // Write Header
+            res.writeHead(200, {
+                'Content-Type': 'text/html'
+            });
+            // Wrte Body
+            res.write(data);
+            res.end();
+        });
+    }
+    function displayDriving(res) {
+        fs.readFile('task/driving/index.html', function(err, data) {
             // Write Header
             res.writeHead(200, {
                 'Content-Type': 'text/html'

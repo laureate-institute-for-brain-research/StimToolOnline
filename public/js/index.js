@@ -125,7 +125,7 @@ window.mobileCheck = function() {
 };
   
 
-
+disable_begin = false;
 
 // When study list is change, than show input fields
 // Show Session based on study
@@ -145,7 +145,10 @@ $('#study-list').change(function () {
     // Fire modal to aler user that this study is mobile
     if (document.getElementById('study-list').value == 'Driving') {
         if (!window.mobileCheck()) {
-            $('#modalMobileWarning').modal({});
+            $('#modalMobileWarning').modal({}); // Show Warning Modal
+            document.getElementById('begin').classList.add('disabled')
+            document.getElementById('begin').title = 'Disabled - please use a mobile device to begin.'
+            disable_begin = true
         }
         
     }
@@ -175,40 +178,47 @@ document.getElementById("about").addEventListener("click", function(event){
 });
 
 // Submit Logic
+
 document.getElementById('begin').addEventListener('click', (event) => {
     event.preventDefault();
-    var values = {};
-    $.each($('#adduser').serializeArray(), function (i, field) {
-        values[field.name] = field.value;
-    });
-    // console.log(values)
 
-    
-    $.ajax({
-        type: "POST",
-        url: '/adduser',
-        data: values,
-        dataType: 'JSON',
-        success: function (result) {
-            console.log(result);
-            if (result.message == 'ok') {
+    if (!disable_begin) {
+        var values = {};
+        $.each($('#adduser').serializeArray(), function (i, field) {
+            values[field.name] = field.value;
+        });
+        // console.log(values)
 
-                next_link = '/link?id=' + result.info.link
-                window.location.replace(next_link);
-            } else {
-                // Open Modal to Confirm Already Exists Subject
-                $('#modalCenter').modal({});
+        
+        $.ajax({
+            type: "POST",
+            url: '/adduser',
+            data: values,
+            dataType: 'JSON',
+            success: function (result) {
+                console.log(result);
+                if (result.message == 'ok') {
 
-                document.getElementById('errorMessage').innerText = result.message;
-                document.getElementById('procceed_anyways').addEventListener('click', () => {
                     next_link = '/link?id=' + result.info.link
                     window.location.replace(next_link);
-                });
+                } else {
+                    // Open Modal to Confirm Already Exists Subject
+                    $('#modalCenter').modal({});
+
+                    document.getElementById('errorMessage').innerText = result.message;
+                    document.getElementById('procceed_anyways').addEventListener('click', () => {
+                        next_link = '/link?id=' + result.info.link
+                        window.location.replace(next_link);
+                    });
+                }
             }
-        }
-    });
+        });
+    }
+    
 
 });
+
+
 
 
 
@@ -298,8 +308,7 @@ if (getQueryVariable('study')) {
     if (studies.includes(getQueryVariable('study'))) {
         $('#study-list').val(getQueryVariable('study')).trigger('change');
     } else {
-        console.log('the study you specified (' + getQueryVariable('study') + ') is not in the list of studies:')
-        console.log(studies)
+        console.error('the study you specified (' + getQueryVariable('study') + ') is not in the list of studies:', studies)
     }
     
 }
@@ -314,8 +323,7 @@ if (getQueryVariable('session')) {
     if (sessions.includes(getQueryVariable('session'))) {
         $('#session-list').val(getQueryVariable('session')).trigger('change');
     } else {
-        console.log('the session you specified (' + getQueryVariable('study') + ') is not in the list of sessions:')
-        console.log(sessions)
+        console.error('the session you specified (' + getQueryVariable('study') + ') is not in the list of sessions:', sessions)
     }
     
 }
@@ -360,5 +368,4 @@ colors = [
 ]
 
   var random_color = getRandomSubarray(colors, 1);
-  console.log(random_color)
   document.getElementById('particles-js').style.backgroundColor = random_color[0]
