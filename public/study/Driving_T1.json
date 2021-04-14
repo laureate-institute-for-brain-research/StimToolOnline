@@ -3,7 +3,7 @@
     "order": [
         "/?index=0&survey=demo",
         "/?index=1&survey=panasx",
-        "https://x0-29.psych.umn.edu/driving/#/?trials=3&time=3",
+        "https://x0-29.psych.umn.edu/driving/#/?trials=10&time=3",
         "/completed?"
     ],
     "fullscreen": true,
