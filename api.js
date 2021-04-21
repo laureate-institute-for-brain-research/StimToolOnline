@@ -3,6 +3,8 @@ var fs = require('fs');
 var url = require('url');
 
 var models = require('./models')
+const pino = require('pino')
+const logger = pino({ level: process.env.LOG_LEVEL || 'info' })
 
 module.exports = function (app){
     // ROUTES
@@ -16,94 +18,16 @@ module.exports = function (app){
 
         var ctpattern = q.pattern;
         var type = q.type;
-        //console.log('session: ' + session, 'id: ' + mkturk_id, 'survey: ' + survey, 'task: ' + task)
-        //console.log(req.connection.remoteAddress)
 
-        if (survey == 'demo') {
-            displaySurveydemo(res);
-        } else if (survey == 'phq') {
-            displaySurveyphq(res);
-        } else if (survey == 'oasis') {
-            displaySurveyoasis(res);
-        } else if (survey == 'asi') {
-            displaySurveyasi(res);
-        } else if (survey == 'assessment') {
-            displayAssessment(res);
-        } else if (survey == 'panas') {
-            displaySurveyPanas(res);
-        } else if (survey == 'panasx') {
-            displaySurveyPanasx(res);
-        } else if (survey == 'feedback') {
-            displayFeedback(res);
-        } else if (session == '1' && task == 'dotprobe') {
-            displayDotProbe1(res);
-        } else if (session == '2' && task == 'dotprobe') {
-            displayDotProbe2(res);
-        } else if (task == 'chicken') {
-
-            // Route Based on Chicken pattern
-            if (type == 'estimate') {
-
-                if (q.pattern) {
-                    displayChickenEstimate(res, q.pattern);
-                } else {
-                    displayChickenEstimate(res, '1');
-                }
-            } else if (type == 'predict_2') {
-                displayChickenPredict2(res, q)
-            } else {
-                switch (ctpattern) {
-                    case '1':
-                        displayChicken1(res);
-                        break;
-                    case '2':
-                        displayChicken2(res);
-                        break;
-                    case '3':
-                        displayChicken3(res);
-                        break;
-                    default:
-                        displayChicken1(res);
-                }
-            }
-
-        } else if (task == 'gonogo') {
-            displayGoNoGo(res, q.version);
-        } else if (task == 'limited_offer') {
-            displayLimited_Offer(res)
-        } else if (task == 'horizon') {
-            displayHorizon(res)
-        } else if (task == 'ncair') {
-            displayNCAIR(res)
-        } else if (task == 'driving') {
-            displayDriving(res)
-        } else if (ctpattern == '0' && task == 'chicken') {
-            displayChicken0(res);
-        } else if (survey == 'datacamp') {
-            displayDataCampSurvey(res);
-        } else if (task == 'test') {
-            displayTest(res);
-            //sendEmailCode(mkturk_id);
-        } else if ((q.name == 'email') && (q.type == 'code')) {
-
-            // for some reason.. this doesn't work
-            logger.info('Test Email Code....');
-            sendEmailCode(mkturk_id);
-            res.send('Tried to send code email..');
-
-
-        } else if (q.name == 'email' && q.type == 'remind') {
-            sendEmailRemind(mkturk_id, hours_away = 1, study);
-            res.send('Tried to send remind email');
-        } else {
+        if (task) {
+            displayTask(task, res)
+        } else if (survey) {
+            displaySurvey(survey,res)
+        }else {
             displayHome(res);
         }
 
     });
-
-    // app.get('/driving', function (req, res) {
-    //     displayDriving(res)
-    // })
 
     // Returning the get request when it has
     // not been past 25hours
@@ -154,19 +78,6 @@ module.exports = function (app){
             res.end();
         });
     });
-
-    // Page of of Studies
-    // app.get('/studies', function(req, res) {
-    //     fs.readFile('studies.html', function(err, data) {
-    //         // Write Header
-    //         res.writeHead(200, {
-    //             'Content-Type': 'text/html'
-    //         });
-    //         // Wrte Body
-    //         res.write(data);
-    //         res.end();
-    //     });
-    // });
 
     // Page of all Task
     app.get('/list', function(req, res) {
@@ -232,45 +143,6 @@ module.exports = function (app){
             res.end();
         });
     });
-
-    app.get('/flanker', function(req, res) {
-        fileurl = 'task/flanker/version1.html'
-        fs.readFile(fileurl, function(err, data) {
-            // Write Header
-            res.writeHead(200, {
-                'Content-Type': 'text/html'
-            });
-            // Wrte Body
-            res.write(data);
-            res.end();
-        });
-    })
-
-    app.get('/color_stroop', function(req, res) {
-        fileurl = 'task/color_stroop/version1.html'
-        fs.readFile(fileurl, function(err, data) {
-            // Write Header
-            res.writeHead(200, {
-                'Content-Type': 'text/html'
-            });
-            // Wrte Body
-            res.write(data);
-            res.end();
-        });
-    })
-
-    app.get('/emotional_stroop', function(req, res) {
-        fileurl = 'task/emotional_stroop/version1.html'
-        fs.readFile(fileurl, function(err, data) {
-            // Write Header
-            res.writeHead(200, {
-                'Content-Type': 'text/html'
-            });
-            // Wrte Body
-            res.write(data);
-            res.end();
-        });
-    })
 
 
     app.get('/square_circle_rating', function(req, res) {
@@ -1355,53 +1227,7 @@ module.exports = function (app){
         });
     }
 
-    function displaySurveyoasis(res) {
-        fs.readFile('surveys/oasis.html', function(err, data) {
-            // Write Header
-            res.writeHead(200, {
-                'Content-Type': 'text/html'
-            });
-            // Wrte Body
-            res.write(data);
-            res.end();
-        });
-    }
 
-    function displaySurveyasi(res) {
-        fs.readFile('surveys/asi.html', function(err, data) {
-            // Write Header
-            res.writeHead(200, {
-                'Content-Type': 'text/html'
-            });
-            // Wrte Body
-            res.write(data);
-            res.end();
-        });
-    }
-
-    function displaySurveyPanas(res) {
-        fs.readFile('surveys/panas.html', function(err, data) {
-            // Write Header
-            res.writeHead(200, {
-                'Content-Type': 'text/html'
-            });
-            // Wrte Body
-            res.write(data);
-            res.end();
-        });
-    }
-
-    function displaySurveyPanasx(res) {
-        fs.readFile('surveys/panasx.html', function(err, data) {
-            // Write Header
-            res.writeHead(200, {
-                'Content-Type': 'text/html'
-            });
-            // Wrte Body
-            res.write(data);
-            res.end();
-        });
-    }
 
     function displayFeedback(res) {
         fs.readFile('surveys/feedback.html', function(err, data) {
@@ -1466,79 +1292,6 @@ module.exports = function (app){
     }
 
 
-    function displayDotProbe1(res) {
-
-        fs.readFile('task/dotprobe1.html', function(err, data) {
-            // Write Header
-            res.writeHead(200, {
-                'Content-Type': 'text/html'
-            });
-            // Wrte Body
-            res.write(data);
-            res.end();
-        });
-    }
-
-    function displayDotProbe2(res) {
-        fs.readFile('task/dotprobe2.html', function(err, data) {
-            // Write Header
-            res.writeHead(200, {
-                'Content-Type': 'text/html'
-            });
-            // Wrte Body
-            res.write(data);
-            res.end();
-        });
-    }
-
-    function displayChicken1(res) {
-        fs.readFile('task/chicken_task/predict_version/chicken134.html', function(err, data) {
-            // Write Header
-            res.writeHead(200, {
-                'Content-Type': 'text/html'
-            });
-            // Wrte Body
-            res.write(data);
-            res.end();
-        });
-    }
-
-    function displayChicken2(res) {
-        fs.readFile('task/chicken_task/predict_version/chicken145.html', function(err, data) {
-            // Write Header
-            res.writeHead(200, {
-                'Content-Type': 'text/html'
-            });
-            // Wrte Body
-            res.write(data);
-            res.end();
-        });
-    }
-
-
-    function displayChicken3(res) {
-        fs.readFile('task/chicken_task/predict_version/chicken4.html', function(err, data) {
-            // Write Header
-            res.writeHead(200, {
-                'Content-Type': 'text/html'
-            });
-            // Wrte Body
-            res.write(data);
-            res.end();
-        });
-    }
-
-    function displayChicken0(res) {
-        fs.readFile('task/chicken_task/chicken0.html', function(err, data) {
-            // Write Header
-            res.writeHead(200, {
-                'Content-Type': 'text/html'
-            });
-            // Wrte Body
-            res.write(data);
-            res.end();
-        });
-    }
 
 
     function displayChickenEstimate(res, version) {
@@ -1589,14 +1342,12 @@ module.exports = function (app){
             }
         });
 
-
-
-        
     }
 
 
-    function displayGoNoGo(res, versionnum) {
-        fs.readFile('task/gonogo/version_' + versionnum + '/container' + versionnum + '.html', function(err, data) {
+    function displayTask(task, res) {
+        logger.info('task requested: ' + task)
+        fs.readFile(`public/js/tasks/${task}/index.html`, function(err, data) {
             // Write Header
             res.writeHead(200, {
                 'Content-Type': 'text/html'
@@ -1607,43 +1358,9 @@ module.exports = function (app){
         });
     }
 
-
-    function displayLimited_Offer(res) {
-        fs.readFile('task/limited_offer/index.html', function(err, data) {
-            // Write Header
-            res.writeHead(200, {
-                'Content-Type': 'text/html'
-            });
-            // Wrte Body
-            res.write(data);
-            res.end();
-        });
-    }
-    function displayHorizon(res) {
-        fs.readFile('task/horizon/index.html', function(err, data) {
-            // Write Header
-            res.writeHead(200, {
-                'Content-Type': 'text/html'
-            });
-            // Wrte Body
-            res.write(data);
-            res.end();
-        });
-    }
-
-    function displayNCAIR(res) {
-        fs.readFile('task/ncair/index.html', function(err, data) {
-            // Write Header
-            res.writeHead(200, {
-                'Content-Type': 'text/html'
-            });
-            // Wrte Body
-            res.write(data);
-            res.end();
-        });
-    }
-    function displayDriving(res) {
-        fs.readFile('task/driving/index.html', function(err, data) {
+    function displaySurvey(survey, res) {
+        logger.info('survey requested: ' + survey)
+        fs.readFile(`public/js/surveys/${survey}/index.html`, function(err, data) {
             // Write Header
             res.writeHead(200, {
                 'Content-Type': 'text/html'

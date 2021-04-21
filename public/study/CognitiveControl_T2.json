@@ -1,9 +1,9 @@
 {
     "name": "Cognitive Control T2",
     "order": [
-        "/flanker?index=0&study=cognitive_control&session=2&version=1",
-        "/color_stroop?&index=1&study=cognitive_control&session=2&version=1",
-        "/emotional_stroop?&index=2&study=cognitive_control&session=2&version=1",
+        "/?task=flanker&index=0&study=cognitive_control&session=2&version=1",
+        "/?task=color_stroop&index=1&study=cognitive_control&session=2&version=1",
+        "/?task=emotional_stroop&index=2&study=cognitive_control&session=2&version=1",
         "/completed?"
     ],
     "fullscreen": true,
