@@ -136,7 +136,8 @@ module.exports = function (app){
                 } else {
                     // The check failed
                     // meaning subject probably entered their own  study -_- or field is blank
-                    path_to_save = `${process.env.DATA_PATH}/free/${file_name}`
+                    // Save to local
+                    path_to_save = `data/free/${file_name}`
                     
                     fs.writeFile(path_to_save, csv, function(err) {
                         if (err) return console.error(err);
