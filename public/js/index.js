@@ -144,7 +144,7 @@ $('#study-list').change(function () {
 
     mobileonly_studies = ['Driving']
     // Fire modal to aler user that this study is mobile
-    if (!mobileonly_studies.includes(document.getElementById('study-list').value)) {
+    if (mobileonly_studies.includes(document.getElementById('study-list').value)) {
         if (!window.mobileCheck()) {
             $('#modalMobileWarning').modal({}); // Show Warning Modal
             document.getElementById('begin').classList.add('disabled')
