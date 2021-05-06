@@ -3,5 +3,20 @@
     "mysql_host" : "localhost",
     "mysql_user" : "weblogin",
     "mysql_password" : "U5AZwEpM",
-    "mysql_database" : "stimtool"
+    "mysql_database" : "stimtool",
+    "dialect": "mysql",
+    "development": {
+        "host" : "localhost",
+        "username" : "weblogin",
+        "password" : "U5AZwEpM",
+        "database" : "stimtool",
+        "dialect": "mysql"
+    },
+    "production": {
+        "username": "weblogin",
+        "password": null,
+        "database": "database_production",
+        "host": "127.0.0.1",
+        "dialect": "mysql"
+      }
 }

@@ -7,6 +7,11 @@ const jsonexport = require('jsonexport');
 const pino = require('pino')
 const logger = pino({ level: process.env.LOG_LEVEL || 'info' })
 
+const accountSid = process.env.TWILIO_ACCOUNT_SID;
+const authToken = process.env.TWILIO_AUTH_TOKEN;
+const client = require('twilio')(accountSid, authToken);
+
+
 var models = require('./models')
 
 module.exports = function (app){
@@ -212,7 +217,7 @@ module.exports = function (app){
                         var DOMAIN = 'paulus.touthang.info';
                         var mailgun = require('mailgun-js')({ apiKey: api_key, domain: DOMAIN });
                         
-                        var ulink = 'https://brainworkout.paulus.libr.net/link?id=' + id
+                        var ulink = 'https://tasks.laureateinstitute.org/link?id=' + id
                         var data = {
                             from: req.sanitize(req.body.from),
                             to: req.sanitize(req.body.to),
@@ -242,6 +247,105 @@ module.exports = function (app){
         
     })
 
+    app.post('/mturklink', (req, res) => {
+        console.log('/mturklink called')
+
+        models.dashboard.findOne({
+            where: {
+                subject: req.sanitize(req.body.subject),
+                study: req.sanitize(req.body.study),
+                session: req.sanitize(req.body.session),
+            }
+        })
+            .then((result) => {
+                // console.log(result)
+                if (result == null) {
+                    req.body.link = uuidv4(); // Create unique uuid for this user/stud/session
+
+                    models.dashboard.create({
+                        subject: req.sanitize(req.body.subject),
+                        study: req.sanitize(req.body.study),
+                        session: req.sanitize(req.body.session),
+                        email: req.sanitize(req.body.email),
+                        phone: req.sanitize(req.body.phone),
+                        link: req.sanitize(req.body.link)
+                    })
+                        .then((result) => {
+                            // Added to table
+                            // Send them Link
+                            result.email = req.sanitize(req.body.email)
+                            result.phone = req.sanitize(req.body.phone)
+                            result.link_type = req.sanitize(req.body.link_type)
+                            sendLink(result)
+                    })
+                } else {
+                    // already have same subject, study, session
+                    // Still send them the link
+                    // console.error(result)
+                    result.email = req.sanitize(req.body.email)
+                    result.phone = req.sanitize(req.body.phone)
+                    result.link_type = req.sanitize(req.body.link_type)
+                    sendLink(result)
+                    // res.send({
+                    //     'message': 'subject/study/session already exists in database',
+                    //     'info': result
+                    // })
+                }
+            })
+
+        // if (req.body.link_type == 'text') {
+        //     client.messages
+        //     .create({
+        //         body: 'This is the ship that made the Kessel Run in fourteen parsecs?',
+        //         from: '+19189927728',
+        //         to: req.body.phone
+        //     })
+        //     .then(message => console.log(message.sid));
+        // }
+        
+        res.redirect(301, '/mturk/driving?submitform=completed');
+
+
+    })
+
+    function sendLink(result) {
+        if (result.link_type == 'text') {
+            var ulink = 'https://tasks.laureateinstitute.org/link?id=' + result.link
+            body = "Thank You for your participation. Here is your link to the survey: " + ulink
+
+            //console.log(body)
+            client.messages
+                .create({
+                    body: body,
+                    from: '+19189927728',
+                    to: result.phone
+                })
+                .then(message => console.log(message.sid));
+        }
+        if (result.link_type == 'email') {
+            var ulink = 'https://tasks.laureateinstitute.org/link?id=' + result.link
+            var mailgun = require("mailgun-js");
+            var api_key = 'key-fa2d65c78c52cfabac185c98eb95721e';
+            var DOMAIN = 'paulus.touthang.info';
+            var mailgun = require('mailgun-js')({ apiKey: api_key, domain: DOMAIN });
+            
+            var data = {
+                from: 'jtouthang@libr.net',
+                to: result.email,
+                subject: 'Shared Link',
+                text: `Hello!\n\nA link has been shared to you. Click the link to perform the task: ${ulink}\n\nThank you for your participation.`,
+                html: sharedLinkHTMLTemplate(ulink, '') 
+            };
+            
+
+            mailgun.messages().send(data, function(error, body) {
+                // logger.info(body);
+                console.log(body)
+                // res.send({'message': 'email sent!'})
+            });
+        }
+    }
+
     function sharedLinkHTMLTemplate(link, body) {
         if (body == undefined){
             body = ''
@@ -261,7 +365,7 @@ module.exports = function (app){
                             <tr>
                                 <td align="center" bgcolor="#FFFFFF" style="padding: 40px 0 30px 0; color: #153643; font-size: 28px; font-weight: bold; font-family: Arial, sans-serif;">
                                 <center><a href="http://www.laureateinstitute.org/"><img class="logo" style = "width: 400px;
-                                height: 70px;" src="http://brainworkout.paulus.libr.net/images/logo.png"></a></center>
+                                height: 70px;" src="https://tasks.laureateinstitute.org/images/logo.png"></a></center>
                                 </td>
 
                             </tr>

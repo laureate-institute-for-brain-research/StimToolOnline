@@ -72,3 +72,7 @@ exports.studies = function (req, res) {
     });
     
 }
+
+exports.mturk_driving = function (req, res) {
+    res.render('mturk_driving', { layout: false })
+}

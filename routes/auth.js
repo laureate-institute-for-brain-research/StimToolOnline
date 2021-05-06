@@ -8,4 +8,6 @@ module.exports = function (app) {
 
     app.get('/studies', authController.studies)
 
+    app.get('/mturk/driving', authController.mturk_driving)
+
 }

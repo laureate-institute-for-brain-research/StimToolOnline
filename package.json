@@ -40,6 +40,7 @@
     "survey-jquery": "^0.98.1",
     "tape": "^4.9.1",
     "to": "^0.2.9",
+    "twilio": "^3.62.0",
     "update": "^0.7.4",
     "util": "^0.10.3"
   },
@@ -64,6 +65,7 @@
   "devDependencies": {
     "gulp": "^4.0.2",
     "gulp-rename": "^2.0.0",
-    "gulp-terser": "^2.0.1"
+    "gulp-terser": "^2.0.1",
+    "sequelize-cli": "^6.2.0"
   }
 }

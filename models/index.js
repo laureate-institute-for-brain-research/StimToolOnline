@@ -11,6 +11,7 @@ var opts = {
     operatorsAliases: false,
     logging: false,
     force: true,
+    alter: true,
     define: {
         freezeTableName: true
     },
