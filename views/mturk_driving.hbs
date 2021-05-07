@@ -83,16 +83,17 @@
 		<br>
 		<div class="row" >
 			<img src="/images/LIBR_1color_white_logo.jpg" alt="Libr Logo" width="201" height="47" style="margin-left: auto; margin-right: auto;">
-			
 		</div>
 		<br>
+		<h4 id='sessiontxt' style="text-align: center;"></h4>
 		<div id='postLink'>
 			<center><h2>Link Sent</h2></center>
 			<p id='postMessage'>{{postMessage}}</p>
-			<p><b>Reminder: This HIT must be done from your phone. Please open the link on your phone.</b></p>
+			<p><b>Reminder: This HIT must be done from your phone. Please open the link that is sent to you on your phone.</b></p>
 			
 			<p>If you have issues recieving the link please email us at <a href="mailto:jtouthang@libr.net?subject=Mail About Mturk">jtouthang@libr.net</a></p>
 		</div>
+		
 		
 		<p id='toptxt'>Please enter your email address or phone number to receive a link to your phone.</p>
 		
@@ -136,11 +137,11 @@
 				<div id="error-msg" class="float-right" style="color: red; font-weight: bold;"></div>
 			</div>
 			<br>
-			<div class="form-check">
+			{{!-- <div class="form-check">
 				<input class="form-check-input" type="checkbox" value="true" id="remind" name="remind">
 				<label class="form-check-label" for="remind">Notify me when Session 2 is available</label>
 				</div>
-			<br>
+			<br> --}}
 			
 			<div class="form-check">
 				<input class="form-check-input" type="checkbox" value="" id="checkbock" required>
@@ -238,6 +239,12 @@
 			document.getElementById('phone').value = $("#phone").intlTelInput("getNumber");
 		});
 
+		var session = getQueryVariable('session')
+		
+
+		document.getElementById('sessiontxt').innerHTML = 'Session ' + session
+		document.getElementById('session').value = 'T' + session
+
 		
 
 		// on keyup / change flag: reset
@@ -247,6 +254,7 @@
 		if (getQueryVariable('submitform') == 'completed'){ 
 			document.getElementById('linkForm').style.display = 'none'
 			document.getElementById('toptxt').style.display = 'none'
+			document.getElementById('sessiontxt').style.display = 'none'
 		} else {
 			document.getElementById('postLink').style.display = 'none'
 		}

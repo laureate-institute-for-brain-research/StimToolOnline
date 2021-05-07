@@ -9,7 +9,12 @@ const logger = pino({ level: process.env.LOG_LEVEL || 'info' })
 
 const accountSid = process.env.TWILIO_ACCOUNT_SID;
 const authToken = process.env.TWILIO_AUTH_TOKEN;
+
+const mailgun_api_key = process.env.MAILGUN_API_KEY;
+const mailgun_domain = process.env.MAILGUN_DOMAIN;
+
 const client = require('twilio')(accountSid, authToken);
+var mailgun = require('mailgun-js')({ apiKey: mailgun_api_key, domain: mailgun_domain });
 
 
 var models = require('./models')
@@ -212,11 +217,7 @@ module.exports = function (app){
                     if (result == null) {
                         res.send({'message': 'not valid id'})
                     } else {
-                        var mailgun = require("mailgun-js");
-                        var api_key = 'key-fa2d65c78c52cfabac185c98eb95721e';
-                        var DOMAIN = 'paulus.touthang.info';
-                        var mailgun = require('mailgun-js')({ apiKey: api_key, domain: DOMAIN });
-                        
+    
                         var ulink = 'https://tasks.laureateinstitute.org/link?id=' + id
                         var data = {
                             from: req.sanitize(req.body.from),
@@ -248,8 +249,7 @@ module.exports = function (app){
     })
 
     app.post('/mturklink', (req, res) => {
-        console.log('/mturklink called')
-
+        logger.info('/mturklink called')
         models.dashboard.findOne({
             where: {
                 subject: req.sanitize(req.body.subject),
@@ -314,21 +314,17 @@ module.exports = function (app){
             body = "Thank You for your participation. Here is your link to the survey: " + ulink
 
             //console.log(body)
+            logger.info("text message sent to " + result.phone)
             client.messages
                 .create({
                     body: body,
                     from: '+19189927728',
                     to: result.phone
                 })
-                .then(message => console.log(message.sid));
+                .then(message => logger.info(message.sid));
         }
         if (result.link_type == 'email') {
             var ulink = 'https://tasks.laureateinstitute.org/link?id=' + result.link
-            var mailgun = require("mailgun-js");
-            var api_key = 'key-fa2d65c78c52cfabac185c98eb95721e';
-            var DOMAIN = 'paulus.touthang.info';
-            var mailgun = require('mailgun-js')({ apiKey: api_key, domain: DOMAIN });
-            
             var data = {
                 from: 'jtouthang@libr.net',
                 to: result.email,
@@ -337,10 +333,10 @@ module.exports = function (app){
                 html: sharedLinkHTMLTemplate(ulink, '') 
             };
             
-
             mailgun.messages().send(data, function(error, body) {
                 // logger.info(body);
-                console.log(body)
+                logger.info("email message sent to " + result.email)
+                logger.info(body)
                 // res.send({'message': 'email sent!'})
             });
         }
