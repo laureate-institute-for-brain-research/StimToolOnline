@@ -319,7 +319,7 @@ module.exports = function (app){
         if (result.link_type == 'email') {
             var ulink = 'https://tasks.laureateinstitute.org/link?id=' + result.link
             var data = {
-                from: 'jtouthang@libr.net',
+                from: 'no-reply@paulus.touthang.info',
                 to: result.email,
                 subject: 'Shared Link',
                 text: `Hello!\n\nA link has been shared to you. Click the link to perform the task: ${ulink}\n\nThank you for your participation.`,
@@ -381,7 +381,6 @@ module.exports = function (app){
                                                     color: #ffffff; font-family: sans-serif;font-size: 1rem; cursor: pointer; text-align: center; transition: background 250ms ease-in-out, 
                                                     transform 150ms ease; -webkit-appearance: none; -moz-appearance: none;">Go To Session</a href="${link}"></center>
                                             </td>
-
                                         </tr>
                                         <tr>
                                             <td style="padding: 20px 0 30px 0; color: #153643; font-family: Arial, sans-serif; font-size: 16px; line-height: 20px;">
@@ -393,9 +392,11 @@ module.exports = function (app){
                                                 If the above button doesn't work, copy and paste the link below:
                                                 <br>
                                                 ${link}
+                                                <br>
+                                                <p>Please do not reply to this email. If you have questions, email us at jtouthang@libr.net</p>
                                             </td>
                                         </tr>
-                        
+
                                     </table>
                                 </td>
                             </tr>
@@ -404,6 +405,7 @@ module.exports = function (app){
                     </td>
                 </tr>
             </table>
+            
         </body>
     </html>`
     }
