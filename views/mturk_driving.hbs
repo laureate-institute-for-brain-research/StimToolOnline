@@ -95,7 +95,7 @@
 		</div>
 		
 		
-		<p id='toptxt'>Please enter your email address or phone number to receive a link to your phone.</p>
+		<p id='toptxt'>Please enter your email address to receive a link.</p>
 		
 		<form id='linkForm' class="needs-validation" action="/mturklink" method="POST">
 
@@ -107,8 +107,8 @@
 				</div>
 			</div>
 			<br>
-			<p>How do you want us to send the link?</p>
-			<div class="form-check form-check-inline">
+			{{!-- <p>How do you want us to send the link?</p> --}}
+			{{!-- <div class="form-check form-check-inline">
 				<input class="form-check-input" type="radio" name="link_type" id="email_type" value="email">
 				<label class="form-check-label" for="email_type">
 					Email
@@ -120,7 +120,7 @@
 					Text
 				</label>
 			</div>
-			
+			 --}}
 			<hr style="height:2px;color:purple;background-color:purple">
 			<div class="row" id='emailForm'>
 				<label for="email" class="col col-form-label" >Email:</label>
@@ -186,11 +186,9 @@
 			}
 		}
 
-		checkcommType()
+		//checkcommType()
 
-		$( "input[name=link_type]" ).change(function() {
-			checkcommType()
-		});
+		//$( "input[name=link_type]" ).change(checkcommType());
 		
 				
         function getQueryVariable(variable) {

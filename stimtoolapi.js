@@ -293,16 +293,6 @@ module.exports = function (app){
                 }
             })
 
-        // if (req.body.link_type == 'text') {
-        //     client.messages
-        //     .create({
-        //         body: 'This is the ship that made the Kessel Run in fourteen parsecs?',
-        //         from: '+19189927728',
-        //         to: req.body.phone
-        //     })
-        //     .then(message => console.log(message.sid));
-        // }
-        
         res.redirect(301, '/mturk/driving?submitform=completed');
 
 

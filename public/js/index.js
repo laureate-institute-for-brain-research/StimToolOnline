@@ -1,7 +1,23 @@
 /* ---- particles.js config ---- */
 
+colors = [
+    '#4b3064',
+    '#b61924',
+    '#e86638',
+    "#f0bd4a",
+    "#de1874",
+    "#b52236",
+    "#e85733",
+    "#7b8da7"
+]
+var new_color = colors[Math.floor(Math.random()*colors.length)];
+$('#particles-js').css('background-color',new_color);
+
+// var random_color = getRandomSubarray(colors, 1);
+// document.getElementById('particles-js').style.backgroundColor = random_color[0]
 
 particlesJS("particles-js", {
+    
     "particles": {
         "number": {
             "value": 100,
@@ -10,8 +26,9 @@ particlesJS("particles-js", {
                 "value_area": 800 
             }
         },
+        
         "color": {
-            "value": "#ffffff"
+            "value": ["#BD10E0", "#B8E986", "#50E3C2", "#FFD300", "#E86363"]
         },
         "shape": {
             "type": "circle",
@@ -39,7 +56,7 @@ particlesJS("particles-js", {
             }
         },
         "size": {
-            "value": 3,
+            "value": 5,
             "random": true,
             "anim": {
                 "enable": false,
@@ -59,7 +76,7 @@ particlesJS("particles-js", {
             "enable": true,
             "speed": 6,
             "direction": "none",
-            "random": false,
+            "random": true,
             "straight": false,
             "out_mode": "out",
             "bounce": false,
@@ -348,27 +365,3 @@ if(performance.navigation.type == 2){
 //         window.location.href="/studies";
 //     }
 // }); 
-function getRandomSubarray(arr, size) {
-    var shuffled = arr.slice(0), i = arr.length, temp, index;
-    while (i--) {
-        index = Math.floor((i + 1) * Math.random());
-        temp = shuffled[index];
-        shuffled[index] = shuffled[i];
-        shuffled[i] = temp;
-    }
-    return shuffled.slice(0, size);
-  }
- // set random background color
-colors = [
-    '#4b3064',
-    '#b61924',
-    '#e86638',
-    "#f0bd4a",
-    "#de1874",
-    "#b52236",
-    "#e85733",
-    "#7b8da7"
-]
-
-  var random_color = getRandomSubarray(colors, 1);
-  document.getElementById('particles-js').style.backgroundColor = random_color[0]
