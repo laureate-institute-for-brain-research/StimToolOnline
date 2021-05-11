@@ -260,6 +260,8 @@ module.exports = function (app){
             .then((result) => {
                 // console.log(result)
                 if (result == null) {
+
+                    logger.info('creating account')
                     req.body.link = uuidv4(); // Create unique uuid for this user/stud/session
 
                     models.dashboard.create({
@@ -279,6 +281,7 @@ module.exports = function (app){
                             sendLink(result)
                     })
                 } else {
+                    logger.info('already have account')
                     // already have same subject, study, session
                     // Still send them the link
                     // console.error(result)
