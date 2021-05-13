@@ -169,13 +169,25 @@
             }, {
                 name: "page15",
                 elements: [{
+                    type: "dropdown",
+                    name: "country",
+                    title: "Select the country you live in.",
+                    isRequired: true,
+                    choicesByUrl: {
+                        url: "https://restcountries.eu/rest/v2/all",
+                        valueName: "name"
+                    }
+                }]
+            }, {
+                name: "countrPage",
+                elements: [{
                     type: "text",
                     name: "age",
                     title: "What is your current age? (enter a number)",
                     isRequired: true,
                     inputType: "number"
                 }]
-            }, {
+            },{
                 name: "page2",
                 elements: [{
                     type: "radiogroup",
