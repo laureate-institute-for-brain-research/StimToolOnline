@@ -128,7 +128,7 @@ module.exports = function (app){
         // console.log(trials_data)
         // Save to /data/folder based of study
         jsonexport(trials_data, function(err, csv) {
-            if (err) return console.error(err);
+            if (err) return logger.error(err);
 
             // File name is by taskname, participant id, session and date 
             file_name = req.sanitize(req.body.expInfo.task) + '_' + req.sanitize(req.body.expInfo.participant) + '_' + req.sanitize(req.body.expInfo.session) + '_' + req.sanitize(req.body.expInfo.date)+ '.csv'
@@ -139,7 +139,7 @@ module.exports = function (app){
                 if (!error) {
                     // The check succeeded
                     fs.writeFile(path_to_save, csv, function(err) {
-                        if (err) return console.error(err);
+                        if (err) return logger.error(err);
                         logger.info(`${path_to_save} saved`);
                         
                     });
@@ -157,7 +157,7 @@ module.exports = function (app){
                 }
             });
         });
-        res.send('data saved')
+        res.status(200).send('data saved')
     })
 
     // save Audio

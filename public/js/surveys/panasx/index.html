@@ -1704,14 +1704,14 @@
         // Get Query Variables
         var surveyname = getQueryVariable('survey');
 
-        var expInfo = { 'participant': '' ,'session': '',  'task': surveyname, 'date' : formatDate(), 'study': ''};
+        var expInfo = { 'participant': '' ,'session': '',  'task': surveyname, 'date' : formatDate(), 'study': '', 'id': getQueryVariable('id')};
 
         // Get info Promize
         const getInfoPromise = new Promise((resolve, reject) => {
             $.ajax({
                 type: "POST",
                 url: '/getInfo',
-                data: { 'id': getQueryVariable('id') },
+                data: { 'id': expInfo.id },
                 dataType: 'JSON',
                 success: function (data) {
                     resolve(data)
@@ -1731,7 +1731,7 @@
                 survey.onComplete.add(function (result) {
                     //result.preventDefault();
                     postSurveyData(result.data, expInfo.session, expInfo.participant);
-                    window.location.replace('/link?id=' + values.link + '&index=' + (parseInt(getQueryVariable('index')) + 1))
+                    
                 });
 
                 $("#surveyElement").Survey({model: survey});
@@ -1751,8 +1751,11 @@
                     "expInfo": expInfo
                 },
                 dataType: 'JSON',
-                success:function(data) {
-                    console.log(data)
+                statusCode: {
+                    200: function() {
+                        console.log('sucess saved on backend')
+                        window.location.replace('/link?id=' + expInfo.id + '&index=' + (parseInt(getQueryVariable('index')) + 1))
+                    }
                 }
             })
         }

@@ -118,14 +118,14 @@
     </div>
 
     <script type="text/javascript">
-        var expInfo = { 'participant': '' ,'session': '', 'study': ''};
+        var expInfo = { 'participant': '' ,'session': '', 'study': '', 'id': getQueryVariable('id') };
 
         // Get info Promize
         const getInfoPromise = new Promise((resolve, reject) => {
             $.ajax({
                 type: "POST",
                 url: '/getInfo',
-                data: { 'id': getQueryVariable('id') },
+                data: { 'id': expInfo.id },
                 dataType: 'JSON',
                 success: function (data) {
                     resolve(data)
