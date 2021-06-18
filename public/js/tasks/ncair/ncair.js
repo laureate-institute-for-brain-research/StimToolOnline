@@ -1451,7 +1451,7 @@ function trialRoutineEnd(trials) {
 		// Slider Response Based on Rating Type
 		var slider_result;
 
-		if (trial_type == 'rating_valence' || trial_type == 'rating_identity' || trial_type == 'rating_typicality') {
+		if (trial_type == 'rating_valence' || trial_type == 'rating_identity' || trial_type == 'rating_typicality' || trial_type == 'rating_arousal') {
 			slider_result = slider.getRating()
 		if (trial_type == 'rating_identity' || trial_type == 'rating_typicality') {
 			slider_result = Math.round(slider_result * 25)
