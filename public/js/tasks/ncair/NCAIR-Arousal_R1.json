@@ -1,0 +1,4 @@
+{
+    "schedule": "/js/tasks/ncair/NCAIR-Arousal_RX_A.csv",
+    "instruct_schedule": "/js/tasks/ncair/media/ncair-arousal_instruct_slide_R1.csv"
+}

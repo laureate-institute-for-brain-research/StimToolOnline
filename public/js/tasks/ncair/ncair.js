@@ -182,6 +182,8 @@ window.onload = function () {
 			// If vanderbelt, send them to next run
 			console.log(resources)
 
+			psychoJS._collectIP = false // don't collect IP
+
 			// expInfo.study = study
 			psychoJS.start({
 				expName, 
@@ -746,6 +748,7 @@ function random_order(trial_list) {
 	var cultural_idx = 0
 	var comparator_idx = 0
 	console.log(m_type)
+	console.log(expInfo.run_id)
 	if (m_type == 'audio') {
 		// Alternate Addin
 		for (var i = 0; i < total_stims; i++){
@@ -756,11 +759,18 @@ function random_order(trial_list) {
 				sorted_trial_list.push(random_comparator[comparator_idx])
 				comparator_idx++;
 			}
-			sorted_trial_list.push({ TrialTypes: "2_6", Durations: 0, stim_paths: "None" })
-			sorted_trial_list.push({ TrialTypes: "2_3", Durations: 0, stim_paths: "None" })
-			sorted_trial_list.push({ TrialTypes: "2_7", Durations: 0, stim_paths: "None" })
-			sorted_trial_list.push({ TrialTypes: "2_4", Durations: 0, stim_paths: "None" })
-			sorted_trial_list.push({ TrialTypes: "2_5", Durations: 0, stim_paths: "None"})
+
+			// If arousal only study, then only add the arousal question
+			if (expInfo.run_id.includes('Arousal')) {
+				sorted_trial_list.push({ TrialTypes: "2_5", Durations: 0, stim_paths: "None"})
+			} else {
+				sorted_trial_list.push({ TrialTypes: "2_6", Durations: 0, stim_paths: "None" })
+				sorted_trial_list.push({ TrialTypes: "2_3", Durations: 0, stim_paths: "None" })
+				sorted_trial_list.push({ TrialTypes: "2_7", Durations: 0, stim_paths: "None" })
+				sorted_trial_list.push({ TrialTypes: "2_4", Durations: 0, stim_paths: "None" })
+				sorted_trial_list.push({ TrialTypes: "2_5", Durations: 0, stim_paths: "None"})
+			}
+			
 		}
 	}
 
@@ -774,11 +784,15 @@ function random_order(trial_list) {
 				sorted_trial_list.push(random_comparator[comparator_idx])
 				comparator_idx++;
 			}
-			sorted_trial_list.push({ TrialTypes: "4_6", Durations: 0, stim_paths: "None" })
-			sorted_trial_list.push({ TrialTypes: "4_3", Durations: 0, stim_paths: "None" })
-			sorted_trial_list.push({ TrialTypes: "4_7", Durations: 0, stim_paths: "None" })
-			sorted_trial_list.push({ TrialTypes: "4_4", Durations: 0, stim_paths: "None" })
-			sorted_trial_list.push({ TrialTypes: "4_5", Durations: 0, stim_paths: "None"})
+			if (expInfo.run_id.includes('Arousal')) {
+				sorted_trial_list.push({ TrialTypes: "4_5", Durations: 0, stim_paths: "None"})
+			} else {
+				sorted_trial_list.push({ TrialTypes: "4_6", Durations: 0, stim_paths: "None" })
+				sorted_trial_list.push({ TrialTypes: "4_3", Durations: 0, stim_paths: "None" })
+				sorted_trial_list.push({ TrialTypes: "4_7", Durations: 0, stim_paths: "None" })
+				sorted_trial_list.push({ TrialTypes: "4_4", Durations: 0, stim_paths: "None" })
+				sorted_trial_list.push({ TrialTypes: "4_5", Durations: 0, stim_paths: "None"})
+			}
 		}
 	}
 
@@ -792,11 +806,16 @@ function random_order(trial_list) {
 				sorted_trial_list.push(random_comparator[comparator_idx])
 				comparator_idx++;
 			}
-			sorted_trial_list.push({ TrialTypes: "3_6", Durations: 0, stim_paths: "None" })
-			sorted_trial_list.push({ TrialTypes: "3_3", Durations: 0, stim_paths: "None" })
-			sorted_trial_list.push({ TrialTypes: "3_7", Durations: 0, stim_paths: "None" })
-			sorted_trial_list.push({ TrialTypes: "3_4", Durations: 0, stim_paths: "None" })
-			sorted_trial_list.push({ TrialTypes: "3_5", Durations: 0, stim_paths: "None"})
+
+			if (expInfo.run_id.includes('Arousal')) {
+				sorted_trial_list.push({ TrialTypes: "3_5", Durations: 0, stim_paths: "None"})
+			} else {
+				sorted_trial_list.push({ TrialTypes: "3_6", Durations: 0, stim_paths: "None" })
+				sorted_trial_list.push({ TrialTypes: "3_3", Durations: 0, stim_paths: "None" })
+				sorted_trial_list.push({ TrialTypes: "3_7", Durations: 0, stim_paths: "None" })
+				sorted_trial_list.push({ TrialTypes: "3_4", Durations: 0, stim_paths: "None" })
+				sorted_trial_list.push({ TrialTypes: "3_5", Durations: 0, stim_paths: "None"})
+			}
 		}
 		// Add the feedback Trial
 		sorted_trial_list.push({ TrialTypes: "3_8", Durations: 0, stim_paths: "None"})
@@ -823,9 +842,10 @@ function trialsLoopBegin(thisScheduler) {
 
 	//setting Up Schedule
 	// ToDO lop by alternating
+	console.log('Sorint Trial List - Before')
 	console.log(trials._trialList)
 	trials._trialList = random_order(trials._trialList)
-
+	console.log('Sorint Trial List - After')
 	console.log(trials._trialList)
 
 	psychoJS.experiment.addLoop(trials); // add the loop to the experiment
