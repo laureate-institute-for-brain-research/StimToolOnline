@@ -3,22 +3,25 @@ const MANIFEST = 'flutter-app-manifest';
 const TEMP = 'flutter-temp-cache';
 const CACHE_NAME = 'flutter-app-cache';
 const RESOURCES = {
-  "manifest.json": "863251aad6f11d1d6b4d59e48ecbf73d",
-"version.json": "d9addc95968eaea5315ebeb5abfa1a11",
-"icons/Icon-512.png": "96e752610906ba2a93c65f8abe1645f1",
+  "index.html": "830bdf79d0f4756bced38c354766cdb5",
+"/": "830bdf79d0f4756bced38c354766cdb5",
 "icons/Icon-192.png": "ac9a721a12bbc803b44f645561ecb1e1",
-"favicon.png": "5dcef449791fa27946b3d35ad8803796",
-"index.html": "0e27518a5284a322266d858473fb827b",
-"/": "0e27518a5284a322266d858473fb827b",
-"main.dart.js": "c171d259ff9b581e15ff103c1098d5cb",
-"assets/packages/cupertino_icons/assets/CupertinoIcons.ttf": "115e937bb829a890521f72d2e664b632",
+"icons/Icon-512.png": "96e752610906ba2a93c65f8abe1645f1",
 "assets/FontManifest.json": "dc3d03800ccca4601324923c0b1d6d57",
-"assets/AssetManifest.json": "1e5b6d53a417268cbc4daa8859536a2d",
-"assets/images/countdown_bg.jpg": "40eafd21c3f3dc818956eabe7ec823f9",
-"assets/images/drivingtaskbg.png": "73082638490a62f782af8854ae754990",
+"assets/AssetManifest.json": "cdea2362756b65abb24553b73785c54d",
+"assets/fonts/MaterialIcons-Regular.otf": "4e6447691c9509f7acdbf8a931a85ca1",
 "assets/images/stopsign.png": "e7df0791a315cc8c14a536c570c618c5",
-"assets/NOTICES": "2ed592db4c8962669fd591ec2c7e71d7",
-"assets/fonts/MaterialIcons-Regular.otf": "1288c9e28052e028aba623321f7826ac"
+"assets/images/drivingtaskbg.png": "73082638490a62f782af8854ae754990",
+"assets/images/beforeline.png": "63440a4d3b0ae32114e6b8edfe606137",
+"assets/images/afterline.png": "9bb08904fd1f0a5268e9679afd9ebeac",
+"assets/images/countdown_bg.jpg": "40eafd21c3f3dc818956eabe7ec823f9",
+"assets/images/line.png": "94e650fd7068055ca96fca57d363abf9",
+"assets/packages/cupertino_icons/assets/CupertinoIcons.ttf": "115e937bb829a890521f72d2e664b632",
+"assets/NOTICES": "f12a0fb031fa5201394eafa02e12bd72",
+"version.json": "d9addc95968eaea5315ebeb5abfa1a11",
+"favicon.png": "5dcef449791fa27946b3d35ad8803796",
+"main.dart.js": "c3bc022d4e245abb52f22c81ce0eed74",
+"manifest.json": "863251aad6f11d1d6b4d59e48ecbf73d"
 };
 
 // The application shell files that are downloaded before a service worker can
@@ -36,7 +39,7 @@ self.addEventListener("install", (event) => {
   return event.waitUntil(
     caches.open(TEMP).then((cache) => {
       return cache.addAll(
-        CORE.map((value) => new Request(value + '?revision=' + RESOURCES[value], {'cache': 'reload'})));
+        CORE.map((value) => new Request(value, {'cache': 'reload'})));
     })
   );
 });
