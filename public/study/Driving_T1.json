@@ -3,7 +3,7 @@
     "order": [
         "/?index=0&survey=demo&session=1",
         "/?index=1&survey=panasx&session=1",
-        "/js/tasks/driving/#/?trials=1&time=.75&index=2&session=1",
+        "/js/tasks/driving/#/?trials=20&time=.75&index=2&session=1",
         "/?index=3&survey=mturkfeedback&session=1",
         "/completeMobile?session=1"
     ],
