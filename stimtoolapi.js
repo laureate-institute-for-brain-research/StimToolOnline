@@ -121,6 +121,29 @@ module.exports = function (app){
         })
     })
 
+    // send dashboard info given link
+    app.post('/getSubjectInfo', (req, res)=>{
+        subject = req.sanitize(req.body.subject);
+
+        models.dashboard.findOne({
+            where: {
+                subject: subject
+            }
+        })
+            .then(
+                function (result) {
+                    if (result == null) {
+                        res.send({})
+                    } else {
+                        res.send(result)
+                    }
+                }
+        )
+            .catch(error => {
+            res.send({})
+        })
+    })
+
     // send save info given link
     app.post('/save', (req, res)=>{
         trials_data = req.body.trials_data
