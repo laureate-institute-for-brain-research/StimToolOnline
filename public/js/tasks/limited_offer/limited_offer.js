@@ -813,6 +813,18 @@ function trialRoutineEachFrame(trials) {
 	return function () {
 		//------Loop for each frame of Routine 'trial'-------
 		let continueRoutine = true; // until we're told otherwise
+
+
+		// Allow to skip trials for testing and tech errors
+		let theseKeys = resp.getKeys({ keyList: ['z'], waitRelease: false });
+		if (theseKeys.length > 0) {
+			resp.keys = theseKeys[0].name;  // just the last key pressed
+			if (resp.keys == 'z') {
+				continueRoutine = false;
+				current_point = 0
+				offer_stim_text.setText(0 + ' points')
+			}
+		}
 		
 	
 		// get current time
