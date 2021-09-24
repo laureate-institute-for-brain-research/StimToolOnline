@@ -150,7 +150,7 @@ $('#study-list').change(function () {
     document.getElementById('id_div').style.display = 'block';
     document.getElementById('session_div').style.display = 'block'; // Show session dropdown
 
-    two_session_studies = ['AAC-BET', 'BK_Pilot', 'CognitiveControl', 'Driving']
+    two_session_studies = ['AAC-BET', 'BK_Pilot', 'CognitiveControl', 'Driving', 'METH_Pilot']
     if (!two_session_studies.includes(document.getElementById('study-list').value)) {
         var selectobject = document.getElementById("session-list");
         for (var i=0; i<selectobject.length; i++) {
