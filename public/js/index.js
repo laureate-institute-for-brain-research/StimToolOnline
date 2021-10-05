@@ -150,7 +150,7 @@ $('#study-list').change(function () {
     document.getElementById('id_div').style.display = 'block';
     document.getElementById('session_div').style.display = 'block'; // Show session dropdown
 
-    two_session_studies = ['AAC-BET', 'BK_Pilot', 'CognitiveControl', 'Driving', 'METH_Pilot']
+    two_session_studies = ['AAC-BET', 'BK_Pilot', 'CognitiveControl', 'Driving2', 'METH_Pilot']
     if (!two_session_studies.includes(document.getElementById('study-list').value)) {
         var selectobject = document.getElementById("session-list");
         for (var i=0; i<selectobject.length; i++) {
@@ -159,7 +159,7 @@ $('#study-list').change(function () {
         }
     }
 
-    mobileonly_studies = ['Driving']
+    mobileonly_studies = ['Driving2']
     // Fire modal to aler user that this study is mobile
     if (mobileonly_studies.includes(document.getElementById('study-list').value)) {
         if (!window.mobileCheck()) {
