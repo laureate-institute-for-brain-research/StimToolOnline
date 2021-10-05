@@ -2,6 +2,7 @@
 // Written by James Touthang
 
 require('dotenv').config();// Load environment variables
+var cors = require('cors')
 
 var express = require('express');
 var bodyParser = require('body-parser');
@@ -24,9 +25,10 @@ var config = require('./config/config.json')
 
 var app = express();
 
+app.options('*', cors()) // include before other routes
 
-
-
+// Add Access Control Allow Origin headers
+app.use(cors())
 // STUDIES//
 
 // This is the Module for wave2
@@ -107,6 +109,9 @@ app.use('/data', serveIndex('data', {
 function setHeaders(res, filepath) {
     res.setHeader('Content-Disposition', 'attachment; filename=' + path.basename(filepath));
 }
+
+
+
 // For Handlebars
 // Allows for logical coniditions in handlebards
 const isEqualHelperHandlerbar = function (a, b, opts) {
@@ -130,6 +135,7 @@ app.set('view engine', '.hbs')
 app.set('views', './views')
 
 
+
 var stimToolAPiRoute = require('./stimtoolapi.js')(app)
 var authRoute = require('./routes/auth.js')(app)
 var apiRoute = require('./api.js')(app)
@@ -139,6 +145,7 @@ var server = app.listen(process.env.PORT, function () {
     logger.info('NODE_ENV: ' + process.env.NODE_ENV)
     logger.info('listening on port: ' + process.env.PORT.toString())
 });
+
 
 
 // Module Exports

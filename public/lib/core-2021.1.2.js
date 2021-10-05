@@ -215,8 +215,11 @@ class ServerManager extends PsychObject
 				}
 				else
 				{
+					
 					for (const {name, path} of resources)
 					{
+						// console.log(name)
+						// console.log(path)
 						self._resources.set(name, {path});
 						newResources.set(name, {path});
 					}
@@ -342,7 +345,16 @@ class ServerManager extends PsychObject
 			const url = this._psychoJS.config.pavlovia.URL +
 				'/api/v2/experiments/' + encodeURIComponent(this._psychoJS.config.experiment.fullpath) +
 				'/resources';
-			$.get(url, data, null, 'json')
+			$.ajax({
+				url: url,
+				type: 'GET',
+				data: data,
+				dataType: 'application/json',
+				xhrFields: {
+					withCredentials: true
+			   }
+			})
+			// $.get(url, data, null, 'json')
 				.done((data, textStatus) =>
 				{
 					if (!('resources' in data))
@@ -384,6 +396,8 @@ class ServerManager extends PsychObject
 		const filesToDownload = resources.size ? resources : this._resources;
 		this._resourceQueue.addEventListener("filestart", event =>
 		{
+			// console.log(event.item.id)
+			
 			self.emit(ServerManager.Event.RESOURCE, {
 				message: ServerManager.Event.DOWNLOADING_RESOURCE,
 				resource: event.item.id
@@ -392,6 +406,7 @@ class ServerManager extends PsychObject
 		this._resourceQueue.addEventListener("fileload", event =>
 		{
 			++self._nbLoadedResources;
+			
 			let path_data = self._resources.get(event.item.id);
 			path_data.data = event.result;
 			self.emit(ServerManager.Event.RESOURCE, {
@@ -416,6 +431,7 @@ class ServerManager extends PsychObject
 		});
 		let manifest = [];
 		let soundResources = [];
+		let externalResources = [];
 		for (const [name, path_data] of filesToDownload)
 		{
 			const nameParts = name.toLowerCase().split('.');
@@ -438,7 +454,15 @@ class ServerManager extends PsychObject
 			}
 			else
 			{
-				manifest.push({id: name, src: path_data.path});
+				// console.log(name)
+
+				// if (name.includes('https://')) {
+				// 	externalResources.push(name)
+				// } else {
+				// 	manifest.push({ id: name, src: path_data.path });
+				// }
+				manifest.push({ id: name, src: path_data.path });
+				
 			}
 		}
 		if (manifest.length > 0)
@@ -485,6 +509,39 @@ class ServerManager extends PsychObject
 			});
 			howl.load();
 		}
+		// Process external Sources
+		// for (const name of externalResources) {
+		// 	self.emit(ServerManager.Event.RESOURCE, {
+		// 		message: ServerManager.Event.DOWNLOADING_RESOURCE,
+		// 		resource: name
+		// 	});
+		// 	const path_data = self._resources.get(name);
+		// 	console.log(path_data)
+		// 	// Retrieve Data
+		// 	$.ajax({
+		// 		url: path_data.path,
+		// 		xhrFields: {
+		// 		   withCredentials: true
+		// 		}
+		// 	})
+		// 		.done(function (data)
+		// 		{
+		// 			// console.log(data)
+		// 			++self._nbLoadedResources;
+		// 			path_data.data = data;
+		// 			self.emit(ServerManager.Event.RESOURCE, {
+		// 				message: ServerManager.Event.RESOURCE_DOWNLOADED,
+		// 				resource: name
+		// 			});
+		// 			if (self._nbLoadedResources === filesToDownload.size)
+		// 			{
+		// 				self.setStatus(ServerManager.Status.READY);
+		// 				self.emit(ServerManager.Event.RESOURCE, {message: ServerManager.Event.DOWNLOAD_COMPLETED});
+		// 			}
+
+		// 	  });
+
+		// }
 	}
 }
 ServerManager.Event = {
