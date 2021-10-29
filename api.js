@@ -20,7 +20,7 @@ module.exports = function (app){
         var type = q.type;
 
         if (task) {
-            displayTask(task, res)
+            displayTask(task, res, q)
         } else if (survey) {
             displaySurvey(survey,res)
         }else {
@@ -1345,8 +1345,8 @@ module.exports = function (app){
     }
 
 
-    function displayTask(task, res) {
-        logger.info('task requested: ' + task)
+    function displayTask(task, res, query) {
+        logger.info(`task requested: ${task} by ${query.id}`)
         fs.readFile(`public/js/tasks/${task}/index.html`, function(err, data) {
             // Write Header
             res.writeHead(200, {
