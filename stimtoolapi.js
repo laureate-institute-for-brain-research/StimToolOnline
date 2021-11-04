@@ -125,7 +125,7 @@ module.exports = function (app){
     app.post('/getSubjectInfo', (req, res)=>{
         subject = req.sanitize(req.body.subject);
 
-        models.dashboard.findOne({
+        models.dashboard.findAll({
             where: {
                 subject: subject
             }
