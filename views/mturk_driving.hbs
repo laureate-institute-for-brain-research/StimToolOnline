@@ -99,17 +99,17 @@
 		<div class="accordion accordion-flush" id="accordionFlushExample">
 				<div class="accordion-item">
 					<p class="accordion-header" id="flush-headingOne">
-						<button class="accordion-button collapsed btn btn-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+						<button class="accordion-button collapsed btn btn-danger" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
 							Click here for instructions without entering an email.
 						</button>
 					</p>
 					<div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
-						<div class="accordion-body">
-							Ignore the form below and follow these steps to perfom the task without being sent a direct link to your email:
+						<div class="accordion-body" style="background-color: #5c2020; color:white;">
+							 Ignore the form below and follow these steps to perfom the task without being sent a direct link to your email:
 							<br>
 							<ol>
 								<li>
-									<b>On your smartphone</b> Go to <a href="https://tasks.laureateinstitute.org">https://tasks.laureateinstitute.org</a>
+									<b>On your smartphone</b> Go to <a style="color: rgb(212, 212, 212);"href="https://tasks.laureateinstitute.org">https://tasks.laureateinstitute.org</a>
 								</li>
 								<li>
 									Select <b>Driving2</b> on "Choose Study"
@@ -129,7 +129,7 @@
 					</div>
 				</div>
 			</div>
-		
+		<hr style="height:2px;color:purple;background-color:purple">
 		<form id='linkForm' class="needs-validation" action="/mturklink" method="POST">
 
 			<div class="row">
@@ -156,7 +156,7 @@
 			
 			 --}}
 			<input type="hidden" name="link_type" id="email_type" value="email">
-			<hr style="height:2px;color:purple;background-color:purple">
+			
 			<div class="row" id='emailForm'>
 				<label for="email" class="col col-form-label" >Email:</label>
 				<input type="email" class="col form-control" name="email" id="email" placeholder="name@example.com" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$">
