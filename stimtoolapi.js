@@ -13,7 +13,7 @@ const authToken = process.env.TWILIO_AUTH_TOKEN;
 const mailgun_api_key = process.env.MAILGUN_API_KEY;
 const mailgun_domain = process.env.MAILGUN_DOMAIN;
 
-const client = require('twilio')(accountSid, authToken);
+// const client = require('twilio')(accountSid, authToken);
 var mailgun = require('mailgun-js')({ apiKey: mailgun_api_key, domain: mailgun_domain });
 
 
@@ -331,13 +331,13 @@ module.exports = function (app){
 
             //console.log(body)
             logger.info("text message sent to " + result.phone)
-            client.messages
-                .create({
-                    body: body,
-                    from: '+19189927728',
-                    to: result.phone
-                })
-                .then(message => logger.info(message.sid));
+            // client.messages
+            //     .create({
+            //         body: body,
+            //         from: '+19189927728',
+            //         to: result.phone
+            //     })
+            //     .then(message => logger.info(message.sid));
         }
         if (result.link_type == 'email') {
             var ulink = 'https://tasks.laureateinstitute.org/link?id=' + result.link
