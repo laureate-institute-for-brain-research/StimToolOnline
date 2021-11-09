@@ -10,11 +10,19 @@ const logger = pino({ level: process.env.LOG_LEVEL || 'info' })
 const accountSid = process.env.TWILIO_ACCOUNT_SID;
 const authToken = process.env.TWILIO_AUTH_TOKEN;
 
-const mailgun_api_key = process.env.MAILGUN_API_KEY;
-const mailgun_domain = process.env.MAILGUN_DOMAIN;
-
 // const client = require('twilio')(accountSid, authToken);
-var mailgun = require('mailgun-js')({ apiKey: mailgun_api_key, domain: mailgun_domain });
+
+const formData = require('form-data');
+const Mailgun = require('mailgun.js');
+const mailgun = new Mailgun(formData);
+
+const mg = mailgun.client({
+    username: 'api',
+    key: process.env.MAILGUN_API_KEY,
+    public_key: process.env.MAILGUN_PUBLIC_KEY
+});
+
+// var mailgun = require('mailgun-js')({ apiKey: mailgun_api_key, domain: mailgun_domain });
 
 
 var models = require('./models')
@@ -253,10 +261,8 @@ module.exports = function (app){
                         logger.info("Sending email: " + req.body.to);
                         // logger.info(data)
 
-                        mailgun.messages().send(data, function(error, body) {
-                            // logger.info(body);
-                            res.send({'message': 'email sent!'})
-                        });
+                        mg.messages.create(process.env.MAILGUN_DOMAIN, data)
+                            .then(msg => console.log(msg)) // logs response data
                         
                         // test
                         // res.send({'message': 'email sent!'})
@@ -348,13 +354,11 @@ module.exports = function (app){
                 text: `Hello!\n\nA link has been shared to you. Click the link to perform the task: ${ulink}\n\nThank you for your participation.`,
                 html: sharedLinkHTMLTemplate(ulink, '') 
             };
+
+            // new way to send with mailgun.s
+            mg.messages.create(process.env.MAILGUN_DOMAIN, data)
+              .then(msg => console.log(msg)) // logs response data
             
-            mailgun.messages().send(data, function(error, body) {
-                // logger.info(body);
-                logger.info("email message sent to " + result.email)
-                logger.info(body)
-                // res.send({'message': 'email sent!'})
-            });
         }
     }
 
