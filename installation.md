@@ -1,10 +1,11 @@
 # Installation Steps
 Installation steps on Ubuntu.
 Main Steps are:
-1. Install Dependencies
-2. Configure Mysql
-3. Configure nginx
-4. Setup pm2
+1. [Install Dependencies](#1.Install-Dependencies)
+2. Clone repo
+3. Configure Mysql
+4. Configure nginx
+5. Setup pm2
 
 # 1. Install Dependencies
 ```
@@ -13,8 +14,12 @@ $ apt install -y mysql-server
 $ sudo apt install nodejs
 $ apt install npm
 ```
+# 2. Clone Repo
 
-# 2. Setup Mysql & Confgiure
+`$ git clone https://github.com/laureate-institute-for-brain-research/Online-StimTool.git`
+
+
+# 3. Setup Mysql & Confgiure
 mysql is used to store database.
 
 `$ sudo systemctl start mysqld`
@@ -79,7 +84,7 @@ Once you see this message:
 Exit the node process by pressint *Ctrl + C*
 
 
-# 3. Configure Nginx
+# 4. Configure Nginx
 
 Make All Traffic Secure using nginx
 Edit the configuration file:
@@ -197,7 +202,7 @@ nginx: configuration file /etc/nginx/nginx.conf test is successful
 ### Start nginx after restart
 `sudo systemctl enable nginx.service`
 
-# 4. Setup PM2
+# 5. Setup PM2
 PM2 is a process manageement that handles all process relating to node tasks.
 Like restartin the process during an error, and starting up the application during a restart.
 
