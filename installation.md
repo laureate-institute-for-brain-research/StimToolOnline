@@ -1,11 +1,11 @@
 # Installation Steps
 Installation steps on Ubuntu.
 Main Steps are:
-1. [Install Dependencies](#1.Install-Dependencies)
-2. Clone repo
-3. Configure Mysql
-4. Configure nginx
-5. Setup pm2
+1. [Install Dependencies](#1-install-dependencies)
+2. [Clone repo](#2-clone-repo)
+3. [Setup Mysql & Confgiure](#3-Setup-Mysql-&-Confgiure)
+4. [Configure Nginx](#4-configure-nginx)
+5. [Setup PM2](#5-Setup-PM2)
 
 # 1. Install Dependencies
 ```
