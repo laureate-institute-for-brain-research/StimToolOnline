@@ -5,4 +5,4 @@ This is the 'web' version of stimtool.
 
 # Installation
 
-See the **installation.md** file.
+See the [installation.md](https://github.com/laureate-institute-for-brain-research/Online-StimTool/blob/master/installation.md) file.
