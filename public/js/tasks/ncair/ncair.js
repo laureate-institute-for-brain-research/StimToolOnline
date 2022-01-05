@@ -1431,7 +1431,7 @@ function trialRoutineEachFrame(trials) {
 		}
 		// Allo skip trial only for developlment
 		if ((window.location.hostname == 'localhost')) {
-			if (trial_type != 'general_feedback' && psychoJS.eventManager.getKeys({keyList:['z']}).length > 0) {
+			if ( psychoJS.eventManager.getKeys({keyList:['z']}).length > 0) {
 				return Scheduler.Event.NEXT;
 			}
 		}
