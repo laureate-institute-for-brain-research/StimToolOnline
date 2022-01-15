@@ -33,7 +33,7 @@
     "request-ip": "^2.0.2",
     "sequelize": "^6.6.2",
     "serve-index": "^1.9.1",
-    "shelljs": "^0.8.1",
+    "shelljs": "^0.8.5",
     "sqlstring": "^2.3.0",
     "survey-jquery": "^0.98.1",
     "tape": "^4.9.1",
