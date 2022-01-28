@@ -58,7 +58,7 @@ Create the database user weblogin for communication with the database. And give 
 
 MySQL v8 default authentication plug was changed so need to be reverted back to work with sequelize.
 
-`mysql> ALTER USER 'weblogin'@'localhost' IDENTIFIED WITH mysql_native_password BY 'U5AZwEpM';`
+`mysql> ALTER USER 'weblogin'@'localhost' IDENTIFIED WITH mysql_native_password BY 'REPLACEME';`
 
 `mysql> flush privileges;`
 
