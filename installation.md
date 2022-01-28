@@ -56,9 +56,21 @@ Create the database user weblogin for communication with the database. And give 
 
 `mysql> CREATE USER 'weblogin'@'localhost' IDENTIFIED BY 'REPLACEME';`
 
+MySQL v8 default authentication plug was changed so need to be reverted back to work with sequelize.
+
+`mysql> ALTER USER 'weblogin'@'localhost' IDENTIFIED WITH mysql_native_password BY 'U5AZwEpM';`
+
+`mysql> flush privileges;`
+
+Lastly for this user, all ALL privelges need to be granted to work with the database.
+
+`mysql> GRANT ALL PRIVILEGES ON stimtool.* TO 'weblogin'@'localhost';`
+
+Done. This mysql user is ready to work with the application.
+
 Save these in a file called .env
 
-Contents should looke like
+Contents should look like
 ```
 NODE_ENV=development
 PORT=1185
