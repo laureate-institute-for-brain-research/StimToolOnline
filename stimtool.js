@@ -8,7 +8,7 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var path = require('path');
 
-var mysql = require('mysql');
+var mysql = require('mysql2');
 
 var serveIndex = require('serve-index');
 
