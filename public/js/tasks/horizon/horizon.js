@@ -264,7 +264,7 @@ function updateInfo() {
 	// add info from the URL:
 	util.addInfoFromUrl(expInfo);
 
-	if (getQueryVariable('study') == 'vanderbelt') {
+	if (getQueryVariable('study') == 'vanderbelt' || getQueryVariable('study') == 'johns_hopkins') {
 
 		// Take Them to completion no 2nd run
 		psychoJS.setRedirectUrls(
@@ -1305,7 +1305,7 @@ function thanksRoutineBegin(trials) {
 
 		// Show Final Points and money earned
 		
-		if (getQueryVariable('study') == 'vanderbelt') {
+		if (getQueryVariable('study') == 'vanderbelt' || getQueryVariable('study') == 'johns_hopkins') {
 			// 1000 points = 10 cents
 			thanksText.setText(`This is the end of the task run.\n\n\n Total Points Earned: ${totalPoints} \n\n Total Cents Earned: ${totalPoints / 100 } =  $${ (totalPoints / 10000).toFixed(2)}`)
 		} else if (getQueryVariable('run') == 'BK_Pilot_R1.json' || getQueryVariable('run') == 'BK_Pilot_R2.json' || getQueryVariable('run') == 'METH_Pilot_R1.json' || getQueryVariable('run') == 'METH_Pilot_R2.json' ) {
