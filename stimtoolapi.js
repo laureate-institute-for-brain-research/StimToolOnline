@@ -221,7 +221,7 @@ module.exports = function (app){
                 // The check failed
                 // meaning subject probably entered their own  study -_- or field is blank
                 
-                path_to_save = `${process.env.DATA_PATH}/free/${file_name}`
+                path_to_save = `data/free/${file_name}`
                 fs.writeFile(path_to_save, data, { encoding: 'base64' }, function(err) {
                     if (err) {
                         logger.error("err", err);

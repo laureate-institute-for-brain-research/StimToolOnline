@@ -86,6 +86,7 @@ function toggleRecording(e) {
 }
 
 function startRecording() {
+    console.log("Recording")
     if (!audioRecorder)
         return;
 
