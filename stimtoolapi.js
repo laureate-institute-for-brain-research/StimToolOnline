@@ -77,6 +77,11 @@ module.exports = function (app){
             id = req.body.id
         }
 
+        // Change where to route them based on id
+        if (id.charAt(0) == 'U') {
+            res.redirect('/js/tasks/driving/completed.html');
+        }
+
         models.dashboard.findOne({
             where: {
                 link: id

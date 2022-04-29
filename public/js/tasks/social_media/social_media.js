@@ -367,7 +367,7 @@ var moreStim;
 var videoCameraStim;
 
 var leftColor = '#56B4E9'
-var rightColor = '#E69F00'
+var rightColor = '#db6e00'
 var rect_fillColor = '#009E73'
 var forced_fillColor = '#FF0000'
 
@@ -766,6 +766,7 @@ function experimentInit() {
 		size: [.4, 1],
 		anchor: 'center',
 		fillColor: new util.Color(leftColor),
+		// opacity: .5,
 		letterHeight: .05,
 		font: 'lucida grande',
 		ori : 0, pos : [0, .8],
@@ -778,6 +779,7 @@ function experimentInit() {
 		size: [.4, 1],
 		anchor: 'center',
 		fillColor: new util.Color(rightColor),
+		// opacity: .5,
 		letterHeight: .05,
 		font: 'lucida grande',
 		ori : 0, pos : [.4, .8],
