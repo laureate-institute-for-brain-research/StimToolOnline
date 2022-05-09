@@ -329,16 +329,34 @@ var postStims = {
 	9: {},
 } 
 
+
+var post_stim_x_pos = {
+	'left': {
+		'post_text': 0.57,
+		'like_icon': -0.373,
+		'like_posts': -0.373,
+		'profile_photo': 0.65
+	},
+	'right': {
+		'post_text': -0.3,
+		'like_icon': 0.65,
+		'like_posts': 0.65,
+		'profile_photo': -0.373
+	}
+}
+
 // Create Y axis  points
 for (let i = 0; i <= 9; i++){
 	if (i == 0) {
 		postStims[i]['post_y'] = .62
 		postStims[i]['postphoto_y'] = .62
-		postStims[i]['postlike_y'] = .56
+		postStims[i]['postlike_y'] = .65
+		postStims[i]['postlikeIcon_y'] = .57
 	} else {
 		postStims[i]['post_y'] = postStims[i - 1]['post_y'] - posts_height
 		postStims[i]['postphoto_y'] = postStims[i - 1]['postphoto_y'] - .17
 		postStims[i]['postlike_y'] = postStims[i - 1]['postlike_y'] - .17
+		postStims[i]['postlikeIcon_y'] = postStims[i - 1]['postlikeIcon_y'] - .17
 
 	}
 }
@@ -366,10 +384,17 @@ var phoneCallStim;
 var moreStim;
 var videoCameraStim;
 
+
+var fontColor = '#ffffff'
+var fontFadeColor = '#545454'
+
 var leftColor = '#56B4E9'
+var leftFadeColor = '#142833'
+
 var rightColor = '#db6e00'
-var rect_fillColor = '#009E73'
-var forced_fillColor = '#FF0000'
+var rightFadeColor = '#361b01'
+
+
 
 
 var slideStim;
@@ -420,6 +445,9 @@ var thanksClock;
 var thanksText;
 var globalClock;
 var routineTimer;
+
+var mouse;
+
 function experimentInit() {
 	
 	// Initialize components for Routine "instruct"
@@ -785,116 +813,7 @@ function experimentInit() {
 		ori : 0, pos : [.4, .8],
 	});
 
-
-	
-
-	// Initial the Text Position of the Band
-	word = new visual.TextStim({
-		win: psychoJS.window,
-		name: 'word',
-		text: 'default text',
-		font: 'lucida grande',
-		units: 'height',
-		pos: [0, 0], height: 0.15, wrapWidth: undefined, ori: 0,
-		color: new util.Color('white'), opacity: 1,
-		depth: 0.0
-	});
-
-	bandit_left_up_handle = new visual.ShapeStim({
-		win: psychoJS.window,
-		name: 'left_bandit_handle',
-		opacity: 1,
-		units: 'norm',
-		lineColor: new util.Color(leftColor),
-		fillColor: new util.Color(leftColor),
-		vertices: [
-			[-0.15, .48],
-			[-0.15, .52],
-			[-0.27, .70],
-			[-0.27, .73],
-			[-0.32, .73],
-			[-0.32, .73],
-			[-0.32, .64],
-			[-0.27, .64],
-			[-0.27, .66],
-		],
-		pos: [0,0],
-		closeShape: true,
-		ori: 0,
-		depth: 0
-	})
-
-	bandit_left_down_handle = new visual.ShapeStim({
-		win: psychoJS.window,
-		name: 'left_bandit_handle',
-		opacity: 1,
-		units: 'norm',
-		lineColor: new util.Color(leftColor),
-		fillColor: new util.Color(leftColor),
-		vertices: [
-			[-0.15, .48],
-			[-0.15, .52],
-			[-0.27, .40],
-			[-0.27, .43],
-			[-0.32, .43],
-			[-0.32, .43],
-			[-0.32, .34],
-			[-0.27, .34],
-			[-0.27, .36],
-		],
-		pos: [0,0],
-		closeShape: true,
-		ori: 0,
-		depth: 0
-	})
-
-	bandit_right_up_handle = new visual.ShapeStim({
-		win: psychoJS.window,
-		name: 'right_bandit_handle',
-		opacity: 1,
-		units: 'norm',
-		lineColor: new util.Color(rightColor),
-		fillColor: new util.Color(rightColor),
-		vertices: [
-			[0.15, .48],
-			[0.15, .52],
-			[0.27, .70],
-			[0.27, .73],
-			[0.32, .73],
-			[0.32, .73],
-			[0.32, .64],
-			[0.27, .64],
-			[0.27, .66],
-		],
-		pos: [0,0],
-		closeShape: true,
-		ori: 0,
-		depth: 0
-	})
-
-	bandit_right_down_handle = new visual.ShapeStim({
-		win: psychoJS.window,
-		name: 'right_bandit_handle',
-		opacity: 1,
-		units: 'norm',
-		lineColor: new util.Color(rightColor),
-		fillColor: new util.Color(rightColor),
-		vertices: [
-			[0.15, .48],
-			[0.15, .52],
-			[0.27, .40],
-			[0.27, .43],
-			[0.32, .43],
-			[0.32, .43],
-			[0.32, .34],
-			[0.27, .34],
-			[0.27, .36],
-		],
-		pos: [0,0],
-		closeShape: true,
-		ori: 0,
-		depth: 0
-	})
+	mouse = new core.Mouse({win: psychoJS.window})
 
 	// Craete the post stims
 	for (var i = 0; i <= 9; i++){
@@ -918,12 +837,12 @@ function experimentInit() {
 			text: samplePosts[i],
 			fontFamily: 'lucida grande',
 			multiline: true,
-			height: .04,
+			height: .035,
 			units: 'norm',
 			alignVert: 'left',
 			alignHoriz: 'left',
 			pos: [-.3, postStims[i]['post_y']],
-			wrapWidth: true, ori: 0,
+			wrapWidth: .87, ori: 0,
 			color: new util.Color('white'), opacity: 1,
 			depth: 0.0
 		});
@@ -948,7 +867,7 @@ function experimentInit() {
 			name : `like_post_${i}`, units : 'norm', 
 			image : 'heart', mask : undefined,
 			ori: 0,
-			pos: [ .60, postStims[i]['postlike_y'] ], 
+			pos: [ .65, postStims[i]['postlikeIcon_y'] ], 
 			size: [.05,.05],
 			color: undefined, opacity: 1,
 			flipHoriz : false, flipVert : false,
@@ -959,67 +878,17 @@ function experimentInit() {
 		postStims[i]['like_posts'] = new visual.TextStim({
 			win: psychoJS.window,
 			name: `like_posts_${i}`,
-			text: 'X',
+			text: '00',
+			bold: true,
 			fontFamily: 'lucida grande',
 			units: 'norm',
 			pos: [.65, postStims[i]['postlike_y']],
-			height: .05, wrapWidth: undefined, ori: 0,
+			height: .07, wrapWidth: undefined, ori: 0,
 			color: new util.Color('white'), opacity: 1,
 			depth: 0.0
 		});
 	}
 
-
-	for (var i = 0; i <= 9; i++){
-		// Init Left textStims
-		bandits['left'][i] = new visual.TextStim({
-			win: psychoJS.window,
-			name: `left_bandit_${i}`,
-			text: 'XX',
-			fontFamily: 'lucida grande',
-			units: 'norm',
-			pos: [-0.1, y_pos[i] - .1], height: 0.09, wrapWidth: undefined, ori: 0,
-			color: new util.Color('white'), opacity: 1,
-			depth: 0.0
-		});
-		// Init  Right TexStims
-		bandits['right'][i] = new visual.TextStim({
-			win: psychoJS.window,
-			name: `right_bandit_${i}`,
-			text: 'XX',
-			fontFamily: 'lucida grande',
-			units: 'norm',
-			pos: [0.1, y_pos[i] -.1], height: 0.09, wrapWidth: undefined, ori: 0,
-			color: new util.Color('white'), opacity: 1,
-			depth: 0.0
-		});
-
-		// Rectangle LEFT BANDIT
-		bandits_rect['left'][i] = new visual.Rect({
-			win: psychoJS.window,
-			name: `left_bandit_rect_${i}`,
-			width: 0.09,
-			height: 0.09,
-			lineWidth: 3.5,
-			units: 'norm',
-			pos: [-0.1, y_pos[i] -.1 ], ori: 0,
-			lineColor: new util.Color(leftColor), opacity: 1,
-			depth: 0.0
-		});
-
-		bandits_rect['right'][i] = new visual.Rect({
-			win: psychoJS.window,
-			name: `right_bandit_rect_${i}`,
-			width: 0.09,
-			height: 0.09,
-			lineWidth: 3.5,
-			units: 'norm',
-			pos: [0.1, y_pos[i] -.1], ori: 0,
-			lineColor: new util.Color(rightColor), opacity: 1,
-			depth: 0.0
-		});
-
-	}
 	currentTrialText  = new visual.TextStim({
 		win: psychoJS.window,
 		name: 'trialTrackerText',
@@ -1261,24 +1130,6 @@ function instructSlideRoutineEachFrame(trials) {
 }
 
 
-function clearBandits() {
-	for (var i = 0; i <= 9; i++) {
-		// Init Left textStims
-		bandits['left'][i].setAutoDraw(false)
-		bandits['right'][i].setAutoDraw(false)
-		bandits_rect['left'][i].setAutoDraw(false)
-		bandits_rect['right'][i].setAutoDraw(false)
-	}
-}
-
-function clearLevers() {
-	bandit_left_up_handle.setAutoDraw(false)
-	bandit_left_down_handle.setAutoDraw(false)
-
-	bandit_right_up_handle.setAutoDraw(false)
-	bandit_right_down_handle.setAutoDraw(false)
-	
-}
 function instructRoutineEnd(trials) {
 	return function () {
 		//------Ending Routine 'instruct'-------
@@ -1333,7 +1184,8 @@ function trialsLoopBegin(thisScheduler) {
 
 		thisScheduler.add(importConditions(snapshot));
 		thisScheduler.add(trialRoutineBegin(snapshot));
-		thisScheduler.add(trialRoutineEachFrame(snapshot));
+		thisScheduler.add(trialRoutineEachFrameWaitforInput(snapshot));
+		thisScheduler.add(trialRoutineEachFrameShowPost(snapshot));
 		thisScheduler.add(trialRoutineEnd(snapshot));
 		thisScheduler.add(endLoopIteration(thisScheduler, snapshot));
 	}
@@ -1348,14 +1200,7 @@ function instruct_pagesLoopEnd() {
 }
 
 
-
 function trialsLoopEnd() {
-	clearBandits()
-	clearLevers()
-	currentTrialNumber.setAutoDraw(false)
-	dayNumberTracker.setAutoDraw(false)
-	totalLikesTracker.setAutoDraw(false)
-	slideStim.setAutoDraw(false)
 
 	psychoJS.experiment.removeLoop(trials);
 
@@ -1376,26 +1221,101 @@ function trialRoutineBegin(trials) {
 		// word.setColor(new util.Color(letterColor));
 
 
+		// choice1Button.fillColor = new util.Color(leftFadeColor)
+		// choice1Button.color = new util.Color(fontFadeColor)
+		// choice2Button.fillColor = new util.Color(rightFadeColor)
+		// choice2Button.color = new util.Color(fontFadeColor)
+
+		switch (force_pos) {
+			case 'R':
+				choice1Button.fillColor = new util.Color(leftFadeColor)
+				choice1Button.color = new util.Color(fontFadeColor)
+
+				choice2Button.color = new util.Color(fontColor)
+				choice2Button.fillColor = new util.Color(rightColor)
+				break;
+			case 'L':
+				choice1Button.fillColor = new util.Color(leftColor)
+				choice1Button.color = new util.Color(fontColor)
+
+				choice2Button.fillColor = new util.Color(rightFadeColor)
+				choice2Button.color = new util.Color(fontFadeColor)
+
+				break;
+			case 'X':
+				choice1Button.fillColor = new util.Color(leftColor)
+				choice1Button.color = new util.Color(fontColor)
+
+				choice2Button.fillColor = new util.Color(rightColor)
+				choice2Button.color = new util.Color(fontColor)
+			default:
+				choice1Button.fillColor = new util.Color(leftColor)
+				choice1Button.color = new util.Color(fontColor)
+
+				choice2Button.fillColor = new util.Color(rightColor)
+				choice2Button.color = new util.Color(fontColor)
+		}
+
 		// If it's a new game, clear other texts
 		// console.log(lastGameNumber)
 		if (game_number != lastGameNumber) {
 			lastTrialKeyPressed = false;
-			bandits_rect['right'][trial_num].fillColor = false
-			bandits_rect['left'][trial_num].fillColor = false
-			clearBandits()
+			// bandits_rect['right'][trial_num].fillColor = false
+			// bandits_rect['left'][trial_num].fillColor = false
+			reset_stims()
+			// clearBandits()
 		}
 
 		// Set components from last trial
-		
-
-		if (lastTrialKeyPressed) {
-			bandits_rect['right'][trial_num].fillColor = false
-			bandits_rect['left'][trial_num].fillColor = false
-		}
+		console.log(`Game: ${game_number}, trial #${trial_num} starting`)
 		
 		currentTrialNumber.setText(`${trial_num}`)
 		dayNumberTracker.setText(`${game_number + 1}/${total_games}`)
 		totalLikesTracker.setText(`${totalPoints}`)
+
+		headerRectStim.setAutoDraw(true)
+		dividerStim.setAutoDraw(true)
+
+		// searchStim.setAutoDraw(true)
+		homeStim.setAutoDraw(true)
+		homeTextStim.setAutoDraw(true)
+		hashtagStim.setAutoDraw(true)
+		exploreTextStim.setAutoDraw(true)
+		notificationStim.setAutoDraw(true)
+		notificationTextStim.setAutoDraw(true)
+		messageStim.setAutoDraw(true)
+		messageTextStim.setAutoDraw(true)
+		bookmarkStim.setAutoDraw(true)
+		bookmarkTextStim.setAutoDraw(true)
+		listStim.setAutoDraw(true)
+		listTextStim.setAutoDraw(true)
+		profileStim.setAutoDraw(true)
+		profileTextStim.setAutoDraw(true)
+		profilePicStim.setAutoDraw(true)
+		moreStim.setAutoDraw(true)
+		moreTextStim.setAutoDraw(true)
+
+		currentTrialText.setAutoDraw(true)
+		currentTrialNumber.setAutoDraw(true)
+		// Draw the Tracker and Points Counter
+		dayNumberTrackerText.setAutoDraw(true)
+		dayNumberTracker.setAutoDraw(true)
+		totalLikesText.setAutoDraw(true)
+		totalLikesTracker.setAutoDraw(true)
+
+		choice1Button.setAutoDraw(true)
+		choice2Button.setAutoDraw(true)
+
+		
+		logoStim.setAutoDraw(true)
+		usernameStim.setAutoDraw(true)
+		fullNameStim.setAutoDraw(true)
+
+		pageName.setAutoDraw(true)
+		questionText.setAutoDraw(true)
+		profilePicPostStim.setAutoDraw(true)
+
+		lastTrialKeyPressed = false
 	
 		resp.keys = undefined;
 		resp.rt = undefined;
@@ -1424,11 +1344,61 @@ function isLastTrial(game_type, trial_num) {
 	return false
 }
 
+
+function reset_stims() {
+
+	console.log('reset stims called')
+	choice1Button.setAutoDraw(false)
+	choice2Button.setAutoDraw(false)
+
+	for (var i = 0; i <= 9; i++) {
+		// Init Left textStims
+		postStims[i]['rect'].status = PsychoJS.Status.FINISHED
+		postStims[i]['rect'].setAutoDraw(false) // draw rect
+
+		postStims[i]['post_text'].status = PsychoJS.Status.FINISHED
+		postStims[i]['post_text'].setAutoDraw(false)
+
+		postStims[i]['like_icon'].status = PsychoJS.Status.FINISHED
+		postStims[i]['like_icon'].setAutoDraw(false)
+
+		postStims[i]['like_posts'].status = PsychoJS.Status.FINISHED
+		postStims[i]['like_posts'].setAutoDraw(false)
+
+		postStims[i]['profile_photo'].status = PsychoJS.Status.FINISHED
+		postStims[i]['profile_photo'].setAutoDraw(false) // draw profile pic post
+	}
+}
+
 var showLastTrial;
 var time_continue;
 var now;
 var theseKeys;
-function trialRoutineEachFrame(trials) {
+var trial_reward;
+
+// This variable is used to find the 3 random timepoints the post updates
+var animationAttributes = {
+	'duration': 2000, // total duration of the animation in ms
+	'instance': 3 // instance the reward should update within the animation
+};
+
+function getAnimationAttributes(reward) {
+	// console.log('Geting Animation Attribuates')
+	
+	// The Timing 
+	animationAttributes.updateTimePoints = Array.from({ length: animationAttributes.instance }, () => (Math.floor(Math.random() * animationAttributes.duration) / 1000.0 ));
+	animationAttributes.updateTimePoints.sort() // sort form small to greatest
+
+	animationAttributes.updateLikesTimePoint = Array.from({ length: animationAttributes.instance }, () => Math.floor(Math.random() * trial_reward));
+	animationAttributes.updateLikesTimePoint.sort()
+
+	// console.log(animationAttributes)
+	return animationAttributes
+}
+
+
+
+function trialRoutineEachFrameWaitforInput(trials) {
 	return function () {
 		//------Loop for each frame of Routine 'trial'-------
 		let continueRoutine = true; // until we're told otherwise
@@ -1437,141 +1407,6 @@ function trialRoutineEachFrame(trials) {
 		t = trialClock.getTime();
 		frameN = frameN + 1;// number of completed frames (so 0 is the first frame)
 
-
-		// update/draw components on each frame
-		if (t >= 0.3) {
-			// keep track of start time/frame for later
-			// word.tStart = t;  // (not accounting for frame time here)
-			// word.frameNStart = frameN;  // exact frame index
-			// word.setAutoDraw(true);
-
-			
-			headerRectStim.setAutoDraw(true)
-			for (var i = 0; i < trial_num; i++){
-				// bandits_rect['left'][i].setAutoDraw(true)
-				// bandits_rect['right'][i].setAutoDraw(true)
-
-		
-				postStims[i]['rect'].opacity = .5 
-				postStims[i]['rect'].setAutoDraw(true) // draw rect
-				postStims[i]['post_text'].setAutoDraw(true)
-				postStims[i]['like_icon'].setAutoDraw(true)
-				postStims[i]['like_posts'].setAutoDraw(true)
-				postStims[i]['profile_photo'].setAutoDraw(true) // draw profile pic post
-				
-			}
-
-			dividerStim.setAutoDraw(true)
-			logoStim.setAutoDraw(true)
-			usernameStim.setAutoDraw(true)
-			fullNameStim.setAutoDraw(true)
-			// onlineUsers.setAutoDraw(true)
-			pageName.setAutoDraw(true)
-			questionText.setAutoDraw(true)
-			profilePicPostStim.setAutoDraw(true)
-
-			switch (force_pos) {
-				case 'R':
-					choice1Button.setAutoDraw(false)
-					choice2Button.setAutoDraw(true)
-					break;
-				case 'L':
-					choice1Button.setAutoDraw(true)
-					choice2Button.setAutoDraw(false)
-					break;
-				case 'X':
-					choice1Button.setAutoDraw(true)
-					choice2Button.setAutoDraw(true)
-				default:
-					choice1Button.setAutoDraw(true)
-					choice2Button.setAutoDraw(true)
-			}
-			
-			
-			// searchStim.setAutoDraw(true)
-			homeStim.setAutoDraw(true)
-			homeTextStim.setAutoDraw(true)
-			hashtagStim.setAutoDraw(true)
-			exploreTextStim.setAutoDraw(true)
-			notificationStim.setAutoDraw(true)
-			notificationTextStim.setAutoDraw(true)
-			messageStim.setAutoDraw(true)
-			messageTextStim.setAutoDraw(true)
-			bookmarkStim.setAutoDraw(true)
-			bookmarkTextStim.setAutoDraw(true)
-			listStim.setAutoDraw(true)
-			listTextStim.setAutoDraw(true)
-			profileStim.setAutoDraw(true)
-			profileTextStim.setAutoDraw(true)
-			profilePicStim.setAutoDraw(true)
-			moreStim.setAutoDraw(true)
-			moreTextStim.setAutoDraw(true)
-			// phoneCallStim.setAutoDraw(true)
-			// videoCameraStim.setAutoDraw(true)
-
-
-			
-			
-			// Show only last Trials
-			// for (var i = 0; i < trial_num; i++){
-			// 	bandits['left'][i].setAutoDraw(true)
-			// 	// Init  Right TexStims
-			// 	bandits['right'][i].setAutoDraw(true)
-			// }
-		
-			if (showLastTrial) {
-				if (trialClock.getTime() >= time_continue) {
-					showLastTrial = false
-					return Scheduler.Event.NEXT;
-				}
-		
-			}
-
-			// make sure the hanlds are down at the start of the trial
-			// bandit_left_down_handle.setAutoDraw(false) 
-			// bandit_right_down_handle.setAutoDraw(false)
-			
-			if (!showLastTrial) {
-				switch (force_pos) {
-					case 'R':
-						bandits_rect['right'][trial_num].fillColor = new util.Color(forced_fillColor)
-						break;
-					case 'L':
-						bandits_rect['left'][trial_num].fillColor = new util.Color(forced_fillColor)
-						break;
-					case 'X':
-						// Show both
-						bandits_rect['right'][trial_num].fillColor = new util.Color(rect_fillColor)
-						bandits_rect['left'][trial_num].fillColor = new util.Color(rect_fillColor)
-					default:
-					
-				}
-			}
-			
-			
-			// bandit_left_up_handle.setAutoDraw(true)
-			// bandit_right_up_handle.setAutoDraw(true)
-			
-			currentTrialText.setAutoDraw(true)
-			currentTrialNumber.setAutoDraw(true)
-			// Draw the Tracker and Points Counter
-			dayNumberTrackerText.setAutoDraw(true)
-			dayNumberTracker.setAutoDraw(true)
-			totalLikesText.setAutoDraw(true)
-			totalLikesTracker.setAutoDraw(true)
-		}
-
-		// if (showLastTrial) {
-		// 	bandits['left'][trial_num].setAutoDraw(true)
-		// 	bandits['right'][trial_num].setAutoDraw(true)
-		// 	if (trialClock.getTime() >= time_continue) {
-		// 		showLastTrial = false
-		// 		return Scheduler.Event.NEXT;
-		// 	}
-	
-		// }
-
-		
 
 		// *resp* updates
 		if (t >= 0.5 && resp.status === PsychoJS.Status.NOT_STARTED) {
@@ -1600,60 +1435,115 @@ function trialRoutineEachFrame(trials) {
 					keyList = [LEFT_KEY, RIGHT_KEY]
 			}
 			
-			
-			
 			let theseKeys = resp.getKeys({ keyList: keyList, waitRelease: false });
-			
 
 			// After key is pressed, go to next routine
-			if (theseKeys && theseKeys.length > 0 && !showLastTrial) {  // at least one key was pressed
+			if ( theseKeys && theseKeys.length > 0 ){  // at least one key was pressed
 				resp.keys = theseKeys[0].name;  // just the last key pressed
 				resp.rt = theseKeys[0].rt;
-
-				// console.log(theseKeys)
-				lastTrialKeyPressed = resp.keys; // store the value globally
+				
+				
+				lastTrialKeyPressed = resp.keys;
 				console.log(lastTrialKeyPressed)
+
+				// Set the position of the stims so that the posts overlapp based on resopnse
+				// For Left Topic, Put the Likes on the Left and the Profile logo on the right
+				// For Right Topic, Put the Lines on the Right and the Profile logo on the left.
+				
 				if (resp.keys == LEFT_KEY) {
-					bandits['left'][trial_num].setText(left_reward)
-					postStims[trial_num]['like_posts'].setText(left_reward)
-					postStims[i]['rect'].fillColor = leftColor 
+
+					postStims[trial_num]['profile_photo'] = new visual.ImageStim({
+						win : psychoJS.window,
+						name : `profile_pic_post_${trial_num}`, units : 'norm', 
+						image : 'profile_pic',
+						ori: 0,
+						pos: [ post_stim_x_pos.left.profile_photo, postStims[trial_num]['postphoto_y'] ], 
+						size: [.07,.09],
+						color: undefined, opacity: 1,
+						flipHoriz : false, flipVert : false,
+						texRes : 128, interpolate : true, depth : 0
+					});
+
+					postStims[trial_num]['like_icon'] = new visual.ImageStim({
+						win : psychoJS.window,
+						name : `like_post_${trial_num}`, units : 'norm', 
+						image : 'heart', mask : undefined,
+						ori: 0,
+						pos: [ post_stim_x_pos.left.like_icon, postStims[trial_num]['postlikeIcon_y'] ], 
+						size: [.05,.05],
+						color: undefined, opacity: 1,
+						flipHoriz : false, flipVert : false,
+						texRes : 128, interpolate : true, depth : 0
+					});
+					
+
+					// postStims[trial_num]['profile_photo'].pos[0] = post_stim_x_pos.left.profile_photo
+					postStims[trial_num]['post_text'].pos[0] = post_stim_x_pos.left['post_text']
+					postStims[trial_num]['post_text'].alignVert = 'right'
+					postStims[trial_num]['post_text'].alignHoriz = 'right'
+			
+					postStims[trial_num]['like_posts'].pos[0] = post_stim_x_pos.left['like_posts']
+					// postStims[trial_num]['like_posts'].setText(left_reward)
+					trial_reward = left_reward
+					
+					postStims[trial_num]['rect'].fillColor = new util.Color(leftColor)
 
 					// Set the other bandit as XX
 					// bandits['right'][trial_num].setText('XX')
 					totalPoints = totalPoints + left_reward
+				} else if (resp.keys == RIGHT_KEY) {
 
-					// Animation for left Lever
-					// bandit_left_up_handle.setAutoDraw(false)
-					// bandit_left_down_handle.setAutoDraw(true)
-				}
-				if (resp.keys == RIGHT_KEY) {
-					bandits['right'][trial_num].setText(right_reward) 
-					postStims[trial_num]['like_posts'].setText(right_reward)
-					postStims[i]['rect'].fillColor = rightColor 
+					postStims[trial_num]['profile_photo'] = new visual.ImageStim({
+						win : psychoJS.window,
+						name : `profile_pic_post_${trial_num}`, units : 'norm', 
+						image : 'profile_pic',
+						ori: 0,
+						pos: [ post_stim_x_pos.right.profile_photo, postStims[trial_num]['postphoto_y'] ], 
+						size: [.07,.09],
+						color: undefined, opacity: 1,
+						flipHoriz : false, flipVert : false,
+						texRes : 128, interpolate : true, depth : 0
+					});
+
+					postStims[trial_num]['like_icon'] = new visual.ImageStim({
+						win : psychoJS.window,
+						name : `like_post_${trial_num}`, units : 'norm', 
+						image : 'heart', mask : undefined,
+						ori: 0,
+						pos: [ post_stim_x_pos.right.like_icon, postStims[trial_num]['postlikeIcon_y'] ], 
+						size: [.05,.05],
+						color: undefined, opacity: 1,
+						flipHoriz : false, flipVert : false,
+						texRes : 128, interpolate : true, depth : 0
+					});
+
+					postStims[trial_num]['post_text'].pos[0] = post_stim_x_pos.right['post_text']
+					postStims[trial_num]['post_text'].alignVert = 'left'
+					postStims[trial_num]['post_text'].alignHoriz = 'left'			
+					postStims[trial_num]['like_posts'].pos[0] = post_stim_x_pos.right['like_posts']
+					// postStims[trial_num]['like_posts'].setText(right_reward)
+					trial_reward = right_reward
+					
+					postStims[trial_num]['rect'].fillColor = new util.Color(rightColor)
 					// bandits['left'][trial_num].setText('XX')
 					totalPoints = totalPoints + right_reward
-
-					// Animatino for right lever
-					// bandit_right_up_handle.setAutoDraw(false)
-					// bandit_right_down_handle.setAutoDraw(true)
 				}
-				// console.log(left_reward)
+			
 
-				// If it's the last trial, hang here for a second to show points
-				if (isLastTrial(game_type, trial_num)){
-					// wait a second
-					showLastTrial = true;
-					bandits_rect['right'][trial_num].fillColor = false
-					bandits_rect['left'][trial_num].fillColor = false
+				// Fade out the choices
+				choice1Button.fillColor = new util.Color(leftFadeColor)
+				choice1Button.color = new util.Color(fontFadeColor)
+				choice2Button.fillColor = new util.Color(rightFadeColor)
+				choice2Button.color = new util.Color(fontFadeColor)
 
-					
-					now = trialClock.getTime();
-					time_continue = now + 1.5 // 1 second to show points then continue
-					
-				} else {
-					continueRoutine = false;
-					time_continue = 999999
-				}
+				// Reset Trial Time
+				trialClock.reset();
+
+				animationAttributes = getAnimationAttributes(trial_reward)
+
+				
+
+				return Scheduler.Event.NEXT; // Go to Next Routine after subject makes a selection
 			}
 		}
 
@@ -1662,27 +1552,95 @@ function trialRoutineEachFrame(trials) {
 			return quitPsychoJS('The [Escape] key was pressed. Goodbye!', false);
 		}
 
-		// check if the Routine should terminate
-		if (!continueRoutine) {  // a component has requested a forced-end of Routine
-			return Scheduler.Event.NEXT;
-		}
-
-		for (const thisComponent of trialComponents)
-			if ('status' in thisComponent && thisComponent.status !== PsychoJS.Status.FINISHED) {
-				continueRoutine = true;
-				break;
-			}
-
+		return Scheduler.Event.FLIP_REPEAT;
 		// refresh the screen if continuing
-		if (continueRoutine) {
-			return Scheduler.Event.FLIP_REPEAT;
-		}
-		else {
-			return Scheduler.Event.NEXT;
-		}
+		// if (continueRoutine) {
+		// 	return Scheduler.Event.FLIP_REPEAT;
+		// }
+		// else {
+		// 	return Scheduler.Event.NEXT;
+		// }
 	};
 }
 
+// This Routine hanlds the animation
+function trialRoutineEachFrameShowPost(trials) {
+	return function () {
+		//------Loop for each frame of Routine 'trial'-------
+		let continueRoutine = true; // until we're told otherwise
+	
+		// get current time
+		t = trialClock.getTime();
+		frameN = frameN + 1;// number of completed frames (so 0 is the first frame)
+
+		if (t > .5) {
+			postStims[trial_num]['rect'].opacity = .5 
+			postStims[trial_num]['rect'].setAutoDraw(true) // draw rect
+			postStims[trial_num]['post_text'].setAutoDraw(true)
+			postStims[trial_num]['like_icon'].setAutoDraw(true)
+			postStims[trial_num]['like_posts'].setAutoDraw(true)
+			postStims[trial_num]['profile_photo'].setAutoDraw(true)
+		}
+
+		// for (var i = 0; i <= trial_num; i++){
+		// 	postStims[i]['rect'].opacity = .5 
+		// 	postStims[i]['rect'].setAutoDraw(true) // draw rect
+		// 	postStims[i]['post_text'].setAutoDraw(true)
+		// 	postStims[i]['like_icon'].setAutoDraw(true)
+		// 	postStims[i]['like_posts'].setAutoDraw(true)
+		// 	postStims[i]['profile_photo'].setAutoDraw(true) // draw profile pic post
+		// }
+
+
+		// animate up
+		if (t > .4) {
+			postStims[trial_num]['like_posts'].setText(animationAttributes.updateLikesTimePoint[0])
+		}
+
+		if (t > 1.0) {
+			postStims[trial_num]['like_posts'].setText(animationAttributes.updateLikesTimePoint[1])
+		}
+
+		if (t > 1.8) {
+			postStims[trial_num]['like_posts'].setText(animationAttributes.updateLikesTimePoint[2])
+		}
+
+	
+		
+		// check for quit (typically the Esc key)
+		if (psychoJS.eventManager.getKeys({keyList:['escape']}).length > 0) {
+			return quitPsychoJS('The [Escape] key was pressed. Goodbye!', false);
+		}
+
+		// check if the Routine should terminate
+		// if (!continueRoutine) {  // a component has requested a forced-end of Routine
+		// 	return Scheduler.Event.NEXT;
+		// }
+
+		// for (const thisComponent of trialComponents)
+		// 	if ('status' in thisComponent && thisComponent.status !== PsychoJS.Status.FINISHED) {
+		// 		continueRoutine = true;
+		// 		break;
+		// 	}
+
+		// After 2 seconds go to the next Trial (post)
+		if (t > 2) {
+			postStims[trial_num]['like_posts'].setText(trial_reward)
+			return Scheduler.Event.NEXT;
+		}
+
+		return Scheduler.Event.FLIP_REPEAT;
+
+		
+		// refresh the screen if continuing
+		// if (continueRoutine) {
+		// 	return Scheduler.Event.FLIP_REPEAT;
+		// }
+		// else {
+		// 	return Scheduler.Event.NEXT;
+		// }
+	};
+}
 
 var key_map = {
 	',': 'left',
@@ -1714,6 +1672,8 @@ function trialRoutineEnd(trials) {
 	return function () {
 		//------Ending Routine 'trial'-------
 
+		// console.log("Trial Route End for Trial " + trial_num)
+
 		if (resp.keys == LEFT_KEY) {
 			lastTrialPoints = left_reward
 		}
@@ -1722,7 +1682,7 @@ function trialRoutineEnd(trials) {
 		}
 
 		lastGameNumber = game_number
-
+		
 		// was no response the correct answer?!
 		// if (resp.keys === undefined) {
 		// 	if (['None', 'none', undefined].includes(corrAns)) {
@@ -1739,19 +1699,13 @@ function trialRoutineEnd(trials) {
 			psychoJS.experiment.addData('resp.rt', resp.rt);
 			routineTimer.reset();
 		}
-		bandits_rect['right'][trial_num].fillColor = false
-		bandits_rect['left'][trial_num].fillColor = false
-
 		
-
 		resp.stop();
 		// the Routine "trial" was not non-slip safe, so reset the non-slip timer
 		routineTimer.reset();
+		trialClock.reset();
 
-
-
-		
-
+	
 		return Scheduler.Event.NEXT;
 	};
 }
@@ -1760,8 +1714,9 @@ function readyRoutineBegin(trials) {
 	return function () {
 		//------Prepare to start Routine 'ready'-------
 		// Clear Trial Components
-		clearBandits()
-		clearLevers()
+		// clearBandits()
+		// reset_stims()
+		// clearLevers()
 		t = 0;
 		psychoJS.eventManager.clearEvents()
 		readyClock.reset(); // clock
@@ -1832,8 +1787,9 @@ function thanksRoutineBegin(trials) {
 	return function () {
 		//------Prepare to start Routine 'thanks'-------
 		// Clear Trial Components
-		clearBandits()
-		clearLevers()
+		reset_stims()
+		// clearBandits()
+		// clearLevers()
 		t = 0;
 		thanksClock.reset(); // clock
 		frameN = -1;
@@ -1984,8 +1940,6 @@ function quitPsychoJS(message, isCompleted) {
 	if (psychoJS.experiment.isEntryEmpty()) {
 		psychoJS.experiment.nextEntry();
 	}
-
-
 
 	psychoJS.window.close();
 	psychoJS.quit({ message: message, isCompleted: isCompleted });
