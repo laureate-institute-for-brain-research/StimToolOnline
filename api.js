@@ -79,31 +79,6 @@ module.exports = function (app){
         });
     });
 
-    // Page of all Task
-    app.get('/list', function(req, res) {
-        fs.readFile('list.html', function(err, data) {
-            // Write Header
-            res.writeHead(200, {
-                'Content-Type': 'text/html'
-            });
-            // Wrte Body
-            res.write(data);
-            res.end();
-        });
-    });
-
-    app.get('/workouts', function(req, res) {
-        fs.readFile('list.html', function(err, data) {
-            // Write Header
-            res.writeHead(200, {
-                'Content-Type': 'text/html'
-            });
-            // Wrte Body
-            res.write(data);
-            res.end();
-        });
-    });
-
 
     app.get('/exclude', function(req, res) {
         fs.readFile('exclude.html', function(err, data) {
