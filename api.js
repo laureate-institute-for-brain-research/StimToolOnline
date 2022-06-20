@@ -104,17 +104,6 @@ module.exports = function (app){
         });
     });
 
-    app.get('/test', function(req, res) {
-        fs.readFile('test.html', function(err, data) {
-            // Write Header
-            res.writeHead(200, {
-                'Content-Type': 'text/html'
-            });
-            // Wrte Body
-            res.write(data);
-            res.end();
-        });
-    });
 
     app.get('/exclude', function(req, res) {
         fs.readFile('exclude.html', function(err, data) {
