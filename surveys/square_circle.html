@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html>
+    <head>
+            <style type="text/css">
+        @font-face {
+            font-family: gotham;
+            src: url(/gotham-book-regular.otf);
+        }
+        body {
+            background-color: #f2f0eb;
+        }
+        * {
+            font-family: Helvetica Neue;
+        }
+        a:link,a:visited {
+            color: #5e3f99;
+        }
+        .logo {
+            max-width: 30%;
+            height: 50px;
+        }
+        input[type=text]:focus {
+            border-color:   #f68826;
+            box-shadow: 0 0 5px #f68826 !important;
+        }
+        input[type=email]:focus {
+            border-color:   #f68826;
+            box-shadow: 0 0 5px #f68826 !important;
+        }
+        .center-div
+        {
+            margin: 0 auto;
+            width: 900px; 
+        }
+
+
+    </style>
+        <title>Square Circle Rating</title>
+        <script
+			  src="https://code.jquery.com/jquery-3.3.1.min.js"
+			  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+              crossorigin="anonymous"></script>
+
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+        <!-- Optional theme -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+        <!-- Latest compiled and minified JavaScript -->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+        <link href="https://surveyjs.azureedge.net/1.0.30/survey.css" type="text/css" rel="stylesheet" />
+        <script src="https://surveyjs.azureedge.net/1.0.30/survey.jquery.min.js"></script>
+
+    </head>
+    <body>
+        
+        
+        
+
+        <!-- Showing Time Elapsed
+        <div style="position: fixed; left : 50% ;  background-color: #ff9900;"><center><p id="mkId"></p></center><p id="timeOutput"></p></div>
+         -->
+        <div class="container">
+            <div class="row" style="padding: 20px;">
+                
+                <center><a href="http://www.laureateinstitute.org/"><img class="logo" src="/images/logo.png"></a></center>
+                
+            </div>
+            <div class="row">
+                <!-- <h2>DataCamp Survey</h2> -->
+                <div id="surveyElement"></div>
+                <div id="surveyResult"></div> 
+            </div>
+        </div>
+
+    
+
+
+        <script type="text/javascript">
+            // Prompt User to enter MTURK ID
+            let mturkid = prompt("What's your MTURK ID?");
+
+            /**
+             * Shuffles array in place. ES6 version
+             * @param {Array} a items An array containing the items.
+             */
+            function shuffle(a) {
+                for (let i = a.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [a[i], a[j]] = [a[j], a[i]];
+                }
+                return a;
+            }
+            Survey.Survey.cssType = "bootstrap";
+            //Survey.defaultBootstrapCss.navigationButton = "btn btn-green";
+
+            // Adding Page elements to the surveyjs
+            pages = []
+
+            shapes_block = []
+
+            // Adding the square_circle questions
+            for(var i = 1; i<= 19; i++){
+                filename = 'S' + i + '_black.png'
+                url = 'https://res.cloudinary.com/laureate-institute-for-brain-research/image/upload/v1550099637/Square_Circle/' + filename
+                console.log(filename)
+                singlepage = {
+                    name: 'S' + i,
+                    elements:[
+                            {
+                                type: 'html',
+                                html: `<p>Please look at the following images and match them as best as you can to either a <b>SQUARE</b> or a <b>CIRCLE</b></p>`
+                            },
+                            {
+                                type:"html",
+                                html: '<img src="' + url + '">'
+                            },
+                            {
+                                type:"radiogroup",
+                                name:filename,
+                                title:'Is this a square or circle.',
+                                isRequired:true,
+                                choices:[
+                                    {
+                                        value:"1",
+                                        text:"square"
+                                    },
+                                    {
+                                        value:"2",
+                                        text:"circle"
+                                    }
+                                ]
+                            }]
+                }
+                shapes_block.push(singlepage)
+            }
+            shuffle(shapes_block)
+
+
+            // Adding the Colors_block
+            colors_block = []
+            
+            color_images = [
+                '485.jpg',
+                '487.jpg',
+                '489.jpg',
+                '490.jpg',
+                '491.jpg',
+                '492.jpg',
+                '493.jpg',
+                '494.jpg',
+                '495.jpg',
+                '496.jpg',
+                '497.jpg',
+                '498.jpg',
+                '499.jpg',
+                '503.jpg',
+            ]
+
+            color_images.forEach(element => {
+                url = '/images/blue_green_colors/' + element
+                singlepage = {
+                    name: element,
+                    elements:[
+                            {
+                                type: 'html',
+                                html: `<p>Please look at the following images and match them as best as you can to either <b>BLUE</b> or <b>GREEN</b></p>`
+                            },  
+                            {
+                                type:"html",
+                                html: '<img src="' + url + '">'
+                            },
+                            {
+                                type:"radiogroup",
+                                name:element,
+                                title:'Is this blue or green.',
+                                isRequired:true,
+                                choices:[
+                                    {
+                                        value:"blue",
+                                        text:"blue"
+                                    },
+                                    {
+                                        value:"green",
+                                        text:"green"
+                                    }
+                                ]
+                            }]
+                }
+                colors_block.push(singlepage)
+            });
+
+            shuffle(colors_block)
+
+            // Combine Blocks
+            shapes_block.forEach(page =>{
+                pages.push(page)
+            })
+            colors_block.forEach(page =>{
+                pages.push(page)
+            })
+            
+            // pages.push(singlepage)
+
+            
+
+            
+
+
+            
+            var json = {
+                completedHtml:`<center>
+                Thank You for your Reponse.<br>
+                Your HIT CODE is:<br>
+                <font size='10'><b>43483</b></font>
+                </center>`,pages:  pages
+                }
+
+            window.survey = new Survey.Model(json);
+            var timerID = null;
+
+            lastpage = survey.currentPage;
+            function timerLoop(elapsed){
+                var page = survey.currentPage; // page variable is the currentPage on the survey
+                if (!page) return;
+                if (lastpage != page) {
+                    // set new start date
+                    start = new Date().getTime(); // sets new start Date object when page has changed.
+                    lastpage = page // sets the last page to currente page 
+
+                }
+                var valueName = "TRQ" + survey.pages.indexOf(page);
+
+                var ms = survey.getValue(valueName);  // gets the value of the valuename. e.g: TRQ1
+
+                if( ms == null) ms = 0;
+                else ms = elapsed;
+                //survey.setValue(valueName, ms);
+                $('#timeEl').text(elapsed + ' ms');
+            }
+
+            function getQueryVariable(variable) {
+                var query = window.location.search.substring(1);
+                var vars = query.split('&');
+                for (var i = 0; i < vars.length; i++) {
+                    var pair = vars[i].split('=');
+                    if (decodeURIComponent(pair[0]) == variable) {
+                        return decodeURIComponent(pair[1]);
+                    }
+                }
+                return 'NULL'
+            }
+
+
+            survey.showProgressBar = "false";
+            survey.goNextPageAutomatic = false;
+            survey.showNavigationButtons = true;
+            survey.showCompletedPage = true;
+
+            // Get Query Variables
+
+            var session = getQueryVariable('session');
+            var mkturkid = getQueryVariable('mkturk_id');
+            var surveyname = getQueryVariable('survey');
+
+            survey.onComplete.add(function (result) {
+                postSurveyData(result.data, session, mkturkid,surveyname);
+                //window.location.href = "/?session="+session+"&mkturk_id="+mkturkid+"&survey=panas"+"&study="+getQueryVariable('study');
+             });
+
+            // Parse the URL 
+
+            function postSurveyData(data, session, mkturkid, surveyname){
+                $.ajax({
+                    type: 'POST',
+                    async: false,
+                    url: '/saveSquareCircleRating?id=' + mturkid,
+                    data: JSON.stringify(data), // or JSON.stringify ({name: 'jonas'}),
+                    contentType: "application/json",
+                    dataType: 'json'
+                });
+            }
+
+            $("#surveyElement").Survey({model: survey});
+            $("#mkid").text(mkturkid);
+            $("#session").text(session);
+            $("#study").text(getQueryVariable('study'));
+
+            var start = new Date().getTime(),
+                elapsed = '0.0';
+
+            // executes timerCallback every 100 ms
+            timerID = window.setInterval(function(){
+                
+                var time = new Date().getTime() - start;
+                elapsed = Math.floor(time);
+
+                //alert(elapsed);
+                //$('#timeEl').text(elapsed + ' ms');
+
+                //displayTime(1);
+                timerLoop(elapsed);
+
+            }, 5);
+        </script>
+
+    </body>
+</html>

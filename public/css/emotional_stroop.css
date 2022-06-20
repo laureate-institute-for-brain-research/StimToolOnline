@@ -1,0 +1,36 @@
+p {
+    font-size: 2rem;
+    /* color: white; */
+    font-family: Helvetica, Arial, sans-serif;
+}
+
+.logo {
+    max-width: 40%;
+    height: auto;
+}
+
+body {
+    /* color: #888; */
+    background: #d0cece;
+    margin: 0;
+    padding: 40px;
+    text-align: center;
+    font-family: "helvetica Neue", Helvetica, Arial, sans-serif;
+  }
+/*   
+  #canvas {
+    width: 150px;
+    height: 300px;
+    position: absolute;
+    top: 150px;
+    left: 45%;
+    text-align: center;
+  } */
+
+canvas { 
+    display: inline-block; 
+    background: #202020; 
+    width: 95%;
+    height: 45%;
+    box-shadow: 0px 0px 10px blue;
+}

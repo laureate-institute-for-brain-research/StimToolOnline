@@ -1,0 +1,11 @@
+phq-NULL-TNULL-Mon Jan 08 2018,User Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.84 Safari/537.36
+QUESTION,RESULT,RT(ms)
+phq_1,0,1205
+phq_2,2,876
+phq_3,1,667
+phq_4,2,540
+phq_5,2,591
+phq_6,2,183
+phq_7,2,152
+phq_8,2,141
+phq_9,2,208

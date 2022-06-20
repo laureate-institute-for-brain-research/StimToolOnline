@@ -1,0 +1,7 @@
+oasis-FIREFOXTEST-T1-2018_7_5_16_21,User Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.12; rv:61.0) Gecko/20100101 Firefox/61.0,IP: ::1
+QUESTION,RESULT,RT(ms)
+oasis_1,0,1339
+oasis_2,0,1362
+oasis_3,0,1311
+oasis_4,0,1372
+oasis_5,1,1261

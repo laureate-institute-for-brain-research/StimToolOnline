@@ -1,0 +1,10 @@
+phq-FIREFOXTEST-T1-2018_7_5_15_58,User Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.12; rv:61.0) Gecko/20100101 Firefox/61.0,IP: ::1
+QUESTION,RESULT,RT(ms)
+phq_1,0,14574
+phq_2,0,1565
+phq_3,0,993
+phq_4,0,1284
+phq_5,3,1526
+phq_6,3,1106
+phq_7,3,1373
+phq_8,3,1520

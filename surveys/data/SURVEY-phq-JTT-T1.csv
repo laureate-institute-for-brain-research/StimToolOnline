@@ -1,0 +1,11 @@
+phq-JTT-T1-Wed Feb 14 2018,User Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36,IP: ::1
+QUESTION,RESULT,RT(ms)
+phq_1,2,18767
+phq_2,2,1113
+phq_3,2,1074
+phq_4,3,943
+phq_5,0,745
+phq_6,0,3412
+phq_7,1,1633
+phq_8,2,1533
+phq_9,2,1612

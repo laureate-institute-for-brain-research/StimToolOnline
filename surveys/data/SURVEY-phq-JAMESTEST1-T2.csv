@@ -1,0 +1,10 @@
+phq-JAMESTEST1-T2-Fri, 31 May 2018 16:19:30 UTC,User Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.181 Safari/537.36,IP: ::1
+QUESTION,RESULT,RT(ms)
+phq_1,0,2610
+phq_2,1,1014
+phq_3,2,1242
+phq_4,2,4480
+phq_5,2,1375
+phq_6,2,1126
+phq_7,2,1309
+phq_8,1,1097

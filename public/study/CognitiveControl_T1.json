@@ -1,0 +1,11 @@
+{
+    "name": "Cognitive Control T1",
+    "order": [
+        "/?task=flanker&index=0&study=cognitive_control&session=1&version=1",
+        "/?task=color_stroop&index=1&study=cognitive_control&session=1&version=1",
+        "/?task=emotional_stroop&index=2&study=cognitive_control&session=1&version=1",
+        "/completed?"
+    ],
+    "fullscreen": true,
+    "text_html": "<p>This study includes the following tasks: <ul><li>Flanker Task - Run 1</li><li>Color Stroop Task - Run 1</li><li>Emotional Stroop Task - Run 1</li></ul></p>"
+} 

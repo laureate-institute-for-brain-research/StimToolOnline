@@ -1,0 +1,14 @@
+p {
+    font-size: 2rem;
+    /* color: white; */
+    font-family: Helvetica, Arial, sans-serif;
+}
+
+.logo {
+    max-width: 40%;
+    height: auto;
+}
+
+body {
+    background: #d0cece;
+}

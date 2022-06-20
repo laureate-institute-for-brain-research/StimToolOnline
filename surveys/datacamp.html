@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html>
+    <head>
+            <style type="text/css">
+        @font-face {
+            font-family: gotham;
+            src: url(/gotham-book-regular.otf);
+        }
+        body {
+            background-color: #f2f0eb;
+        }
+        * {
+            font-family: Helvetica Neue;
+        }
+        a:link,a:visited {
+            color: #5e3f99;
+        }
+        .logo {
+            max-width: 30%;
+            height: auto;
+        }
+        input[type=text]:focus {
+            border-color:   #f68826;
+            box-shadow: 0 0 5px #f68826 !important;
+        }
+        input[type=email]:focus {
+            border-color:   #f68826;
+            box-shadow: 0 0 5px #f68826 !important;
+        }
+        .center-div
+        {
+            margin: 0 auto;
+            width: 900px; 
+        }
+
+
+    </style>
+        <title>Data Camp</title>
+        <script
+			  src="https://code.jquery.com/jquery-3.3.1.min.js"
+			  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+              crossorigin="anonymous"></script>
+
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+        <!-- Optional theme -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+        <!-- Latest compiled and minified JavaScript -->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+        <link href="https://surveyjs.azureedge.net/1.0.30/survey.css" type="text/css" rel="stylesheet" />
+        <script src="https://surveyjs.azureedge.net/1.0.30/survey.jquery.min.js"></script>
+
+    </head>
+    <body>
+        <br>
+        <br>
+        <center><a href="http://www.laureateinstitute.org/"><img class="logo" src="/images/logo.png"></a></center>
+        <center>
+            <a href="https://www.datacamp.com/"><img class="logo" src="https://cdn.datacamp.com/main-app/assets/brand/logos/DataCamp_Horizontal_RGB-d196011f63ebda76dc5c9772425cf9541b8639af842d5e5476ef10f2460ed1e4.png"></a>
+            <!-- <h1 style="padding: 17px" >DataCamp Survey</h1> -->
+        </center>
+        
+
+        <!-- Showing Time Elapsed
+        <div style="position: fixed; left : 50% ;  background-color: #ff9900;"><center><p id="mkId"></p></center><p id="timeOutput"></p></div>
+         -->
+        <div class="container-fluid">
+            <div class="row">
+                <div class="center-div" >
+                    <br>
+                    <p>
+                        <a href="https://www.datacamp.com/">DataCamp&copy;</a> is an online data science learning platform that offers practical hands on tutorials and courses in data science instructed by key figures.
+                        Scientists and researchers can master data analysis from the comfort of their browser, at their own pace, and tailored to their needs and expertise.
+                    </p>
+                    <br>
+                    <img src="https://cdn.datacamp.com/main-app/assets/logos/python-r-sql-spark-grey-eb9a8135db0537c1bb8ab14dd7ae296db015c021cb01f3027a6e7946df3879f4.svg">
+                    <img style="padding-left: 50px" src="https://cdn.datacamp.com/main-app/assets/logos/git-shell-spreadsheets-grey-1da3734aa17cfd0f4008b94d3feb0bffd0190938631a77b0daa402384c5228a0.svg">
+                    <br>
+                    <p><a href="https://www.datacamp.com/courses/all">Click here for full list of courses</a></p>
+                    <br>
+                    <p>The first few sessions of most courses are available free of charge as a sample. You can take a look <a href="https://www.datacamp.com/">inside</a> to have a better estimate about the structure of the courses.</p>
+                    
+                   
+                  
+                   
+                    <!-- <h2>DataCamp Survey</h2> -->
+                    <div id="surveyElement"></div>
+                    <div id="surveyResult"></div>  
+                </div>
+            </div>
+
+<!-- 
+            <div class="row">
+                <p align="right" class="col-md-10" >Mechanical Turk ID:</p>
+                <a align="right" id="mkid"></a> 
+            </div>
+
+            <div class="row">
+                <p align="right" class="col-md-10">Session: </p>
+                <a align="right" id="session"></a>   
+            </div>
+
+            <div class="row">
+                <p align="right" class="col-md-10">Study: </p>
+                <a align="right" id="study"></a>   
+            </div> -->
+
+<!--             <div class="row">
+                <p align="right" class="col-md-10">Time Spent on Question: </p>
+                <a align="right" id="timeEl"></a> 
+                </p>
+            </div> -->
+
+
+
+
+        </div>
+
+        <div class="container-fluid">
+            <!-- <center><p class="text-p">&copy; 2018 <a href="http://www.laureateinstitute.org">laureateinstitute.org</a>. All rights reserved.</center> -->
+        </div>
+
+
+        <script type="text/javascript">
+            
+            Survey.Survey.cssType = "bootstrap";
+            //Survey.defaultBootstrapCss.navigationButton = "btn btn-green";
+            
+            var json = {completedHtml:"Thank You for your Reponse",pages:[{name:"page1",elements:[{type:"radiogroup",name:"datacamp_1",title:"How helpful do you think the skills targeted in these courses would be to you?",isRequired:true,choices:[{value:"1",text:"not very helpful"},{value:"2",text:"a little helpful"},{value:"3",text:"somewhat helpful"},{value:"4",text:"very helpful"},{value:"5",text:"extremely helpful"}]},{type:"radiogroup",name:"datacamp_2",title:"How helpful do you think the skills targeted in these courses would be for your students/colleagues?",isRequired:true,choices:[{value:"1",text:"not very helpful"},{value:"2",text:"a little helpful"},{value:"3",text:"somewhat helpful"},{value:"4",text:"very helpful"},{value:"5",text:"extremely helpful"}]},{type:"radiogroup",name:"datacamp_3",title:"How likely would it be for you to use DataCamp if it were provided by LIBR?",isRequired:true,choices:[{value:"1",text:"not very helpful"},{value:"2",text:"a little helpful"},{value:"3",text:"somewhat helpful"},{value:"4",text:"very helpful"},{value:"5",text:"extremely helpful"}]},{type:"radiogroup",name:"datacamp_4",title:"How often would you use this resource?",isRequired:true,choices:[{value:"1",text:"never"},{value:"2",text:"occasionally (less than once a month)"},{value:"3",text:"sometimes (more than once a month)"},{value:"4",text:"often (more than once a week)"},{value:"5",text:"always (several times a week)"}]}]}]}
+
+            window.survey = new Survey.Model(json);
+            var timerID = null;
+
+            lastpage = survey.currentPage;
+            function timerLoop(elapsed){
+                var page = survey.currentPage; // page variable is the currentPage on the survey
+                if (!page) return;
+                if (lastpage != page) {
+                    // set new start date
+                    start = new Date().getTime(); // sets new start Date object when page has changed.
+                    lastpage = page // sets the last page to currente page 
+
+                }
+                var valueName = "TRQ" + survey.pages.indexOf(page);
+
+                var ms = survey.getValue(valueName);  // gets the value of the valuename. e.g: TRQ1
+
+                if( ms == null) ms = 0;
+                else ms = elapsed;
+                //survey.setValue(valueName, ms);
+                $('#timeEl').text(elapsed + ' ms');
+            }
+
+            function getQueryVariable(variable) {
+                var query = window.location.search.substring(1);
+                var vars = query.split('&');
+                for (var i = 0; i < vars.length; i++) {
+                    var pair = vars[i].split('=');
+                    if (decodeURIComponent(pair[0]) == variable) {
+                        return decodeURIComponent(pair[1]);
+                    }
+                }
+                return 'NULL'
+            }
+
+
+            survey.showProgressBar = "false";
+            survey.goNextPageAutomatic = false;
+            survey.showNavigationButtons = true;
+            survey.showCompletedPage = true;
+
+            // Get Query Variables
+
+            var session = getQueryVariable('session');
+            var mkturkid = getQueryVariable('mkturk_id');
+            var surveyname = getQueryVariable('survey');
+
+            survey.onComplete.add(function (result) {
+                postSurveyData(result.data, session, mkturkid,surveyname);
+                //window.location.href = "/?session="+session+"&mkturk_id="+mkturkid+"&survey=panas"+"&study="+getQueryVariable('study');
+             });
+
+            // Parse the URL 
+
+            function postSurveyData(data, session, mkturkid, surveyname){
+                $.ajax({
+                    type: 'POST',
+                    async: false,
+                    url: '/saveDC',
+                    data: JSON.stringify(data), // or JSON.stringify ({name: 'jonas'}),
+                    contentType: "application/json",
+                    dataType: 'json'
+                });
+            }
+
+            $("#surveyElement").Survey({model: survey});
+            $("#mkid").text(mkturkid);
+            $("#session").text(session);
+            $("#study").text(getQueryVariable('study'));
+
+            var start = new Date().getTime(),
+                elapsed = '0.0';
+
+            // executes timerCallback every 100 ms
+            timerID = window.setInterval(function(){
+                
+                var time = new Date().getTime() - start;
+                elapsed = Math.floor(time);
+
+                //alert(elapsed);
+                //$('#timeEl').text(elapsed + ' ms');
+
+                //displayTime(1);
+                timerLoop(elapsed);
+
+            }, 5);
+        </script>
+
+    </body>
+</html>

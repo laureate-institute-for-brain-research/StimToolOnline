@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html>
+    <head>
+            <style type="text/css">
+        @font-face {
+                font-family: gotham;
+                src: url(/gotham-book-regular.otf);
+            }
+            body {
+                background-color: #f2f0eb;
+            }
+            * {
+                font-family: Helvetica Neue;
+            }
+            a:link,a:visited {
+                color: #5e3f99;
+            }
+            img {
+                max-width: 40%;
+                height: auto;
+            }
+            input[type=text]:focus {
+                border-color:   #f68826;
+                box-shadow: 0 0 5px #f68826 !important;
+            }
+            input[type=email]:focus {
+                border-color:   #f68826;
+                box-shadow: 0 0 5px #f68826 !important;
+            }
+
+
+    </style>
+        <title>OASIS Survey</title>
+        <script
+			  src="https://code.jquery.com/jquery-3.3.1.min.js"
+			  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+              crossorigin="anonymous"></script>
+
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+        <!-- Optional theme -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+        <!-- Latest compiled and minified JavaScript -->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+        <link href="https://surveyjs.azureedge.net/1.0.30/survey.css" type="text/css" rel="stylesheet" />
+        <script src="https://surveyjs.azureedge.net/1.0.30/survey.jquery.min.js"></script>
+
+    </head>
+    <body>
+        <center><a href="http://www.laureateinstitute.org/"><img class="logo" src="/images/logo.png"></a></center>
+        
+
+        <!-- Showing Time Elapsed
+        <div style="position: fixed; left : 50% ;  background-color: #ff9900;"><center><p id="mkId"></p></center><p id="timeOutput"></p></div>
+         -->
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-10">
+                    <h1 style="padding: 17px" >OASIS Survey</h1>
+                </div>
+            </div>
+
+
+            <div class="row">
+                <p align="right" class="col-md-10" >Mechanical Turk ID:</p>
+                <a align="right" id="mkid"></a> 
+            </div>
+
+            <div class="row">
+                <p align="right" class="col-md-10">Session: </p>
+                <a align="right" id="session"></a>   
+            </div>
+
+            <div class="row">
+                <p align="right" class="col-md-10">Study: </p>
+                <a align="right" id="study"></a>   
+            </div>
+
+<!--             <div class="row">
+                <p align="right" class="col-md-10">Time Spent on Question: </p>
+                <a align="right" id="timeEl"></a> 
+                </p>
+            </div> -->
+
+            <div class="row" style="padding: 17px">
+                <p>The following items ask about anxiety and fear. These symptoms may include panic attacks, situational anxieties, worries, flashbacks, hypervigilance or startle.</p>
+                <p>Include ALL of your anxiety symptoms when answering these questions. For each item, select the answer that best describes your experience over the past week.</p>
+                <div id="surveyElement"></div>
+                <div id="surveyResult"></div>    
+            </div>
+
+
+        </div>
+
+        <div class="container-fluid">
+            <center><p class="text-p">&copy; 2017 <a href="http://www.laureateinstitute.org">laureateinstitute.org</a>. All rights reserved.</center>
+        </div>
+
+
+        <script type="text/javascript">
+            
+            Survey.Survey.cssType = "bootstrap";
+            Survey.defaultBootstrapCss.navigationButton = "btn btn-green";
+
+            var json = {pages:[{elements:[{type:"radiogroup",choices:[{value:"0",text:"No anxiety in past week."},{value:"1",text:"Infrequent anxiety. Felt anxious a few times."},{value:"2",text:"Occasional anxiety. Felt anxious as much of the time as not. It was hard to relax."},{value:"3",text:"Frequent anxiety. Felt anxious most of the time. It was very difficult to relax."},{value:"4",text:"Constant anxiety. Felt anxious all of the time and never really relaxed."}],isRequired:true,name:"oasis_1",title:"In the past week, how often have you felt anxious?"}],name:"page1"},{elements:[{type:"radiogroup",choices:[{value:"0",text:"Little or None: Anxiety was absent or barely noticeable."},{value:"1",text:"Mild: Anxiety was at a low level. It was possible to relax when I tried. Physical symptoms were only slightly uncomfortable."},{value:"2",text:"Moderate: Anxiety was distressing at times. It was hard to relax or concentrate, but I could do it if I tried. Physical symptoms were uncomfortable."},{value:"3",text:"Severe: Anxiety was intense much of the time. It was very difficult to relax or focus on anything else. Physical symptoms were extremely uncomfortable."},{value:"4",text:"Extreme: Anxiety was overwhelming. It was impossible to relax at all. Physical symptoms were unbearable."}],isRequired:true,name:"oasis_2",title:"In the past week, when you have felt anxious, how intense or severe was your anxiety?"}],name:"page2"},{elements:[{type:"radiogroup",choices:[{value:"0",text:"None: I do not avoid places, situations, activities, or things because of fear."},{value:"1",text:"Infrequent: I avoid something once in awhile, but will usually face the situation or confront the object. My lifestyle is not affected."},{value:"2",text:"Occasional: I have some fear of certain situations, places, or objects, but it is still manageable. My lifestyle has only changed in minor ways. I always or almost always avoid the things I fear when I'm alone, but can handle them if someone comes with me."},{value:"3",text:"Frequent: I have considerable fear and really try to avoid the things that frighten me. I have made significant changes in my lifestyle to avoid the object, situation, activity or place."},{value:"4",text:"All the Time: Avoiding objects, situations, activities, or places has taken over my life. My lifestyle has been extensively affected and I no longer do things that I used to enjoy."}],isRequired:true,name:"oasis_3",title:"In the past week, how often did you avoid situations, places, objects, or activities because of anxiety or fear?"}],name:"page3"},{elements:[{type:"radiogroup",choices:[{value:"0",text:"None: No interference at work/home/school from anxiety."},{value:"1",text:"Mild: My anxiety has caused some interference at work/home/school. Things are more difficult, but everything that needs to be done is still getting done."},{value:"2",text:"Moderate: My anxiety definitely interferes with tasks. Most things are still getting done, but few things are being done as well as in the past."},{value:"3",text:"Severe: My anxiety has really changed my ability to get things done. Some tasks are still being done, but many things are not. My performance has definitely suffered."},{value:"4",text:"Extreme: My anxiety has become incapacitating. I am unable to complete tasks and have had to leave school, have quit or been fired from my job, or have been unable to complete tasks at home and have faced consequences like bill collectors, eviction, etc."}],isRequired:true,name:"oasis_4",title:"In the past week, how much did your anxiety interfere with your ability to do the things you needed to do at work, at school, or at home?"}],name:"page4"},{elements:[{type:"radiogroup",choices:[{value:"0",text:"None: My anxiety doesn't affect my relationships."},{value:"1",text:"Mild: My anxiety slightly interferes with my relationships. Some of my friendships and other relationships have suffered, but, overall, my social life is fulfilling."},{value:"2",text:"Moderate: I have experienced some interference with my social life, but I still have a few close relationships. I don't spend as much time with others as in the past, but I still socialize sometimes."},{value:"3",text:"Severe: My friendships and other relationships have suffered a lot because of anxiety. I do not enjoy social activities. I socialize very little."},{value:"4",text:"Extreme: My anxiety has completely disrupted my social activities. All of my relationships have suffered or ended. My family life is extremely strained."}],isRequired:true,name:"oasis_5",title:"In the past week, how much has anxiety interfered with your social life and relationships?"}],name:"page5"}]}
+
+            window.survey = new Survey.Model(json);
+            var timerID = null;
+
+            lastpage = survey.currentPage;
+            function timerLoop(elapsed){
+                var page = survey.currentPage; // page variable is the currentPage on the survey
+                if (!page) return;
+                if (lastpage != page) {
+                    // set new start date
+                    start = new Date().getTime(); // sets new start Date object when page has changed.
+                    lastpage = page // sets the last page to currente page 
+
+                }
+                var valueName = "TRQ" + survey.pages.indexOf(page);
+
+                var ms = survey.getValue(valueName);  // gets the value of the valuename. e.g: TRQ1
+
+                if( ms == null) ms = 0;
+                else ms = elapsed;
+                survey.setValue(valueName, ms);
+                $('#timeEl').text(elapsed + ' ms');
+            }
+
+            function getQueryVariable(variable) {
+                var query = window.location.search.substring(1);
+                var vars = query.split('&');
+                for (var i = 0; i < vars.length; i++) {
+                    var pair = vars[i].split('=');
+                    if (decodeURIComponent(pair[0]) == variable) {
+                        return decodeURIComponent(pair[1]);
+                    }
+                }
+                return 'NULL'
+            }
+
+
+            survey.showProgressBar = "bottom";
+
+            survey.goNextPageAutomatic = false;
+            survey.showNavigationButtons = true;
+            survey.showCompletedPage = false;
+
+            // Get Query Variables
+
+            var session = getQueryVariable('session');
+            var mkturkid = getQueryVariable('mkturk_id');
+            var surveyname = getQueryVariable('survey');
+
+            survey.onComplete.add(function (result) {
+                postSurveyData(result.data, session, mkturkid,surveyname);
+                window.location.href = "/?session="+session+"&mkturk_id="+mkturkid+"&survey=panasx"+"&study="+getQueryVariable('study');
+             });
+
+            // Parse the URL 
+
+            function postSurveyData(data, session, mkturkid, surveyname){
+                $.ajax({
+                    type: 'POST',
+                    async: false,
+                    url: 'saveSurvey/?session=' + session + '&mkturk_id=' + mkturkid + '&survey=' + surveyname + "&study=" + getQueryVariable('study'),
+                    data: JSON.stringify(data), // or JSON.stringify ({name: 'jonas'}),
+                    contentType: "application/json",
+                    dataType: 'json'
+                });
+            }
+
+            $("#surveyElement").Survey({model: survey});
+            $("#mkid").text(mkturkid);
+            $("#session").text(session);
+            $("#study").text(getQueryVariable('study'));
+
+            var start = new Date().getTime(),
+                elapsed = '0.0';
+
+            // executes timerCallback every 100 ms
+            timerID = window.setInterval(function(){
+                
+                var time = new Date().getTime() - start;
+                elapsed = Math.floor(time);
+
+                //alert(elapsed);
+                //$('#timeEl').text(elapsed + ' ms');
+
+                //displayTime(1);
+                timerLoop(elapsed);
+
+            }, 5);
+        </script>
+
+    </body>
+</html>

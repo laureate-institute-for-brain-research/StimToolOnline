@@ -1,0 +1,10 @@
+phq-JTFirefoxTest-T1-2018_7_5_16_0,User Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.12; rv:61.0) Gecko/20100101 Firefox/61.0,IP: ::1
+QUESTION,RESULT,RT(ms)
+phq_1,3,57157
+phq_2,3,1196
+phq_3,3,1132
+phq_4,3,1832
+phq_5,3,1188
+phq_6,3,1281
+phq_7,3,1482
+phq_8,3,1350

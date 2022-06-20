@@ -1,0 +1,23 @@
+demo-JTTEST2-T1-Tue Feb 13 2018,User Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36,IP: ::1
+QUESTION,RESULT,RT(ms)
+demps_lv10_gender,1,2246
+demps_lv10_hispanic_ethnicity,2,955
+demps_lv10_race,demps_lv10_race___18,781
+demps_lv10_engprimary,1,939
+demps_lv10_intactfamorigin,1,961
+demps_lv10_current_marital_status,1,1300
+demps_lv10_prevmarried,0,3432
+demps_lv10_nchild,0,4019
+demps_lv10_nsachild,1,938
+demps_lv10_residence,1,963
+demps_lv10_current_educational_attainment,7,877
+demps_lv10_employment,8,622
+demps_lv10_leftjobreason,7,2811
+demps_lv10_insemployer,0,19628
+demps_lv10_insdirect,1,19628
+demps_lv10_insmedicare,1,19628
+demps_lv10_insmilitary,1,19628
+demps_lv10_insva,1,19628
+demps_lv10_insihs,1,19628
+demps_lv10_insotherdesc,none,19628
+demps_lv10_service,1,68163

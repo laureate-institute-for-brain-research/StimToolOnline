@@ -1,0 +1,79 @@
+@font-face {
+    font-family: gotham;
+    src: url(/gotham-book-regular.otf);
+}
+
+body {
+    background-color: #f2f0eb;
+}
+
+* {
+    font-family: Helvetica Neue;
+}
+
+a:link,
+a:visited {
+    color: #5e3f99;
+}
+
+img {
+    max-width: 40%;
+    height: auto;
+}
+
+input[type=text]:focus {
+    border-color: #f68826;
+    box-shadow: 0 0 5px #f68826 !important;
+}
+
+input[type=email]:focus {
+    border-color: #f68826;
+    box-shadow: 0 0 5px #f68826 !important;
+}
+
+.canvasboxstyle:fullscreen {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.canvasboxstyle:-moz-full-screen {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.canvasboxstyle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+.lds-dual-ring {
+    display: inline-block;
+    width: 64px;
+    height: 64px;
+}
+
+.lds-dual-ring:after {
+    content: " ";
+    display: block;
+    width: 46px;
+    height: 46px;
+    margin: 1px;
+    border-radius: 50%;
+    border: 5px solid rgb(0, 0, 0);
+    border-color: rgb(0, 0, 0) transparent rgb(0, 0, 0) transparent;
+    animation: lds-dual-ring 1.2s linear infinite;
+}
+
+@keyframes lds-dual-ring {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}

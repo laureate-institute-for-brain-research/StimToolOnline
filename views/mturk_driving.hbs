@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <style type="text/css">
+        @font-face {
+            font-family: gotham;
+            src: url(/gotham-book-regular.otf);
+        }
+
+        * {
+            font-family: Helvetica Neue;
+        }
+
+        a:link,
+        a:visited {
+            color: #5e3f99;
+        }
+
+        input[type=text]:focus {
+            border-color: #f68826;
+            box-shadow: 0 0 5px #f68826 !important;
+        }
+
+        input[type=email]:focus {
+            border-color: #f68826;
+            box-shadow: 0 0 5px #f68826 !important;
+        }
+
+        .sv-root-modern .sv-container-modern {
+            color: white !important;
+            fill: white !important;
+        }
+        .sv-radio__svg {
+            border-color: white !important;
+        }
+
+        .sv-root-modern .sv-radio--checked .sv-radio__svg  {
+            fill: white !important;
+        }
+
+        .sv-root-modern input.sv-text, textarea.sv-comment, select.sv-dropdown{
+            color: white !important;
+        }
+
+		.iti-flag {
+			background-image: url("https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/10.0.2/img/flags.png");
+			}
+		li.country {
+			background-color: black !important;
+		}
+        
+    </style>
+    <title>Link Send</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+        crossorigin="anonymous"></script>
+
+    <!-- Latest compiled and minified CSS -->
+    <!-- Using Bootsawtch theme: https://bootswatch.com/cyborg/ -->
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/10.0.2/css/intlTelInput.css" rel="stylesheet">
+
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js" integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous"></script>
+
+    <link href="https://unpkg.com/survey-knockout@1.8.41/modern.css" type="text/css" rel="stylesheet"/>
+    <script src="https://unpkg.com/jquery"></script>
+    <script src="https://unpkg.com/survey-jquery@1.8.41/survey.jquery.min.js"></script>
+
+    <script type="text/javascript" src='/js/StimToolLib.js'></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/11.0.14/js/intlTelInput.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/11.0.14/js/utils.js"></script>
+
+</head>
+
+<body>
+
+
+	<div class="container" style="width: 390px;">
+		<br>
+		<div class="row" >
+			<img src="/images/LIBR_1color_white_logo.jpg" alt="Libr Logo" width="201" height="47" style="margin-left: auto; margin-right: auto;">
+		</div>
+		<br>
+		<h4 id='sessiontxt' style="text-align: center;"></h4>
+		<div id='postLink'>
+			<center><h2>Link Sent</h2></center>
+			<p id='postMessage'>{{postMessage}}</p>
+			<p><b>Reminder: This HIT must be done from your phone. Please open the link that is sent to you on your phone.</b></p>
+			
+			<p>If you have issues recieving the link please email us at <a href="mailto:jtouthang@libr.net?subject=Mail About Mturk">jtouthang@libr.net</a></p>
+		</div>
+		
+		
+		<p id='toptxt'>Please enter your email address to receive a link.</p>
+		<div class="accordion accordion-flush" id="accordionFlushExample">
+				<div class="accordion-item">
+					<p class="accordion-header" id="flush-headingOne">
+						<button class="accordion-button collapsed btn btn-danger" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+							Click here for instructions without entering an email.
+						</button>
+					</p>
+					<div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
+						<div class="accordion-body" style="background-color: #5c2020; color:white;">
+							 Ignore the form below and follow these steps to perfom the task without being sent a direct link to your email:
+							<br>
+							<ol>
+								<li>
+									<b>On your smartphone</b> Go to <a style="color: rgb(212, 212, 212);"href="https://tasks.laureateinstitute.org">https://tasks.laureateinstitute.org</a>
+								</li>
+								<li>
+									Select <b>Driving2</b> on "Choose Study"
+								</li>
+								<li>
+									On "Subject ID", enter your mturk id.
+								</li>
+								<li>
+									On "Choose Session", select <span id='sessiontxt1'></span>
+								</li>
+								<li>
+									Click <b>Begin</b> to start the survey and task.
+								</li>
+							</ol>
+						</div>
+					</div>
+				</div>
+			</div>
+		<hr style="height:2px;color:purple;background-color:purple">
+		<form id='linkForm' class="needs-validation" action="/mturklink" method="POST">
+
+			<div class="row">
+				<label for="mturkid" class="col-form-label">MTURK ID:</label>
+				<input type="text" class="form-control" id="mturkid" name='subject' placeholder="AXXXXXXXXXXXXX" required>
+				<div class="invalid-feedback">
+					Please enter your mturk id.
+				</div>
+			</div>
+			<br>
+			{{!-- <p>How do you want us to send the link?</p> --}}
+			{{!-- <div class="form-check form-check-inline">
+				<input class="form-check-input" type="radio" name="link_type" id="email_type" value="email">
+				<label class="form-check-label" for="email_type">
+					Email
+				</label>
+				</div>
+				<div class="form-check form-check-inline">
+				<input class="form-check-input" type="radio" name="link_type" id="phone_type" value="text" checked>
+				<label class="form-check-label" for="phone_type">
+					Text
+				</label>
+			</div>
+			
+			 --}}
+			<input type="hidden" name="link_type" id="email_type" value="email">
+			
+			<div class="row" id='emailForm'>
+				<label for="email" class="col col-form-label" >Email:</label>
+				<input type="email" class="col form-control" name="email" id="email" placeholder="name@example.com" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$">
+				
+			</div>
+
+
+			<div class="row" id='phoneForm' style="display: none;">
+				<label class="col col-form-label" for="phone">Phone Number:</label>
+				<input type="tel" name="phone" id="phone" class="col form-control" placeholder="1234567890">
+				
+			</div>
+			<div>
+				<div id="error-msg" class="float-right" style="color: red; font-weight: bold;"></div>
+			</div>
+			
+			<br>
+			{{!-- <div class="form-check">
+				<input class="form-check-input" type="checkbox" value="true" id="remind" name="remind">
+				<label class="form-check-label" for="remind">Notify me when Session 2 is available</label>
+				</div>
+			<br> --}}
+			
+			<div class="form-check">
+				<input class="form-check-input" type="checkbox" value="" id="checkbock" required>
+				<label class="form-check-label" for="checkbock">I will do this task truthfully and to the best of my ability. Any information I provide may be used for research. I also hereby certify that I am over 18 years of age.</label>
+				<div class="invalid-feedback">
+				You must agree before submitting.
+			</div>
+			</div>
+			<br>
+			<input type="hidden" id="study" name="study" value="Driving2">
+			<input type="hidden" id="session" name="session" value="T1">
+			
+			<button type="submit" class="btn btn-primary form-control">Send Me Link</button>
+		</form>
+	</div>
+	<br>
+	<br>
+	<div class="container" style="width: 390px;">
+		
+		<center>&copy; 2021 <a href="http://www.laureateinstitute.org"> laureateinstitute.org</a>. All rights reserved.</center>
+		
+	</div>
+	<script type="text/javascript">
+		
+		function checkcommType(){
+			if(document.getElementById('email_type').checked) {
+				//Email radio button is checked
+				document.getElementById('email').value = ''
+				document.getElementById('email').required = true;
+				document.getElementById('emailForm').style.display = 'flex';
+				document.getElementById('phoneForm').style.display = 'none';
+				document.getElementById('phone').required = false;
+				reset();
+			
+			}else if(document.getElementById('phone_type').checked) {
+				//Text radio button is checked
+				document.getElementById('email').required = false;
+				document.getElementById('emailForm').style.display = 'none'
+				document.getElementById('phoneForm').style.display = 'flex'
+				document.getElementById('phone').required = true;
+	
+			}
+		}
+
+		//checkcommType()
+
+		//$( "input[name=link_type]" ).change(checkcommType());
+		
+				
+        function getQueryVariable(variable) {
+            var query = window.location.search.substring(1);
+            var vars = query.split('&');
+            for (var i = 0; i < vars.length; i++) {
+                var pair = vars[i].split('=');
+                if (decodeURIComponent(pair[0]) == variable) {
+                    return decodeURIComponent(pair[1]);
+                }
+            }
+            return 'NULL'
+        }
+		
+		$("#phone").intlTelInput()
+
+
+		var input = document.getElementById('phone')
+		errorMsg = document.getElementById("error-msg")
+		validMsg = document.getElementById("valid-msg")
+
+		// here, the index maps to the error code returned from getValidationError - see readme
+		var errorMap = ["Invalid number", "Invalid country code", "Too short", "Too long", "Invalid number"];
+
+		// initialise plugin
+
+
+		var reset = function() {
+			input.classList.remove("error");
+			errorMsg.innerHTML = "";
+			errorMsg.classList.add("hide");
+		};
+
+		// on blur: validate
+		input.addEventListener('blur', function() {
+			reset();
+			if (!$("#phone").intlTelInput('isValidNumber')) {
+				var errorCode = $("#phone").intlTelInput('getValidationError');
+				input.setCustomValidity(errorMap[errorCode])
+			}else{
+				input.setCustomValidity('')
+			}
+		});
+
+		$('#linkForm').submit(function(event) {
+			document.getElementById('phone').value = $("#phone").intlTelInput("getNumber");
+		});
+
+		var session = getQueryVariable('session')
+		
+
+		document.getElementById('sessiontxt').innerHTML = 'Session ' + session
+		document.getElementById('session').value = 'T' + session
+
+		document.getElementById('sessiontxt1').innerHTML = 'T' + session
+
+		
+
+		// on keyup / change flag: reset
+		input.addEventListener('change', reset);
+		input.addEventListener('keyup', reset);
+
+		if (getQueryVariable('submitform') == 'completed'){ 
+			document.getElementById('linkForm').style.display = 'none'
+			document.getElementById('toptxt').style.display = 'none'
+			document.getElementById('sessiontxt').style.display = 'none'
+		} else {
+			document.getElementById('postLink').style.display = 'none'
+		}
+
+
+    </script>
+
+	
+</body>
+
+</html>

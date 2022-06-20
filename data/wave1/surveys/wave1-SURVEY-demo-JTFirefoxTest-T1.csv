@@ -1,0 +1,18 @@
+demo-JTFirefoxTest-T1-2018_7_5_15_59,User Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.12; rv:61.0) Gecko/20100101 Firefox/61.0,IP: ::1
+QUESTION,RESULT,RT(ms)
+demps_lv10_gender,1,1131
+age,1,1880
+demps_lv10_hispanic_ethnicity,7,1376
+demps_lv10_race,demps_lv10_race___14,1208
+demps_lv10_engprimary,2,2077
+demps_lv10_intactfamorigin,1,1488
+demps_lv10_current_marital_status,3,1184
+demps_lv10_prevmarried,0,1221
+demps_lv10_nchild,1,1537
+demps_lv10_nsachild,0,1858
+demps_lv10_residence,2,2110
+demps_lv10_current_educational_attainment,2,1737
+demps_lv10_employment,17,2473
+demps_lv10_leftjobreason,1,2129
+mkturk_other,1,3033
+question1,1,3033

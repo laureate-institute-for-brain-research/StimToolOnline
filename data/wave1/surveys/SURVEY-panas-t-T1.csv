@@ -1,0 +1,11 @@
+panas-t-T1-Fri, 21 Jun 2018 16:52:14 UTC,User Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.87 Safari/537.36,IP: ::1
+QUESTION,RESULT,RT(ms)
+panas_interested,0,89307
+panas_distressed,3,906
+panas_ excited,1,1083
+panas_upset,2,1659
+panas_strong,3,1165
+panas_ guilty,1,1059
+panas_scared,3,1049
+panas_hostile,2,977
+panas_proud,2,972

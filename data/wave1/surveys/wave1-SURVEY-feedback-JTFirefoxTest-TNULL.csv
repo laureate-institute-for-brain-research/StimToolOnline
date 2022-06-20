@@ -1,0 +1,7 @@
+feedback-JTFirefoxTest-TNULL-2018_7_5_18_31,User Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.12; rv:61.0) Gecko/20100101 Firefox/61.0,IP: ::1
+QUESTION,RESULT,RT(ms)
+question1,1,9895
+question2,1,4257
+question3,s,2505
+question4,sd,1053
+question5,df,2006
