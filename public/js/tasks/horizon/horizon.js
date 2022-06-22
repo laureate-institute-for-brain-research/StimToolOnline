@@ -849,9 +849,6 @@ function trials_exampleLoopBegin(thisScheduler) {
 		thisScheduler.add(trialRoutineEnd(snapshot));
 		thisScheduler.add(endLoopIteration(thisScheduler, snapshot));
 	}
-
-	
-
 	return Scheduler.Event.NEXT;
 }
 function instruct_pagesLoopEnd() {

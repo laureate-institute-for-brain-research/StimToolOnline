@@ -200,17 +200,22 @@ if (!getQueryVariable('skip_instructions')) {
 
 // // // Example Play
 if (getQueryVariable('run').includes('R1') ){
-	// const example_playScheduler = new Scheduler(psychoJS);
-	// flowScheduler.add(trials_exampleLoopBegin, example_playScheduler);
-	// flowScheduler.add(example_playScheduler);
-	// flowScheduler.add(exampleLoopEnd);
+	const example_playScheduler = new Scheduler(psychoJS);
+	flowScheduler.add(trials_exampleLoopBegin, example_playScheduler);
+	flowScheduler.add(example_playScheduler);
+	flowScheduler.add(trialsLoopEnd);
 
-	// Ready Routine
-	flowScheduler.add(readyRoutineBegin());
-	flowScheduler.add(readyRoutineEachFrame());
-	flowScheduler.add(readyRoutineEnd());
-
+	// // Ready Routine
+	// flowScheduler.add(readyRoutineBegin());
+	// flowScheduler.add(readyRoutineEachFrame());
+	// flowScheduler.add(readyRoutineEnd());
 }
+
+// Role Reversal Trial
+const instruct_pagesLoopScheduler = new Scheduler(psychoJS);
+flowScheduler.add(instruct_pages_roleReversal_LoopBegin, instruct_pagesLoopScheduler);
+flowScheduler.add(instruct_pagesLoopScheduler);
+flowScheduler.add(instruct_pagesLoopEnd);
 
 
 
@@ -233,6 +238,9 @@ dialogCancelScheduler.add(quitPsychoJS, '', false);
 
 // Add Slides to resources
 var resources = [
+	{ name: 'example_play.xls', path: '/js/tasks/social_media/media/example_play.xls' },
+	{ name: '/js/tasks/social_media/media/instructions/Slide25.jpeg', path: '/js/tasks/social_media/media/instructions/Slide25.jpeg'},
+	{ name: 'role_reversal_instruct_schedule.csv', path: '/js/tasks/social_media/media/role_reversal_instruct_schedule.csv'},
 	{ name: 'logo', path: '/js/tasks/social_media/media/mice.png' },
 	{ name: 'home', path: '/js/tasks/social_media/media/home.png' },
 	{ name: 'hashtag', path: '/js/tasks/social_media/media/hashtag.png' },
@@ -1070,6 +1078,49 @@ function experimentInit() {
 	return Scheduler.Event.NEXT;
 }
 
+function clear_All_stims() {
+
+	headerRectStim.setAutoDraw(false)
+	dividerStim.setAutoDraw(false)
+
+	// searchStim.setAutoDraw(false)
+	homeStim.setAutoDraw(false)
+	homeTextStim.setAutoDraw(false)
+	hashtagStim.setAutoDraw(false)
+	exploreTextStim.setAutoDraw(false)
+	notificationStim.setAutoDraw(false)
+	notificationTextStim.setAutoDraw(false)
+	messageStim.setAutoDraw(false)
+	messageTextStim.setAutoDraw(false)
+	bookmarkStim.setAutoDraw(false)
+	bookmarkTextStim.setAutoDraw(false)
+	listStim.setAutoDraw(false)
+	listTextStim.setAutoDraw(false)
+	profileStim.setAutoDraw(false)
+	profileTextStim.setAutoDraw(false)
+	profilePicStim.setAutoDraw(false)
+	moreStim.setAutoDraw(false)
+	moreTextStim.setAutoDraw(false)
+
+	currentTrialText.setAutoDraw(false)
+	currentTrialNumber.setAutoDraw(false)
+	// Draw the Tracker and Points Counter
+	dayNumberTrackerText.setAutoDraw(false)
+	dayNumberTracker.setAutoDraw(false)
+	totalLikesText.setAutoDraw(false)
+	totalLikesTracker.setAutoDraw(false)
+
+	choice1Button.setAutoDraw(false)
+	choice2Button.setAutoDraw(false)
+	logoStim.setAutoDraw(false)
+	usernameStim.setAutoDraw(false)
+	fullNameStim.setAutoDraw(false)
+	pageName.setAutoDraw(false)
+	questionText.setAutoDraw(false)
+	profilePicPostStim.setAutoDraw(false)
+	reset_stims()
+}
+
 function instruct_pagesLoopBegin(thisScheduler) {
 	// set up handler to look up the conditions
 	slides = new TrialHandler({
@@ -1077,6 +1128,34 @@ function instruct_pagesLoopBegin(thisScheduler) {
 		nReps: 1, method: TrialHandler.Method.SEQUENTIAL,
 		extraInfo: expInfo, originPath: undefined,
 		trialList: 'instruct_schedule.csv',
+		seed: undefined, name: 'slides'
+	});
+
+	// console.log(slides)
+	
+	psychoJS.experiment.addLoop(slides); // add the loop to the experiment
+	currentLoop = slides;  // we're now the current loop
+
+	// Schedule all the slides in the trialList:
+	for (const thisTrial of slides) {
+		const snapshot = slides.getSnapshot();
+
+		thisScheduler.add(importConditions(snapshot));
+		thisScheduler.add(instructRoutineBegin(snapshot));
+		thisScheduler.add(instructSlideRoutineEachFrame(snapshot));
+		thisScheduler.add(instructRoutineEnd(snapshot));
+		thisScheduler.add(endLoopIteration(thisScheduler, snapshot));
+	}
+	return Scheduler.Event.NEXT;
+}
+
+function instruct_pages_roleReversal_LoopBegin(thisScheduler) {
+	// set up handler to look up the conditions
+	slides = new TrialHandler({
+		psychoJS: psychoJS,
+		nReps: 1, method: TrialHandler.Method.SEQUENTIAL,
+		extraInfo: expInfo, originPath: undefined,
+		trialList: 'role_reversal_instruct_schedule.csv',
 		seed: undefined, name: 'slides'
 	});
 
@@ -1207,6 +1286,33 @@ function instructSlideRoutineEachFrame(trials) {
 	};
 }
 
+function trials_exampleLoopBegin(thisScheduler) {
+	total_games = 4
+	
+	example_trials = new TrialHandler({
+		psychoJS: psychoJS,
+		nReps: 1, method: TrialHandler.Method.SEQUENTIAL,
+		extraInfo: expInfo, originPath: undefined,
+		trialList: 'example_play.xls',
+		seed: undefined, name: 'example_trials'
+	});
+	psychoJS.experiment.addLoop(example_trials); // add the loop to the experiment
+	currentLoop = example_trials;  // we're now the current loop
+
+	// Schedule all the example_trials in the trialList:
+	// Schedule all the trials in the trialList:
+	for (const thisTrial of example_trials) {
+		const snapshot = example_trials.getSnapshot();
+
+		thisScheduler.add(importConditions(snapshot));
+		thisScheduler.add(trialRoutineBegin(snapshot));
+		thisScheduler.add(trialRoutineEachFrameWaitforInput(snapshot));
+		thisScheduler.add(trialRoutineEachFrameShowPost(snapshot));
+		thisScheduler.add(trialRoutineEnd(snapshot));
+		thisScheduler.add(endLoopIteration(thisScheduler, snapshot));
+	}
+	return Scheduler.Event.NEXT;
+}
 
 function instructRoutineEnd(trials) {
 	return function () {
@@ -1222,7 +1328,7 @@ function instructRoutineEnd(trials) {
 		return Scheduler.Event.NEXT;
 	};
 }
-
+var example_trials;
 var trials;
 var currentLoop;
 var lastTrialKeyPressed;
@@ -1277,9 +1383,8 @@ function instruct_pagesLoopEnd() {
 }
 
 function trialsLoopEnd() {
-
+	clear_All_stims()
 	psychoJS.experiment.removeLoop(trials);
-
 	return Scheduler.Event.NEXT;
 }
 
@@ -1771,8 +1876,9 @@ function trialRoutineEachFrameShowPost(trials) {
 			return quitPsychoJS('The [Escape] key was pressed. Goodbye!', false);
 		}
 
-		// After 5 seconds go to the next Trial (post)
-		if (t > 3) {
+		// After 3 seconds go to the next Trial (post)
+		
+		if (t > .1) {
 			removeLoadingAnimation()
 			newLoadingAnimation()
 			postStims[trial_num].like_icon_outline.setAutoDraw(false) // don't show the heart outline
