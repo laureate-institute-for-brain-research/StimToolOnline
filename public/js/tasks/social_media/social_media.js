@@ -2102,7 +2102,7 @@ function trialRoleReversalRoutineEachFrameWaitforInput(trials) {
 				postStims[trial_num].profileRR_photo = new visual.ImageStim({
 					win : psychoJS.window,
 					name : `profile_pic_post_${trial_num}`, units : 'norm', 
-					image : 'profile_pic.png',
+					image : 'profile_picRR.png',
 					ori: 0,
 					pos: [ post_stim_x_pos.right.profile_photo, postStims[trial_num].postphoto_y ], 
 					size: [0.07,0.09],
