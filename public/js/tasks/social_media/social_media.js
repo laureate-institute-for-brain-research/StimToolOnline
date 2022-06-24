@@ -4,14 +4,13 @@
  */
 
 import { core, data, sound, util, visual } from '/psychojs/psychojs-2021.2.3.js';
- const { PsychoJS } = core;
- const { TrialHandler } = data;
- const { Scheduler } = util;
- //some handy aliases as in the psychopy scripts;
- const { abs, sin, cos, PI: pi, sqrt } = Math;
+const { PsychoJS } = core;
+const { TrialHandler } = data;
+const { Scheduler } = util;
+//some handy aliases as in the psychopy scripts;
+const { abs, sin, cos, PI: pi, sqrt } = Math;
 const { round } = util;
- 
- log4javascript.setEnabled(false);
+
 
 // import { PsychoJS } from '/lib/core-2020.1.js';
 // import * as core from '/lib/core-2020.1.js';
@@ -30,6 +29,7 @@ var RIGHT_KEY = 'period'
 const psychoJS = new PsychoJS({
 	debug: false,
 });
+
 
 
 window.onload = function () {
@@ -185,11 +185,14 @@ const flowScheduler = new Scheduler(psychoJS);
 const dialogCancelScheduler = new Scheduler(psychoJS);
 psychoJS.scheduleCondition(function () { return (psychoJS.gui.dialogComponent.button === 'OK'); }, flowScheduler, dialogCancelScheduler);
 
+// BEGIN BLOCK
 // flowScheduler gets run if the participants presses OK
 flowScheduler.add(updateInfo); // add timeStamp
 flowScheduler.add(experimentInit);
 
 // instruction slide
+
+// INSTRUCTION BLOCK
 if (!getQueryVariable('skip_instructions')) {
 	const instruct_pagesLoopScheduler = new Scheduler(psychoJS);
 	flowScheduler.add(instruct_pagesLoopBegin, instruct_pagesLoopScheduler);
@@ -198,8 +201,8 @@ if (!getQueryVariable('skip_instructions')) {
 }
 
 
-// // // Example Play
-if (getQueryVariable('run').includes('R1') ){
+// EXAMPLE PLAY BLOCK
+if (getQueryVariable('run').includes('R1') && !getQueryVariable('skip_exampleplay')  ){
 	const example_playScheduler = new Scheduler(psychoJS);
 	flowScheduler.add(trials_exampleLoopBegin, example_playScheduler);
 	flowScheduler.add(example_playScheduler);
@@ -211,22 +214,28 @@ if (getQueryVariable('run').includes('R1') ){
 	// flowScheduler.add(readyRoutineEnd());
 }
 
-// Role Reversal Trial
+// ROLE REVERSAL BLOCK
+
+// Instruction for the Role Traversal Slide(s)
 const instruct_pagesLoopScheduler = new Scheduler(psychoJS);
 flowScheduler.add(instruct_pages_roleReversal_LoopBegin, instruct_pagesLoopScheduler);
 flowScheduler.add(instruct_pagesLoopScheduler);
 flowScheduler.add(instruct_pagesLoopEnd);
 
+// ROLE REVERSAL TRIAL BLOCK
+const roleReversalScheduler = new Scheduler(psychoJS);
+flowScheduler.add(trials_role_reversalBegin, roleReversalScheduler);
+flowScheduler.add(roleReversalScheduler);
+flowScheduler.add(trialsLoopEnd);
 
 
-// flowScheduler.add(thanksRoutineBegin());
-// flowScheduler.add(thanksRoutineEachFrame());
-// flowScheduler.add(thanksRoutineEnd());
-
+// MAIN BLOCK
 const trialsLoopScheduler = new Scheduler(psychoJS);
 flowScheduler.add(trialsLoopBegin, trialsLoopScheduler);
 flowScheduler.add(trialsLoopScheduler);
 flowScheduler.add(trialsLoopEnd);
+
+// END BLOCK
 flowScheduler.add(thanksRoutineBegin());
 flowScheduler.add(thanksRoutineEachFrame());
 flowScheduler.add(thanksRoutineEnd());
@@ -238,53 +247,55 @@ dialogCancelScheduler.add(quitPsychoJS, '', false);
 
 // Add Slides to resources
 var resources = [
-	{ name: 'example_play.xls', path: '/js/tasks/social_media/media/example_play.xls' },
+	{ name: 'example_play.xls', path: '/js/tasks/social_media/example_play.xls' },
+	{ name: 'role_reversal_shedule.xls', path:'/js/tasks/social_media/role_reversal_shedule.xls' },
 	{ name: '/js/tasks/social_media/media/instructions/Slide25.jpeg', path: '/js/tasks/social_media/media/instructions/Slide25.jpeg'},
 	{ name: 'role_reversal_instruct_schedule.csv', path: '/js/tasks/social_media/media/role_reversal_instruct_schedule.csv'},
-	{ name: 'logo', path: '/js/tasks/social_media/media/mice.png' },
-	{ name: 'home', path: '/js/tasks/social_media/media/home.png' },
-	{ name: 'hashtag', path: '/js/tasks/social_media/media/hashtag.png' },
-	{ name: 'notification', path: '/js/tasks/social_media/media/bell.png' },
-	{ name: 'message', path: '/js/tasks/social_media/media/email.png' },
-	{ name: 'bookmark', path: '/js/tasks/social_media/media/bookmark.png' },
-	{ name: 'list', path: '/js/tasks/social_media/media/list.png' },
-	{ name: 'profile', path: '/js/tasks/social_media/media/user.png' },
-	{ name: 'more', path: '/js/tasks/social_media/media/more.png' },
-	{ name: 'search', path: '/js/tasks/social_media/media/search.png' },
-	{ name: 'profile_pic', path: '/js/tasks/social_media/media/profile_photo.png' },
-	{ name: 'like', path: '/js/tasks/social_media/media/like.png' },
-	{ name: 'heart', path: '/js/tasks/social_media/media/heart.png' },
-	{ name: 'heart_outline', path: '/js/tasks/social_media/media/heart_outline.png' },
-	{ name: 'loading0', path: '/js/tasks/social_media/media/loading/loading0.png' },
-	{ name: 'loading1', path: '/js/tasks/social_media/media/loading/loading1.png' },
-	{ name: 'loading2', path: '/js/tasks/social_media/media/loading/loading2.png' },
-	{ name: 'loading3', path: '/js/tasks/social_media/media/loading/loading3.png' },
-	{ name: 'loading4', path: '/js/tasks/social_media/media/loading/loading4.png' },
-	{ name: 'loading5', path: '/js/tasks/social_media/media/loading/loading5.png' },
-	{ name: 'loading6', path: '/js/tasks/social_media/media/loading/loading6.png' },
-	{ name: 'loading7', path: '/js/tasks/social_media/media/loading/loading7.png' },
-	{ name: 'loading8', path: '/js/tasks/social_media/media/loading/loading8.png' },
-	{ name: 'loading9', path: '/js/tasks/social_media/media/loading/loading9.png' },
-	{ name: 'loading10', path: '/js/tasks/social_media/media/loading/loading10.png' },
-	{ name: 'loading11', path: '/js/tasks/social_media/media/loading/loading11.png' },
-	{ name: 'loading12', path: '/js/tasks/social_media/media/loading/loading12.png' },
-	{ name: 'loading13', path: '/js/tasks/social_media/media/loading/loading13.png' },
-	{ name: 'loading14', path: '/js/tasks/social_media/media/loading/loading14.png' },
-	{ name: 'loading15', path: '/js/tasks/social_media/media/loading/loading15.png' },
-	{ name: 'loading16', path: '/js/tasks/social_media/media/loading/loading16.png' },
-	{ name: 'loading17', path: '/js/tasks/social_media/media/loading/loading17.png' },
-	{ name: 'loading18', path: '/js/tasks/social_media/media/loading/loading18.png' },
-	{ name: 'loading19', path: '/js/tasks/social_media/media/loading/loading19.png' },
-	{ name: 'loading20', path: '/js/tasks/social_media/media/loading/loading20.png' },
-	{ name: 'loading21', path: '/js/tasks/social_media/media/loading/loading21.png' },
-	{ name: 'loading22', path: '/js/tasks/social_media/media/loading/loading22.png' },
-	{ name: 'loading23', path: '/js/tasks/social_media/media/loading/loading23.png' },
-	{ name: 'loading24', path: '/js/tasks/social_media/media/loading/loading24.png' },
-	{ name: 'loading25', path: '/js/tasks/social_media/media/loading/loading25.png' },
-	{ name: 'loading26', path: '/js/tasks/social_media/media/loading/loading26.png' },
-	{ name: 'loading27', path: '/js/tasks/social_media/media/loading/loading27.png' },
-	{ name: 'loading28', path: '/js/tasks/social_media/media/loading/loading28.png' },
-	{ name: 'loading29', path: '/js/tasks/social_media/media/loading/loading29.png' },
+	{ name: 'logo.png', path: '/js/tasks/social_media/media/mice.png' },
+	{ name: 'home.png', path: '/js/tasks/social_media/media/home.png' },
+	{ name: 'hashtag.png', path: '/js/tasks/social_media/media/hashtag.png' },
+	{ name: 'notification.png', path: '/js/tasks/social_media/media/bell.png' },
+	{ name: 'message.png', path: '/js/tasks/social_media/media/email.png' },
+	{ name: 'bookmark.png', path: '/js/tasks/social_media/media/bookmark.png' },
+	{ name: 'list.png', path: '/js/tasks/social_media/media/list.png' },
+	{ name: 'profile.png', path: '/js/tasks/social_media/media/user.png' },
+	{ name: 'more.png', path: '/js/tasks/social_media/media/more.png' },
+	{ name: 'search.png', path: '/js/tasks/social_media/media/search.png' },
+	{ name: 'profile_pic.png', path: '/js/tasks/social_media/media/profile_photo.png' },
+	{ name: 'profile_picRR.png', path: '/js/tasks/social_media/media/profile_picRR.png' },
+	{ name: 'like.png', path: '/js/tasks/social_media/media/like.png' },
+	{ name: 'heart.png', path: '/js/tasks/social_media/media/heart.png' },
+	{ name: 'heart_outline.png', path: '/js/tasks/social_media/media/heart_outline.png' },
+	{ name: 'loading0.png', path: '/js/tasks/social_media/media/loading/loading0.png' },
+	{ name: 'loading1.png', path: '/js/tasks/social_media/media/loading/loading1.png' },
+	{ name: 'loading2.png', path: '/js/tasks/social_media/media/loading/loading2.png' },
+	{ name: 'loading3.png', path: '/js/tasks/social_media/media/loading/loading3.png' },
+	{ name: 'loading4.png', path: '/js/tasks/social_media/media/loading/loading4.png' },
+	{ name: 'loading5.png', path: '/js/tasks/social_media/media/loading/loading5.png' },
+	{ name: 'loading6.png', path: '/js/tasks/social_media/media/loading/loading6.png' },
+	{ name: 'loading7.png', path: '/js/tasks/social_media/media/loading/loading7.png' },
+	{ name: 'loading8.png', path: '/js/tasks/social_media/media/loading/loading8.png' },
+	{ name: 'loading9.png', path: '/js/tasks/social_media/media/loading/loading9.png' },
+	{ name: 'loading10.png', path: '/js/tasks/social_media/media/loading/loading10.png' },
+	{ name: 'loading11.png', path: '/js/tasks/social_media/media/loading/loading11.png' },
+	{ name: 'loading12.png', path: '/js/tasks/social_media/media/loading/loading12.png' },
+	{ name: 'loading13.png', path: '/js/tasks/social_media/media/loading/loading13.png' },
+	{ name: 'loading14.png', path: '/js/tasks/social_media/media/loading/loading14.png' },
+	{ name: 'loading15.png', path: '/js/tasks/social_media/media/loading/loading15.png' },
+	{ name: 'loading16.png', path: '/js/tasks/social_media/media/loading/loading16.png' },
+	{ name: 'loading17.png', path: '/js/tasks/social_media/media/loading/loading17.png' },
+	{ name: 'loading18.png', path: '/js/tasks/social_media/media/loading/loading18.png' },
+	{ name: 'loading19.png', path: '/js/tasks/social_media/media/loading/loading19.png' },
+	{ name: 'loading20.png', path: '/js/tasks/social_media/media/loading/loading20.png' },
+	{ name: 'loading21.png', path: '/js/tasks/social_media/media/loading/loading21.png' },
+	{ name: 'loading22.png', path: '/js/tasks/social_media/media/loading/loading22.png' },
+	{ name: 'loading23.png', path: '/js/tasks/social_media/media/loading/loading23.png' },
+	{ name: 'loading24.png', path: '/js/tasks/social_media/media/loading/loading24.png' },
+	{ name: 'loading25.png', path: '/js/tasks/social_media/media/loading/loading25.png' },
+	{ name: 'loading26.png', path: '/js/tasks/social_media/media/loading/loading26.png' },
+	{ name: 'loading27.png', path: '/js/tasks/social_media/media/loading/loading27.png' },
+	{ name: 'loading28.png', path: '/js/tasks/social_media/media/loading/loading28.png' },
+	{ name: 'loading29.png', path: '/js/tasks/social_media/media/loading/loading29.png' },
 ]
 
 var frameDur;
@@ -335,6 +346,8 @@ var listStim;
 var profileStim;
 var profilePicStim;
 var profilePicPostStim;
+var profilePicRRStim;
+var profilePicRRPostStim;
 
 var homeTextStim;
 var exploreTextStim;
@@ -422,6 +435,8 @@ var samplePosts = [
 	'.@Bas always delivers. \'\[BUMP\] Pick Me Up\' is out now ft. @Galimatias x @1GunnaGunna x @JColeNC x @liltjay x @AriLennox http://apple.co/PickMeUp',
 ]
 
+var beginButton;
+
 
 var moreStim;
 
@@ -479,7 +494,7 @@ function newLoadingAnimation() {
 		loadingStim[i] = new visual.ImageStim({
 			win : psychoJS.window,
 			name : `loading${i}`, units : 'norm', 
-			image: `loading${i}`,
+			image: `loading${i}.png`,
 			mask: undefined,
 			ori: 0,
 			pos: [ 0, postStims[trial_num].postlike_y ], 
@@ -546,7 +561,7 @@ function experimentInit() {
 	logoStim = new visual.ImageStim({
 		win : psychoJS.window,
 		name : 'slide_stim', units : 'norm', 
-		image : 'logo', mask : undefined,
+		image : 'logo.png', mask : undefined,
 		ori : 0, pos : [-0.90, 0.9],
 		color: undefined, opacity: 1,
 		flipHoriz : false, flipVert : false,
@@ -648,7 +663,7 @@ function experimentInit() {
 	homeStim = new visual.ImageStim({
 		win : psychoJS.window,
 		name : 'home', units : 'norm', 
-		image : 'home', mask : undefined,
+		image : 'home.png', mask : undefined,
 		ori : 0, pos : [-0.9, 0.73],
 		color: undefined, opacity: 1,
 		flipHoriz : false, flipVert : false,
@@ -671,7 +686,7 @@ function experimentInit() {
 	hashtagStim = new visual.ImageStim({
 		win : psychoJS.window,
 		name : 'hashtag', units : 'norm', 
-		image : 'hashtag', mask : undefined,
+		image : 'hashtag.png', mask : undefined,
 		ori : 0, pos : [-0.9, 0.56],
 		color: undefined, opacity: 1,
 		flipHoriz : false, flipVert : false,
@@ -693,7 +708,7 @@ function experimentInit() {
 	notificationStim = new visual.ImageStim({
 		win : psychoJS.window,
 		name : 'notification', units : 'norm', 
-		image : 'notification', mask : undefined,
+		image : 'notification.png', mask : undefined,
 		ori : 0, pos : [-0.9, 0.39],
 		color: undefined, opacity: 1,
 		flipHoriz : false, flipVert : false,
@@ -715,7 +730,7 @@ function experimentInit() {
 	messageStim = new visual.ImageStim({
 		win : psychoJS.window,
 		name : 'message', units : 'norm', 
-		image : 'message', mask : undefined,
+		image : 'message.png', mask : undefined,
 		ori : 0, pos : [-0.9, 0.22],
 		color: undefined, opacity: 1,
 		flipHoriz : false, flipVert : false,
@@ -737,7 +752,7 @@ function experimentInit() {
 	bookmarkStim = new visual.ImageStim({
 		win : psychoJS.window,
 		name : 'bookmark', units : 'norm', 
-		image : 'bookmark', mask : undefined,
+		image : 'bookmark.png', mask : undefined,
 		ori : 0, pos : [-0.9, 0.05],
 		color: undefined, opacity: 1,
 		flipHoriz : false, flipVert : false,
@@ -759,7 +774,7 @@ function experimentInit() {
 	listStim = new visual.ImageStim({
 		win : psychoJS.window,
 		name : 'list', units : 'norm', 
-		image : 'list', mask : undefined,
+		image : 'list.png', mask : undefined,
 		ori : 0, pos : [-0.9, -0.12],
 		color: undefined, opacity: 1,
 		flipHoriz : false, flipVert : false,
@@ -781,7 +796,7 @@ function experimentInit() {
 	profileStim = new visual.ImageStim({
 		win : psychoJS.window,
 		name : 'profile', units : 'norm', 
-		image : 'profile', mask : undefined,
+		image : 'profile.png', mask : undefined,
 		ori : 0, pos : [-0.9, -0.29],
 		color: undefined, opacity: 1,
 		flipHoriz : false, flipVert : false,
@@ -803,7 +818,7 @@ function experimentInit() {
 	moreStim = new visual.ImageStim({
 		win : psychoJS.window,
 		name : 'more', units : 'norm', 
-		image : 'more', mask : undefined,
+		image : 'more.png', mask : undefined,
 		ori : 0, pos : [-0.9, -0.46],
 		color: undefined, opacity: 1,
 		flipHoriz : false, flipVert : false,
@@ -825,7 +840,7 @@ function experimentInit() {
 	profilePicStim = new visual.ImageStim({
 		win : psychoJS.window,
 		name : 'profile_pic', units : 'norm', 
-		image : 'profile_pic', mask : undefined,
+		image : 'profile_pic.png', mask : undefined,
 		ori : 0, pos : [-0.87, -0.86],
 		color: undefined, opacity: 1,
 		flipHoriz : false, flipVert : false,
@@ -835,7 +850,29 @@ function experimentInit() {
 	profilePicPostStim = new visual.ImageStim({
 		win : psychoJS.window,
 		name : 'profile_pic_post', units : 'norm', 
-		image : 'profile_pic', mask : undefined,
+		image : 'profile_pic.png', mask : undefined,
+		ori: 0,
+		pos: [ -0.373, 0.82 ], 
+		size: [0.09,0.11],
+		color: undefined, opacity: 1,
+		flipHoriz : false, flipVert : false,
+		texRes : 128, interpolate : true, depth : 0
+	});
+
+	profilePicRRStim = new visual.ImageStim({
+		win : psychoJS.window,
+		name : 'profile_picRR', units : 'norm', 
+		image : 'profile_picRR.png', mask : undefined,
+		ori : 0, pos : [-0.87, -0.86],
+		color: undefined, opacity: 1,
+		flipHoriz : false, flipVert : false,
+		texRes : 128, interpolate : true, depth : 0
+	});
+
+	profilePicRRPostStim = new visual.ImageStim({
+		win : psychoJS.window,
+		name : 'profile_picRR_post', units : 'norm', 
+		image : 'profile_picRR.png', mask : undefined,
 		ori: 0,
 		pos: [ -0.373, 0.82 ], 
 		size: [0.09,0.11],
@@ -870,6 +907,24 @@ function experimentInit() {
 		font: 'lucida grande',
 		ori : 0, pos : [0.4, 0.8],
 	});
+
+	beginButton = new visual.ButtonStim({
+		win : psychoJS.window,
+		name: 'begin_button',
+		units: 'norm', 
+		text: 'Begin', 
+		anchor: 'center',
+		size: [0.17, 1],
+		alignVert: 'center',
+		alignHoriz: 'center',
+		fillColor: new util.Color('green'),
+		// opacity: .5,
+		letterHeight: 0.04,
+		font: 'lucida grande',
+		ori : 0, pos : [0.19, 0.78],
+	});
+	beginButton.setAnchor('center')
+	console.log(beginButton.getAlignment())
 
 	
 	mouse = new core.Mouse({win: psychoJS.window})
@@ -910,7 +965,20 @@ function experimentInit() {
 		postStims[i].profile_photo = new visual.ImageStim({
 			win : psychoJS.window,
 			name : `profile_pic_post_${i}`, units : 'norm', 
-			image : 'profile_pic', mask : undefined,
+			image : 'profile_pic.png', mask : undefined,
+			ori: 0,
+			pos: [ -0.373, postStims[i].postphoto_y ], 
+			size: [0.07, 0.09],
+			color: undefined, opacity: 1,
+			flipHoriz : false, flipVert : false,
+			texRes : 128, interpolate : true, depth : 0
+		});
+
+		// Mini Profile Photo for Reversa
+		postStims[i].profileRR_photo = new visual.ImageStim({
+			win : psychoJS.window,
+			name : `profile_picRR_post_${i}`, units : 'norm', 
+			image : 'profile_picRR.png', mask : undefined,
 			ori: 0,
 			pos: [ -0.373, postStims[i].postphoto_y ], 
 			size: [0.07, 0.09],
@@ -923,7 +991,7 @@ function experimentInit() {
 		postStims[i].like_icon = new visual.ImageStim({
 			win : psychoJS.window,
 			name : `like_post_${i}`, units : 'pix', 
-			image : 'heart', mask : undefined,
+			image : 'heart.png', mask : undefined,
 			ori: 0,
 			pos: [ 0.65, postStims[i].postlikeIcon_y ], 
 			size: [0.04, 0.05],
@@ -936,7 +1004,7 @@ function experimentInit() {
 		postStims[i].like_icon_outline = new visual.ImageStim({
 			win : psychoJS.window,
 			name : `like_post_${i}_outline`, units : 'pix', 
-			image : 'heart_outline', mask : undefined,
+			image : 'heart_outline.png', mask : undefined,
 			ori: 0,
 			pos: [ 0.65, postStims[i].postlikeIcon_y ], 
 			size: [0.04, 0.05],
@@ -1314,6 +1382,36 @@ function trials_exampleLoopBegin(thisScheduler) {
 	return Scheduler.Event.NEXT;
 }
 
+
+function trials_role_reversalBegin(thisScheduler) {
+	// role_reversal_shedule
+	total_games = 2
+	
+	roleReversalTrials = new TrialHandler({
+		psychoJS: psychoJS,
+		nReps: 1, method: TrialHandler.Method.SEQUENTIAL,
+		extraInfo: expInfo, originPath: undefined,
+		trialList: 'role_reversal_shedule.xls',
+		seed: undefined, name: 'roleReversalTrials'
+	});
+	psychoJS.experiment.addLoop(roleReversalTrials); // add the loop to the experiment
+	currentLoop = roleReversalTrials;  // we're now the current loop
+
+	// Schedule all the roleReversalTrials in the trialList:
+	// Schedule all the trials in the trialList:
+	for (const thisTrial of roleReversalTrials) {
+		const snapshot = roleReversalTrials.getSnapshot();
+
+		thisScheduler.add(importConditions(snapshot));
+		thisScheduler.add(trialRoleReversalRoutineBegin(snapshot));
+		thisScheduler.add(trialRoleReversalRoutineEachFrameWaitforInput(snapshot));
+		thisScheduler.add(trialRoleReversalRoutineEachFrameShowPost(snapshot));
+		thisScheduler.add(trialRoleReversalRoutineEnd(snapshot));
+		thisScheduler.add(endLoopIteration(thisScheduler, snapshot));
+	}
+	return Scheduler.Event.NEXT;
+}
+
 function instructRoutineEnd(trials) {
 	return function () {
 		//------Ending Routine 'instruct'-------
@@ -1329,6 +1427,7 @@ function instructRoutineEnd(trials) {
 	};
 }
 var example_trials;
+var roleReversalTrials;
 var trials;
 var currentLoop;
 var lastTrialKeyPressed;
@@ -1431,14 +1530,6 @@ function trialRoutineBegin(trials) {
 		trialClock.reset(); // clock
 		frameN = -1;
 		// update component parameters for each repeat
-		// word.setColor(new util.Color(letterColor));
-
-
-		// choice1Button.fillColor = new util.Color(leftFadeColor)
-		// choice1Button.color = new util.Color(fontFadeColor)
-		// choice2Button.fillColor = new util.Color(rightFadeColor)
-		// choice2Button.color = new util.Color(fontFadeColor)
-
 		switch (force_pos) {
 			case 'R':
 				choice1Button.fillColor = new util.Color(leftFadeColor)
@@ -1537,6 +1628,7 @@ function trialRoutineBegin(trials) {
 		fullNameStim.setAutoDraw(true)
 
 		pageName.setAutoDraw(true)
+		questionText.setText('Choose a topic:')
 		questionText.setAutoDraw(true)
 		profilePicPostStim.setAutoDraw(true)
 
@@ -1558,6 +1650,98 @@ function trialRoutineBegin(trials) {
 	};
 }
 
+function trialRoleReversalRoutineBegin(trials) {
+	return function () {
+		//------Prepare to start Routine 'trial'-------
+		t = 0;
+		trialClock.reset(); // clock
+		frameN = -1;
+		// update component parameters for each repeat
+
+		// If it's a new game, clear other texts
+		// console.log(lastGameNumber)
+		if (game_number != lastGameNumber) {
+			leftTopicCounter = 0
+			rightTopicCounter = 0
+			lastTrialKeyPressed = false;
+			// bandits_rect['right'][trial_num].fillColor = false
+			// bandits_rect['left'][trial_num].fillColor = false
+			reset_stims()
+			// clearBandits()
+		}
+
+		// Set components from last trial
+		console.log(`Role Reversal ChatRoom: ${game_number}, trial #${trial_num}, game type ${game_type} starting`)
+
+		setupPosts(game_type)
+		
+		currentTrialNumber.setText(`${trial_num}`)
+		dayNumberTracker.setText(`${game_number + 1}/${total_games}`)
+		totalLikesTracker.setText(`${totalPoints}`)
+
+		headerRectStim.setAutoDraw(true)
+		dividerStim.setAutoDraw(true)
+
+		// searchStim.setAutoDraw(true)
+		homeStim.setAutoDraw(true)
+		homeTextStim.setAutoDraw(true)
+		hashtagStim.setAutoDraw(true)
+		exploreTextStim.setAutoDraw(true)
+		notificationStim.setAutoDraw(true)
+		notificationTextStim.setAutoDraw(true)
+		messageStim.setAutoDraw(true)
+		messageTextStim.setAutoDraw(true)
+		bookmarkStim.setAutoDraw(true)
+		bookmarkTextStim.setAutoDraw(true)
+		listStim.setAutoDraw(true)
+		listTextStim.setAutoDraw(true)
+		profileStim.setAutoDraw(true)
+		profileTextStim.setAutoDraw(true)
+		profilePicRRStim.setAutoDraw(true)
+		moreStim.setAutoDraw(true)
+		moreTextStim.setAutoDraw(true)
+
+		currentTrialText.setAutoDraw(true)
+		currentTrialNumber.setAutoDraw(true)
+		// Draw the Tracker and Points Counter
+		dayNumberTrackerText.setAutoDraw(true)
+		dayNumberTracker.setAutoDraw(true)
+
+
+		newLoadingAnimation()
+
+		
+		logoStim.setAutoDraw(true)
+		usernameStim.setAutoDraw(true)
+		fullNameStim.setAutoDraw(true)
+
+		pageName.setAutoDraw(true)
+		questionText.setText('\nLike Posts!\nClick the heart to like the post.')
+
+		questionText.setAutoDraw(true)
+		beginButton.setAutoDraw(true)
+
+		profilePicRRPostStim.setAutoDraw(true)
+
+		lastTrialKeyPressed = false
+	
+		resp.keys = undefined;
+		resp.rt = undefined;
+		// keep track of which components have finished
+		trialComponents = [];
+		// trialComponents.push(bandits['left'][trial_num]);
+		// trialComponents.push(left_bandit_0);
+		trialComponents.push(resp);
+
+		for (const thisComponent of trialComponents)
+			if ('status' in thisComponent)
+				thisComponent.status = PsychoJS.Status.NOT_STARTED;
+
+		return Scheduler.Event.NEXT;
+	};
+}
+
+
 /**
  * Returns true if this is the last trial
  * @param {*} game_type 
@@ -1575,6 +1759,7 @@ function reset_stims() {
 	console.log('reset stims called')
 	choice1Button.setAutoDraw(false)
 	choice2Button.setAutoDraw(false)
+	beginButton.setAutoDraw(false)
 
 	for (var i = 0; i <= 9; i++) {
 		// Init Left textStims
@@ -1632,6 +1817,7 @@ function getAnimationAttributes(reward) {
 	return animationAttributes
 }
 
+// This is the Route for Whe we wait for Input
 function trialRoutineEachFrameWaitforInput(trials) {
 	return function () {
 		//------Loop for each frame of Routine 'trial'-------
@@ -1675,13 +1861,13 @@ function trialRoutineEachFrameWaitforInput(trials) {
 			let theseKeys = resp.getKeys({ keyList: keyList, waitRelease: false });
 
 			// After key is pressed, go to next routine
-			if ( theseKeys && theseKeys.length > 0 ){  // at least one key was pressed
+			if ( theseKeys && theseKeys.length == 1 ){  // one key was pressed
 				resp.keys = theseKeys[0].name;  // just the last key pressed
 				resp.rt = theseKeys[0].rt;
 				
 				
 				lastTrialKeyPressed = resp.keys;
-				console.log(lastTrialKeyPressed)
+				// console.log(lastTrialKeyPressed)
 
 				// Set the position of the stims so that the posts overlapp based on resopnse
 				// For Left Topic, Put the Likes on the Left and the Profile logo on the right
@@ -1692,7 +1878,7 @@ function trialRoutineEachFrameWaitforInput(trials) {
 					postStims[trial_num].profile_photo = new visual.ImageStim({
 						win : psychoJS.window,
 						name : `profile_pic_post_${trial_num}`, units : 'norm', 
-						image : 'profile_pic',
+						image : 'profile_pic.png',
 						ori: 0,
 						pos: [ post_stim_x_pos.left.profile_photo, postStims[trial_num].postphoto_y ], 
 						size: [0.07,0.09],
@@ -1704,7 +1890,7 @@ function trialRoutineEachFrameWaitforInput(trials) {
 					postStims[trial_num].like_icon = new visual.ImageStim({
 						win : psychoJS.window,
 						name : `like_post_${trial_num}`, units : 'norm', 
-						image : 'heart', mask : undefined,
+						image : 'heart.png', mask : undefined,
 						ori: 0,
 						pos: [ post_stim_x_pos.left.like_icon, postStims[trial_num].postlikeIcon_y ], 
 						size: [0.04,0.05],
@@ -1716,7 +1902,7 @@ function trialRoutineEachFrameWaitforInput(trials) {
 					postStims[trial_num].like_icon_outline = new visual.ImageStim({
 						win : psychoJS.window,
 						name : `like_post_${trial_num}_outline`, units : 'norm', 
-						image : 'heart_outline', mask : undefined,
+						image : 'heart_outline.png', mask : undefined,
 						ori: 0,
 						pos: [ post_stim_x_pos.left.like_icon, postStims[trial_num].postlikeIcon_y ], 
 						size: [0.04,0.05],
@@ -1755,12 +1941,12 @@ function trialRoutineEachFrameWaitforInput(trials) {
 					// Set the other bandit as XX
 					// bandits['right'][trial_num].setText('XX')
 					totalPoints = totalPoints + left_reward
-				} else if (resp.keys == RIGHT_KEY) {
+				} else {
 
 					postStims[trial_num].profile_photo = new visual.ImageStim({
 						win : psychoJS.window,
 						name : `profile_pic_post_${trial_num}`, units : 'norm', 
-						image : 'profile_pic',
+						image : 'profile_pic.png',
 						ori: 0,
 						pos: [ post_stim_x_pos.right.profile_photo, postStims[trial_num].postphoto_y ], 
 						size: [0.07,0.09],
@@ -1772,7 +1958,7 @@ function trialRoutineEachFrameWaitforInput(trials) {
 					postStims[trial_num].like_icon = new visual.ImageStim({
 						win : psychoJS.window,
 						name : `like_post_${trial_num}`, units : 'norm', 
-						image : 'heart', mask : undefined,
+						image : 'heart.png', mask : undefined,
 						ori: 0,
 						pos: [ post_stim_x_pos.right.like_icon, postStims[trial_num].postlikeIcon_y ], 
 						size: [0.04,0.05],
@@ -1784,7 +1970,7 @@ function trialRoutineEachFrameWaitforInput(trials) {
 					postStims[trial_num].like_icon_outline = new visual.ImageStim({
 						win : psychoJS.window,
 						name : `like_post_${trial_num}_outline`, units : 'norm', 
-						image : 'heart_outline', mask : undefined,
+						image : 'heart_outline.png', mask : undefined,
 						ori: 0,
 						pos: [ post_stim_x_pos.right.like_icon, postStims[trial_num].postlikeIcon_y ], 
 						size: [0.04,0.05],
@@ -1866,19 +2052,13 @@ function trialRoutineEachFrameShowPost(trials) {
 			
 			loadingAnimation()
 		}
-
-		
-		
-		
-
 		// check for quit (typically the Esc key)
 		if (psychoJS.eventManager.getKeys({keyList:['escape']}).length > 0) {
 			return quitPsychoJS('The [Escape] key was pressed. Goodbye!', false);
 		}
 
 		// After 3 seconds go to the next Trial (post)
-		
-		if (t > .1) {
+		if (t > 3) {
 			removeLoadingAnimation()
 			newLoadingAnimation()
 			postStims[trial_num].like_icon_outline.setAutoDraw(false) // don't show the heart outline
@@ -1888,6 +2068,176 @@ function trialRoutineEachFrameShowPost(trials) {
 			return Scheduler.Event.NEXT;
 		}
 		return Scheduler.Event.FLIP_REPEAT;
+	};
+}
+
+// This the routine when we wait for the user to click a like
+function trialRoleReversalRoutineEachFrameWaitforInput(trials) {
+	return function () {
+		//------Loop for each frame of Routine 'trial'-------
+		let continueRoutine = true; // until we're told otherwise
+	
+		// get current time
+		t = trialClock.getTime();
+		frameN = frameN + 1;// number of completed frames (so 0 is the first frame)
+
+
+		// *resp* updates
+		if (t >= 0.5 && resp.status === PsychoJS.Status.NOT_STARTED) {
+			// keep track of start time/frame for later
+			resp.tStart = t;  // (not accounting for frame time here)
+			resp.frameNStart = frameN;  // exact frame index
+
+			// keyboard checking is just starting
+			psychoJS.window.callOnFlip(function () { resp.clock.reset(); });  // t=0 on next screen flip
+			psychoJS.window.callOnFlip(function () { resp.start(); }); // start on screen flip
+			psychoJS.window.callOnFlip(function () { resp.clearEvents(); });
+		}
+
+		if (resp.status === PsychoJS.Status.STARTED) {
+			// After key is pressed, go to next routine
+			if ( mouse.isPressedIn(beginButton) ){  // at least one key was pressed
+				beginButton.setAutoDraw(false)  // remove the begin Button
+
+				postStims[trial_num].profileRR_photo = new visual.ImageStim({
+					win : psychoJS.window,
+					name : `profile_pic_post_${trial_num}`, units : 'norm', 
+					image : 'profile_pic.png',
+					ori: 0,
+					pos: [ post_stim_x_pos.right.profile_photo, postStims[trial_num].postphoto_y ], 
+					size: [0.07,0.09],
+					color: undefined, opacity: 1,
+					flipHoriz : false, flipVert : false,
+					texRes : 128, interpolate : true, depth : 0
+				});
+
+				postStims[trial_num].like_icon = new visual.ImageStim({
+					win : psychoJS.window,
+					name : `like_post_${trial_num}`, units : 'norm', 
+					image : 'heart.png', mask : undefined,
+					ori: 0,
+					pos: [ post_stim_x_pos.right.like_icon, postStims[trial_num].postlikeIcon_y ], 
+					size: [0.04,0.05],
+					color: undefined, opacity: 1,
+					flipHoriz : false, flipVert : false,
+					texRes : 128, interpolate : true, depth : 0
+				});
+
+				postStims[trial_num].like_icon_outline = new visual.ImageStim({
+					win : psychoJS.window,
+					name : `like_post_${trial_num}_outline`, units : 'norm', 
+					image : 'heart_outline.png', mask : undefined,
+					ori: 0,
+					pos: [ post_stim_x_pos.right.like_icon, postStims[trial_num].postlikeIcon_y ], 
+					size: [0.04,0.05],
+					color: undefined, opacity: 1,
+					flipHoriz : false, flipVert : false,
+					texRes : 128, interpolate : true, depth : 0
+				});
+
+				postStims[trial_num].post_text.setText(rightTopic[rightTopicCounter])
+				rightTopicCounter++
+				postStims[trial_num].post_text.pos[0] = post_stim_x_pos.right.post_text
+				postStims[trial_num].post_text.alignVert = 'left'
+				postStims[trial_num].post_text.alignHoriz = 'left'			
+				postStims[trial_num].like_posts.pos[0] = post_stim_x_pos.right.like_posts
+				// postStims[trial_num]['like_posts'].setText(right_reward)
+				trial_reward = right_reward
+				
+				postStims[trial_num].rect.fillColor = new util.Color(rightColor)
+				// bandits['left'][trial_num].setText('XX')
+				totalPoints = totalPoints + right_reward
+
+				trialClock.reset();
+
+				return Scheduler.Event.NEXT; // Go to Next Routine after subject makes a selection
+			}
+		}
+
+		// check for quit (typically the Esc key)
+		if (psychoJS.eventManager.getKeys({keyList:['escape']}).length > 0) {
+			return quitPsychoJS('The [Escape] key was pressed. Goodbye!', false);
+		}
+
+		return Scheduler.Event.FLIP_REPEAT;
+	};
+}
+
+function trialRoleReversalRoutineEachFrameShowPost(trials) {
+	return function () {
+		//------Loop for each frame of Routine 'trial'-------
+		let continueRoutine = true; // until we're told otherwise
+	
+		// get current time
+		t = trialClock.getTime();
+		frameN = frameN + 1;// number of completed frames (so 0 is the first frame)
+
+		//postStims[trial_num].rect.opacity = 0.5 
+
+		if (t > 0.5) {
+			postStims[trial_num].post_text.setAutoDraw(true)
+			postStims[trial_num].like_icon_outline.setAutoDraw(true) // show the heart outline
+			
+			// postStims[trial_num].like_posts.setAutoDraw(true)
+			postStims[trial_num].profileRR_photo.setAutoDraw(true)
+			
+			loadingAnimation()
+
+			if (mouse.isPressedIn(postStims[trial_num].like_icon_outline)) {
+				postStims[trial_num].like_icon_outline.setAutoDraw(false)
+				postStims[trial_num].like_icon.setAutoDraw(true) // show filled in heart
+			}
+		}
+
+		// check for quit (typically the Esc key)
+		if (psychoJS.eventManager.getKeys({keyList:['escape']}).length > 0) {
+			return quitPsychoJS('The [Escape] key was pressed. Goodbye!', false);
+		}
+
+		// After 3 seconds go to the next Trial (post)
+		if (t > 3) {
+			removeLoadingAnimation()
+			newLoadingAnimation()
+			//postStims[trial_num].like_icon_outline.setAutoDraw(false) // don't show the heart outline
+			
+			postStims[trial_num].like_posts.setText(trial_reward)
+			postStims[trial_num].like_posts.setAutoDraw(true)
+			return Scheduler.Event.NEXT;
+		}
+		return Scheduler.Event.FLIP_REPEAT;
+	};
+}
+
+function trialRoleReversalRoutineEnd(trials) {
+	return function () {
+		//------Ending Routine 'trial'-------
+		// console.log("Trial Route End for Trial " + trial_num)
+
+		if (resp.keys == LEFT_KEY) {
+			lastTrialPoints = left_reward
+		}
+		if (resp.keys == RIGHT_KEY) {
+			lastTrialPoints = right_reward
+		}
+
+		lastGameNumber = game_number
+		
+		// store data for thisExp (ExperimentHandler)
+		psychoJS.experiment.addData('resp.keys', key_map[resp.keys]);
+		psychoJS.experiment.addData('points', totalPoints);
+		// psychoJS.experiment.addData('resp.corr', resp.corr);
+		if (typeof resp.keys !== 'undefined') {  // we had a response
+			psychoJS.experiment.addData('resp.rt', resp.rt);
+			routineTimer.reset();
+		}
+		
+		resp.stop();
+		// the Routine "trial" was not non-slip safe, so reset the non-slip timer
+		routineTimer.reset();
+		trialClock.reset();
+
+	
+		return Scheduler.Event.NEXT;
 	};
 }
 
