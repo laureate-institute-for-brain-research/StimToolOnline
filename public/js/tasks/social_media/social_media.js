@@ -249,7 +249,7 @@ dialogCancelScheduler.add(quitPsychoJS, '', false);
 var resources = [
 	{ name: 'example_play.xls', path: '/js/tasks/social_media/example_play.xls' },
 	{ name: 'role_reversal_shedule.xls', path:'/js/tasks/social_media/role_reversal_shedule.xls' },
-	{ name: '/js/tasks/social_media/media/instructions/Slide25.jpeg', path: '/js/tasks/social_media/media/instructions/Slide25.jpeg'},
+	{ name: '/js/tasks/social_media/media/instructions/Slide26.jpeg', path: '/js/tasks/social_media/media/instructions/Slide26.jpeg'},
 	{ name: 'role_reversal_instruct_schedule.csv', path: '/js/tasks/social_media/media/role_reversal_instruct_schedule.csv'},
 	{ name: 'logo.png', path: '/js/tasks/social_media/media/mice.png' },
 	{ name: 'home.png', path: '/js/tasks/social_media/media/home.png' },
