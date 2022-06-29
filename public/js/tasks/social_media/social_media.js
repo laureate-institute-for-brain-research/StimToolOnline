@@ -474,6 +474,8 @@ var currentTrialText;
 var dayNumberTracker;
 var dayNumberTrackerText;
 var totalPoints = 0;
+var totalPossible = 0;
+var socialApprovalScore = 0;
 var totalLikesTracker;
 var totalLikesText;
 
@@ -1640,7 +1642,14 @@ function trialRoutineBegin(trials) {
 		
 		currentTrialNumber.setText(`${trial_num}`)
 		dayNumberTracker.setText(`${game_number + 1}/${total_games}`)
-		totalLikesTracker.setText(`${totalPoints}`)
+
+		if (force_pos == 'X') {
+			totalLikesTracker.setText(`${ Math.round(socialApprovalScore * 100) }%`)
+		} else {
+			// Social Approval Score is not calcuated during Force Trials
+			totalLikesTracker.setText(`--`)
+		}
+		
 
 		headerRectStim.setAutoDraw(true)
 		dividerStim.setAutoDraw(true)
@@ -1998,7 +2007,15 @@ function trialRoutineEachFrameWaitforInput(trials) {
 
 					// Set the other bandit as XX
 					// bandits['right'][trial_num].setText('XX')
-					totalPoints = totalPoints + left_reward
+					
+
+					if (force_pos == 'X') {
+						totalPoints = totalPoints + left_reward
+						totalPossible = totalPossible + right_reward + left_reward
+						socialApprovalScore = totalPoints / totalPossible
+						// console.log(left_reward, right_reward,totalPossible,socialApprovalScore )
+					}
+					
 				} else {
 
 					postStims[trial_num].profile_photo = new visual.ImageStim({
@@ -2063,7 +2080,13 @@ function trialRoutineEachFrameWaitforInput(trials) {
 					
 					postStims[trial_num].rect.fillColor = new util.Color(rightColor)
 					// bandits['left'][trial_num].setText('XX')
-					totalPoints = totalPoints + right_reward
+
+					if (force_pos == 'X') {
+						totalPoints = totalPoints + right_reward
+						totalPossible = totalPossible + right_reward + left_reward
+						socialApprovalScore = totalPoints / totalPossible
+						// console.log(left_reward, right_reward,totalPossible,socialApprovalScore )
+					}
 				}
 			
 
@@ -2222,6 +2245,7 @@ function trialRoleReversalRoutineEachFrameWaitforInput(trials) {
 				postStims[trial_num].rect.fillColor = new util.Color(rightColor)
 				// bandits['left'][trial_num].setText('XX')
 				totalPoints = totalPoints + right_reward
+
 
 				trialClock.reset();
 
