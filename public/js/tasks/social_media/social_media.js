@@ -406,12 +406,20 @@ for (let i = 0; i <= 9; i++){
 var choice1Button;
 var choice2Button;
 
+var topic_text;
+
 var leftTopicCounter = 0
 var leftTopic = [
-	'I listened to country all the time at my friends house when I was younger, but never really by myself.',
-	'I feel like some country songs are super sad. Might make me feel better though if I was having a bad day.',
-	'Bars in the southwest are definitely fun if you like to dance to country music. I went to one the other night and stayed for like 4 hours!',
-	"It seems like people outside of America aren't as into country music. If not, they're missing out!"
+	'I listened to country all the time at my friends house when I was younger.',
+	"I feel like some country songs make me feel better when I'm having a bad day.",
+	'Bars in the southwest are definitely fun if you like to dance to country music.',
+	"It seems like people outside of America aren't as into country music. If not, they're missing out!",
+	"I love Brad Paisley more than any other artist.",
+	"NA",
+	"NA",
+	"NA",
+	"NA",
+	"NA"
 ]
 var rightTopicCounter = 0
 var rightTopic = [
@@ -419,7 +427,12 @@ var rightTopic = [
 	"I'm trying to decide which concert to go to. Both have rappers I really like!",
 	"I like listening to rap when I'm in some moods, but not others.",
 	"Rappers talk so fast I sometimes can't understand what they're saying, but it still sounds good anyway!",
-	"I can't believe they cancelled the concert. Good rap artists never come do shows here anymore!"
+	"I can't believe they cancelled the concert. Good rap artists never come do shows here anymore!",
+	"NA",
+	"NA",
+	"NA",
+	"NA",
+	"NA"
 ]
 
 var samplePosts = [
@@ -436,7 +449,6 @@ var samplePosts = [
 ]
 
 var beginButton;
-
 
 var moreStim;
 
@@ -468,6 +480,7 @@ var totalLikesText;
 var readyClock;
 var readyText;
 
+
 var track;
 
 var resp;
@@ -487,6 +500,9 @@ function removeLoadingAnimation() {
 		loadingStim[i].setAutoDraw(false)
 	}
 }
+
+
+
 
 function newLoadingAnimation() {
 
@@ -525,6 +541,43 @@ function loadingAnimation() {
 	} else {
 		loadingCounter = 0
 	}
+}
+
+function normalize_elements(strings) {
+	// This will take a list of element string
+	// Group them so that they all have the same amount of elements
+	let string_length = strings.length
+	if (string_length == 0) {
+		return ['Hello', 'World']
+	}
+
+	// console.log('string lenght:',string_length)
+	if (string_length <= (30 / animation_duration)) {
+		return strings // return as is since it's less than the max frame count
+	} else {
+		let mod_num = Math.ceil(string_length / (30 / animation_duration))
+		let new_strings = []
+		var begin_index = 0
+		for (var i = 0; i <= string_length; i++){
+			if (i % mod_num == 0) {
+				new_strings.push(strings.slice(begin_index, i + 1).join(' '))
+				begin_index = i + 1
+			}
+		}
+
+		return new_strings
+	}
+
+
+}
+
+var topic_text_elements;
+function loadingAnimationText() {
+	// topic_text_test = normalize_elements(topic_text.split(' '))
+	// console.log(topic_text_elements)
+	postStims[trial_num].post_text.setText(topic_text_elements.slice(0, loadingCounter).join(' '))
+	if (frameN % 6 == 0) loadingCounter++
+
 }
 
 function experimentInit() {
@@ -924,7 +977,6 @@ function experimentInit() {
 		ori : 0, pos : [0.19, 0.78],
 	});
 	beginButton.setAnchor('center')
-	console.log(beginButton.getAlignment())
 
 	
 	mouse = new core.Mouse({win: psychoJS.window})
@@ -948,7 +1000,7 @@ function experimentInit() {
 		postStims[i].post_text = new visual.TextStim({
 			win: psychoJS.window,
 			name: `post_text_${i}`,
-			text: samplePosts[i],
+			text: 'sample post goes here',
 			fontFamily: 'lucida grande',
 			multiline: true,
 			height: 0.043,
@@ -1069,7 +1121,7 @@ function experimentInit() {
 	dayNumberTrackerText = new visual.TextStim({
 		win: psychoJS.window,
 		name: 'gameTrackerText',
-		text: 'CHAT ROOM:',
+		text: 'CHATROOM:',
 		font: 'lucida grande',
 		units: 'norm',
 		alignHoriz: 'center',
@@ -1432,6 +1484,7 @@ var trials;
 var currentLoop;
 var lastTrialKeyPressed;
 var total_games;
+var animation_duration = 2
 function trialsLoopBegin(thisScheduler) {
 	// set up handler to look up the conditions
 	total_games = 80
@@ -1561,6 +1614,9 @@ function trialRoutineBegin(trials) {
 				choice2Button.color = new util.Color(fontColor)
 		}
 
+		lastTrial = isLastTrial(game_type, trial_num)
+
+
 		// If it's a new game, clear other texts
 		// console.log(lastGameNumber)
 		if (game_number != lastGameNumber) {
@@ -1620,7 +1676,7 @@ function trialRoutineBegin(trials) {
 		choice2Button.setAutoDraw(true)
 
 
-		newLoadingAnimation()
+		// newLoadingAnimation()
 
 		
 		logoStim.setAutoDraw(true)
@@ -1913,10 +1969,10 @@ function trialRoutineEachFrameWaitforInput(trials) {
 
 					// postStims[i].like_animation = new visual.ImageStim({
 					// 	win : psychoJS.window,
-					// 	name : `loading_${trial_num}`, units : 'norm', 
+					// 	name : `loading_${trial_num}`, units : 'norm',
 					// 	image : 'loading', mask : undefined,
 					// 	ori: 0,
-					// 	pos: [ post_stim_x_pos.left.like_icon, postStims[trial_num].postlikeIcon_y + .03 ], 
+					// 	pos: [ post_stim_x_pos.left.like_icon, postStims[trial_num].postlikeIcon_y + .03 ],
 					// 	size: [0.04,0.05],
 					// 	color: undefined, opacity: 1,
 					// 	flipHoriz : false, flipVert : false,
@@ -1925,7 +1981,9 @@ function trialRoutineEachFrameWaitforInput(trials) {
 					
 
 					// postStims[trial_num]['profile_photo'].pos[0] = post_stim_x_pos.left.profile_photo
-					postStims[trial_num].post_text.setText(leftTopic[leftTopicCounter])
+					topic_text = leftTopic[leftTopicCounter]
+					topic_text_elements = normalize_elements(topic_text.split(' '))
+					postStims[trial_num].post_text.setText('')
 					leftTopicCounter++
 					postStims[trial_num].post_text.pos[0] = post_stim_x_pos.left.post_text
 					postStims[trial_num].post_text.alignVert = 'right'
@@ -1982,7 +2040,7 @@ function trialRoutineEachFrameWaitforInput(trials) {
 
 					// postStims[i].like_animation = new visual.ImageStim({
 					// 	win : psychoJS.window,
-					// 	name : `loading_${trial_num}`, units : 'norm', 
+					// 	name : `loading_${trial_num}`, units : 'norm',
 					// 	image : 'loading', mask : undefined,
 					// 	ori: 0,
 					// 	pos: [ post_stim_x_pos.right.like_icon, postStims[trial_num].postlikeIcon_y + .03 ],
@@ -1992,7 +2050,9 @@ function trialRoutineEachFrameWaitforInput(trials) {
 					// 	texRes : 128, interpolate : true, depth : 0
 					// });
 
-					postStims[trial_num].post_text.setText(rightTopic[rightTopicCounter])
+					topic_text = rightTopic[rightTopicCounter]
+					topic_text_elements = normalize_elements(topic_text.split(' '))
+					postStims[trial_num].post_text.setText('')
 					rightTopicCounter++
 					postStims[trial_num].post_text.pos[0] = post_stim_x_pos.right.post_text
 					postStims[trial_num].post_text.alignVert = 'left'
@@ -2031,6 +2091,7 @@ function trialRoutineEachFrameWaitforInput(trials) {
 	};
 }
 
+
 // This Routine hanlds the animation
 function trialRoutineEachFrameShowPost(trials) {
 	return function () {
@@ -2045,27 +2106,41 @@ function trialRoutineEachFrameShowPost(trials) {
 
 		if (t > 0.5) {
 			postStims[trial_num].post_text.setAutoDraw(true)
-			postStims[trial_num].like_icon_outline.setAutoDraw(true) // show the heart outline
+			//postStims[trial_num].like_icon_outline.setAutoDraw(true) // show the heart outline
 			
 			// postStims[trial_num].like_posts.setAutoDraw(true)
 			postStims[trial_num].profile_photo.setAutoDraw(true)
-			
-			loadingAnimation()
+			// console.log(loadingCounter)
+			loadingAnimationText()
+			// loadingAnimation()
+
+			postStims[trial_num].like_posts.setText(trial_reward)
+			postStims[trial_num].like_posts.setAutoDraw(true)
+			postStims[trial_num].like_icon.setAutoDraw(true) // show filled in heart
 		}
 		// check for quit (typically the Esc key)
 		if (psychoJS.eventManager.getKeys({keyList:['escape']}).length > 0) {
 			return quitPsychoJS('The [Escape] key was pressed. Goodbye!', false);
 		}
 
-		// After 3 seconds go to the next Trial (post)
-		if (t > 3) {
-			removeLoadingAnimation()
-			newLoadingAnimation()
-			postStims[trial_num].like_icon_outline.setAutoDraw(false) // don't show the heart outline
-			postStims[trial_num].like_icon.setAutoDraw(true) // show filled in heart
-			postStims[trial_num].like_posts.setText(trial_reward)
-			postStims[trial_num].like_posts.setAutoDraw(true)
-			return Scheduler.Event.NEXT;
+		// After 3 seconds go to the next Trial (post) or next chat room
+		if (t > animation_duration) {
+			loadingCounter = 0
+			if (!lastTrial) {
+				return Scheduler.Event.NEXT;
+			} else {
+				// Show Instructions about clicking space to go to next chat room
+				questionText.setText('\n\nPress SPACE key to go to\nthe next chatroom.')
+				choice1Button.setAutoDraw(false)
+				choice2Button.setAutoDraw(false)
+
+				// wait for space key
+				let theseKeys = resp.getKeys({ keyList: ['space'], waitRelease: false });
+
+				if (theseKeys.length > 0) {
+					return Scheduler.Event.NEXT;
+				}
+			}
 		}
 		return Scheduler.Event.FLIP_REPEAT;
 	};
