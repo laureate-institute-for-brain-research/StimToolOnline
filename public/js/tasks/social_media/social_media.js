@@ -85,6 +85,8 @@ window.onload = function () {
 			resources.push({ name: 'run_schedule.xls', path: values.schedule })
 			resources.push({ name: 'instruct_schedule.csv', path: values.instruct_schedule })
 
+			resources.push({ name: 'roleReversal_instruct_schedule.csv', path: "role_reversal_instruct_schedule.csv" })
+
 			// Add file paths to expInfo
 			if (values.schedule) expInfo.task_schedule = values.schedule
 			if (values.instruct_schedule) expInfo.instruct_schedule = values.instruct_schedule
@@ -132,9 +134,42 @@ window.onload = function () {
 			if (getQueryVariable('run')) expInfo.run_id = getQueryVariable('run')
 
 			
+			return new Promise((resolve, reject) => {
+				$.ajax({
+					type: 'GET',
+					url: '/js/tasks/social_media/media/role_reversal_instruct_schedule.csv',
+					dataType: 'text',
+					async: false,
+					success: (data) => {
+						var out = [];
+						var allRows = data.split('\n'); // split rows at new line
+						
+						var headerRows = allRows[0].split(',');
+						
+						for (var i=1; i<allRows.length; i++) {
+							var obj = {};
+							var currentLine = allRows[i].split(',');
+							for (var j = 0; j < headerRows.length; j++){
+								obj[headerRows[j]] = currentLine[j];
+							}
+							out.push(obj);
+							resources.push({ name: obj.instruct_slide, path: obj.instruct_slide })
 
-			// If vanderbelt, send them to next run
+							if (obj.audio_path){
+								resources.push({ name: obj.audio_path, path: obj.audio_path })
+							}
+							
+						}
+						console.log(resources)
 
+						resolve(data)
+					}
+				})
+				
+			})
+		})
+	
+		.then(()=>{
 			console.log(expInfo)
 			// expInfo.study = study
 			psychoJS.start({
@@ -143,8 +178,6 @@ window.onload = function () {
 				resources: resources,
 			  })
 			psychoJS._config.experiment.saveFormat = undefined // don't save to client side
-			
-			// console.log(psychoJS)
 		})
 	
 }
@@ -544,7 +577,7 @@ function loadingAnimation() {
 		loadingCounter = 0
 	}
 }
-
+var max_frame;
 function normalize_elements(strings) {
 	// This will take a list of element string
 	// Group them so that they all have the same amount of elements
@@ -553,11 +586,13 @@ function normalize_elements(strings) {
 		return ['Hello', 'World']
 	}
 
+	max_frame = 30 / animation_duration
+
 	// console.log('string lenght:',string_length)
-	if (string_length <= (30 / animation_duration)) {
+	if (string_length <= max_frame) {
 		return strings // return as is since it's less than the max frame count
 	} else {
-		let mod_num = Math.ceil(string_length / (30 / animation_duration))
+		let mod_num = Math.ceil(string_length / max_frame)
 		let new_strings = []
 		var begin_index = 0
 		for (var i = 0; i <= string_length; i++){
@@ -575,6 +610,7 @@ function normalize_elements(strings) {
 
 var topic_text_elements;
 function loadingAnimationText() {
+	// if (frameN > max_frame) return
 	// topic_text_test = normalize_elements(topic_text.split(' '))
 	// console.log(topic_text_elements)
 	postStims[trial_num].post_text.setText(topic_text_elements.slice(0, loadingCounter).join(' '))
@@ -1739,6 +1775,8 @@ function trialRoleReversalRoutineBegin(trials) {
 		console.log(`Role Reversal ChatRoom: ${game_number}, trial #${trial_num}, game type ${game_type} starting`)
 
 		setupPosts(game_type)
+
+		lastTrial = isLastTrial(game_type, trial_num)
 		
 		currentTrialNumber.setText(`${trial_num}`)
 		dayNumberTracker.setText(`${game_number + 1}/${total_games}`)
@@ -1773,7 +1811,7 @@ function trialRoleReversalRoutineBegin(trials) {
 		dayNumberTracker.setAutoDraw(true)
 
 
-		newLoadingAnimation()
+		// newLoadingAnimation()
 
 		
 		logoStim.setAutoDraw(true)
@@ -1781,14 +1819,128 @@ function trialRoleReversalRoutineBegin(trials) {
 		fullNameStim.setAutoDraw(true)
 
 		pageName.setAutoDraw(true)
-		questionText.setText('\nLike Posts!\nClick the heart to like the post.')
 
+		questionText.setText('')
 		questionText.setAutoDraw(true)
-		beginButton.setAutoDraw(true)
+		// beginButton.setAutoDraw(true)
 
 		profilePicRRPostStim.setAutoDraw(true)
 
+		// Prepare the posts
+		// Random Side
+		var choices = ['LEFT', 'RIGHT']
+		var topic_side = choices[Math.floor(Math.random()*choices.length)];
+
+		
+		if (topic_side == 'LEFT') {
+			postStims[trial_num].profileRR_photo = new visual.ImageStim({
+				win : psychoJS.window,
+				name : `profile_picRR_post_${trial_num}`, units : 'norm', 
+				image : 'profile_picRR.png', mask : undefined,
+				ori: 0,
+				pos: [ post_stim_x_pos.left.profile_photo, postStims[trial_num].postphoto_y ], 
+				size: [0.07,0.09],
+				color: undefined, opacity: 1,
+				flipHoriz : false, flipVert : false,
+				texRes : 128, interpolate : true, depth : 0
+			});
+			postStims[trial_num].like_icon = new visual.ImageStim({
+				win : psychoJS.window,
+				name : `like_post_${trial_num}`, units : 'norm', 
+				image : 'heart.png', mask : undefined,
+				ori: 0,
+				pos: [ post_stim_x_pos.left.like_icon, postStims[trial_num].postlikeIcon_y ], 
+				size: [0.04,0.05],
+				color: undefined, opacity: 1,
+				flipHoriz : false, flipVert : false,
+				texRes : 128, interpolate : true, depth : 0
+			});
+			postStims[trial_num].like_icon_outline = new visual.ImageStim({
+				win : psychoJS.window,
+				name : `like_post_${trial_num}_outline`, units : 'norm', 
+				image : 'heart_outline.png', mask : undefined,
+				ori: 0,
+				pos: [ post_stim_x_pos.left.like_icon, postStims[trial_num].postlikeIcon_y ], 
+				size: [0.04,0.05],
+				color: undefined, opacity: 1,
+				flipHoriz : false, flipVert : false,
+				texRes : 128, interpolate : true, depth : 0
+			});
+
+			topic_text = leftTopic[leftTopicCounter]
+			topic_text_elements = normalize_elements(topic_text.split(' '))
+			postStims[trial_num].post_text.setText('')
+			leftTopicCounter++
+			postStims[trial_num].post_text.pos[0] = post_stim_x_pos.left.post_text
+			postStims[trial_num].post_text.alignVert = 'right'
+			postStims[trial_num].post_text.alignHoriz = 'right'
+	
+			postStims[trial_num].like_posts.pos[0] = post_stim_x_pos.left.like_posts
+			// postStims[trial_num]['like_posts'].setText(left_reward)
+			trial_reward = left_reward
+			
+			postStims[trial_num].rect.fillColor = new util.Color(leftColor)
+			postStims[trial_num].rect.lineColor = new util.Color(leftColor)
+			
+		} else {
+			// Right Side
+			postStims[trial_num].profileRR_photo = new visual.ImageStim({
+				win : psychoJS.window,
+				name : `profile_picRR_post_${trial_num}`, units : 'norm', 
+				image : 'profile_picRR.png', mask : undefined,
+				ori: 0,
+				pos: [ post_stim_x_pos.right.profile_photo, postStims[trial_num].postphoto_y ], 
+				size: [0.07,0.09],
+				color: undefined, opacity: 1,
+				flipHoriz : false, flipVert : false,
+				texRes : 128, interpolate : true, depth : 0
+			});
+			postStims[trial_num].like_icon = new visual.ImageStim({
+				win : psychoJS.window,
+				name : `like_post_${trial_num}`, units : 'norm', 
+				image : 'heart.png', mask : undefined,
+				ori: 0,
+				pos: [ post_stim_x_pos.right.like_icon, postStims[trial_num].postlikeIcon_y ], 
+				size: [0.04,0.05],
+				color: undefined, opacity: 1,
+				flipHoriz : false, flipVert : false,
+				texRes : 128, interpolate : true, depth : 0
+			});
+			postStims[trial_num].like_icon_outline = new visual.ImageStim({
+				win : psychoJS.window,
+				name : `like_post_${trial_num}_outline`, units : 'norm', 
+				image : 'heart_outline.png', mask : undefined,
+				ori: 0,
+				pos: [ post_stim_x_pos.right.like_icon, postStims[trial_num].postlikeIcon_y ], 
+				size: [0.04,0.05],
+				color: undefined, opacity: 1,
+				flipHoriz : false, flipVert : false,
+				texRes : 128, interpolate : true, depth : 0
+			});
+
+			topic_text = rightTopic[rightTopicCounter]
+			topic_text_elements = normalize_elements(topic_text.split(' '))
+			postStims[trial_num].post_text.setText('')
+			rightTopicCounter++
+			postStims[trial_num].post_text.pos[0] = post_stim_x_pos.right.post_text
+			postStims[trial_num].post_text.alignVert = 'left'
+			postStims[trial_num].post_text.alignHoriz = 'left'			
+			postStims[trial_num].like_posts.pos[0] = post_stim_x_pos.right.like_posts
+			// postStims[trial_num]['like_posts'].setText(right_reward)
+			trial_reward = right_reward
+			
+			postStims[trial_num].rect.fillColor = new util.Color(rightColor)
+
+		}
+
+		// console.log(topic_text)
+
 		lastTrialKeyPressed = false
+		
+		loadingCounter = 0
+		frameN = 0
+
+		
 	
 		resp.keys = undefined;
 		resp.rt = undefined;
@@ -1845,6 +1997,9 @@ function reset_stims() {
 
 		postStims[i].profile_photo.status = PsychoJS.Status.FINISHED
 		postStims[i].profile_photo.setAutoDraw(false) // draw profile pic post
+
+		postStims[i].profileRR_photo.status = PsychoJS.Status.FINISHED
+		postStims[i].profileRR_photo.setAutoDraw(false) // draw profile pic post
 	}
 }
 
@@ -2181,7 +2336,7 @@ function trialRoleReversalRoutineEachFrameWaitforInput(trials) {
 
 
 		// *resp* updates
-		if (t >= 0.5 && resp.status === PsychoJS.Status.NOT_STARTED) {
+		if (t >= 0.5) {
 			// keep track of start time/frame for later
 			resp.tStart = t;  // (not accounting for frame time here)
 			resp.frameNStart = frameN;  // exact frame index
@@ -2190,69 +2345,41 @@ function trialRoleReversalRoutineEachFrameWaitforInput(trials) {
 			psychoJS.window.callOnFlip(function () { resp.clock.reset(); });  // t=0 on next screen flip
 			psychoJS.window.callOnFlip(function () { resp.start(); }); // start on screen flip
 			psychoJS.window.callOnFlip(function () { resp.clearEvents(); });
+
+			postStims[trial_num].post_text.setAutoDraw(true)
+
+			loadingAnimationText()
+
+			postStims[trial_num].like_posts.setAutoDraw(true)
+			postStims[trial_num].like_posts.setText(trial_reward)
+
+			postStims[trial_num].like_icon_outline.setAutoDraw(true)
+			postStims[trial_num].like_icon.setAutoDraw(false) // filed hard
+
+			postStims[trial_num].profileRR_photo.setAutoDraw(true)
 		}
 
-		if (resp.status === PsychoJS.Status.STARTED) {
+		if (t >= animation_duration) {
+			questionText.setText('\nPress ">" to add a like.\nPress "<" to not add a like.')
+			questionText.setAutoDraw(true)
+			let theseKeys = resp.getKeys({ keyList: [LEFT_KEY, RIGHT_KEY], waitRelease: false });
+
 			// After key is pressed, go to next routine
-			if ( mouse.isPressedIn(beginButton) ){  // at least one key was pressed
-				beginButton.setAutoDraw(false)  // remove the begin Button
-
-				postStims[trial_num].profileRR_photo = new visual.ImageStim({
-					win : psychoJS.window,
-					name : `profile_pic_post_${trial_num}`, units : 'norm', 
-					image : 'profile_picRR.png',
-					ori: 0,
-					pos: [ post_stim_x_pos.right.profile_photo, postStims[trial_num].postphoto_y ], 
-					size: [0.07,0.09],
-					color: undefined, opacity: 1,
-					flipHoriz : false, flipVert : false,
-					texRes : 128, interpolate : true, depth : 0
-				});
-
-				postStims[trial_num].like_icon = new visual.ImageStim({
-					win : psychoJS.window,
-					name : `like_post_${trial_num}`, units : 'norm', 
-					image : 'heart.png', mask : undefined,
-					ori: 0,
-					pos: [ post_stim_x_pos.right.like_icon, postStims[trial_num].postlikeIcon_y ], 
-					size: [0.04,0.05],
-					color: undefined, opacity: 1,
-					flipHoriz : false, flipVert : false,
-					texRes : 128, interpolate : true, depth : 0
-				});
-
-				postStims[trial_num].like_icon_outline = new visual.ImageStim({
-					win : psychoJS.window,
-					name : `like_post_${trial_num}_outline`, units : 'norm', 
-					image : 'heart_outline.png', mask : undefined,
-					ori: 0,
-					pos: [ post_stim_x_pos.right.like_icon, postStims[trial_num].postlikeIcon_y ], 
-					size: [0.04,0.05],
-					color: undefined, opacity: 1,
-					flipHoriz : false, flipVert : false,
-					texRes : 128, interpolate : true, depth : 0
-				});
-
-				postStims[trial_num].post_text.setText(rightTopic[rightTopicCounter])
-				rightTopicCounter++
-				postStims[trial_num].post_text.pos[0] = post_stim_x_pos.right.post_text
-				postStims[trial_num].post_text.alignVert = 'left'
-				postStims[trial_num].post_text.alignHoriz = 'left'			
-				postStims[trial_num].like_posts.pos[0] = post_stim_x_pos.right.like_posts
-				// postStims[trial_num]['like_posts'].setText(right_reward)
-				trial_reward = right_reward
+			if (theseKeys && theseKeys.length == 1) {  // one key was pressed
+				resp.keys = theseKeys[0].name;  // just the last key pressed
+				resp.rt = theseKeys[0].rt;
 				
-				postStims[trial_num].rect.fillColor = new util.Color(rightColor)
-				// bandits['left'][trial_num].setText('XX')
-				totalPoints = totalPoints + right_reward
-
-
-				trialClock.reset();
-
-				return Scheduler.Event.NEXT; // Go to Next Routine after subject makes a selection
+				lastTrialKeyPressed = resp.keys;
+				if (resp.keys == RIGHT_KEY) {
+					// For Right Key, subject is adding a like
+					postStims[trial_num].like_icon_outline.setAutoDraw(false)
+					postStims[trial_num].like_icon.setAutoDraw(true) // filed hard
+				}
+				return Scheduler.Event.NEXT;
 			}
 		}
 
+		
 		// check for quit (typically the Esc key)
 		if (psychoJS.eventManager.getKeys({keyList:['escape']}).length > 0) {
 			return quitPsychoJS('The [Escape] key was pressed. Goodbye!', false);
@@ -2271,37 +2398,23 @@ function trialRoleReversalRoutineEachFrameShowPost(trials) {
 		t = trialClock.getTime();
 		frameN = frameN + 1;// number of completed frames (so 0 is the first frame)
 
-		//postStims[trial_num].rect.opacity = 0.5 
-
-		if (t > 0.5) {
-			postStims[trial_num].post_text.setAutoDraw(true)
-			postStims[trial_num].like_icon_outline.setAutoDraw(true) // show the heart outline
-			
-			// postStims[trial_num].like_posts.setAutoDraw(true)
-			postStims[trial_num].profileRR_photo.setAutoDraw(true)
-			
-			loadingAnimation()
-
-			if (mouse.isPressedIn(postStims[trial_num].like_icon_outline)) {
-				postStims[trial_num].like_icon_outline.setAutoDraw(false)
-				postStims[trial_num].like_icon.setAutoDraw(true) // show filled in heart
-			}
-		}
-
 		// check for quit (typically the Esc key)
 		if (psychoJS.eventManager.getKeys({keyList:['escape']}).length > 0) {
 			return quitPsychoJS('The [Escape] key was pressed. Goodbye!', false);
 		}
 
-		// After 3 seconds go to the next Trial (post)
-		if (t > 3) {
-			removeLoadingAnimation()
-			newLoadingAnimation()
-			//postStims[trial_num].like_icon_outline.setAutoDraw(false) // don't show the heart outline
-			
-			postStims[trial_num].like_posts.setText(trial_reward)
-			postStims[trial_num].like_posts.setAutoDraw(true)
+		if (!lastTrial) {
 			return Scheduler.Event.NEXT;
+		} else {
+			// Show Instructions about clicking space to go to next chat room
+			questionText.setText('\n\nPress SPACE key to go to\nthe next chatroom.')
+
+			// wait for space key
+			let theseKeys = resp.getKeys({ keyList: ['space'], waitRelease: false });
+
+			if (theseKeys.length > 0) {
+				return Scheduler.Event.NEXT;
+			}
 		}
 		return Scheduler.Event.FLIP_REPEAT;
 	};
