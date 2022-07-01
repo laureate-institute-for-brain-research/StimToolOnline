@@ -504,8 +504,8 @@ var word;
 
 var currentTrialNumber;
 var currentTrialText;
-var dayNumberTracker;
-var dayNumberTrackerText;
+var chatRoomNumber;
+var chatRoomNumberText;
 var totalPoints = 0;
 var totalPossible = 0;
 var socialApprovalScore = 0;
@@ -1156,7 +1156,7 @@ function experimentInit() {
 		depth: 0.0
 	});
 
-	dayNumberTrackerText = new visual.TextStim({
+	chatRoomNumberText = new visual.TextStim({
 		win: psychoJS.window,
 		name: 'gameTrackerText',
 		text: 'CHATROOM:',
@@ -1169,7 +1169,7 @@ function experimentInit() {
 		depth: 0.0
 	});
 
-	dayNumberTracker = new visual.TextStim({
+	chatRoomNumber = new visual.TextStim({
 		win: psychoJS.window,
 		name: 'gameTracker',
 		text: '1/80',
@@ -1263,8 +1263,8 @@ function clear_All_stims() {
 	currentTrialText.setAutoDraw(false)
 	currentTrialNumber.setAutoDraw(false)
 	// Draw the Tracker and Points Counter
-	dayNumberTrackerText.setAutoDraw(false)
-	dayNumberTracker.setAutoDraw(false)
+	chatRoomNumberText.setAutoDraw(false)
+	chatRoomNumber.setAutoDraw(false)
 	totalLikesText.setAutoDraw(false)
 	totalLikesTracker.setAutoDraw(false)
 
@@ -1689,7 +1689,7 @@ function trialRoutineBegin(trials) {
 		choice2Button.setText('Rap Music') // will need to grab the topic from schedule // TODO
 		
 		currentTrialNumber.setText(`${trial_num}`)
-		dayNumberTracker.setText(`${game_number + 1}/${total_games}`)
+		chatRoomNumber.setText(`${game_number + 1}/${total_games}`)
 
 		if ( totalPossible <= 0) {
 			totalLikesTracker.setText(`--`)
@@ -1720,8 +1720,8 @@ function trialRoutineBegin(trials) {
 		currentTrialText.setAutoDraw(true)
 		currentTrialNumber.setAutoDraw(true)
 		// Draw the Tracker and Points Counter
-		dayNumberTrackerText.setAutoDraw(true)
-		dayNumberTracker.setAutoDraw(true)
+		chatRoomNumberText.setAutoDraw(true)
+		chatRoomNumber.setAutoDraw(true)
 		totalLikesText.setAutoDraw(true)
 		totalLikesTracker.setAutoDraw(true)
 
@@ -1787,7 +1787,7 @@ function trialRoleReversalRoutineBegin(trials) {
 		lastTrial = isLastTrial(game_type, trial_num)
 		
 		currentTrialNumber.setText(`${trial_num}`)
-		dayNumberTracker.setText(`${game_number + 1}/${total_games}`)
+		chatRoomNumber.setText(`${game_number + 1}/${total_games}`)
 		totalLikesTracker.setText(`${totalPoints}`)
 
 		headerRectStim.setAutoDraw(true)
@@ -1815,8 +1815,8 @@ function trialRoleReversalRoutineBegin(trials) {
 		currentTrialText.setAutoDraw(true)
 		currentTrialNumber.setAutoDraw(true)
 		// Draw the Tracker and Points Counter
-		dayNumberTrackerText.setAutoDraw(true)
-		dayNumberTracker.setAutoDraw(true)
+		chatRoomNumberText.setAutoDraw(true)
+		chatRoomNumber.setAutoDraw(true)
 
 
 		// newLoadingAnimation()
@@ -1839,6 +1839,10 @@ function trialRoleReversalRoutineBegin(trials) {
 		var choices = ['LEFT', 'RIGHT']
 		var topic_side = choices[Math.floor(Math.random()*choices.length)];
 
+		// Since we use a bigger Like on the Role Reversal
+		// We increase the size of the hears and also need to position it a little higher
+		// Than the normal post
+		var like_icon_pos_y_offest = .04
 		
 		if (topic_side == 'LEFT') {
 			postStims[trial_num].profileRR_photo = new visual.ImageStim({
@@ -1857,8 +1861,8 @@ function trialRoleReversalRoutineBegin(trials) {
 				name : `like_post_${trial_num}`, units : 'norm', 
 				image : 'heart.png', mask : undefined,
 				ori: 0,
-				pos: [ post_stim_x_pos.left.like_icon, postStims[trial_num].postlikeIcon_y ], 
-				size: [0.04,0.05],
+				pos: [ post_stim_x_pos.left.like_icon, postStims[trial_num].postlikeIcon_y + like_icon_pos_y_offest ], 
+				size: [0.07,0.08],
 				color: undefined, opacity: 1,
 				flipHoriz : false, flipVert : false,
 				texRes : 128, interpolate : true, depth : 0
@@ -1868,8 +1872,8 @@ function trialRoleReversalRoutineBegin(trials) {
 				name : `like_post_${trial_num}_outline`, units : 'norm', 
 				image : 'heart_outline.png', mask : undefined,
 				ori: 0,
-				pos: [ post_stim_x_pos.left.like_icon, postStims[trial_num].postlikeIcon_y ], 
-				size: [0.04,0.05],
+				pos: [ post_stim_x_pos.left.like_icon, postStims[trial_num].postlikeIcon_y + like_icon_pos_y_offest ], 
+				size: [0.07,0.08],
 				color: undefined, opacity: 1,
 				flipHoriz : false, flipVert : false,
 				texRes : 128, interpolate : true, depth : 0
@@ -1883,9 +1887,6 @@ function trialRoleReversalRoutineBegin(trials) {
 			postStims[trial_num].post_text.alignVert = 'right'
 			postStims[trial_num].post_text.alignHoriz = 'right'
 	
-			postStims[trial_num].like_posts.pos[0] = post_stim_x_pos.left.like_posts
-			// postStims[trial_num]['like_posts'].setText(left_reward)
-			trial_reward = left_reward
 			
 			postStims[trial_num].rect.fillColor = new util.Color(leftColor)
 			postStims[trial_num].rect.lineColor = new util.Color(leftColor)
@@ -1908,8 +1909,8 @@ function trialRoleReversalRoutineBegin(trials) {
 				name : `like_post_${trial_num}`, units : 'norm', 
 				image : 'heart.png', mask : undefined,
 				ori: 0,
-				pos: [ post_stim_x_pos.right.like_icon, postStims[trial_num].postlikeIcon_y ], 
-				size: [0.04,0.05],
+				pos: [ post_stim_x_pos.right.like_icon, postStims[trial_num].postlikeIcon_y + like_icon_pos_y_offest ], 
+				size: [0.07,0.08],
 				color: undefined, opacity: 1,
 				flipHoriz : false, flipVert : false,
 				texRes : 128, interpolate : true, depth : 0
@@ -1919,8 +1920,8 @@ function trialRoleReversalRoutineBegin(trials) {
 				name : `like_post_${trial_num}_outline`, units : 'norm', 
 				image : 'heart_outline.png', mask : undefined,
 				ori: 0,
-				pos: [ post_stim_x_pos.right.like_icon, postStims[trial_num].postlikeIcon_y ], 
-				size: [0.04,0.05],
+				pos: [ post_stim_x_pos.right.like_icon, postStims[trial_num].postlikeIcon_y + like_icon_pos_y_offest ], 
+				size: [0.07,0.08],
 				color: undefined, opacity: 1,
 				flipHoriz : false, flipVert : false,
 				texRes : 128, interpolate : true, depth : 0
@@ -1932,8 +1933,8 @@ function trialRoleReversalRoutineBegin(trials) {
 			rightTopicCounter++
 			postStims[trial_num].post_text.pos[0] = post_stim_x_pos.right.post_text
 			postStims[trial_num].post_text.alignVert = 'left'
-			postStims[trial_num].post_text.alignHoriz = 'left'			
-			postStims[trial_num].like_posts.pos[0] = post_stim_x_pos.right.like_posts
+			postStims[trial_num].post_text.alignHoriz = 'left'
+			
 			// postStims[trial_num]['like_posts'].setText(right_reward)
 			trial_reward = right_reward
 			
@@ -2330,16 +2331,12 @@ function trialRoleReversalRoutineEachFrameWaitforInput(trials) {
 
 			loadingAnimationText()
 
-			postStims[trial_num].like_posts.setAutoDraw(true)
-			postStims[trial_num].like_posts.setText(trial_reward)
-
-			postStims[trial_num].like_icon_outline.setAutoDraw(true)
-			postStims[trial_num].like_icon.setAutoDraw(false) // filed hard
-
 			postStims[trial_num].profileRR_photo.setAutoDraw(true)
 		}
 
 		if (t >= animation_duration) {
+			postStims[trial_num].like_icon_outline.setAutoDraw(true)
+			postStims[trial_num].like_icon.setAutoDraw(false) // filed hard
 			questionText.setText('\nPress ">" to add a like.\nPress "<" to not add a like.')
 			questionText.setAutoDraw(true)
 			let theseKeys = resp.getKeys({ keyList: [LEFT_KEY, RIGHT_KEY], waitRelease: false });
