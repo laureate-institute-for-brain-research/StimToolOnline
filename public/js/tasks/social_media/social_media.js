@@ -607,8 +607,6 @@ function normalize_elements(strings) {
 
 		return new_strings
 	}
-
-
 }
 
 var topic_text_elements;
@@ -1309,15 +1307,17 @@ function instruct_pagesLoopBegin(thisScheduler) {
 	currentLoop = slides;  // we're now the current loop
 
 	// Schedule all the slides in the trialList:
-	for (const thisTrial of slides) {
-		const snapshot = slides.getSnapshot();
 
-		thisScheduler.add(importConditions(snapshot));
-		thisScheduler.add(instructRoutineBegin(snapshot));
-		thisScheduler.add(instructSlideRoutineEachFrame(snapshot));
-		thisScheduler.add(instructRoutineEnd(snapshot));
-		thisScheduler.add(endLoopIteration(thisScheduler, snapshot));
-	}
+	var currentInstructIndex = 0
+	var maxInstructions = slides.nTotal
+	const snapshot = slides.getSnapshot();
+
+	thisScheduler.add(importConditions(snapshot));
+	thisScheduler.add(instructRoutineBegin(snapshot));
+	thisScheduler.add(instructSlideRoutineEachFrame(snapshot, slides));
+	thisScheduler.add(instructRoutineEnd(snapshot));
+	thisScheduler.add(endLoopIteration(thisScheduler, snapshot));
+	
 	return Scheduler.Event.NEXT;
 }
 
@@ -1337,15 +1337,14 @@ function instruct_pages_roleReversal_LoopBegin(thisScheduler) {
 	currentLoop = slides;  // we're now the current loop
 
 	// Schedule all the slides in the trialList:
-	for (const thisTrial of slides) {
-		const snapshot = slides.getSnapshot();
 
-		thisScheduler.add(importConditions(snapshot));
-		thisScheduler.add(instructRoutineBegin(snapshot));
-		thisScheduler.add(instructSlideRoutineEachFrame(snapshot));
-		thisScheduler.add(instructRoutineEnd(snapshot));
-		thisScheduler.add(endLoopIteration(thisScheduler, snapshot));
-	}
+	const snapshot = slides.getSnapshot();
+	thisScheduler.add(importConditions(snapshot));
+	thisScheduler.add(instructRoutineBegin(snapshot));
+	thisScheduler.add(instructSlideRoutineEachFrame(snapshot, slides));
+	thisScheduler.add(instructRoutineEnd(snapshot));
+	thisScheduler.add(endLoopIteration(thisScheduler, snapshot));
+	
 	return Scheduler.Event.NEXT;
 }
 
@@ -1368,6 +1367,8 @@ function instructRoutineBegin(trials) {
 	
 		instructComponents.push(ready);
 
+		console.log("InstructionSlides Index: ",trials.thisIndex)
+
 		if (audio_path) {
 			track = new Sound({
 				win: psychoJS.window,
@@ -1387,7 +1388,8 @@ function instructRoutineBegin(trials) {
 }
 
 var continueRoutine;
-function instructSlideRoutineEachFrame(trials) {
+var newSlide;
+function instructSlideRoutineEachFrame(trials, slides) {
 	return function () {
 		//------Loop for each frame of Routine 'instruct'-------
 		let continueRoutine = true; // until we're told otherwise
@@ -1405,6 +1407,21 @@ function instructSlideRoutineEachFrame(trials) {
 			// instrText1.setAutoDraw(true);
 		}
 
+		
+		if (newSlide) {
+			console.log('setting new image', instruct_slide, 'index:',trials.thisIndex)
+			// slideStim = new visual.ImageStim({
+			// 	win : psychoJS.window,
+			// 	name : 'slide_stim', units : 'height', 
+			// 	image : undefined, mask : undefined,
+			// 	ori : 0, pos : [0, 0],
+			// 	color : new util.Color([1, 1, 1]), opacity : 1,
+			// 	flipHoriz : false, flipVert : false,
+			// 	texRes : 128, interpolate : true, depth : 0
+			// });
+			slideStim.setImage(instruct_slide)
+			newSlide = false
+		}
 		// *ready* updates
 		if (t >= 0 && ready.status === PsychoJS.Status.NOT_STARTED) {
 			// keep track of start time/frame for later
@@ -1418,16 +1435,32 @@ function instructSlideRoutineEachFrame(trials) {
 		}
 
 		// Play Audio If Exists
-		
-
-
 		if (ready.status === PsychoJS.Status.STARTED) {
-			let theseKeys = ready.getKeys({ keyList: ['right'], waitRelease: false });
-
-			if (theseKeys.length > 0) {  // at least one key was pressed
-				// a response ends the routine
-				if (track) track.stop();
-				continueRoutine = false;
+			let theseKeys = ready.getKeys({ keyList: ['right', 'left'], waitRelease: false });
+			
+			if (theseKeys.length > 0 && theseKeys[0].name == 'right') {  // at least one key was pressed
+				slides.thisIndex++
+				if (slides.thisIndex >= slides.nTotal) {
+					continueRoutine = false
+				}
+				trials = slides.getSnapshot()
+				psychoJS.importAttributes(trials.getCurrentTrial());
+				//console.log(trials)
+				newSlide = true
+			}
+			
+			if (theseKeys.length > 0 && theseKeys[0].name == 'left') {
+				// Presse the back button
+				slides.thisIndex--
+				if (slides.thisIndex < 0) {
+					slides.thisIndex = 0
+					
+				} else {
+					trials = slides.getSnapshot()
+					psychoJS.importAttributes(trials.getCurrentTrial());
+					//console.log(trials)
+					newSlide = true
+				}
 			}
 		}
 
