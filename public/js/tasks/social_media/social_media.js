@@ -240,27 +240,29 @@ if (getQueryVariable('run').includes('R1') && !getQueryVariable('skip_examplepla
 	flowScheduler.add(trials_exampleLoopBegin, example_playScheduler);
 	flowScheduler.add(example_playScheduler);
 	flowScheduler.add(trialsLoopEnd);
-
-	// // Ready Routine
-	// flowScheduler.add(readyRoutineBegin());
-	// flowScheduler.add(readyRoutineEachFrame());
-	// flowScheduler.add(readyRoutineEnd());
 }
 
 // ROLE REVERSAL BLOCK
 
-// Instruction for the Role Traversal Slide(s)
-const instruct_pagesLoopScheduler = new Scheduler(psychoJS);
-flowScheduler.add(instruct_pages_roleReversal_LoopBegin, instruct_pagesLoopScheduler);
-flowScheduler.add(instruct_pagesLoopScheduler);
-flowScheduler.add(instruct_pagesLoopEnd);
+if (!getQueryVariable('skip_roleReversal')) {
+	// Instruction for the Role Traversal Slide(s)
+	const instruct_pagesLoopScheduler = new Scheduler(psychoJS);
+	flowScheduler.add(instruct_pages_roleReversal_LoopBegin, instruct_pagesLoopScheduler);
+	flowScheduler.add(instruct_pagesLoopScheduler);
+	flowScheduler.add(instruct_pagesLoopEnd);
 
-// ROLE REVERSAL TRIAL BLOCK
-const roleReversalScheduler = new Scheduler(psychoJS);
-flowScheduler.add(trials_role_reversalBegin, roleReversalScheduler);
-flowScheduler.add(roleReversalScheduler);
-flowScheduler.add(trialsLoopEnd);
+	// ROLE REVERSAL TRIAL BLOCK
+	const roleReversalScheduler = new Scheduler(psychoJS);
+	flowScheduler.add(trials_role_reversalBegin, roleReversalScheduler);
+	flowScheduler.add(roleReversalScheduler);
+	flowScheduler.add(trialsLoopEnd);
+}
 
+
+// MAIN BLOCK - Instrcutions
+flowScheduler.add(readyRoutineBegin());
+flowScheduler.add(readyRoutineEachFrame());
+flowScheduler.add(readyRoutineEnd());
 
 // MAIN BLOCK
 const trialsLoopScheduler = new Scheduler(psychoJS);
@@ -282,7 +284,7 @@ dialogCancelScheduler.add(quitPsychoJS, '', false);
 var resources = [
 	{ name: 'example_play.xls', path: '/js/tasks/social_media/example_play.xls' },
 	{ name: 'role_reversal_shedule.xls', path:'/js/tasks/social_media/role_reversal_shedule.xls' },
-	{ name: '/js/tasks/social_media/media/instructions/Slide26.jpeg', path: '/js/tasks/social_media/media/instructions/Slide26.jpeg'},
+	{ name: 'ready.jpeg', path: '/js/tasks/social_media/media/instructions/Slide31.jpeg'},
 	{ name: 'role_reversal_instruct_schedule.csv', path: '/js/tasks/social_media/media/role_reversal_instruct_schedule.csv'},
 	{ name: 'logo.png', path: '/js/tasks/social_media/media/body-organ.png' },
 	{ name: 'home.png', path: '/js/tasks/social_media/media/home.png' },
@@ -512,6 +514,7 @@ var socialApprovalScore = 0;
 var totalLikesTracker;
 var totalLikesText;
 
+var readyStim;
 var readyClock;
 var readyText;
 
@@ -972,6 +975,16 @@ function experimentInit() {
 		texRes : 128, interpolate : true, depth : 0
 	});
 
+	readyStim = new visual.ImageStim({
+		win : psychoJS.window,
+		name : 'ready_stim', units : 'height', 
+		image : 'ready.jpeg', mask : undefined,
+		ori : 0, pos : [0, 0],
+		color : new util.Color([1, 1, 1]), opacity : 1,
+		flipHoriz : false, flipVert : false,
+		texRes : 128, interpolate : true, depth : 0
+	});
+
 
 	choice1Button = new visual.ButtonStim({
 		win : psychoJS.window,
@@ -1276,6 +1289,7 @@ function clear_All_stims() {
 	pageName.setAutoDraw(false)
 	questionText.setAutoDraw(false)
 	profilePicPostStim.setAutoDraw(false)
+	profilePicRRStim.setAutoDraw(false)
 	reset_stims()
 }
 
@@ -2009,6 +2023,8 @@ function reset_stims() {
 
 		postStims[i].profileRR_photo.status = PsychoJS.Status.FINISHED
 		postStims[i].profileRR_photo.setAutoDraw(false) // draw profile pic post
+
+		
 	}
 }
 
@@ -2420,6 +2436,7 @@ function trialRoleReversalRoutineEnd(trials) {
 			routineTimer.reset();
 		}
 		
+		profilePicRRPostStim.setAutoDraw(false)
 		resp.stop();
 		// the Routine "trial" was not non-slip safe, so reset the non-slip timer
 		routineTimer.reset();
@@ -2501,8 +2518,8 @@ function readyRoutineBegin(trials) {
 		routineTimer.add(2.000000);
 		// update component parameters for each repeat
 		// keep track of which components have finished
-		readyComponents = [];
-
+		readyComponents = [readyStim];
+		readyStim.setAutoDraw(true)
 		return Scheduler.Event.NEXT;
 	};
 }
