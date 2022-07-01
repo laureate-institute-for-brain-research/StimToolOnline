@@ -284,7 +284,7 @@ var resources = [
 	{ name: 'role_reversal_shedule.xls', path:'/js/tasks/social_media/role_reversal_shedule.xls' },
 	{ name: '/js/tasks/social_media/media/instructions/Slide26.jpeg', path: '/js/tasks/social_media/media/instructions/Slide26.jpeg'},
 	{ name: 'role_reversal_instruct_schedule.csv', path: '/js/tasks/social_media/media/role_reversal_instruct_schedule.csv'},
-	{ name: 'logo.png', path: '/js/tasks/social_media/media/mice.png' },
+	{ name: 'logo.png', path: '/js/tasks/social_media/media/body-organ.png' },
 	{ name: 'home.png', path: '/js/tasks/social_media/media/home.png' },
 	{ name: 'hashtag.png', path: '/js/tasks/social_media/media/hashtag.png' },
 	{ name: 'notification.png', path: '/js/tasks/social_media/media/bell.png' },
@@ -1610,6 +1610,18 @@ function setupPosts(game_type) {
 	}
 }
 
+
+// Social Approval Score is the percentage
+// of how much total likes ther user has received / 
+// the maximum number of likes they could have recieved through the chatrooms
+function getSocialApprovalScore() {
+	
+	totalPossible = totalPossible + Math.max(left_reward, right_reward)
+	socialApprovalScore = totalPoints / totalPossible
+	console.log('Left Reward: ',left_reward, ' Right Reward:',right_reward, 'TotalPoints: ',totalPoints, 'totalPossible: ', totalPossible, 'Score:',socialApprovalScore)
+	socialApprovalScore = `${ Math.round(socialApprovalScore * 100) }%`
+}
+
 var trialComponents;
 var lastGameNumber;
 var lastTrial;
@@ -1669,7 +1681,7 @@ function trialRoutineBegin(trials) {
 
 		// Set components from last trial
 		console.log(`Game: ${game_number}, trial #${trial_num}, game type ${game_type} starting`)
-
+		
 		setupPosts(game_type)
 		
 
@@ -1679,14 +1691,10 @@ function trialRoutineBegin(trials) {
 		currentTrialNumber.setText(`${trial_num}`)
 		dayNumberTracker.setText(`${game_number + 1}/${total_games}`)
 
-		if (force_pos == 'X') {
-			totalLikesTracker.setText(`${ Math.round(socialApprovalScore * 100) }%`)
-		} else {
-			// Social Approval Score is not calcuated during Force Trials
+		if ( totalPossible <= 0) {
 			totalLikesTracker.setText(`--`)
 		}
 		
-
 		headerRectStim.setAutoDraw(true)
 		dividerStim.setAutoDraw(true)
 
@@ -2131,18 +2139,6 @@ function trialRoutineEachFrameWaitforInput(trials) {
 						texRes : 128, interpolate : true, depth : 0
 					});
 
-					// postStims[i].like_animation = new visual.ImageStim({
-					// 	win : psychoJS.window,
-					// 	name : `loading_${trial_num}`, units : 'norm',
-					// 	image : 'loading', mask : undefined,
-					// 	ori: 0,
-					// 	pos: [ post_stim_x_pos.left.like_icon, postStims[trial_num].postlikeIcon_y + .03 ],
-					// 	size: [0.04,0.05],
-					// 	color: undefined, opacity: 1,
-					// 	flipHoriz : false, flipVert : false,
-					// 	texRes : 128, interpolate : true, depth : 0
-					// });
-					
 
 					// postStims[trial_num]['profile_photo'].pos[0] = post_stim_x_pos.left.profile_photo
 					topic_text = leftTopic[leftTopicCounter]
@@ -2159,17 +2155,6 @@ function trialRoutineEachFrameWaitforInput(trials) {
 					
 					postStims[trial_num].rect.fillColor = new util.Color(leftColor)
 					postStims[trial_num].rect.lineColor = new util.Color(leftColor)
-
-					// Set the other bandit as XX
-					// bandits['right'][trial_num].setText('XX')
-					
-
-					if (force_pos == 'X') {
-						totalPoints = totalPoints + left_reward
-						totalPossible = totalPossible + right_reward + left_reward
-						socialApprovalScore = totalPoints / totalPossible
-						// console.log(left_reward, right_reward,totalPossible,socialApprovalScore )
-					}
 					
 				} else {
 
@@ -2209,19 +2194,6 @@ function trialRoutineEachFrameWaitforInput(trials) {
 						texRes : 128, interpolate : true, depth : 0
 					});
 
-
-					// postStims[i].like_animation = new visual.ImageStim({
-					// 	win : psychoJS.window,
-					// 	name : `loading_${trial_num}`, units : 'norm',
-					// 	image : 'loading', mask : undefined,
-					// 	ori: 0,
-					// 	pos: [ post_stim_x_pos.right.like_icon, postStims[trial_num].postlikeIcon_y + .03 ],
-					// 	size: [0.04,0.05],
-					// 	color: undefined, opacity: 1,
-					// 	flipHoriz : false, flipVert : false,
-					// 	texRes : 128, interpolate : true, depth : 0
-					// });
-
 					topic_text = rightTopic[rightTopicCounter]
 					topic_text_elements = normalize_elements(topic_text.split(' '))
 					postStims[trial_num].post_text.setText('')
@@ -2232,18 +2204,18 @@ function trialRoutineEachFrameWaitforInput(trials) {
 					postStims[trial_num].like_posts.pos[0] = post_stim_x_pos.right.like_posts
 					// postStims[trial_num]['like_posts'].setText(right_reward)
 					trial_reward = right_reward
-					
 					postStims[trial_num].rect.fillColor = new util.Color(rightColor)
 					// bandits['left'][trial_num].setText('XX')
 
-					if (force_pos == 'X') {
-						totalPoints = totalPoints + right_reward
-						totalPossible = totalPossible + right_reward + left_reward
-						socialApprovalScore = totalPoints / totalPossible
-						// console.log(left_reward, right_reward,totalPossible,socialApprovalScore )
-					}
 				}
-			
+				
+
+				if (force_pos == 'X') {
+					totalPoints = totalPoints + trial_reward
+					getSocialApprovalScore()
+					totalLikesTracker.setText(socialApprovalScore)
+				}
+				
 
 				// Fade out the choices
 				choice1Button.fillColor = new util.Color(leftFadeColor)
@@ -2255,7 +2227,7 @@ function trialRoutineEachFrameWaitforInput(trials) {
 				trialClock.reset();
 
 				animationAttributes = getAnimationAttributes(trial_reward)
-
+				frameN = 0
 				return Scheduler.Event.NEXT; // Go to Next Routine after subject makes a selection
 			}
 		}
@@ -2280,7 +2252,9 @@ function trialRoutineEachFrameShowPost(trials) {
 		t = trialClock.getTime();
 		frameN = frameN + 1;// number of completed frames (so 0 is the first frame)
 
-		//postStims[trial_num].rect.opacity = 0.5 
+		//postStims[trial_num].rect.opacity = 0.5
+
+		
 
 		if (t > 0.5) {
 			postStims[trial_num].post_text.setAutoDraw(true)
@@ -2293,8 +2267,7 @@ function trialRoutineEachFrameShowPost(trials) {
 			// loadingAnimation()
 
 			postStims[trial_num].like_posts.setText(trial_reward)
-			postStims[trial_num].like_posts.setAutoDraw(true)
-			postStims[trial_num].like_icon.setAutoDraw(true) // show filled in heart
+			
 		}
 		// check for quit (typically the Esc key)
 		if (psychoJS.eventManager.getKeys({keyList:['escape']}).length > 0) {
@@ -2303,7 +2276,10 @@ function trialRoutineEachFrameShowPost(trials) {
 
 		// After 3 seconds go to the next Trial (post) or next chat room
 		if (t > animation_duration) {
+			postStims[trial_num].like_posts.setAutoDraw(true)
+			postStims[trial_num].like_icon.setAutoDraw(true) // show filled in heart
 			loadingCounter = 0
+
 			if (!lastTrial) {
 				return Scheduler.Event.NEXT;
 			} else {
