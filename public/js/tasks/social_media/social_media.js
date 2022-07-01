@@ -2278,15 +2278,19 @@ function trialRoutineEachFrameShowPost(trials) {
 		if (t > animation_duration) {
 			postStims[trial_num].like_posts.setAutoDraw(true)
 			postStims[trial_num].like_icon.setAutoDraw(true) // show filled in heart
-			loadingCounter = 0
+			
 
 			if (!lastTrial) {
+				// Go to the next routine if it's not the last trial
+				loadingCounter = 0
 				return Scheduler.Event.NEXT;
 			} else {
 				// Show Instructions about clicking space to go to next chat room
 				questionText.setText('\n\nPress SPACE key to go to\nthe next chatroom.')
 				choice1Button.setAutoDraw(false)
 				choice2Button.setAutoDraw(false)
+
+				// postStims[trial_num].post_text.setAutoDraw(true) // for some reason, last poist doesnt' show
 
 				// wait for space key
 				let theseKeys = resp.getKeys({ keyList: ['space'], waitRelease: false });
