@@ -611,10 +611,12 @@ function normalize_elements(strings) {
 
 var topic_text_elements;
 function loadingAnimationText() {
+	// if (postStims[trial_num].post_text.text == topic_text ) {
+	// 	postStims[trial_num].post_text.status = PsychoJS.STATUS.FINISHED
+	// }
 	// if (frameN > max_frame) return
 	// topic_text_test = normalize_elements(topic_text.split(' '))
-	// console.log(topic_text_elements)
-	postStims[trial_num].post_text.setText(topic_text_elements.slice(0, loadingCounter).join(' '))
+	postStims[trial_num].post_text.setText( topic_text_elements.slice(0, loadingCounter).join(' ') )
 	if (frameN % 6 == 0) loadingCounter++
 
 }
@@ -1407,18 +1409,9 @@ function instructSlideRoutineEachFrame(trials, slides) {
 			// instrText1.setAutoDraw(true);
 		}
 
-		
+		// New Slide Call, set it after pressing key
 		if (newSlide) {
 			console.log('setting new image', instruct_slide, 'index:',trials.thisIndex)
-			// slideStim = new visual.ImageStim({
-			// 	win : psychoJS.window,
-			// 	name : 'slide_stim', units : 'height', 
-			// 	image : undefined, mask : undefined,
-			// 	ori : 0, pos : [0, 0],
-			// 	color : new util.Color([1, 1, 1]), opacity : 1,
-			// 	flipHoriz : false, flipVert : false,
-			// 	texRes : 128, interpolate : true, depth : 0
-			// });
 			slideStim.setImage(instruct_slide)
 			newSlide = false
 		}
@@ -1434,29 +1427,28 @@ function instructSlideRoutineEachFrame(trials, slides) {
 			psychoJS.window.callOnFlip(function () { ready.clearEvents(); });
 		}
 
-		// Play Audio If Exists
 		if (ready.status === PsychoJS.Status.STARTED) {
 			let theseKeys = ready.getKeys({ keyList: ['right', 'left'], waitRelease: false });
 			
 			if (theseKeys.length > 0 && theseKeys[0].name == 'right') {  // at least one key was pressed
-				slides.thisIndex++
+				slides.thisIndex++ // incremenet the index
 				if (slides.thisIndex >= slides.nTotal) {
-					continueRoutine = false
+					// if we reached here, it means we reached the last and we should move on.
+					continueRoutine = false 
 				}
-				trials = slides.getSnapshot()
-				psychoJS.importAttributes(trials.getCurrentTrial());
+				trials = slides.getSnapshot() // get new snapshot after incrementing index
+				psychoJS.importAttributes(trials.getCurrentTrial()); // import the attributes to main class
 				//console.log(trials)
 				newSlide = true
 			}
-			
 			if (theseKeys.length > 0 && theseKeys[0].name == 'left') {
 				// Presse the back button
-				slides.thisIndex--
+				slides.thisIndex-- // decremenet the index
 				if (slides.thisIndex < 0) {
+					// If the index is 0, that means we reached the very first slide
 					slides.thisIndex = 0
-					
 				} else {
-					trials = slides.getSnapshot()
+					trials = slides.getSnapshot() 
 					psychoJS.importAttributes(trials.getCurrentTrial());
 					//console.log(trials)
 					newSlide = true
@@ -1974,6 +1966,7 @@ function trialRoleReversalRoutineBegin(trials) {
 				texRes : 128, interpolate : true, depth : 0
 			});
 
+
 			topic_text = rightTopic[rightTopicCounter]
 			topic_text_elements = normalize_elements(topic_text.split(' '))
 			postStims[trial_num].post_text.setText('')
@@ -2036,28 +2029,27 @@ function reset_stims() {
 
 	for (var i = 0; i <= 9; i++) {
 		// Init Left textStims
-		postStims[i].rect.status = PsychoJS.Status.FINISHED
+		postStims[i].rect.status = PsychoJS.Status.NOT_STARTED
 		postStims[i].rect.setAutoDraw(false) // draw rect
 
-		postStims[i].post_text.status = PsychoJS.Status.FINISHED
+		postStims[i].post_text.status = PsychoJS.Status.NOT_STARTED
 		postStims[i].post_text.setAutoDraw(false)
 
-		postStims[i].like_icon.status = PsychoJS.Status.FINISHED
+		postStims[i].like_icon.status = PsychoJS.Status.NOT_STARTED
 		postStims[i].like_icon.setAutoDraw(false)
 
-		postStims[i].like_icon_outline.status = PsychoJS.Status.FINISHED
+		postStims[i].like_icon_outline.status = PsychoJS.Status.NOT_STARTED
 		postStims[i].like_icon_outline.setAutoDraw(false)
 
-		postStims[i].like_posts.status = PsychoJS.Status.FINISHED
+		postStims[i].like_posts.status = PsychoJS.Status.NOT_STARTED
 		postStims[i].like_posts.setAutoDraw(false)
 
-		postStims[i].profile_photo.status = PsychoJS.Status.FINISHED
+		postStims[i].profile_photo.status = PsychoJS.Status.NOT_STARTED
 		postStims[i].profile_photo.setAutoDraw(false) // draw profile pic post
 
-		postStims[i].profileRR_photo.status = PsychoJS.Status.FINISHED
+		postStims[i].profileRR_photo.status = PsychoJS.Status.NOT_STARTED
 		postStims[i].profileRR_photo.setAutoDraw(false) // draw profile pic post
 
-		
 	}
 }
 
@@ -2189,17 +2181,34 @@ function trialRoutineEachFrameWaitforInput(trials) {
 						texRes : 128, interpolate : true, depth : 0
 					});
 
+					postStims[trial_num].like_posts = new visual.TextStim({
+						win: psychoJS.window,
+						name: `like_posts_${trial_num}`,
+						text: left_reward,
+						bold: true,
+						fontFamily: 'lucida grande',
+						units: 'norm',
+						pos: [ post_stim_x_pos.left.like_posts, postStims[trial_num].postlike_y],
+						height: 0.07, wrapWidth: undefined, ori: 0,
+						color: new util.Color('white'), opacity: 1,
+						depth: 0.0
+					});
+
 
 					// postStims[trial_num]['profile_photo'].pos[0] = post_stim_x_pos.left.profile_photo
 					topic_text = leftTopic[leftTopicCounter]
 					topic_text_elements = normalize_elements(topic_text.split(' '))
 					postStims[trial_num].post_text.setText('')
 					leftTopicCounter++
+					
 					postStims[trial_num].post_text.pos[0] = post_stim_x_pos.left.post_text
 					postStims[trial_num].post_text.alignVert = 'right'
 					postStims[trial_num].post_text.alignHoriz = 'right'
 			
-					postStims[trial_num].like_posts.pos[0] = post_stim_x_pos.left.like_posts
+					// postStims[trial_num].like_posts.pos[0] = post_stim_x_pos.left.like_posts
+
+					
+
 					// postStims[trial_num]['like_posts'].setText(left_reward)
 					trial_reward = left_reward
 					
@@ -2244,14 +2253,32 @@ function trialRoutineEachFrameWaitforInput(trials) {
 						texRes : 128, interpolate : true, depth : 0
 					});
 
+					postStims[trial_num].like_posts = new visual.TextStim({
+						win: psychoJS.window,
+						name: `like_posts_${trial_num}`,
+						text: right_reward,
+						bold: true,
+						fontFamily: 'lucida grande',
+						units: 'norm',
+						pos: [ post_stim_x_pos.right.like_posts, postStims[trial_num].postlike_y],
+						height: 0.07, wrapWidth: undefined, ori: 0,
+						color: new util.Color('white'), opacity: 1,
+						depth: 0.0
+					});
+
+
+
+					
 					topic_text = rightTopic[rightTopicCounter]
 					topic_text_elements = normalize_elements(topic_text.split(' '))
 					postStims[trial_num].post_text.setText('')
 					rightTopicCounter++
 					postStims[trial_num].post_text.pos[0] = post_stim_x_pos.right.post_text
 					postStims[trial_num].post_text.alignVert = 'left'
-					postStims[trial_num].post_text.alignHoriz = 'left'			
-					postStims[trial_num].like_posts.pos[0] = post_stim_x_pos.right.like_posts
+					postStims[trial_num].post_text.alignHoriz = 'left'
+
+					// postStims[trial_num].like_posts.pos[0] = post_stim_x_pos.right.like_posts
+
 					// postStims[trial_num]['like_posts'].setText(right_reward)
 					trial_reward = right_reward
 					postStims[trial_num].rect.fillColor = new util.Color(rightColor)
@@ -2259,13 +2286,13 @@ function trialRoutineEachFrameWaitforInput(trials) {
 
 				}
 				
-
 				if (force_pos == 'X') {
 					totalPoints = totalPoints + trial_reward
 					getSocialApprovalScore()
 					totalLikesTracker.setText(socialApprovalScore)
 				}
-				
+
+				// console.log(postStims[trial_num].like_posts)
 
 				// Fade out the choices
 				choice1Button.fillColor = new util.Color(leftFadeColor)
@@ -2278,6 +2305,8 @@ function trialRoutineEachFrameWaitforInput(trials) {
 
 				animationAttributes = getAnimationAttributes(trial_reward)
 				frameN = 0
+				postStims[trial_num].like_posts.setText(trial_reward)
+				postStims[trial_num].post_text.setAutoDraw(true)
 				return Scheduler.Event.NEXT; // Go to Next Routine after subject makes a selection
 			}
 		}
@@ -2304,21 +2333,17 @@ function trialRoutineEachFrameShowPost(trials) {
 
 		//postStims[trial_num].rect.opacity = 0.5
 
+		if (t > 0.5 && postStims[trial_num].post_text.status != PsychoJS.Status.FINISHED) {
+			loadingAnimationText()
+		}
+		if (t > 0.5 && postStims[trial_num].profile_photo.status == PsychoJS.Status.NOT_STARTED) {
+			postStims[trial_num].profile_photo.setAutoDraw(true)
+		}
 		
 
-		if (t > 0.5) {
-			postStims[trial_num].post_text.setAutoDraw(true)
-			//postStims[trial_num].like_icon_outline.setAutoDraw(true) // show the heart outline
-			
-			// postStims[trial_num].like_posts.setAutoDraw(true)
-			postStims[trial_num].profile_photo.setAutoDraw(true)
-			// console.log(loadingCounter)
-			loadingAnimationText()
-			// loadingAnimation()
-
-			postStims[trial_num].like_posts.setText(trial_reward)
-			
-		}
+		// if (postStims[trial_num].post_text.status != PsychoJS.Status.FINISHED ) {
+		// 	loadingAnimationText()
+		// }
 		// check for quit (typically the Esc key)
 		if (psychoJS.eventManager.getKeys({keyList:['escape']}).length > 0) {
 			return quitPsychoJS('The [Escape] key was pressed. Goodbye!', false);
@@ -2328,7 +2353,6 @@ function trialRoutineEachFrameShowPost(trials) {
 		if (t > animation_duration) {
 			postStims[trial_num].like_posts.setAutoDraw(true)
 			postStims[trial_num].like_icon.setAutoDraw(true) // show filled in heart
-			
 
 			if (!lastTrial) {
 				// Go to the next routine if it's not the last trial
