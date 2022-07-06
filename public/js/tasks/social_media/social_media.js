@@ -299,6 +299,7 @@ var resources = [
 	{ name: 'profile_pic.png', path: '/js/tasks/social_media/media/profile_photo.png' },
 	{ name: 'profile_picRR.png', path: '/js/tasks/social_media/media/profile_picRR.png' },
 	{ name: 'like.png', path: '/js/tasks/social_media/media/like.png' },
+	{ name: 'dislike.png', path: '/js/tasks/social_media/media/dislike.png' },
 	{ name: 'heart.png', path: '/js/tasks/social_media/media/heart.png' },
 	{ name: 'heart_outline.png', path: '/js/tasks/social_media/media/heart_outline.png' },
 	{ name: 'loading0.png', path: '/js/tasks/social_media/media/loading/loading0.png' },
@@ -509,7 +510,7 @@ var currentTrialText;
 var chatRoomNumber;
 var chatRoomNumberText;
 var totalPoints = 0;
-var totalPossible = 0;
+var totalPossible = null;
 var socialApprovalScore = 0;
 var totalLikesTracker;
 var totalLikesText;
@@ -1116,6 +1117,19 @@ function experimentInit() {
 			texRes : 128, interpolate : true, depth : 0
 		});
 
+		// DisLike Icon
+		postStims[i].dislike_icon = new visual.ImageStim({
+			win : psychoJS.window,
+			name : `dislike_post_${i}`, units : 'pix', 
+			image : 'dislike.png', mask : undefined,
+			ori: 0,
+			pos: [ 0.65, postStims[i].postlikeIcon_y ], 
+			size: [0.04, 0.05],
+			color: undefined, opacity: 1,
+			flipHoriz : false, flipVert : false,
+			texRes : 128, interpolate : true, depth : 0
+		});
+
 		// Number of Likes on each post
 		postStims[i].like_posts = new visual.TextStim({
 			win: psychoJS.window,
@@ -1657,8 +1671,20 @@ function getSocialApprovalScore() {
 	
 	totalPossible = totalPossible + Math.max(left_reward, right_reward)
 	socialApprovalScore = totalPoints / totalPossible
+
+	// if (socialApprovalScore > 1) {
+	// 	socialApprovalScore = 1 - socialApprovalScore
+	// }
+
+	console.log('totalPoints', totalPoints)
+	if (totalPoints < 0) {
+		socialApprovalScore = 1 - socialApprovalScore
+		socialApprovalScore = `${ Math.round( socialApprovalScore * 100) }%`
+	} else {
+		socialApprovalScore = `${ Math.round(socialApprovalScore * 100) }%`
+	}
 	console.log('Left Reward: ',left_reward, ' Right Reward:',right_reward, 'TotalPoints: ',totalPoints, 'totalPossible: ', totalPossible, 'Score:',socialApprovalScore)
-	socialApprovalScore = `${ Math.round(socialApprovalScore * 100) }%`
+	// socialApprovalScore = `${ Math.round(socialApprovalScore * 100) }%`
 }
 
 var trialComponents;
@@ -1705,6 +1731,12 @@ function trialRoutineBegin(trials) {
 
 		lastTrial = isLastTrial(game_type, trial_num)
 
+		// Turn the rewards to negative if it's a dislike_chartroom
+		if (dislike_room) {
+			left_reward = -left_reward
+			right_reward = -right_reward
+		}
+
 
 		// If it's a new game, clear other texts
 		// console.log(lastGameNumber)
@@ -1730,7 +1762,7 @@ function trialRoutineBegin(trials) {
 		currentTrialNumber.setText(`${trial_num}`)
 		chatRoomNumber.setText(`${game_number + 1}/${total_games}`)
 
-		if ( totalPossible <= 0) {
+		if (!Number.isFinite(totalPossible) ) {
 			totalLikesTracker.setText(`--`)
 		}
 		
@@ -1906,6 +1938,8 @@ function trialRoleReversalRoutineBegin(trials) {
 				flipHoriz : false, flipVert : false,
 				texRes : 128, interpolate : true, depth : 0
 			});
+
+
 			postStims[trial_num].like_icon_outline = new visual.ImageStim({
 				win : psychoJS.window,
 				name : `like_post_${trial_num}_outline`, units : 'norm', 
@@ -2038,6 +2072,9 @@ function reset_stims() {
 		postStims[i].like_icon.status = PsychoJS.Status.NOT_STARTED
 		postStims[i].like_icon.setAutoDraw(false)
 
+		postStims[i].dislike_icon.status = PsychoJS.Status.NOT_STARTED
+		postStims[i].dislike_icon.setAutoDraw(false)
+
 		postStims[i].like_icon_outline.status = PsychoJS.Status.NOT_STARTED
 		postStims[i].like_icon_outline.setAutoDraw(false)
 
@@ -2169,6 +2206,20 @@ function trialRoutineEachFrameWaitforInput(trials) {
 						texRes : 128, interpolate : true, depth : 0
 					});
 
+					postStims[trial_num].dislike_icon = new visual.ImageStim({
+						win : psychoJS.window,
+						name : `dislike_post_${trial_num}`, units : 'norm', 
+						image : 'dislike.png', mask : undefined,
+						ori: 0,
+						pos: [ post_stim_x_pos.left.like_icon, postStims[trial_num].postlikeIcon_y ], 
+						size: [0.04,0.05],
+						color: undefined, opacity: 1,
+						flipHoriz : false, flipVert : false,
+						texRes : 128, interpolate : true, depth : 0
+					});
+
+				
+
 					postStims[trial_num].like_icon_outline = new visual.ImageStim({
 						win : psychoJS.window,
 						name : `like_post_${trial_num}_outline`, units : 'norm', 
@@ -2233,6 +2284,18 @@ function trialRoutineEachFrameWaitforInput(trials) {
 						win : psychoJS.window,
 						name : `like_post_${trial_num}`, units : 'norm', 
 						image : 'heart.png', mask : undefined,
+						ori: 0,
+						pos: [ post_stim_x_pos.right.like_icon, postStims[trial_num].postlikeIcon_y ], 
+						size: [0.04,0.05],
+						color: undefined, opacity: 1,
+						flipHoriz : false, flipVert : false,
+						texRes : 128, interpolate : true, depth : 0
+					});
+
+					postStims[trial_num].dislike_icon = new visual.ImageStim({
+						win : psychoJS.window,
+						name : `dislike_post_${trial_num}`, units : 'norm', 
+						image : 'dislike.png', mask : undefined,
 						ori: 0,
 						pos: [ post_stim_x_pos.right.like_icon, postStims[trial_num].postlikeIcon_y ], 
 						size: [0.04,0.05],
@@ -2352,7 +2415,13 @@ function trialRoutineEachFrameShowPost(trials) {
 		// After 3 seconds go to the next Trial (post) or next chat room
 		if (t > animation_duration) {
 			postStims[trial_num].like_posts.setAutoDraw(true)
-			postStims[trial_num].like_icon.setAutoDraw(true) // show filled in heart
+
+			if (dislike_room) {
+				postStims[trial_num].dislike_icon.setAutoDraw(true) // show filled in heart
+			} else {
+				postStims[trial_num].like_icon.setAutoDraw(true) // show filled in heart
+			}
+			
 
 			if (!lastTrial) {
 				// Go to the next routine if it's not the last trial
