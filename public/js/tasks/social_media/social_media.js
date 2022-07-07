@@ -265,6 +265,7 @@ flowScheduler.add(readyRoutineEachFrame());
 flowScheduler.add(readyRoutineEnd());
 
 // MAIN BLOCK
+totalPoints = null // reset total points
 const trialsLoopScheduler = new Scheduler(psychoJS);
 flowScheduler.add(trialsLoopBegin, trialsLoopScheduler);
 flowScheduler.add(trialsLoopScheduler);
@@ -1668,23 +1669,15 @@ function setupPosts(game_type) {
 // of how much total likes ther user has received / 
 // the maximum number of likes they could have recieved through the chatrooms
 function getSocialApprovalScore() {
-	
+
 	totalPossible = totalPossible + Math.max(left_reward, right_reward)
-	socialApprovalScore = totalPoints / totalPossible
+	// socialApprovalScore = ( totalPoints / totalPossible )
 
-	// if (socialApprovalScore > 1) {
-	// 	socialApprovalScore = 1 - socialApprovalScore
-	// }
+	socialApprovalScore = ( totalPoints / totalPossible )
 
-	console.log('totalPoints', totalPoints)
-	if (totalPoints < 0) {
-		socialApprovalScore = 1 - socialApprovalScore
-		socialApprovalScore = `${ Math.round( socialApprovalScore * 100) }%`
-	} else {
-		socialApprovalScore = `${ Math.round(socialApprovalScore * 100) }%`
-	}
 	console.log('Left Reward: ',left_reward, ' Right Reward:',right_reward, 'TotalPoints: ',totalPoints, 'totalPossible: ', totalPossible, 'Score:',socialApprovalScore)
-	// socialApprovalScore = `${ Math.round(socialApprovalScore * 100) }%`
+	// Put in percentage
+	socialApprovalScore = `${Math.round(socialApprovalScore * 100)}%`
 }
 
 var trialComponents;
