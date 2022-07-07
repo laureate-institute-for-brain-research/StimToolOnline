@@ -1735,6 +1735,7 @@ function trialRoutineBegin(trials) {
 		// If it's a new game, clear other texts
 		// console.log(lastGameNumber)
 		if (game_number != lastGameNumber) {
+			console.log('new chat room')
 			leftTopicCounter = 0
 			rightTopicCounter = 0
 			lastTrialKeyPressed = false;
@@ -1948,13 +1949,11 @@ function trialRoleReversalRoutineBegin(trials) {
 
 			topic_text = leftTopic[leftTopicCounter]
 			topic_text_elements = normalize_elements(topic_text.split(' '))
-			postStims[trial_num].post_text.setText('')
 			leftTopicCounter++
 			postStims[trial_num].post_text.pos[0] = post_stim_x_pos.left.post_text
 			postStims[trial_num].post_text.alignVert = 'right'
 			postStims[trial_num].post_text.alignHoriz = 'right'
 	
-			
 			postStims[trial_num].rect.fillColor = new util.Color(leftColor)
 			postStims[trial_num].rect.lineColor = new util.Color(leftColor)
 			
@@ -1997,7 +1996,6 @@ function trialRoleReversalRoutineBegin(trials) {
 
 			topic_text = rightTopic[rightTopicCounter]
 			topic_text_elements = normalize_elements(topic_text.split(' '))
-			postStims[trial_num].post_text.setText('')
 			rightTopicCounter++
 			postStims[trial_num].post_text.pos[0] = post_stim_x_pos.right.post_text
 			postStims[trial_num].post_text.alignVert = 'left'
@@ -2009,6 +2007,8 @@ function trialRoleReversalRoutineBegin(trials) {
 			postStims[trial_num].rect.fillColor = new util.Color(rightColor)
 
 		}
+
+		postStims[trial_num].post_text.setText('')
 
 		// console.log(topic_text)
 
@@ -2360,8 +2360,9 @@ function trialRoutineEachFrameWaitforInput(trials) {
 				// Reset Trial Time
 				trialClock.reset();
 
-				animationAttributes = getAnimationAttributes(trial_reward)
-				frameN = 0
+				// animationAttributes = getAnimationAttributes(trial_reward)
+				frameN = 1
+				loadingCounter = 0
 				postStims[trial_num].like_posts.setText(trial_reward)
 				postStims[trial_num].post_text.setAutoDraw(true)
 				return Scheduler.Event.NEXT; // Go to Next Routine after subject makes a selection
@@ -2419,7 +2420,7 @@ function trialRoutineEachFrameShowPost(trials) {
 
 			if (!lastTrial) {
 				// Go to the next routine if it's not the last trial
-				loadingCounter = 0
+				
 				return Scheduler.Event.NEXT;
 			} else {
 				// Show Instructions about clicking space to go to next chat room
