@@ -447,43 +447,31 @@ var topic_text;
 
 var leftTopicCounter = 0
 var leftTopic = [
-	'I listened to country all the time at my friends house when I was younger.',
-	"I feel like some country songs make me feel better when I'm having a bad day.",
-	'Bars in the southwest are definitely fun if you like to dance to country music.',
-	"It seems like people outside of America aren't as into country music. If not, they're missing out!",
-	"I love Brad Paisley more than any other artist.",
-	"NA",
-	"NA",
-	"NA",
-	"NA",
-	"NA"
+	"One time I saw what's called a Super Flower Blood Moon.",
+	"They mean it when they say not to look at a solar eclipse!",
+	"I can always find the Big Dipper at night but hardly anything else",
+	"It's crazy that the stars are so far away!",
+	"I was staring at a moving star for 20 mins before I realized it was a satelite",
+	"Anyone have any good telescope recommendations?",
+	"I have an app that tells me which constellations I'm looking at!",
+	"I always stargaze when I had a rough day at work.",
+	"My city has way too much light pollution",
+	"Who else is excited for the meteor shower this weekend??"
 ]
 var rightTopicCounter = 0
 var rightTopic = [
-	'My parents were pretty conservative growing up and never let me listen to rap. So I only got into it when I was older.',
-	"I'm trying to decide which concert to go to. Both have rappers I really like!",
-	"I like listening to rap when I'm in some moods, but not others.",
-	"Rappers talk so fast I sometimes can't understand what they're saying, but it still sounds good anyway!",
-	"I can't believe they cancelled the concert. Good rap artists never come do shows here anymore!",
-	"NA",
-	"NA",
-	"NA",
-	"NA",
-	"NA"
+	"We just planted our very first garden: cucumbers, tomatoes, ghost peppers, basil, rosemary, and onions.",
+	"Who's going to the azalea festival this weekend?",
+	"It's so satisfying to see that first seedling come up after weeks of watering.",
+	"Save your coffee grounds! They're a good fertilizer for plants that like acidic soil.",
+	"Lilies and Tulips and Begonias, oh my!",
+	"Why do I kill every Alocasia I plant??",
+	"I harvested the first tomato from my garden today!",
+	"Anyone have any tips for keeping bugs off of my potato seedlings?",
+	"I'm worried it might be too hot outside for some of the seeds I bought",
+	"I hope I can keep my dogs away from my plants this year"
 ]
 
-var samplePosts = [
-	'It\'s #NationalVegetarianWeek! Here are our exciting recipe ideas for tasty snacks and sides. ⚡️',
-	'🚨 IT\'S FINALLY HAPPENING 🚨 @kendricklamar is set to drop his new album "Mr. Morale & The Big Steppers" on May 13th',
-	'More music on the way from Jamie Foxx. He discusses his new single, “LET\'S DO IT AGAIN,” and what\'s ahead with @zanelow. 🙌 http://apple.co/JamiexxZLS',
-	'@arzE and the @timecrisis2000 crew chat with @brucehornsby about his new single "Sidelines," plus they get into the top hits of 1988 and today',
-	'Celebrate Easter with @HillaryScottLA and guest Chandler Moore of @MavCityMusic on #CountryFaith Radio. 🌼',
-	'"The beauty of making music is the magical moments that can\'t be repeated or explained." Hear @swedishousemfia\'s "Heaven Takes You Home" on #danceXL.',
-	'@Camila_Cabello chats with @zanelowe about the making of #Familia and gets candid about her mental health journey.',
-	'.@lizzo is here to slay. ✨ Turn up on #NewMusicDaily: http://apple.co/NMDLizzo',
-	'.@HueyLewisNews is going back in time for another season of #80sRadio! Listen to episode 1 right now on Apple Music Hits: http://apple.co/80sRadioHL',
-	'.@Bas always delivers. \'\[BUMP\] Pick Me Up\' is out now ft. @Galimatias x @1GunnaGunna x @JColeNC x @liltjay x @AriLennox http://apple.co/PickMeUp',
-]
 
 var beginButton;
 
@@ -1751,8 +1739,8 @@ function trialRoutineBegin(trials) {
 		setupPosts(game_type)
 		
 
-		choice1Button.setText('Country Music') // will need to grap topc from schedule // TODO
-		choice2Button.setText('Rap Music') // will need to grab the topic from schedule // TODO
+		choice1Button.setText('Astronomy') // will need to grap topc from schedule // TODO
+		choice2Button.setText('Gardening') // will need to grab the topic from schedule // TODO
 		
 		currentTrialNumber.setText(`${trial_num}`)
 		chatRoomNumber.setText(`${game_number + 1}/${total_games}`)
