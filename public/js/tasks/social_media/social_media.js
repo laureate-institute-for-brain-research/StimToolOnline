@@ -1666,8 +1666,9 @@ function setupPosts(game_type) {
 
 
 // Social Approval Score is the percentage
-// of how much total likes ther user has received / 
-// the maximum number of likes they could have recieved through the chatrooms
+// of how much total likes ther user has accumalted
+//  / 
+// the maximum number of likes they could have recieved through out the chatrooms
 function getSocialApprovalScore() {
 
 	totalPossible = totalPossible + Math.max(left_reward, right_reward)
