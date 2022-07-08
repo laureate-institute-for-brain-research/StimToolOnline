@@ -266,6 +266,7 @@ flowScheduler.add(readyRoutineEnd());
 
 // MAIN BLOCK
 totalPoints = null // reset total points
+totalPossible = 0
 const trialsLoopScheduler = new Scheduler(psychoJS);
 flowScheduler.add(trialsLoopBegin, trialsLoopScheduler);
 flowScheduler.add(trialsLoopScheduler);
@@ -486,6 +487,11 @@ var leftFadeColor = '#142833'
 var rightColor = '#db6e00'
 var rightFadeColor = '#361b01'
 
+var like_color = {
+	'likes': '#FF137E',
+	'dislikes': 'red'
+}
+
 var slideStim;
 var slides;
 var instructClock;
@@ -498,6 +504,8 @@ var currentTrialNumber;
 var currentTrialText;
 var chatRoomNumber;
 var chatRoomNumberText;
+var roomType;
+var roomTypeText;
 var totalPoints = 0;
 var totalPossible = null;
 var socialApprovalScore = 0;
@@ -1155,7 +1163,7 @@ function experimentInit() {
 		alignHoriz: 'center',
 		alignVert: 'center',
 		pos: [ 0.86, 0.93], height: 0.05, wrapWidth: undefined, ori: 0,
-		color: new util.Color('#FFFF00'), opacity: 1,
+		color: new util.Color('white'), opacity: 1,
 		depth: 0.0
 	});
 
@@ -1181,7 +1189,7 @@ function experimentInit() {
 		alignHoriz: 'center',
 		alignVert: 'center',
 		pos: [ 0.865, 0.7], height: 0.05, wrapWidth: undefined, ori: 0,
-		color: new util.Color('#00FF00'), opacity: 1,
+		color: new util.Color('white'), opacity: 1,
 		depth: 0.0
 	});
 
@@ -1207,7 +1215,7 @@ function experimentInit() {
 		alignHoriz: 'center',
 		alignVert: 'center',
 		pos: [0.87, 0.44], height: 0.05, wrapWidth: undefined, ori: 0,
-		color: new util.Color('#00FFFF'), opacity: 1,
+		color: new util.Color('white'), opacity: 1,
 		depth: 0.0
 	});
 
@@ -1221,6 +1229,34 @@ function experimentInit() {
 		units: 'norm',
 		pos: [ 0.86, 0.33], height: 0.05, wrapWidth: undefined, ori: 0,
 		color: new util.Color('#00FFFF'), opacity: 1,
+		depth: 0.0
+	});
+
+
+	roomTypeText = new visual.TextStim({
+		win: psychoJS.window,
+		name: 'roomTypeText',
+		text: 'ROOM TYPE:',
+		font: 'lucida grande',
+		units: 'norm',
+		alignHoriz: 'center',
+		alignVert: 'center',
+		pos: [0.87, 0.16], height: 0.05, wrapWidth: undefined, ori: 0,
+		color: new util.Color('white'), opacity: 1,
+		depth: 0.0
+	});
+
+	roomType = new visual.TextStim({
+		win: psychoJS.window,
+		name: 'roomType',
+		text: 'Likes',
+		italic: true,
+		font: 'lucida grande',
+		alignHoriz: 'center',
+		alignVert: 'center',
+		units: 'norm',
+		pos: [ 0.86, 0.09], height: 0.05, wrapWidth: undefined, ori: 0,
+		color: new util.Color('#FF137E'), opacity: 1,
 		depth: 0.0
 	});
 
@@ -1283,6 +1319,8 @@ function clear_All_stims() {
 	chatRoomNumber.setAutoDraw(false)
 	totalLikesText.setAutoDraw(false)
 	totalLikesTracker.setAutoDraw(false)
+	roomTypeText.setAutoDraw(false)
+	roomType.setAutoDraw(false)
 
 	choice1Button.setAutoDraw(false)
 	choice2Button.setAutoDraw(false)
@@ -1659,7 +1697,12 @@ function setupPosts(game_type) {
 // the maximum number of likes they could have recieved through out the chatrooms
 function getSocialApprovalScore() {
 
-	totalPossible = totalPossible + Math.max(left_reward, right_reward)
+	if (dislike_room == 0) {
+		// Total Possible should only be for the like chat rooms
+		//  We dont add total possible for dislikes rooms.
+		totalPossible = totalPossible + 100
+	}
+	
 	// socialApprovalScore = ( totalPoints / totalPossible )
 
 	socialApprovalScore = ( totalPoints / totalPossible )
@@ -1714,9 +1757,16 @@ function trialRoutineBegin(trials) {
 		lastTrial = isLastTrial(game_type, trial_num)
 
 		// Turn the rewards to negative if it's a dislike_chartroom
-		if (dislike_room) {
+		if (dislike_room == 1) {
 			left_reward = -left_reward
 			right_reward = -right_reward
+
+			roomType.setColor(like_color.dislikes)
+			roomType.setText('Dislikes')
+		} else {
+			roomType.setText('Likes')
+			roomType.setColor(like_color.likes)
+			
 		}
 
 
@@ -1778,6 +1828,8 @@ function trialRoutineBegin(trials) {
 		chatRoomNumber.setAutoDraw(true)
 		totalLikesText.setAutoDraw(true)
 		totalLikesTracker.setAutoDraw(true)
+		roomType.setAutoDraw(true)
+		roomTypeText.setAutoDraw(true)
 
 		choice1Button.setAutoDraw(true)
 		choice2Button.setAutoDraw(true)
