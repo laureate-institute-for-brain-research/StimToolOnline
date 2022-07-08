@@ -265,8 +265,6 @@ flowScheduler.add(readyRoutineEachFrame());
 flowScheduler.add(readyRoutineEnd());
 
 // MAIN BLOCK
-totalPoints = null // reset total points
-totalPossible = 0
 const trialsLoopScheduler = new Scheduler(psychoJS);
 flowScheduler.add(trialsLoopBegin, trialsLoopScheduler);
 flowScheduler.add(trialsLoopScheduler);
@@ -1605,6 +1603,9 @@ var total_games;
 var animation_duration = 2
 function trialsLoopBegin(thisScheduler) {
 	// set up handler to look up the conditions
+	totalPoints = null // reset total points
+	totalPossible = null
+	socialApprovalScore = 0
 	total_games = 80
 	if (getQueryVariable('practice') == 'true') {
 		total_games = 5
@@ -1792,7 +1793,7 @@ function trialRoutineBegin(trials) {
 		choice1Button.setText('Astronomy') // will need to grap topc from schedule // TODO
 		choice2Button.setText('Gardening') // will need to grab the topic from schedule // TODO
 		
-		currentTrialNumber.setText(`${trial_num}`)
+		currentTrialNumber.setText(`${trial_num + 1}`)
 		chatRoomNumber.setText(`${game_number + 1}/${total_games}`)
 
 		if (!Number.isFinite(totalPossible) ) {
@@ -1892,7 +1893,7 @@ function trialRoleReversalRoutineBegin(trials) {
 
 		lastTrial = isLastTrial(game_type, trial_num)
 		
-		currentTrialNumber.setText(`${trial_num}`)
+		currentTrialNumber.setText(`${trial_num + 1}`)
 		chatRoomNumber.setText(`${game_number + 1}/${total_games}`)
 		totalLikesTracker.setText(`${totalPoints}`)
 
@@ -2383,10 +2384,11 @@ function trialRoutineEachFrameWaitforInput(trials) {
 
 				}
 				
+				// Calculate the score as soon as you press
+				// But don't actually set the text/show the text until after animation
 				if (force_pos == 'X') {
 					totalPoints = totalPoints + trial_reward
-					getSocialApprovalScore()
-					totalLikesTracker.setText(socialApprovalScore)
+					getSocialApprovalScore() // calculates the approval score
 				}
 
 				// console.log(postStims[trial_num].like_posts)
@@ -2450,6 +2452,7 @@ function trialRoutineEachFrameShowPost(trials) {
 		// After 3 seconds go to the next Trial (post) or next chat room
 		if (t > animation_duration) {
 			postStims[trial_num].like_posts.setAutoDraw(true)
+			totalLikesTracker.setText(socialApprovalScore)
 
 			if (dislike_room) {
 				postStims[trial_num].dislike_icon.setAutoDraw(true) // show filled in heart
