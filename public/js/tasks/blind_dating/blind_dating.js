@@ -731,7 +731,7 @@ function questionRoutineBegin(trials) {
 		loading_formio_text = new visual.TextStim({
 			win: psychoJS.window,
 			name: 'loading_formio_text',
-			text: 'Embedding formio...',
+			text: 'loading page....',
 			font: 'Arial',
 			units: 'height',
 			pos: [0, 0], height: 0.05, wrapWidth: undefined, ori: 0,
