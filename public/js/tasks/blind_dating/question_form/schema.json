@@ -1,0 +1,136 @@
+{
+    "display": "form",
+    "settings": {
+        "pdf": {
+            "id": "1ec0f8ee-6685-5d98-a847-26f67b67d6f0",
+            "src": "https://files.form.io/pdf/5692b91fd1028f01000407e3/file/1ec0f8ee-6685-5d98-a847-26f67b67d6f0"
+        }
+    },
+    "components": [
+        {
+            "label": "What was your sex assigned at birth?",
+            "optionsLabelPosition": "right",
+            "inline": false,
+            "tableView": false,
+            "values": [
+                {
+                    "label": "Male",
+                    "value": "male",
+                    "shortcut": ""
+                },
+                {
+                    "label": "Female",
+                    "value": "female",
+                    "shortcut": ""
+                },
+                {
+                    "label": "Prefer not to answer",
+                    "value": "preferNotToAnswer",
+                    "shortcut": ""
+                }
+            ],
+            "validate": {
+                "required": true
+            },
+            "key": "whatWasYourSexAssignedAtBirth",
+            "type": "radio",
+            "input": true
+        },
+        {
+            "label": "How do you currently identify your gender?",
+            "optionsLabelPosition": "right",
+            "inline": false,
+            "tableView": false,
+            "values": [
+                {
+                    "label": "Male",
+                    "value": "male",
+                    "shortcut": ""
+                },
+                {
+                    "label": "Female",
+                    "value": "female",
+                    "shortcut": ""
+                },
+                {
+                    "label": "Female-to-Male (FTM)/Transgender Male/Trans Man",
+                    "value": "femaleToMaleFtmTransgenderMaleTransMan",
+                    "shortcut": ""
+                },
+                {
+                    "label": "Male-to-Female (MTF)/Transgender Female/Trans Woman",
+                    "value": "maleToFemaleMtfTransgenderFemaleTransWoman",
+                    "shortcut": ""
+                },
+                {
+                    "label": "Genderqueer / Gender non-conforming",
+                    "value": "genderqueerGenderNonConforming",
+                    "shortcut": ""
+                },
+                {
+                    "label": "Prefer not to answer",
+                    "value": "preferNotToAnswer",
+                    "shortcut": ""
+                }
+            ],
+            "validate": {
+                "required": true
+            },
+            "key": "howDoYouCurrentlyIdentifyYourGender",
+            "type": "radio",
+            "input": true
+        },
+        {
+            "label": "Which best describes your sexual identity?",
+            "optionsLabelPosition": "right",
+            "inline": false,
+            "tableView": false,
+            "values": [
+                {
+                    "label": "Heterosexual (Straight)",
+                    "value": "heterosexualStraight",
+                    "shortcut": ""
+                },
+                {
+                    "label": "Gay",
+                    "value": "gay",
+                    "shortcut": ""
+                },
+                {
+                    "label": "Lesbian",
+                    "value": "lesbian",
+                    "shortcut": ""
+                },
+                {
+                    "label": "Bisexual",
+                    "value": "bisexual",
+                    "shortcut": ""
+                }
+            ],
+            "validate": {
+                "required": true
+            },
+            "key": "whichBestDescribesYourSexualIdentity",
+            "type": "radio",
+            "input": true
+        },
+        {
+            "label": "What are you interests?",
+            "tableView": false,
+            "validate": {
+                "required": true
+            },
+            "key": "whatAreYouInterests",
+            "type": "tags",
+            "input": true
+        },
+        {
+            "type": "button",
+            "label": "Submit",
+            "key": "submit",
+            "disableOnInvalid": true,
+            "input": true,
+            "tableView": false
+        }
+    ]
+}

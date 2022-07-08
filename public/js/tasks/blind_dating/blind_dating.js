@@ -164,7 +164,7 @@ psychoJS.openWindow({
 });
 
 // store info about the experiment session:
-let expName = 'Limited Offer Task';  // from the Builder filename that created this script
+let expName = 'Blind Dating Game';  // from the Builder filename that created this script
 var expInfo = { 'participant': '' ,'session': '',  'run_id': '', 'date' : formatDate(), 'study': '', };
 
 // schedule the experiment:
@@ -192,6 +192,9 @@ if (!getQueryVariable('skip_instructions')) {
 
 
 // QUESTION BLOCK
+flowScheduler.add(questionRoutineBegin());
+flowScheduler.add(questionRoutineEachFrame());
+flowScheduler.add(questionRoutineEnd());
 
 
 // // Ready Routine
@@ -509,6 +512,25 @@ function experimentInit() {
 		depth: 0.0
 	});
 
+	 // Exposes PsychoJS's addData for use in HTML pages
+	 window.addData = function(key, value) {
+		psychoJS.experiment.addData(key, value);
+	}
+  
+
+	// Adds an iframe on top of the PsychoJS canvas. Use src to specify an HTML page
+	window.startHTML = (src) => {
+		$('body').append('<iframe id="iframe" src="' + src +'" style="width: 100%; height: 100%; position:absolute;z-index:1;top:0;left:0;border:0;"></iframe>');    
+		window.finishedHTML = false;
+	};
+	
+	// Removes the iframe again
+	window.finishHTML = () => {
+		$('#iframe').remove();
+		window.finishedHTML = true;
+	};
+	
+
 	// Create some handy timers
 	globalClock = new util.Clock();  // to track the time since experiment started
 	routineTimer = new util.CountdownTimer();  // to track time remaining of each (non-slip) routine
@@ -697,6 +719,82 @@ function instructRoutineEnd(trials) {
 	};
 }
 
+var questionComponents;
+var loading_formio_text;
+function questionRoutineBegin(trials) {
+	return function () {
+		//------Prepare to start Routine 'question'-------
+		frameN = 0;
+
+		console.log('Questions Routine')
+		
+		loading_formio_text = new visual.TextStim({
+			win: psychoJS.window,
+			name: 'loading_formio_text',
+			text: 'Embedding formio...',
+			font: 'Arial',
+			units: 'height',
+			pos: [0, 0], height: 0.05, wrapWidth: undefined, ori: 0,
+			color: new util.Color('white'), opacity: 1,
+			depth: 0.0
+		});
+
+		window.startHTML('/js/tasks/blind_dating/question_form/index.html');
+
+		// update component parameters for each repeat
+		// keep track of which components have finished
+		questionComponents = [];
+		questionComponents.push(loading_formio_text);
+
+		for (const thisComponent of questionComponents)
+			if ('status' in thisComponent)
+				thisComponent.status = PsychoJS.Status.NOT_STARTED;
+
+		return Scheduler.Event.NEXT;
+	};
+}
+
+var frameRemains;
+function questionRoutineEachFrame(trials) {
+	return function () {
+		//------Loop for each frame of Routine 'question'-------
+		let continueRoutine = !window.finishedHTML;
+		// get current time
+		frameN = frameN + 1;// number of completed frames (so 0 is the first frame)
+		// update/draw components on each frame
+		if (loading_formio_text.status === PsychoJS.Status.NOT_STARTED) {
+			loading_formio_text.setAutoDraw(true);
+		}
+
+		// check for quit (typically the Esc key)
+		if (psychoJS.eventManager.getKeys({keyList:['escape']}).length > 0) {
+			return quitPsychoJS('The [Escape] key was pressed. Goodbye!', false);
+		}
+
+
+		// refresh the screen if continuing
+		if (continueRoutine) {
+			return Scheduler.Event.FLIP_REPEAT;
+		}
+		else {
+			return Scheduler.Event.NEXT;
+		}
+	};
+}
+
+function questionRoutineEnd(trials) {
+	return function () {
+		//------Ending Routine 'question'-------
+		for (const thisComponent of questionComponents) {
+			if (typeof thisComponent.setAutoDraw === 'function') {
+				thisComponent.setAutoDraw(false);
+			}
+		}
+
+		return Scheduler.Event.NEXT;
+	};
+}
+
 var trials;
 var currentLoop;
 function trialsLoopBegin(thisScheduler) {
@@ -720,8 +818,6 @@ function trialsLoopBegin(thisScheduler) {
 			seed: undefined, name: 'trials'
 		});
 	}
-
-	
 
 	// console.log(trials)
 	
@@ -747,7 +843,6 @@ function instruct_pagesLoopEnd() {
 	psychoJS.experiment.removeLoop(slides);
 	return Scheduler.Event.NEXT;
 }
-
 
 // SHow the points in the trial 
 function trialsLoopEnd() {
@@ -778,8 +873,6 @@ function clearTrialComponenets() {
 
 	offer_stim_text.setAutoDraw(false)
 
-
-	
 }
 
 
@@ -853,7 +946,6 @@ function trialRoutineEachFrame(trials) {
 				offer_stim_text.setText(0 + ' points')
 			}
 		}
-		
 	
 		// get current time
 		t = trialClock.getTime();
@@ -888,8 +980,6 @@ function trialRoutineEachFrame(trials) {
 			}
 		}
 		
-
-
 		// Draw the Boxes
 
 		// Orientation Screen ( 1000ms)
@@ -941,8 +1031,6 @@ function trialRoutineEachFrame(trials) {
 				wait_text_stim.setAutoDraw(true)
 				wait_text_stim.color = new util.Color('#A9A9A9')
 			}
-			
-			
 
 		}
 
@@ -961,9 +1049,6 @@ function trialRoutineEachFrame(trials) {
 				wait_rect_stim.lineColor = new util.Color('white')
 				wait_text_stim.color = new util.Color('black')
 			}
-			
-			
-		
 			
 			// resp.clearEvents()
 			if (!pressed && !missed) {
@@ -1039,10 +1124,6 @@ function trialRoutineEachFrame(trials) {
 				// }
 			}
 
-			
-
-
-
 			// Save Data for each timepoint during the break phase
 			if ( (typeof resp.keys !== 'undefined') && !saved ) {  // we had a response
 				// psychoJS.experiment.addData('resp.rt', resp.rt);
@@ -1056,9 +1137,6 @@ function trialRoutineEachFrame(trials) {
 			}
 
 		}
-
-		
-
 		//  time point end
 		// timepoint time should never go aboive 4.5 seconds
 		if (tp > 4.5)  { 
@@ -1256,8 +1334,6 @@ function trialRoutineEnd(trials) {
 }
 
 var readyComponents;
-
-
 var thanksComponents;
 function thanksRoutineBegin(trials) {
 	return function () {
@@ -1332,8 +1408,6 @@ function thanksRoutineEachFrame(trials) {
 		}
 	};
 }
-
-
 
 function thanksRoutineEnd(trials) {
 	return function () {

@@ -1,0 +1,46 @@
+<html>
+  <head>
+    <meta charset="utf-8">    
+    <!-- Includes for form.io -->
+    <link rel='stylesheet' href='https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css'>
+    <link rel='stylesheet' href='https://unpkg.com/formiojs@latest/dist/formio.full.min.css'>
+    <script src='https://unpkg.com/formiojs@latest/dist/formio.full.min.js'></script>
+    <!-- Include to flatten a JSON submission -->
+    <script src='/js/tasks/blind_dating/question_form/flat-5.0.0.js'></script>    
+    <script type='text/javascript'>
+      window.onload = function() {
+       // Convert URL of this page to baseURL (i.e. remove 'index.html' at te end)
+        var baseURL = window.location.href;
+        baseURL = baseURL.substr(0, baseURL.length - 'index.html'.length);
+        // Create Form; here we use baseURL to get the URL of schema.json
+        Formio.createForm(document.getElementById('formio'), baseURL + 'schema.json')
+          .then(function(form) {
+            // Don't POST the data when the form is sumbmitted; we use addData for that
+            form.nosubmit = true;
+            // Called when form is submitted
+            form.on('submit', (submission) => {
+              // Debug code
+              console.log('The form was just submitted!!!');
+              console.log(submission);
+              // Note that submission.data contains the actual answers to the form
+              // We'll flatten this part for storage
+              // (i.e. {"key":["value1", value2"} becomes {"key.0": "value1", "key.1": "value2"}
+              var flatSubmission = flat.flatten(submission.data);
+              // Mode debug code
+              console.log(flatSubmission);
+              // Store each key-value pair
+              for (var key in flatSubmission) {
+                parent.addData(key, flatSubmission[key]);
+              }
+              // Finish HTML
+              parent.finishHTML();
+              form.emit('submitDone', submission);
+            });
+          });
+      };
+    </script>
+  </head>
+  <body>
+    <div id='formio' style='margin:15px;'></div>
+  </body>
+</html>
