@@ -1,6 +1,7 @@
 ﻿/**
- * Horizon Task
- * @author James Touthang <jtouthang@laureateinstitute.org>
+ * Social Media Task
+ * A modified Horizon Task
+ * @author James Touthang <james@touthang.info>
  */
 
 import { core, data, sound, util, visual } from '/psychojs/psychojs-2021.2.3.js';
@@ -338,7 +339,7 @@ var frameDur;
 function updateInfo() {
 	expInfo.date = util.MonotonicClock.getDateStr();  // add a simple timestamp
 	expInfo.expName = expName;
-	expInfo.psychopyVersion = '3.2.5';
+	expInfo.psychopyVersion = '2021.2.3';
 	expInfo.OS = window.navigator.platform;
 
 	// store frame rate of monitor if we can measure it successfully
@@ -1392,41 +1393,7 @@ function instruct_pages_roleReversal_LoopBegin(thisScheduler) {
 var t;
 var frameN;
 var instructComponents;
-function instructRoutineBegin(trials) {
-	return function () {
-		//------Prepare to start Routine 'instruct'-------
-		t = 0;
-		instructClock.reset(); // clock
-		frameN = -1;
-		// console.log(instruct_slide)
-		slideStim.setImage(instruct_slide)
-		// update component parameters for each repeat
-		ready.keys = undefined;
-		ready.rt = undefined;
-		// keep track of which components have finished
-		instructComponents = [ slideStim];
-	
-		instructComponents.push(ready);
 
-		console.log("InstructionSlides Index: ",trials.thisIndex)
-
-		if (audio_path) {
-			track = new Sound({
-				win: psychoJS.window,
-				value: audio_path
-			  });
-			// console.log(audio_path)
-			track.setVolume(1.0);
-			track.play();
-		}
-
-		for (const thisComponent of instructComponents)
-			if ('status' in thisComponent)
-				thisComponent.status = PsychoJS.Status.NOT_STARTED;
-
-		return Scheduler.Event.NEXT;
-	};
-}
 
 var continueRoutine;
 var newSlide;
@@ -2849,6 +2816,42 @@ function endLoopIteration(thisScheduler, loop = undefined) {
 function importConditions(trials) {
 	return function () {
 		psychoJS.importAttributes(trials.getCurrentTrial());
+		return Scheduler.Event.NEXT;
+	};
+}
+
+function instructRoutineBegin(trials) {
+	return function () {
+		//------Prepare to start Routine 'instruct'-------
+		t = 0;
+		instructClock.reset(); // clock
+		frameN = -1;
+		// console.log(instruct_slide)
+		slideStim.setImage(instruct_slide)
+		// update component parameters for each repeat
+		ready.keys = undefined;
+		ready.rt = undefined;
+		// keep track of which components have finished
+		instructComponents = [ slideStim];
+	
+		instructComponents.push(ready);
+
+		console.log("InstructionSlides Index: ",trials.thisIndex)
+
+		if (audio_path) {
+			track = new Sound({
+				win: psychoJS.window,
+				value: audio_path
+			  });
+			// console.log(audio_path)
+			track.setVolume(1.0);
+			track.play();
+		}
+
+		for (const thisComponent of instructComponents)
+			if ('status' in thisComponent)
+				thisComponent.status = PsychoJS.Status.NOT_STARTED;
+
 		return Scheduler.Event.NEXT;
 	};
 }

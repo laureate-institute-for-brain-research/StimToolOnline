@@ -1,16 +1,16 @@
 ﻿/**
- * Limited Offer Task
- * @author James Touthang <jtouthang@laureateinstitute.org>
+ * Speed Dating Task
+ * A modifieid Limited Offer Task
+ * @author James Touthang <james@touthang.info>
  */
 
-import { PsychoJS } from '/lib/core-2020.1.js';
-import * as core from '/lib/core-2020.1.js';
-import { TrialHandler } from '/lib/data-2020.1.js';
-import { Scheduler } from '/lib/util-2020.1.js';
-import * as util from '/lib/util-2020.1.js';
-import * as visual from '/lib/visual-2020.1.js';
-import { Sound } from '/lib/sound-2020.1.js';
-
+ import { core, data, sound, util, visual } from '/psychojs/psychojs-2021.2.3.js';
+ const { PsychoJS } = core;
+ const { TrialHandler } = data;
+ const { Scheduler } = util;
+ //some handy aliases as in the psychopy scripts;
+ const { abs, sin, cos, PI: pi, sqrt } = Math;
+ const { round } = util;
 
 // TASAK PARAMS
 var practice = false;
@@ -67,7 +67,7 @@ window.onload = function () {
 			return new Promise((resolve, reject) => {
 				$.ajax({
 					type: 'GET',
-					url: '/js/tasks/limited_offer/' + getQueryVariable('run'),
+					url: '/js/tasks/blind_dating/' + getQueryVariable('run'),
 					dataType: 'json',
 					success: (data) => {
 						resolve(data)
@@ -79,19 +79,19 @@ window.onload = function () {
 	
 		// Read RUN Config
 		.then((values) => {
-			// console.log(values['instruct_schedule'])
-			resources.push({ name: 'run_schedule.xls', path: values['schedule'] })
-			resources.push({ name: 'instruct_schedule.csv', path: values['instruct_schedule'] })
+
+			resources.push({ name: 'run_schedule.xls', path: values.schedule })
+			resources.push({ name: 'instruct_schedule.csv', path: values.instruct_schedule })
 
 			// Add file paths to expInfo
-			if (values['schedule']) expInfo.task_schedule = values['schedule']
-			if (values['instruct_schedule']) expInfo.instruct_schedule = values['instruct_schedule']
+			if (values.schedule) expInfo.task_schedule = values.schedule
+			if (values.instruct_schedule) expInfo.instruct_schedule = values.instruct_schedule
 			
 			// Import the instruction slides
 			return new Promise((resolve, reject) => {
 				$.ajax({
 					type: 'GET',
-					url: values['instruct_schedule'],
+					url: values.instruct_schedule,
 					dataType: 'text',
 					async: false,
 					success: (data) => {
@@ -114,8 +114,8 @@ window.onload = function () {
 							}
 							out.push(obj);
 
-							if (obj['instruct_slide'] != "" || obj['instruct_slide'] != undefined ) resources.push({ name: obj['instruct_slide'], path: obj['instruct_slide'] })
-							if (obj['audio_path'] != "" || obj['audio_path'] != undefined ) resources.push({ name: obj['audio_path'], path: obj['audio_path'] })
+							if (obj.instruct_slide != "" || obj.instruct_slide != undefined ) resources.push({ name: obj.instruct_slide, path: obj.instruct_slide })
+							if (obj.audio_path != "" || obj.audio_path != undefined ) resources.push({ name: obj.audio_path, path: obj.audio_path })
 						}
 						// console.log(out)
 						// console.log(resources)
@@ -181,27 +181,25 @@ psychoJS.scheduleCondition(function () { return (psychoJS.gui.dialogComponent.bu
 flowScheduler.add(updateInfo); // add timeStamp
 flowScheduler.add(experimentInit);
 
-// instruction slide
-const instruct_pagesLoopScheduler = new Scheduler(psychoJS);
-flowScheduler.add(instruct_pagesLoopBegin, instruct_pagesLoopScheduler);
-flowScheduler.add(instruct_pagesLoopScheduler);
-flowScheduler.add(instruct_pagesLoopEnd);
 
-// // // Example Play
-// const example_playScheduler = new Scheduler(psychoJS);
-// flowScheduler.add(trials_exampleLoopBegin, example_playScheduler);
-// flowScheduler.add(example_playScheduler);
-// flowScheduler.add(exampleLoopEnd);
+// INSTRUCTION BLOCK
+if (!getQueryVariable('skip_instructions')) {
+	const instruct_pagesLoopScheduler = new Scheduler(psychoJS);
+	flowScheduler.add(instruct_pagesLoopBegin, instruct_pagesLoopScheduler);
+	flowScheduler.add(instruct_pagesLoopScheduler);
+	flowScheduler.add(instruct_pagesLoopEnd);
+}
+
+
+// QUESTION BLOCK
+
 
 // // Ready Routine
 // flowScheduler.add(readyRoutineBegin());
 // flowScheduler.add(readyRoutineEachFrame());
 // flowScheduler.add(readyRoutineEnd());
 
-// flowScheduler.add(thanksRoutineBegin());
-// flowScheduler.add(thanksRoutineEachFrame());
-// flowScheduler.add(thanksRoutineEnd());
-
+// MAIN BLOCK
 const trialsLoopScheduler = new Scheduler(psychoJS);
 flowScheduler.add(trialsLoopBegin, trialsLoopScheduler);
 flowScheduler.add(trialsLoopScheduler);
@@ -224,25 +222,18 @@ var resources = [
 
 
 
-// // psychoJS.start({expName, expInfo});
-// psychoJS.start({
-// 	expName, 
-// 	expInfo,
-// 	resources: resources
-// });
-
 
 var frameDur;
 function updateInfo() {
-	expInfo['date'] = util.MonotonicClock.getDateStr();  // add a simple timestamp
-	expInfo['expName'] = expName;
-	expInfo['psychopyVersion'] = '3.2.5';
-	expInfo['OS'] = window.navigator.platform;
+	expInfo.date = util.MonotonicClock.getDateStr();  // add a simple timestamp
+	expInfo.expName = expName;
+	expInfo.psychopyVersion = '2021.2.3';
+	expInfo.OS = window.navigator.platform;
 
 	// store frame rate of monitor if we can measure it successfully
-	expInfo['frameRate'] = psychoJS.window.getActualFrameRate();
-	if (typeof expInfo['frameRate'] !== 'undefined')
-		frameDur = 1.0 / Math.round(expInfo['frameRate']);
+	expInfo.frameRate = psychoJS.window.getActualFrameRate();
+	if (typeof expInfo.frameRate !== 'undefined')
+		frameDur = 1.0 / Math.round(expInfo.frameRate);
 	else
 		frameDur = 1.0 / 60.0; // couldn't get a reliable measure so guess
 
@@ -256,7 +247,6 @@ var selectColor = '#0074B7'
 
 
 var slideStim;
-var goodLuckStim;
 var slides;
 var instructClock;
 var instrBelow;
@@ -266,13 +256,15 @@ var timePointClock;
 var offer_stim_text;
 var offer_rect;
 
+var current_point;
 
-var short_boxes_x_pos = [-.18, -.06, .06, .18]
+
+var short_boxes_x_pos = [-0.18, -0.06, 0.06, 0.18]
 var long_boxes_x_pos = [
-	-.42, -.30,
+	-0.42, -0.30,
 	short_boxes_x_pos[0], short_boxes_x_pos[1],
 	short_boxes_x_pos[2], short_boxes_x_pos[3],
-	.30, .42
+	0.30, 0.42
 ]
 
 
@@ -312,7 +304,7 @@ var routineTimer;
 function experimentInit() {
 	// Check if there is an practice
 	if (getQueryVariable('practice') == 'true') {
-		practice == true;
+		practice = true;
 		console.log("PRACTICE SESSION!")
 	}
 	// Initialize components for Routine "instruct"
@@ -324,7 +316,7 @@ function experimentInit() {
 		text: 'Press any key to Continue',
 		font: 'Arial',
 		units: 'height',
-		pos: [0, -.8], height: 0.05, wrapWidth: undefined, ori: 0,
+		pos: [0, -0.8], height: 0.05, wrapWidth: undefined, ori: 0,
 		color: new util.Color('white'), opacity: 1,
 		depth: 0.0
 	});
@@ -354,7 +346,7 @@ function experimentInit() {
 		text: 'X',
 		font: 'Arial',
 		units: 'height',
-		pos: [0, .06], height: 0.07, wrapWidth: undefined, ori: 0,
+		pos: [0, 0.06], height: 0.07, wrapWidth: undefined, ori: 0,
 		color: new util.Color('black'), opacity: 1,
 		depth: 0.0
 	});
@@ -366,7 +358,7 @@ function experimentInit() {
 		height: 0.2,
 		lineWidth: 3.5,
 		units: 'norm',
-		pos: [0, .12], ori: 0,
+		pos: [0, 0.12], ori: 0,
 		lineColor: new util.Color('black'),
 		fillColor: new util.Color('white'),
 		opacity: 1,
@@ -384,23 +376,23 @@ function experimentInit() {
 			height: 0.09,
 			lineWidth: 3.5,
 			units: 'norm',
-			pos: [short_boxes_x_pos[i], .5 ], ori: 0,
+			pos: [short_boxes_x_pos[i], 0.5 ], ori: 0,
 			lineColor: new util.Color(boxColor), opacity: 1,
 			depth: 0.0
 		});
 	}
 
 	// Make Long Boxes
-	for (var i = 0; i <= 7; i++){
+	for (var j = 0; j <= 7; j++){
 		// Rectangle LEFT BANDIT
-		boxes_rect[8][i] = new visual.Rect({
+		boxes_rect[8][j] = new visual.Rect({
 			win: psychoJS.window,
-			name: `long_box${i}`,
+			name: `long_box${j}`,
 			width: 0.09,
 			height: 0.09,
 			lineWidth: 3.5,
 			units: 'norm',
-			pos: [long_boxes_x_pos[i], .5 ], ori: 0,
+			pos: [long_boxes_x_pos[j], 0.5 ], ori: 0,
 			lineColor: new util.Color(boxColor), opacity: 1,
 			depth: 0.0
 		});
@@ -412,7 +404,7 @@ function experimentInit() {
 		text: 'accept',
 		font: 'Arial',
 		units: 'norm',
-		pos: [-.3, -.3], height: 0.05, wrapWidth: undefined, ori: 0,
+		pos: [-0.3, -0.3], height: 0.05, wrapWidth: undefined, ori: 0,
 		color: new util.Color('white'), opacity: 1,
 		depth: 0.0
 	});
@@ -424,7 +416,7 @@ function experimentInit() {
 		height: 0.09,
 		lineWidth: 3.5,
 		units: 'norm',
-		pos: [-.3, -.3 ], ori: 0,
+		pos: [-0.3, -0.3 ], ori: 0,
 		lineColor: new util.Color('white'), opacity: 1,
 		depth: 0.0
 	});
@@ -435,7 +427,7 @@ function experimentInit() {
 		text: 'wait',
 		font: 'Arial',
 		units: 'norm',
-		pos: [.3, -.3], height: 0.05, wrapWidth: undefined, ori: 0,
+		pos: [ 0.3, - 0.3], height: 0.05, wrapWidth: undefined, ori: 0,
 		color: new util.Color('white'), opacity: 1,
 		depth: 0.0
 	});
@@ -447,7 +439,7 @@ function experimentInit() {
 		height: 0.09,
 		lineWidth: 3.5,
 		units: 'norm',
-		pos: [.3, -.3 ], ori: 0,
+		pos: [ 0.3, -0.3 ], ori: 0,
 		lineColor: new util.Color('white'), opacity: 1,
 		depth: 0.0
 	});
@@ -458,7 +450,7 @@ function experimentInit() {
 		text: 'Trial Number: ',
 		font: 'Arial',
 		units: 'norm',
-		pos: [0, -.7], height: 0.08, wrapWidth: undefined, ori: 0,
+		pos: [0, -0.7], height: 0.08, wrapWidth: undefined, ori: 0,
 		color: new util.Color('white'), opacity: 1,
 		depth: 0.0
 	});
@@ -469,7 +461,7 @@ function experimentInit() {
 		text: '1/80',
 		font: 'Arial',
 		units: 'norm',
-		pos: [0, -.8], height: 0.08, wrapWidth: undefined, ori: 0,
+		pos: [0, -0.8], height: 0.08, wrapWidth: undefined, ori: 0,
 		color: new util.Color('white'), opacity: 1,
 		depth: 0.0
 	});
@@ -480,7 +472,7 @@ function experimentInit() {
 		text: 'Total points: 0',
 		font: 'Arial',
 		units: 'norm',
-		pos: [0, -.9], height: 0.08, wrapWidth: undefined, ori: 0,
+		pos: [0, -0.9], height: 0.08, wrapWidth: undefined, ori: 0,
 		color: new util.Color('green'), opacity: 1,
 		depth: 0.0
 	});
@@ -541,16 +533,15 @@ function instruct_pagesLoopBegin(thisScheduler) {
 	psychoJS.experiment.addLoop(slides); // add the loop to the experiment
 	currentLoop = slides;  // we're now the current loop
 
-	// Schedule all the slides in the trialList:
-	for (const thisTrial of slides) {
-		const snapshot = slides.getSnapshot();
+	var currentInstructIndex = 0
+	var maxInstructions = slides.nTotal
 
-		thisScheduler.add(importConditions(snapshot));
-		thisScheduler.add(instructRoutineBegin(snapshot));
-		thisScheduler.add(instructSlideRoutineEachFrame(snapshot));
-		thisScheduler.add(instructRoutineEnd(snapshot));
-		thisScheduler.add(endLoopIteration(thisScheduler, snapshot));
-	}
+	const snapshot = slides.getSnapshot();
+	thisScheduler.add(importConditions(snapshot));
+	thisScheduler.add(instructRoutineBegin(snapshot));
+	thisScheduler.add(instructSlideRoutineEachFrame(snapshot, slides));
+	thisScheduler.add(instructRoutineEnd(snapshot));
+	thisScheduler.add(endLoopIteration(thisScheduler, snapshot));
 
 	// console.log(thisScheduler)
 
@@ -577,6 +568,18 @@ function instructRoutineBegin(trials) {
 	
 		instructComponents.push(ready);
 
+		console.log("InstructionSlides Index: ",trials.thisIndex)
+
+		if (audio_path) {
+			track = new Sound({
+				win: psychoJS.window,
+				value: audio_path
+			  });
+			// console.log(audio_path)
+			track.setVolume(1.0);
+			track.play();
+		}
+
 		for (const thisComponent of instructComponents)
 			if ('status' in thisComponent)
 				thisComponent.status = PsychoJS.Status.NOT_STARTED;
@@ -586,7 +589,8 @@ function instructRoutineBegin(trials) {
 }
 
 var continueRoutine;
-function instructSlideRoutineEachFrame(trials) {
+var newSlide;
+function instructSlideRoutineEachFrame(trials, slides) {
 	return function () {
 		//------Loop for each frame of Routine 'instruct'-------
 		let continueRoutine = true; // until we're told otherwise
@@ -604,6 +608,12 @@ function instructSlideRoutineEachFrame(trials) {
 			// instrText1.setAutoDraw(true);
 		}
 
+		// New Slide Call, set it after pressing key
+		if (newSlide) {
+			console.log('setting new image', instruct_slide, 'index:',trials.thisIndex)
+			slideStim.setImage(instruct_slide)
+			newSlide = false
+		}
 		// *ready* updates
 		if (t >= 0 && ready.status === PsychoJS.Status.NOT_STARTED) {
 			// keep track of start time/frame for later
@@ -617,11 +627,31 @@ function instructSlideRoutineEachFrame(trials) {
 		}
 
 		if (ready.status === PsychoJS.Status.STARTED) {
-			let theseKeys = ready.getKeys({ keyList: ['right'], waitRelease: false });
-
-			if (theseKeys.length > 0) {  // at least one key was pressed
-				// a response ends the routine
-				continueRoutine = false;
+			let theseKeys = ready.getKeys({ keyList: ['right', 'left'], waitRelease: false });
+			
+			if (theseKeys.length > 0 && theseKeys[0].name == 'right') {  // at least one key was pressed
+				slides.thisIndex++ // incremenet the index
+				if (slides.thisIndex >= slides.nTotal) {
+					// if we reached here, it means we reached the last and we should move on.
+					continueRoutine = false 
+				}
+				trials = slides.getSnapshot() // get new snapshot after incrementing index
+				psychoJS.importAttributes(trials.getCurrentTrial()); // import the attributes to main class
+				//console.log(trials)
+				newSlide = true
+			}
+			if (theseKeys.length > 0 && theseKeys[0].name == 'left') {
+				// Presse the back button
+				slides.thisIndex-- // decremenet the index
+				if (slides.thisIndex < 0) {
+					// If the index is 0, that means we reached the very first slide
+					slides.thisIndex = 0
+				} else {
+					trials = slides.getSnapshot() 
+					psychoJS.importAttributes(trials.getCurrentTrial());
+					//console.log(trials)
+					newSlide = true
+				}
 			}
 		}
 
@@ -672,7 +702,7 @@ var currentLoop;
 function trialsLoopBegin(thisScheduler) {
 
 	if (getQueryVariable('practice') == 'true') {
-		practice == true;
+		practice = true;
 		console.log('Practice Session')
 		trials = new TrialHandler({
 			psychoJS: psychoJS,
@@ -738,14 +768,12 @@ function clearTrialComponenets() {
 	totalPointsTracker.setAutoDraw(false)
 
 	// Boxes
-	for (var key of Object.keys(boxes_rect[4])) {
-		// console.log(key + " -> " + p[key])
-		boxes_rect[4][key].setAutoDraw(false)
+	for (var key_4 of Object.keys(boxes_rect[4])) {
+		boxes_rect[4][key_4].setAutoDraw(false)
 	}
 
-	for (var key of Object.keys(boxes_rect[8])) {
-		// console.log(key + " -> " + p[key])
-		boxes_rect[8][key].setAutoDraw(false)
+	for (var key_8 of Object.keys(boxes_rect[8])) {
+		boxes_rect[8][key_8].setAutoDraw(false)
 	}
 
 	offer_stim_text.setAutoDraw(false)
@@ -950,10 +978,10 @@ function trialRoutineEachFrame(trials) {
 						accepted = true
 						accept_rect_stim.fillColor = new util.Color(selectColor)
 						offer_rect.fillColor = new util.Color(selectColor)
-						offer_rect.opacity = .5
+						offer_rect.opacity = 0.5
 
-						offer_stim_text.height += .02
-						offer_stim_text.width += .02
+						offer_stim_text.height += 0.02
+						offer_stim_text.width += 0.02
 						offer_stim_text.setAutoDraw(true)
 						accept_rect_stim.setAutoDraw(true)
 						offer_stim_text.color = new util.Color('white')
@@ -965,8 +993,8 @@ function trialRoutineEachFrame(trials) {
 
 
 						wait_rect_stim.fillColor = new util.Color(selectColor)
-						wait_rect_stim.height += .02
-						wait_rect_stim.width += .02
+						wait_rect_stim.height += 0.02
+						wait_rect_stim.width += 0.02
 
 						wait_text_stim.color = new util.Color('white')
 						// totalPoints = totalPoints + offer_rect.text.replace(' ', 'points')
@@ -1049,7 +1077,7 @@ function trialRoutineEachFrame(trials) {
 		
 
 		// When to Flip Screen
-		if (t >= .1 ) {
+		if (t >= 0.1 ) {
 			// keep track of start time/frame for later
 			resp.tStart = t;  // (not accounting for frame time here)
 			resp.frameNStart = frameN;  // exact frame index
@@ -1071,7 +1099,7 @@ function trialRoutineEachFrame(trials) {
 			t_isi = 0
 
 			// remove the cents symbolc of the text
-			var current_point = offer_stim_text.getText().split(' ')[0]
+			current_point = offer_stim_text.getText().split(' ')[0]
 			if (current_point == 'X') {
 				current_point = 0
 			}
@@ -1089,8 +1117,8 @@ function trialRoutineEachFrame(trials) {
 			
 			psychoJS.experiment.addData(`points_won`, current_point);
 
-			for (var i = 0; i < trial_length; i++){
-				boxes_rect[trial_length][i].setAutoDraw(false)
+			for (var j = 0; j < trial_length; j++){
+				boxes_rect[trial_length][j].setAutoDraw(false)
 			}
 
 			currentTrialNumber.setAutoDraw(false)
