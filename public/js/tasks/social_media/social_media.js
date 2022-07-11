@@ -1942,7 +1942,6 @@ function trialRoleReversalRoutineBegin(trials) {
 				texRes : 128, interpolate : true, depth : 0
 			});
 
-
 			postStims[trial_num].like_icon_outline = new visual.ImageStim({
 				win : psychoJS.window,
 				name : `like_post_${trial_num}_outline`, units : 'norm', 

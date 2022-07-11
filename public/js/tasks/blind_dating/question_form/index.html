@@ -15,6 +15,7 @@
       label{
         color: white
       }
+      
     </style>
     <script type='text/javascript'>
       window.onload = function() {
@@ -36,12 +37,13 @@
               // (i.e. {"key":["value1", value2"} becomes {"key.0": "value1", "key.1": "value2"}
               var flatSubmission = flat.flatten(submission.data);
               // Mode debug code
-              console.log(flatSubmission);
+              //console.log(flatSubmission);
               // Store each key-value pair
               for (var key in flatSubmission) {
                 parent.addData(key, flatSubmission[key]);
               }
               // Finish HTML
+              parent.question_data = flatSubmission
               parent.finishHTML();
               form.emit('submitDone', submission);
             });

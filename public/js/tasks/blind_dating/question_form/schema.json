@@ -126,7 +126,7 @@
         },
         {
             "type": "button",
-            "label": "Submit",
+            "label": "Continue",
             "key": "submit",
             "disableOnInvalid": true,
             "input": true,
