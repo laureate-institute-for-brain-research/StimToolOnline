@@ -1153,58 +1153,6 @@ function experimentInit() {
 		// });
 	}
 
-	currentTrialText  = new visual.TextStim({
-		win: psychoJS.window,
-		name: 'trialTrackerText',
-		text: 'POST:',
-		font: 'lucida grande',
-		units: 'norm',
-		alignHoriz: 'center',
-		alignVert: 'center',
-		pos: [ 0.86, 0.93], height: 0.05, wrapWidth: undefined, ori: 0,
-		color: new util.Color('white'), opacity: 1,
-		depth: 0.0
-	});
-
-	currentTrialNumber  = new visual.TextStim({
-		win: psychoJS.window,
-		name: 'trialTracker',
-		text: '1',
-		font: 'lucida grande',
-		units: 'norm',
-		alignHoriz: 'center',
-		alignVert: 'center',
-		pos: [0.86, 0.87], height: 0.05, wrapWidth: undefined, ori: 0,
-		color: new util.Color('#FFFF00'), opacity: 1,
-		depth: 0.0
-	});
-
-	chatRoomNumberText = new visual.TextStim({
-		win: psychoJS.window,
-		name: 'gameTrackerText',
-		text: 'CHATROOM:',
-		font: 'lucida grande',
-		units: 'norm',
-		alignHoriz: 'center',
-		alignVert: 'center',
-		pos: [ 0.865, 0.7], height: 0.05, wrapWidth: undefined, ori: 0,
-		color: new util.Color('white'), opacity: 1,
-		depth: 0.0
-	});
-
-	chatRoomNumber = new visual.TextStim({
-		win: psychoJS.window,
-		name: 'gameTracker',
-		text: '1/80',
-		font: 'lucida grande',
-		units: 'norm',
-		alignHoriz: 'center',
-		alignVert: 'center',
-		pos: [ 0.86, 0.63], height: 0.05, wrapWidth: undefined, ori: 0,
-		color: new util.Color('#00FF00'), opacity: 1,
-		depth: 0.0
-	});
-
 	totalLikesText = new visual.TextStim({
 		win: psychoJS.window,
 		name: 'pointsTracker',
@@ -1213,7 +1161,7 @@ function experimentInit() {
 		units: 'norm',
 		alignHoriz: 'center',
 		alignVert: 'center',
-		pos: [0.87, 0.44], height: 0.05, wrapWidth: undefined, ori: 0,
+		pos: [0.86, 0.93], height: 0.05, wrapWidth: undefined, ori: 0,
 		color: new util.Color('white'), opacity: 1,
 		depth: 0.0
 	});
@@ -1226,11 +1174,36 @@ function experimentInit() {
 		alignHoriz: 'center',
 		alignVert: 'center',
 		units: 'norm',
-		pos: [ 0.86, 0.33], height: 0.05, wrapWidth: undefined, ori: 0,
+		pos: [ 0.86, 0.82], height: 0.09, wrapWidth: undefined, ori: 0,
 		color: new util.Color('#00FFFF'), opacity: 1,
 		depth: 0.0
 	});
 
+	chatRoomNumberText = new visual.TextStim({
+		win: psychoJS.window,
+		name: 'gameTrackerText',
+		text: 'CHATROOM:',
+		font: 'lucida grande',
+		units: 'norm',
+		alignHoriz: 'center',
+		alignVert: 'center',
+		pos: [ 0.865, 0.65], height: 0.05, wrapWidth: undefined, ori: 0,
+		color: new util.Color('white'), opacity: 1,
+		depth: 0.0
+	});
+
+	chatRoomNumber = new visual.TextStim({
+		win: psychoJS.window,
+		name: 'gameTracker',
+		text: '1/80',
+		font: 'lucida grande',
+		units: 'norm',
+		alignHoriz: 'center',
+		alignVert: 'center',
+		pos: [ 0.86, 0.55], height: 0.05, wrapWidth: undefined, ori: 0,
+		color: new util.Color('#00FF00'), opacity: 1,
+		depth: 0.0
+	});
 
 	roomTypeText = new visual.TextStim({
 		win: psychoJS.window,
@@ -1240,7 +1213,7 @@ function experimentInit() {
 		units: 'norm',
 		alignHoriz: 'center',
 		alignVert: 'center',
-		pos: [0.87, 0.16], height: 0.05, wrapWidth: undefined, ori: 0,
+		pos: [0.87, 0.38], height: 0.05, wrapWidth: undefined, ori: 0,
 		color: new util.Color('white'), opacity: 1,
 		depth: 0.0
 	});
@@ -1254,8 +1227,34 @@ function experimentInit() {
 		alignHoriz: 'center',
 		alignVert: 'center',
 		units: 'norm',
-		pos: [ 0.86, 0.09], height: 0.05, wrapWidth: undefined, ori: 0,
+		pos: [ 0.86, 0.31], height: 0.05, wrapWidth: undefined, ori: 0,
 		color: new util.Color('#FF137E'), opacity: 1,
+		depth: 0.0
+	});
+
+	currentTrialText  = new visual.TextStim({
+		win: psychoJS.window,
+		name: 'trialTrackerText',
+		text: 'POST:',
+		font: 'lucida grande',
+		units: 'norm',
+		alignHoriz: 'center',
+		alignVert: 'center',
+		pos: [ 0.86, 0.14], height: 0.05, wrapWidth: undefined, ori: 0,
+		color: new util.Color('white'), opacity: 1,
+		depth: 0.0
+	});
+
+	currentTrialNumber  = new visual.TextStim({
+		win: psychoJS.window,
+		name: 'trialTracker',
+		text: '1',
+		font: 'lucida grande',
+		units: 'norm',
+		alignHoriz: 'center',
+		alignVert: 'center',
+		pos: [0.86, 0.08], height: 0.05, wrapWidth: undefined, ori: 0,
+		color: new util.Color('#FFFF00'), opacity: 1,
 		depth: 0.0
 	});
 
