@@ -32,6 +32,7 @@ const psychoJS = new PsychoJS({
 });
 
 
+var tweets;
 
 window.onload = function () {
 	var id = getQueryVariable('id')
@@ -169,10 +170,21 @@ window.onload = function () {
 				
 			})
 		})
+
+		// Get the Tweets from the json file
+		.then(() => {
+			return new Promise((resolve, reject) => {
+				console.log('getting tweets..')
+				$.getJSON('/js/tasks/social_media/tweets/tweets.json', function (data) {
+					// console.log(data)
+					tweets = data
+					resolve(data)
+				})
+				
+			})
+		})
 	
 		.then(()=>{
-			console.log(expInfo)
-			// expInfo.study = study
 			psychoJS.start({
 				expName, 
 				expInfo,
@@ -449,7 +461,7 @@ var leftTopicCounter = 0
 var leftTopic = [
 	"One time I saw what's called a Super Flower Blood Moon.",
 	"They mean it when they say not to look at a solar eclipse!",
-	"I can always find the Big Dipper at night but hardly anything else",
+	"I can always find the Big Dipper at night but hardly anything else.",
 	"It's crazy that the stars are so far away!",
 	"I was staring at a moving star for 20 mins before I realized it was a satelite",
 	"Anyone have any good telescope recommendations?",
@@ -987,26 +999,28 @@ function experimentInit() {
 		win : psychoJS.window,
 		name : 'choice_1_button', units : 'norm', 
 		text: 'Post Topic 1', 
-		size: [0.4, 1],
+		size: [0.6, 1],
 		anchor: 'center',
+		alignHoriz: 'center',
 		fillColor: new util.Color(leftColor),
 		// opacity: .5,
 		letterHeight: 0.04,
 		font: 'lucida grande',
-		ori : 0, pos : [0, 0.8],
+		ori : 0, pos : [-.05, 0.8],
 	});
 
 	choice2Button = new visual.ButtonStim({
 		win : psychoJS.window,
 		name : 'choice_2_button', units : 'norm', 
 		text: 'Post Topic 2', 
-		size: [0.4, 1],
+		size: [0.6, 1],
 		alignVert: 'center',
+		alignHoriz: 'center',
 		fillColor: new util.Color(rightColor),
 		// opacity: .5,
 		letterHeight: 0.04,
 		font: 'lucida grande',
-		ori : 0, pos : [0.4, 0.8],
+		ori : 0, pos : [0.45, 0.8],
 	});
 
 	beginButton = new visual.ButtonStim({
@@ -1741,6 +1755,14 @@ function trialRoutineBegin(trials) {
 		// console.log(lastGameNumber)
 		if (game_number != lastGameNumber) {
 			console.log('new chat room')
+
+			chatRoomNumber.setText(`${game_number + 1}/${total_games}`)
+			
+			// Set the tweets
+			leftTopic = tweets[left_topic]
+			rightTopic = tweets[right_topic]
+			choice1Button.setText(left_topic)
+			choice2Button.setText(right_topic) 
 			leftTopicCounter = 0
 			rightTopicCounter = 0
 			lastTrialKeyPressed = false;
@@ -1754,13 +1776,9 @@ function trialRoutineBegin(trials) {
 		console.log(`Game: ${game_number}, trial #${trial_num}, game type ${game_type} starting`)
 		
 		setupPosts(game_type)
-		
 
-		choice1Button.setText('Astronomy') // will need to grap topc from schedule // TODO
-		choice2Button.setText('Gardening') // will need to grab the topic from schedule // TODO
-		
 		currentTrialNumber.setText(`${trial_num + 1}`)
-		chatRoomNumber.setText(`${game_number + 1}/${total_games}`)
+		
 
 		if (!Number.isFinite(totalPossible) ) {
 			totalLikesTracker.setText(`--`)
@@ -1891,6 +1909,8 @@ function trialRoleReversalRoutineBegin(trials) {
 		chatRoomNumberText.setAutoDraw(true)
 		chatRoomNumber.setAutoDraw(true)
 
+		roomTypeText.setAutoDraw(true)
+		roomType.setAutoDraw(true)
 
 		// newLoadingAnimation()
 
@@ -2814,6 +2834,7 @@ function endLoopIteration(thisScheduler, loop = undefined) {
 function importConditions(trials) {
 	return function () {
 		psychoJS.importAttributes(trials.getCurrentTrial());
+		// console.log(window)
 		return Scheduler.Event.NEXT;
 	};
 }
