@@ -297,7 +297,7 @@ dialogCancelScheduler.add(quitPsychoJS, '', false);
 var resources = [
 	{ name: 'example_play.xls', path: '/js/tasks/social_media/example_play.xls' },
 	{ name: 'role_reversal_shedule.xls', path:'/js/tasks/social_media/role_reversal_shedule.xls' },
-	{ name: 'ready.jpeg', path: '/js/tasks/social_media/media/instructions/Slide32.jpeg'},
+	{ name: 'ready.jpeg', path: '/js/tasks/social_media/media/instructions/Slide33.jpeg'},
 	{ name: 'role_reversal_instruct_schedule.csv', path: '/js/tasks/social_media/media/role_reversal_instruct_schedule.csv'},
 	{ name: 'logo.png', path: '/js/tasks/social_media/media/body-organ.png' },
 	{ name: 'home.png', path: '/js/tasks/social_media/media/home.png' },
@@ -313,6 +313,7 @@ var resources = [
 	{ name: 'profile_picRR.png', path: '/js/tasks/social_media/media/profile_picRR.png' },
 	{ name: 'like.png', path: '/js/tasks/social_media/media/like.png' },
 	{ name: 'dislike.png', path: '/js/tasks/social_media/media/dislike.png' },
+	{ name: 'dislike_outline.png', path: '/js/tasks/social_media/media/dislike_outline.png'},
 	{ name: 'heart.png', path: '/js/tasks/social_media/media/heart.png' },
 	{ name: 'heart_outline.png', path: '/js/tasks/social_media/media/heart_outline.png' },
 	{ name: 'loading0.png', path: '/js/tasks/social_media/media/loading/loading0.png' },
@@ -1140,6 +1141,18 @@ function experimentInit() {
 			texRes : 128, interpolate : true, depth : 0
 		});
 
+		postStims[i].dislike_icon_outline = new visual.ImageStim({
+			win : psychoJS.window,
+			name : `dislike_post_${i}_outline`, units : 'pix', 
+			image : 'dislike_outline.png', mask : undefined,
+			ori: 0,
+			pos: [ 0.65, postStims[i].postlikeIcon_y ], 
+			size: [0.04, 0.05],
+			color: undefined, opacity: 1,
+			flipHoriz : false, flipVert : false,
+			texRes : 128, interpolate : true, depth : 0
+		});
+
 		// Number of Likes on each post
 		postStims[i].like_posts = new visual.TextStim({
 			win: psychoJS.window,
@@ -1856,11 +1869,24 @@ function trialRoleReversalRoutineBegin(trials) {
 		t = 0;
 		trialClock.reset(); // clock
 		frameN = -1;
-		// update component parameters for each repeat
+		// Turn the rewards to negative if it's a dislike_chartroom
+		if (dislike_room == 1) {
+			left_reward = -left_reward
+			right_reward = -right_reward
+
+			roomType.setColor(like_color.dislikes)
+			roomType.setText('Dislikes')
+		} else {
+			roomType.setText('Likes')
+			roomType.setColor(like_color.likes)
+			
+		}
 
 		// If it's a new game, clear other texts
 		// console.log(lastGameNumber)
 		if (game_number != lastGameNumber) {
+			leftTopic = tweets[left_topic]
+			rightTopic = tweets[right_topic]
 			leftTopicCounter = 0
 			rightTopicCounter = 0
 			lastTrialKeyPressed = false;
@@ -1869,7 +1895,7 @@ function trialRoleReversalRoutineBegin(trials) {
 			reset_stims()
 			// clearBandits()
 		}
-
+		// console.log(tweets[left_topic], tweets[right_topic])
 		// Set components from last trial
 		console.log(`Role Reversal ChatRoom: ${game_number}, trial #${trial_num}, game type ${game_type} starting`)
 
@@ -1935,7 +1961,7 @@ function trialRoleReversalRoutineBegin(trials) {
 		// Since we use a bigger Like on the Role Reversal
 		// We increase the size of the hears and also need to position it a little higher
 		// Than the normal post
-		var like_icon_pos_y_offest = .04
+		var like_icon_pos_y_offest = 0.04
 		
 		if (topic_side == 'LEFT') {
 			postStims[trial_num].profileRR_photo = new visual.ImageStim({
@@ -1965,6 +1991,30 @@ function trialRoleReversalRoutineBegin(trials) {
 				win : psychoJS.window,
 				name : `like_post_${trial_num}_outline`, units : 'norm', 
 				image : 'heart_outline.png', mask : undefined,
+				ori: 0,
+				pos: [ post_stim_x_pos.left.like_icon, postStims[trial_num].postlikeIcon_y + like_icon_pos_y_offest ], 
+				size: [0.07,0.08],
+				color: undefined, opacity: 1,
+				flipHoriz : false, flipVert : false,
+				texRes : 128, interpolate : true, depth : 0
+			});
+
+			// Dislike Icons
+			postStims[trial_num].dislike_icon = new visual.ImageStim({
+				win : psychoJS.window,
+				name : `like_post_${trial_num}`, units : 'norm', 
+				image : 'dislike.png', mask : undefined,
+				ori: 0,
+				pos: [ post_stim_x_pos.left.like_icon, postStims[trial_num].postlikeIcon_y + like_icon_pos_y_offest ], 
+				size: [0.07,0.08],
+				color: undefined, opacity: 1,
+				flipHoriz : false, flipVert : false,
+				texRes : 128, interpolate : true, depth : 0
+			});
+			postStims[trial_num].dislike_icon_outline = new visual.ImageStim({
+				win : psychoJS.window,
+				name : `like_post_${trial_num}_outline`, units : 'norm', 
+				image : 'dislike_outline.png', mask : undefined,
 				ori: 0,
 				pos: [ post_stim_x_pos.left.like_icon, postStims[trial_num].postlikeIcon_y + like_icon_pos_y_offest ], 
 				size: [0.07,0.08],
@@ -2018,6 +2068,28 @@ function trialRoleReversalRoutineBegin(trials) {
 				flipHoriz : false, flipVert : false,
 				texRes : 128, interpolate : true, depth : 0
 			});
+			postStims[trial_num].dislike_icon = new visual.ImageStim({
+				win : psychoJS.window,
+				name : `like_post_${trial_num}`, units : 'norm', 
+				image : 'dislike.png', mask : undefined,
+				ori: 0,
+				pos: [ post_stim_x_pos.right.like_icon, postStims[trial_num].postlikeIcon_y + like_icon_pos_y_offest ], 
+				size: [0.07,0.08],
+				color: undefined, opacity: 1,
+				flipHoriz : false, flipVert : false,
+				texRes : 128, interpolate : true, depth : 0
+			});
+			postStims[trial_num].dislike_icon_outline = new visual.ImageStim({
+				win : psychoJS.window,
+				name : `like_post_${trial_num}_outline`, units : 'norm', 
+				image : 'dislike_outline.png', mask : undefined,
+				ori: 0,
+				pos: [ post_stim_x_pos.right.like_icon, postStims[trial_num].postlikeIcon_y + like_icon_pos_y_offest ], 
+				size: [0.07,0.08],
+				color: undefined, opacity: 1,
+				flipHoriz : false, flipVert : false,
+				texRes : 128, interpolate : true, depth : 0
+			});
 
 
 			topic_text = rightTopic[rightTopicCounter]
@@ -2031,20 +2103,14 @@ function trialRoleReversalRoutineBegin(trials) {
 			trial_reward = right_reward
 			
 			postStims[trial_num].rect.fillColor = new util.Color(rightColor)
-
 		}
 
 		postStims[trial_num].post_text.setText('')
-
-		// console.log(topic_text)
-
 		lastTrialKeyPressed = false
 		
 		loadingCounter = 0
 		frameN = 0
 
-		
-	
 		resp.keys = undefined;
 		resp.rt = undefined;
 		// keep track of which components have finished
@@ -2094,6 +2160,9 @@ function reset_stims() {
 
 		postStims[i].dislike_icon.status = PsychoJS.Status.NOT_STARTED
 		postStims[i].dislike_icon.setAutoDraw(false)
+
+		postStims[i].dislike_icon_outline.status = PsychoJS.Status.NOT_STARTED
+		postStims[i].dislike_icon_outline.setAutoDraw(false)
 
 		postStims[i].like_icon_outline.status = PsychoJS.Status.NOT_STARTED
 		postStims[i].like_icon_outline.setAutoDraw(false)
@@ -2237,8 +2306,6 @@ function trialRoutineEachFrameWaitforInput(trials) {
 						flipHoriz : false, flipVert : false,
 						texRes : 128, interpolate : true, depth : 0
 					});
-
-				
 
 					postStims[trial_num].like_icon_outline = new visual.ImageStim({
 						win : psychoJS.window,
@@ -2500,10 +2567,19 @@ function trialRoleReversalRoutineEachFrameWaitforInput(trials) {
 		}
 
 		if (t >= animation_duration) {
-			postStims[trial_num].like_icon_outline.setAutoDraw(true)
-			postStims[trial_num].like_icon.setAutoDraw(false) // filed hard
-			questionText.setText('\nPress ">" to add a like.\nPress "<" to not add a like.')
+			// Turn the rewards to negative if it's a dislike_chartroom
+			if (dislike_room == 1) {
+				questionText.setText('\nPress ">" to add a dislike.\nPress "<" to not add a dislike.')
+				postStims[trial_num].dislike_icon_outline.setAutoDraw(true)
+				postStims[trial_num].dislike_icon.setAutoDraw(false) // filled dislike
+			} else {
+				questionText.setText('\nPress ">" to add a like.\nPress "<" to not add a like.')
+				postStims[trial_num].like_icon_outline.setAutoDraw(true)
+				postStims[trial_num].like_icon.setAutoDraw(false) // filed hard
+			}
 			questionText.setAutoDraw(true)
+			
+			
 			let theseKeys = resp.getKeys({ keyList: [LEFT_KEY, RIGHT_KEY], waitRelease: false });
 
 			// After key is pressed, go to next routine
@@ -2514,8 +2590,15 @@ function trialRoleReversalRoutineEachFrameWaitforInput(trials) {
 				lastTrialKeyPressed = resp.keys;
 				if (resp.keys == RIGHT_KEY) {
 					// For Right Key, subject is adding a like
-					postStims[trial_num].like_icon_outline.setAutoDraw(false)
-					postStims[trial_num].like_icon.setAutoDraw(true) // filed hard
+
+					if (dislike_room == 1) {
+						postStims[trial_num].dislike_icon_outline.setAutoDraw(false)
+						postStims[trial_num].dislike_icon.setAutoDraw(true) // filed hard
+					} else {
+						postStims[trial_num].like_icon_outline.setAutoDraw(false)
+						postStims[trial_num].like_icon.setAutoDraw(true) // filed hard
+					}
+					
 				}
 				return Scheduler.Event.NEXT;
 			}
