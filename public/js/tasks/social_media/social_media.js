@@ -614,7 +614,7 @@ function loadingAnimationText() {
 	// if (frameN > max_frame) return
 	// topic_text_test = normalize_elements(topic_text.split(' '))
 	postStims[trial_num].post_text.setText( topic_text_elements.slice(0, loadingCounter).join(' ') )
-	if (frameN % 6 == 0) loadingCounter++
+	if (frameN % 5 == 0) loadingCounter++
 
 }
 
