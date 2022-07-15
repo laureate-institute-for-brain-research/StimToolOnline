@@ -228,7 +228,7 @@ dialogCancelScheduler.add(quitPsychoJS, '', false);
 
 // Add Slides to resources
 var resources = [
-	{ name: 'r_test.xls', path: '/js/tasks/blind_dating/r_test.xls' },
+	{ name: 'practice_schedule.xls', path: '/js/tasks/blind_dating/practice_schedule.xls' },
 	{ name: 'user.png', path: '/js/tasks/blind_dating/media/user.png' },
 	{ name: 'user_filled.png', path: '/js/tasks/blind_dating/media/user_filled.png' },
 	{ name: 'ready.jpeg', path: '/js/tasks/blind_dating/media/instructions/Slide22.jpeg'}
@@ -943,7 +943,7 @@ function practiceTrialsLoopBegin(thisScheduler) {
 		psychoJS: psychoJS,
 		nReps: 1, method: TrialHandler.Method.SEQUENTIAL,
 		extraInfo: expInfo, originPath: undefined,
-		trialList: 'r_test.xls',
+		trialList: 'practice_schedule.xls',
 		seed: undefined, name: 'trials'
 	});
 
@@ -1061,7 +1061,7 @@ function trialRoutineBegin(trials) {
 			starting_index = 0
 		}
 		
-
+		console.log(trials)
 
 		// Reset Trial Variables
 		pressed = false;
@@ -1078,12 +1078,9 @@ function trialRoutineBegin(trials) {
 		// update component parameters for each repeat
 		// word.setColor(new util.Color(letterColor));
 		
-		offer_stim_text.setText(initial_offer + '% Match') // Set the Current Offer
-
-		globalTrialNumber = globalTrialNumber + 1
+		offer_stim_text.setText(initial_offer + '% Match') // Set the Current Offer	
 		
-		
-		currentTrialNumber.setText(`Event: ${globalTrialNumber} / 108`)
+		currentTrialNumber.setText(`Event: ${trial_number} / ${trials.nStim}`)
 		totalPointsTracker.setText(`Total Dates: ${totalDates}`)
 
 		console.log('Trial Number: ', globalTrialNumber, 'Total Points: ', totalDates)
