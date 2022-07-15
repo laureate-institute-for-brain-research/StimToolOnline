@@ -315,37 +315,7 @@ var resources = [
 	{ name: 'dislike.png', path: '/js/tasks/social_media/media/dislike.png' },
 	{ name: 'dislike_outline.png', path: '/js/tasks/social_media/media/dislike_outline.png'},
 	{ name: 'heart.png', path: '/js/tasks/social_media/media/heart.png' },
-	{ name: 'heart_outline.png', path: '/js/tasks/social_media/media/heart_outline.png' },
-	{ name: 'loading0.png', path: '/js/tasks/social_media/media/loading/loading0.png' },
-	{ name: 'loading1.png', path: '/js/tasks/social_media/media/loading/loading1.png' },
-	{ name: 'loading2.png', path: '/js/tasks/social_media/media/loading/loading2.png' },
-	{ name: 'loading3.png', path: '/js/tasks/social_media/media/loading/loading3.png' },
-	{ name: 'loading4.png', path: '/js/tasks/social_media/media/loading/loading4.png' },
-	{ name: 'loading5.png', path: '/js/tasks/social_media/media/loading/loading5.png' },
-	{ name: 'loading6.png', path: '/js/tasks/social_media/media/loading/loading6.png' },
-	{ name: 'loading7.png', path: '/js/tasks/social_media/media/loading/loading7.png' },
-	{ name: 'loading8.png', path: '/js/tasks/social_media/media/loading/loading8.png' },
-	{ name: 'loading9.png', path: '/js/tasks/social_media/media/loading/loading9.png' },
-	{ name: 'loading10.png', path: '/js/tasks/social_media/media/loading/loading10.png' },
-	{ name: 'loading11.png', path: '/js/tasks/social_media/media/loading/loading11.png' },
-	{ name: 'loading12.png', path: '/js/tasks/social_media/media/loading/loading12.png' },
-	{ name: 'loading13.png', path: '/js/tasks/social_media/media/loading/loading13.png' },
-	{ name: 'loading14.png', path: '/js/tasks/social_media/media/loading/loading14.png' },
-	{ name: 'loading15.png', path: '/js/tasks/social_media/media/loading/loading15.png' },
-	{ name: 'loading16.png', path: '/js/tasks/social_media/media/loading/loading16.png' },
-	{ name: 'loading17.png', path: '/js/tasks/social_media/media/loading/loading17.png' },
-	{ name: 'loading18.png', path: '/js/tasks/social_media/media/loading/loading18.png' },
-	{ name: 'loading19.png', path: '/js/tasks/social_media/media/loading/loading19.png' },
-	{ name: 'loading20.png', path: '/js/tasks/social_media/media/loading/loading20.png' },
-	{ name: 'loading21.png', path: '/js/tasks/social_media/media/loading/loading21.png' },
-	{ name: 'loading22.png', path: '/js/tasks/social_media/media/loading/loading22.png' },
-	{ name: 'loading23.png', path: '/js/tasks/social_media/media/loading/loading23.png' },
-	{ name: 'loading24.png', path: '/js/tasks/social_media/media/loading/loading24.png' },
-	{ name: 'loading25.png', path: '/js/tasks/social_media/media/loading/loading25.png' },
-	{ name: 'loading26.png', path: '/js/tasks/social_media/media/loading/loading26.png' },
-	{ name: 'loading27.png', path: '/js/tasks/social_media/media/loading/loading27.png' },
-	{ name: 'loading28.png', path: '/js/tasks/social_media/media/loading/loading28.png' },
-	{ name: 'loading29.png', path: '/js/tasks/social_media/media/loading/loading29.png' },
+	{ name: 'heart_outline.png', path: '/js/tasks/social_media/media/heart_outline.png' }
 ]
 
 var frameDur;
@@ -540,56 +510,11 @@ var routineTimer;
 
 var response;
 
-var loadingStim = {};
 var loadingCounter = 0;
 
-function removeLoadingAnimation() {
-	for (var i = 0; i <= 29; i++){
-		loadingStim[i].setAutoDraw(false)
-	}
-}
 
 
 
-
-function newLoadingAnimation() {
-
-	for (var i = 0; i <= 29; i++){
-		loadingStim[i] = new visual.ImageStim({
-			win : psychoJS.window,
-			name : `loading${i}`, units : 'norm', 
-			image: `loading${i}.png`,
-			mask: undefined,
-			ori: 0,
-			pos: [ 0, postStims[trial_num].postlike_y ], 
-			size: [0.09, 0.11],
-			opacity: 1,
-			flipHoriz : false, flipVert : false,
-			texRes : 128, interpolate : true, depth : 0
-		});
-	}
-}
-
-function loadingAnimation() {
-	if (loadingCounter > 0) {
-		loadingStim[loadingCounter - 1].setAutoDraw(false)
-	}
-	if (loadingCounter <= 29) {
-		if (resp.keys == LEFT_KEY) {
-			loadingStim[loadingCounter].pos[0] = post_stim_x_pos.left.like_posts // x position
-			loadingStim[loadingCounter].pos[1] = postStims[trial_num].postlike_y // y position
-		} else {
-			loadingStim[loadingCounter].pos[0] = post_stim_x_pos.right.like_posts
-			loadingStim[loadingCounter].pos[1] = postStims[trial_num].postlike_y // y position
-		}
-
-		loadingStim[loadingCounter].setAutoDraw(true)
-		loadingCounter++
-		//loadingStim[loadingCounter].setAutoDraw(false)
-	} else {
-		loadingCounter = 0
-	}
-}
 var max_frame;
 function normalize_elements(strings) {
 	// This will take a list of element string
