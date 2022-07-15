@@ -297,7 +297,8 @@ dialogCancelScheduler.add(quitPsychoJS, '', false);
 var resources = [
 	{ name: 'example_play.xls', path: '/js/tasks/social_media/example_play.xls' },
 	{ name: 'role_reversal_shedule.xls', path:'/js/tasks/social_media/role_reversal_shedule.xls' },
-	{ name: 'ready.jpeg', path: '/js/tasks/social_media/media/instructions/Slide33.jpeg'},
+	{ name: 'ready.jpeg', path: '/js/tasks/social_media/media/instructions/Slide33.jpeg' },
+	{ name: 'ready.mp3', path: '/js/tasks/social_media/media/instructions_audio/Slide33.mp3'},
 	{ name: 'role_reversal_instruct_schedule.csv', path: '/js/tasks/social_media/media/role_reversal_instruct_schedule.csv'},
 	{ name: 'logo.png', path: '/js/tasks/social_media/media/body-organ.png' },
 	{ name: 'home.png', path: '/js/tasks/social_media/media/home.png' },
@@ -925,7 +926,7 @@ function experimentInit() {
 		win : psychoJS.window,
 		name : 'choice_1_button', units : 'norm', 
 		text: 'Post Topic 1', 
-		size: [0.6, 1],
+		size: [0.55, 1],
 		anchor: 'center',
 		alignHoriz: 'center',
 		fillColor: new util.Color(leftColor),
@@ -939,7 +940,7 @@ function experimentInit() {
 		win : psychoJS.window,
 		name : 'choice_2_button', units : 'norm', 
 		text: 'Post Topic 2', 
-		size: [0.6, 1],
+		size: [0.55, 1],
 		alignVert: 'center',
 		alignHoriz: 'center',
 		fillColor: new util.Color(rightColor),
@@ -1569,9 +1570,17 @@ function trialsLoopBegin(thisScheduler) {
 	psychoJS.experiment.addLoop(trials); // add the loop to the experiment
 	currentLoop = trials;  // we're now the current loop
 
+	// Check if the skip_game query exist. means
+	var skip_game = getQueryVariable('skip_game') ? getQueryVariable('skip_game') : null
+
 	// Schedule all the trials in the trialList:
 	for (const thisTrial of trials) {
 		const snapshot = trials.getSnapshot();
+
+		// If there is a skip_game flag, thane skip those trials until we reach to game number
+		if (skip_game && snapshot.game_number < skip_game) {
+			continue
+		}
 
 		thisScheduler.add(importConditions(snapshot));
 		thisScheduler.add(trialRoutineBegin(snapshot));
@@ -2691,6 +2700,12 @@ function readyRoutineBegin(trials) {
 		frameN = -1;
 	
 		routineTimer.add(2.000000);
+		track = new Sound({
+			win: psychoJS.window,
+			value: 'ready.mp3'
+		  });
+		track.setVolume(1.0);
+		track.play();
 		// update component parameters for each repeat
 		// keep track of which components have finished
 		readyComponents = [readyStim];
