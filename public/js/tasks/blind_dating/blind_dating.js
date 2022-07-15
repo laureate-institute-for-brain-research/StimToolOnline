@@ -1160,7 +1160,7 @@ function trialRoutineEachFrame(trials) {
 
 		// Orientation Screen ( 1000ms)
 		var orientation_screen_duration = 1
-		if (tp > 0  && tp <= 1) {
+		if (tp > 0  && tp <= orientation_screen_duration) {
 			// console.log('Orientation Screen')
 			psychoJS.eventManager.clearEvents()
 			saved = false
@@ -1187,9 +1187,9 @@ function trialRoutineEachFrame(trials) {
 			offer_stim_text.setAutoDraw(true)
 			
 		}
-		// Make Decision (1500ms)
-		var decision_making_duration = 1.5
-		if (tp > 1  && tp <= 2.5){
+		// Make Decision (5s)
+		var decision_making_duration = 5
+		if (tp > orientation_screen_duration  && tp <= (orientation_screen_duration + decision_making_duration )){
 			if (!missed) {
 				accept_rect_stim.setAutoDraw(true)
 				accept_rect_stim.fillColor = new util.Color('black')
@@ -1207,7 +1207,12 @@ function trialRoutineEachFrame(trials) {
 
 		// Button Press ( 1000ms)
 		var button_press_duration = 1
-		if (tp > 2.5  && tp <= 3.5){
+		if (tp > (
+			orientation_screen_duration + decision_making_duration
+		) && tp <= (
+				orientation_screen_duration + decision_making_duration +
+				button_press_duration
+			)) {
 			if (!pressed) {
 				accept_rect_stim.fillColor = new util.Color('white')
 				accept_rect_stim.lineColor = new util.Color('white')
@@ -1262,7 +1267,12 @@ function trialRoutineEachFrame(trials) {
 
 		// Break ( 1000ms)
 		var break_duration = 1
-		if (tp > 3.5  && tp <= 4.5){
+		if (tp > (
+			orientation_screen_duration + decision_making_duration +
+			button_press_duration
+		) && tp <= (
+			orientation_screen_duration + decision_making_duration + 
+			button_press_duration +break_duration )) {
 			// console.log('Break Screen')
 			// console.log(resp.keys)
 
@@ -1308,7 +1318,8 @@ function trialRoutineEachFrame(trials) {
 		}
 		//  time point end
 		// timepoint time should never go aboive 4.5 seconds
-		if (tp > 4.5)  { 
+		if (tp > (orientation_screen_duration + decision_making_duration + 
+			button_press_duration +break_duration ))  { 
 			
 			// console.log(`Finished timepoint ${time_point}`)
 			
