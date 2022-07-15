@@ -19,7 +19,7 @@ const { round } = util;
 // import { Scheduler } from '/lib/util-2020.1.js';
 // import * as util from '/lib/util-2020.1.js';
 // import * as visual from '/lib/visual-2020.1.js';
-// import { Sound } from '/lib/sound-2020.1.js';
+import { Sound } from '/lib/sound-2020.1.js';
 
 var practice = false;
 var LEFT_KEY = 'comma'
@@ -1367,10 +1367,25 @@ function instructSlideRoutineEachFrame(trials, slides) {
 		}
 
 		// New Slide Call, set it after pressing key
+		// console.log(track.status)
 		if (newSlide) {
 			console.log('setting new image', instruct_slide, 'index:',trials.thisIndex)
 			slideStim.setImage(instruct_slide)
 			newSlide = false
+			if (audio_path) {
+				
+				if (track.status != PsychoJS.Status.NOT_STARTED) {
+					track.stop()
+					track = new Sound({
+						win: psychoJS.window,
+						value: audio_path
+					  });
+					// console.log(audio_path)
+					track.setVolume(1.0);
+					track.play();
+				}
+				}
+				
 		}
 		// *ready* updates
 		if (t >= 0 && ready.status === PsychoJS.Status.NOT_STARTED) {
@@ -1385,7 +1400,10 @@ function instructSlideRoutineEachFrame(trials, slides) {
 		}
 
 		if (ready.status === PsychoJS.Status.STARTED) {
+
 			let theseKeys = ready.getKeys({ keyList: ['right', 'left'], waitRelease: false });
+
+			
 			
 			if (theseKeys.length > 0 && theseKeys[0].name == 'right') {  // at least one key was pressed
 				slides.thisIndex++ // incremenet the index
@@ -2870,7 +2888,7 @@ function instructRoutineBegin(trials) {
 				win: psychoJS.window,
 				value: audio_path
 			  });
-			// console.log(audio_path)
+			console.log(audio_path)
 			track.setVolume(1.0);
 			track.play();
 		}
