@@ -10,7 +10,9 @@
  const { Scheduler } = util;
  //some handy aliases as in the psychopy scripts;
  const { abs, sin, cos, PI: pi, sqrt } = Math;
- const { round } = util;
+const { round } = util;
+ 
+import { Sound } from '/lib/sound-2020.1.js';
 
 // TASAK PARAMS
 var practice = false;
@@ -319,7 +321,7 @@ var readyClock;
 var isiClock;
 var endClock;
 var gameNumtracker;
-
+var track;
 
 var resp;
 var thanksClock;
