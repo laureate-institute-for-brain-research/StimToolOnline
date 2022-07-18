@@ -2636,7 +2636,7 @@ function trialRoleReversalRoutineEnd(trials) {
 		
 		// store data for thisExp (ExperimentHandler)
 		psychoJS.experiment.addData('resp.keys', key_map[resp.keys]);
-		psychoJS.experiment.addData('points', totalPoints);
+		psychoJS.experiment.addData('social_approval_score', socialApprovalScore);
 		// psychoJS.experiment.addData('resp.corr', resp.corr);
 		if (typeof resp.keys !== 'undefined') {  // we had a response
 			psychoJS.experiment.addData('resp.rt', resp.rt);
