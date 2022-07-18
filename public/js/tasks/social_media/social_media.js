@@ -1380,7 +1380,8 @@ function instructSlideRoutineEachFrame(trials, slides) {
 					track = new Sound({
 						win: psychoJS.window,
 						value: audio_path
-					  });
+					});
+					time_audio_end = t + track.getDuration()
 					// console.log(audio_path)
 					track.setVolume(1.0);
 					track.play();
@@ -1402,11 +1403,29 @@ function instructSlideRoutineEachFrame(trials, slides) {
 
 		if (ready.status === PsychoJS.Status.STARTED) {
 
-			let theseKeys = ready.getKeys({ keyList: ['right', 'left'], waitRelease: false });
+			let theseKeys = ready.getKeys({ keyList: ['right', 'left', 'z'], waitRelease: false });
 
 			
-			
+			// Force Progression
+			if (theseKeys.length > 0 && theseKeys[0].name == 'z') {  // at least one key was pressed
+
+				slides.thisIndex++ // incremenet the index
+				if (slides.thisIndex >= slides.nTotal) {
+					// if we reached here, it means we reached the last and we should move on.
+					continueRoutine = false 
+				}
+				trials = slides.getSnapshot() // get new snapshot after incrementing index
+				psychoJS.importAttributes(trials.getCurrentTrial()); // import the attributes to main class
+				//console.log(trials)
+				newSlide = true
+			}
+
 			if (theseKeys.length > 0 && theseKeys[0].name == 'right') {  // at least one key was pressed
+				// Verify if the audio has beend played
+				if (audio_path && (t <= time_audio_end)) {
+					return Scheduler.Event.FLIP_REPEAT;
+				}
+				
 				slides.thisIndex++ // incremenet the index
 				if (slides.thisIndex >= slides.nTotal) {
 					// if we reached here, it means we reached the last and we should move on.
@@ -1419,6 +1438,10 @@ function instructSlideRoutineEachFrame(trials, slides) {
 			}
 			if (theseKeys.length > 0 && theseKeys[0].name == 'left') {
 				// Presse the back button
+				// Verify if the audio has beend played
+				if (audio_path && (t <= time_audio_end)) {
+					return Scheduler.Event.FLIP_REPEAT;
+				}
 				slides.thisIndex-- // decremenet the index
 				if (slides.thisIndex < 0) {
 					// If the index is 0, that means we reached the very first slide
@@ -2880,6 +2903,7 @@ function importConditions(trials) {
 	};
 }
 
+var time_audio_end;
 function instructRoutineBegin(trials) {
 	return function () {
 		//------Prepare to start Routine 'instruct'-------
@@ -2904,6 +2928,7 @@ function instructRoutineBegin(trials) {
 				value: audio_path
 			  });
 			console.log(audio_path)
+			time_audio_end = t + track.getDuration()
 			track.setVolume(1.0);
 			track.play();
 		}
