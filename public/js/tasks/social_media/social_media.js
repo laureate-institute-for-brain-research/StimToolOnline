@@ -1114,7 +1114,7 @@ function experimentInit() {
 		units: 'norm',
 		alignHoriz: 'center',
 		alignVert: 'center',
-		pos: [0.86, 0.93], height: 0.05, wrapWidth: undefined, ori: 0,
+		pos: [0, 0.4], height: 0.1, wrapWidth: undefined, ori: 0,
 		color: new util.Color('white'), opacity: 1,
 		depth: 0.0
 	});
@@ -1127,36 +1127,38 @@ function experimentInit() {
 		alignHoriz: 'center',
 		alignVert: 'center',
 		units: 'norm',
-		pos: [ 0.86, 0.82], height: 0.09, wrapWidth: undefined, ori: 0,
+		pos: [ 0, 0], height: 0.4, wrapWidth: undefined, ori: 0,
 		color: new util.Color('#00FFFF'), opacity: 1,
 		depth: 0.0
 	});
 
-	chatRoomNumberText = new visual.TextStim({
+	currentTrialText  = new visual.TextStim({
 		win: psychoJS.window,
-		name: 'gameTrackerText',
-		text: 'CHATROOM:',
+		name: 'trialTrackerText',
+		text: 'POST:',
 		font: 'lucida grande',
 		units: 'norm',
 		alignHoriz: 'center',
 		alignVert: 'center',
-		pos: [ 0.865, 0.65], height: 0.05, wrapWidth: undefined, ori: 0,
+		pos: [ 0.86, 0.93], height: 0.05, wrapWidth: undefined, ori: 0,
 		color: new util.Color('white'), opacity: 1,
 		depth: 0.0
 	});
 
-	chatRoomNumber = new visual.TextStim({
+	currentTrialNumber  = new visual.TextStim({
 		win: psychoJS.window,
-		name: 'gameTracker',
-		text: '1/80',
+		name: 'trialTracker',
+		text: '1',
 		font: 'lucida grande',
 		units: 'norm',
 		alignHoriz: 'center',
 		alignVert: 'center',
-		pos: [ 0.86, 0.55], height: 0.05, wrapWidth: undefined, ori: 0,
-		color: new util.Color('#00FF00'), opacity: 1,
+		pos: [0.86, 0.86], height: 0.05, wrapWidth: undefined, ori: 0,
+		color: new util.Color('#FFFF00'), opacity: 1,
 		depth: 0.0
 	});
+
+	
 
 	roomTypeText = new visual.TextStim({
 		win: psychoJS.window,
@@ -1166,7 +1168,7 @@ function experimentInit() {
 		units: 'norm',
 		alignHoriz: 'center',
 		alignVert: 'center',
-		pos: [0.87, 0.38], height: 0.05, wrapWidth: undefined, ori: 0,
+		pos: [0.87, 0.68], height: 0.05, wrapWidth: undefined, ori: 0,
 		color: new util.Color('white'), opacity: 1,
 		depth: 0.0
 	});
@@ -1180,34 +1182,36 @@ function experimentInit() {
 		alignHoriz: 'center',
 		alignVert: 'center',
 		units: 'norm',
-		pos: [ 0.86, 0.31], height: 0.05, wrapWidth: undefined, ori: 0,
+		pos: [ 0.86, 0.61], height: 0.05, wrapWidth: undefined, ori: 0,
 		color: new util.Color('#FF137E'), opacity: 1,
 		depth: 0.0
 	});
 
-	currentTrialText  = new visual.TextStim({
+	
+
+	chatRoomNumberText = new visual.TextStim({
 		win: psychoJS.window,
-		name: 'trialTrackerText',
-		text: 'POST:',
+		name: 'gameTrackerText',
+		text: 'CHATROOM:',
 		font: 'lucida grande',
 		units: 'norm',
 		alignHoriz: 'center',
 		alignVert: 'center',
-		pos: [ 0.86, 0.14], height: 0.05, wrapWidth: undefined, ori: 0,
+		pos: [ 0.865, 0.43], height: 0.05, wrapWidth: undefined, ori: 0,
 		color: new util.Color('white'), opacity: 1,
 		depth: 0.0
 	});
 
-	currentTrialNumber  = new visual.TextStim({
+	chatRoomNumber = new visual.TextStim({
 		win: psychoJS.window,
-		name: 'trialTracker',
-		text: '1',
+		name: 'gameTracker',
+		text: '1/80',
 		font: 'lucida grande',
 		units: 'norm',
 		alignHoriz: 'center',
 		alignVert: 'center',
-		pos: [0.86, 0.08], height: 0.05, wrapWidth: undefined, ori: 0,
-		color: new util.Color('#FFFF00'), opacity: 1,
+		pos: [ 0.86, 0.36], height: 0.05, wrapWidth: undefined, ori: 0,
+		color: new util.Color('#00FF00'), opacity: 1,
 		depth: 0.0
 	});
 
@@ -1239,49 +1243,118 @@ function experimentInit() {
 	return Scheduler.Event.NEXT;
 }
 
+/**
+ * Clears all the stimulus objects & set's there status back to NOT_STARTED
+ */
 function clear_All_stims() {
-
 	headerRectStim.setAutoDraw(false)
-	dividerStim.setAutoDraw(false)
+	headerRectStim.status = PsychoJS.Status.NOT_STARTED
 
-	// searchStim.setAutoDraw(false)
+	dividerStim.setAutoDraw(false)
+	dividerStim.status = PsychoJS.Status.NOT_STARTED
+
 	homeStim.setAutoDraw(false)
+	homeStim.status = PsychoJS.Status.NOT_STARTED
+
 	homeTextStim.setAutoDraw(false)
+	homeTextStim.status = PsychoJS.Status.NOT_STARTED
+
 	hashtagStim.setAutoDraw(false)
+	hashtagStim.status = PsychoJS.Status.NOT_STARTED
+
 	exploreTextStim.setAutoDraw(false)
+	exploreTextStim.status = PsychoJS.Status.NOT_STARTED
+
 	notificationStim.setAutoDraw(false)
+	notificationStim.status = PsychoJS.Status.NOT_STARTED
+
 	notificationTextStim.setAutoDraw(false)
+	notificationTextStim.status = PsychoJS.Status.NOT_STARTED
+
 	messageStim.setAutoDraw(false)
+	messageStim.status = PsychoJS.Status.NOT_STARTED
+
 	messageTextStim.setAutoDraw(false)
+	messageTextStim.status = PsychoJS.Status.NOT_STARTED
+
 	bookmarkStim.setAutoDraw(false)
+	bookmarkStim.status = PsychoJS.Status.NOT_STARTED
+
 	bookmarkTextStim.setAutoDraw(false)
+	bookmarkTextStim.status = PsychoJS.Status.NOT_STARTED
+
 	listStim.setAutoDraw(false)
+	listStim.status = PsychoJS.Status.NOT_STARTED
+
 	listTextStim.setAutoDraw(false)
+	listTextStim.status = PsychoJS.Status.NOT_STARTED
+
 	profileStim.setAutoDraw(false)
+	profileStim.status = PsychoJS.Status.NOT_STARTED
+
 	profileTextStim.setAutoDraw(false)
+	profileTextStim.status = PsychoJS.Status.NOT_STARTED
+
 	profilePicStim.setAutoDraw(false)
+	profilePicStim.status = PsychoJS.Status.NOT_STARTED
+
 	moreStim.setAutoDraw(false)
+	moreStim.status = PsychoJS.Status.NOT_STARTED
+
 	moreTextStim.setAutoDraw(false)
+	moreTextStim.status = PsychoJS.Status.NOT_STARTED
 
 	currentTrialText.setAutoDraw(false)
+	currentTrialText.status = PsychoJS.Status.NOT_STARTED
+
 	currentTrialNumber.setAutoDraw(false)
-	// Draw the Tracker and Points Counter
+	currentTrialNumber.status = PsychoJS.Status.NOT_STARTED
+
 	chatRoomNumberText.setAutoDraw(false)
+	chatRoomNumberText.status = PsychoJS.Status.NOT_STARTED
+
 	chatRoomNumber.setAutoDraw(false)
+	chatRoomNumber.status = PsychoJS.Status.NOT_STARTED
+
 	totalLikesText.setAutoDraw(false)
+	totalLikesText.status = PsychoJS.Status.NOT_STARTED
+
 	totalLikesTracker.setAutoDraw(false)
+	totalLikesTracker.status = PsychoJS.Status.NOT_STARTED
+
 	roomTypeText.setAutoDraw(false)
+	roomTypeText.status = PsychoJS.Status.NOT_STARTED
+
 	roomType.setAutoDraw(false)
+	roomType.status = PsychoJS.Status.NOT_STARTED
 
 	choice1Button.setAutoDraw(false)
+	choice1Button.status = PsychoJS.Status.NOT_STARTED
+
 	choice2Button.setAutoDraw(false)
+	choice2Button.status = PsychoJS.Status.NOT_STARTED
+
 	logoStim.setAutoDraw(false)
+	logoStim.status = PsychoJS.Status.NOT_STARTED
+
 	usernameStim.setAutoDraw(false)
+	usernameStim.status = PsychoJS.Status.NOT_STARTED
+
 	fullNameStim.setAutoDraw(false)
+	fullNameStim.status = PsychoJS.Status.NOT_STARTED
+
 	pageName.setAutoDraw(false)
+	pageName.status = PsychoJS.Status.NOT_STARTED
+
 	questionText.setAutoDraw(false)
+	questionText.status = PsychoJS.Status.NOT_STARTED
+
 	profilePicPostStim.setAutoDraw(false)
+	profilePicPostStim.status = PsychoJS.Status.NOT_STARTED
+
 	profilePicRRStim.setAutoDraw(false)
+	profilePicRRStim.status = PsychoJS.Status.NOT_STARTED
+
 	reset_stims()
 }
 
@@ -1483,8 +1556,8 @@ function instructSlideRoutineEachFrame(trials, slides) {
 }
 
 function trials_exampleLoopBegin(thisScheduler) {
+	resetSocialApprovalScore()
 	total_games = 4
-	
 	example_trials = new TrialHandler({
 		psychoJS: psychoJS,
 		nReps: 1, method: TrialHandler.Method.SEQUENTIAL,
@@ -1501,9 +1574,10 @@ function trials_exampleLoopBegin(thisScheduler) {
 		const snapshot = example_trials.getSnapshot();
 
 		thisScheduler.add(importConditions(snapshot));
-		thisScheduler.add(trialRoutineBegin(snapshot));
-		thisScheduler.add(trialRoutineEachFrameWaitforInput(snapshot));
-		thisScheduler.add(trialRoutineEachFrameShowPost(snapshot));
+		thisScheduler.add(trialRoutineBegin(snapshot)); // setup routine
+		thisScheduler.add(trialRoutineEachFrameWaitforInput(snapshot)); // show topics
+		thisScheduler.add(trialRoutineEachFrameShowPost(snapshot)); // show animation post
+		thisScheduler.add(trialRoutineEachFrameShowScore(snapshot)); // show score post
 		thisScheduler.add(trialRoutineEnd(snapshot));
 		thisScheduler.add(endLoopIteration(thisScheduler, snapshot));
 	}
@@ -1554,6 +1628,13 @@ function instructRoutineEnd(trials) {
 		return Scheduler.Event.NEXT;
 	};
 }
+
+function resetSocialApprovalScore() {
+	totalPoints = null // reset total points
+	totalPossible = null
+	socialApprovalScore = 0
+}
+
 var example_trials;
 var roleReversalTrials;
 var trials;
@@ -1563,30 +1644,15 @@ var total_games;
 var animation_duration = 2
 function trialsLoopBegin(thisScheduler) {
 	// set up handler to look up the conditions
-	totalPoints = null // reset total points
-	totalPossible = null
-	socialApprovalScore = 0
+	resetSocialApprovalScore()
 	total_games = 80
-	if (getQueryVariable('practice') == 'true') {
-		total_games = 5
-		practice = true;
-		console.log('Practice Session')
-		trials = new TrialHandler({
-			psychoJS: psychoJS,
-			nReps: 1, method: TrialHandler.Method.SEQUENTIAL,
-			extraInfo: expInfo, originPath: undefined,
-			trialList: 'game_type_practice.xls',
-			seed: undefined, name: 'trials'
-		});
-	} else {
-		trials = new TrialHandler({
-			psychoJS: psychoJS,
-			nReps: 1, method: TrialHandler.Method.SEQUENTIAL,
-			extraInfo: expInfo, originPath: undefined,
-			trialList: 'run_schedule.xls',
-			seed: undefined, name: 'trials'
-		});
-	}
+	trials = new TrialHandler({
+		psychoJS: psychoJS,
+		nReps: 1, method: TrialHandler.Method.SEQUENTIAL,
+		extraInfo: expInfo, originPath: undefined,
+		trialList: 'run_schedule.xls',
+		seed: undefined, name: 'trials'
+	});
 
 	// console.log(trials)
 	
@@ -1608,7 +1674,8 @@ function trialsLoopBegin(thisScheduler) {
 		thisScheduler.add(importConditions(snapshot));
 		thisScheduler.add(trialRoutineBegin(snapshot));
 		thisScheduler.add(trialRoutineEachFrameWaitforInput(snapshot));
-		thisScheduler.add(trialRoutineEachFrameShowPost(snapshot));
+		thisScheduler.add(trialRoutineEachFrameShowPost(snapshot)); 
+		thisScheduler.add(trialRoutineEachFrameShowScore(snapshot));
 		thisScheduler.add(trialRoutineEnd(snapshot));
 		thisScheduler.add(endLoopIteration(thisScheduler, snapshot));
 	}
@@ -1665,15 +1732,7 @@ function setupPosts(game_type) {
 //  / 
 // the maximum number of likes they could have recieved through out the chatrooms
 function getSocialApprovalScore() {
-
-	if (dislike_room == 0) {
-		// Total Possible should only be for the like chat rooms
-		//  We dont add total possible for dislikes rooms.
-		totalPossible = totalPossible + 100
-	}
-	
-	// socialApprovalScore = ( totalPoints / totalPossible )
-
+	totalPossible = totalPossible + 100 // increment possible regardless if dislike or like room
 	socialApprovalScore = ( totalPoints / totalPossible )
 
 	console.log('Left Reward: ',left_reward, ' Right Reward:',right_reward, 'TotalPoints: ',totalPoints, 'totalPossible: ', totalPossible, 'Score:',socialApprovalScore)
@@ -1725,11 +1784,8 @@ function trialRoutineBegin(trials) {
 
 		lastTrial = isLastTrial(game_type, trial_num)
 
-		// Turn the rewards to negative if it's a dislike_chartroom
+		// Set the color of the ROOM Type
 		if (dislike_room == 1) {
-			left_reward = -left_reward
-			right_reward = -right_reward
-
 			roomType.setColor(like_color.dislikes)
 			roomType.setText('Dislikes')
 		} else {
@@ -1743,7 +1799,7 @@ function trialRoutineBegin(trials) {
 		// console.log(lastGameNumber)
 		if (game_number != lastGameNumber) {
 			console.log('new chat room')
-
+			resetSocialApprovalScore() // reset the score
 			chatRoomNumber.setText(`${game_number + 1}/${total_games}`)
 			
 			// Set the tweets
@@ -1799,8 +1855,8 @@ function trialRoutineBegin(trials) {
 		// Draw the Tracker and Points Counter
 		chatRoomNumberText.setAutoDraw(true)
 		chatRoomNumber.setAutoDraw(true)
-		totalLikesText.setAutoDraw(true)
-		totalLikesTracker.setAutoDraw(true)
+		// totalLikesText.setAutoDraw(true)
+		// totalLikesTracker.setAutoDraw(true)
 		roomType.setAutoDraw(true)
 		roomTypeText.setAutoDraw(true)
 
@@ -2479,18 +2535,16 @@ function trialRoutineEachFrameShowPost(trials) {
 		// After 3 seconds go to the next Trial (post) or next chat room
 		if (t > animation_duration) {
 			postStims[trial_num].like_posts.setAutoDraw(true)
-			totalLikesTracker.setText(socialApprovalScore)
+			
 
 			if (dislike_room) {
 				postStims[trial_num].dislike_icon.setAutoDraw(true) // show filled in heart
 			} else {
 				postStims[trial_num].like_icon.setAutoDraw(true) // show filled in heart
 			}
-			
-
 			if (!lastTrial) {
 				// Go to the next routine if it's not the last trial
-				
+				trialClock.reset();
 				return Scheduler.Event.NEXT;
 			} else {
 				// Show Instructions about clicking space to go to next chat room
@@ -2504,6 +2558,8 @@ function trialRoutineEachFrameShowPost(trials) {
 				let theseKeys = resp.getKeys({ keyList: ['space'], waitRelease: false });
 
 				if (theseKeys.length > 0) {
+					trialClock.reset();
+					clear_All_stims() // clear all Stims
 					return Scheduler.Event.NEXT;
 				}
 			}
@@ -2512,6 +2568,48 @@ function trialRoutineEachFrameShowPost(trials) {
 	};
 }
 
+// This routine handls the score slide
+// Should only show when it's the last trial
+var SHOW_SCORE_DURATION = 3 // duration of how long to show the score screen
+function trialRoutineEachFrameShowScore(trials) {
+	return function () {
+		//------Loop for each frame of Routine 'trial'-------
+		
+		if (!lastTrial) {
+			// Go to the next routine if it's not the last trial
+			return Scheduler.Event.NEXT;
+		}
+	
+		// get current time
+		t = trialClock.getTime();
+
+		if (totalLikesTracker.status != PsychoJS.Status.FINISHED) {
+			if (dislike_room) {
+				totalLikesTracker.color = new util.Color('red')
+				totalLikesText.setText('SOCIAL DISAPPROVAL SCORE')
+			} else {
+				totalLikesTracker.color = new util.Color('green')
+				totalLikesText.setText('SOCIAL APPROVAL SCORE')
+			}
+			totalLikesTracker.setText(socialApprovalScore)
+
+			totalLikesTracker.setAutoDraw(true)
+			totalLikesText.setAutoDraw(true)
+		}
+		// check for quit (typically the Esc key)
+		if (psychoJS.eventManager.getKeys({keyList:['escape']}).length > 0) {
+			return quitPsychoJS('The [Escape] key was pressed. Goodbye!', false);
+		}
+
+		// Go to next routeing after the set duratino
+		if (t > SHOW_SCORE_DURATION) {
+			totalLikesTracker.setAutoDraw(false)
+			totalLikesText.setAutoDraw(false)
+			return Scheduler.Event.NEXT;
+		}
+		return Scheduler.Event.FLIP_REPEAT;
+	};
+}
 // This the routine when we wait for the user to click a like
 function trialRoleReversalRoutineEachFrameWaitforInput(trials) {
 	return function () {
