@@ -563,7 +563,6 @@ function experimentInit() {
 	endClock = new util.Clock();
 	isiClock = new util.Clock();
 
-
 	resp = new core.Keyboard({ psychoJS, clock: new util.Clock(), waitForStart: true });
 
 	// Initiali comnponenents for Routine 'read'y

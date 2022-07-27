@@ -297,8 +297,8 @@ dialogCancelScheduler.add(quitPsychoJS, '', false);
 var resources = [
 	{ name: 'example_play.xls', path: '/js/tasks/social_media/example_play.xls' },
 	{ name: 'role_reversal_shedule.xls', path:'/js/tasks/social_media/role_reversal_shedule.xls' },
-	{ name: 'ready.jpeg', path: '/js/tasks/social_media/media/instructions/Slide33.jpeg' },
-	{ name: 'ready.mp3', path: '/js/tasks/social_media/media/instructions_audio/Slide33.mp3'},
+	{ name: 'ready.jpeg', path: '/js/tasks/social_media/media/instructions/Slide34.jpeg' },
+	{ name: 'ready.mp3', path: '/js/tasks/social_media/media/instructions_audio/Slide34.mp3'},
 	{ name: 'role_reversal_instruct_schedule.csv', path: '/js/tasks/social_media/media/role_reversal_instruct_schedule.csv'},
 	{ name: 'logo.png', path: '/js/tasks/social_media/media/body-organ.png' },
 	{ name: 'home.png', path: '/js/tasks/social_media/media/home.png' },
@@ -1443,12 +1443,11 @@ function instructSlideRoutineEachFrame(trials, slides) {
 		// New Slide Call, set it after pressing key
 		// console.log(track.status)
 		if (newSlide) {
-			console.log('setting new image', instruct_slide, 'index:',trials.thisIndex)
+			console.log('setting new image', instruct_slide, 'index:',trials.thisIndex, 'Audio: ',audio_path)
 			slideStim.setImage(instruct_slide)
 			newSlide = false
 			if (audio_path) {
-				
-				if (track.status != PsychoJS.Status.NOT_STARTED) {
+				if (track && (track.status != PsychoJS.Status.NOT_STARTED) ) {
 					track.stop()
 					track = new Sound({
 						win: psychoJS.window,
@@ -1458,8 +1457,17 @@ function instructSlideRoutineEachFrame(trials, slides) {
 					// console.log(audio_path)
 					track.setVolume(1.0);
 					track.play();
+				} else {
+					track = new Sound({
+						win: psychoJS.window,
+						value: audio_path
+					});
+					time_audio_end = t + track.getDuration()
+					// console.log(audio_path)
+					track.setVolume(1.0);
+					track.play();
 				}
-				}
+			}
 				
 		}
 		// *ready* updates
