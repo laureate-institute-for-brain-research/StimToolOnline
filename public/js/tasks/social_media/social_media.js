@@ -1114,7 +1114,7 @@ function experimentInit() {
 		units: 'norm',
 		alignHoriz: 'center',
 		alignVert: 'center',
-		pos: [0, 0.4], height: 0.1, wrapWidth: undefined, ori: 0,
+		pos: [0.86, 0.93], height: 0.05, wrapWidth: undefined, ori: 0,
 		color: new util.Color('white'), opacity: 1,
 		depth: 0.0
 	});
@@ -1127,38 +1127,36 @@ function experimentInit() {
 		alignHoriz: 'center',
 		alignVert: 'center',
 		units: 'norm',
-		pos: [ 0, 0], height: 0.4, wrapWidth: undefined, ori: 0,
+		pos: [ 0.86, 0.82], height: 0.09, wrapWidth: undefined, ori: 0,
 		color: new util.Color('#00FFFF'), opacity: 1,
 		depth: 0.0
 	});
 
-	currentTrialText  = new visual.TextStim({
+	chatRoomNumberText = new visual.TextStim({
 		win: psychoJS.window,
-		name: 'trialTrackerText',
-		text: 'POST:',
+		name: 'gameTrackerText',
+		text: 'CHATROOM:',
 		font: 'lucida grande',
 		units: 'norm',
 		alignHoriz: 'center',
 		alignVert: 'center',
-		pos: [ 0.86, 0.93], height: 0.05, wrapWidth: undefined, ori: 0,
+		pos: [ 0.865, 0.65], height: 0.05, wrapWidth: undefined, ori: 0,
 		color: new util.Color('white'), opacity: 1,
 		depth: 0.0
 	});
 
-	currentTrialNumber  = new visual.TextStim({
+	chatRoomNumber = new visual.TextStim({
 		win: psychoJS.window,
-		name: 'trialTracker',
-		text: '1',
+		name: 'gameTracker',
+		text: '1/80',
 		font: 'lucida grande',
 		units: 'norm',
 		alignHoriz: 'center',
 		alignVert: 'center',
-		pos: [0.86, 0.86], height: 0.05, wrapWidth: undefined, ori: 0,
-		color: new util.Color('#FFFF00'), opacity: 1,
+		pos: [ 0.86, 0.55], height: 0.05, wrapWidth: undefined, ori: 0,
+		color: new util.Color('#00FF00'), opacity: 1,
 		depth: 0.0
 	});
-
-	
 
 	roomTypeText = new visual.TextStim({
 		win: psychoJS.window,
@@ -1168,7 +1166,7 @@ function experimentInit() {
 		units: 'norm',
 		alignHoriz: 'center',
 		alignVert: 'center',
-		pos: [0.87, 0.68], height: 0.05, wrapWidth: undefined, ori: 0,
+		pos: [0.87, 0.38], height: 0.05, wrapWidth: undefined, ori: 0,
 		color: new util.Color('white'), opacity: 1,
 		depth: 0.0
 	});
@@ -1182,39 +1180,36 @@ function experimentInit() {
 		alignHoriz: 'center',
 		alignVert: 'center',
 		units: 'norm',
-		pos: [ 0.86, 0.61], height: 0.05, wrapWidth: undefined, ori: 0,
+		pos: [ 0.86, 0.31], height: 0.05, wrapWidth: undefined, ori: 0,
 		color: new util.Color('#FF137E'), opacity: 1,
 		depth: 0.0
 	});
 
-	
-
-	chatRoomNumberText = new visual.TextStim({
+	currentTrialText  = new visual.TextStim({
 		win: psychoJS.window,
-		name: 'gameTrackerText',
-		text: 'CHATROOM:',
+		name: 'trialTrackerText',
+		text: 'POST:',
 		font: 'lucida grande',
 		units: 'norm',
 		alignHoriz: 'center',
 		alignVert: 'center',
-		pos: [ 0.865, 0.43], height: 0.05, wrapWidth: undefined, ori: 0,
+		pos: [ 0.86, 0.14], height: 0.05, wrapWidth: undefined, ori: 0,
 		color: new util.Color('white'), opacity: 1,
 		depth: 0.0
 	});
 
-	chatRoomNumber = new visual.TextStim({
+	currentTrialNumber  = new visual.TextStim({
 		win: psychoJS.window,
-		name: 'gameTracker',
-		text: '1/80',
+		name: 'trialTracker',
+		text: '1',
 		font: 'lucida grande',
 		units: 'norm',
 		alignHoriz: 'center',
 		alignVert: 'center',
-		pos: [ 0.86, 0.36], height: 0.05, wrapWidth: undefined, ori: 0,
-		color: new util.Color('#00FF00'), opacity: 1,
+		pos: [0.86, 0.08], height: 0.05, wrapWidth: undefined, ori: 0,
+		color: new util.Color('#FFFF00'), opacity: 1,
 		depth: 0.0
 	});
-
 
 	resp = new core.Keyboard({ psychoJS, clock: new util.Clock(), waitForStart: true });
 
@@ -1585,7 +1580,7 @@ function trials_exampleLoopBegin(thisScheduler) {
 		thisScheduler.add(trialRoutineBegin(snapshot)); // setup routine
 		thisScheduler.add(trialRoutineEachFrameWaitforInput(snapshot)); // show topics
 		thisScheduler.add(trialRoutineEachFrameShowPost(snapshot)); // show animation post
-		thisScheduler.add(trialRoutineEachFrameShowScore(snapshot)); // show score post
+		// thisScheduler.add(trialRoutineEachFrameShowScore(snapshot)); // show score post
 		thisScheduler.add(trialRoutineEnd(snapshot));
 		thisScheduler.add(endLoopIteration(thisScheduler, snapshot));
 	}
@@ -1740,7 +1735,9 @@ function setupPosts(game_type) {
 //  / 
 // the maximum number of likes they could have recieved through out the chatrooms
 function getSocialApprovalScore() {
-	totalPossible = totalPossible + 100 // increment possible regardless if dislike or like room
+	// total possible is based on either h1 or h6
+	if (game_type == 'h1') totalPossible = 100
+	if (game_type == 'h6') totalPossible = 600
 	socialApprovalScore = ( totalPoints / totalPossible )
 
 	console.log('Left Reward: ',left_reward, ' Right Reward:',right_reward, 'TotalPoints: ',totalPoints, 'totalPossible: ', totalPossible, 'Score:',socialApprovalScore)
@@ -1863,8 +1860,8 @@ function trialRoutineBegin(trials) {
 		// Draw the Tracker and Points Counter
 		chatRoomNumberText.setAutoDraw(true)
 		chatRoomNumber.setAutoDraw(true)
-		// totalLikesText.setAutoDraw(true)
-		// totalLikesTracker.setAutoDraw(true)
+		totalLikesText.setAutoDraw(true)
+		totalLikesTracker.setAutoDraw(true)
 		roomType.setAutoDraw(true)
 		roomTypeText.setAutoDraw(true)
 
@@ -2543,7 +2540,7 @@ function trialRoutineEachFrameShowPost(trials) {
 		// After 3 seconds go to the next Trial (post) or next chat room
 		if (t > animation_duration) {
 			postStims[trial_num].like_posts.setAutoDraw(true)
-			
+			totalLikesTracker.setText(socialApprovalScore)
 
 			if (dislike_room) {
 				postStims[trial_num].dislike_icon.setAutoDraw(true) // show filled in heart
