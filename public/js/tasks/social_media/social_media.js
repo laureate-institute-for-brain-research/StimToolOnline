@@ -1738,6 +1738,7 @@ function getSocialApprovalScore() {
 	// total possible is based on either h1 or h6
 	if (game_type == 'h1') totalPossible = 100
 	if (game_type == 'h6') totalPossible = 600
+
 	socialApprovalScore = ( totalPoints / totalPossible )
 
 	console.log('Left Reward: ',left_reward, ' Right Reward:',right_reward, 'TotalPoints: ',totalPoints, 'totalPossible: ', totalPossible, 'Score:',socialApprovalScore)
@@ -1806,6 +1807,17 @@ function trialRoutineBegin(trials) {
 			console.log('new chat room')
 			resetSocialApprovalScore() // reset the score
 			chatRoomNumber.setText(`${game_number + 1}/${total_games}`)
+
+			
+			if (dislike_room == 1) {
+				// Set TotalPoints since for dislikes they start with 100% score
+				if (game_type == 'h1') totalPoints = 100
+				if (game_type == 'h6') totalPoints = 600
+			} else {
+				// Like Room Start at 0
+				totalPoints = 0
+			}
+			
 			
 			// Set the tweets
 			leftTopic = tweets[left_topic]
@@ -2475,7 +2487,14 @@ function trialRoutineEachFrameWaitforInput(trials) {
 				// Calculate the score as soon as you press
 				// But don't actually set the text/show the text until after animation
 				if (force_pos == 'X') {
-					totalPoints = totalPoints + trial_reward
+					if (dislike_room == 0) {
+						// Like Room // sum points
+						totalPoints = totalPoints + trial_reward
+					} else {
+						// Dislike Room
+						totalPoints = totalPoints - trial_reward
+					}
+					
 					getSocialApprovalScore() // calculates the approval score
 				}
 
