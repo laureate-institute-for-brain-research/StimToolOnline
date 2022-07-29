@@ -1813,10 +1813,16 @@ function trialRoutineBegin(trials) {
 				// Set TotalPoints since for dislikes they start with 100% score
 				if (game_type == 'h1') totalPoints = 100
 				if (game_type == 'h6') totalPoints = 600
+
+				totalPossible = totalPossible
 			} else {
 				// Like Room Start at 0
 				totalPoints = 0
+
+				totalPossible = 0
 			}
+
+			getSocialApprovalScore()
 			
 			
 			// Set the tweets
@@ -1841,9 +1847,7 @@ function trialRoutineBegin(trials) {
 		currentTrialNumber.setText(`${trial_num + 1}`)
 		
 
-		if (!Number.isFinite(totalPossible) ) {
-			totalLikesTracker.setText(`--`)
-		}
+		totalLikesTracker.setText(socialApprovalScore)
 		
 		headerRectStim.setAutoDraw(true)
 		dividerStim.setAutoDraw(true)
