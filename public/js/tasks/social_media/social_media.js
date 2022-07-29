@@ -471,7 +471,7 @@ var rightColor = '#db6e00'
 var rightFadeColor = '#361b01'
 
 var like_color = {
-	'likes': '#FF137E',
+	'likes': '#00FFFF',
 	'dislikes': 'red'
 }
 
