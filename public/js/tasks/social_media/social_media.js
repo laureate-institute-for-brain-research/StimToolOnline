@@ -1678,7 +1678,7 @@ function trialsLoopBegin(thisScheduler) {
 		thisScheduler.add(trialRoutineBegin(snapshot));
 		thisScheduler.add(trialRoutineEachFrameWaitforInput(snapshot));
 		thisScheduler.add(trialRoutineEachFrameShowPost(snapshot)); 
-		thisScheduler.add(trialRoutineEachFrameShowScore(snapshot));
+		// thisScheduler.add(trialRoutineEachFrameShowScore(snapshot));
 		thisScheduler.add(trialRoutineEnd(snapshot));
 		thisScheduler.add(endLoopIteration(thisScheduler, snapshot));
 	}
@@ -1798,6 +1798,10 @@ function trialRoutineBegin(trials) {
 			roomType.setText('Likes')
 			roomType.setColor(like_color.likes)
 			
+		}
+
+		if (track && (track.status != PsychoJS.Status.STARTED)) {
+			track.stop()
 		}
 
 
@@ -2895,6 +2899,7 @@ function readyRoutineEachFrame(trials) {
 function readyRoutineEnd(trials) {
 	return function () {
 		//------Ending Routine 'ready'-------
+		track.stop()
 		for (const thisComponent of readyComponents) {
 			if (typeof thisComponent.setAutoDraw === 'function') {
 				thisComponent.setAutoDraw(false);
