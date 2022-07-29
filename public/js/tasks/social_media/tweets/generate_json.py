@@ -18,7 +18,7 @@ def main():
     """
 
     # Read excel file
-    tweets_df = pd.read_csv('/Users/jtouthang/iCloud Drive (Archive)/Documents/Documents - L00019188/StimTool_Online/public/js/tasks/social_media/tweets/Horizon Social Media Tweets_updated_07_26_2022.csv', index_col=0)
+    tweets_df = pd.read_csv('/Users/jtouthang/iCloud Drive (Archive)/Documents/Documents - L00019188/StimTool_Online/public/js/tasks/social_media/tweets/Horizon Social Media Tweets_updated_07_29_2022.csv', index_col=0)
     #print(tweets_df)
 
     # NA are 'NA"
@@ -29,7 +29,6 @@ def main():
     # Iteraver of each columns
     for col in tweets_df.columns:
        # print(col)
-
         #if col == 'Topic': continue
 
         # Add to dictionary if not already
