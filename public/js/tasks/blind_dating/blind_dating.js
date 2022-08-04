@@ -228,10 +228,12 @@ dialogCancelScheduler.add(quitPsychoJS, '', false);
 
 // Add Slides to resources
 var resources = [
-	{ name: 'practice_schedule.xls', path: '/js/tasks/blind_dating/practice_schedule.xls' },
+	{ name: 'practice_schedule.xls', path: '/js/tasks/blind_dating/practice_schedule.xls'},
 	{ name: 'user.png', path: '/js/tasks/blind_dating/media/user.png' },
-	{ name: 'user_filled.png', path: '/js/tasks/blind_dating/media/user_filled.png' },
-	{ name: 'ready.jpeg', path: '/js/tasks/blind_dating/media/instructions/Slide22.jpeg'}
+	{ name: 'user_filled.png', path: '/js/tasks/blind_dating/media/user_filled.png'},
+	{ name: 'ready.jpeg', path: '/js/tasks/blind_dating/media/instructions/Slide22.jpeg'},
+	{ name: 'male.png', path: '/js/tasks/blind_dating/media/male.png' },
+	{ name: 'female.png', path: '/js/tasks/blind_dating/media/female.png'}
 ]
 
 
@@ -260,6 +262,7 @@ var boxColor = '#0074B7'
 var selectColor = '#0074B7'
 
 var question_data;
+var desiredGender = 'male'; // default gender is male
 
 
 var slideStim;
@@ -271,6 +274,7 @@ var trialClock;
 var timePointClock;
 var offer_stim_text;
 var offer_rect;
+var profile_outline;
 
 var current_point;
 
@@ -290,16 +294,16 @@ var boxes_rect = {
 	8 : {}
 }
 
-var profile_icon = {
+// Male Profiles
+var male_profile_icon = {
 	4: {},
 	8: {}
 }
-
-var profile_icon_filled = {
+// Female Profiles
+var female_profile_icon = {
 	4: {},
 	8: {}
 }
-
 var accept_text_stim;
 var accept_rect_stim;
 
@@ -384,7 +388,7 @@ function experimentInit() {
 		font: 'Arial',
 		units: 'height',
 		pos: [0, 0.06], height: 0.07, wrapWidth: undefined, ori: 0,
-		color: new util.Color('black'), opacity: 1,
+		color: new util.Color('white'), opacity: 1,
 		depth: 0.0
 	});
 
@@ -402,14 +406,28 @@ function experimentInit() {
 		depth: 0.0
 	});
 
+	profile_outline = new visual.Rect({
+		win: psychoJS.window,
+		name: `profile_outline`,
+		width: 0.2,
+		height: 0.3,
+		lineWidth: 3.5,
+		units: 'norm',
+		pos: [0, 0.12], ori: 0,
+		lineColor: new util.Color('yellow'),
+		fillColor: undefined,
+		opacity: 1,
+		depth: 0.0
+	});
+
 
 	// Make Short Boxes
 	for (var i = 0; i <= 3; i++){
 		// Profile Pic
-		profile_icon[4][i] = new visual.ImageStim({
+		male_profile_icon[4][i] = new visual.ImageStim({
 			win : psychoJS.window,
-			name : `profile_icon_${i}_outline`, units : 'norm', 
-			image : 'user.png', mask : undefined,
+			name : `male_profile_icon_${i}_outline`, units : 'norm', 
+			image : 'male.png', mask : undefined,
 			ori: 0,
 			pos: [short_boxes_x_pos[i], 0.5 ], 
 			size: [0.2,0.3],
@@ -418,10 +436,10 @@ function experimentInit() {
 			texRes : 128, interpolate : true, depth : 0
 		});
 
-		profile_icon_filled[4][i] = new visual.ImageStim({
+		female_profile_icon[4][i] = new visual.ImageStim({
 			win : psychoJS.window,
-			name : `profile_icon_${i}_outline`, units : 'norm', 
-			image : 'user_filled.png', mask : undefined,
+			name : `male_profile_icon_${i}_outline`, units : 'norm', 
+			image : 'female.png', mask : undefined,
 			ori: 0,
 			pos: [short_boxes_x_pos[i], 0.5 ], 
 			size: [0.2,0.3],
@@ -429,15 +447,27 @@ function experimentInit() {
 			flipHoriz : false, flipVert : false,
 			texRes : 128, interpolate : true, depth : 0
 		});
+
+		// male_profile_icon_filled[4][i] = new visual.ImageStim({
+		// 	win : psychoJS.window,
+		// 	name : `male_profile_icon_${i}_outline`, units : 'norm', 
+		// 	image : 'user_filled.png', mask : undefined,
+		// 	ori: 0,
+		// 	pos: [short_boxes_x_pos[i], 0.5 ], 
+		// 	size: [0.2,0.3],
+		// 	color: undefined, opacity: 1,
+		// 	flipHoriz : false, flipVert : false,
+		// 	texRes : 128, interpolate : true, depth : 0
+		// });
 	}
 
 	// Make Long Boxes
 	for (var j = 0; j <= 7; j++){
 		// Profile Pic
-		profile_icon[8][j] = new visual.ImageStim({
+		male_profile_icon[8][j] = new visual.ImageStim({
 			win : psychoJS.window,
-			name : `profile_icon_${j}_outline`, units : 'norm', 
-			image : 'user.png', mask : undefined,
+			name : `male_profile_icon_${j}_outline`, units : 'norm', 
+			image : 'male.png', mask : undefined,
 			ori: 0,
 			pos: [long_boxes_x_pos[j], 0.5 ], 
 			size: [0.2,0.3],
@@ -446,10 +476,10 @@ function experimentInit() {
 			texRes : 128, interpolate : true, depth : 0
 		});
 
-		profile_icon_filled[8][j] = new visual.ImageStim({
+		female_profile_icon[8][j] = new visual.ImageStim({
 			win : psychoJS.window,
-			name : `profile_icon_filled_${j}_outline`, units : 'norm', 
-			image : 'user_filled.png', mask : undefined,
+			name : `female_profile_icon_${j}_outline`, units : 'norm', 
+			image : 'female.png', mask : undefined,
 			ori: 0,
 			pos: [long_boxes_x_pos[j], 0.5 ], 
 			size: [0.2,0.3],
@@ -595,7 +625,7 @@ function experimentInit() {
 	// Removes the iframe again
 	window.finishHTML = () => {
 		question_data = window.question_data 	// Add to the question_data variable
-
+		desiredGender = question_data.isYourDesiredPartnerMaleOrFemale // specificall need this data
 		$('#iframe').remove();
 		window.finishedHTML = true;
 	};
@@ -956,6 +986,7 @@ function practiceTrialsLoopBegin(thisScheduler) {
 		thisScheduler.add(importConditions(snapshot));
 		thisScheduler.add(trialRoutineBegin(snapshot));
 		thisScheduler.add(trialRoutineEachFrame(snapshot));
+		// thisScheduler.add(trialResult(snapshot)); // show the result 
 		thisScheduler.add(trialIsi(snapshot));
 		thisScheduler.add(trialRoutineEnd(snapshot));
 		thisScheduler.add(endLoopIteration(thisScheduler, snapshot));
@@ -1060,7 +1091,7 @@ function trialRoutineBegin(trials) {
 			starting_index = 0
 		}
 		
-		console.log(trials)
+		// console.log(trials)
 
 		// Reset Trial Variables
 		pressed = false;
@@ -1074,11 +1105,27 @@ function trialRoutineBegin(trials) {
 
 		psychoJS.eventManager.clearEvents()
 
-		// update component parameters for each repeat
-		// word.setColor(new util.Color(letterColor));
-		
+		currentTrialNumber.setAutoDraw(true)
+		totalPointsTracker.setAutoDraw(true)
+
+		console.log(question_data)
+
+		// Draw the profile stims
+		draw_profile_icons()
+		draw_profile_outline()
+
+		// Draw the Accept and Wait Rect Stims
+		reset_rectangle_stims()
+		accept_rect_stim.setAutoDraw(true)
+		accept_text_stim.setAutoDraw(true)
+
+		wait_rect_stim.setAutoDraw(true)
+		wait_text_stim.setAutoDraw(true)
+
+		// Setup The Offer Stim
 		offer_stim_text.setText(initial_offer + '% Match') // Set the Current Offer	
-		
+		offer_stim_text.setAutoDraw(true)
+
 		currentTrialNumber.setText(`Event: ${trial_number} / ${trials.nStim}`)
 		totalPointsTracker.setText(`Total Dates: ${totalDates}`)
 
@@ -1094,244 +1141,109 @@ function trialRoutineBegin(trials) {
 	};
 }
 
+function clear_stims() {
+	for (var j = 0; j < trial_length; j++){
+		male_profile_icon[trial_length][j].setAutoDraw(false)
+		male_profile_icon[trial_length][j].status = PsychoJS.Status.NOT_STARTED
+
+		female_profile_icon[trial_length][j].setAutoDraw(false)
+		female_profile_icon[trial_length][j].status = PsychoJS.Status.NOT_STARTED
+
+		if (trial_length == 4) {
+			person_texts[j + 2].setAutoDraw(false)
+			person_texts[j + 2].status = PsychoJS.Status.NOT_STARTED
+		} else {
+			person_texts[j].setAutoDraw(false)
+			person_texts[j].status = PsychoJS.Status.NOT_STARTED
+		}
+	}
+	currentTrialNumber.setAutoDraw(false)
+	currentTrialNumber.status = PsychoJS.Status.NOT_STARTED
+
+	totalPointsTracker.setAutoDraw(false)
+	totalPointsTracker.status = PsychoJS.Status.NOT_STARTED
+
+	offer_stim_text.setAutoDraw(false)
+	offer_stim_text.status = PsychoJS.Status.NOT_STARTED
+
+	offer_rect.setAutoDraw(false)
+	offer_rect.status = PsychoJS.Status.NOT_STARTED
+
+	accept_rect_stim.setAutoDraw(false)
+	accept_rect_stim.status = PsychoJS.Status.NOT_STARTED
+
+	accept_text_stim.setAutoDraw(false)
+	accept_text_stim.status = PsychoJS.Status.NOT_STARTED
+	
+	wait_rect_stim.setAutoDraw(false)
+	wait_rect_stim.status = PsychoJS.Status.NOT_STARTED
+
+	wait_text_stim.setAutoDraw(false)
+	wait_text_stim.status = PsychoJS.Status.NOT_STARTED
+}
+
+// Draws the Profile Phots Dependent on Desired Gender
+function draw_profile_icons() {
+	// Draw the Profile Icond
+	for (var i = 0; i < trial_length; i++){
+
+		// Text Number on the Top
+		if (trial_length == 4) {
+			person_texts[i+ 2].setText( i+ 1)
+			person_texts[i+ 2].setAutoDraw(true)
+		} else {
+			person_texts[i].setText( i+ 1)
+			person_texts[i].setAutoDraw(true)
+		}
+		
+		// Profile Icon & Dependent on Female or Male
+		if (desiredGender == 'male') {
+			male_profile_icon[trial_length][i].setAutoDraw(true)
+		} else {
+			female_profile_icon[trial_length][i].setAutoDraw(true)
+		}
+		
+	}
+}
+
+// Draws the current outline based on timepoint
+function draw_profile_outline() {
+	profile_outline.pos = male_profile_icon[trial_length][time_point].pos
+	profile_outline.setAutoDraw(true)
+}
+
+// Reset the rectangle stims to their original structure
+function reset_rectangle_stims() {
+	accept_rect_stim.lineColor = new util.Color('white')
+	accept_rect_stim.fillColor = new util.Color('black')
+	accept_text_stim.color = new util.Color('white')
+	accept_rect_stim.width = 0.14
+	accept_rect_stim.height = 0.09
+
+	wait_rect_stim.lineColor = new util.Color('white')
+	wait_rect_stim.fillColor = new util.Color('black')
+	wait_text_stim.color = new util.Color('white')
+	wait_rect_stim.width = 0.14
+	wait_rect_stim.height = 0.09
+ }
+
+
 var time_point;
 var missed_timepoint;
+var feedback_break;
+var feedback_break_time_end;
 
 function trialRoutineEachFrame(trials) {
 	return function () {
 		//------Loop for each frame of Routine 'trial'-------
 		let continueRoutine = true; // until we're told otherwise
 
-
-		// Allow to skip trials for testing and tech errors
-		let theseKeys = resp.getKeys({ keyList: ['z'], waitRelease: false });
-		if (theseKeys.length > 0) {
-			resp.keys = theseKeys[0].name;  // just the last key pressed
-			if (resp.keys == 'z') {
-				continueRoutine = false;
-				current_point = 0
-				offer_stim_text.setText(0 + '% Match')
-			}
-		}
-	
 		// get current time
 		t = trialClock.getTime();
 		tp = timePointClock.getTime();
 
-		currentTrialNumber.setAutoDraw(true)
-		// gameNumtracker.setAutoDraw(true)
-		totalPointsTracker.setAutoDraw(true)
-	
-		// Draw the Profile Icond
-		for (var i = 0; i < trial_length; i++){
-			if (trial_length == 4) {
-				person_texts[i+ 2].setText( i+ 1)
-				person_texts[i+ 2].setAutoDraw(true)
-			} else {
-				person_texts[i].setText( i+ 1)
-				person_texts[i].setAutoDraw(true)
-			}
-			
-
-			if (i != time_point) {
-				profile_icon[trial_length][i].setAutoDraw(true)
-				profile_icon_filled[trial_length][i].setAutoDraw(false)
-			} else {
-				profile_icon_filled[trial_length][i].setAutoDraw(true)
-				profile_icon[trial_length][i].setAutoDraw(false)
-			}
-		}
-
-		// Withdraw or High offer depedning on schedule
-		if (waited) {
-			if ( (time_point + 1) == ts_high) {
-				offer_stim_text.setText(highOfferVal + '% Match')
-			}
-			if ((time_point + 1) == ts_withdrawal) {
-				offer_withdrew = true;
-				offer_stim_text.setText(0 + '% Match')
-				// offer_stim_text.setText('Offer revoked')
-			}
-		}
-		
-		// Draw the Boxes
-
-		// Orientation Screen ( 1000ms)
-		var orientation_screen_duration = 1
-		if (tp > 0  && tp <= orientation_screen_duration) {
-			// console.log('Orientation Screen')
-			psychoJS.eventManager.clearEvents()
-			saved = false
-			
-			// psychoJS.eventManager.clearEvents()
-			// 
-			offer_rect.fillColor = new util.Color('white')
-			offer_rect.opacity = 1
-			offer_stim_text.color = new util.Color('white')
-
-			wait_rect_stim.height = 0.09
-			wait_rect_stim.width = 0.12
-
-			offer_stim_text.height = 0.07
-			if (time_point == 0 || waited){
-				// offer_rect.setAutoDraw(true)
-			}
-	
-			if (missed) {
-				offer_stim_text.setText('X')
-				// offer_rect.setAutoDraw(false)
-			}
-
-			offer_stim_text.setAutoDraw(true)
-			
-		}
-		// Make Decision (5s)
-		var decision_making_duration = 5
-		if (tp > orientation_screen_duration  && tp <= (orientation_screen_duration + decision_making_duration )){
-			if (!missed) {
-				accept_rect_stim.setAutoDraw(true)
-				accept_rect_stim.fillColor = new util.Color('black')
-				accept_rect_stim.lineColor = new util.Color('#A9A9A9')
-				accept_text_stim.setAutoDraw(true)
-				accept_text_stim.color = new util.Color('#A9A9A9')
-				
-				wait_rect_stim.setAutoDraw(true)
-				wait_rect_stim.fillColor = new util.Color('black')
-				wait_rect_stim.lineColor = new util.Color('#A9A9A9')
-				wait_text_stim.setAutoDraw(true)
-				wait_text_stim.color = new util.Color('#A9A9A9')
-			}
-		}
-
-		// Button Press ( 1000ms)
-		var button_press_duration = 1
-		if (tp > (
-			orientation_screen_duration + decision_making_duration
-		) && tp <= (
-				orientation_screen_duration + decision_making_duration +
-				button_press_duration
-			)) {
-			if (!pressed) {
-				accept_rect_stim.fillColor = new util.Color('white')
-				accept_rect_stim.lineColor = new util.Color('white')
-				accept_text_stim.color = new util.Color('black')
-				
-				wait_rect_stim.fillColor = new util.Color('white')
-				wait_rect_stim.lineColor = new util.Color('white')
-				wait_text_stim.color = new util.Color('black')
-			}
-			
-			// resp.clearEvents()
-			if (!pressed && !missed) {
-				let theseKeys = resp.getKeys({ keyList: keyList, waitRelease: false });
-				if (theseKeys.length > 0) {
-					resp.keys = theseKeys[0].name;  // just the last key pressed
-					resp.rt = theseKeys[0].rt;
-
-					pressed = true
-
-					if (resp.keys == LEFT_KEY) {
-						accepted = true
-						accept_rect_stim.fillColor = new util.Color(selectColor)
-						offer_rect.fillColor = new util.Color(selectColor)
-						offer_rect.opacity = 0.5
-
-						offer_stim_text.height += 0.02
-						offer_stim_text.width += 0.02
-						offer_stim_text.setAutoDraw(true)
-						accept_rect_stim.setAutoDraw(true)
-						offer_stim_text.color = new util.Color('white')
-						
-					}
-					if (resp.keys == RIGHT_KEY) {
-						waited = true
-						wait_rect_stim.lineColor = new util.Color(selectColor)
-
-
-						wait_rect_stim.fillColor = new util.Color(selectColor)
-						wait_rect_stim.height += 0.02
-						wait_rect_stim.width += 0.02
-
-						wait_text_stim.color = new util.Color('white')
-						// totalPoints = totalPoints + offer_rect.text.replace(' ', 'points')
-			
-					}
-					
-				} 
-			}
-			
-			
-		}
-
-		// Break ( 1000ms)
-		var break_duration = 1
-		if (tp > (
-			orientation_screen_duration + decision_making_duration +
-			button_press_duration
-		) && tp <= (
-			orientation_screen_duration + decision_making_duration + 
-			button_press_duration +break_duration )) {
-			// console.log('Break Screen')
-			// console.log(resp.keys)
-
-			accept_rect_stim.setAutoDraw(false)
-			accept_text_stim.setAutoDraw(false)
-			
-			wait_rect_stim.setAutoDraw(false)
-			wait_text_stim.setAutoDraw(false)
-
-			if (waited) {
-				offer_stim_text.setAutoDraw(false)
-			} else {
-				offer_stim_text.setAutoDraw(true)
-			}
-
-			if (!pressed) {
-				missed = true
-				
-				offer_stim_text.setText('0')
-				// Show the text only once in that timepoint only
-				// if (!showed_missed) {
-				// 	// missed_timepoint.push(time_point)
-
-				// 	offer_stim_text.setText('Miss - Press Earlier \nOffer Lost')
-				// 	offer_stim_text.color = new util.Color('white')
-				// 	offer_stim_text.setAutoDraw(true)
-				// 	showed_missed = true
-				// }
-			}
-
-			// Save Data for each timepoint during the break phase
-			if ( (typeof resp.keys !== 'undefined') && !saved ) {  // we had a response
-				// psychoJS.experiment.addData('resp.rt', resp.rt);
-				psychoJS.experiment.addData(`resp_${time_point + 1}`, key_map[resp.keys]);
-				
-				psychoJS.experiment.addData(`rt_${time_point + 1}`, resp.rt);
-				resp.keys = undefined;
-				resp.rt = undefined;
-				saved = true
-				resp.stop();
-			}
-
-		}
-		//  time point end
-		// timepoint time should never go aboive 4.5 seconds
-		if (tp > (orientation_screen_duration + decision_making_duration + 
-			button_press_duration +break_duration ))  { 
-			
-			// console.log(`Finished timepoint ${time_point}`)
-			
-			// psychoJS.experiment.addData('timepoint_', time_point);
-			pressed = false
-
-			timePointClock.reset();
-			psychoJS.eventManager.clearEvents()
-			resp.clearEvents();
-			time_point++;
-		}
-
-		// When to Flip Screen
-		if (t >= 0.1 ) {
+		// Get User Input
+		if (t >= 0.5 && resp.status === PsychoJS.Status.NOT_STARTED) {
 			// keep track of start time/frame for later
 			resp.tStart = t;  // (not accounting for frame time here)
 			resp.frameNStart = frameN;  // exact frame index
@@ -1342,63 +1254,272 @@ function trialRoutineEachFrame(trials) {
 			psychoJS.window.callOnFlip(function () { resp.clearEvents(); });
 		}
 
-		// Went through all timepoints. Go to next Trial Routine
-		// / If accepted, go to the next trial
-		if ((time_point == trial_length) || accepted || missed || offer_withdrew) {
-			continueRoutine = false
+		let theseKeys = resp.getKeys({ keyList: keyList, waitRelease: false });
+		if (!feedback_break && theseKeys.length > 0) {
+			resp.keys = theseKeys[0].name;  // just the last key pressed
+			resp.rt = theseKeys[0].rt;
 
-			// Show Points Reset so next routine can show points won and ISI
-			endClock.reset()
-			t_end = 0
-			t_isi = 0
+			pressed = true
 
-			// remove the cents symbolc of the text
-			current_point = offer_stim_text.getText().split(' ')[0]
-			if (current_point == 'X') {
-				current_point = 0
-			}
-			//  to be displayed at trial end
-			
-			if (missed) {
-				points_fixation_stim.color = new util.Color('red')
-				points_fixation_stim.setText(`End Up Alone.`)
-			}
-			else if (offer_withdrew) {
-				points_fixation_stim.color = new util.Color('red')
-				points_fixation_stim.setText(`End Up Alone.`)
-			}
-			else {
-				points_fixation_stim.color = new util.Color('green')
-				points_fixation_stim.setText(`You Have A date!`)
-				totalDates++
-			}
-			
-			psychoJS.experiment.addData(`points_won`, current_point);
+			if (resp.keys == LEFT_KEY) {
+				console.log('Pressed Left')
+				accepted = true
+				accept_rect_stim.fillColor = new util.Color(selectColor)
+				accept_rect_stim.lineColor = new util.Color(selectColor)
+				accept_rect_stim.height += 0.02
+				accept_rect_stim.width += 0.02
 
-			for (var j = 0; j < trial_length; j++){
-				profile_icon[trial_length][j].setAutoDraw(false)
-				profile_icon_filled[trial_length][j].setAutoDraw(false)
+				accept_text_stim.color = new util.Color('white')
+				continueRoutine = true
+				
+			} else if (resp.keys == RIGHT_KEY) {
+				console.log('Pressed Right')
+				waited = true
+				wait_rect_stim.fillColor = new util.Color(selectColor)
+				wait_rect_stim.lineColor = new util.Color(selectColor)
+				wait_rect_stim.height += 0.02
+				wait_rect_stim.width += 0.02
 
-				if (trial_length == 4) {
-					person_texts[j+ 2].setAutoDraw(false)
-				} else {
-					person_texts[j].setAutoDraw(false)
+				wait_text_stim.color = new util.Color('white')
+
+				if ( (time_point + 1) == ts_high) {
+					offer_stim_text.setText(highOfferVal + '% Match')
+				}
+
+				if ((time_point + 1) == ts_withdrawal) {
+					offer_withdrew = true;
+					offer_stim_text.setText(0 + '% Match')
+					// offer_stim_text.setText('Offer revoked')
 				}
 			}
-
-			currentTrialNumber.setAutoDraw(false)
-			totalPointsTracker.setAutoDraw(false)
-			offer_stim_text.setAutoDraw(false)
-			offer_rect.setAutoDraw(false)
-
-			accept_rect_stim.setAutoDraw(false)
-			accept_text_stim.setAutoDraw(false)
+			time_point++;
+			draw_profile_icons()
+			draw_profile_outline()
 			
-			wait_rect_stim.setAutoDraw(false)
-			wait_text_stim.setAutoDraw(false)
 
-			
+			// small break
+			feedback_break = true
+			feedback_break_time_end = t + .5
+			console.log(time_point)
 		}
+
+		if (feedback_break) {
+			if (t <= feedback_break_time_end) {
+			// meants the time within the 500ms fb
+			} else {
+				feedback_break = false
+				reset_rectangle_stims()
+			}
+		}
+
+		// // Withdraw or High offer depedning on schedule
+		// if (waited) {
+		// 	if ( (time_point + 1) == ts_high) {
+		// 		offer_stim_text.setText(highOfferVal + '% Match')
+		// 	}
+		// 	if ((time_point + 1) == ts_withdrawal) {
+		// 		offer_withdrew = true;
+		// 		offer_stim_text.setText(0 + '% Match')
+		// 		// offer_stim_text.setText('Offer revoked')
+		// 	}
+		// }
+
+		// // Orientation Screen ( 1000ms)
+		// var orientation_screen_duration = 1
+		// if (tp > 0  && tp <= orientation_screen_duration) {
+		// 	// console.log('Orientation Screen')
+		// 	psychoJS.eventManager.clearEvents()
+		// 	saved = false
+			
+		// 	// psychoJS.eventManager.clearEvents()
+		// 	// 
+		// 	offer_rect.fillColor = new util.Color('white')
+		// 	offer_rect.opacity = 1
+		// 	offer_stim_text.color = new util.Color('white')
+
+		// 	wait_rect_stim.height = 0.09
+		// 	wait_rect_stim.width = 0.12
+
+		// 	offer_stim_text.height = 0.07
+		// 	if (time_point == 0 || waited){
+		// 		// offer_rect.setAutoDraw(true)
+		// 	}
+	
+		// 	if (missed) {
+		// 		offer_stim_text.setText('X')
+		// 		// offer_rect.setAutoDraw(false)
+		// 	}
+
+		// 	offer_stim_text.setAutoDraw(true)
+			
+		// }
+		// // Make Decision (5s)
+		// var decision_making_duration = 5
+		// if (tp > orientation_screen_duration  && tp <= (orientation_screen_duration + decision_making_duration )){
+		// 	if (!missed) {
+		// 		accept_rect_stim.setAutoDraw(true)
+		// 		accept_rect_stim.fillColor = new util.Color('black')
+		// 		accept_rect_stim.lineColor = new util.Color('#A9A9A9')
+		// 		accept_text_stim.setAutoDraw(true)
+		// 		accept_text_stim.color = new util.Color('#A9A9A9')
+				
+		// 		wait_rect_stim.setAutoDraw(true)
+		// 		wait_rect_stim.fillColor = new util.Color('black')
+		// 		wait_rect_stim.lineColor = new util.Color('#A9A9A9')
+		// 		wait_text_stim.setAutoDraw(true)
+		// 		wait_text_stim.color = new util.Color('#A9A9A9')
+		// 	}
+		// }
+
+		// // Button Press ( 1000ms)
+		// var button_press_duration = 1
+		// if (tp > (
+		// 	orientation_screen_duration + decision_making_duration
+		// ) && tp <= (
+		// 		orientation_screen_duration + decision_making_duration +
+		// 		button_press_duration
+		// 	)) {
+		// 	if (!pressed) {
+		// 		accept_rect_stim.fillColor = new util.Color('white')
+		// 		accept_rect_stim.lineColor = new util.Color('white')
+		// 		accept_text_stim.color = new util.Color('black')
+				
+		// 		wait_rect_stim.fillColor = new util.Color('white')
+		// 		wait_rect_stim.lineColor = new util.Color('white')
+		// 		wait_text_stim.color = new util.Color('black')
+		// 	}
+			
+		// 	// resp.clearEvents()
+		// 	if (!pressed && !missed) {
+		// 		let theseKeys = resp.getKeys({ keyList: keyList, waitRelease: false });
+		// 		if (theseKeys.length > 0) {
+		// 			resp.keys = theseKeys[0].name;  // just the last key pressed
+		// 			resp.rt = theseKeys[0].rt;
+
+		// 			pressed = true
+
+		// 			if (resp.keys == LEFT_KEY) {
+		// 				accepted = true
+		// 				accept_rect_stim.fillColor = new util.Color(selectColor)
+		// 				offer_rect.fillColor = new util.Color(selectColor)
+		// 				offer_rect.opacity = 0.5
+
+		// 				offer_stim_text.height += 0.02
+		// 				offer_stim_text.width += 0.02
+		// 				offer_stim_text.setAutoDraw(true)
+		// 				accept_rect_stim.setAutoDraw(true)
+		// 				offer_stim_text.color = new util.Color('white')
+						
+		// 			}
+		// 			if (resp.keys == RIGHT_KEY) {
+		// 				waited = true
+		// 				wait_rect_stim.lineColor = new util.Color(selectColor)
+
+
+		// 				wait_rect_stim.fillColor = new util.Color(selectColor)
+		// 				wait_rect_stim.height += 0.02
+		// 				wait_rect_stim.width += 0.02
+
+		// 				wait_text_stim.color = new util.Color('white')
+
+		// 			}
+					
+		// 		} 
+		// 	}
+		// }
+
+		// // Break ( 1000ms)
+		// var break_duration = 1
+		// if (tp > (
+		// 	orientation_screen_duration + decision_making_duration +
+		// 	button_press_duration
+		// ) && tp <= (
+		// 	orientation_screen_duration + decision_making_duration + 
+		// 	button_press_duration + break_duration )) {
+		// 	// console.log('Break Screen')
+		// 	// console.log(resp.keys)
+
+		// 	accept_rect_stim.setAutoDraw(false)
+		// 	accept_text_stim.setAutoDraw(false)
+			
+		// 	wait_rect_stim.setAutoDraw(false)
+		// 	wait_text_stim.setAutoDraw(false)
+
+		// 	if (waited) {
+		// 		offer_stim_text.setAutoDraw(false)
+		// 	} else {
+		// 		offer_stim_text.setAutoDraw(true)
+		// 	}
+
+		// 	if (!pressed) {
+		// 		missed = true
+		// 		offer_stim_text.setText('0')
+		// 	}
+
+		// 	// Save Data for each timepoint during the break phase
+		// 	if ( (typeof resp.keys !== 'undefined') && !saved ) {  // we had a response
+		// 		// psychoJS.experiment.addData('resp.rt', resp.rt);
+		// 		psychoJS.experiment.addData(`resp_${time_point + 1}`, key_map[resp.keys]);
+				
+		// 		psychoJS.experiment.addData(`rt_${time_point + 1}`, resp.rt);
+		// 		resp.keys = undefined;
+		// 		resp.rt = undefined;
+		// 		saved = true
+		// 		resp.stop();
+		// 	}
+
+		// }
+		// //  time point end
+		// // timepoint time should never go aboive 4.5 seconds
+		// if (tp > (orientation_screen_duration + decision_making_duration + 
+		// 	button_press_duration +break_duration ))  { 
+			
+		// 	// console.log(`Finished timepoint ${time_point}`)
+			
+		// 	// psychoJS.experiment.addData('timepoint_', time_point);
+		// 	pressed = false
+
+		// 	timePointClock.reset();
+		// 	psychoJS.eventManager.clearEvents()
+		// 	resp.clearEvents();
+		// 	time_point++;
+		// }
+
+		// // Went through all timepoints. Go to next Trial Routine
+		// // / If accepted, go to the next trial
+		// if ((time_point == trial_length) || accepted || missed || offer_withdrew) {
+		// 	continueRoutine = false
+
+		// 	// Show Points Reset so next routine can show points won and ISI
+		// 	endClock.reset()
+		// 	t_end = 0
+		// 	t_isi = 0
+
+		// 	// remove the cents symbolc of the text
+		// 	current_point = offer_stim_text.getText().split(' ')[0]
+		// 	if (current_point == 'X') {
+		// 		current_point = 0
+		// 	}
+		// 	//  to be displayed at trial end
+			
+		// 	if (missed) {
+		// 		points_fixation_stim.color = new util.Color('red')
+		// 		points_fixation_stim.setText(`End Up Alone.`)
+		// 	}
+		// 	else if (offer_withdrew) {
+		// 		points_fixation_stim.color = new util.Color('red')
+		// 		points_fixation_stim.setText(`End Up Alone.`)
+		// 	}
+		// 	else {
+		// 		points_fixation_stim.color = new util.Color('green')
+		// 		points_fixation_stim.setText(`You Have A date!`)
+		// 		totalDates++
+		// 	}
+			
+		// 	psychoJS.experiment.addData(`points_won`, current_point);
+
+		// 	
+		// }
 
 		// check for quit (typically the Esc key)
 		if (psychoJS.eventManager.getKeys({keyList:['escape']}).length > 0) {
@@ -1406,12 +1527,37 @@ function trialRoutineEachFrame(trials) {
 		}
 
 		// check if the Routine should terminate
-		if (!continueRoutine) {  // a component has requested a forced-end of Routine
+		if (continueRoutine) {
+			return Scheduler.Event.FLIP_REPEAT;
+		}
+		else {
+			clear_stims()
 			return Scheduler.Event.NEXT;
 		}
+	};
+}
 
-		// refresh the screen if continuing
-		if (continueRoutine) {
+/**
+ * Show Trial Result Routine
+ * @param {*} trials trial snapshot
+ */
+function trialResult(trials) {
+	return function () {
+		//------Loop for each frame of Routine 'trial'-------
+		let continueRoutine = true; // until we're told otherwise
+
+		if (points_fixation_stim.status == PsychoJS.Status.NOT_STARTED) {
+			points_fixation_stim.setAutoDraw(true)
+		}
+
+		
+		// check for quit (typically the Esc key)
+		if (psychoJS.eventManager.getKeys({keyList:['escape']}).length > 0) {
+			return quitPsychoJS('The [Escape] key was pressed. Goodbye!', false);
+		}
+
+		// check if the Routine should terminate
+		if (continueRoutine) { 
 			return Scheduler.Event.FLIP_REPEAT;
 		}
 		else {
@@ -1452,11 +1598,6 @@ function trialIsi(trials) {
 		}
 
 		// check if the Routine should terminate
-		if (!continueRoutine) {  // a component has requested a forced-end of Routine
-			return Scheduler.Event.NEXT;
-		}
-
-		// refresh the screen if continuing
 		if (continueRoutine) { 
 			return Scheduler.Event.FLIP_REPEAT;
 		}
