@@ -1022,7 +1022,7 @@ function trialsLoopBegin(thisScheduler) {
 	resp.stop()
 	resp.clearEvents()
 	resp.status = PsychoJS.Status.NOT_STARTED
-	
+
 	trials = new TrialHandler({
 		psychoJS: psychoJS,
 		nReps: 1, method: TrialHandler.Method.SEQUENTIAL,
@@ -1407,7 +1407,7 @@ function trialRoutineEachFrame(trials) {
 			if (points_fixation_stim.status == PsychoJS.Status.NOT_STARTED) {
 				clear_stims()
 				points_fixation_stim.color = new util.Color('red')
-				points_fixation_stim.setText(`End up Alone.`)
+				points_fixation_stim.setText(`END UP ALONE.`)
 				points_fixation_stim.setAutoDraw(true)
 
 				console.log('no more dates')
