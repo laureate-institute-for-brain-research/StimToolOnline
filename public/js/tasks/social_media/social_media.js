@@ -2923,7 +2923,7 @@ function thanksRoutineBegin(trials) {
 		// keep track of which components have finished
 
 		// Show Final Points and money earned
-		thanksText.setText(`This is the end of the task run.\n\n\n Total Points Earned: ${totalPoints} \n\n Total Cents Earned: ${totalPoints / 10 } =  $${ (totalPoints / 1000).toFixed(2)}`)
+		thanksText.setText(`This is the end of the task.`)
 		
 		thanksComponents = [];
 		thanksComponents.push(thanksText);
