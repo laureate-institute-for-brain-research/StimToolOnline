@@ -526,7 +526,7 @@ function experimentInit() {
 	reject_text_stim = new visual.TextStim({
 		win: psychoJS.window,
 		name: 'reject_stim',
-		text: 'Reject',
+		text: 'Wait',
 		font: 'Arial',
 		units: 'norm',
 		pos: [ 0.3, - 0.3], height: 0.05, wrapWidth: undefined, ori: 0,
@@ -1429,7 +1429,7 @@ function trialIsi(trials) {
 
 		}
 
-		if (t_end >= (fb_duration + (trial_isi / 1000))) {
+		if (t_end >= ((trial_isi / 1000))) {
 			continueRoutine = false
 			points_fixation_stim.setAutoDraw(false)
 			points_fixation_stim.status = PsychoJS.Status.NOT_STARTED
