@@ -1292,7 +1292,7 @@ function trialRoutineEachFrame(trials) {
 
 				reject_text_stim.color = new util.Color('white')
 
-				if ( (time_point + 1) == ts_high) {
+				if ((time_point + 1) == ts_high) {
 					offer_stim_text.setText(highOfferVal + '% Match')
 				}
 
@@ -1307,6 +1307,14 @@ function trialRoutineEachFrame(trials) {
 				}
 			}
 			time_point++;
+
+			// Update 08/05/2022 - last person should only allo the accept button
+			if (time_point == (trial_length - 1)) {
+				keyList = [LEFT_KEY]
+				reject_rect_stim.setAutoDraw(false)
+				reject_text_stim.setAutoDraw(false)
+			} 
+
 			if (time_point != trial_length) {
 				draw_profile_icons()
 				draw_profile_outline()
