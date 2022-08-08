@@ -1442,7 +1442,9 @@ function instructSlideRoutineEachFrame(trials, slides) {
 			console.log('setting new image', instruct_slide, 'index:',trials.thisIndex, 'Audio: ',audio_path)
 			slideStim.setImage(instruct_slide)
 			newSlide = false
+
 			if (audio_path && !instruct_prev_pressed) {
+				
 				if (track && (track.status != PsychoJS.Status.NOT_STARTED) ) {
 					track.stop()
 					track = new Sound({
@@ -1623,6 +1625,12 @@ function trials_role_reversalBegin(thisScheduler) {
 function instructRoutineEnd(trials) {
 	return function () {
 		//------Ending Routine 'instruct'-------
+		if (audio_path && track) {
+			// Change the track status if it was played
+			track.stop()
+			track.status = PsychoJS.Status.NOT_STARTED
+		}
+		track = false
 		for (const thisComponent of instructComponents) {
 			if (typeof thisComponent.setAutoDraw === 'function') {
 				thisComponent.setAutoDraw(false);
@@ -1805,6 +1813,7 @@ function trialRoutineBegin(trials) {
 
 		if (track && (track.status != PsychoJS.Status.STARTED)) {
 			track.stop()
+			track.status = PsychoJS.Status.STARTED
 		}
 
 
