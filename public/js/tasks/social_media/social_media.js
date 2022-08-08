@@ -117,14 +117,11 @@ window.onload = function () {
 							if (obj.audio_path){
 								resources.push({ name: obj.audio_path, path: obj.audio_path })
 							}
-							
 						}
 						console.log(resources)
-
 						resolve(data)
 					}
 				})
-				
 			})
 		})
 	
