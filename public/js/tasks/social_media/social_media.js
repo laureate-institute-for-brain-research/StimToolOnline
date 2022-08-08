@@ -1417,6 +1417,7 @@ var instructComponents;
 
 var continueRoutine;
 var newSlide;
+var instruct_prev_pressed = false
 function instructSlideRoutineEachFrame(trials, slides) {
 	return function () {
 		//------Loop for each frame of Routine 'instruct'-------
@@ -1441,7 +1442,7 @@ function instructSlideRoutineEachFrame(trials, slides) {
 			console.log('setting new image', instruct_slide, 'index:',trials.thisIndex, 'Audio: ',audio_path)
 			slideStim.setImage(instruct_slide)
 			newSlide = false
-			if (audio_path) {
+			if (audio_path && !instruct_prev_pressed) {
 				if (track && (track.status != PsychoJS.Status.NOT_STARTED) ) {
 					track.stop()
 					track = new Sound({
@@ -1498,6 +1499,7 @@ function instructSlideRoutineEachFrame(trials, slides) {
 
 			if (theseKeys.length > 0 && theseKeys[0].name == 'right') {  // at least one key was pressed
 				// Verify if the audio has beend played
+				instruct_prev_pressed = false
 				if (audio_path && (t <= time_audio_end)) {
 					return Scheduler.Event.FLIP_REPEAT;
 				}
@@ -1514,6 +1516,7 @@ function instructSlideRoutineEachFrame(trials, slides) {
 			}
 			if (theseKeys.length > 0 && theseKeys[0].name == 'left') {
 				// Presse the back button
+				instruct_prev_pressed = true
 				// Verify if the audio has beend played
 				if (audio_path && (t <= time_audio_end)) {
 					return Scheduler.Event.FLIP_REPEAT;
@@ -3051,7 +3054,8 @@ function instructRoutineBegin(trials) {
 	
 		instructComponents.push(ready);
 
-		console.log("InstructionSlides Index: ",trials.thisIndex)
+		console.log("InstructionSlides Index: ", trials.thisIndex)
+		instruct_prev_pressed = false
 
 		if (audio_path) {
 			track = new Sound({
