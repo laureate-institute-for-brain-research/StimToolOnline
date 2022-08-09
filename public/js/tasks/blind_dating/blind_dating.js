@@ -1415,8 +1415,6 @@ function trialRoutineEachFrame(trials) {
 			}
 		}
 
-		
-
 		// check for quit (typically the Esc key)
 		if (psychoJS.eventManager.getKeys({keyList:['escape']}).length > 0) {
 			return quitPsychoJS('The [Escape] key was pressed. Goodbye!', false);
