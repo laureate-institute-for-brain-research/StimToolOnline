@@ -1,0 +1,5 @@
+﻿trial_number,tone,stim_path,stim_type,noise,response_duration
+1,high,/js/tasks/emotional_faces/media/faces/MC02_F4_MF_continua/MC02_Anger/MC02_Ang_075_.jpg,angry,none,2500
+2,low,/js/tasks/emotional_faces/media/faces/MC02_F4_MF_continua/MC02_Sadness/MC02_Sad_050_.jpg,sad,none,2500
+3,high,/js/tasks/emotional_faces/media/faces/MC03_F5_MO_continua/MC03_Anger/MC03_Ang_050_.jpg,angry,none,2500
+4,low,/js/tasks/emotional_faces/media/faces/MC03_F5_MO_continua/MC03_Sadness/MC03_Sad_050_.jpg,sad,none,2500
