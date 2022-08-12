@@ -1713,7 +1713,7 @@ function trialsLoopEnd() {
 function setupPosts(game_type) {
 	// Depending on the game_type, show the recangle Boxies
 	if (game_type == 'h6') {
-		var MAXPOST = 9
+		var MAXPOST = 8
 	} else {
 		var MAXPOST = 4
 	}

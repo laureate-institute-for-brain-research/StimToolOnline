@@ -70,13 +70,11 @@ var con = mysql.createConnection({
 //     api_secret: config.cloudinary_api_secret
 // });
 
-
 con.connect(function(err) {
     if (!err)
         logger.info('wave1 db is Connected');
     else
         logger.info('wave1 db connection err.');
-
 });
 
 
