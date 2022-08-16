@@ -1394,7 +1394,7 @@ function trialRoutineEachFrame(trials) {
 			if (points_fixation_stim.status == PsychoJS.Status.NOT_STARTED) {
 				clear_stims()
 				points_fixation_stim.color = new util.Color('#00fa40')
-				points_fixation_stim.setText(`You Have A date!`)
+				points_fixation_stim.setText(`YOU HAVE A DATE!`)
 				points_fixation_stim.setAutoDraw(true)
 
 				continueRoutine = false
