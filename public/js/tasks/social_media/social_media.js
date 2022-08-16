@@ -1990,7 +1990,7 @@ function trialRoleReversalRoutineBegin(trials) {
 		listTextStim.setAutoDraw(true)
 		profileStim.setAutoDraw(true)
 		profileTextStim.setAutoDraw(true)
-		profilePicRRStim.setAutoDraw(true)
+		profilePicStim.setAutoDraw(true)
 		moreStim.setAutoDraw(true)
 		moreTextStim.setAutoDraw(true)
 
@@ -2016,7 +2016,7 @@ function trialRoleReversalRoutineBegin(trials) {
 		questionText.setAutoDraw(true)
 		// beginButton.setAutoDraw(true)
 
-		profilePicRRPostStim.setAutoDraw(true)
+		profilePicPostStim.setAutoDraw(true)
 
 		// Prepare the posts
 		// Random Side
@@ -2031,8 +2031,8 @@ function trialRoleReversalRoutineBegin(trials) {
 		if (topic_side == 'LEFT') {
 			postStims[trial_num].profileRR_photo = new visual.ImageStim({
 				win : psychoJS.window,
-				name : `profile_picRR_post_${trial_num}`, units : 'norm', 
-				image : 'profile_picRR.png', mask : undefined,
+				name : `profile_pic_post_${trial_num}`, units : 'norm', 
+				image : 'profile_pic.png', mask : undefined,
 				ori: 0,
 				pos: [ post_stim_x_pos.left.profile_photo, postStims[trial_num].postphoto_y ], 
 				size: [0.07,0.09],
@@ -2102,8 +2102,8 @@ function trialRoleReversalRoutineBegin(trials) {
 			// Right Side
 			postStims[trial_num].profileRR_photo = new visual.ImageStim({
 				win : psychoJS.window,
-				name : `profile_picRR_post_${trial_num}`, units : 'norm', 
-				image : 'profile_picRR.png', mask : undefined,
+				name : `profile_pic_post_${trial_num}`, units : 'norm', 
+				image : 'profile_pic.png', mask : undefined,
 				ori: 0,
 				pos: [ post_stim_x_pos.right.profile_photo, postStims[trial_num].postphoto_y ], 
 				size: [0.07,0.09],
