@@ -99,7 +99,7 @@ window.onload = function () {
 						
 						var headerRows = allRows[0].split(',');
 
-						// console.log(headerRows)
+						// console.log(data)
 						
 						for (var i=1; i<allRows.length; i++) {
 							var obj = {};
@@ -109,12 +109,17 @@ window.onload = function () {
 								// if (headerRows[j] == " ") {
 								// 	console.log('empyt string')
 								// }
-								obj[headerRows[j]] = currentLine[j];
+								obj[headerRows[j]] = currentLine[j]
 							}
 							out.push(obj);
 
-							if (obj.instruct_slide != "" || obj.instruct_slide != undefined ) resources.push({ name: obj.instruct_slide, path: obj.instruct_slide })
-							if (obj.audio_path != "" || obj.audio_path != undefined ) resources.push({ name: obj.audio_path, path: obj.audio_path })
+							if (obj.instruct_slide && obj.instruct_slide != '\n'){
+								resources.push({ name: obj.instruct_slide, path: obj.instruct_slide })
+							}
+
+							if (obj.audio_path && obj.audio_path != '\n'){
+								resources.push({ name: obj.audio_path, path: obj.audio_path })
+							}
 						}
 						// console.log(out)
 						// console.log(resources)
@@ -687,10 +692,7 @@ function instruct_pagesLoopBegin(thisScheduler) {
 	return Scheduler.Event.NEXT;
 }
 
-var t;
-var tp;
-var frameN;
-var instructComponents;
+var time_audio_end;
 function instructRoutineBegin(trials) {
 	return function () {
 		//------Prepare to start Routine 'instruct'-------
@@ -707,14 +709,16 @@ function instructRoutineBegin(trials) {
 	
 		instructComponents.push(ready);
 
-		console.log("InstructionSlides Index: ",trials.thisIndex)
+		console.log("InstructionSlides Index: ", trials.thisIndex)
+		instruct_prev_pressed = false
 
 		if (audio_path) {
 			track = new Sound({
 				win: psychoJS.window,
 				value: audio_path
 			  });
-			// console.log(audio_path)
+			console.log(audio_path)
+			time_audio_end = t + track.getDuration()
 			track.setVolume(1.0);
 			track.play();
 		}
@@ -727,8 +731,14 @@ function instructRoutineBegin(trials) {
 	};
 }
 
+var t;
+var frameN;
+var instructComponents;
+
+
 var continueRoutine;
 var newSlide;
+var instruct_prev_pressed = false
 function instructSlideRoutineEachFrame(trials, slides) {
 	return function () {
 		//------Loop for each frame of Routine 'instruct'-------
@@ -748,10 +758,36 @@ function instructSlideRoutineEachFrame(trials, slides) {
 		}
 
 		// New Slide Call, set it after pressing key
+		// console.log(track.status)
 		if (newSlide) {
-			console.log('setting new image', instruct_slide, 'index:',trials.thisIndex)
+			console.log('setting new image', instruct_slide, 'index:',trials.thisIndex, 'Audio: ',audio_path)
 			slideStim.setImage(instruct_slide)
 			newSlide = false
+
+			if (audio_path && !instruct_prev_pressed) {
+				
+				if (track && (track.status != PsychoJS.Status.NOT_STARTED) ) {
+					track.stop()
+					track = new Sound({
+						win: psychoJS.window,
+						value: audio_path
+					});
+					time_audio_end = t + track.getDuration()
+					// console.log(audio_path)
+					track.setVolume(1.0);
+					track.play();
+				} else {
+					track = new Sound({
+						win: psychoJS.window,
+						value: audio_path
+					});
+					time_audio_end = t + track.getDuration()
+					// console.log(audio_path)
+					track.setVolume(1.0);
+					track.play();
+				}
+			}
+				
 		}
 		// *ready* updates
 		if (t >= 0 && ready.status === PsychoJS.Status.NOT_STARTED) {
@@ -766,9 +802,31 @@ function instructSlideRoutineEachFrame(trials, slides) {
 		}
 
 		if (ready.status === PsychoJS.Status.STARTED) {
-			let theseKeys = ready.getKeys({ keyList: ['right', 'left'], waitRelease: false });
+
+			let theseKeys = ready.getKeys({ keyList: ['right', 'left', 'z'], waitRelease: false });
+
 			
+			// Force Progression
+			if (theseKeys.length > 0 && theseKeys[0].name == 'z') {  // at least one key was pressed
+
+				slides.thisIndex++ // incremenet the index
+				if (slides.thisIndex >= slides.nTotal) {
+					// if we reached here, it means we reached the last and we should move on.
+					continueRoutine = false 
+				}
+				trials = slides.getSnapshot() // get new snapshot after incrementing index
+				psychoJS.importAttributes(trials.getCurrentTrial()); // import the attributes to main class
+				//console.log(trials)
+				newSlide = true
+			}
+
 			if (theseKeys.length > 0 && theseKeys[0].name == 'right') {  // at least one key was pressed
+				// Verify if the audio has beend played
+				instruct_prev_pressed = false
+				if (audio_path && (t <= time_audio_end)) {
+					return Scheduler.Event.FLIP_REPEAT;
+				}
+				
 				slides.thisIndex++ // incremenet the index
 				if (slides.thisIndex >= slides.nTotal) {
 					// if we reached here, it means we reached the last and we should move on.
@@ -781,6 +839,11 @@ function instructSlideRoutineEachFrame(trials, slides) {
 			}
 			if (theseKeys.length > 0 && theseKeys[0].name == 'left') {
 				// Presse the back button
+				instruct_prev_pressed = true
+				// Verify if the audio has beend played
+				if (audio_path && (t <= time_audio_end)) {
+					return Scheduler.Event.FLIP_REPEAT;
+				}
 				slides.thisIndex-- // decremenet the index
 				if (slides.thisIndex < 0) {
 					// If the index is 0, that means we reached the very first slide
@@ -824,6 +887,12 @@ function instructSlideRoutineEachFrame(trials, slides) {
 function instructRoutineEnd(trials) {
 	return function () {
 		//------Ending Routine 'instruct'-------
+		if (audio_path && track) {
+			// Change the track status if it was played
+			track.stop()
+			track.status = PsychoJS.Status.NOT_STARTED
+		}
+		track = false
 		for (const thisComponent of instructComponents) {
 			if (typeof thisComponent.setAutoDraw === 'function') {
 				thisComponent.setAutoDraw(false);
