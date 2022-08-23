@@ -242,9 +242,6 @@ var resources = [
 	{ name: 'female.png', path: '/js/tasks/blind_dating/media/female.png'}
 ]
 
-
-
-
 var frameDur;
 function updateInfo() {
 	expInfo.date = util.MonotonicClock.getDateStr();  // add a simple timestamp
@@ -1151,6 +1148,7 @@ var saved;
 var globalTrialNumber = 0;
 var starting_index = 0
 var lastTimePoint;
+var tp;
 function trialRoutineBegin(trials) {
 	return function () {
 		//------Prepare to start Routine 'trial'-------
@@ -1545,7 +1543,6 @@ function trialIsi(trials) {
 	return function () {
 		//------Loop for each frame of Routine 'trial'-------
 		let continueRoutine = true; // until we're told otherwise	
-		
 	
 		// get current time
 		t_end = endClock.getTime();
