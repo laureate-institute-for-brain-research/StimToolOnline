@@ -114,8 +114,8 @@ window.onload = function () {
 							}
 							out.push(obj);
 
-							if (obj.instruct_slide != "" || obj.instruct_slide != undefined ) resources.push({ name: obj.instruct_slide, path: obj.instruct_slide })
-							if (obj.audio_path != "" || obj.audio_path != undefined ) resources.push({ name: obj.audio_path, path: obj.audio_path })
+							if (obj.instruct_slide) resources.push({ name: obj.instruct_slide, path: obj.instruct_slide })
+							if (obj.audio_path) resources.push({ name: obj.audio_path, path: obj.audio_path })
 						}
 						// console.log(out)
 						// console.log(resources)
@@ -293,7 +293,7 @@ var resources = [
 	{ name: 'practice_schedule.csv', path: '/js/tasks/emotional_faces/practice_schedule.csv'},
 	{ name: 'user.png', path: '/js/tasks/emotional_faces/media/user.png' },
 	{ name: 'user_filled.png', path: '/js/tasks/emotional_faces/media/user_filled.png'},
-	{ name: 'ready.jpeg', path: '/js/tasks/emotional_faces/media/instructions/Slide9.jpeg'},
+	{ name: 'ready.jpeg', path: '/js/tasks/emotional_faces/media/instructions/Slide10.jpeg'},
 	{ name: 'male.png', path: '/js/tasks/emotional_faces/media/male.png' },
 	{ name: 'female.png', path: '/js/tasks/emotional_faces/media/female.png' },
 	{ name: 'high_tone.mp3', path: '/js/tasks/emotional_faces/media/tones/high_tone.mp3' },
@@ -322,7 +322,9 @@ function updateInfo() {
 	return Scheduler.Event.NEXT;
 }
 var boxColor = '#0074B7'
-var selectColor = '#0074B7'
+var selectColor = '#FFFFFF'
+const angryColor = '#ff0015'
+const sadColor = '#83acdd'
 
 var question_data;
 var desiredGender = 'male'; // default gender is male
@@ -442,19 +444,19 @@ function experimentInit() {
 		text: 'Angry',
 		font: 'Arial',
 		units: 'norm',
-		pos: [-0.3, -0.3], height: 0.05, wrapWidth: undefined, ori: 0,
-		color: new util.Color('white'), opacity: 1,
+		pos: [-0.3, 0], height: 0.09, wrapWidth: undefined, ori: 0,
+		color: new util.Color(angryColor), opacity: 1,
 		depth: 0.0
 	});
 
 	left_rect = new visual.Rect({
 		win: psychoJS.window,
 		name: 'left_rect',
-		width: 0.14,
+		width: 0.16,
 		height: 0.09,
 		lineWidth: 3.5,
 		units: 'norm',
-		pos: [-0.3, -0.3 ], ori: 0,
+		pos: [-0.3, 0 ], ori: 0,
 		lineColor: new util.Color('white'), opacity: 1,
 		depth: 0.0
 	});
@@ -465,19 +467,19 @@ function experimentInit() {
 		text: 'Sad',
 		font: 'Arial',
 		units: 'norm',
-		pos: [ 0.3, - 0.3], height: 0.05, wrapWidth: undefined, ori: 0,
-		color: new util.Color('white'), opacity: 1,
+		pos: [ 0.3, 0], height: 0.09, wrapWidth: undefined, ori: 0,
+		color: new util.Color(sadColor), opacity: 1,
 		depth: 0.0
 	});
 
 	right_rect = new visual.Rect({
 		win: psychoJS.window,
 		name: 'right_rect',
-		width: 0.12,
+		width: 0.16,
 		height: 0.09,
 		lineWidth: 3.5,
 		units: 'norm',
-		pos: [ 0.3, -0.3 ], ori: 0,
+		pos: [ 0.3, 0 ], ori: 0,
 		lineColor: new util.Color('white'), opacity: 1,
 		depth: 0.0
 	});
@@ -996,6 +998,7 @@ var high_tone;
 var low_tone;
 var tone_sound;
 var stim_image;
+var too_slow;
 
 function trialRoutineBegin(trials) {
 	return function () {
@@ -1005,6 +1008,8 @@ function trialRoutineBegin(trials) {
 		trialClock.reset(); // clock
 		toneClock.reset(); // toneclock
 		frameN = -1;
+
+		
 
 		// Set High or Low Tone
 		if (tone == 'high') {
@@ -1034,6 +1039,8 @@ function trialRoutineBegin(trials) {
 	
 		resp.keys = undefined;
 		resp.rt = undefined;
+		pressed = false;
+		too_slow = false;
 	
 		return Scheduler.Event.NEXT;
 	};
@@ -1120,6 +1127,20 @@ function trialRoutineShowStim(trials) {
 	};
 }
 
+/**
+ * Returns Either correct or incorrect depending on response
+ * @param {*} response 
+ */
+function getResult(response) {
+	// stim_type is a global variable
+	if (response == LEFT_KEY && stim_type == 'angry') {
+		return 'correct'
+	} else if (response == RIGHT_KEY && stim_type == 'sad') {
+		return 'correct'
+	}
+	return 'incorrect'
+}
+
 
 var response;
 /**
@@ -1137,8 +1158,8 @@ function trialRoutineRespond(trials) {
 		t = respondClock.getTime();
 
 		// Draw the Texts
-		if (response_text.status == PsychoJS.Status.NOT_STARTED) {
-			response_text.setAutoDraw(true)
+		if (left_text.status == PsychoJS.Status.NOT_STARTED) {
+			// response_text.setAutoDraw(true)
 			left_text.setAutoDraw(true)
 			right_text.setAutoDraw(true)
 		}
@@ -1188,13 +1209,22 @@ function trialRoutineRespond(trials) {
 			// Save Data on each Press
 			psychoJS.experiment.addData(`resp`, key_map[resp.keys]);
 			psychoJS.experiment.addData(`rt`, resp.rt);
-			psychoJS.experiment.addData(`result`, response );
+			psychoJS.experiment.addData(`result`, getResult(key_map[resp.keys]) );
 			resp.keys = undefined;
 			resp.rt = undefined;
+
+			// If there is response_duration is false, then just go to
+			// the next trial
+			if (response_duration == 'false') {
+				continueRoutine = false
+			}
 		}
 
 		// Go to Next Routine After the allowed duration
-		if (t >= response_duration) {
+		if (response_duration != 'false' && t >= response_duration) {
+
+			// Set too_slow flag to true if they never pressed the a key
+			if (!pressed) too_slow = true
 			continueRoutine = false
 		}
 
@@ -1220,6 +1250,8 @@ function trialRoutineRespond(trials) {
 			right_text.status = PsychoJS.Status.NOT_STARTED
 			right_rect.setAutoDraw(false)
 			right_rect.status = PsychoJS.Status.NOT_STARTED
+
+			endClock.reset()
 			return Scheduler.Event.NEXT;
 		}
 	};
@@ -1306,6 +1338,12 @@ function trialRoutineEnd(trials) {
 		t = endClock.getTime()
 
 		if (points_fixation_stim.status == PsychoJS.Status.NOT_STARTED) {
+
+			if (too_slow) {
+				points_fixation_stim.setText('too slow')
+			} else {
+				points_fixation_stim.setText('+')
+			}
 			points_fixation_stim.setAutoDraw(true)
 			console.log('End Fixation')
 		}
