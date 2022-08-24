@@ -140,6 +140,8 @@ window.onload = function () {
 						
 						var headerRows = allRows[0].split(',');
 						
+						console.log('practice:',allRows)
+
 						for (var i=1; i<allRows.length; i++) {
 							var obj = {};
 							var currentLine = allRows[i].split(',');
@@ -288,7 +290,7 @@ dialogCancelScheduler.add(quitPsychoJS, '', false);
 
 // Add Slides to resources
 var resources = [
-	{ name: 'practice_schedule.xls', path: '/js/tasks/emotional_faces/practice_schedule.xls'},
+	{ name: 'practice_schedule.csv', path: '/js/tasks/emotional_faces/practice_schedule.csv'},
 	{ name: 'user.png', path: '/js/tasks/emotional_faces/media/user.png' },
 	{ name: 'user_filled.png', path: '/js/tasks/emotional_faces/media/user_filled.png'},
 	{ name: 'ready.jpeg', path: '/js/tasks/emotional_faces/media/instructions/Slide9.jpeg'},
@@ -332,46 +334,21 @@ var instrBelow;
 
 var ready;
 var trialClock;
-var fbClock;
+var toneClock;
+var stimClock;
+var respondClock;
+
+var stimImageStim;
+
+var response_text
+var left_text;
+var left_rect;
+var right_text;
+var right_rect;
 
 var offer_stim_text;
 var offer_rect;
 var profile_outline;
-
-
-
-var short_boxes_x_pos = [-0.33, -0.11, 0.11, 0.33]
-var long_boxes_x_pos = [
-	-0.77, -0.55,
-	short_boxes_x_pos[0], short_boxes_x_pos[1],
-	short_boxes_x_pos[2], short_boxes_x_pos[3],
-	0.55, 0.77
-]
-
-var person_texts = []
-var turn_texts = []
-
-var boxes_rect = {
-	4 : {},
-	8 : {}
-}
-
-// Male Profiles
-var male_profile_icon = {
-	4: {},
-	8: {}
-}
-// Female Profiles
-var female_profile_icon = {
-	4: {},
-	8: {}
-}
-var accept_text_stim;
-var accept_rect_stim;
-
-var reject_text_stim;
-var reject_rect_stim;
-
 
 var currentTrialNumber;
 
@@ -381,7 +358,6 @@ var totalPointsTracker;
 var points_fixation_stim;
 
 var t_end;
-var t_isi;
 
 var readyClock;
 var isiClock;
@@ -441,14 +417,17 @@ function experimentInit() {
 
 	// Initialize components for Routine "trial"
 	trialClock = new util.Clock();
+	toneClock = new util.Clock();
+	stimClock = new util.Clock();
+	respondClock = new util.Clock();
+	
 
-	fbClock = new util.Clock();
 
 	// Initial the Text Position of the Band
-	offer_stim_text = new visual.TextStim({
+	response_text = new visual.TextStim({
 		win: psychoJS.window,
-		name: 'offer',
-		text: 'X',
+		name: 'response_text',
+		text: 'Angry or Sad Face?',
 		font: 'Arial',
 		units: 'height',
 		pos: [0, 0.06], height: 0.07, wrapWidth: undefined, ori: 0,
@@ -456,129 +435,11 @@ function experimentInit() {
 		depth: 0.0
 	});
 
-	offer_rect= new visual.Rect({
+
+	left_text = new visual.TextStim({
 		win: psychoJS.window,
-		name: `offer_rect`,
-		width: 0.28,
-		height: 0.2,
-		lineWidth: 3.5,
-		units: 'norm',
-		pos: [0, 0.12], ori: 0,
-		lineColor: new util.Color('black'),
-		fillColor: new util.Color('white'),
-		opacity: 1,
-		depth: 0.0
-	});
-
-	profile_outline = new visual.Rect({
-		win: psychoJS.window,
-		name: `profile_outline`,
-		width: 0.2,
-		height: 0.3,
-		lineWidth: 3.5,
-		units: 'norm',
-		pos: [0, 0.12], ori: 0,
-		lineColor: new util.Color('yellow'),
-		fillColor: undefined,
-		opacity: 1,
-		depth: 0.0
-	});
-
-
-	// Make Short Boxes
-	for (var i = 0; i <= 3; i++){
-		// Profile Pic
-		male_profile_icon[4][i] = new visual.ImageStim({
-			win : psychoJS.window,
-			name : `male_profile_icon_${i}_outline`, units : 'norm', 
-			image : 'male.png', mask : undefined,
-			ori: 0,
-			pos: [short_boxes_x_pos[i], 0.5 ], 
-			size: [0.2,0.3],
-			color: undefined, opacity: 1,
-			flipHoriz : false, flipVert : false,
-			texRes : 128, interpolate : true, depth : 0
-		});
-
-		female_profile_icon[4][i] = new visual.ImageStim({
-			win : psychoJS.window,
-			name : `male_profile_icon_${i}_outline`, units : 'norm', 
-			image : 'female.png', mask : undefined,
-			ori: 0,
-			pos: [short_boxes_x_pos[i], 0.5 ], 
-			size: [0.2,0.3],
-			color: undefined, opacity: 1,
-			flipHoriz : false, flipVert : false,
-			texRes : 128, interpolate : true, depth : 0
-		});
-
-		// male_profile_icon_filled[4][i] = new visual.ImageStim({
-		// 	win : psychoJS.window,
-		// 	name : `male_profile_icon_${i}_outline`, units : 'norm', 
-		// 	image : 'user_filled.png', mask : undefined,
-		// 	ori: 0,
-		// 	pos: [short_boxes_x_pos[i], 0.5 ], 
-		// 	size: [0.2,0.3],
-		// 	color: undefined, opacity: 1,
-		// 	flipHoriz : false, flipVert : false,
-		// 	texRes : 128, interpolate : true, depth : 0
-		// });
-	}
-
-	// Make Long Boxes
-	for (var j = 0; j <= 7; j++){
-		// Profile Pic
-		male_profile_icon[8][j] = new visual.ImageStim({
-			win : psychoJS.window,
-			name : `male_profile_icon_${j}_outline`, units : 'norm', 
-			image : 'male.png', mask : undefined,
-			ori: 0,
-			pos: [long_boxes_x_pos[j], 0.5 ], 
-			size: [0.2,0.3],
-			color: undefined, opacity: 1,
-			flipHoriz : false, flipVert : false,
-			texRes : 128, interpolate : true, depth : 0
-		});
-
-		female_profile_icon[8][j] = new visual.ImageStim({
-			win : psychoJS.window,
-			name : `female_profile_icon_${j}_outline`, units : 'norm', 
-			image : 'female.png', mask : undefined,
-			ori: 0,
-			pos: [long_boxes_x_pos[j], 0.5 ], 
-			size: [0.2,0.3],
-			color: undefined, opacity: 1,
-			flipHoriz : false, flipVert : false,
-			texRes : 128, interpolate : true, depth : 0
-		});
-
-		person_texts.push(new visual.TextStim({
-			win: psychoJS.window,
-			name: `person_text_#${i + 1}`,
-			text: `Turn:\n${j + 1}`,
-			font: 'Arial',
-			units: 'norm',
-			pos: [long_boxes_x_pos[j], 0.72 ], height: 0.1, wrapWidth: undefined, ori: 0,
-			color: new util.Color('white'), opacity: 1,
-			depth: 0.0
-		}))
-
-		turn_texts.push(new visual.TextStim({
-			win: psychoJS.window,
-			name: `turn_text_#${i + 1}`,
-			text: `Turn`,
-			font: 'Arial',
-			units: 'norm',
-			pos: [long_boxes_x_pos[j], 0.81 ], height: 0.05, wrapWidth: undefined, ori: 0,
-			color: new util.Color('white'), opacity: 1,
-			depth: 0.0
-		}))
-	}
-
-	accept_text_stim = new visual.TextStim({
-		win: psychoJS.window,
-		name: 'accept_text',
-		text: 'Accept',
+		name: 'left_text',
+		text: 'Angry',
 		font: 'Arial',
 		units: 'norm',
 		pos: [-0.3, -0.3], height: 0.05, wrapWidth: undefined, ori: 0,
@@ -586,9 +447,9 @@ function experimentInit() {
 		depth: 0.0
 	});
 
-	accept_rect_stim = new visual.Rect({
+	left_rect = new visual.Rect({
 		win: psychoJS.window,
-		name: 'accept_rect',
+		name: 'left_rect',
 		width: 0.14,
 		height: 0.09,
 		lineWidth: 3.5,
@@ -598,10 +459,10 @@ function experimentInit() {
 		depth: 0.0
 	});
 
-	reject_text_stim = new visual.TextStim({
+	right_text = new visual.TextStim({
 		win: psychoJS.window,
-		name: 'reject_stim',
-		text: 'Wait',
+		name: 'right_text',
+		text: 'Sad',
 		font: 'Arial',
 		units: 'norm',
 		pos: [ 0.3, - 0.3], height: 0.05, wrapWidth: undefined, ori: 0,
@@ -609,9 +470,9 @@ function experimentInit() {
 		depth: 0.0
 	});
 
-	reject_rect_stim = new visual.Rect({
+	right_rect = new visual.Rect({
 		win: psychoJS.window,
-		name: 'wait_rect',
+		name: 'right_rect',
 		width: 0.12,
 		height: 0.09,
 		lineWidth: 3.5,
@@ -1038,7 +899,7 @@ function practiceTrialsLoopBegin(thisScheduler) {
 		psychoJS: psychoJS,
 		nReps: 1, method: TrialHandler.Method.SEQUENTIAL,
 		extraInfo: expInfo, originPath: undefined,
-		trialList: 'practice_schedule.xls',
+		trialList: 'practice_schedule.csv',
 		seed: undefined, name: 'trials'
 	});
 
@@ -1142,6 +1003,7 @@ function trialRoutineBegin(trials) {
 		t = 0;
 		tp = 0;
 		trialClock.reset(); // clock
+		toneClock.reset(); // toneclock
 		frameN = -1;
 
 		// Set High or Low Tone
@@ -1151,10 +1013,22 @@ function trialRoutineBegin(trials) {
 			tone_sound = low_tone
 		}
 
-		// Set The Image
-		stim_image = stim_path
+		// Set the Sounds Ojbect 
+		tone_sound.setVolume(1.0);
+
+		// Initialize the image
+		stimImageStim = new visual.ImageStim({
+			win : psychoJS.window,
+			name : 'stimPath', units : 'height', 
+			image : stim_paths, mask : undefined,
+			ori : 0, pos : [0, 0], opacity : 1,
+			flipHoriz : false, flipVert : false,
+			texRes : 128, interpolate : true, depth : 0
+		});
+		stimImageStim.status = PsychoJS.Status.NOT_STARTED // set image Status
 	
 		currentTrialNumber.setText(`Trial: ${trial_number} / ${trials.nStim}`)
+		console.log("Trial Number: ", trial_number, ' Tone: ', tone, stim_paths)
 
 		endClock.reset()
 	
@@ -1178,11 +1052,16 @@ function trialRoutinePlayTone(trials) {
 		let continueRoutine = true; // until we're told otherwise
 
 		// get current time
-		t = trialClock.getTime();
+		t = toneClock.getTime();
 
 		// Play Tone
-		if (t >= 0.5 && (trac)) {
-			
+		if (tone_sound) {
+			tone_sound.play();
+		}
+
+		// Tone plays for only 300ms
+		if (t >= 0.3) {
+			continueRoutine = false
 		}
 
 		// check for quit (typically the Esc key)
@@ -1195,33 +1074,29 @@ function trialRoutinePlayTone(trials) {
 			return Scheduler.Event.FLIP_REPEAT;
 		}
 		else {
-			endClock.reset() // reset the clock for the next routine
-			resp.clock.reset() 	// Reset Keyboard Clock
-			resp.stop() // stop keyboard events
-			resp.status = PsychoJS.Status.NOT_STARTED
-
-			fbClock.reset()
+			stimClock.reset(); // stimclock
 			return Scheduler.Event.NEXT;
 		}
 	};
 }
 
 /**
- * Show Trial Result Routine
+ * Show Stim Eithe the Sad or Angry Faces
  * @param {*} trials trial snapshot
  */
+const STIM_DURATION = 0.150 // duration of the image
 function trialRoutineShowStim(trials) {
 	return function () {
 		//------Loop for each frame of Routine 'trial'-------
 		let continueRoutine = true; // until we're told otherwise
 
-		t = fbClock.getTime()
-
-		if (points_fixation_stim.status == PsychoJS.Status.NOT_STARTED) {
-			points_fixation_stim.setAutoDraw(true)
+		t = stimClock.getTime()
+		// Space for 200ms then show stim for 150ms
+		if (t >= 0.2 && stimImageStim.status == PsychoJS.Status.NOT_STARTED) {
+			stimImageStim.setAutoDraw(true)
 		}
 
-		if (t >= 1) {
+		if (t >= 0.2 + STIM_DURATION) {
 			continueRoutine = false
 		}
 
@@ -1235,12 +1110,23 @@ function trialRoutineShowStim(trials) {
 			return Scheduler.Event.FLIP_REPEAT;
 		}
 		else {
+			// Clear Stim
+			stimImageStim.setAutoDraw(false)
+			stimImageStim.status = PsychoJS.Status.FINISHED;
+
+			respondClock.reset(); // response Clock
 			return Scheduler.Event.NEXT;
 		}
 	};
 }
 
-var fb_duration = 1.5;
+
+var response;
+/**
+ * Respond Routine
+ * @param {*} trials 
+ * @returns 
+ */
 function trialRoutineRespond(trials) {
 	return function () {
 		//------Loop for each frame of Routine 'trial'-------
@@ -1248,22 +1134,70 @@ function trialRoutineRespond(trials) {
 		
 	
 		// get current time
-		t_end = endClock.getTime();
-		
-		if (points_fixation_stim.status == PsychoJS.Status.NOT_STARTED) {
-			points_fixation_stim.color = new util.Color('white')
-			points_fixation_stim.setText('+')
-			points_fixation_stim.setAutoDraw(true)
-			console.log('trial ISI', trial_isi)
+		t = respondClock.getTime();
 
+		// Draw the Texts
+		if (response_text.status == PsychoJS.Status.NOT_STARTED) {
+			response_text.setAutoDraw(true)
+			left_text.setAutoDraw(true)
+			right_text.setAutoDraw(true)
 		}
 
-		if (t_end >= ((trial_isi / 1000))) {
+		// Get Resposne Keys
+		// Get User Input
+		if (resp.status === PsychoJS.Status.NOT_STARTED) {
+			// keep track of start time/frame for later
+			resp.tStart = t;  // (not accounting for frame time here)
+			resp.frameNStart = frameN;  // exact frame index
+
+			// keyboard checking is just starting
+			resp.clock.reset();  // t=0 on next screen flip
+			resp.start(); // start on screen flip
+			resp.clearEvents();
+		}
+		let theseKeys = resp.getKeys({ keyList: keyList, waitRelease: false });
+		if (theseKeys.length > 0) {
+			resp.keys = theseKeys[0].name;  // just the last key pressed
+			resp.rt = theseKeys[0].rt;
+
+			pressed = true
+
+			if (resp.keys == LEFT_KEY) {
+				console.log('Pressed Left')
+				response = 'angry'
+				left_rect.setAutoDraw(true)
+				// left_rect.fillColor = new util.Color(selectColor)
+				left_rect.lineColor = new util.Color(selectColor)
+				left_rect.height += 0.02
+				left_rect.width += 0.02
+
+				right_rect.setAutoDraw(false)
+				
+			} else if (resp.keys == RIGHT_KEY) {
+				console.log('Pressed Right')
+				response = 'sad'
+				right_rect.setAutoDraw(true)
+				// right_rect.fillColor = new util.Color(selectColor)
+				right_rect.lineColor = new util.Color(selectColor)
+				right_rect.height += 0.02
+				right_rect.width += 0.02
+
+				left_rect.setAutoDraw(false)
+			}
+
+			// Save Data on each Press
+			psychoJS.experiment.addData(`resp`, key_map[resp.keys]);
+			psychoJS.experiment.addData(`rt`, resp.rt);
+			psychoJS.experiment.addData(`result`, response );
+			resp.keys = undefined;
+			resp.rt = undefined;
+		}
+
+		// Go to Next Routine After the allowed duration
+		if (t >= response_duration) {
 			continueRoutine = false
-			points_fixation_stim.setAutoDraw(false)
-			points_fixation_stim.status = PsychoJS.Status.NOT_STARTED
 		}
-		
+
 		// check for quit (typically the Esc key)
 		if (psychoJS.eventManager.getKeys({keyList:['escape']}).length > 0) {
 			return quitPsychoJS('The [Escape] key was pressed. Goodbye!', false);
@@ -1274,9 +1208,18 @@ function trialRoutineRespond(trials) {
 			return Scheduler.Event.FLIP_REPEAT;
 		}
 		else {
-			resp.stop()
-			resp.clearEvents()
-			resp.status = PsychoJS.Status.NOT_STARTED
+			// Clear Routine Stim
+			response_text.setAutoDraw(false)
+			response_text.status = PsychoJS.Status.NOT_STARTED
+			left_text.setAutoDraw(false)
+			left_text.status = PsychoJS.Status.NOT_STARTED
+			left_rect.setAutoDraw(false)
+			left_rect.status = PsychoJS.Status.NOT_STARTED
+
+			right_text.setAutoDraw(false)
+			right_text.status = PsychoJS.Status.NOT_STARTED
+			right_rect.setAutoDraw(false)
+			right_rect.status = PsychoJS.Status.NOT_STARTED
 			return Scheduler.Event.NEXT;
 		}
 	};
@@ -1319,6 +1262,8 @@ function initialFixation(trials) {
 		else {
 			points_fixation_stim.setAutoDraw(false)
 			points_fixation_stim.status = PsychoJS.Status.NOT_STARTED
+			
+			endClock.reset()
 			return Scheduler.Event.NEXT;
 		}
 	};
@@ -1350,34 +1295,38 @@ function sendData(trial_data) {
     })
 }
 
-
+/**
+ * Trial Routine End
+ * @param {*} trials 
+ * @returns 
+ */
 function trialRoutineEnd(trials) {
 	return function () {
 		//------Ending Routine 'trial'-------
+		t = endClock.getTime()
 
-		// Add Points at End
-		if (offer_stim_text.getText() != 'X') {
-			if (!Number.isNaN(offer_stim_text.getText())) {
-				console.log(offer_stim_text.getText())
-				// totalDates++
-				// totalPoints = totalPoints + parseInt(offer_stim_text.getText().replace(' points', ''))
-			}
+		if (points_fixation_stim.status == PsychoJS.Status.NOT_STARTED) {
+			points_fixation_stim.setAutoDraw(true)
+			console.log('End Fixation')
 		}
-	
-		if (typeof resp.keys !== 'undefined') {  // we had a response
-			// psychoJS.experiment.addData('resp.rt', resp.rt);
-			routineTimer.reset();
-		}
-
-		// the Routine "trial" was not non-slip safe, so reset the non-slip timer
-		routineTimer.reset();
-		resp.stop()
-		resp.status = PsychoJS.Status.NOT_STARTED
-
+		
 		// Send Data
-		sendData(psychoJS.experiment._trialsData)
+		if (t <= 2) {
+			return Scheduler.Event.FLIP_REPEAT;
+		} else {
+			resp.stop()
+			resp.status = PsychoJS.Status.NOT_STARTED
+			sendData(psychoJS.experiment._trialsData)
 
-		return Scheduler.Event.NEXT;
+			// Clear Fixation
+			points_fixation_stim.setAutoDraw(false)
+			points_fixation_stim.status = PsychoJS.Status.NOT_STARTED
+
+			return Scheduler.Event.NEXT;
+		}
+		
+
+		
 	};
 }
 
