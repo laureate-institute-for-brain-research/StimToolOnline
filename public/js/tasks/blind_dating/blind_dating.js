@@ -20,7 +20,7 @@ var LEFT_KEY = 'left'
 var RIGHT_KEY = 'right'
 var keyList = [LEFT_KEY, RIGHT_KEY]
 
-var highOfferVal = 80
+var highOfferVal = 90
 
 
 // init psychoJS:
@@ -1208,12 +1208,13 @@ function trialRoutineBegin(trials) {
 		offer_stim_text.setText(initial_offer + '% Match') // Set the Current Offer	
 		offer_stim_text.setAutoDraw(true)
 
-		currentTrialNumber.setText(`Event: ${trial_number} / ${trials.nStim}`)
+		currentTrialNumber.setText(`Event: ${trials.thisIndex + 1} / ${trials.nStim}`)
 		totalPointsTracker.setText(`Total Dates: ${totalDates}`)
 
 		endClock.reset()
 
-		console.log('Trial Number: ', globalTrialNumber, 'Total Points: ', totalDates)
+		console.log('Trial Number: ', trials.thisIndex + 1, 'Total Points: ', totalDates)
+		// console.log(trials)
 		// console.log("Sexual Orientation: ",question_data.whichBestDescribesYourSexualIdentity )
 		
 		// console.log(psychoJS.experiment._trialsData[1].whichBestDescribesYourSexualIdentity)
