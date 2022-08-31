@@ -125,13 +125,13 @@ window.onload = function () {
 				
 			})
 		})
-		// Add Practice Schedule stim_path to resources
+		// Add Media to Resrouces
 		.then((values) => {			
 			// Add instrcution Images
 			return new Promise((resolve, reject) => {
 				$.ajax({
 					type: 'GET',
-					url: '/js/tasks/emotional_faces/practice_schedule.csv',
+					url: '/js/tasks/emotional_faces/rate_faces_schedule.csv',
 					dataType: 'text',
 					async: false,
 					success: (data) => {
@@ -140,7 +140,7 @@ window.onload = function () {
 						
 						var headerRows = allRows[0].split(',');
 						
-						console.log('practice:',allRows)
+						// console.log('faces:',allRows)
 
 						for (var i=1; i<allRows.length; i++) {
 							var obj = {};
@@ -149,7 +149,7 @@ window.onload = function () {
 								obj[headerRows[j]] = currentLine[j];	
 							}
 							// If there's media add to resources
-							if (obj.stim_paths != 'None' && obj.stim_paths != undefined) {
+							if (obj.stim_paths && obj.stim_paths != undefined) {
 								resources.push({ name: obj.stim_paths , path: obj.stim_paths  })
 							}
 							
@@ -252,7 +252,8 @@ flowScheduler.add(updateInfo); // add timeStamp
 flowScheduler.add(experimentInit);
 
 
-// INSTRUCTION BLOCK
+// INSTRUCTIONS BLOCK
+// Runs through instructions
 if (!getQueryVariable('skip_instructions')) {
 	const instruct_pagesLoopScheduler = new Scheduler(psychoJS);
 	flowScheduler.add(instruct_pagesLoopBegin, instruct_pagesLoopScheduler);
@@ -260,7 +261,25 @@ if (!getQueryVariable('skip_instructions')) {
 	flowScheduler.add(instruct_pagesLoopEnd);
 }
 
+
+// RATE BLOCK
+// Runs through all the faces and subject just chooses Angry or Sad for EACH face.
+if (!getQueryVariable('skip_rate_faces')) {
+	const rateFacesLoopScheduler = new Scheduler(psychoJS);
+	flowScheduler.add(rateFacesLoopBegin, rateFacesLoopScheduler);
+	flowScheduler.add(rateFacesLoopScheduler);
+	flowScheduler.add(trialsLoopEnd);
+}
+
+
 // PRACTICE BLOCK
+
+// Single Slide
+flowScheduler.add(readyRoutineBegin('PRACTICE'));
+flowScheduler.add(readyRoutineEachFrame());
+flowScheduler.add(readyRoutineEnd());
+
+
 const practiceTrialsLoopScheduler = new Scheduler(psychoJS);
 flowScheduler.add(practiceTrialsLoopBegin, practiceTrialsLoopScheduler);
 flowScheduler.add(practiceTrialsLoopScheduler);
@@ -269,8 +288,7 @@ flowScheduler.add(trialsLoopEnd);
 
 // MAIN BLOCK
 // Ready Routine
-
-flowScheduler.add(readyRoutineBegin());
+flowScheduler.add(readyRoutineBegin('MAIN'));
 flowScheduler.add(readyRoutineEachFrame());
 flowScheduler.add(readyRoutineEnd());
 
@@ -290,10 +308,12 @@ dialogCancelScheduler.add(quitPsychoJS, '', false);
 
 // Add Slides to resources
 var resources = [
-	{ name: 'practice_schedule.csv', path: '/js/tasks/emotional_faces/practice_schedule.csv'},
+	{ name: 'practice_schedule.csv', path: '/js/tasks/emotional_faces/practice_schedule.csv' },
+	{ name: 'rate_faces_schedule.csv', path: '/js/tasks/emotional_faces/rate_faces_schedule.csv' }, // faces lists
 	{ name: 'user.png', path: '/js/tasks/emotional_faces/media/user.png' },
-	{ name: 'user_filled.png', path: '/js/tasks/emotional_faces/media/user_filled.png'},
-	{ name: 'ready.jpeg', path: '/js/tasks/emotional_faces/media/instructions/Slide10.jpeg'},
+	{ name: 'user_filled.png', path: '/js/tasks/emotional_faces/media/user_filled.png' },
+	{ name: 'PRACTICE_ready', path: '/js/tasks/emotional_faces/media/instructions/Slide9.jpeg'},
+	{ name: 'MAIN_ready', path: '/js/tasks/emotional_faces/media/instructions/Slide10.jpeg'},
 	{ name: 'male.png', path: '/js/tasks/emotional_faces/media/male.png' },
 	{ name: 'female.png', path: '/js/tasks/emotional_faces/media/female.png' },
 	{ name: 'high_tone.mp3', path: '/js/tasks/emotional_faces/media/tones/high_tone.mp3' },
@@ -406,7 +426,7 @@ function experimentInit() {
 	readyStim = new visual.ImageStim({
 		win : psychoJS.window,
 		name : 'ready_stim', units : 'height', 
-		image : 'ready.jpeg', mask : undefined,
+		image : 'PRACTICE_ready', mask : undefined,
 		ori : 0, pos : [0, 0],
 		color : new util.Color([1, 1, 1]), opacity : 1,
 		flipHoriz : false, flipVert : false,
@@ -566,6 +586,36 @@ function experimentInit() {
 
 	globalClock.reset() // start Global Clock
 	return Scheduler.Event.NEXT;
+}
+
+/**
+ * Reset the Stims back to their intiaiization configurations
+ */
+function resetRects() {
+
+	left_rect = new visual.Rect({
+		win: psychoJS.window,
+		name: 'left_rect',
+		width: 0.16,
+		height: 0.09,
+		lineWidth: 3.5,
+		units: 'norm',
+		pos: [-0.3, 0 ], ori: 0,
+		lineColor: new util.Color('white'), opacity: 1,
+		depth: 0.0
+	});
+
+	right_rect = new visual.Rect({
+		win: psychoJS.window,
+		name: 'right_rect',
+		width: 0.16,
+		height: 0.09,
+		lineWidth: 3.5,
+		units: 'norm',
+		pos: [ 0.3, 0 ], ori: 0,
+		lineColor: new util.Color('white'), opacity: 1,
+		depth: 0.0
+	});
 }
 
 function instruct_pagesLoopBegin(thisScheduler) {
@@ -749,93 +799,54 @@ function instructRoutineEnd(trials) {
 	};
 }
 
-var questionComponents;
-var loading_formio_text;
-function questionRoutineBegin(trials) {
-	return function () {
-		//------Prepare to start Routine 'question'-------
-		frameN = 0;
-
-		console.log('Questions Routine')
-		
-		loading_formio_text = new visual.TextStim({
-			win: psychoJS.window,
-			name: 'loading_formio_text',
-			text: 'loading page....',
-			font: 'Arial',
-			units: 'height',
-			pos: [0, 0], height: 0.05, wrapWidth: undefined, ori: 0,
-			color: new util.Color('white'), opacity: 1,
-			depth: 0.0
-		});
-
-		window.startHTML('/js/tasks/emotional_faces/question_form/index.html');
-
-		// update component parameters for each repeat
-		// keep track of which components have finished
-		questionComponents = [];
-		questionComponents.push(loading_formio_text);
-
-		for (const thisComponent of questionComponents)
-			if ('status' in thisComponent)
-				thisComponent.status = PsychoJS.Status.NOT_STARTED;
-
-		return Scheduler.Event.NEXT;
-	};
-}
-
 var frameRemains;
-function questionRoutineEachFrame(trials) {
-	return function () {
-		//------Loop for each frame of Routine 'question'-------
-		let continueRoutine = !window.finishedHTML;
-		// get current time
-		frameN = frameN + 1;// number of completed frames (so 0 is the first frame)
-		// update/draw components on each frame
-		if (loading_formio_text.status === PsychoJS.Status.NOT_STARTED) {
-			loading_formio_text.setAutoDraw(true);
-		}
-
-		// check for quit (typically the Esc key)
-		if (psychoJS.eventManager.getKeys({keyList:['escape']}).length > 0) {
-			return quitPsychoJS('The [Escape] key was pressed. Goodbye!', false);
-		}
-
-		// refresh the screen if continuing
-		if (continueRoutine) {
-			return Scheduler.Event.FLIP_REPEAT;
-		}
-		else {
-			return Scheduler.Event.NEXT;
-		}
-	};
-}
-
-function questionRoutineEnd(trials) {
-	return function () {
-		//------Ending Routine 'question'-------
-		for (const thisComponent of questionComponents) {
-			if (typeof thisComponent.setAutoDraw === 'function') {
-				thisComponent.setAutoDraw(false);
-			}
-		}
-
-		// Send Data
-		sendData(psychoJS.experiment._trialsData)
-
-		return Scheduler.Event.NEXT;
-	};
-}
 
 var readyComponents;
 var readyStim;
-function readyRoutineBegin(trials) {
+function readyRoutineBegin(block_type) {
 	return function () {
 		//------Prepare to start Routine 'ready'-------
 		t = 0;
 		psychoJS.eventManager.clearEvents()
 		readyClock.reset(); // clock
 		frameN = -1;
+
+		// Set readyStim based on block_type
+		switch (block_type) {
+			case 'PRACTICE':
+				readyStim = new visual.ImageStim({
+					win : psychoJS.window,
+					name : 'ready_stim', units : 'height', 
+					image : 'PRACTICE_ready', mask : undefined,
+					ori : 0, pos : [0, 0],
+					color : new util.Color([1, 1, 1]), opacity : 1,
+					flipHoriz : false, flipVert : false,
+					texRes : 128, interpolate : true, depth : 0
+				});
+				break
+			case 'MAIN':
+				readyStim = new visual.ImageStim({
+					win : psychoJS.window,
+					name : 'ready_stim', units : 'height', 
+					image : 'MAIN_ready', mask : undefined,
+					ori : 0, pos : [0, 0],
+					color : new util.Color([1, 1, 1]), opacity : 1,
+					flipHoriz : false, flipVert : false,
+					texRes : 128, interpolate : true, depth : 0
+				});
+				break
+			default:
+				readyStim = new visual.ImageStim({
+					win : psychoJS.window,
+					name : 'ready_stim', units : 'height', 
+					image : 'MAIN_ready', mask : undefined,
+					ori : 0, pos : [0, 0],
+					color : new util.Color([1, 1, 1]), opacity : 1,
+					flipHoriz : false, flipVert : false,
+					texRes : 128, interpolate : true, depth : 0
+				});
+		}
+		
 	
 		routineTimer.add(2.000000);
 		// update component parameters for each repeat
@@ -846,7 +857,7 @@ function readyRoutineBegin(trials) {
 	};
 }
 
-function readyRoutineEachFrame(trials) {
+function readyRoutineEachFrame() {
 	return function () {
 		//------Loop for each frame of Routine 'ready'-------
 		let continueRoutine = true; // until we're told otherwise
@@ -889,6 +900,36 @@ function readyRoutineEnd(trials) {
 		}
 		return Scheduler.Event.NEXT;
 	};
+}
+
+
+var faces;
+function rateFacesLoopBegin(thisScheduler) {;
+	faces = new TrialHandler({
+		psychoJS: psychoJS,
+		nReps: 1, method: TrialHandler.Method.SEQUENTIAL,
+		extraInfo: expInfo, originPath: undefined,
+		trialList: 'rate_faces_schedule.csv',
+		seed: undefined, name: 'faces'
+	});
+
+	psychoJS.experiment.addLoop(faces); // add the loop to the experiment
+	currentLoop = faces;  // we're now the current loop
+	endClock.reset()
+	resp.stop()
+	resp.clearEvents()
+	resp.status = PsychoJS.Status.NOT_STARTED
+
+	for (const thisTrial of faces) {
+		const snapshot = faces.getSnapshot();
+
+		thisScheduler.add(importConditions(snapshot));
+		thisScheduler.add(rateFacesRoutingBegin(snapshot));
+		thisScheduler.add(rateFacesRespond(snapshot));
+		thisScheduler.add(rateFacesEnd(snapshot));
+		thisScheduler.add(endLoopIteration(thisScheduler, snapshot));
+	}
+	return Scheduler.Event.NEXT;
 }
 
 
@@ -980,6 +1021,141 @@ function trialsLoopEnd() {
 
 	return Scheduler.Event.NEXT;
 }
+
+// RoutineBegin for RateFaces
+function rateFacesRoutingBegin(trials) {
+	return function () {
+		// Initialize the image
+		stimImageStim = new visual.ImageStim({
+			win : psychoJS.window,
+			name : 'stimPath', units : 'height', 
+			image : stim_paths, mask : undefined,
+			ori : 0, pos : [0, 0.3], opacity : 1,
+			flipHoriz : false, flipVert : false,
+			texRes : 128, interpolate : true, depth : 0
+		});
+		stimImageStim.setAutoDraw(true) // show image
+
+		left_text.setAutoDraw(true) // show left text (angry)
+		right_text.setAutoDraw(true) // show right text (sad)
+
+		left_rect.setAutoDraw(false)
+		right_rect.setAutoDraw(false)
+		resetRects() // reset rect stims
+
+		console.log("Face: ", stim_paths)
+	
+		resp.keys = undefined;
+		resp.rt = undefined;
+		pressed = false;
+		too_slow = false;
+		respond_time = undefined;
+	
+		return Scheduler.Event.NEXT;
+	};
+}
+var respond_time;
+const button_fb_duration = 0.3 // durating of the feedback button press
+// Show the Face and let Subject give response (without time limit)
+function rateFacesRespond(trials) {
+	return function () {
+		//------Loop for each frame of Routine 'trial'-------
+		let continueRoutine = true; // until we're told otherwise
+
+
+		// console.log(resp.clock.getTime())
+		// Get User Input
+		if (resp.status === PsychoJS.Status.NOT_STARTED) {
+			// keep track of start time/frame for later
+			resp.tStart = t;  // (not accounting for frame time here)
+			resp.frameNStart = frameN;  // exact frame index
+
+			// keyboard checking is just starting
+			resp.clock.reset();  // t=0 on next screen flip
+			resp.start(); // start on screen flip
+			resp.clearEvents();
+		}
+		let theseKeys = resp.getKeys({ keyList: keyList, waitRelease: false });
+		if (!pressed && theseKeys.length > 0) {
+			resp.keys = theseKeys[0].name;  // just the last key pressed
+			resp.rt = theseKeys[0].rt;
+
+			pressed = true
+			respond_time = resp.clock.getTime()
+
+			if (resp.keys == LEFT_KEY) {
+				console.log('Pressed Left')
+				response = 'angry'
+				left_rect.setAutoDraw(true)
+				// left_rect.fillColor = new util.Color(selectColor)
+				left_rect.lineColor = new util.Color(selectColor)
+				left_rect.height += 0.02
+				left_rect.width += 0.1
+
+				right_rect.setAutoDraw(false)
+				
+			} else if (resp.keys == RIGHT_KEY) {
+				console.log('Pressed Right')
+				response = 'sad'
+				right_rect.setAutoDraw(true)
+				// right_rect.fillColor = new util.Color(selectColor)
+				right_rect.lineColor = new util.Color(selectColor)
+				right_rect.height += 0.02
+				right_rect.width += 0.02
+
+				left_rect.setAutoDraw(false)
+			}
+
+			// Save Data on each Press
+			psychoJS.experiment.addData(`resp`, key_map[resp.keys]);
+			psychoJS.experiment.addData(`rt`, resp.rt);
+			psychoJS.experiment.addData(`result`, getResult(key_map[resp.keys]) );
+			resp.keys = undefined;
+			resp.rt = undefined;
+		}
+
+		// Show Slight Feedback
+		if (resp.clock.getTime() >= (respond_time + button_fb_duration)) {
+			// Continue Routine After Pressing Key
+			return Scheduler.Event.NEXT;
+		}
+
+		// check for quit (typically the Esc key)
+		if (psychoJS.eventManager.getKeys({keyList:['escape']}).length > 0) {
+			return quitPsychoJS('The [Escape] key was pressed. Goodbye!', false);
+		}
+		return Scheduler.Event.FLIP_REPEAT;
+	};
+}
+
+
+/**
+ * Rate Faces Routine End
+ * @param {*} trials 
+ * @returns 
+ */
+function rateFacesEnd(trials) {
+	return function () {
+		stimImageStim.setAutoDraw(false)
+		stimImageStim.status = PsychoJS.Status.NOT_STARTED		 
+		
+		left_text.setAutoDraw(false)
+		left_text.status = PsychoJS.Status.NOT_STARTED
+		left_rect.setAutoDraw(false)
+		left_rect.status = PsychoJS.Status.NOT_STARTED
+
+		right_text.setAutoDraw(false)
+		right_text.status = PsychoJS.Status.NOT_STARTED
+		right_rect.setAutoDraw(false)
+		right_rect.status = PsychoJS.Status.NOT_STARTED
+		 
+		resp.stop()
+		resp.status = PsychoJS.Status.NOT_STARTED
+		sendData(psychoJS.experiment._trialsData)
+		return Scheduler.Event.NEXT;
+	};
+}
+
 
 var accepted;
 var waited;
