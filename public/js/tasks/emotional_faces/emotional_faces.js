@@ -1062,7 +1062,6 @@ function rateFacesRespond(trials) {
 		//------Loop for each frame of Routine 'trial'-------
 		let continueRoutine = true; // until we're told otherwise
 
-
 		// console.log(resp.clock.getTime())
 		// Get User Input
 		if (resp.status === PsychoJS.Status.NOT_STARTED) {
