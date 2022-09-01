@@ -99,8 +99,6 @@ window.onload = function () {
 						
 						var headerRows = allRows[0].split(',');
 
-						// console.log(data)
-						
 						for (var i=1; i<allRows.length; i++) {
 							var obj = {};
 							var currentLine = allRows[i].split(',');
@@ -130,7 +128,6 @@ window.onload = function () {
 			})
 		})
 	
-		
 		.then((values) => {
 			// Query Preceeds /getInfo
 			if (getQueryVariable('participant')) expInfo.participant = getQueryVariable('participant')
@@ -279,8 +276,6 @@ var fbClock;
 var offer_stim_text;
 var offer_rect;
 var profile_outline;
-
-
 
 var short_boxes_x_pos = [-0.33, -0.11, 0.11, 0.33]
 var long_boxes_x_pos = [
