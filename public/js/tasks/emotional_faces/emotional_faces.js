@@ -273,17 +273,18 @@ if (!getQueryVariable('skip_rate_faces')) {
 
 
 // PRACTICE BLOCK
+if (!getQueryVariable('skip_practice')) {
+	// Single Slide
+	flowScheduler.add(readyRoutineBegin('PRACTICE'));
+	flowScheduler.add(readyRoutineEachFrame());
+	flowScheduler.add(readyRoutineEnd());
 
-// Single Slide
-flowScheduler.add(readyRoutineBegin('PRACTICE'));
-flowScheduler.add(readyRoutineEachFrame());
-flowScheduler.add(readyRoutineEnd());
+	const practiceTrialsLoopScheduler = new Scheduler(psychoJS);
+	flowScheduler.add(practiceTrialsLoopBegin, practiceTrialsLoopScheduler);
+	flowScheduler.add(practiceTrialsLoopScheduler);
+	flowScheduler.add(trialsLoopEnd);
+}
 
-
-const practiceTrialsLoopScheduler = new Scheduler(psychoJS);
-flowScheduler.add(practiceTrialsLoopBegin, practiceTrialsLoopScheduler);
-flowScheduler.add(practiceTrialsLoopScheduler);
-flowScheduler.add(trialsLoopEnd);
 
 
 // MAIN BLOCK
