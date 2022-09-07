@@ -8,7 +8,7 @@ import math
 
 ################# CONFIGS ###############
 TOTAL_TRIAL = 108
-MEAN = 2000 # in ms
+MEAN = 3000 # in ms
 STD_DEVIATION = 500 #in ms
 np.random.seed(0)
 #########################################
