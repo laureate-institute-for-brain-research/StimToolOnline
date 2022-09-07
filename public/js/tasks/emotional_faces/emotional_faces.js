@@ -392,6 +392,8 @@ var thanksClock;
 var thanksText;
 var globalClock;
 var routineTimer;
+var feedbackTimer;
+var feedback_result_stim;
 function experimentInit() {
 	// Check if there is an practice
 	if (getQueryVariable('practice') == 'true') {
@@ -548,6 +550,17 @@ function experimentInit() {
 		depth: 0.0
 	});
 
+	feedback_result_stim = new visual.TextStim({
+		win: psychoJS.window,
+		name: 'feedback_text',
+		text: 'CORRECT',
+		font: 'Arial',
+		units: 'norm',
+		pos: [0, -0.3], height: 0.12, wrapWidth: undefined, ori: 0,
+		color: new util.Color('white'), opacity: 1,
+		depth: 0.0
+	});
+
 	endClock = new util.Clock();
 	isiClock = new util.Clock();
 
@@ -583,6 +596,8 @@ function experimentInit() {
 	// Create some handy timers
 	globalClock = new util.Clock();  // to track the time since experiment started
 	routineTimer = new util.CountdownTimer();  // to track time remaining of each (non-slip) routine
+
+	feedbackTimer = new util.CountdownTimer(1); 
 
 	globalClock.reset() // start Global Clock
 	return Scheduler.Event.NEXT;
@@ -926,7 +941,8 @@ function rateFacesLoopBegin(thisScheduler) {;
 		thisScheduler.add(importConditions(snapshot));
 		thisScheduler.add(rateFacesRoutingBegin(snapshot));
 		thisScheduler.add(rateFacesRespond(snapshot));
-		thisScheduler.add(rateFacesEnd(snapshot));
+		thisScheduler.add(rateFacesFeedback(snapshot));
+		thisScheduler.add(rateFacesEnd(snapshot)); 
 		thisScheduler.add(endLoopIteration(thisScheduler, snapshot));
 	}
 	return Scheduler.Event.NEXT;
@@ -1023,6 +1039,7 @@ function trialsLoopEnd() {
 }
 
 // RoutineBegin for RateFaces
+var result;
 function rateFacesRoutingBegin(trials) {
 	return function () {
 		// Initialize the image
@@ -1050,6 +1067,7 @@ function rateFacesRoutingBegin(trials) {
 		pressed = false;
 		too_slow = false;
 		respond_time = undefined;
+		result = undefined;
 	
 		return Scheduler.Event.NEXT;
 	};
@@ -1104,11 +1122,14 @@ function rateFacesRespond(trials) {
 
 				left_rect.setAutoDraw(false)
 			}
+			result = getResult(key_map[resp.keys])
+
+			feedback_result_stim.setText(result)
 
 			// Save Data on each Press
 			psychoJS.experiment.addData(`resp`, key_map[resp.keys]);
 			psychoJS.experiment.addData(`rt`, resp.rt);
-			psychoJS.experiment.addData(`result`, getResult(key_map[resp.keys]) );
+			psychoJS.experiment.addData(`result`, result);
 			resp.keys = undefined;
 			resp.rt = undefined;
 		}
@@ -1116,6 +1137,9 @@ function rateFacesRespond(trials) {
 		// Show Slight Feedback
 		if (resp.clock.getTime() >= (respond_time + button_fb_duration)) {
 			// Continue Routine After Pressing Key
+
+			// Prepare for next routin
+			feedbackTimer.reset()
 			return Scheduler.Event.NEXT;
 		}
 
@@ -1124,6 +1148,27 @@ function rateFacesRespond(trials) {
 			return quitPsychoJS('The [Escape] key was pressed. Goodbye!', false);
 		}
 		return Scheduler.Event.FLIP_REPEAT;
+	};
+}
+
+/**
+ * Rate Faces Routine Feedback
+ * @param {*} trials 
+ * @returns 
+ */
+ function rateFacesFeedback(trials) {
+	return function () {
+		let t = feedbackTimer.getTime()
+		// console.log('FEEDBACK: ',result)
+		if (feedback_result_stim.status == PsychoJS.Status.NOT_STARTED) {
+			feedback_result_stim.setAutoDraw(true)
+		}
+
+		if (t >= 0) {
+			return Scheduler.Event.FLIP_REPEAT;
+		}
+		return Scheduler.Event.NEXT;
+		
 	};
 }
 
@@ -1147,6 +1192,9 @@ function rateFacesEnd(trials) {
 		right_text.status = PsychoJS.Status.NOT_STARTED
 		right_rect.setAutoDraw(false)
 		right_rect.status = PsychoJS.Status.NOT_STARTED
+
+		feedback_result_stim.setAutoDraw(false)
+		feedback_result_stim.status = PsychoJS.Status.NOT_STARTED
 		 
 		resp.stop()
 		resp.status = PsychoJS.Status.NOT_STARTED
