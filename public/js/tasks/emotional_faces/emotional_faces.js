@@ -1437,7 +1437,7 @@ function trialRoutineRespond(trials) {
 			resp.clearEvents();
 		}
 		let theseKeys = resp.getKeys({ keyList: keyList, waitRelease: false });
-		if (theseKeys.length > 0) {
+		if (!pressed && theseKeys.length > 0) {
 			resp.keys = theseKeys[0].name;  // just the last key pressed
 			resp.rt = theseKeys[0].rt;
 
