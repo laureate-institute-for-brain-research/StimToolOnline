@@ -1041,6 +1041,7 @@ function trialsLoopEnd() {
 
 // RoutineBegin for RateFaces
 var result;
+var correct_key;
 function rateFacesRoutingBegin(trials) {
 	return function () {
 		// Initialize the image
@@ -1069,6 +1070,14 @@ function rateFacesRoutingBegin(trials) {
 		too_slow = false;
 		respond_time = undefined;
 		result = undefined;
+
+		// Get the Correct KEY, used for feedbackRoutine
+		if (stim_type == 'angry') {
+			correct_key = LEFT_KEY 
+		} else if(stim_type == 'sad') {
+			correct_key = RIGHT_KEY 
+		}
+		
 	
 		return Scheduler.Event.NEXT;
 	};
@@ -1124,8 +1133,12 @@ function rateFacesRespond(trials) {
 				left_rect.setAutoDraw(false)
 			}
 			result = getResult(key_map[resp.keys])
-
-			feedback_result_stim.setText(result)
+			if (result == 'incorrect') {
+				feedback_result_stim.setText(result + '. Please Try Again')
+			} else {
+				feedback_result_stim.setText(result)
+			}
+			
 
 			// Save Data on each Press
 			psychoJS.experiment.addData(`resp`, key_map[resp.keys]);
@@ -1157,19 +1170,40 @@ function rateFacesRespond(trials) {
  * @param {*} trials 
  * @returns 
  */
- function rateFacesFeedback(trials) {
+function rateFacesFeedback(trials) {
 	return function () {
+		let continueRoutine = true;
+		 
 		let t = feedbackTimer.getTime()
 		// console.log('FEEDBACK: ',result)
 		if (feedback_result_stim.status == PsychoJS.Status.NOT_STARTED) {
 			feedback_result_stim.setAutoDraw(true)
+
+			
+			resp.clock.reset();  // t=0 on next screen flip
+			resp.start(); // start on screen flip
+			resp.clearEvents();
 		}
 
-		if (t >= 0) {
-			return Scheduler.Event.FLIP_REPEAT;
+		let theseKeys = resp.getKeys({ keyList: [correct_key], waitRelease: false });
+
+		// For Correct Trials, just show text and go to next routine
+		if (result == 'correct' && t <= 0 ) {
+			continueRoutine = false;
 		}
-		return Scheduler.Event.NEXT;
-		
+
+		// For incorrect trials, wait for keyboard press
+		if (result == 'incorrect' && theseKeys.length > 0) {
+			continueRoutine = false;// just go to next face after clicking correct key
+		}
+	
+		 
+		if (continueRoutine) {
+			return Scheduler.Event.FLIP_REPEAT;
+		} else {
+			return Scheduler.Event.NEXT;
+		}
+
 	};
 }
 
@@ -1260,6 +1294,8 @@ function trialRoutineBegin(trials) {
 		console.log("Trial Number: ", trial_number, ' Tone: ', tone, stim_paths)
 
 		endClock.reset()
+
+		resetRects() // reset rect stims
 	
 		resp.keys = undefined;
 		resp.rt = undefined;
