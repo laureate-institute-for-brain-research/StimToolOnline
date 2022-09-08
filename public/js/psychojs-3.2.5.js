@@ -4423,7 +4423,7 @@ var core = (function (exports, Clock_js, Scheduler_js, PsychObject_js, util$1, E
                   _context3.next = 14;
                   return this._serverManager.closeSession(isCompleted);
                 case 14:
-                  text = 'Thank you for your patience.<br/><br/>';
+                  text = 'Thank you for your participation.<br/><br/>';
                   text += typeof message !== 'undefined' ? message : 'Goodbye!';
                   self = this;
                   this._gui.dialog({
