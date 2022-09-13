@@ -1,9 +1,9 @@
 ﻿instruct_slide,audio_path
 /js/tasks/emotional_faces/media/instructions/Slide1.jpeg,
-/js/tasks/emotional_faces/media/instructions/Slide2.jpeg,
-/js/tasks/emotional_faces/media/instructions/Slide3.jpeg,
-/js/tasks/emotional_faces/media/instructions/Slide4.jpeg,
-/js/tasks/emotional_faces/media/instructions/Slide5.jpeg,
-/js/tasks/emotional_faces/media/instructions/Slide6.jpeg,
-/js/tasks/emotional_faces/media/instructions/Slide7.jpeg,
-/js/tasks/emotional_faces/media/instructions/Slide8.jpeg,
+/js/tasks/emotional_faces/media/instructions/Slide2.jpeg,/js/tasks/emotional_faces/media/instructions_audio/Slide2.mp3
+/js/tasks/emotional_faces/media/instructions/Slide3.jpeg,/js/tasks/emotional_faces/media/instructions_audio/Slide3.mp3
+/js/tasks/emotional_faces/media/instructions/Slide4.jpeg,/js/tasks/emotional_faces/media/instructions_audio/Slide4.mp3
+/js/tasks/emotional_faces/media/instructions/Slide5.jpeg,/js/tasks/emotional_faces/media/instructions_audio/Slide5.mp3
+/js/tasks/emotional_faces/media/instructions/Slide6.jpeg,/js/tasks/emotional_faces/media/instructions_audio/Slide6.mp3
+/js/tasks/emotional_faces/media/instructions/Slide7.jpeg,/js/tasks/emotional_faces/media/instructions_audio/Slide7.mp3
+/js/tasks/emotional_faces/media/instructions/Slide8.jpeg,/js/tasks/emotional_faces/media/instructions_audio/Slide8.mp3

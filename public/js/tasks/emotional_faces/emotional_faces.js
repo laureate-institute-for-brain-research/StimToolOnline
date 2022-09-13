@@ -5,6 +5,26 @@
  * @author James Touthang <james@touthang.info>
  */
 
+/*jshint -W069 */
+/*Disable Warning Justification:
+	Using bracket notation because it's familiar coding convention with python
+	Counterpart
+*/
+
+var event_types = {
+	'INSTRUCT_ONSET': 1,
+	'TASK_ONSET': 2,
+	'FIXATION_ONSET': 3,
+	'FACE_ONSET': 4,
+	'TONE_ONSET': 5,
+	'CHOICE_ONSET': 6,
+	'RESPONSE': 7,
+	'BLOCK_ONSET': 8,
+	'FEEDBACK': 9
+}
+
+var task_data = []
+
  import { core, data, sound, util, visual } from '/psychojs/psychojs-2021.2.3.js';
  const { PsychoJS } = core;
  const { TrialHandler } = data;
@@ -601,6 +621,9 @@ function experimentInit() {
 	feedbackTimer = new util.CountdownTimer(1); 
 
 	globalClock.reset() // start Global Clock
+
+	mark_event(psychoJS, 'NA', 'NA', event_types['TASK_ONSET'],
+				'NA', 'NA' , 'NA')
 	return Scheduler.Event.NEXT;
 }
 
@@ -666,6 +689,35 @@ function instruct_pagesLoopBegin(thisScheduler) {
 	return Scheduler.Event.NEXT;
 }
 
+
+
+/**
+ * Marks the event
+ * @param {*} psyhcJSObj psychoJS Ojbect
+ * @param {*} trial trial index
+ * @param {*} trial_type trial type
+ * @param {*} event_type event type/code
+ * @param {*} response_time response time
+ * @param {*} response response
+ * @param {*} result result
+ */
+function mark_event(psyhcJSObj,trial, trial_type, event_type, response_time,
+					response, result) {
+	
+	// Add the following columne to the experiment data
+	task_data.push({
+		'trial': trial,
+		'trial_type': trial_type,
+		'event_type': event_type,
+		'absolute_time': globalClock.getTime(),
+		'response_time': response_time,
+		'response': response,
+		'result': result,
+	})
+	
+}
+
+
 var t;
 var tp;
 var frameN;
@@ -723,6 +775,7 @@ function instructSlideRoutineEachFrame(trials, slides) {
 			slideStim.tStart = t;  // (not accounting for frame time here)
 			slideStim.frameNStart = frameN;  // exact frame index
 			slideStim.setAutoDraw(true);
+			
 			// instrText1.setAutoDraw(true);
 		}
 
@@ -731,6 +784,9 @@ function instructSlideRoutineEachFrame(trials, slides) {
 			console.log('setting new image', instruct_slide, 'index:',trials.thisIndex)
 			slideStim.setImage(instruct_slide)
 			newSlide = false
+
+			mark_event(psychoJS, trials.thisIndex, 'INSTRUCT', event_types['INSTRUCT_ONSET'],
+				'NA', 'NA', 'NA')
 		}
 		// *ready* updates
 		if (t >= 0 && ready.status === PsychoJS.Status.NOT_STARTED) {
@@ -863,6 +919,8 @@ function readyRoutineBegin(block_type) {
 				});
 		}
 		
+		mark_event(psychoJS, 0, block_type, event_types['BLOCK_ONSET'],
+				'NA', 'NA', 'NA')
 	
 		routineTimer.add(2.000000);
 		// update component parameters for each repeat
@@ -946,12 +1004,15 @@ function rateFacesLoopBegin(thisScheduler) {;
 		thisScheduler.add(rateFacesEnd(snapshot)); 
 		thisScheduler.add(endLoopIteration(thisScheduler, snapshot));
 	}
+	mark_event(psychoJS, 'NA', 'RATE_FACES', event_types['BLOCK_ONSET'],
+			'NA', 'NA', 'NA')
 	return Scheduler.Event.NEXT;
 }
 
 
 var trials;
 var currentLoop;
+var trial_type;
 function practiceTrialsLoopBegin(thisScheduler) {
 	totalDates = 0; // reset the totalDates
 	time_point = 0;
@@ -982,6 +1043,9 @@ function practiceTrialsLoopBegin(thisScheduler) {
 		thisScheduler.add(trialRoutineEnd(snapshot));
 		thisScheduler.add(endLoopIteration(thisScheduler, snapshot));
 	}
+	trial_type = 'PRACTICE'
+	mark_event(psychoJS, 'NA', trial_type, event_types['BLOCK_ONSET'],
+				'NA', 'NA' , 'NA')
 	return Scheduler.Event.NEXT;
 }
 
@@ -1018,6 +1082,9 @@ function trialsLoopBegin(thisScheduler) {
 		thisScheduler.add(trialRoutineEnd(snapshot));
 		thisScheduler.add(endLoopIteration(thisScheduler, snapshot));
 	}
+	trial_type = 'MAIN'
+	mark_event(psychoJS, 'NA', trial_type, event_types['BLOCK_ONSET'],
+				'NA', 'NA' , 'NA')
 	return Scheduler.Event.NEXT;
 }
 
@@ -1077,6 +1144,9 @@ function rateFacesRoutingBegin(trials) {
 		} else if(stim_type == 'sad') {
 			correct_key = RIGHT_KEY 
 		}
+		
+		mark_event(psychoJS, trials.thisIndex, 'RATE_FACES', event_types['FACE_ONSET'],
+			resp.rt, key_map[resp.keys] , result)
 		
 	
 		return Scheduler.Event.NEXT;
@@ -1141,9 +1211,9 @@ function rateFacesRespond(trials) {
 			
 
 			// Save Data on each Press
-			psychoJS.experiment.addData(`resp`, key_map[resp.keys]);
-			psychoJS.experiment.addData(`rt`, resp.rt);
-			psychoJS.experiment.addData(`result`, result);
+			mark_event(psychoJS, trials.thisIndex, 'RATE_FACES', event_types['RESPONSE'],
+				resp.rt, key_map[resp.keys] , result)
+
 			resp.keys = undefined;
 			resp.rt = undefined;
 		}
@@ -1183,6 +1253,9 @@ function rateFacesFeedback(trials) {
 			resp.clock.reset();  // t=0 on next screen flip
 			resp.start(); // start on screen flip
 			resp.clearEvents();
+
+			mark_event(psychoJS, trials.thisIndex, 'RATE_FACES', event_types['FEEDBACK'],
+				'NA', 'NA' , 'NA')
 		}
 
 		let theseKeys = resp.getKeys({ keyList: [correct_key], waitRelease: false });
@@ -1233,7 +1306,7 @@ function rateFacesEnd(trials) {
 		 
 		resp.stop()
 		resp.status = PsychoJS.Status.NOT_STARTED
-		sendData(psychoJS.experiment._trialsData)
+		sendData()
 		return Scheduler.Event.NEXT;
 	};
 }
@@ -1301,7 +1374,9 @@ function trialRoutineBegin(trials) {
 		resp.rt = undefined;
 		pressed = false;
 		too_slow = false;
-	
+
+		mark_event(psychoJS, trials.thisIndex, trial_type, event_types['TONE_ONSET'],
+				'NA', 'NA' , tone)
 		return Scheduler.Event.NEXT;
 	};
 }
@@ -1361,6 +1436,9 @@ function trialRoutineShowStim(trials) {
 		// Space for 200ms then show stim for 150ms
 		if (t >= 0.2 && stimImageStim.status == PsychoJS.Status.NOT_STARTED) {
 			stimImageStim.setAutoDraw(true)
+		
+			mark_event(psychoJS, trials.thisIndex, trial_type, event_types['FACE_ONSET'],
+				'NA', 'NA' , stim_paths)
 		}
 
 		if (t >= 0.2 + STIM_DURATION) {
@@ -1422,6 +1500,9 @@ function trialRoutineRespond(trials) {
 			// response_text.setAutoDraw(true)
 			left_text.setAutoDraw(true)
 			right_text.setAutoDraw(true)
+
+			mark_event(psychoJS, trials.thisIndex, trial_type, event_types['CHOICE_ONSET'],
+				'NA', 'NA' , 'NA')
 		}
 
 		// Get Resposne Keys
@@ -1467,9 +1548,8 @@ function trialRoutineRespond(trials) {
 			}
 
 			// Save Data on each Press
-			psychoJS.experiment.addData(`resp`, key_map[resp.keys]);
-			psychoJS.experiment.addData(`rt`, resp.rt);
-			psychoJS.experiment.addData(`result`, getResult(key_map[resp.keys]) );
+			mark_event(psychoJS, trials.thisIndex, trial_type, event_types['RESPONSE'],
+					resp.rt, key_map[resp.keys] , getResult(key_map[resp.keys]))
 			resp.keys = undefined;
 			resp.rt = undefined;
 
@@ -1534,6 +1614,9 @@ function initialFixation(trials) {
 			points_fixation_stim.setAutoDraw(true)
 			console.log('Initial Fixation')
 
+			mark_event(psychoJS, 'NA', trial_type, event_types['FIXATION_ONSET'],
+				'NA', 'NA' , 'NA')
+
 		}
 
 		if (t_end >= 3) {
@@ -1572,12 +1655,12 @@ var key_map = {
 	'period': 'right'
 }
 
-function sendData(trial_data) {
+function sendData() {
 	$.ajax({
         type: "POST",
         url: '/save',
 		data: {
-			"trials_data": trial_data,
+			"trials_data": task_data,
 			"expInfo": expInfo
 		},
 		dataType: 'JSON',
@@ -1601,8 +1684,12 @@ function trialRoutineEnd(trials) {
 
 			if (too_slow) {
 				points_fixation_stim.setText('too slow')
+				mark_event(psychoJS, 'NA', trial_type, event_types['FEEDBACK'],
+				'NA', 'NA' , 'slow')
 			} else {
 				points_fixation_stim.setText('+')
+				mark_event(psychoJS, 'NA', trial_type, event_types['FEEDBACK'],
+				'NA', 'NA' , '+')
 			}
 			points_fixation_stim.setAutoDraw(true)
 			console.log('End Fixation')
@@ -1614,7 +1701,7 @@ function trialRoutineEnd(trials) {
 		} else {
 			resp.stop()
 			resp.status = PsychoJS.Status.NOT_STARTED
-			sendData(psychoJS.experiment._trialsData)
+			sendData()
 
 			// Clear Fixation
 			points_fixation_stim.setAutoDraw(false)
@@ -1739,7 +1826,7 @@ function endLoopIteration(thisScheduler, loop = undefined) {
 			}
 		}
 
-		sendData(psychoJS.experiment._trialsData)
+		sendData()
 
 		return Scheduler.Event.NEXT;
 	};
