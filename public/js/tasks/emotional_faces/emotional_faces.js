@@ -1375,6 +1375,7 @@ function trialRoutineBegin(trials) {
 		pressed = false;
 		too_slow = false;
 
+		trial_type = stim_type + '_' + intensity
 		mark_event(psychoJS, trials.thisIndex, trial_type, event_types['TONE_ONSET'],
 				'NA', 'NA' , tone)
 		return Scheduler.Event.NEXT;
