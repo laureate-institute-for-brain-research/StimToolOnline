@@ -654,8 +654,6 @@ function experimentInit() {
 
 function instruct_pagesLoopBegin(thisScheduler) {
 	// set up handler to look up the conditions
-
-	
 	slides = new TrialHandler({
 		psychoJS: psychoJS,
 		nReps: 1, method: TrialHandler.Method.SEQUENTIAL,
