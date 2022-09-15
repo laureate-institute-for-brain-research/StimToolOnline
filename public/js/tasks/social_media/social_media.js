@@ -2200,7 +2200,7 @@ function trialRoleReversalRoutineBegin(trials) {
  */
 function isLastTrial(game_type, trial_num) {
 	if (game_type == 'h1' && trial_num == 4) return true
-	if (game_type == 'h6' && trial_num == 9) return true
+	if (game_type == 'h6' && trial_num == 8) return true
 	return false
 }
 
