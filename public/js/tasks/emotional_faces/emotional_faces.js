@@ -721,7 +721,7 @@ function instructRoutineBegin(trials) {
 
 		console.log("InstructionSlides Index: ", trials.thisIndex)
 		instruct_prev_pressed = false
-
+		
 		if (audio_path) {
 			track = new Sound({
 				win: psychoJS.window,

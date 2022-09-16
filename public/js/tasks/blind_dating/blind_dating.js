@@ -4,6 +4,20 @@
  * @author James Touthang <james@touthang.info>
  */
 
+ var event_types = {
+	'INSTRUCT_ONSET': 1,
+	'TASK_ONSET': 2,
+	'FIXATION_ONSET': 3,
+	'QUESTION_RESULT': 4,
+	'CHOICE_ONSET': 5,
+	'RESPONSE': 6,
+	'BLOCK_ONSET': 7,
+	'FEEDBACK': 8,
+	'ISI': 9
+ }
+
+ var trials_data = []
+
  import { core, data, sound, util, visual } from '/psychojs/psychojs-2021.2.3.js';
  const { PsychoJS } = core;
  const { TrialHandler } = data;
@@ -652,6 +666,8 @@ function experimentInit() {
 	return Scheduler.Event.NEXT;
 }
 
+var block_type;
+var trial_type;
 function instruct_pagesLoopBegin(thisScheduler) {
 	// set up handler to look up the conditions
 	slides = new TrialHandler({
@@ -677,7 +693,9 @@ function instruct_pagesLoopBegin(thisScheduler) {
 	thisScheduler.add(instructRoutineEnd(snapshot));
 	thisScheduler.add(endLoopIteration(thisScheduler, snapshot));
 
-	// console.log(thisScheduler)
+	block_type = 'INSTRUCTIONS'
+	mark_event(trials_data, globalClock, 0, block_type, event_types['BLOCK_ONSET'],
+				'NA', 'NA', 'NA')
 
 	return Scheduler.Event.NEXT;
 }
@@ -711,6 +729,9 @@ function instructRoutineBegin(trials) {
 			time_audio_end = t + track.getDuration()
 			track.setVolume(1.0);
 			track.play();
+
+			mark_event(trials_data, globalClock, trials.thisIndex, block_type, event_types['AUDIO_ONSET'],
+				'NA', instruct_slide, audio_path)
 		}
 
 		for (const thisComponent of instructComponents)
@@ -915,6 +936,10 @@ function questionRoutineBegin(trials) {
 			depth: 0.0
 		});
 
+		block_type = 'QUESTIONAIRRE'
+		mark_event(trials_data, globalClock, 0, block_type, event_types['BLOCK_ONSET'],
+					'NA', 'NA', 'NA')
+
 		window.startHTML('/js/tasks/blind_dating/question_form/index.html');
 
 		// update component parameters for each repeat
@@ -960,14 +985,19 @@ function questionRoutineEachFrame(trials) {
 function questionRoutineEnd(trials) {
 	return function () {
 		//------Ending Routine 'question'-------
+		
 		for (const thisComponent of questionComponents) {
 			if (typeof thisComponent.setAutoDraw === 'function') {
 				thisComponent.setAutoDraw(false);
 			}
 		}
 
+		// questionarire result
+		mark_event(trials_data, globalClock, 'NA', block_type+'_RESULT', event_types['QUESTION_RESULT'],
+				'NA', 'NA', JSON.stringify(question_data) )
+
 		// Send Data
-		sendData(psychoJS.experiment._trialsData)
+		sendData()
 
 		return Scheduler.Event.NEXT;
 	};
@@ -1070,6 +1100,10 @@ function practiceTrialsLoopBegin(thisScheduler) {
 		thisScheduler.add(trialRoutineEnd(snapshot));
 		thisScheduler.add(endLoopIteration(thisScheduler, snapshot));
 	}
+
+	block_type = 'PRACTICE'
+	mark_event(trials_data, globalClock, 0, block_type, event_types['BLOCK_ONSET'],
+				'NA', 'NA', 'NA')
 	return Scheduler.Event.NEXT;
 }
 
@@ -1106,6 +1140,9 @@ function trialsLoopBegin(thisScheduler) {
 		thisScheduler.add(trialRoutineEnd(snapshot));
 		thisScheduler.add(endLoopIteration(thisScheduler, snapshot));
 	}
+	block_type = 'MAIN'
+	mark_event(trials_data, globalClock, 0, block_type, event_types['BLOCK_ONSET'],
+				'NA', 'NA', 'NA')
 	return Scheduler.Event.NEXT;
 }
 
@@ -1203,6 +1240,13 @@ function trialRoutineBegin(trials) {
 
 		currentTrialNumber.setText(`Event: ${trials.thisIndex + 1} / ${trials.nStim}`)
 		totalPointsTracker.setText(`Total Dates: ${totalDates}`)
+
+		// trial_type is the trial_length '_' + person with high match + '_' + person of when 0% match
+		trial_type = trial_length + '_' + ts_high + '_' + ts_withdrawal
+		mark_event(trials_data, globalClock, trials.thisIndex, trial_type, event_types['FIXATION_ONSET'],
+			'NA', 'NA', '+')
+		mark_event(trials_data, globalClock, trials.thisIndex, trial_type, event_types['CHOICE_ONSET'],
+			'NA', initial_offer, totalDates)
 
 		endClock.reset()
 
@@ -1411,9 +1455,8 @@ function trialRoutineEachFrame(trials) {
 
 			}
 
-			// Save Data
-			psychoJS.experiment.addData(`resp_${time_point + 1}`, key_map[resp.keys]);
-			psychoJS.experiment.addData(`rt_${time_point + 1}`, resp.rt);
+			mark_event(trials_data, globalClock, trials.thisIndex, trial_type,
+				event_types['RESPONSE'], resp.rt , key_map[resp.keys], 'Turn ' + (time_point + 1))
 			resp.keys = undefined;
 			resp.rt = undefined;
 
@@ -1511,6 +1554,8 @@ function trialResult(trials) {
 
 		if (points_fixation_stim.status == PsychoJS.Status.NOT_STARTED) {
 			points_fixation_stim.setAutoDraw(true)
+			mark_event(trials_data, globalClock, trials.thisIndex, trial_type,
+				event_types['FEEDBACK'], 'NA' , 1,  points_fixation_stim.text)
 		}
 
 		if (t >= 1) {
@@ -1546,6 +1591,8 @@ function trialIsi(trials) {
 			points_fixation_stim.setText('+')
 			points_fixation_stim.setAutoDraw(true)
 			console.log('trial ISI', trial_isi)
+			mark_event(trials_data, globalClock, trials.thisIndex, trial_type,
+				event_types['ISI'], 'NA' , 'NA',  trial_isi)
 
 		}
 
@@ -1590,6 +1637,9 @@ function initialFixation(trials) {
 			points_fixation_stim.setAutoDraw(true)
 			console.log('Initial Fixation')
 
+			mark_event(trials_data, globalClock, trials.thisIndex, block_type, event_types['FIXATION_ONSET'],
+				'NA', 'NA', '+')
+
 		}
 
 		if (t_end >= 3) {
@@ -1626,12 +1676,12 @@ var key_map = {
 	'period': 'right'
 }
 
-function sendData(trial_data) {
+function sendData() {
 	$.ajax({
         type: "POST",
         url: '/save',
 		data: {
-			"trials_data": trial_data,
+			"trials_data": trials_data,
 			"expInfo": expInfo
 		},
 		dataType: 'JSON',
@@ -1666,7 +1716,7 @@ function trialRoutineEnd(trials) {
 		resp.status = PsychoJS.Status.NOT_STARTED
 
 		// Send Data
-		sendData(psychoJS.experiment._trialsData)
+		sendData()
 
 		return Scheduler.Event.NEXT;
 	};
@@ -1783,7 +1833,7 @@ function endLoopIteration(thisScheduler, loop = undefined) {
 			}
 		}
 
-		sendData(psychoJS.experiment._trialsData)
+		sendData()
 
 		return Scheduler.Event.NEXT;
 	};
