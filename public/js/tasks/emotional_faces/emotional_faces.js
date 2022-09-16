@@ -24,7 +24,7 @@ var event_types = {
 	'AUDIO_ONSET': 10
 }
 
-var task_data = []
+var trials_data = []
 
  import { core, data, sound, util, visual } from '/psychojs/psychojs-2021.2.3.js';
  const { PsychoJS } = core;
@@ -35,7 +35,6 @@ var task_data = []
 const { round } = util;
  
 import { Sound } from '/lib/sound-2020.1.js';
-import { globalBin } from 'npm';
 
 // TASAK PARAMS
 var practice = false;
@@ -1372,7 +1371,6 @@ function trialRoutineBegin(trials) {
 	return function () {
 		//------Prepare to start Routine 'trial'-------
 		t = 0;
-		tp = 0;
 		trialClock.reset(); // clock
 		toneClock.reset(); // toneclock
 		frameN = -1;
@@ -1698,7 +1696,7 @@ function sendData() {
         type: "POST",
         url: '/save',
 		data: {
-			"trials_data": task_data,
+			"trials_data": trials_data,
 			"expInfo": expInfo
 		},
 		dataType: 'JSON',
@@ -1723,7 +1721,7 @@ function trialRoutineEnd(trials) {
 			if (too_slow) {
 				points_fixation_stim.setText('too slow')
 				mark_event(trials_data, globalClock, 'NA', trial_type, event_types['FEEDBACK'],
-				'NA', 'NA' , 'slow')
+				'NA', 'NA' , 'too slow')
 			} else {
 				points_fixation_stim.setText('+')
 				mark_event(trials_data, globalClock, 'NA', trial_type, event_types['FEEDBACK'],
