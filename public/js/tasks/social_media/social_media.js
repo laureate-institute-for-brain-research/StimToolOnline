@@ -4,6 +4,22 @@
  * @author James Touthang <james@touthang.info>
  */
 
+ var event_types = {
+	'INSTRUCT_ONSET': 1,
+	'TASK_ONSET': 2,
+	'AUDIO_ONSET': 3,
+	'FIXATION_ONSET': 4,
+	'CHATROOM_ONSET': 5,
+	'POST_ONSET': 6,
+	'RESPONSE': 7,
+	'CHOICE_ONSET': 8,
+	'BLOCK_ONSET': 9,
+	'ANIMATION_ONSET': 10,
+	'SCORE': 11
+}
+
+var trials_data = []
+
 import { core, data, sound, util, visual } from '/psychojs/psychojs-2021.2.3.js';
 const { PsychoJS } = core;
 const { TrialHandler } = data;
@@ -1349,7 +1365,7 @@ function clear_All_stims() {
 
 	reset_stims()
 }
-
+var block_type;
 function instruct_pagesLoopBegin(thisScheduler) {
 	// set up handler to look up the conditions
 	slides = new TrialHandler({
@@ -1376,6 +1392,10 @@ function instruct_pagesLoopBegin(thisScheduler) {
 	thisScheduler.add(instructSlideRoutineEachFrame(snapshot, slides));
 	thisScheduler.add(instructRoutineEnd(snapshot));
 	thisScheduler.add(endLoopIteration(thisScheduler, snapshot));
+
+	block_type = 'INSTRUCTIONS'
+	mark_event(trials_data, globalClock, 0, block_type, event_types['BLOCK_ONSET'],
+				'NA', 'NA', 'NA')
 	
 	return Scheduler.Event.NEXT;
 }
@@ -1404,6 +1424,9 @@ function instruct_pages_roleReversal_LoopBegin(thisScheduler) {
 	thisScheduler.add(instructRoutineEnd(snapshot));
 	thisScheduler.add(endLoopIteration(thisScheduler, snapshot));
 	
+	block_type = 'INSTRUCT_ROLEREVERSAL'
+	mark_event(trials_data, globalClock, 0, block_type, event_types['BLOCK_ONSET'],
+				'NA', 'NA', 'NA')
 	return Scheduler.Event.NEXT;
 }
 
@@ -1440,6 +1463,9 @@ function instructSlideRoutineEachFrame(trials, slides) {
 			slideStim.setImage(instruct_slide)
 			newSlide = false
 
+			mark_event(trials_data, globalClock, trials.thisIndex, block_type, event_types['BLOCK_ONSET'],
+				'NA', 'NA', 'NA')
+
 			if (audio_path && !instruct_prev_pressed) {
 				
 				if (track && (track.status != PsychoJS.Status.NOT_STARTED) ) {
@@ -1462,6 +1488,9 @@ function instructSlideRoutineEachFrame(trials, slides) {
 					track.setVolume(1.0);
 					track.play();
 				}
+
+				mark_event(trials_data, globalClock, trials.thisIndex, block_type, event_types['AUDIO_ONSET'],
+				'NA', instruct_slide, audio_path)
 			}
 				
 		}
@@ -1586,6 +1615,9 @@ function trials_exampleLoopBegin(thisScheduler) {
 		thisScheduler.add(trialRoutineEnd(snapshot));
 		thisScheduler.add(endLoopIteration(thisScheduler, snapshot));
 	}
+	block_type = 'EXAMPLE_BLOCK'
+	mark_event(trials_data, globalClock, 0, block_type, event_types['BLOCK_ONSET'],
+				'NA', 'NA', 'NA')
 	return Scheduler.Event.NEXT;
 }
 
@@ -1616,6 +1648,11 @@ function trials_role_reversalBegin(thisScheduler) {
 		thisScheduler.add(trialRoleReversalRoutineEnd(snapshot));
 		thisScheduler.add(endLoopIteration(thisScheduler, snapshot));
 	}
+
+	block_type = 'ROLE_REVERSAL'
+	mark_event(trials_data, globalClock, 0, block_type, event_types['BLOCK_ONSET'],
+				'NA', 'NA', 'NA')
+
 	return Scheduler.Event.NEXT;
 }
 
@@ -1690,7 +1727,9 @@ function trialsLoopBegin(thisScheduler) {
 		thisScheduler.add(trialRoutineEnd(snapshot));
 		thisScheduler.add(endLoopIteration(thisScheduler, snapshot));
 	}
-
+	block_type = 'MAIN'
+	mark_event(trials_data, globalClock, 0, block_type, event_types['BLOCK_ONSET'],
+				'NA', 'NA', 'NA')
 	return Scheduler.Event.NEXT;
 }
 
@@ -1758,6 +1797,7 @@ var trialComponents;
 var lastGameNumber;
 var lastTrial;
 var lastTrialPoints = 0;
+var trial_type;
 function trialRoutineBegin(trials) {
 	return function () {
 		//------Prepare to start Routine 'trial'-------
@@ -1854,6 +1894,10 @@ function trialRoutineBegin(trials) {
 
 		// Set components from last trial
 		console.log(`Game: ${game_number}, trial #${trial_num}, game type ${game_type} starting`)
+		trial_type = game_type + '_' + roomType.text
+
+		mark_event(trials_data, globalClock, trial_num, trial_type, event_types['CHATROOM_ONSET'],
+				'NA', 'NA', left_topic + ' | ' + right_topic)
 		
 		setupPosts(game_type)
 
@@ -2515,6 +2559,10 @@ function trialRoutineEachFrameWaitforInput(trials) {
 					getSocialApprovalScore() // calculates the approval score
 				}
 
+				mark_event(trials_data, globalClock, trial_num, trial_type,
+					event_types['RESPONSE'], 'NA',
+					resp.keys, trial_reward)
+
 				// console.log(postStims[trial_num].like_posts)
 
 				// Fade out the choices
@@ -2562,8 +2610,9 @@ function trialRoutineEachFrameShowPost(trials) {
 		}
 		if (t > 0.5 && postStims[trial_num].profile_photo.status == PsychoJS.Status.NOT_STARTED) {
 			postStims[trial_num].profile_photo.setAutoDraw(true)
+			mark_event(trials_data, globalClock, trial_num, trial_type, event_types['ANIMATION_ONSET'], 'NA', 'NA', topic_text)
 		}
-		
+		 
 
 		// if (postStims[trial_num].post_text.status != PsychoJS.Status.FINISHED ) {
 		// 	loadingAnimationText()
@@ -2714,6 +2763,9 @@ function trialRoleReversalRoutineEachFrameWaitforInput(trials) {
 					}
 					
 				}
+				mark_event(trials_data, globalClock, trial_num, trial_type, event_types['RESPONSE'], 'NA',
+					resp.keys, trial_reward)
+				
 				return Scheduler.Event.NEXT;
 			}
 		}
@@ -2752,6 +2804,7 @@ function trialRoleReversalRoutineEachFrameShowPost(trials) {
 			let theseKeys = resp.getKeys({ keyList: ['space'], waitRelease: false });
 
 			if (theseKeys.length > 0) {
+				
 				return Scheduler.Event.NEXT;
 			}
 		}
@@ -2774,8 +2827,10 @@ function trialRoleReversalRoutineEnd(trials) {
 		lastGameNumber = game_number
 		
 		// store data for thisExp (ExperimentHandler)
-		psychoJS.experiment.addData('resp.keys', key_map[resp.keys]);
-		psychoJS.experiment.addData('social_approval_score', socialApprovalScore);
+
+		mark_event(trials_data, globalClock, trial_num, trial_type,
+			event_types['SCORE'], 'NA', 'NA', socialApprovalScore)
+		
 		// psychoJS.experiment.addData('resp.corr', resp.corr);
 		if (typeof resp.keys !== 'undefined') {  // we had a response
 			psychoJS.experiment.addData('resp.rt', resp.rt);
@@ -2804,12 +2859,12 @@ var key_map = {
 	'period': 'right'
 }
 
-function sendData(trial_data) {
+function sendData() {
 	$.ajax({
         type: "POST",
         url: '/save',
 		data: {
-			"trials_data": trial_data,
+			"trials_data": trials_data,
 			"expInfo": expInfo
 		},
 		dataType: 'JSON',
@@ -2834,10 +2889,9 @@ function trialRoutineEnd(trials) {
 
 		lastGameNumber = game_number
 		
-		// store data for thisExp (ExperimentHandler)
-		psychoJS.experiment.addData('resp.keys', key_map[resp.keys]);
-		psychoJS.experiment.addData('points', totalPoints);
-		// psychoJS.experiment.addData('resp.corr', resp.corr);
+		mark_event(trials_data, globalClock, trial_num, trial_type,
+			event_types['SCORE'], 'NA', 'NA', socialApprovalScore)
+		
 		if (typeof resp.keys !== 'undefined') {  // we had a response
 			psychoJS.experiment.addData('resp.rt', resp.rt);
 			routineTimer.reset();
@@ -3019,10 +3073,10 @@ function endLoopIteration(thisScheduler, loop = undefined) {
 				thisScheduler.stop();
 
 				// Send Data at last loop 
-				sendData(psychoJS.experiment._trialsData)
+				sendData()
 			} else {
 				// Send Data for Every Trial
-				sendData(psychoJS.experiment._trialsData)
+				sendData()
 				const thisTrial = loop.getCurrentTrial();
 				if (typeof thisTrial === 'undefined' || !('isTrials' in thisTrial) || thisTrial.isTrials)
 				{

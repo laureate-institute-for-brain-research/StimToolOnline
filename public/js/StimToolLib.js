@@ -111,3 +111,30 @@ function sanitizeResources(resources) {
       }
     return(sanitized_resources)
 }
+
+
+/**
+ * Marks the event
+ * @param {*} task_data task data array
+ * @param {*} trial trial index
+ * @param {*} trial_type trial type
+ * @param {*} event_type event type/code
+ * @param {*} response_time response time
+ * @param {*} response response
+ * @param {*} result result
+ */
+ function mark_event(task_data, globalClock, trial, trial_type, event_type, response_time,
+    response, result) {
+
+    // Add the following columne to the experiment data
+    task_data.push({
+    'trial': trial,
+    'trial_type': trial_type,
+    'event_type': event_type,
+    'absolute_time': globalClock.getTime(),
+    'response_time': response_time,
+    'response': response,
+    'result': result,
+    })
+
+}

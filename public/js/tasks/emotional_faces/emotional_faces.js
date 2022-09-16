@@ -35,6 +35,7 @@ var task_data = []
 const { round } = util;
  
 import { Sound } from '/lib/sound-2020.1.js';
+import { globalBin } from 'npm';
 
 // TASAK PARAMS
 var practice = false;
@@ -626,7 +627,7 @@ function experimentInit() {
 
 	globalClock.reset() // start Global Clock
 
-	mark_event(psychoJS, 'NA', 'NA', event_types['TASK_ONSET'],
+	mark_event(trials_data, globalClock, 'NA', 'NA', event_types['TASK_ONSET'],
 				'NA', 'NA' , 'NA')
 	return Scheduler.Event.NEXT;
 }
@@ -690,39 +691,13 @@ function instruct_pagesLoopBegin(thisScheduler) {
 
 	// console.log(thisScheduler)
 	block_type = 'INSTRUCTIONS'
-	mark_event(psychoJS, 0, block_type, event_types['BLOCK_ONSET'],
+	mark_event(trials_data, globalClock, 0, block_type, event_types['BLOCK_ONSET'],
 				'NA', 'NA', 'NA')
 
 	return Scheduler.Event.NEXT;
 }
 
 
-
-/**
- * Marks the event
- * @param {*} psyhcJSObj psychoJS Ojbect
- * @param {*} trial trial index
- * @param {*} trial_type trial type
- * @param {*} event_type event type/code
- * @param {*} response_time response time
- * @param {*} response response
- * @param {*} result result
- */
-function mark_event(psyhcJSObj,trial, trial_type, event_type, response_time,
-					response, result) {
-	
-	// Add the following columne to the experiment data
-	task_data.push({
-		'trial': trial,
-		'trial_type': trial_type,
-		'event_type': event_type,
-		'absolute_time': globalClock.getTime(),
-		'response_time': response_time,
-		'response': response,
-		'result': result,
-	})
-	
-}
 
 var block_type;
 var t;
@@ -757,7 +732,7 @@ function instructRoutineBegin(trials) {
 			time_audio_end = t + track.getDuration()
 			track.setVolume(1.0);
 			track.play();
-			mark_event(psychoJS, trials.thisIndex, block_type, event_types['AUDIO_ONSET'],
+			mark_event(trials_data, globalClock, trials.thisIndex, block_type, event_types['AUDIO_ONSET'],
 				'NA', instruct_slide, audio_path)
 		}
 
@@ -981,7 +956,7 @@ function readyRoutineBegin(block_type) {
 				});
 		}
 		
-		mark_event(psychoJS, 0, block_type, event_types['BLOCK_ONSET'],
+		mark_event(trials_data, globalClock, 0, block_type, event_types['BLOCK_ONSET'],
 				'NA', 'NA', 'NA')
 	
 		routineTimer.add(2.000000);
@@ -1066,7 +1041,7 @@ function rateFacesLoopBegin(thisScheduler) {;
 		thisScheduler.add(rateFacesEnd(snapshot)); 
 		thisScheduler.add(endLoopIteration(thisScheduler, snapshot));
 	}
-	mark_event(psychoJS, 'NA', 'RATE_FACES', event_types['BLOCK_ONSET'],
+	mark_event(trials_data, globalClock, 'NA', 'RATE_FACES', event_types['BLOCK_ONSET'],
 			'NA', 'NA', 'NA')
 	return Scheduler.Event.NEXT;
 }
@@ -1106,7 +1081,7 @@ function practiceTrialsLoopBegin(thisScheduler) {
 		thisScheduler.add(endLoopIteration(thisScheduler, snapshot));
 	}
 	trial_type = 'PRACTICE'
-	mark_event(psychoJS, 'NA', trial_type, event_types['BLOCK_ONSET'],
+	mark_event(trials_data, globalClock, 'NA', trial_type, event_types['BLOCK_ONSET'],
 				'NA', 'NA' , 'NA')
 	return Scheduler.Event.NEXT;
 }
@@ -1145,7 +1120,7 @@ function trialsLoopBegin(thisScheduler) {
 		thisScheduler.add(endLoopIteration(thisScheduler, snapshot));
 	}
 	trial_type = 'MAIN'
-	mark_event(psychoJS, 'NA', trial_type, event_types['BLOCK_ONSET'],
+	mark_event(trials_data, globalClock, 'NA', trial_type, event_types['BLOCK_ONSET'],
 				'NA', 'NA' , 'NA')
 	return Scheduler.Event.NEXT;
 }
@@ -1207,7 +1182,7 @@ function rateFacesRoutingBegin(trials) {
 			correct_key = RIGHT_KEY 
 		}
 		
-		mark_event(psychoJS, trials.thisIndex, 'RATE_FACES', event_types['FACE_ONSET'],
+		mark_event(trials_data, globalClock, trials.thisIndex, 'RATE_FACES', event_types['FACE_ONSET'],
 			resp.rt, key_map[resp.keys] , result)
 		
 	
@@ -1273,7 +1248,7 @@ function rateFacesRespond(trials) {
 			
 
 			// Save Data on each Press
-			mark_event(psychoJS, trials.thisIndex, 'RATE_FACES', event_types['RESPONSE'],
+			mark_event(trials_data, globalClock, trials.thisIndex, 'RATE_FACES', event_types['RESPONSE'],
 				resp.rt, key_map[resp.keys] , result)
 
 			resp.keys = undefined;
@@ -1316,7 +1291,7 @@ function rateFacesFeedback(trials) {
 			resp.start(); // start on screen flip
 			resp.clearEvents();
 
-			mark_event(psychoJS, trials.thisIndex, 'RATE_FACES', event_types['FEEDBACK'],
+			mark_event(trials_data, globalClock, trials.thisIndex, 'RATE_FACES', event_types['FEEDBACK'],
 				'NA', 'NA' , 'NA')
 		}
 
@@ -1438,7 +1413,7 @@ function trialRoutineBegin(trials) {
 		too_slow = false;
 
 		trial_type = stim_type + '_' + intensity
-		mark_event(psychoJS, trials.thisIndex, trial_type, event_types['TONE_ONSET'],
+		mark_event(trials_data, globalClock, trials.thisIndex, trial_type, event_types['TONE_ONSET'],
 				'NA', 'NA' , tone)
 		return Scheduler.Event.NEXT;
 	};
@@ -1500,7 +1475,7 @@ function trialRoutineShowStim(trials) {
 		if (t >= 0.2 && stimImageStim.status == PsychoJS.Status.NOT_STARTED) {
 			stimImageStim.setAutoDraw(true)
 		
-			mark_event(psychoJS, trials.thisIndex, trial_type, event_types['FACE_ONSET'],
+			mark_event(trials_data, globalClock, trials.thisIndex, trial_type, event_types['FACE_ONSET'],
 				'NA', 'NA' , stim_paths)
 		}
 
@@ -1564,7 +1539,7 @@ function trialRoutineRespond(trials) {
 			left_text.setAutoDraw(true)
 			right_text.setAutoDraw(true)
 
-			mark_event(psychoJS, trials.thisIndex, trial_type, event_types['CHOICE_ONSET'],
+			mark_event(trials_data, globalClock, trials.thisIndex, trial_type, event_types['CHOICE_ONSET'],
 				'NA', 'NA' , 'NA')
 		}
 
@@ -1611,7 +1586,7 @@ function trialRoutineRespond(trials) {
 			}
 
 			// Save Data on each Press
-			mark_event(psychoJS, trials.thisIndex, trial_type, event_types['RESPONSE'],
+			mark_event(trials_data, globalClock, trials.thisIndex, trial_type, event_types['RESPONSE'],
 					resp.rt, key_map[resp.keys] , getResult(key_map[resp.keys]))
 			resp.keys = undefined;
 			resp.rt = undefined;
@@ -1677,7 +1652,7 @@ function initialFixation(trials) {
 			points_fixation_stim.setAutoDraw(true)
 			console.log('Initial Fixation')
 
-			mark_event(psychoJS, 'NA', trial_type, event_types['FIXATION_ONSET'],
+			mark_event(trials_data, globalClock, 'NA', trial_type, event_types['FIXATION_ONSET'],
 				'NA', 'NA' , 'NA')
 
 		}
@@ -1747,11 +1722,11 @@ function trialRoutineEnd(trials) {
 
 			if (too_slow) {
 				points_fixation_stim.setText('too slow')
-				mark_event(psychoJS, 'NA', trial_type, event_types['FEEDBACK'],
+				mark_event(trials_data, globalClock, 'NA', trial_type, event_types['FEEDBACK'],
 				'NA', 'NA' , 'slow')
 			} else {
 				points_fixation_stim.setText('+')
-				mark_event(psychoJS, 'NA', trial_type, event_types['FEEDBACK'],
+				mark_event(trials_data, globalClock, 'NA', trial_type, event_types['FEEDBACK'],
 				'NA', 'NA' , '+')
 			}
 			points_fixation_stim.setAutoDraw(true)
