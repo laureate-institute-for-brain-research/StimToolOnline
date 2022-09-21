@@ -6,8 +6,8 @@
 
 #convert MC10_Ang_050_copy.jpg -gravity North -chop 0x9 MC10_Ang_050_copy.jpg
 
-for f in ../faces/*/*/*.jpg;
+for f in ../faces/*.jpg;
 do
     echo $f
-    convert $f -gravity North -chop 0x9 $f
+    convert $f -gravity North -chop 0x10 $f
 done
