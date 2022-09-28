@@ -338,7 +338,8 @@ var resources = [
 	{ name: 'user.png', path: '/js/tasks/emotional_faces/media/user.png' },
 	{ name: 'user_filled.png', path: '/js/tasks/emotional_faces/media/user_filled.png' },
 	{ name: 'PRACTICE_ready', path: '/js/tasks/emotional_faces/media/instructions/Slide9.jpeg'},
-	{ name: 'MAIN_ready', path: '/js/tasks/emotional_faces/media/instructions/Slide10.jpeg'},
+	{ name: 'MAIN_ready', path: '/js/tasks/emotional_faces/media/instructions/Slide10.jpeg' },
+	{ name: 'PRACTICE_ready_audio.mp3', path: '/js/tasks/emotional_faces/media/instructions_audio/Slide9.mp3'},
 	{ name: 'male.png', path: '/js/tasks/emotional_faces/media/male.png' },
 	{ name: 'female.png', path: '/js/tasks/emotional_faces/media/female.png' },
 	{ name: 'high_tone.mp3', path: '/js/tasks/emotional_faces/media/tones/high_tone.mp3' },
@@ -920,6 +921,7 @@ function readyRoutineBegin(block_type) {
 		frameN = -1;
 
 		// Set readyStim based on block_type
+		console.log('block_type: ',block_type)
 		switch (block_type) {
 			case 'PRACTICE':
 				readyStim = new visual.ImageStim({
@@ -931,6 +933,11 @@ function readyRoutineBegin(block_type) {
 					flipHoriz : false, flipVert : false,
 					texRes : 128, interpolate : true, depth : 0
 				});
+				track = new Sound({
+					win: psychoJS.window,
+					value: 'PRACTICE_ready_audio.mp3'
+				});
+				track.setVolume(1.0);
 				break
 			case 'MAIN':
 				readyStim = new visual.ImageStim({
@@ -942,17 +949,22 @@ function readyRoutineBegin(block_type) {
 					flipHoriz : false, flipVert : false,
 					texRes : 128, interpolate : true, depth : 0
 				});
+				track = undefined;
 				break
 			default:
 				readyStim = new visual.ImageStim({
-					win : psychoJS.window,
-					name : 'ready_stim', units : 'height', 
-					image : 'MAIN_ready', mask : undefined,
-					ori : 0, pos : [0, 0],
-					color : new util.Color([1, 1, 1]), opacity : 1,
-					flipHoriz : false, flipVert : false,
-					texRes : 128, interpolate : true, depth : 0
+					win: psychoJS.window,
+					name: 'ready_stim', units: 'height',
+					image: 'MAIN_ready', mask: undefined,
+					ori: 0, pos: [0, 0],
+					color: new util.Color([1, 1, 1]), opacity: 1,
+					flipHoriz: false, flipVert: false,
+					texRes: 128, interpolate: true, depth: 0
 				});
+				track = undefined;
+
+				
+				
 		}
 		
 		mark_event(trials_data, globalClock, 0, block_type, event_types['BLOCK_ONSET'],
@@ -975,6 +987,11 @@ function readyRoutineEachFrame() {
 		t = readyClock.getTime();
 		if (resp.status == PsychoJS.Status.NOT_STARTED) {
 			resp.start()
+
+			if (track) {
+				console.log('ready track: ',track)
+				track.play()
+			}
 		}
 	
 		// update/draw components on each frame

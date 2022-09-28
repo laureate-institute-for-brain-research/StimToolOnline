@@ -4,6 +4,19 @@
  * @author James Touthang <james@touthang.info>
  */
 
+
+event_types = {
+	'INSTRUCT_ONSET': 1,
+	'TASK_ONSET': 2,
+	'BLOCK_ONSET': 3,
+	'TRIAL_ONSET': 4,
+	'SELECTION': 5,
+	'BLOCK_RESULT_ONSET': 6,
+	'BLOCK_RESULT_OFFSET': 7,
+	'FINAL_RESULT_ONSET': 8,
+	'FINAL_RESULT_OFFSET': 9
+}
+
  import { core, data, sound, util, visual } from '/psychojs/psychojs-2021.2.3.js';
  const { PsychoJS } = core;
  const { TrialHandler } = data;
