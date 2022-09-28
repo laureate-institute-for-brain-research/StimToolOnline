@@ -582,7 +582,7 @@ function experimentInit() {
 		text: 'CORRECT',
 		font: 'Arial',
 		units: 'norm',
-		pos: [0, -0.3], height: 0.12, wrapWidth: undefined, ori: 0,
+		pos: [0, -0.5], height: 0.12, wrapWidth: undefined, ori: 0,
 		color: new util.Color('white'), opacity: 1,
 		depth: 0.0
 	});
@@ -637,29 +637,35 @@ function experimentInit() {
  */
 function resetRects() {
 
-	left_rect = new visual.Rect({
-		win: psychoJS.window,
-		name: 'left_rect',
-		width: 0.16,
-		height: 0.09,
-		lineWidth: 3.5,
-		units: 'norm',
-		pos: [-0.3, 0 ], ori: 0,
-		lineColor: new util.Color('white'), opacity: 1,
-		depth: 0.0
-	});
+	// left_rect = new visual.Rect({
+	// 	win: psychoJS.window,
+	// 	name: 'left_rect',
+	// 	width: 0.16,
+	// 	height: 0.09,
+	// 	lineWidth: 3.5,
+	// 	units: 'norm',
+	// 	pos: [-0.3, 0 ], ori: 0,
+	// 	lineColor: new util.Color('white'), opacity: 1,
+	// 	depth: 0.0
+	// });
 
-	right_rect = new visual.Rect({
-		win: psychoJS.window,
-		name: 'right_rect',
-		width: 0.16,
-		height: 0.09,
-		lineWidth: 3.5,
-		units: 'norm',
-		pos: [ 0.3, 0 ], ori: 0,
-		lineColor: new util.Color('white'), opacity: 1,
-		depth: 0.0
-	});
+	left_rect.width = 0.16;
+	left_rect.height = 0.09;
+
+	// right_rect = new visual.Rect({
+	// 	win: psychoJS.window,
+	// 	name: 'right_rect',
+	// 	width: 0.16,
+	// 	height: 0.09,
+	// 	lineWidth: 3.5,
+	// 	units: 'norm',
+	// 	pos: [ 0.3, 0 ], ori: 0,
+	// 	lineColor: new util.Color('white'), opacity: 1,
+	// 	depth: 0.0
+	// });
+
+	right_rect.width = 0.16;
+	right_rect.height = 0.09;
 }
 
 function instruct_pagesLoopBegin(thisScheduler) {
@@ -1175,12 +1181,21 @@ function rateFacesRoutingBegin(trials) {
 		});
 		stimImageStim.setAutoDraw(true) // show image
 
+		// For This block move the text slighty down
+		left_text.pos[1] = -0.2
+		left_rect.pos[1] = left_text.pos[1]
+		
+		right_text.pos[1] = -0.2
+		right_rect.pos[1] = right_text.pos[1]
+	
+
 		left_text.setAutoDraw(true) // show left text (angry)
 		right_text.setAutoDraw(true) // show right text (sad)
 
 		left_rect.setAutoDraw(false)
 		right_rect.setAutoDraw(false)
 		resetRects() // reset rect stims
+		
 
 		console.log("Face: ", stim_paths)
 	
@@ -1332,7 +1347,6 @@ function rateFacesFeedback(trials) {
 			} else {
 				right_rect.setAutoDraw(true)
 			}
-			
 		}
 
 		// Another exit is after some time after the correct press was entered
