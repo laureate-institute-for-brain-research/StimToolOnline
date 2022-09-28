@@ -477,11 +477,11 @@ var moreStim;
 var fontColor = '#ffffff'
 var fontFadeColor = '#545454'
 
-var leftColor = '#7E7E7E'
-var leftFadeColor = '#7E7E7E'
+var leftColor = '#56B4E9'
+var leftFadeColor = '#142833'
 
-var rightColor = '#7E7E7E'
-var rightFadeColor = '#7E7E7E'
+var rightColor = '#db6e00'
+var rightFadeColor = '#361b01'
 
 var like_color = {
 	'likes': '#00FFFF',
