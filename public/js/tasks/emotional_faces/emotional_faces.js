@@ -1169,7 +1169,7 @@ function rateFacesRoutingBegin(trials) {
 			win : psychoJS.window,
 			name : 'stimPath', units : 'height', 
 			image : stim_paths, mask : undefined,
-			ori : 0, pos : [0, 0.3], opacity : 1,
+			ori : 0, pos : [0, 0.2], opacity : 1,
 			flipHoriz : false, flipVert : false,
 			texRes : 128, interpolate : true, depth : 0
 		});
@@ -1258,6 +1258,9 @@ function rateFacesRespond(trials) {
 			result = getResult(key_map[resp.keys])
 			if (result == 'incorrect') {
 				feedback_result_stim.setText(result + '. Please Try Again')
+
+				left_rect.setAutoDraw(false)
+				right_rect.setAutoDraw(false)
 			} else {
 				feedback_result_stim.setText(result)
 			}
@@ -1320,7 +1323,24 @@ function rateFacesFeedback(trials) {
 
 		// For incorrect trials, wait for keyboard press
 		if (result == 'incorrect' && theseKeys.length > 0) {
-			continueRoutine = false;// just go to next face after clicking correct key
+			// continueRoutine = false;// just go to next face after clicking correct key
+			respond_time = resp.clock.getTime()
+			feedback_result_stim.setText('correct')
+
+			if (correct_key == LEFT_KEY) {
+				left_rect.setAutoDraw(true)
+			} else {
+				right_rect.setAutoDraw(true)
+			}
+			
+		}
+
+		// Another exit is after some time after the correct press was entered
+		// This is for the incorrect trials
+		// Show Slight Feedback
+		if (resp.clock.getTime() >= (respond_time + 1)) {
+			// Continue Routine After Pressing Key
+			continueRoutine = false;
 		}
 	
 		 
