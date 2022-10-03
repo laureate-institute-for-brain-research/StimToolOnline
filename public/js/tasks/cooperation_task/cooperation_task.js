@@ -225,10 +225,6 @@ window.onload = function () {
 			if (getQueryVariable('study')) expInfo.study = getQueryVariable('study')
 			if (getQueryVariable('run')) expInfo.run_id = getQueryVariable('run')
 
-
-			// If vanderbelt, send them to next run
-			console.log(expInfo)
-
 			// Sanitze the resources. Needs to be clean so that psychoJS doesn't complain
 			resources = sanitizeResources(resources)
 			console.log(resources)
@@ -321,7 +317,9 @@ var resources = [
 	{ name: 'practice_schedule.csv', path: '/js/tasks/cooperation_task/practice_schedule.csv' },
 	{ name: 'faces_paths.csv', path: '/js/tasks/cooperation_task/faces_paths.csv' }, // faces lists
 	{ name: 'PRACTICE_ready', path: '/js/tasks/cooperation_task/media/instructions/Slide17.jpeg'},
-	{ name: 'MAIN_ready', path: '/js/tasks/cooperation_task/media/instructions/Slide18.jpeg' }
+	{ name: 'MAIN_ready', path: '/js/tasks/cooperation_task/media/instructions/Slide18.jpeg' },
+	{ name: 'positive_result', path: '/js/tasks/cooperation_task/media/green_smile.png' },
+	{ name: 'negative_result', path: '/js/tasks/cooperation_task/media/red_sad.png' },
 ]
 
 
@@ -411,7 +409,7 @@ function experimentInit() {
 	// Initialize components for Routine "trial"
 	blockClock = new util.Clock();
 
-
+	g.game_number = 1
 	g.text_game_number  = new visual.TextStim({
 		win: psychoJS.window,
 		name: 'text_game_number',
@@ -423,17 +421,18 @@ function experimentInit() {
 		depth: 0.0
 	});
 
-	g.game_number  = new visual.TextStim({
+	g.text_val_game_number  = new visual.TextStim({
 		win: psychoJS.window,
 		name: 'game_number',
 		text: '1', alignHoriz: 'right',
 		font: 'Arial',
 		units: 'norm',
-		pos: [-0.48, 0.9], height: 0.06, wrapWidth: undefined, ori: 0,
+		pos: [-0.4, 0.9], height: 0.06, wrapWidth: undefined, ori: 0,
 		color: new util.Color('white'), opacity: 1,
 		depth: 0.0
 	});
 
+	g.trial_number = 1;
 	g.text_trial_number  = new visual.TextStim({
 		win: psychoJS.window,
 		name: 'text_trial_number',
@@ -451,7 +450,7 @@ function experimentInit() {
 		text: '1',alignHoriz: 'right',
 		font: 'Arial',
 		units: 'norm',
-		pos: [-0.48, 0.8], height: 0.06, wrapWidth: undefined, ori: 0,
+		pos: [-0.4, 0.8], height: 0.06, wrapWidth: undefined, ori: 0,
 		color: new util.Color('white'), opacity: 1,
 		depth: 0.0
 	});
@@ -1113,10 +1112,12 @@ function blockRoutineBegin(block) {
 		// Draw the static stims
 		// Top Information
 		g.text_game_number.setAutoDraw(true);
-		g.game_number.setAutoDraw(true);
+		g.text_val_game_number.setAutoDraw(true);
+		g.text_val_game_number.setText(g.game_number);
 
 		g.text_trial_number.setAutoDraw(true);
 		g.text_val_trial_number.setAutoDraw(true)
+		g.text_val_trial_number.setText(g.trial_number);
 
 		g.text_total_points.setAutoDraw(true)
 		g.text_val_total_points.setAutoDraw(true)
@@ -1140,11 +1141,236 @@ function blockRoutineBegin(block) {
 	};
 }
 
+// X / Y normal positiions for each of the outcome faces for each choice.
+g.choice_outcome_pos = {
+	1: {
+		'negative': [],
+		'positive': []
+	},
+	2: {
+		'negative': [],
+		'positive': []
+	},
+	3: {
+		'negative': [],
+		'positive': []
+	}
+}
+var face_pos_multiplier = 0.07
+// Add the positions iteratively
+for (let i = 0; i < 14; i++) {
+	// choice 1, negative
+	g.choice_outcome_pos[1]['negative'].push([-0.55, -0.45 + (i * face_pos_multiplier)])
+	g.choice_outcome_pos[1]['positive'].push([-0.45, -0.45 + (i * face_pos_multiplier)])
+	
+	g.choice_outcome_pos[2]['negative'].push([-0.05, -0.45 + (i * face_pos_multiplier)])
+	g.choice_outcome_pos[2]['positive'].push([ 0.05, -0.45 + (i * face_pos_multiplier)])
 
+	g.choice_outcome_pos[3]['negative'].push([ 0.55, -0.45 + (i * face_pos_multiplier)])
+	g.choice_outcome_pos[3]['positive'].push([ 0.45, -0.45 + (i * face_pos_multiplier)])
+}
+  
+
+
+
+// Used for holding the intialized outcome image stim.
+// Can be used to access ImageStim 
+g.outcome = {
+	1: {
+		'negative': [],
+		'positive': []
+	},
+	2: {
+		'negative': [],
+		'positive': []
+	},
+	3: {
+		'negative': [],
+		'positive': []
+	}
+}
+
+// Used for counting the positive/negative levels for each choice selection
+g.choice_counter = {
+	1: { 'negative': 0, 'positive': 0},
+	2: { 'negative': 0, 'positive': 0},
+	3: { 'negative': 0, 'positive': 0},
+}
+
+/**
+ * Returns either positive or negative given random probability
+ * @param {*} probability probabilty 
+ */
+function getRandomOutcome(probability) {
+	if (Math.random() < probability) {
+		return 'positive'
+	} else {
+		return 'negative'
+	}
+}
+var outcome;
 function blockRoutineTrials(trials) {
 	return function () {
 		//------Loop for each frame of Routine 'trial'-------
 		let continueRoutine = true; // until we're told otherwise
+
+		if (t >= 0 && ready.status === PsychoJS.Status.NOT_STARTED) {
+			// keep track of start time/frame for later
+			ready.tStart = t;  // (not accounting for frame time here)
+			ready.frameNStart = frameN;  // exact frame index
+
+			// keyboard checking is just starting
+			psychoJS.window.callOnFlip(function () { ready.clock.reset(); });  // t=0 on next screen flip
+			psychoJS.window.callOnFlip(function () { ready.start(); }); // start on screen flip
+			psychoJS.window.callOnFlip(function () { ready.clearEvents(); });
+		}
+
+		if (ready.status === PsychoJS.Status.STARTED) {
+
+			let theseKeys = ready.getKeys({ keyList: ['1', '2', '3'], waitRelease: false });
+			
+			if (theseKeys.length > 0) {
+				if (theseKeys[0].name == '1') {
+					let choice = 1
+					outcome = getRandomOutcome(probability_1)
+					
+					if (outcome == 'positive') {
+						// Positive Outcome on Choice 2
+						g.outcome[choice]['positive'].push(
+							new visual.ImageStim({
+							win : psychoJS.window,
+							name : 'outcome_choice_' + choice, units : 'norm',
+							image : 'positive_result', mask : undefined,
+							ori: 0,
+								pos: g.choice_outcome_pos[choice]['positive'][
+									g.choice_counter[choice]['positive']
+							],
+							color : new util.Color([1, 1, 1]), opacity : 1,
+							flipHoriz : false, flipVert : false,
+							texRes : 128, interpolate : true, depth : 0
+							})
+						)
+						g.outcome[choice]['positive'][g.choice_counter[choice]['positive']].setAutoDraw(true)
+						g.choice_counter[choice]['positive']++
+					} else {
+						// Negative Outcome on Choice 2
+						g.outcome[choice]['negative'].push(
+							new visual.ImageStim({
+							win : psychoJS.window,
+							name : 'outcome_negative_choice_' + choice, units : 'norm', 
+							image : 'negative_result', mask : undefined,
+							ori: 0,
+								pos: g.choice_outcome_pos[choice]['negative'][
+									g.choice_counter[choice]['negative']
+							],
+							color : new util.Color([1, 1, 1]), opacity : 1,
+							flipHoriz : false, flipVert : false,
+							texRes : 128, interpolate : true, depth : 0
+							})
+						)
+						g.outcome[choice]['negative'][g.choice_counter[choice]['negative']].setAutoDraw(true)
+						g.choice_counter[choice]['negative']++
+					}
+	
+				}
+	
+				if (theseKeys[0].name == '2') {
+					let choice = 2
+					outcome = getRandomOutcome(probability_2)
+					
+					if (outcome == 'positive') {
+						// Positive Outcome on Choice 2
+						g.outcome[choice]['positive'].push(
+							new visual.ImageStim({
+							win : psychoJS.window,
+							name : 'outcome_choice_' + choice, units : 'norm',
+							image : 'positive_result', mask : undefined,
+							ori: 0,
+								pos: g.choice_outcome_pos[choice]['positive'][
+									g.choice_counter[choice]['positive']
+							],
+							color : new util.Color([1, 1, 1]), opacity : 1,
+							flipHoriz : false, flipVert : false,
+							texRes : 128, interpolate : true, depth : 0
+							})
+						)
+						g.outcome[choice]['positive'][g.choice_counter[choice]['positive']].setAutoDraw(true)
+						g.choice_counter[choice]['positive']++
+					} else {
+						// Negative Outcome on Choice 2
+						g.outcome[choice]['negative'].push(
+							new visual.ImageStim({
+							win : psychoJS.window,
+							name : 'outcome_negative_choice_' + choice, units : 'norm', 
+							image : 'negative_result', mask : undefined,
+							ori: 0,
+								pos: g.choice_outcome_pos[choice]['negative'][
+									g.choice_counter[choice]['negative']
+							],
+							color : new util.Color([1, 1, 1]), opacity : 1,
+							flipHoriz : false, flipVert : false,
+							texRes : 128, interpolate : true, depth : 0
+							})
+						)
+						g.outcome[choice]['negative'][g.choice_counter[choice]['negative']].setAutoDraw(true)
+						g.choice_counter[choice]['negative']++
+					}
+				}
+	
+				if (theseKeys[0].name == '3') {
+					let choice = 3
+					outcome = getRandomOutcome(probability_3)
+	
+					if (outcome == 'positive') {
+						// Positive Outcome on Choice 3
+						g.outcome[choice]['positive'].push(
+							new visual.ImageStim({
+							win : psychoJS.window,
+							name : 'outcome_choice_' + choice, units : 'norm',
+							image : 'positive_result', mask : undefined,
+							ori: 0,
+								pos: g.choice_outcome_pos[choice]['positive'][
+									g.choice_counter[choice]['positive']
+							],
+							color : new util.Color([1, 1, 1]), opacity : 1,
+							flipHoriz : false, flipVert : false,
+							texRes : 128, interpolate : true, depth : 0
+							})
+						)
+						g.outcome[choice]['positive'][g.choice_counter[choice]['positive']].setAutoDraw(true)
+						g.choice_counter[choice]['positive']++
+					} else {
+						// Negative Outcome on Choice 3
+						g.outcome[choice]['negative'].push(
+							new visual.ImageStim({
+							win : psychoJS.window,
+							name : 'outcome_negative_choice_' + choice, units : 'norm', 
+							image : 'negative_result', mask : undefined,
+							ori: 0,
+								pos: g.choice_outcome_pos[choice]['negative'][
+									g.choice_counter[choice]['negative']
+							],
+							color : new util.Color([1, 1, 1]), opacity : 1,
+							flipHoriz : false, flipVert : false,
+							texRes : 128, interpolate : true, depth : 0
+							})
+						)
+						g.outcome[choice]['negative'][g.choice_counter[choice]['negative']].setAutoDraw(true)
+						g.choice_counter[choice]['negative']++
+					}
+				}
+
+				// presed key
+				g.trial_number++ // incremente trial number
+				g.text_val_trial_number.setText(g.trial_number)
+
+				// Next Routine after trial nuber reached
+				if (g.trial_number > trials_block) {
+					continueRoutine = false;
+				}
+			}
+		}
+
 
 		// check for quit (typically the Esc key)
 		if (psychoJS.eventManager.getKeys({keyList:['escape']}).length > 0) {
@@ -1156,7 +1382,6 @@ function blockRoutineTrials(trials) {
 			return Scheduler.Event.FLIP_REPEAT;
 		}
 		else {
-			stimClock.reset(); // stimclock
 			return Scheduler.Event.NEXT;
 		}
 	};
@@ -1170,20 +1395,8 @@ const STIM_DURATION = 0.150 // duration of the image
 function blockRoutineOutcome(trials) {
 	return function () {
 		//------Loop for each frame of Routine 'trial'-------
-		let continueRoutine = true; // until we're told otherwise
+		let continueRoutine = false; // until we're told otherwise
 
-		t = stimClock.getTime()
-		// Space for 200ms then show stim for 150ms
-		if (t >= 0.2 && stimImageStim.status == PsychoJS.Status.NOT_STARTED) {
-			stimImageStim.setAutoDraw(true)
-		
-			mark_event(trials_data, globalClock, trials.thisIndex, trial_type, event_types['FACE_ONSET'],
-				'NA', 'NA' , stim_paths)
-		}
-
-		if (t >= 0.2 + STIM_DURATION) {
-			continueRoutine = false
-		}
 
 		// check for quit (typically the Esc key)
 		if (psychoJS.eventManager.getKeys({keyList:['escape']}).length > 0) {
@@ -1195,11 +1408,6 @@ function blockRoutineOutcome(trials) {
 			return Scheduler.Event.FLIP_REPEAT;
 		}
 		else {
-			// Clear Stim
-			stimImageStim.setAutoDraw(false)
-			stimImageStim.status = PsychoJS.Status.FINISHED;
-
-			respondClock.reset(); // response Clock
 			return Scheduler.Event.NEXT;
 		}
 	};
@@ -1294,6 +1502,71 @@ function sendData() {
 }
 
 /**
+ * Reset the choice counters
+ * (Usuually done after each block)
+ */
+function reset_choice_counter(){
+	g.choice_counter[1]['negative'] = 0;
+	g.choice_counter[1]['positive'] = 0;
+
+	g.choice_counter[2]['negative'] = 0;
+	g.choice_counter[2]['positive'] = 0;
+
+	g.choice_counter[3]['negative'] = 0;
+	g.choice_counter[3]['positive'] = 0;
+}
+
+/**
+ * Cleat the outcome faces
+ */
+function clear_outcome_faces() {
+
+	if (g.outcome[1]['negative'].length > 0) {
+		g.outcome[1]['negative'].forEach((item) => {
+			item.setAutoDraw(false)
+			item.status = PsychoJS.Status.NOT_STARTED
+		});
+	}
+
+	if (g.outcome[1]['positive'].length > 0) {
+		g.outcome[1]['positive'].forEach((item) => {
+			item.setAutoDraw(false)
+			item.status = PsychoJS.Status.NOT_STARTED
+		});
+	}
+
+	if (g.outcome[2]['negative'].length > 0) {
+		g.outcome[2]['negative'].forEach((item) => {
+			item.setAutoDraw(false)
+			item.status = PsychoJS.Status.NOT_STARTED
+		});
+	}
+
+	if (g.outcome[2]['positive'].length > 0) {
+		g.outcome[2]['positive'].forEach((item) => {
+			item.setAutoDraw(false)
+			item.status = PsychoJS.Status.NOT_STARTED
+		});
+	}
+
+	if (g.outcome[3]['negative'].length > 0) {
+		g.outcome[3]['negative'].forEach((item) => {
+			item.setAutoDraw(false)
+			item.status = PsychoJS.Status.NOT_STARTED
+		});
+	}
+
+	if (g.outcome[3]['positive'].length > 0) {
+		g.outcome[3]['positive'].forEach((item) => {
+			item.setAutoDraw(false)
+			item.status = PsychoJS.Status.NOT_STARTED
+		});
+	}
+
+
+}
+
+/**
  * Trial Routine End
  * @param {*} trials 
  * @returns 
@@ -1303,20 +1576,10 @@ function blockRoutineEnd(trials) {
 		//------Ending Routine 'trial'-------
 		t = endClock.getTime()
 
-		if (points_fixation_stim.status == PsychoJS.Status.NOT_STARTED) {
+		g.game_number++
+		g.trial_number = 0
 
-			if (too_slow) {
-				points_fixation_stim.setText('too slow')
-				mark_event(trials_data, globalClock, 'NA', trial_type, event_types['FEEDBACK'],
-				'NA', 'NA' , 'too slow')
-			} else {
-				points_fixation_stim.setText('+')
-				mark_event(trials_data, globalClock, 'NA', trial_type, event_types['FEEDBACK'],
-				'NA', 'NA' , '+')
-			}
-			points_fixation_stim.setAutoDraw(true)
-			console.log('End Fixation')
-		}
+	
 		
 		// Send Data
 		if (t <= 2) {
@@ -1325,6 +1588,11 @@ function blockRoutineEnd(trials) {
 			resp.stop()
 			resp.status = PsychoJS.Status.NOT_STARTED
 			sendData()
+
+			
+			reset_choice_counter() // resetCounter
+
+			clear_outcome_faces() // undraw the faces
 
 			// Clear Fixation
 			points_fixation_stim.setAutoDraw(false)
