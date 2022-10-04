@@ -20,7 +20,7 @@ module.exports = function (app){
         var type = q.type;
 
         if (task) {
-            displayTask(task, res, q)
+            displayTask(task, req, res, q)
         } else if (survey) {
             displaySurvey(survey,res)
         }else {
@@ -1276,8 +1276,36 @@ module.exports = function (app){
     }
 
 
-    function displayTask(task, res, query) {
+    function displayTask(task, req, res, query) {
         logger.info(`task requested: ${task} by ${query.id}`)
+
+        if (task == 'cooperation_task') {
+            // For the cooperation_task, it needs to be behind a password protected page since 
+            // it uses IAPS/IADS media
+            const reject = () => {
+                res.setHeader("www-authenticate", "Basic");
+                res.sendStatus(401);
+            };
+            
+            const authorization = req.headers.authorization;
+
+            if (!authorization) {
+                return reject();
+            }
+
+            const [username, password] = Buffer.from(
+                authorization.replace("Basic ", ""),
+                "base64"
+            )
+                .toString()
+                .split(":");
+
+            if (!(username === process.env.IAPS_USER && password === process.env.IAPS_PASSWORD)) {
+                return reject();
+            }
+            
+        }
+
         fs.readFile(`public/js/tasks/${task}/index.html`, function(err, data) {
             // Write Header
             res.writeHead(200, {
@@ -1287,6 +1315,9 @@ module.exports = function (app){
             res.write(data);
             res.end();
         });
+
+
+        
     }
 
     function displaySurvey(survey, res) {

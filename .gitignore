@@ -3,3 +3,4 @@ node_modules/*
 Mechanical-Turk-Web-App/
 data/
 .env
+public/js/tasks/cooperation_task/media/outcome_media/

@@ -1577,7 +1577,7 @@ function blockRoutineEnd(trials) {
 		t = endClock.getTime()
 
 		g.game_number++
-		g.trial_number = 0
+		g.trial_number = 1
 
 	
 		
