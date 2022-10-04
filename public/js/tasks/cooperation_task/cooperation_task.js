@@ -26,6 +26,10 @@ var event_types = {
 
 var trials_data = []
 var g = {}				// global variables
+g.outcome_media = {
+	'negative': [], 	// holds negateive image-audio pair
+	'positive': []		// holds positive image-audio pair
+}
 
  import { core, data, sound, util, visual } from '/psychojs/psychojs-2021.2.3.js';
  const { PsychoJS } = core;
@@ -182,6 +186,59 @@ window.onload = function () {
 			})
 		})
 
+		// Add Outcome Picture and Audio to resources
+		// Add Faces Media to Resrouces
+		.then((values) => {			
+			return new Promise((resolve, reject) => {
+				$.ajax({
+					type: 'GET',
+					url: '/js/tasks/cooperation_task/outcome_media.csv',
+					dataType: 'text',
+					async: false,
+					success: (data) => {
+						var out = [];
+						var allRows = data.split('\n'); // split rows at new line
+						
+						var headerRows = allRows[0].split(',');
+
+						for (var i=1; i<allRows.length; i++) {
+							var obj = {};
+							var currentLine = allRows[i].split(',');
+							for (var j = 0; j < headerRows.length; j++){
+								obj[headerRows[j]] = currentLine[j];	
+							}
+							// If there's media add to resources
+							if (obj.image_path && obj.image_path != undefined) {
+								resources.push({ name: obj.image_path , path: obj.image_path  })
+							}
+
+							// If there's media add to resources
+							if (obj.sound_path && obj.sound_path != undefined) {
+								resources.push({ name: obj.sound_path , path: obj.sound_path  })
+							}
+
+							// Push to their designated outcome lists
+							if (obj.outcome_type == 'negative') {
+								g.outcome_media.negative.push([
+									obj.image_path,
+									obj.sound_path 
+								])
+							} else {
+								g.outcome_media.positive.push([
+									obj.image_path,
+									obj.sound_path 
+								])
+							}
+							
+						}
+
+						resolve(data)
+					}
+				})
+				
+			})
+		})
+
 		// Add Main Schedule stim_path to resources
 		.then((values) => {			
 			// Add instrcution Images
@@ -227,7 +284,8 @@ window.onload = function () {
 
 			// Sanitze the resources. Needs to be clean so that psychoJS doesn't complain
 			resources = sanitizeResources(resources)
-			console.log(resources)
+			// console.log(resources)
+			console.log(g.outcome_media)
 			// expInfo.study = study
 			psychoJS.start({
 				expName, 
@@ -513,6 +571,7 @@ function experimentInit() {
 	// Create some handy timers
 	globalClock = new util.Clock();  // to track the time since experiment started
 	routineTimer = new util.CountdownTimer();  // to track time remaining of each (non-slip) routine
+	g.outcomeTimer = new util.CountdownTimer(); // timer for when to go to next trial
 
 	feedbackTimer = new util.CountdownTimer(1); 
 
@@ -1208,6 +1267,41 @@ function getRandomOutcome(probability) {
 		return 'negative'
 	}
 }
+
+/**
+ * Returns an image/audio outcome pair based on given income
+ * @param {*} outcome string of either 'negative' or 'positive'
+ */
+function getOutcomePair(outcome) {
+	let outcome_pair;
+	if (outcome == 'negative') {
+		outcome_pair = g.outcome_media.negative[Math.floor(Math.random() * g.outcome_media.negative.length)];
+	} else {
+		outcome_pair = g.outcome_media.positive[Math.floor(Math.random() * g.outcome_media.positive.length)];
+	}
+	console.log('outcome_pair:',outcome_pair)
+
+	// Outcome_image Stim
+	g.outcome_image = new visual.ImageStim({
+		win : psychoJS.window,
+		name : 'outcome_image', units : 'norm', 
+		image : outcome_pair[0], mask : undefined,
+		ori: 0,pos: [0,0], opacity : 1,size: [2,2],
+		flipHoriz : false, flipVert : false,
+		texRes : 128, interpolate : true, depth : 2
+	})
+	
+	// Outocme Sound Stim
+	g.outcome_sound = new Sound({
+		win: psychoJS.window,
+		value: outcome_pair[1]
+	});
+	
+	g.outcome_sound.setVolume(1.0);
+	
+}
+
+
 var outcome;
 function blockRoutineTrials(trials) {
 	return function () {
@@ -1225,14 +1319,26 @@ function blockRoutineTrials(trials) {
 			psychoJS.window.callOnFlip(function () { ready.clearEvents(); });
 		}
 
+		// Clear out the outcome image after timer is up and also if it's not the first trial
+		if (g.outcomeTimer.getTime() <= 0 && g.trial_number > 1) {
+			g.outcome_image.setAutoDraw(false)
+			g.outcome_image.status = PsychoJS.Status.NOT_STARTED
+			// for some reason, we need to setText after we draw out the image or else
+			//  the trial number is a layer above the outcome image
+			g.text_val_trial_number.setText(g.trial_number)
+		}
+
 		if (ready.status === PsychoJS.Status.STARTED) {
 
 			let theseKeys = ready.getKeys({ keyList: ['1', '2', '3'], waitRelease: false });
 			
-			if (theseKeys.length > 0) {
+			if (theseKeys.length > 0 && g.outcomeTimer.getTime() <= 0) {
+
 				if (theseKeys[0].name == '1') {
 					let choice = 1
 					outcome = getRandomOutcome(probability_1)
+					
+					getOutcomePair(outcome) // Generate a random image/sound pair based on outcome
 					
 					if (outcome == 'positive') {
 						// Positive Outcome on Choice 2
@@ -1277,6 +1383,7 @@ function blockRoutineTrials(trials) {
 				if (theseKeys[0].name == '2') {
 					let choice = 2
 					outcome = getRandomOutcome(probability_2)
+					getOutcomePair(outcome) // Generate a random image/sound pair based on outcome
 					
 					if (outcome == 'positive') {
 						// Positive Outcome on Choice 2
@@ -1320,6 +1427,7 @@ function blockRoutineTrials(trials) {
 				if (theseKeys[0].name == '3') {
 					let choice = 3
 					outcome = getRandomOutcome(probability_3)
+					getOutcomePair(outcome) // Generate a random image/sound pair based on outcome
 	
 					if (outcome == 'positive') {
 						// Positive Outcome on Choice 3
@@ -1362,7 +1470,15 @@ function blockRoutineTrials(trials) {
 
 				// presed key
 				g.trial_number++ // incremente trial number
-				g.text_val_trial_number.setText(g.trial_number)
+				
+
+				// Start Timer
+				g.outcomeTimer.reset( g.outcome_sound.getDuration() ) ;
+				
+				g.outcome_image.setAutoDraw(true)
+				g.outcome_sound.play()
+
+				
 
 				// Next Routine after trial nuber reached
 				if (g.trial_number > trials_block) {
@@ -1408,6 +1524,10 @@ function blockRoutineOutcome(trials) {
 			return Scheduler.Event.FLIP_REPEAT;
 		}
 		else {
+			g.outcome_image.setAutoDraw(false)
+			g.outcome_image.status = PsychoJS.Status.NOT_STARTED
+
+			
 			return Scheduler.Event.NEXT;
 		}
 	};
