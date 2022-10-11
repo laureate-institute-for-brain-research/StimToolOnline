@@ -29,10 +29,16 @@ var event_types = {
 
 var trials_data = []
 var g = {}				// global variables
+g.PLEASANT_COLOR = 'green';
+g.UNPLEASANT_COLOR = 'red';
+
 g.outcome_media = {
 	'negative': [], 	// holds negateive image-audio pair
 	'positive': []		// holds positive image-audio pair
 }
+
+var LEFT_KEY = 'left'
+var RIGHT_KEY = 'right'
 
  import { core, data, sound, util, visual } from '/psychojs/psychojs-2021.2.3.js';
  const { PsychoJS } = core;
@@ -44,15 +50,22 @@ const { round } = util;
  
 import { Sound } from '/lib/sound-2020.1.js';
 
-// TASAK PARAMS
-var practice = false;
-var LEFT_KEY = 'left'
-var RIGHT_KEY = 'right'
-var keyList = [LEFT_KEY, RIGHT_KEY]
+/**
+ * Returns array of unique paths
+ * @param {*} resources 
+ */
+function removeDuplicates(resources) {
+	let new_resources = []
+	let paths_added = []
+	resources.forEach(element => {
+		if (!paths_added.includes(element.path)) {
+			paths_added.push(element.path)  // add path to paths addded.
+			new_resources.push(element)		// then add to resources
 
-var highOfferVal = 80
-
-
+		}
+	})
+	return new_resources
+}
 // init psychoJS:
 const psychoJS = new PsychoJS({
 	debug: false
@@ -216,6 +229,11 @@ window.onload = function () {
 							}
 
 							// If there's media add to resources
+							if (obj.image_path_scramble && obj.image_path_scramble != undefined) {
+								resources.push({ name: obj.image_path_scramble , path: obj.image_path_scramble  })
+							}
+
+							// If there's media add to resources
 							if (obj.sound_path && obj.sound_path != undefined) {
 								resources.push({ name: obj.sound_path , path: obj.sound_path  })
 							}
@@ -224,12 +242,14 @@ window.onload = function () {
 							if (obj.outcome_type == 'negative') {
 								g.outcome_media.negative.push([
 									obj.image_path,
-									obj.sound_path 
+									obj.sound_path,
+									obj.image_path_scramble,
 								])
 							} else {
 								g.outcome_media.positive.push([
 									obj.image_path,
-									obj.sound_path 
+									obj.sound_path,
+									obj.image_path_scramble,
 								])
 							}
 							
@@ -287,13 +307,14 @@ window.onload = function () {
 
 			// Sanitze the resources. Needs to be clean so that psychoJS doesn't complain
 			resources = sanitizeResources(resources)
+			let uniq_resources = removeDuplicates(resources)
 			// console.log(resources)
-			console.log(g.outcome_media)
+			// console.log(g.outcome_media)
 			// expInfo.study = study
 			psychoJS.start({
 				expName, 
 				expInfo,
-				resources: resources,
+				resources: uniq_resources,
 			  })
 			psychoJS._config.experiment.saveFormat = undefined // don't save to client side
 			
@@ -379,8 +400,10 @@ var resources = [
 	{ name: 'faces_paths.csv', path: '/js/tasks/cooperation_task/faces_paths.csv' }, // faces lists
 	{ name: 'PRACTICE_ready', path: '/js/tasks/cooperation_task/media/instructions/Slide18.jpeg'},
 	{ name: 'MAIN_ready', path: '/js/tasks/cooperation_task/media/instructions/Slide19.jpeg' },
-	{ name: 'positive_result', path: '/js/tasks/cooperation_task/media/green_smile.png' },
-	{ name: 'negative_result', path: '/js/tasks/cooperation_task/media/red_sad.png' },
+	{ name: 'positive_face', path: '/js/tasks/cooperation_task/media/green_smile.png' },
+	{ name: 'negative_face', path: '/js/tasks/cooperation_task/media/red_sad.png' },
+	{ name: 'neutral_face', path: '/js/tasks/cooperation_task/media/neutral_face.png' },
+	{ name: 'neutral_sound.mp3', path: '/js/tasks/cooperation_task/media/neutral_sound.mp3'}
 ]
 
 var frameDur;
@@ -499,20 +522,20 @@ function experimentInit() {
 	});
 
 
-	g.text_total_points  = new visual.TextStim({
+	g.text_game_type  = new visual.TextStim({
 		win: psychoJS.window,
-		name: 'text_total_points',
-		text: 'Points:',alignHoriz: 'left',
+		name: 'text_game_type',
+		text: 'Game Type:',alignHoriz: 'left',
 		font: 'Arial',
 		units: 'norm',
-		pos: [0.6, 0.9], height: 0.06, wrapWidth: undefined, ori: 0,
+		pos: [0.2, 0.9], height: 0.06, wrapWidth: undefined, ori: 0,
 		color: new util.Color('white'), opacity: 1,
 		depth: 0.0
 	});
 
-	g.text_val_total_points = new visual.TextStim({
+	g.text_val_game_type = new visual.TextStim({
 		win: psychoJS.window,
-		name: 'text_val_total_points',
+		name: 'text_val_game_type',
 		text: '0',alignHoriz: 'right',
 		font: 'Arial',
 		units: 'norm',
@@ -998,7 +1021,7 @@ function instruct_pagesLoopEnd() {
 // SHow the points in the trial 
 function trialsLoopEnd() {
 	g.text_trial_number.setAutoDraw(false)
-	g.text_val_total_points.setAutoDraw(false)
+	g.text_val_game_type.setAutoDraw(false)
 	g.slideStim.setAutoDraw(false)
 
 	psychoJS.experiment.removeLoop(trials);
@@ -1146,8 +1169,15 @@ function blockRoutineBegin(block) {
 		g.text_val_trial_number.setText(g.trial_number);
 		g.last_trial_number = undefined; // store laste trial number
 
-		g.text_total_points.setAutoDraw(true)
-		g.text_val_total_points.setAutoDraw(true)
+		// g.text_game_type.setAutoDraw(true)
+		if (game_type == 'pleasant') {
+			g.text_val_game_type.color = g.PLEASANT_COLOR;
+			g.text_val_game_type.setText('Positive Outcome Games')
+		} else {
+			g.text_val_game_type.color = g.UNPLEASANT_COLOR;
+			g.text_val_game_type.setText('Negative Outcome Games')
+		}
+		g.text_val_game_type.setAutoDraw(true)
 
 		g.rect[1].setAutoDraw(true)
 		g.rect[2].setAutoDraw(true)
@@ -1173,97 +1203,207 @@ function blockRoutineBegin(block) {
 // X / Y normal positiions for each of the outcome faces for each choice.
 g.choice_outcome_pos = {
 	1: {
-		'negative': [],
-		'positive': []
+		'unscramble': [],
+		'scramble': []
 	},
 	2: {
-		'negative': [],
-		'positive': []
+		'unscramble': [],
+		'scramble': []
 	},
 	3: {
-		'negative': [],
-		'positive': []
+		'unscramble': [],
+		'scramble': []
 	}
 }
 var face_pos_multiplier = 0.07
 // Add the positions iteratively
 for (let i = 0; i < 14; i++) {
 	// choice 1, negative
-	g.choice_outcome_pos[1]['negative'].push([-0.55, -0.45 + (i * face_pos_multiplier)])
-	g.choice_outcome_pos[1]['positive'].push([-0.45, -0.45 + (i * face_pos_multiplier)])
+	g.choice_outcome_pos[1]['scramble'].push([-0.55, -0.45 + (i * face_pos_multiplier)])
+	g.choice_outcome_pos[1]['unscramble'].push([-0.45, -0.45 + (i * face_pos_multiplier)])
 	
-	g.choice_outcome_pos[2]['negative'].push([-0.05, -0.45 + (i * face_pos_multiplier)])
-	g.choice_outcome_pos[2]['positive'].push([ 0.05, -0.45 + (i * face_pos_multiplier)])
+	g.choice_outcome_pos[2]['scramble'].push([-0.05, -0.45 + (i * face_pos_multiplier)])
+	g.choice_outcome_pos[2]['unscramble'].push([ 0.05, -0.45 + (i * face_pos_multiplier)])
 
-	g.choice_outcome_pos[3]['negative'].push([ 0.55, -0.45 + (i * face_pos_multiplier)])
-	g.choice_outcome_pos[3]['positive'].push([ 0.45, -0.45 + (i * face_pos_multiplier)])
+	g.choice_outcome_pos[3]['scramble'].push([ 0.55, -0.45 + (i * face_pos_multiplier)])
+	g.choice_outcome_pos[3]['unscramble'].push([ 0.45, -0.45 + (i * face_pos_multiplier)])
 }
 
-// Used for holding the intialized outcome image stim.
+// Used for holding the intialized face image stim.
 // Can be used to access ImageStim 
 g.outcome = {
 	1: {
 		'negative': [],
-		'positive': []
+		'positive': [],
+		'meaningless': []
+
 	},
 	2: {
 		'negative': [],
-		'positive': []
+		'positive': [],
+		'meaningless': []
 	},
 	3: {
 		'negative': [],
-		'positive': []
+		'positive': [],
+		'meaningless': []
 	}
 }
 
 // Used for counting the positive/negative levels for each choice selection
 g.choice_counter = {
-	1: { 'negative': 0, 'positive': 0},
-	2: { 'negative': 0, 'positive': 0},
-	3: { 'negative': 0, 'positive': 0},
+	1: { 'negative': 0, 'positive': 0, 'meaningless': 0},
+	2: { 'negative': 0, 'positive': 0, 'meaningless': 0},
+	3: { 'negative': 0, 'positive': 0, 'meaningless': 0},
 }
+
+/**
+ * Returns shuffled array of given list
+ * @param {*} o array of elements
+ * @returns same array but shuffled
+ */
+function shuffle(o) {
+    for(var j, x, i = o.length; i; j = parseInt(Math.random() * i), x = o[--i], o[i] = o[j], o[j] = x);
+    return o;
+};
+
 
 /**
  * Returns either positive or negative given random probability
  * @param {*} probability probabilty 
  */
-function getRandomOutcome(probability) {
+function getRandomOutcome(probability, game_type) {
 	if (Math.random() < probability) {
-		return 'positive'
+		// returns the game_type. Either 'plesant' or 'unpleasant'
+		return (game_type == 'pleasant' ? 'positive': 'negative');
 	} else {
-		return 'negative'
+		return 'meaningless'
 	}
 }
 
 /**
  * Returns an image/audio outcome pair based on given income
- * @param {*} outcome string of either 'negative' or 'positive'
+ * @param {*} outcome string of either 'negative' or 'positive' or 'meaningless'
  */
-function getOutcomePair(outcome) {
-	g.outcome_pair;
-	if (outcome == 'negative') {
-		g.outcome_pair = g.outcome_media.negative[Math.floor(Math.random() * g.outcome_media.negative.length)];
-	} else {
-		g.outcome_pair = g.outcome_media.positive[Math.floor(Math.random() * g.outcome_media.positive.length)];
+function getOutcomePair(outcome, game_type) {
+	switch (outcome) {
+		case 'meaningless':
+			// returns outcome_triple based on game_type
+			if (game_type == 'pleasant') {
+				g.outcome_triple = g.outcome_media.positive[Math.floor(Math.random() * g.outcome_media.positive.length)];
+			} else {
+				g.outcome_triple = g.outcome_media.negative[Math.floor(Math.random() * g.outcome_media.negative.length)];
+			}
+			break;
+		case 'positive':
+			g.outcome_triple = g.outcome_media.positive[Math.floor(Math.random() * g.outcome_media.positive.length)];
+			break;
+		case 'negative':
+			g.outcome_triple = g.outcome_media.negative[Math.floor(Math.random() * g.outcome_media.negative.length)];
+			break;
 	}
 
-	// Outcome_image Stim
-	g.outcome_image = new visual.ImageStim({
-		win : psychoJS.window,
-		name : 'outcome_image', units : 'norm', 
-		image : g.outcome_pair[0], mask : undefined,
-		ori: 0,pos: [0,0], opacity : 1,size: [2,2],
-		flipHoriz : false, flipVert : false,
-		texRes : 128, interpolate : true, depth : 2
-	})
-	
-	// Outocme Sound Stim
-	g.outcome_sound = new Sound({
-		win: psychoJS.window,
-		value: g.outcome_pair[1]
-	});
-	
+	console.log('Outcome: ', outcome, game_type, g.outcome_triple)
+
+	// use neutral sound if the outcome is meaningless
+	if (outcome == 'meaningless') {
+		// Outcome_image Stim
+		g.outcome_image = new visual.ImageStim({
+			win : psychoJS.window,
+			name : 'outcome_image', units : 'norm', 
+			image : g.outcome_triple[2], mask : undefined,
+			ori: 0,pos: [0,0], opacity : 1,size: [2,2],
+			flipHoriz : false, flipVert : false,
+			texRes : 128, interpolate : true, depth : 2
+		})
+		
+		// Outcome Sound Stim
+		g.outcome_sound = new Sound({
+			win: psychoJS.window,
+			value: 'neutral_sound.mp3'
+		});
+	} else {
+		// Outcome_image Stim
+		g.outcome_image = new visual.ImageStim({
+			win : psychoJS.window,
+			name : 'outcome_image', units : 'norm', 
+			image : g.outcome_triple[0], mask : undefined,
+			ori: 0,pos: [0,0], opacity : 1,size: [2,2],
+			flipHoriz : false, flipVert : false,
+			texRes : 128, interpolate : true, depth : 2
+		})
+
+		// Outcome Sound Stim
+		g.outcome_sound = new Sound({
+			win: psychoJS.window,
+			value: g.outcome_triple[1]
+		});
+	}
 	g.outcome_sound.setVolume(1.0);
+}
+
+/**
+ * Function call for when a choice is made
+ * @param {string} outcome outcome returned from getRandomOutcome()
+ * @param {string} choice choice given. either '1', '2', or '3'
+ */
+function setOutcome(outcome, choice) {
+	switch (outcome) {
+		case 'positive':
+			g.outcome[choice]['positive'].push(
+				new visual.ImageStim({
+				win : psychoJS.window,
+				name : 'outcome_choice_' + choice, units : 'norm',
+				image : 'positive_face', mask : undefined,
+				ori: 0,
+					pos: g.choice_outcome_pos[choice]['unscramble'][
+						g.choice_counter[choice]['positive']
+				],
+				color : new util.Color([1, 1, 1]), opacity : 1,
+				flipHoriz : false, flipVert : false,
+				texRes : 128, interpolate : true, depth : 0
+				})
+			)
+			g.outcome[choice]['positive'][g.choice_counter[choice]['positive']].setAutoDraw(true)
+			g.choice_counter[choice]['positive']++
+			break;
+		case 'negative':
+			g.outcome[choice]['negative'].push(
+				new visual.ImageStim({
+				win : psychoJS.window,
+				name : 'outcome_negative_choice_' + choice, units : 'norm', 
+				image : 'negative_face', mask : undefined,
+				ori: 0,
+					pos: g.choice_outcome_pos[choice]['unscramble'][
+						g.choice_counter[choice]['negative']
+				],
+				color : new util.Color([1, 1, 1]), opacity : 1,
+				flipHoriz : false, flipVert : false,
+				texRes : 128, interpolate : true, depth : 0
+				})
+			)
+			g.outcome[choice]['negative'][g.choice_counter[choice]['negative']].setAutoDraw(true)
+			g.choice_counter[choice]['negative']++
+			break;
+		case 'meaningless':
+			g.outcome[choice]['meaningless'].push(
+				new visual.ImageStim({
+				win : psychoJS.window,
+				name : 'outcome_negative_choice_' + choice, units : 'norm', 
+				image : 'neutral_face', mask : undefined,
+				ori: 0,
+					pos: g.choice_outcome_pos[choice]['scramble'][
+						g.choice_counter[choice]['meaningless']
+				],
+				color : new util.Color([1, 1, 1]), opacity : 1,
+				flipHoriz : false, flipVert : false,
+				texRes : 128, interpolate : true, depth : 0
+				})
+			)
+			g.outcome[choice]['meaningless'][g.choice_counter[choice]['meaningless']].setAutoDraw(true)
+			g.choice_counter[choice]['meaningless']++
+			break;
+	}
 }
 
 var outcome;
@@ -1285,7 +1425,6 @@ function blockRoutineTrials(trials) {
 
 		if (!g.new_trial_marked) {
 			// mark trial onset
-			console.log('new trial', g.trial_number)
 			mark_event(trials_data, globalClock, g.trial_number, trial_type, event_types['TRIAL_ONSET'],
 				'NA', 'NA', 'NA')
 			
@@ -1313,137 +1452,25 @@ function blockRoutineTrials(trials) {
 				// Chose 1
 				if (theseKeys[0].name == '1') {
 					let choice = 1
-					outcome = getRandomOutcome(probability_1)
-					getOutcomePair(outcome) // Generate a random image/sound pair based on outcome
-					
-					if (outcome == 'positive') {
-						// Positive Outcome on Choice 2
-						g.outcome[choice]['positive'].push(
-							new visual.ImageStim({
-							win : psychoJS.window,
-							name : 'outcome_choice_' + choice, units : 'norm',
-							image : 'positive_result', mask : undefined,
-							ori: 0,
-								pos: g.choice_outcome_pos[choice]['positive'][
-									g.choice_counter[choice]['positive']
-							],
-							color : new util.Color([1, 1, 1]), opacity : 1,
-							flipHoriz : false, flipVert : false,
-							texRes : 128, interpolate : true, depth : 0
-							})
-						)
-						g.outcome[choice]['positive'][g.choice_counter[choice]['positive']].setAutoDraw(true)
-						g.choice_counter[choice]['positive']++
-					} else {
-						// Negative Outcome on Choice 2
-						g.outcome[choice]['negative'].push(
-							new visual.ImageStim({
-							win : psychoJS.window,
-							name : 'outcome_negative_choice_' + choice, units : 'norm', 
-							image : 'negative_result', mask : undefined,
-							ori: 0,
-								pos: g.choice_outcome_pos[choice]['negative'][
-									g.choice_counter[choice]['negative']
-							],
-							color : new util.Color([1, 1, 1]), opacity : 1,
-							flipHoriz : false, flipVert : false,
-							texRes : 128, interpolate : true, depth : 0
-							})
-						)
-						g.outcome[choice]['negative'][g.choice_counter[choice]['negative']].setAutoDraw(true)
-						g.choice_counter[choice]['negative']++
-					}
-	
+					outcome = getRandomOutcome(probability_1, game_type)
+					getOutcomePair(outcome, game_type) // Generate a random image/sound pair based on outcome
+					setOutcome(outcome, choice)
 				}
 				
 				// Chose 2
 				if (theseKeys[0].name == '2') {
 					let choice = 2
-					outcome = getRandomOutcome(probability_2)
-					getOutcomePair(outcome) // Generate a random image/sound pair based on outcome
-					
-					if (outcome == 'positive') {
-						// Positive Outcome on Choice 2
-						g.outcome[choice]['positive'].push(
-							new visual.ImageStim({
-							win : psychoJS.window,
-							name : 'outcome_choice_' + choice, units : 'norm',
-							image : 'positive_result', mask : undefined,
-							ori: 0,
-								pos: g.choice_outcome_pos[choice]['positive'][
-									g.choice_counter[choice]['positive']
-							],
-							color : new util.Color([1, 1, 1]), opacity : 1,
-							flipHoriz : false, flipVert : false,
-							texRes : 128, interpolate : true, depth : 0
-							})
-						)
-						g.outcome[choice]['positive'][g.choice_counter[choice]['positive']].setAutoDraw(true)
-						g.choice_counter[choice]['positive']++
-					} else {
-						// Negative Outcome on Choice 2
-						g.outcome[choice]['negative'].push(
-							new visual.ImageStim({
-							win : psychoJS.window,
-							name : 'outcome_negative_choice_' + choice, units : 'norm', 
-							image : 'negative_result', mask : undefined,
-							ori: 0,
-								pos: g.choice_outcome_pos[choice]['negative'][
-									g.choice_counter[choice]['negative']
-							],
-							color : new util.Color([1, 1, 1]), opacity : 1,
-							flipHoriz : false, flipVert : false,
-							texRes : 128, interpolate : true, depth : 0
-							})
-						)
-						g.outcome[choice]['negative'][g.choice_counter[choice]['negative']].setAutoDraw(true)
-						g.choice_counter[choice]['negative']++
-					}
+					outcome = getRandomOutcome(probability_2, game_type)
+					getOutcomePair(outcome, game_type) // Generate a random image/sound pair based on outcome
+					setOutcome(outcome, choice)
 				}
 				
 				// Chose 3
 				if (theseKeys[0].name == '3') {
 					let choice = 3
-					outcome = getRandomOutcome(probability_3)
-					getOutcomePair(outcome) // Generate a random image/sound pair based on outcome
-	
-					if (outcome == 'positive') {
-						// Positive Outcome on Choice 3
-						g.outcome[choice]['positive'].push(
-							new visual.ImageStim({
-							win : psychoJS.window,
-							name : 'outcome_choice_' + choice, units : 'norm',
-							image : 'positive_result', mask : undefined,
-							ori: 0,
-								pos: g.choice_outcome_pos[choice]['positive'][
-									g.choice_counter[choice]['positive']
-							],
-							color : new util.Color([1, 1, 1]), opacity : 1,
-							flipHoriz : false, flipVert : false,
-							texRes : 128, interpolate : true, depth : 0
-							})
-						)
-						g.outcome[choice]['positive'][g.choice_counter[choice]['positive']].setAutoDraw(true)
-						g.choice_counter[choice]['positive']++
-					} else {
-						// Negative Outcome on Choice 3
-						g.outcome[choice]['negative'].push(
-							new visual.ImageStim({
-							win : psychoJS.window,
-							name : 'outcome_negative_choice_' + choice, units : 'norm', 
-							image : 'negative_result', mask : undefined,
-							ori: 0,
-								pos: g.choice_outcome_pos[choice]['negative'][
-									g.choice_counter[choice]['negative']
-							],
-							color : new util.Color([1, 1, 1]), opacity : 1,
-							flipHoriz : false, flipVert : false,
-							texRes : 128, interpolate : true, depth : 0
-							})
-						)
-						g.outcome[choice]['negative'][g.choice_counter[choice]['negative']].setAutoDraw(true)
-						g.choice_counter[choice]['negative']++
-					}
+					outcome = getRandomOutcome(probability_3, game_type)
+					getOutcomePair(outcome, game_type) // Generate a random image/sound pair based on outcome
+					setOutcome(outcome, choice)
 				}
 
 				// Mark keypress
@@ -1459,11 +1486,11 @@ function blockRoutineTrials(trials) {
 				// Outcome image onset
 				g.outcome_image.setAutoDraw(true)
 				mark_event(trials_data, globalClock, g.trial_number, trial_type, event_types['OUTCOME_IMAGE_ONSET'],
-					'NA', 'NA', g.outcome_pair[0])
+					'NA', 'NA', g.outcome_triple[0])
 				
 				// Outcome sound osnet
 				mark_event(trials_data, globalClock, g.trial_number, trial_type, event_types['OUTCOME_SOUND_ONSET'],
-					g.outcome_sound.getDuration(), 'NA', g.outcome_pair[1])
+					g.outcome_sound.getDuration(), 'NA', g.outcome_triple[1])
 				g.outcome_sound.play()
 
 				ready.clock.reset(); // reset keyboard clock
@@ -1499,7 +1526,6 @@ function blockRoutineOutcome(trials) {
 	return function () {
 		//------Loop for each frame of Routine 'trial'-------
 		let continueRoutine = false; // until we're told otherwise
-
 
 		// check for quit (typically the Esc key)
 		if (psychoJS.eventManager.getKeys({keyList:['escape']}).length > 0) {
@@ -1593,12 +1619,15 @@ function sendData() {
 function reset_choice_counter(){
 	g.choice_counter[1]['negative'] = 0;
 	g.choice_counter[1]['positive'] = 0;
+	g.choice_counter[1]['meaningless'] = 0;
 
 	g.choice_counter[2]['negative'] = 0;
 	g.choice_counter[2]['positive'] = 0;
+	g.choice_counter[2]['meaningless'] = 0;
 
 	g.choice_counter[3]['negative'] = 0;
 	g.choice_counter[3]['positive'] = 0;
+	g.choice_counter[3]['meaningless'] = 0;
 }
 
 /**
@@ -1610,6 +1639,7 @@ function clear_outcome_faces() {
 			item.setAutoDraw(false)
 			item.status = PsychoJS.Status.NOT_STARTED
 		});
+		
 	}
 	if (g.outcome[1]['positive'].length > 0) {
 		g.outcome[1]['positive'].forEach((item) => {
@@ -1617,6 +1647,13 @@ function clear_outcome_faces() {
 			item.status = PsychoJS.Status.NOT_STARTED
 		});
 	}
+	if (g.outcome[1]['meaningless'].length > 0) {
+		g.outcome[1]['meaningless'].forEach((item) => {
+			item.setAutoDraw(false)
+			item.status = PsychoJS.Status.NOT_STARTED
+		});
+	}
+
 	if (g.outcome[2]['negative'].length > 0) {
 		g.outcome[2]['negative'].forEach((item) => {
 			item.setAutoDraw(false)
@@ -1629,6 +1666,13 @@ function clear_outcome_faces() {
 			item.status = PsychoJS.Status.NOT_STARTED
 		});
 	}
+	if (g.outcome[2]['meaningless'].length > 0) {
+		g.outcome[2]['meaningless'].forEach((item) => {
+			item.setAutoDraw(false)
+			item.status = PsychoJS.Status.NOT_STARTED
+		});
+	}
+
 	if (g.outcome[3]['negative'].length > 0) {
 		g.outcome[3]['negative'].forEach((item) => {
 			item.setAutoDraw(false)
@@ -1637,6 +1681,12 @@ function clear_outcome_faces() {
 	}
 	if (g.outcome[3]['positive'].length > 0) {
 		g.outcome[3]['positive'].forEach((item) => {
+			item.setAutoDraw(false)
+			item.status = PsychoJS.Status.NOT_STARTED
+		});
+	}
+	if (g.outcome[3]['meaningless'].length > 0) {
+		g.outcome[3]['meaningless'].forEach((item) => {
 			item.setAutoDraw(false)
 			item.status = PsychoJS.Status.NOT_STARTED
 		});
