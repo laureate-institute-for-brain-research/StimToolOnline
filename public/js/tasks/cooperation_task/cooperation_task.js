@@ -245,7 +245,8 @@ window.onload = function () {
 									obj.sound_path,
 									obj.image_path_scramble,
 								])
-							} else {
+							} 
+							if (obj.outcome_type == 'positive')  {
 								g.outcome_media.positive.push([
 									obj.image_path,
 									obj.sound_path,
@@ -276,7 +277,7 @@ window.onload = function () {
 						var allRows = data.split('\n'); // split rows at new line
 						
 						var headerRows = allRows[0].split(',');
-						
+						g.total_trials = 0
 						for (var i=1; i<allRows.length; i++) {
 							var obj = {};
 							var currentLine = allRows[i].split(',');
@@ -285,6 +286,7 @@ window.onload = function () {
 							}
 							// If there's media add to resources
 							if (obj.stim_paths != 'None' && obj.stim_paths != undefined) {
+
 								resources.push({ name: obj.stim_paths , path: obj.stim_paths  })
 							}
 							
@@ -942,6 +944,73 @@ function readyRoutineEnd(trials) {
 	};
 }
 
+/**
+ * Shuffle arrays in place
+ * e.g. arr = [1,2,3]
+ *     shuffe(arr)
+ * @param {Array} array 
+ * @returns 
+ */
+function shuffle(array) {
+	let currentIndex = array.length,  randomIndex;
+  
+	// While there remain elements to shuffle.
+	while (currentIndex != 0) {
+  
+	  // Pick a remaining element.
+	  randomIndex = Math.floor(Math.random() * currentIndex);
+	  currentIndex--;
+  
+	  // And swap it with the current element.
+	  [array[currentIndex], array[randomIndex]] = [
+		array[randomIndex], array[currentIndex]];
+	}
+  
+	return array;
+  }
+
+/**
+ * Genearte Randomized array
+ * @param {TrialHandler} trial_handler  trial_handler type
+ */
+ function randomizePair(trial_handler) {
+	// Generate random images.
+	// Should not be repeating same outcome twice in a row.
+
+	// get the total_trials
+	g.total_trials = 0
+	trial_handler._trialList.forEach(block_row => {
+		g.total_trials = g.total_trials + (block_row.trials_block)
+	})
+	 
+	let positive_outcome_media = g.outcome_media.positive;
+	let negative_outcome_media = g.outcome_media.negative;
+	 
+	shuffle( negative_outcome_media)
+	shuffle( positive_outcome_media )
+	 
+	if ((g.outcome_media.negative.length <= g.total_trials) || (g.outcome_media.positive.length <= g.total_trials) ) {
+		console.log("add new trials. just shuffle")
+		// If it got here, it means the number of trials is lower than the
+		// number of the outcome media.
+		// Multiple the array itself x number of times till it's greater than the total trials
+		
+		while (g.outcome_media.negative.length <= g.total_trials) {
+			g.outcome_media.negative = g.outcome_media.negative.concat( negative_outcome_media )
+		}
+
+		while (g.outcome_media.positive.length <= g.total_trials) {
+			g.outcome_media.positive = g.outcome_media.positive.concat( positive_outcome_media )
+		}
+	} else {
+		// just returned a shuffle version of the outcome_media
+		g.outcome_media.negative = negative_outcome_media
+		g.outcome_media.positive = positive_outcome_media
+	}
+	 
+	// console.log( g.outcome_media.positive)
+}
+
 var blocks;
 var trial_type;
 function practiceTrialsLoopBegin(thisScheduler) {
@@ -952,6 +1021,8 @@ function practiceTrialsLoopBegin(thisScheduler) {
 		trialList: 'practice_schedule.csv',
 		seed: undefined, name: 'blocks'
 	});
+	g.global_trial_number = 0
+	randomizePair(blocks) // randomize outcome
 
 	psychoJS.experiment.addLoop(blocks); // add the loop to the experiment
 	endClock.reset()
@@ -961,7 +1032,6 @@ function practiceTrialsLoopBegin(thisScheduler) {
 	// Schedule all the trials in the trialList:
 	for (const thisBlock of blocks) {
 		const snapshot = blocks.getSnapshot();
-
 		thisScheduler.add(importConditions(snapshot));
 		thisScheduler.add(initialFixation(snapshot));
 		thisScheduler.add(blockRoutineBegin(snapshot)); 	 // setup block
@@ -977,15 +1047,13 @@ function practiceTrialsLoopBegin(thisScheduler) {
 }
 
 function trialsLoopBegin(thisScheduler) {
-	totalDates = 0; // reset the totalDates
-	time_point = 0;
 	endClock.reset()
 
 	resp.stop()
 	resp.clearEvents()
 	resp.status = PsychoJS.Status.NOT_STARTED
 
-	trials = new TrialHandler({
+	blocks = new TrialHandler({
 		psychoJS: psychoJS,
 		nReps: 1, method: TrialHandler.Method.SEQUENTIAL,
 		extraInfo: expInfo, originPath: undefined,
@@ -993,18 +1061,20 @@ function trialsLoopBegin(thisScheduler) {
 		seed: undefined, name: 'trials'
 	});
 
-	psychoJS.experiment.addLoop(trials); // add the loop to the experiment
+	g.global_trial_number = 0
+	randomizePair(blocks) // randomize outcome
 
-	// Schedule all the trials in the trialList:
-	for (const thisTrial of trials) {
-		const snapshot = trials.getSnapshot();
+	psychoJS.experiment.addLoop(blocks); // add the loop to the experiment
 
+	// Schedule all the blocks in the trialList:
+	for (const thisTrial of blocks) {
+		const snapshot = blocks.getSnapshot();
 		thisScheduler.add(importConditions(snapshot));
 		thisScheduler.add(initialFixation(snapshot));
-		thisScheduler.add(blockRoutineBegin(snapshot));
-		thisScheduler.add(blockRoutineWaitForInput(snapshot));
-		thisScheduler.add(blockRoutineOutcome(snapshot)); // show the result 
-		thisScheduler.add(blockRoutineEnd(snapshot));
+		thisScheduler.add(blockRoutineBegin(snapshot)); 	 // setup block
+		thisScheduler.add(blockRoutineTrials(snapshot));	 // do trials
+		thisScheduler.add(blockRoutineOutcome(snapshot)); 	 // show result
+		thisScheduler.add(blockRoutineEnd(snapshot));		 // end block
 		thisScheduler.add(endLoopIteration(thisScheduler, snapshot));
 	}
 	trial_type = 'MAIN'
@@ -1119,8 +1189,7 @@ function blockRoutineBegin(block) {
 	return function () {
 		//------Prepare to start Routine 'trial'-------
 		t = 0;
-		trial_type = trials_block + '_' + probability_1 + '_' + probability_2 +
-			probability_3
+		trial_type = trials_block + '_' + probability_1 + '_' + probability_2 + '_' + probability_3
 		
 		// set the face image
 		g.faces_choice[1] = new visual.ImageStim({
@@ -1166,6 +1235,8 @@ function blockRoutineBegin(block) {
 
 		g.text_trial_number.setAutoDraw(true);
 		g.text_val_trial_number.setAutoDraw(true)
+	
+		g.trial_number = 1 // reset the trial_number after each block
 		g.text_val_trial_number.setText(g.trial_number);
 		g.last_trial_number = undefined; // store laste trial number
 
@@ -1258,17 +1329,6 @@ g.choice_counter = {
 }
 
 /**
- * Returns shuffled array of given list
- * @param {*} o array of elements
- * @returns same array but shuffled
- */
-function shuffle(o) {
-    for(var j, x, i = o.length; i; j = parseInt(Math.random() * i), x = o[--i], o[i] = o[j], o[j] = x);
-    return o;
-};
-
-
-/**
  * Returns either positive or negative given random probability
  * @param {*} probability probabilty 
  */
@@ -1281,25 +1341,26 @@ function getRandomOutcome(probability, game_type) {
 	}
 }
 
+
 /**
  * Returns an image/audio outcome pair based on given income
  * @param {*} outcome string of either 'negative' or 'positive' or 'meaningless'
  */
-function getOutcomePair(outcome, game_type) {
+function getOutcomePair(outcome, game_type, choice) {
 	switch (outcome) {
 		case 'meaningless':
 			// returns outcome_triple based on game_type
 			if (game_type == 'pleasant') {
-				g.outcome_triple = g.outcome_media.positive[Math.floor(Math.random() * g.outcome_media.positive.length)];
+				g.outcome_triple = g.outcome_media.positive[ g.global_trial_number ];
 			} else {
-				g.outcome_triple = g.outcome_media.negative[Math.floor(Math.random() * g.outcome_media.negative.length)];
+				g.outcome_triple = g.outcome_media.negative[ g.global_trial_number ];
 			}
 			break;
 		case 'positive':
-			g.outcome_triple = g.outcome_media.positive[Math.floor(Math.random() * g.outcome_media.positive.length)];
+			g.outcome_triple = g.outcome_media.positive[ g.global_trial_number];
 			break;
 		case 'negative':
-			g.outcome_triple = g.outcome_media.negative[Math.floor(Math.random() * g.outcome_media.negative.length)];
+			g.outcome_triple = g.outcome_media.negative[ g.global_trial_number ];
 			break;
 	}
 
@@ -1442,6 +1503,11 @@ function blockRoutineTrials(trials) {
 			//  the trial number is a layer above the outcome image
 			g.text_val_trial_number.setText(g.trial_number)
 			g.new_trial_marked = false;
+
+			// Next Routine after trial nuber reached
+			if (g.trial_number > trials_block) {
+				continueRoutine = false;
+			}
 		}
 
 		if (ready.status === PsychoJS.Status.STARTED) {
@@ -1453,7 +1519,7 @@ function blockRoutineTrials(trials) {
 				if (theseKeys[0].name == '1') {
 					let choice = 1
 					outcome = getRandomOutcome(probability_1, game_type)
-					getOutcomePair(outcome, game_type) // Generate a random image/sound pair based on outcome
+					getOutcomePair(outcome, game_type, choice) // Generate a random image/sound pair based on outcome
 					setOutcome(outcome, choice)
 				}
 				
@@ -1461,7 +1527,7 @@ function blockRoutineTrials(trials) {
 				if (theseKeys[0].name == '2') {
 					let choice = 2
 					outcome = getRandomOutcome(probability_2, game_type)
-					getOutcomePair(outcome, game_type) // Generate a random image/sound pair based on outcome
+					getOutcomePair(outcome, game_type, choice) // Generate a random image/sound pair based on outcome
 					setOutcome(outcome, choice)
 				}
 				
@@ -1469,7 +1535,7 @@ function blockRoutineTrials(trials) {
 				if (theseKeys[0].name == '3') {
 					let choice = 3
 					outcome = getRandomOutcome(probability_3, game_type)
-					getOutcomePair(outcome, game_type) // Generate a random image/sound pair based on outcome
+					getOutcomePair(outcome, game_type, choice) // Generate a random image/sound pair based on outcome
 					setOutcome(outcome, choice)
 				}
 
@@ -1479,6 +1545,7 @@ function blockRoutineTrials(trials) {
 
 				// presed key
 				g.trial_number++ // incremente trial number
+				g.global_trial_number++ // incremeante global trial number
 
 				// Start Timer
 				g.outcomeTimer.reset( g.outcome_sound.getDuration() ) ;
@@ -1495,10 +1562,6 @@ function blockRoutineTrials(trials) {
 
 				ready.clock.reset(); // reset keyboard clock
 
-				// Next Routine after trial nuber reached
-				if (g.trial_number > trials_block) {
-					continueRoutine = false;
-				}
 			}
 		}
 
@@ -1540,7 +1603,6 @@ function blockRoutineOutcome(trials) {
 			g.outcome_image.setAutoDraw(false)
 			g.outcome_image.status = PsychoJS.Status.NOT_STARTED
 
-			
 			return Scheduler.Event.NEXT;
 		}
 	};
