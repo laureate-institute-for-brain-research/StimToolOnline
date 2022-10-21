@@ -335,7 +335,20 @@ psychoJS.openWindow({
 
 // store info about the experiment session:
 let expName = 'Cooperation Task';  // from the Builder filename that created this script
-var expInfo = { 'participant': '' ,'session': '',  'run_id': '', 'date' : formatDate(), 'study': '', };
+var expInfo = { 'participant': '', 'session': '', 'run_id': '', 'date': formatDate(), 'study': '', };
+
+// Add Slides to resources
+var resources = [
+	{ name: 'practice_schedule.csv', path: '/js/tasks/cooperation_task/practice_schedule.csv' },
+	{ name: 'faces_paths.csv', path: '/js/tasks/cooperation_task/faces_paths.csv' }, // faces lists
+	{ name: 'PRACTICE_ready', path: '/js/tasks/cooperation_task/media/instructions/Slide18.jpeg'},
+	{ name: 'MAIN_ready', path: '/js/tasks/cooperation_task/media/instructions/Slide19.jpeg' },
+	{ name: 'BEGIN_slide', path: '/js/tasks/cooperation_task/media/instructions/Slide20.jpeg' },
+	{ name: 'positive_face', path: '/js/tasks/cooperation_task/media/green_smile.png' },
+	{ name: 'negative_face', path: '/js/tasks/cooperation_task/media/red_sad.png' },
+	{ name: 'neutral_face', path: '/js/tasks/cooperation_task/media/neutral_face.png' },
+	{ name: 'neutral_sound.mp3', path: '/js/tasks/cooperation_task/media/neutral_sound.mp3'}
+]
 
 // schedule the experiment:
 psychoJS.schedule(psychoJS.gui.DlgFromDict({
@@ -362,7 +375,8 @@ if (!getQueryVariable('skip_instructions')) {
 }
 
 // PRACTICE BLOCK
-if (!getQueryVariable('skip_practice')) {
+// Pratice blocks skipped over if it's a R2
+if (!getQueryVariable('skip_practice') && !getQueryVariable('run').includes('R2')  ) {
 	// Single Slide
 	flowScheduler.add(readyRoutineBegin('PRACTICE'));
 	flowScheduler.add(readyRoutineEachFrame());
@@ -372,13 +386,17 @@ if (!getQueryVariable('skip_practice')) {
 	flowScheduler.add(practiceTrialsLoopBegin, practiceTrialsLoopScheduler);
 	flowScheduler.add(practiceTrialsLoopScheduler);
 	flowScheduler.add(trialsLoopEnd);
+
+	flowScheduler.add(readyRoutineBegin('SLIDE', 'MAIN_ready'));
+	flowScheduler.add(readyRoutineEachFrame());
+	flowScheduler.add(readyRoutineEnd());
 }
 
 
 
 // MAIN BLOCK
 // Ready Routine
-flowScheduler.add(readyRoutineBegin('MAIN'));
+flowScheduler.add(readyRoutineBegin('MAIN', 'BEGIN_slide'));
 flowScheduler.add(readyRoutineEachFrame());
 flowScheduler.add(readyRoutineEnd());
 
@@ -396,17 +414,6 @@ flowScheduler.add(quitPsychoJS, '', true);
 dialogCancelScheduler.add(quitPsychoJS, '', false);
 
 
-// Add Slides to resources
-var resources = [
-	{ name: 'practice_schedule.csv', path: '/js/tasks/cooperation_task/practice_schedule.csv' },
-	{ name: 'faces_paths.csv', path: '/js/tasks/cooperation_task/faces_paths.csv' }, // faces lists
-	{ name: 'PRACTICE_ready', path: '/js/tasks/cooperation_task/media/instructions/Slide18.jpeg'},
-	{ name: 'MAIN_ready', path: '/js/tasks/cooperation_task/media/instructions/Slide19.jpeg' },
-	{ name: 'positive_face', path: '/js/tasks/cooperation_task/media/green_smile.png' },
-	{ name: 'negative_face', path: '/js/tasks/cooperation_task/media/red_sad.png' },
-	{ name: 'neutral_face', path: '/js/tasks/cooperation_task/media/neutral_face.png' },
-	{ name: 'neutral_sound.mp3', path: '/js/tasks/cooperation_task/media/neutral_sound.mp3'}
-]
 
 var frameDur;
 function updateInfo() {
@@ -550,6 +557,31 @@ function experimentInit() {
 		win: psychoJS.window,
 		name: 'pointsTracker',
 		text: 'X',
+		font: 'Arial',
+		units: 'norm',
+		pos: [0, 0], height: 0.12, wrapWidth: undefined, ori: 0,
+		color: new util.Color('white'), opacity: 1,
+		depth: 0.0
+	});
+
+	// Black Rectangle. Used as the background for the outcome text
+	g.black_rectangle = new visual.Rect({
+		win: psychoJS.window,
+		name: 'black_rect',
+		width: 2,
+		height: 2,
+		units: 'norm',
+		pos: [0, 0 ], ori: 0,
+		fillColor: new util.Color('black'),
+		lineColor: new util.Color('black'), opacity: 1,
+		depth: 0
+	})
+
+	// Outcome TextStim
+	g.outcome_text = new visual.TextStim({
+		win: psychoJS.window,
+		name: 'outcome_text',
+		text: 'Place Outcome text here.',
 		font: 'Arial',
 		units: 'norm',
 		pos: [0, 0], height: 0.12, wrapWidth: undefined, ori: 0,
@@ -832,7 +864,7 @@ var frameRemains;
 
 var readyComponents;
 var readyStim;
-function readyRoutineBegin(block_type) {
+function readyRoutineBegin(block_type, image_stim ='MAIN_ready' ) {
 	return function () {
 		//------Prepare to start Routine 'ready'-------
 		t = 0;
@@ -863,7 +895,7 @@ function readyRoutineBegin(block_type) {
 				readyStim = new visual.ImageStim({
 					win : psychoJS.window,
 					name : 'ready_stim', units : 'height', 
-					image : 'MAIN_ready', mask : undefined,
+					image : image_stim, mask : undefined,
 					ori : 0, pos : [0, 0],
 					color : new util.Color([1, 1, 1]), opacity : 1,
 					flipHoriz : false, flipVert : false,
@@ -1041,8 +1073,8 @@ function practiceTrialsLoopBegin(thisScheduler) {
 		thisScheduler.add(endLoopIteration(thisScheduler, snapshot));
 	}
 	trial_type = 'PRACTICE'
-	mark_event(trials_data, globalClock, 'NA', trial_type, event_types['BLOCK_ONSET'],
-				'NA', 'NA' , 'NA')
+	mark_event(trials_data, globalClock, 'NA', trial_type,
+		event_types['BLOCK_ONSET'], 'NA', 'NA' , 'NA')
 	return Scheduler.Event.NEXT;
 }
 
@@ -1493,6 +1525,23 @@ function blockRoutineTrials(trials) {
 			g.new_trial_marked = true;
 		}
 
+		if (g.outcome_sound && g.outcomeTimer.getTime() <= g.outcome_sound.getDuration() && g.outcome_image && g.outcome_image.status == PsychoJS.Status.NOT_STARTED) {
+			console.log('show outcome image')
+
+			g.outcome_text.setAutoDraw(false)
+			g.black_rectangle.setAutoDraw(false)
+			// Start the outcome image and the sound
+			// Outcome image onset
+			g.outcome_image.setAutoDraw(true)
+			mark_event(trials_data, globalClock, g.trial_number, trial_type, event_types['OUTCOME_IMAGE_ONSET'],
+				'NA', 'NA', g.outcome_triple[0])
+			
+			// Outcome sound osnet
+			mark_event(trials_data, globalClock, g.trial_number, trial_type, event_types['OUTCOME_SOUND_ONSET'],
+				g.outcome_sound.getDuration(), 'NA', g.outcome_triple[1])
+			g.outcome_sound.play()
+		}
+
 
 		// Clear out the outcome image after timer is up,
 		// Also sets the new_trial_marked flag to false so that marker event corresponds to the corrent trial_onset
@@ -1508,6 +1557,8 @@ function blockRoutineTrials(trials) {
 			if (g.trial_number > trials_block) {
 				continueRoutine = false;
 			}
+
+			g.outcome_sound = undefined;
 		}
 
 		if (ready.status === PsychoJS.Status.STARTED) {
@@ -1548,17 +1599,12 @@ function blockRoutineTrials(trials) {
 				g.global_trial_number++ // incremeante global trial number
 
 				// Start Timer
-				g.outcomeTimer.reset( g.outcome_sound.getDuration() ) ;
+				g.OUTCOME_TEXT_DURATION = 2; // the time duration for the text to display after selecting the person
+				g.outcomeTimer.reset( g.outcome_sound.getDuration() + g.OUTCOME_TEXT_DURATION) ;
 				
-				// Outcome image onset
-				g.outcome_image.setAutoDraw(true)
-				mark_event(trials_data, globalClock, g.trial_number, trial_type, event_types['OUTCOME_IMAGE_ONSET'],
-					'NA', 'NA', g.outcome_triple[0])
 				
-				// Outcome sound osnet
-				mark_event(trials_data, globalClock, g.trial_number, trial_type, event_types['OUTCOME_SOUND_ONSET'],
-					g.outcome_sound.getDuration(), 'NA', g.outcome_triple[1])
-				g.outcome_sound.play()
+				g.black_rectangle.setAutoDraw(true)
+				g.outcome_text.setAutoDraw(true)
 
 				ready.clock.reset(); // reset keyboard clock
 
