@@ -1126,7 +1126,7 @@ function trialsLoopEnd() {
 	g.text_val_game_type.setAutoDraw(false)
 	g.slideStim.setAutoDraw(false)
 
-	psychoJS.experiment.removeLoop(trials);
+	psychoJS.experiment.removeLoop(blocks);
 
 	psychoJS.experiment.addData('globalClock', globalClock.getTime());
 
@@ -1141,14 +1141,14 @@ g.faces_choice = {
 }
 
 // TextStim Dictionary  for the text
-g.face_text = {
+g.faces_text = {
 	1: new visual.TextStim({
 		win: psychoJS.window,
 		name: 'Face_1',
 		text: '1',
 		font: 'Arial',
 		units: 'norm',
-		pos: [-0.5, -0.58], height: 0.1, wrapWidth: undefined, ori: 0,
+		pos: [-0.6, 0.3], height: 0.1, wrapWidth: undefined, ori: 0,
 		color: new util.Color('white'), opacity: 1,
 		depth: 0.0
 	}),
@@ -1158,7 +1158,7 @@ g.face_text = {
 		text: '2',
 		font: 'Arial',
 		units: 'norm',
-		pos: [0, -0.58], height: 0.1, wrapWidth: undefined, ori: 0,
+		pos: [0, 0.3], height: 0.1, wrapWidth: undefined, ori: 0,
 		color: new util.Color('white'), opacity: 1,
 		depth: 0.0
 	}),
@@ -1168,7 +1168,7 @@ g.face_text = {
 		text: '3',
 		font: 'Arial',
 		units: 'norm',
-		pos: [0.5, -0.58], height: 0.1, wrapWidth: undefined, ori: 0,
+		pos: [0.6, 0.3], height: 0.1, wrapWidth: undefined, ori: 0,
 		color: new util.Color('white'), opacity: 1,
 		depth: 0.0
 	})
@@ -1227,9 +1227,9 @@ function blockRoutineBegin(block) {
 		g.faces_choice[1] = new visual.ImageStim({
 			win: psychoJS.window,
 			name: 'face_1', units: 'norm',
-			size: [0.35, 0.3],
+			size: [0.55, 0.5],
 			image: face_1, mask: undefined,
-			ori: 0, pos: [-0.5, -0.8],
+			ori: 0, pos: [-0.6, 0],
 			color: new util.Color([1, 1, 1]), opacity: 1,
 			flipHoriz: false, flipVert: false,
 			texRes: 128, interpolate: true, depth: 0
@@ -1238,9 +1238,9 @@ function blockRoutineBegin(block) {
 		g.faces_choice[2] = new visual.ImageStim({
 			win: psychoJS.window,
 			name: 'face_2', units: 'norm',
-			size: [0.35, 0.3],
+			size: [0.55, 0.5],
 			image: face_2, mask: undefined,
-			ori: 0, pos: [0, -0.8],
+			ori: 0, pos: [0, 0],
 			color: new util.Color([1, 1, 1]), opacity: 1,
 			flipHoriz: false, flipVert: false,
 			texRes: 128, interpolate: true, depth: 0
@@ -1249,9 +1249,9 @@ function blockRoutineBegin(block) {
 		g.faces_choice[3] = new visual.ImageStim({
 			win: psychoJS.window,
 			name: 'face_3', units: 'norm',
-			size: [0.35, 0.3],
+			size: [0.55, 0.5],
 			image: face_3, mask: undefined,
-			ori: 0, pos: [0.5, -0.8],
+			ori: 0, pos: [0.6, 0],
 			color: new util.Color([1, 1, 1]), opacity: 1,
 			flipHoriz: false, flipVert: false,
 			texRes: 128, interpolate: true, depth: 0
@@ -1282,18 +1282,18 @@ function blockRoutineBegin(block) {
 		}
 		g.text_val_game_type.setAutoDraw(true)
 
-		g.rect[1].setAutoDraw(true)
-		g.rect[2].setAutoDraw(true)
-		g.rect[3].setAutoDraw(true)
+		// g.rect[1].setAutoDraw(true)
+		// g.rect[2].setAutoDraw(true)
+		// g.rect[3].setAutoDraw(true)
 
 		// Draw the faces
 		g.faces_choice[1].setAutoDraw(true)
 		g.faces_choice[2].setAutoDraw(true)
 		g.faces_choice[3].setAutoDraw(true)
 
-		g.face_text[1].setAutoDraw(true)
-		g.face_text[2].setAutoDraw(true)
-		g.face_text[3].setAutoDraw(true)
+		g.faces_text[1].setAutoDraw(true)
+		g.faces_text[2].setAutoDraw(true)
+		g.faces_text[3].setAutoDraw(true)
 
 		g.new_trial_marked = false;
 
@@ -1457,7 +1457,7 @@ function setOutcome(outcome, choice) {
 				texRes : 128, interpolate : true, depth : 0
 				})
 			)
-			g.outcome[choice]['positive'][g.choice_counter[choice]['positive']].setAutoDraw(true)
+			// g.outcome[choice]['positive'][g.choice_counter[choice]['positive']].setAutoDraw(true)
 			g.choice_counter[choice]['positive']++
 			break;
 		case 'negative':
@@ -1475,7 +1475,7 @@ function setOutcome(outcome, choice) {
 				texRes : 128, interpolate : true, depth : 0
 				})
 			)
-			g.outcome[choice]['negative'][g.choice_counter[choice]['negative']].setAutoDraw(true)
+			// g.outcome[choice]['negative'][g.choice_counter[choice]['negative']].setAutoDraw(true)
 			g.choice_counter[choice]['negative']++
 			break;
 		case 'meaningless':
@@ -1493,7 +1493,7 @@ function setOutcome(outcome, choice) {
 				texRes : 128, interpolate : true, depth : 0
 				})
 			)
-			g.outcome[choice]['meaningless'][g.choice_counter[choice]['meaningless']].setAutoDraw(true)
+			// g.outcome[choice]['meaningless'][g.choice_counter[choice]['meaningless']].setAutoDraw(true)
 			g.choice_counter[choice]['meaningless']++
 			break;
 	}
