@@ -337,8 +337,8 @@ var resources = [
 	{ name: 'rate_faces_schedule.csv', path: '/js/tasks/emotional_faces/rate_faces_schedule.csv' }, // faces lists
 	{ name: 'user.png', path: '/js/tasks/emotional_faces/media/user.png' },
 	{ name: 'user_filled.png', path: '/js/tasks/emotional_faces/media/user_filled.png' },
-	{ name: 'PRACTICE_ready', path: '/js/tasks/emotional_faces/media/instructions/Slide9.jpeg'},
-	{ name: 'MAIN_ready', path: '/js/tasks/emotional_faces/media/instructions/Slide10.jpeg' },
+	{ name: 'PRACTICE_ready', path: '/js/tasks/emotional_faces/media/instructions/Slide11.jpeg'},
+	{ name: 'MAIN_ready', path: '/js/tasks/emotional_faces/media/instructions/Slide12.jpeg' },
 	{ name: 'PRACTICE_ready_audio.mp3', path: '/js/tasks/emotional_faces/media/instructions_audio/Slide9.mp3'},
 	{ name: 'male.png', path: '/js/tasks/emotional_faces/media/male.png' },
 	{ name: 'female.png', path: '/js/tasks/emotional_faces/media/female.png' },
