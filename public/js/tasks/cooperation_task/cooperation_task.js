@@ -37,6 +37,21 @@ g.outcome_media = {
 	'positive': []		// holds positive image-audio pair
 }
 
+// Text response to dislpay after choosing a selection.
+g.outcome_text_responses = {
+	'accept': "Sure, I'll help!",
+	'reject': "Too bad!" 
+}
+
+// Variable to hold the actual reponse
+g.outcome_text_response = '';
+
+// Text to show at the bottom of the screen during each trial
+g.game_type_text = {
+	'pleasant': `You will be shown the meaningless image unless the person you choose decides to help you.`,
+	'unpleasant': `You will be shown the unpleasant image unless the person you choose decides to help you.`
+}
+
 var LEFT_KEY = 'left'
 var RIGHT_KEY = 'right'
 
@@ -116,7 +131,6 @@ window.onload = function () {
 					}
 				})
 			})
-		
 		})
 	
 		// Read RUN Config
@@ -192,13 +206,10 @@ window.onload = function () {
 							if (obj.stim_paths && obj.stim_paths != undefined) {
 								resources.push({ name: obj.stim_paths , path: obj.stim_paths  })
 							}
-							
 						}
-
 						resolve(data)
 					}
 				})
-				
 			})
 		})
 
@@ -252,14 +263,11 @@ window.onload = function () {
 									obj.sound_path,
 									obj.image_path_scramble,
 								])
-							}
-							
+							}	
 						}
-
 						resolve(data)
 					}
 				})
-				
 			})
 		})
 
@@ -289,16 +297,12 @@ window.onload = function () {
 
 								resources.push({ name: obj.stim_paths , path: obj.stim_paths  })
 							}
-							
 						}
-
 						resolve(data)
 					}
 				})
-				
 			})
 		})
-	
 		
 		.then((values) => {
 			// Query Preceeds /getInfo
@@ -319,10 +323,8 @@ window.onload = function () {
 				resources: uniq_resources,
 			  })
 			psychoJS._config.experiment.saveFormat = undefined // don't save to client side
-			
 			// console.log(psychoJS)
 		})
-	
 }
 
 // open window:
@@ -392,8 +394,6 @@ if (!getQueryVariable('skip_practice') && !getQueryVariable('run').includes('R2'
 	flowScheduler.add(readyRoutineEnd());
 }
 
-
-
 // MAIN BLOCK
 // Ready Routine
 flowScheduler.add(readyRoutineBegin('MAIN', 'BEGIN_slide'));
@@ -412,8 +412,6 @@ flowScheduler.add(quitPsychoJS, '', true);
 
 // quit if user presses Cancel in dialog box:
 dialogCancelScheduler.add(quitPsychoJS, '', false);
-
-
 
 var frameDur;
 function updateInfo() {
@@ -584,7 +582,19 @@ function experimentInit() {
 		text: 'Place Outcome text here.',
 		font: 'Arial',
 		units: 'norm',
-		pos: [0, 0], height: 0.12, wrapWidth: undefined, ori: 0,
+		pos: [0, -0.33], height: 0.05, wrapWidth: undefined, ori: 0,
+		color: new util.Color('white'), opacity: 1,
+		depth: 0.0
+	});
+
+	// Game Type  Explanation
+	g.game_type_text_stim = new visual.TextStim({
+		win: psychoJS.window,
+		name: 'game_type explanation',
+		text: g.game_type_text['pleasant'],
+		font: 'Arial',
+		units: 'norm',
+		pos: [0, -0.8], height: 0.05, wrapWidth: 1.4, ori: 0,
 		color: new util.Color('white'), opacity: 1,
 		depth: 0.0
 	});
@@ -620,11 +630,8 @@ function experimentInit() {
 	return Scheduler.Event.NEXT;
 }
 
-
 function instruct_pagesLoopBegin(thisScheduler) {
 	// set up handler to look up the conditions
-
-	
 	slides = new TrialHandler({
 		psychoJS: psychoJS,
 		nReps: 1, method: TrialHandler.Method.SEQUENTIAL,
@@ -634,9 +641,6 @@ function instruct_pagesLoopBegin(thisScheduler) {
 	});
 	
 	psychoJS.experiment.addLoop(slides); // add the loop to the experiment
-
-	var currentInstructIndex = 0
-	var maxInstructions = slides.nTotal
 
 	const snapshot = slides.getSnapshot();
 	thisScheduler.add(importConditions(snapshot));
@@ -748,7 +752,6 @@ function instructSlideRoutineEachFrame(trials, slides) {
 					track.play();
 				}
 			}
-				
 		}
 		// *ready* updates
 		if (t >= 0 && ready.status === PsychoJS.Status.NOT_STARTED) {
@@ -766,7 +769,6 @@ function instructSlideRoutineEachFrame(trials, slides) {
 
 			let theseKeys = ready.getKeys({ keyList: ['right', 'left', 'z'], waitRelease: false });
 
-			
 			// Force Progression
 			if (theseKeys.length > 0 && theseKeys[0].name == 'z') {  // at least one key was pressed
 
@@ -1039,8 +1041,6 @@ function shuffle(array) {
 		g.outcome_media.negative = negative_outcome_media
 		g.outcome_media.positive = positive_outcome_media
 	}
-	 
-	// console.log( g.outcome_media.positive)
 }
 
 var blocks;
@@ -1124,6 +1124,7 @@ function instruct_pagesLoopEnd() {
 function trialsLoopEnd() {
 	g.text_trial_number.setAutoDraw(false)
 	g.text_val_game_type.setAutoDraw(false)
+	g.game_type_text_stim.setAutoDraw(false);
 	g.slideStim.setAutoDraw(false)
 
 	psychoJS.experiment.removeLoop(blocks);
@@ -1282,6 +1283,9 @@ function blockRoutineBegin(block) {
 		}
 		g.text_val_game_type.setAutoDraw(true)
 
+		g.game_type_text_stim.setText(g.game_type_text[game_type])
+		g.game_type_text_stim.setAutoDraw(true);
+
 		// g.rect[1].setAutoDraw(true)
 		// g.rect[2].setAutoDraw(true)
 		// g.rect[3].setAutoDraw(true)
@@ -1339,7 +1343,6 @@ g.outcome = {
 		'negative': [],
 		'positive': [],
 		'meaningless': []
-
 	},
 	2: {
 		'negative': [],
@@ -1372,7 +1375,6 @@ function getRandomOutcome(probability, game_type) {
 		return 'meaningless'
 	}
 }
-
 
 /**
  * Returns an image/audio outcome pair based on given income
@@ -1499,7 +1501,81 @@ function setOutcome(outcome, choice) {
 	}
 }
 
+/**
+ * Sets the outcome reponse based on outcome and game type
+ * reference to #56 https://github.com/laureate-institute-for-brain-research/StimToolOnline/issues/56
+ * @param {*} outcome the random outcome. i.e. 'pleasant', 'unpleasant', 'meaningless'
+ * @param {*} game_type the game type from the schedule. ie. 'unpleasant' or 'pleasant'
+ * @param {*} choice the choice number the subjet selected, ie. 1, 2,3
+ */
+function setOutcomeResponse(outcome, game_type, choice) {
+	if (game_type == 'pleasant') {
+		if (outcome == 'positive') {
+			// pleasant outcomes with positive images
+			g.outcome_text_response = g.outcome_text_responses['accept']
+		} else {
+			// pleasant outcomes with scrambled images
+			g.outcome_text_response = g.outcome_text_responses['reject']
+		}
+	} else {
+		if (outcome == 'negative') {
+			// unpleasant outcomes with negative images
+			g.outcome_text_response = g.outcome_text_responses['reject']
+		} else {
+			// unpleasant outcomes with scrambled iamges
+			g.outcome_text_response = g.outcome_text_responses['accept']
+		}
+	}
+
+	// Set the text x-position based of the choice
+	switch (choice) {
+		case 1:
+			g.outcome_text = new visual.TextStim({
+				win: psychoJS.window,
+				name: 'outcome_text',
+				text: g.outcome_text_response,
+				font: 'Arial',
+				units: 'norm',
+				pos: [
+					g.faces_choice[1].pos[0],
+					-0.33], height: 0.05, wrapWidth: undefined, ori: 0,
+				color: new util.Color('white'), opacity: 1,
+				depth: 0.0
+			});
+			break;
+		case 2:
+			g.outcome_text = new visual.TextStim({
+				win: psychoJS.window,
+				name: 'outcome_text',
+				text: g.outcome_text_response,
+				font: 'Arial',
+				units: 'norm',
+				pos: [
+					g.faces_choice[2].pos[0],
+					-0.33], height: 0.05, wrapWidth: undefined, ori: 0,
+				color: new util.Color('white'), opacity: 1,
+				depth: 0.0
+			});
+			break;
+		case 3:
+			g.outcome_text = new visual.TextStim({
+				win: psychoJS.window,
+				name: 'outcome_text',
+				text: g.outcome_text_response,
+				font: 'Arial',
+				units: 'norm',
+				pos: [
+					g.faces_choice[3].pos[0],
+					-0.33], height: 0.05, wrapWidth: undefined, ori: 0,
+				color: new util.Color('white'), opacity: 1,
+				depth: 0.0
+			});
+			break;
+	}
+}
+
 var outcome;
+var outcome_response;
 function blockRoutineTrials(trials) {
 	return function () {
 		//------Loop for each frame of Routine 'trial'-------
@@ -1572,6 +1648,7 @@ function blockRoutineTrials(trials) {
 					outcome = getRandomOutcome(probability_1, game_type)
 					getOutcomePair(outcome, game_type, choice) // Generate a random image/sound pair based on outcome
 					setOutcome(outcome, choice)
+					setOutcomeResponse(outcome, game_type, choice)
 				}
 				
 				// Chose 2
@@ -1580,6 +1657,7 @@ function blockRoutineTrials(trials) {
 					outcome = getRandomOutcome(probability_2, game_type)
 					getOutcomePair(outcome, game_type, choice) // Generate a random image/sound pair based on outcome
 					setOutcome(outcome, choice)
+					setOutcomeResponse(outcome, game_type, choice)
 				}
 				
 				// Chose 3
@@ -1588,6 +1666,7 @@ function blockRoutineTrials(trials) {
 					outcome = getRandomOutcome(probability_3, game_type)
 					getOutcomePair(outcome, game_type, choice) // Generate a random image/sound pair based on outcome
 					setOutcome(outcome, choice)
+					setOutcomeResponse(outcome, game_type, choice)
 				}
 
 				// Mark keypress
@@ -1602,12 +1681,11 @@ function blockRoutineTrials(trials) {
 				g.OUTCOME_TEXT_DURATION = 2; // the time duration for the text to display after selecting the person
 				g.outcomeTimer.reset( g.outcome_sound.getDuration() + g.OUTCOME_TEXT_DURATION) ;
 				
-				
-				g.black_rectangle.setAutoDraw(true)
+				// g.black_rectangle.setAutoDraw(true)
+				g.outcome_text.setText(g.outcome_text_response)
 				g.outcome_text.setAutoDraw(true)
 
 				ready.clock.reset(); // reset keyboard clock
-
 			}
 		}
 
@@ -1674,7 +1752,6 @@ function initialFixation(trials) {
 
 			mark_event(trials_data, globalClock, 'NA', trial_type, event_types['FIXATION_ONSET'],
 				'NA', 'NA' , 'NA')
-
 		}
 
 		if (t_end >= 3) {
@@ -1936,7 +2013,6 @@ function endLoopIteration(thisScheduler, loop = undefined) {
 					psychoJS.experiment.nextEntry(loop);
 				}
 				thisScheduler.stop();
-				
 			} else {
 				const thisTrial = loop.getCurrentTrial();
 				if (typeof thisTrial === 'undefined' || !('isTrials' in thisTrial) || thisTrial.isTrials)
