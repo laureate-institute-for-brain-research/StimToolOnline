@@ -502,7 +502,7 @@ function experimentInit() {
 		text: '1', alignHoriz: 'right',
 		font: 'Arial',
 		units: 'norm',
-		pos: [-0.4, 0.9], height: 0.06, wrapWidth: undefined, ori: 0,
+		pos: [-0.3, 0.9], height: 0.06, wrapWidth: undefined, ori: 0,
 		color: new util.Color('white'), opacity: 1,
 		depth: 0.0
 	});
@@ -511,7 +511,7 @@ function experimentInit() {
 	g.text_trial_number  = new visual.TextStim({
 		win: psychoJS.window,
 		name: 'text_trial_number',
-		text: 'Trial Number:',alignHoriz: 'left',
+		text: 'Choice Number:',alignHoriz: 'left',
 		font: 'Arial',
 		units: 'norm',
 		pos: [-0.95, 0.8], height: 0.06, wrapWidth: undefined, ori: 0,
@@ -525,7 +525,7 @@ function experimentInit() {
 		text: '1',alignHoriz: 'right',
 		font: 'Arial',
 		units: 'norm',
-		pos: [-0.4, 0.8], height: 0.06, wrapWidth: undefined, ori: 0,
+		pos: [-0.3, 0.8], height: 0.06, wrapWidth: undefined, ori: 0,
 		color: new util.Color('white'), opacity: 1,
 		depth: 0.0
 	});
@@ -1263,13 +1263,13 @@ function blockRoutineBegin(block) {
 		// Top Information
 		g.text_game_number.setAutoDraw(true);
 		g.text_val_game_number.setAutoDraw(true);
-		g.text_val_game_number.setText(g.game_number);
+		g.text_val_game_number.setText(g.game_number + '/' + block.nTotal);
 
 		g.text_trial_number.setAutoDraw(true);
 		g.text_val_trial_number.setAutoDraw(true)
 	
 		g.trial_number = 1 // reset the trial_number after each block
-		g.text_val_trial_number.setText(g.trial_number);
+		g.text_val_trial_number.setText(g.trial_number + '/' +  trials_block);
 		g.last_trial_number = undefined; // store laste trial number
 
 		// g.text_game_type.setAutoDraw(true)
@@ -1550,7 +1550,7 @@ function blockRoutineTrials(trials) {
 			g.outcome_image.status = PsychoJS.Status.NOT_STARTED
 			// for some reason, we need to setText after we draw out the image or else
 			//  the trial number is a layer above the outcome image
-			g.text_val_trial_number.setText(g.trial_number)
+			g.text_val_trial_number.setText(g.trial_number + '/' +  trials_block);
 			g.new_trial_marked = false;
 
 			// Next Routine after trial nuber reached
