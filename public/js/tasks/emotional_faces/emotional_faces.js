@@ -339,7 +339,8 @@ var resources = [
 	{ name: 'user_filled.png', path: '/js/tasks/emotional_faces/media/user_filled.png' },
 	{ name: 'PRACTICE_ready', path: '/js/tasks/emotional_faces/media/instructions/Slide11.jpeg'},
 	{ name: 'MAIN_ready', path: '/js/tasks/emotional_faces/media/instructions/Slide12.jpeg' },
-	{ name: 'PRACTICE_ready_audio.mp3', path: '/js/tasks/emotional_faces/media/instructions_audio/Slide9.mp3'},
+	{ name: 'PRACTICE_ready_audio.mp3', path: '/js/tasks/emotional_faces/media/instructions_audio/Slide11.mp3' },
+	{ name: 'MAIN_ready_audio.mp3', path: '/js/tasks/emotional_faces/media/instructions_audio/Slide12.mp3'},
 	{ name: 'male.png', path: '/js/tasks/emotional_faces/media/male.png' },
 	{ name: 'female.png', path: '/js/tasks/emotional_faces/media/female.png' },
 	{ name: 'high_tone.mp3', path: '/js/tasks/emotional_faces/media/tones/high_tone.mp3' },
@@ -955,7 +956,11 @@ function readyRoutineBegin(block_type) {
 					flipHoriz : false, flipVert : false,
 					texRes : 128, interpolate : true, depth : 0
 				});
-				track = undefined;
+				track = new Sound({
+					win: psychoJS.window,
+					value: 'MAIN_ready_audio.mp3'
+				});
+				track.setVolume(1.0);
 				break
 			default:
 				readyStim = new visual.ImageStim({
