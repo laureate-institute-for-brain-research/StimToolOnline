@@ -171,7 +171,7 @@ window.onload = function () {
 							if (obj.instruct_slide && obj.instruct_slide != '\n'){
 								resources.push({ name: obj.instruct_slide, path: obj.instruct_slide })
 							}
-
+							// console.log(obj)
 							if (obj.audio_path && obj.audio_path != '\n'){
 								resources.push({ name: obj.audio_path, path: obj.audio_path })
 							}
@@ -313,6 +313,7 @@ window.onload = function () {
 
 			// Sanitze the resources. Needs to be clean so that psychoJS doesn't complain
 			resources = sanitizeResources(resources)
+			// console.log(resources)
 			let uniq_resources = removeDuplicates(resources)
 			// console.log(resources)
 			// console.log(g.outcome_media)
@@ -343,9 +344,11 @@ var expInfo = { 'participant': '', 'session': '', 'run_id': '', 'date': formatDa
 var resources = [
 	{ name: 'practice_schedule.csv', path: '/js/tasks/cooperation_task/practice_schedule.csv' },
 	{ name: 'faces_paths.csv', path: '/js/tasks/cooperation_task/faces_paths.csv' }, // faces lists
-	{ name: 'PRACTICE_ready', path: '/js/tasks/cooperation_task/media/instructions/Slide18.jpeg'},
-	{ name: 'MAIN_ready', path: '/js/tasks/cooperation_task/media/instructions/Slide19.jpeg' },
-	{ name: 'BEGIN_slide', path: '/js/tasks/cooperation_task/media/instructions/Slide20.jpeg' },
+	{ name: 'PRACTICE_ready', path: '/js/tasks/cooperation_task/media/instructions/Slide15.jpeg' },
+	{ name: 'PRACTICE_ready_audio.mp3', path: '/js/tasks/cooperation_task/media/instructions_audio/Slide15.mp3'},
+	{ name: 'MAIN_ready', path: '/js/tasks/cooperation_task/media/instructions/Slide16.jpeg' },
+	{ name: 'MAIN_ready_audio.mp3', path: '/js/tasks/cooperation_task/media/instructions_audio/Slide16.mp3'},
+	{ name: 'BEGIN_slide', path: '/js/tasks/cooperation_task/media/instructions/Slide17.jpeg' },
 	{ name: 'positive_face', path: '/js/tasks/cooperation_task/media/green_smile.png' },
 	{ name: 'negative_face', path: '/js/tasks/cooperation_task/media/red_sad.png' },
 	{ name: 'neutral_face', path: '/js/tasks/cooperation_task/media/neutral_face.png' },
@@ -389,14 +392,14 @@ if (!getQueryVariable('skip_practice') && !getQueryVariable('run').includes('R2'
 	flowScheduler.add(practiceTrialsLoopScheduler);
 	flowScheduler.add(trialsLoopEnd);
 
-	flowScheduler.add(readyRoutineBegin('SLIDE', 'MAIN_ready'));
+	flowScheduler.add(readyRoutineBegin('SLIDE', 'MAIN_ready', 'MAIN_ready_audio.mp3'));
 	flowScheduler.add(readyRoutineEachFrame());
 	flowScheduler.add(readyRoutineEnd());
 }
 
 // MAIN BLOCK
 // Ready Routine
-flowScheduler.add(readyRoutineBegin('MAIN', 'BEGIN_slide'));
+flowScheduler.add(readyRoutineBegin('MAIN', 'BEGIN_slide', undefined));
 flowScheduler.add(readyRoutineEachFrame());
 flowScheduler.add(readyRoutineEnd());
 
@@ -742,6 +745,7 @@ function instructSlideRoutineEachFrame(trials, slides) {
 					track.setVolume(1.0);
 					track.play();
 				} else {
+					console.log('setting new audio')
 					track = new Sound({
 						win: psychoJS.window,
 						value: audio_path
@@ -849,6 +853,11 @@ function instructSlideRoutineEachFrame(trials, slides) {
 
 function instructRoutineEnd(trials) {
 	return function () {
+
+		if (track) {
+			track.stop()
+		}
+
 		//------Ending Routine 'instruct'-------
 		for (const thisComponent of instructComponents) {
 			if (typeof thisComponent.setAutoDraw === 'function') {
@@ -866,7 +875,7 @@ var frameRemains;
 
 var readyComponents;
 var readyStim;
-function readyRoutineBegin(block_type, image_stim ='MAIN_ready' ) {
+function readyRoutineBegin(block_type, image_stim, audio_stim) {
 	return function () {
 		//------Prepare to start Routine 'ready'-------
 		t = 0;
@@ -887,11 +896,11 @@ function readyRoutineBegin(block_type, image_stim ='MAIN_ready' ) {
 					flipHoriz : false, flipVert : false,
 					texRes : 128, interpolate : true, depth : 0
 				});
-				// track = new Sound({
-				// 	win: psychoJS.window,
-				// 	value: 'PRACTICE_ready_audio.mp3'
-				// });
-				// track.setVolume(1.0);
+				track = new Sound({
+					win: psychoJS.window,
+					value: 'PRACTICE_ready_audio.mp3'
+				});
+				track.setVolume(1.0);
 				break
 			case 'MAIN':
 				readyStim = new visual.ImageStim({
@@ -903,7 +912,16 @@ function readyRoutineBegin(block_type, image_stim ='MAIN_ready' ) {
 					flipHoriz : false, flipVert : false,
 					texRes : 128, interpolate : true, depth : 0
 				});
-				track = undefined;
+
+				if (audio_stim) {
+					track = new Sound({
+						win: psychoJS.window,
+						value: audio_stim
+					});
+					track.setVolume(1.0);
+				} else {
+					track = undefined;
+				}
 				break
 			default:
 				readyStim = new visual.ImageStim({
@@ -960,7 +978,8 @@ function readyRoutineEachFrame() {
 			return Scheduler.Event.FLIP_REPEAT;
 		}
 		else {
-			resp.stop()
+			resp.stop();
+			resp.status = PsychoJS.Status.NOT_STARTED;
 			return Scheduler.Event.NEXT;
 		}
 	};
@@ -1053,7 +1072,8 @@ function practiceTrialsLoopBegin(thisScheduler) {
 		trialList: 'practice_schedule.csv',
 		seed: undefined, name: 'blocks'
 	});
-	g.global_trial_number = 0
+	g.global_trial_number = 0;
+	g.game_number = 1;
 	randomizePair(blocks) // randomize outcome
 
 	psychoJS.experiment.addLoop(blocks); // add the loop to the experiment
@@ -1093,7 +1113,8 @@ function trialsLoopBegin(thisScheduler) {
 		seed: undefined, name: 'trials'
 	});
 
-	g.global_trial_number = 0
+	g.global_trial_number = 0;
+	g.game_number = 1;
 	randomizePair(blocks) // randomize outcome
 
 	psychoJS.experiment.addLoop(blocks); // add the loop to the experiment
@@ -1122,9 +1143,15 @@ function instruct_pagesLoopEnd() {
 
 // SHow the points in the trial 
 function trialsLoopEnd() {
-	g.text_trial_number.setAutoDraw(false)
-	g.text_val_game_type.setAutoDraw(false)
-	g.game_type_text_stim.setAutoDraw(false);
+	g.text_game_number.setAutoDraw(false); // 'Game Number:'
+	g.text_val_game_number.setAutoDraw(false); // the game vale '2/2'
+	g.text_trial_number.setAutoDraw(false); // 'Choice Number:'
+	g.text_val_trial_number.setAutoDraw(false); // the choice val '16/16'
+
+	g.text_val_game_type.setAutoDraw(false); // Top right text
+
+	g.game_type_text_stim.setAutoDraw(false); // bottom text
+
 	g.slideStim.setAutoDraw(false)
 
 	psychoJS.experiment.removeLoop(blocks);
