@@ -1,6 +1,6 @@
 ﻿/**
- * Cooperation Task
- * A modifieid version of 3-Arm Bandit
+ * Invitation Task
+ * A modifieid version of Planning Task
  * See the README.md file for more information about this task
  * @author James Touthang <james@touthang.info>
  */
@@ -124,7 +124,7 @@ window.onload = function () {
 			return new Promise((resolve, reject) => {
 				$.ajax({
 					type: 'GET',
-					url: '/js/tasks/cooperation_task/' + getQueryVariable('run'),
+					url: '/js/tasks/invitation_task/' + getQueryVariable('run'),
 					dataType: 'json',
 					success: (data) => {
 						resolve(data)
@@ -180,94 +180,6 @@ window.onload = function () {
 					}
 				})
 				
-			})
-		})
-		// Add Faces Media to Resrouces
-		.then((values) => {			
-			return new Promise((resolve, reject) => {
-				$.ajax({
-					type: 'GET',
-					url: '/js/tasks/cooperation_task/media/faces_paths.csv',
-					dataType: 'text',
-					async: false,
-					success: (data) => {
-						var out = [];
-						var allRows = data.split('\n'); // split rows at new line
-						
-						var headerRows = allRows[0].split(',');
-
-						for (var i=1; i<allRows.length; i++) {
-							var obj = {};
-							var currentLine = allRows[i].split(',');
-							for (var j = 0; j < headerRows.length; j++){
-								obj[headerRows[j]] = currentLine[j];	
-							}
-							// If there's media add to resources
-							if (obj.stim_paths && obj.stim_paths != undefined) {
-								resources.push({ name: obj.stim_paths , path: obj.stim_paths  })
-							}
-						}
-						resolve(data)
-					}
-				})
-			})
-		})
-
-		// Add Outcome Picture and Audio to resources
-		// Add Faces Media to Resrouces
-		.then((values) => {			
-			return new Promise((resolve, reject) => {
-				$.ajax({
-					type: 'GET',
-					url: '/js/tasks/cooperation_task/outcome_media.csv',
-					dataType: 'text',
-					async: false,
-					success: (data) => {
-						var out = [];
-						var allRows = data.split('\n'); // split rows at new line
-						
-						var headerRows = allRows[0].split(',');
-
-						for (var i=1; i<allRows.length; i++) {
-							var obj = {};
-							var currentLine = allRows[i].split(',');
-							for (var j = 0; j < headerRows.length; j++){
-								obj[headerRows[j]] = currentLine[j];	
-							}
-							// If there's media add to resources
-							if (obj.image_path && obj.image_path != undefined) {
-								resources.push({ name: obj.image_path , path: obj.image_path  })
-							}
-
-							// If there's media add to resources
-							if (obj.image_path_scramble && obj.image_path_scramble != undefined) {
-								resources.push({ name: obj.image_path_scramble , path: obj.image_path_scramble  })
-							}
-
-							// If there's media add to resources
-							if (obj.sound_path && obj.sound_path != undefined) {
-								resources.push({ name: obj.sound_path , path: obj.sound_path  })
-							}
-
-							// Push to their designated outcome lists
-							if (obj.outcome_type == 'negative') {
-								g.outcome_media.negative.push([
-									obj.image_path,
-									obj.sound_path,
-									obj.image_path_scramble,
-								])
-							} 
-							if (obj.outcome_type == 'positive')  {
-								g.outcome_media.positive.push([
-									obj.image_path,
-									obj.sound_path,
-									obj.image_path_scramble,
-								])
-							}	
-						}
-						resolve(data)
-					}
-				})
 			})
 		})
 
@@ -337,22 +249,19 @@ psychoJS.openWindow({
 });
 
 // store info about the experiment session:
-let expName = 'Cooperation Task';  // from the Builder filename that created this script
+let expName = 'Invitation Task';  // from the Builder filename that created this script
 var expInfo = { 'participant': '', 'session': '', 'run_id': '', 'date': formatDate(), 'study': '', };
 
 // Add Slides to resources
 var resources = [
 	{ name: 'practice_schedule.csv', path: '/js/tasks/cooperation_task/practice_schedule.csv' },
-	{ name: 'faces_paths.csv', path: '/js/tasks/cooperation_task/faces_paths.csv' }, // faces lists
 	{ name: 'PRACTICE_ready', path: '/js/tasks/cooperation_task/media/instructions/Slide15.jpeg' },
 	{ name: 'PRACTICE_ready_audio.mp3', path: '/js/tasks/cooperation_task/media/instructions_audio/Slide15.mp3'},
 	{ name: 'MAIN_ready', path: '/js/tasks/cooperation_task/media/instructions/Slide16.jpeg' },
 	{ name: 'MAIN_ready_audio.mp3', path: '/js/tasks/cooperation_task/media/instructions_audio/Slide16.mp3'},
 	{ name: 'BEGIN_slide', path: '/js/tasks/cooperation_task/media/instructions/Slide17.jpeg' },
-	{ name: 'positive_face', path: '/js/tasks/cooperation_task/media/green_smile.png' },
-	{ name: 'negative_face', path: '/js/tasks/cooperation_task/media/red_sad.png' },
-	{ name: 'neutral_face', path: '/js/tasks/cooperation_task/media/neutral_face.png' },
-	{ name: 'neutral_sound.mp3', path: '/js/tasks/cooperation_task/media/neutral_sound.mp3'}
+	{ name: 'step_1_backg', path: '/js/tasks/invitation_task/media/building_street.jpeg'}
+
 ]
 
 // schedule the experiment:
@@ -470,6 +379,16 @@ function experimentInit() {
 		texRes : 128, interpolate : true, depth : 0
 	});
 
+	g.step_1_background = new visual.ImageStim({
+		win : psychoJS.window,
+		name : 'step_1_backg', units : 'height', 
+		image : 'step_1_backg', mask : undefined,
+		ori : 0, pos : [0, 0],
+		color : new util.Color([1, 1, 1]), opacity : 1,
+		flipHoriz : false, flipVert : false,
+		texRes : 128, interpolate : true, depth : 0
+	});
+
 	readyStim = new visual.ImageStim({
 		win : psychoJS.window,
 		name : 'ready_stim', units : 'height', 
@@ -484,29 +403,6 @@ function experimentInit() {
 
 	// Initialize components for Routine "trial"
 	blockClock = new util.Clock();
-
-	g.game_number = 1
-	g.text_game_number  = new visual.TextStim({
-		win: psychoJS.window,
-		name: 'text_game_number',
-		text: 'Game Number:', alignHoriz: 'left',
-		font: 'Arial',
-		units: 'norm',
-		pos: [-0.95, 0.9], height: 0.06, wrapWidth: undefined, ori: 0,
-		color: new util.Color('white'), opacity: 1,
-		depth: 0.0
-	});
-
-	g.text_val_game_number  = new visual.TextStim({
-		win: psychoJS.window,
-		name: 'game_number',
-		text: '1', alignHoriz: 'right',
-		font: 'Arial',
-		units: 'norm',
-		pos: [-0.3, 0.9], height: 0.06, wrapWidth: undefined, ori: 0,
-		color: new util.Color('white'), opacity: 1,
-		depth: 0.0
-	});
 
 	g.trial_number = 1;
 	g.text_trial_number  = new visual.TextStim({
@@ -997,71 +893,6 @@ function readyRoutineEnd(trials) {
 	};
 }
 
-/**
- * Shuffle arrays in place
- * e.g. arr = [1,2,3]
- *     shuffe(arr)
- * @param {Array} array 
- * @returns 
- */
-function shuffle(array) {
-	let currentIndex = array.length,  randomIndex;
-  
-	// While there remain elements to shuffle.
-	while (currentIndex != 0) {
-  
-	  // Pick a remaining element.
-	  randomIndex = Math.floor(Math.random() * currentIndex);
-	  currentIndex--;
-  
-	  // And swap it with the current element.
-	  [array[currentIndex], array[randomIndex]] = [
-		array[randomIndex], array[currentIndex]];
-	}
-  
-	return array;
-  }
-
-/**
- * Genearte Randomized array
- * @param {TrialHandler} trial_handler  trial_handler type
- */
- function randomizePair(trial_handler) {
-	// Generate random images.
-	// Should not be repeating same outcome twice in a row.
-
-	// get the total_trials
-	g.total_trials = 0
-	trial_handler._trialList.forEach(block_row => {
-		g.total_trials = g.total_trials + (block_row.trials_block)
-	})
-	 
-	let positive_outcome_media = g.outcome_media.positive;
-	let negative_outcome_media = g.outcome_media.negative;
-	 
-	shuffle( negative_outcome_media)
-	shuffle( positive_outcome_media )
-	 
-	if ((g.outcome_media.negative.length <= g.total_trials) || (g.outcome_media.positive.length <= g.total_trials) ) {
-		console.log("add new trials. just shuffle")
-		// If it got here, it means the number of trials is lower than the
-		// number of the outcome media.
-		// Multiple the array itself x number of times till it's greater than the total trials
-		
-		while (g.outcome_media.negative.length <= g.total_trials) {
-			g.outcome_media.negative = g.outcome_media.negative.concat( negative_outcome_media )
-		}
-
-		while (g.outcome_media.positive.length <= g.total_trials) {
-			g.outcome_media.positive = g.outcome_media.positive.concat( positive_outcome_media )
-		}
-	} else {
-		// just returned a shuffle version of the outcome_media
-		g.outcome_media.negative = negative_outcome_media
-		g.outcome_media.positive = positive_outcome_media
-	}
-}
-
 var blocks;
 var trial_type;
 function practiceTrialsLoopBegin(thisScheduler) {
@@ -1074,7 +905,6 @@ function practiceTrialsLoopBegin(thisScheduler) {
 	});
 	g.global_trial_number = 0;
 	g.game_number = 1;
-	randomizePair(blocks) // randomize outcome
 
 	psychoJS.experiment.addLoop(blocks); // add the loop to the experiment
 	endClock.reset()
@@ -1086,8 +916,8 @@ function practiceTrialsLoopBegin(thisScheduler) {
 		const snapshot = blocks.getSnapshot();
 		thisScheduler.add(importConditions(snapshot));
 		thisScheduler.add(initialFixation(snapshot));
-		thisScheduler.add(blockRoutineBegin(snapshot)); 	 // setup block
-		thisScheduler.add(blockRoutineTrials(snapshot));	 // do trials
+		thisScheduler.add(trialRoutineBegin(snapshot)); 	 // setup block
+		thisScheduler.add(trialStep1(snapshot));
 		thisScheduler.add(blockRoutineOutcome(snapshot)); 	 // show result
 		thisScheduler.add(blockRoutineEnd(snapshot));		 // end block
 		thisScheduler.add(endLoopIteration(thisScheduler, snapshot));
@@ -1115,7 +945,6 @@ function trialsLoopBegin(thisScheduler) {
 
 	g.global_trial_number = 0;
 	g.game_number = 1;
-	randomizePair(blocks) // randomize outcome
 
 	psychoJS.experiment.addLoop(blocks); // add the loop to the experiment
 
@@ -1124,7 +953,7 @@ function trialsLoopBegin(thisScheduler) {
 		const snapshot = blocks.getSnapshot();
 		thisScheduler.add(importConditions(snapshot));
 		thisScheduler.add(initialFixation(snapshot));
-		thisScheduler.add(blockRoutineBegin(snapshot)); 	 // setup block
+		thisScheduler.add(trialRoutineBegin(snapshot)); 	 // setup block
 		thisScheduler.add(blockRoutineTrials(snapshot));	 // do trials
 		thisScheduler.add(blockRoutineOutcome(snapshot)); 	 // show result
 		thisScheduler.add(blockRoutineEnd(snapshot));		 // end block
@@ -1245,88 +1074,14 @@ g.rect = {
  * @param {*} block 
  * @returns 
  */
-function blockRoutineBegin(block) {
+function trialRoutineBegin(block) {
 	return function () {
 		//------Prepare to start Routine 'trial'-------
 		t = 0;
 		trial_type = trials_block + '_' + probability_1 + '_' + probability_2 + '_' + probability_3
 		
-		// set the face image
-		g.faces_choice[1] = new visual.ImageStim({
-			win: psychoJS.window,
-			name: 'face_1', units: 'norm',
-			size: [0.55, 0.5],
-			image: face_1, mask: undefined,
-			ori: 0, pos: [-0.6, 0],
-			color: new util.Color([1, 1, 1]), opacity: 1,
-			flipHoriz: false, flipVert: false,
-			texRes: 128, interpolate: true, depth: 0
-		});
-
-		g.faces_choice[2] = new visual.ImageStim({
-			win: psychoJS.window,
-			name: 'face_2', units: 'norm',
-			size: [0.55, 0.5],
-			image: face_2, mask: undefined,
-			ori: 0, pos: [0, 0],
-			color: new util.Color([1, 1, 1]), opacity: 1,
-			flipHoriz: false, flipVert: false,
-			texRes: 128, interpolate: true, depth: 0
-		});
-
-		g.faces_choice[3] = new visual.ImageStim({
-			win: psychoJS.window,
-			name: 'face_3', units: 'norm',
-			size: [0.55, 0.5],
-			image: face_3, mask: undefined,
-			ori: 0, pos: [0.6, 0],
-			color: new util.Color([1, 1, 1]), opacity: 1,
-			flipHoriz: false, flipVert: false,
-			texRes: 128, interpolate: true, depth: 0
-		});
 
 		blockClock.reset(); // clock
-
-		// Draw the static stims
-		// Top Information
-		g.text_game_number.setAutoDraw(true);
-		g.text_val_game_number.setAutoDraw(true);
-		g.text_val_game_number.setText(g.game_number + '/' + block.nTotal);
-
-		g.text_trial_number.setAutoDraw(true);
-		g.text_val_trial_number.setAutoDraw(true)
-	
-		g.trial_number = 1 // reset the trial_number after each block
-		g.text_val_trial_number.setText(g.trial_number + '/' +  trials_block);
-		g.last_trial_number = undefined; // store laste trial number
-
-		// g.text_game_type.setAutoDraw(true)
-		if (game_type == 'pleasant') {
-			g.text_val_game_type.color = g.PLEASANT_COLOR;
-			g.text_val_game_type.setText('Positive Outcome Games')
-		} else {
-			g.text_val_game_type.color = g.UNPLEASANT_COLOR;
-			g.text_val_game_type.setText('Negative Outcome Games')
-		}
-		g.text_val_game_type.setAutoDraw(true)
-
-		g.game_type_text_stim.setText(g.game_type_text[game_type])
-		g.game_type_text_stim.setAutoDraw(true);
-
-		// g.rect[1].setAutoDraw(true)
-		// g.rect[2].setAutoDraw(true)
-		// g.rect[3].setAutoDraw(true)
-
-		// Draw the faces
-		g.faces_choice[1].setAutoDraw(true)
-		g.faces_choice[2].setAutoDraw(true)
-		g.faces_choice[3].setAutoDraw(true)
-
-		g.faces_text[1].setAutoDraw(true)
-		g.faces_text[2].setAutoDraw(true)
-		g.faces_text[3].setAutoDraw(true)
-
-		g.new_trial_marked = false;
 
 		mark_event(trials_data, globalClock, block.thisIndex, trial_type, event_types['BLOCK_ONSET'],
 				'NA', 'NA' , face_1 + ' | ' + face_2 + ' | ' + face_3)
@@ -1334,61 +1089,18 @@ function blockRoutineBegin(block) {
 	};
 }
 
-// X / Y normal positiions for each of the outcome faces for each choice.
-g.choice_outcome_pos = {
-	1: {
-		'unscramble': [],
-		'scramble': []
-	},
-	2: {
-		'unscramble': [],
-		'scramble': []
-	},
-	3: {
-		'unscramble': [],
-		'scramble': []
-	}
-}
-var face_pos_multiplier = 0.07
-// Add the positions iteratively
-for (let i = 0; i < 14; i++) {
-	// choice 1, negative
-	g.choice_outcome_pos[1]['scramble'].push([-0.55, -0.45 + (i * face_pos_multiplier)])
-	g.choice_outcome_pos[1]['unscramble'].push([-0.45, -0.45 + (i * face_pos_multiplier)])
+function trialStep1(trial) {
+	return function () {
+		
+		if (g.step_1_background.status == PsychoJS.Status.NOT_STARTED) {
+			g.step_1_background.setAutoDraw(true)
+		}
+
+		return Scheduler.Event.FLIP_REPEAT;
 	
-	g.choice_outcome_pos[2]['scramble'].push([-0.05, -0.45 + (i * face_pos_multiplier)])
-	g.choice_outcome_pos[2]['unscramble'].push([ 0.05, -0.45 + (i * face_pos_multiplier)])
-
-	g.choice_outcome_pos[3]['scramble'].push([ 0.55, -0.45 + (i * face_pos_multiplier)])
-	g.choice_outcome_pos[3]['unscramble'].push([ 0.45, -0.45 + (i * face_pos_multiplier)])
-}
-
-// Used for holding the intialized face image stim.
-// Can be used to access ImageStim 
-g.outcome = {
-	1: {
-		'negative': [],
-		'positive': [],
-		'meaningless': []
-	},
-	2: {
-		'negative': [],
-		'positive': [],
-		'meaningless': []
-	},
-	3: {
-		'negative': [],
-		'positive': [],
-		'meaningless': []
 	}
 }
 
-// Used for counting the positive/negative levels for each choice selection
-g.choice_counter = {
-	1: { 'negative': 0, 'positive': 0, 'meaningless': 0},
-	2: { 'negative': 0, 'positive': 0, 'meaningless': 0},
-	3: { 'negative': 0, 'positive': 0, 'meaningless': 0},
-}
 
 /**
  * Returns either positive or negative given random probability
@@ -1619,101 +1331,9 @@ function blockRoutineTrials(trials) {
 			psychoJS.window.callOnFlip(function () { ready.clearEvents(); });
 		}
 
-		if (!g.new_trial_marked) {
-			// mark trial onset
-			mark_event(trials_data, globalClock, g.trial_number, trial_type, event_types['TRIAL_ONSET'],
-				'NA', 'NA', 'NA')
-			
-			sendData()
-			g.new_trial_marked = true;
-		}
-
-		if (g.outcome_sound && g.outcomeTimer.getTime() <= g.outcome_sound.getDuration() && g.outcome_image && g.outcome_image.status == PsychoJS.Status.NOT_STARTED) {
-			console.log('show outcome image')
-
-			g.outcome_text.setAutoDraw(false)
-			g.black_rectangle.setAutoDraw(false)
-			// Start the outcome image and the sound
-			// Outcome image onset
-			g.outcome_image.setAutoDraw(true)
-			mark_event(trials_data, globalClock, g.trial_number, trial_type, event_types['OUTCOME_IMAGE_ONSET'],
-				'NA', 'NA', g.outcome_triple[0])
-			
-			// Outcome sound osnet
-			mark_event(trials_data, globalClock, g.trial_number, trial_type, event_types['OUTCOME_SOUND_ONSET'],
-				g.outcome_sound.getDuration(), 'NA', g.outcome_triple[1])
-			g.outcome_sound.play()
-		}
-
-
-		// Clear out the outcome image after timer is up,
-		// Also sets the new_trial_marked flag to false so that marker event corresponds to the corrent trial_onset
-		if (g.outcomeTimer.getTime() <= 0 && g.outcome_image && g.outcome_image.status == PsychoJS.Status.STARTED) {
-			g.outcome_image.setAutoDraw(false)
-			g.outcome_image.status = PsychoJS.Status.NOT_STARTED
-			// for some reason, we need to setText after we draw out the image or else
-			//  the trial number is a layer above the outcome image
-			g.text_val_trial_number.setText(g.trial_number + '/' +  trials_block);
-			g.new_trial_marked = false;
-
-			// Next Routine after trial nuber reached
-			if (g.trial_number > trials_block) {
-				continueRoutine = false;
-			}
-
-			g.outcome_sound = undefined;
-		}
-
 		if (ready.status === PsychoJS.Status.STARTED) {
 
 			let theseKeys = ready.getKeys({ keyList: ['1', '2', '3'], waitRelease: false });
-			
-			if (theseKeys.length > 0 && g.outcomeTimer.getTime() <= 0) {
-				// Chose 1
-				if (theseKeys[0].name == '1') {
-					let choice = 1
-					outcome = getRandomOutcome(probability_1, game_type)
-					getOutcomePair(outcome, game_type, choice) // Generate a random image/sound pair based on outcome
-					setOutcome(outcome, choice)
-					setOutcomeResponse(outcome, game_type, choice)
-				}
-				
-				// Chose 2
-				if (theseKeys[0].name == '2') {
-					let choice = 2
-					outcome = getRandomOutcome(probability_2, game_type)
-					getOutcomePair(outcome, game_type, choice) // Generate a random image/sound pair based on outcome
-					setOutcome(outcome, choice)
-					setOutcomeResponse(outcome, game_type, choice)
-				}
-				
-				// Chose 3
-				if (theseKeys[0].name == '3') {
-					let choice = 3
-					outcome = getRandomOutcome(probability_3, game_type)
-					getOutcomePair(outcome, game_type, choice) // Generate a random image/sound pair based on outcome
-					setOutcome(outcome, choice)
-					setOutcomeResponse(outcome, game_type, choice)
-				}
-
-				// Mark keypress
-				mark_event(trials_data, globalClock, g.trial_number, trial_type, event_types['SELECTION'],
-				theseKeys[0].rt, theseKeys[0].name , outcome)
-
-				// presed key
-				g.trial_number++ // incremente trial number
-				g.global_trial_number++ // incremeante global trial number
-
-				// Start Timer
-				g.OUTCOME_TEXT_DURATION = 2; // the time duration for the text to display after selecting the person
-				g.outcomeTimer.reset( g.outcome_sound.getDuration() + g.OUTCOME_TEXT_DURATION) ;
-				
-				// g.black_rectangle.setAutoDraw(true)
-				g.outcome_text.setText(g.outcome_text_response)
-				g.outcome_text.setAutoDraw(true)
-
-				ready.clock.reset(); // reset keyboard clock
-			}
 		}
 
 		// check for quit (typically the Esc key)
@@ -1952,7 +1572,7 @@ function thanksRoutineBegin(trials) {
 
 		// Show Final Points and money earned
 		// 100 points = 10 cents
-		thanksText.setText(`This is the end of the task run`)
+		thanksText.setText(`This is the end of the task run.\n\n\n Total Dates Earned: ${totalDates}`)
 		// update component parameters for each repeat
 		// keep track of which components have finished
 		thanksComponents = [];

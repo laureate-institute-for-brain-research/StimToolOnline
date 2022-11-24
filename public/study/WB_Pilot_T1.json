@@ -5,7 +5,8 @@
         "/?index=1&task=blind_dating&run=Pilot_R1.json",
         "/?index=2&task=emotional_faces&run=Pilot_R1.json",
         "/?index=3&task=cooperation_task&run=Pilot_R1.json",
-        "/?index=3&task=cooperation_task&run=Pilot_R2.json",
+        "/?index=4&task=cooperation_task&run=Pilot_R2.json",
+        "/?index=5&task=invitation_task&run=Pilot_R1.json",
         "/completed?"
     ],
     "fullscreen": true,
