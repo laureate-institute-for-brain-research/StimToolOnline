@@ -284,17 +284,19 @@ if (!getQueryVariable('skip_roleReversal')) {
 	flowScheduler.add(trialsLoopEnd);
 }
 
+if (!getQueryVariable('skip_main')) {
+	// MAIN BLOCK - Instrcutions
+	flowScheduler.add(readyRoutineBegin());
+	flowScheduler.add(readyRoutineEachFrame());
+	flowScheduler.add(readyRoutineEnd());
 
-// MAIN BLOCK - Instrcutions
-flowScheduler.add(readyRoutineBegin());
-flowScheduler.add(readyRoutineEachFrame());
-flowScheduler.add(readyRoutineEnd());
+	// MAIN BLOCK
+	const trialsLoopScheduler = new Scheduler(psychoJS);
+	flowScheduler.add(trialsLoopBegin, trialsLoopScheduler);
+	flowScheduler.add(trialsLoopScheduler);
+	flowScheduler.add(trialsLoopEnd);
+	}
 
-// MAIN BLOCK
-const trialsLoopScheduler = new Scheduler(psychoJS);
-flowScheduler.add(trialsLoopBegin, trialsLoopScheduler);
-flowScheduler.add(trialsLoopScheduler);
-flowScheduler.add(trialsLoopEnd);
 
 // END BLOCK
 flowScheduler.add(thanksRoutineBegin());
@@ -2981,7 +2983,7 @@ function thanksRoutineBegin(trials) {
 		t = 0;
 		thanksClock.reset(); // clock
 		frameN = -1;
-		routineTimer.add(25.000000);
+		routineTimer.add(10);
 		// update component parameters for each repeat
 		// keep track of which components have finished
 

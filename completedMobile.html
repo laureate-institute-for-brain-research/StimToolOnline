@@ -82,7 +82,7 @@
             <tbody>
                 <tr>
                   <th scope="row">ID:</th>
-                  <td><a id="participant"></a></td>
+                  <td id="participant">TEST</td>
                 </tr>
               </tbody>
         </table>
@@ -154,6 +154,14 @@
 
             })
         document.getElementById('mturkcode').innerHTML = getQueryVariable('id').split('-')[3].toUpperCase()
+
+        // Code for code in query
+        if (getQueryVariable('code') && getQueryVariable('mturk')){
+            document.getElementById('mturkcode').innerHTML = getQueryVariable('code').toUpperCase();
+            document.getElementById('participant').innerHTML = getQueryVariable('mturk').toUpperCase();
+            console.log(document.getElementById('participant'))
+        }
+        
     </script>
     <script src="/js/confetti.js"></script>
 
