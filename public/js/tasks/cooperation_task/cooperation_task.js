@@ -654,7 +654,7 @@ function instruct_pagesLoopBegin(thisScheduler) {
 
 	// console.log(thisScheduler)
 	block_type = 'INSTRUCTIONS'
-	mark_event(trials_data, globalClock, 0, block_type, event_types['BLOCK_ONSET'],
+	mark_event(trials_data, globalClock, 'NA', block_type, event_types['BLOCK_ONSET'],
 				'NA', 'NA', 'NA')
 
 	return Scheduler.Event.NEXT;
@@ -936,7 +936,7 @@ function readyRoutineBegin(block_type, image_stim, audio_stim) {
 				track = undefined;
 		}
 		
-		mark_event(trials_data, globalClock, 0, block_type, event_types['BLOCK_ONSET'],
+		mark_event(trials_data, globalClock, 'NA', block_type, event_types['BLOCK_ONSET'],
 				'NA', 'NA', 'NA')
 	
 		routineTimer.add(2.000000);
@@ -1328,7 +1328,7 @@ function blockRoutineBegin(block) {
 
 		g.new_trial_marked = false;
 
-		mark_event(trials_data, globalClock, block.thisIndex, trial_type, event_types['BLOCK_ONSET'],
+		mark_event(trials_data, globalClock, 'BLOCK=' + block.thisIndex, trial_type, event_types['BLOCK_ONSET'],
 				'NA', 'NA' , face_1 + ' | ' + face_2 + ' | ' + face_3)
 		return Scheduler.Event.NEXT;
 	};
