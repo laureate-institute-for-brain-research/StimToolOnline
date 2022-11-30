@@ -156,7 +156,11 @@ $('#study-list').change(function () {
         'CognitiveControl',
         'Driving2',
         'METH_Pilot',
-        'WBMTURK_Social_Media'
+        'WBMTURK_Social_Media',
+        'WBMTURK_Blind_Dating',
+        'WBMTURK_Emotional_Faces',
+        'WBMTURK_Cooperation_Task',
+        'WBMTURK_Invitation_Task'
     ]
     if (!two_session_studies.includes(document.getElementById('study-list').value)) {
         var selectobject = document.getElementById("session-list");
