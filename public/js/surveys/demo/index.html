@@ -128,652 +128,1122 @@
 
     <script type="text/javascript">
 
-
-
-        
-            
         Survey
             .StylesManager
             .applyTheme("modern");
         // Survey.Survey.cssType = "bootstrap";
         // Survey.defaultBootstrapCss.navigationButton = "btn";
-
         var json = {
-            pages: [{
-                name: "page1",
-                elements: [{
-                    type: "radiogroup",
-                    name: "demps_lv10_gender",
-                    title: "Are you male or female?",
-                    isRequired: true,
-                    choices: [{
-                        value: "1",
-                        text: "MALE"
+            "title": "Demographic Survey",
+            "description": "MTurk demographic survey for Well-Being",
+            "logoPosition": "right",
+            "pages": [{
+                "name": "page1",
+                "elements": [{
+                    "type": "radiogroup",
+                    "name": "question1",
+                    "title": "What is your sex assigned at birth?",
+                    "isRequired": true,
+                    "choices": [{
+                        "value": "item1",
+                        "text": "Female"
                     }, {
-                        value: "2",
-                        text: "FEMALE"
+                        "value": "item2",
+                        "text": "Male"
                     }, {
-                        value: "7",
-                        text: "REFUSED"
-                    }, {
-                        value: "8",
-                        text: "DON'T KNOW"
+                        "value": "item3",
+                        "text": "Intersex/Other"
                     }]
                 }]
             }, {
-                name: "page15",
-                elements: [{
-                    type: "text",
-                    name: "age",
-                    title: "What is your current age? (enter a number)",
-                    isRequired: true,
-                    inputType: "number"
+                "name": "page2",
+                "elements": [{
+                    "type": "radiogroup",
+                    "name": "question2",
+                    "title": "What is your gender identity?",
+                    "isRequired": true,
+                    "choices": [{
+                        "value": "item1",
+                        "text": "Cisgender Woman"
+                    }, {
+                        "value": "item2",
+                        "text": "Cisgender Man"
+                    }, {
+                        "value": "item3",
+                        "text": "Transgender Woman"
+                    }, {
+                        "value": "item4",
+                        "text": "Transgender Man"
+                    }, {
+                        "value": "item5",
+                        "text": "Non-binary"
+                    }, {
+                        "value": "item6",
+                        "text": "Genderqueer/Gender nonconforming"
+                    }, {
+                        "value": "item7",
+                        "text": "Prefer not to say"
+                    }],
+                    "showOtherItem": true
                 }]
             }, {
-                name: "page15",
-                elements: [{
-                    type: "dropdown",
-                    name: "country",
-                    title: "Select the country you live in.",
-                    isRequired: true,
-                    choicesByUrl: {
-                        url: "https://surveyjs.io/api/CountriesExample",
-                        valueName: "name"
-                    }
-                }]
-            },  {
-                name: "page2",
-                elements: [{
-                    type: "radiogroup",
-                    name: "demps_lv10_hispanic_ethnicity",
-                    title: "Do you consider yourself Hispanic/Latino? [Where did your ancestors come from?]",
-                    isRequired: true,
-                    choices: [{
-                        value: "1",
-                        text: "YES"
+                "name": "page3",
+                "elements": [{
+                    "type": "radiogroup",
+                    "name": "question15",
+                    "title": "What is your sexual orientation?",
+                    "isRequired": true,
+                    "choices": [{
+                        "value": "item1",
+                        "text": "Asexual"
                     }, {
-                        value: "2",
-                        text: "NO"
+                        "value": "item2",
+                        "text": "Bisexual"
                     }, {
-                        value: "7",
-                        text: "REFUSED"
+                        "value": "item3",
+                        "text": "Demisexual"
                     }, {
-                        value: "9",
-                        text: "DON'T KNOW"
-                    }]
-                }, {
-                    type: "checkbox",
-                    name: "demps_lv10_hispanic_ethnicity_type",
-                    visible: false,
-                    visibleIf: "{demps_lv10_hispanic_ethnicity} = 1",
-                    title: "Please select the group that represents your Hispanic origin or ancestry. Please select 1 or more of these categories.",
-                    choices: [{
-                        value: "demps_lv10_hispanic_ethnicity_type___10",
-                        text: "PUERTO RICAN"
+                        "value": "item4",
+                        "text": "Gay/Lesbian"
                     }, {
-                        value: "demps_lv10_hispanic_ethnicity_type___12",
-                        text: "DOMINICAN (REPUBLIC)"
+                        "value": "item5",
+                        "text": "Heterosexual/Straight"
                     }, {
-                        value: "demps_lv10_hispanic_ethnicity_type___13",
-                        text: "MEXICAN/MEXICANO"
+                        "value": "item6",
+                        "text": "Pansexual"
                     }, {
-                        value: "demps_lv10_hispanic_ethnicity_type___14",
-                        text: "MEXICAN AMERICAN"
-                    }, {
-                        value: "demps_lv10_hispanic_ethnicity_type___15",
-                        text: "CHICANO"
-                    }, {
-                        value: "demps_lv10_hispanic_ethnicity_type___18",
-                        text: "CUBAN"
-                    }, {
-                        value: "demps_lv10_hispanic_ethnicity_type___19",
-                        text: "CUBAN AMERICAN"
-                    }, {
-                        value: "demps_lv10_hispanic_ethnicity_type___20",
-                        text: "CENTRAL OR SOUTH AMERICAN"
-                    }, {
-                        value: "demps_lv10_hispanic_ethnicity_type___40",
-                        text: "OTHER LATIN AMERICAN"
-                    }, {
-                        value: "demps_lv10_hispanic_ethnicity_type___41",
-                        text: "OTHER HISPANIC"
-                    }, {
-                        value: "demps_lv10_hispanic_ethnicity_type___77",
-                        text: "REFUSED"
-                    }, {
-                        value: "demps_lv10_hispanic_ethnicity_type___99",
-                        text: "DON'T KNOW"
-                    }]
-                }, {
-                    type: "text",
-                    name: "demps_lv10_hispanic_ethnicity_type_specify_la",
-                    visible: false,
-                    visibleIf: "{demps_lv10_hispanic_ethnicity_type} = 'demps_lv10_hispanic_ethnicity_type___40'",
-                    title: "Please specify Other Latin American:"
-                }, {
-                    type: "text",
-                    name: "demps_lv10_hispanic_ethnicity_type_specify_h",
-                    visible: false,
-                    visibleIf: "{demps_lv10_hispanic_ethnicity_type} = 'demps_lv10_hispanic_ethnicity_type___41'",
-                    title: "Please specify Other Hispanic:"
+                        "value": "item7",
+                        "text": "Prefer not to say"
+                    }],
+                    "showOtherItem": true
                 }]
             }, {
-                name: "page3",
-                elements: [{
-                    type: "checkbox",
-                    name: "demps_lv10_race",
-                    title: "What race do you consider yourself to be? Please select 1 or more of these categories.",
-                    choices: [{
-                        value: "demps_lv10_race___10",
-                        text: "WHITE"
-                    }, {
-                        value: "demps_lv10_race___11",
-                        text: "BLACK/AFRICAN AMERICAN"
-                    }, {
-                        value: "demps_lv10_race___12",
-                        text: "INDIAN (AMERICAN)"
-                    }, {
-                        value: "demps_lv10_race___13",
-                        text: "ALASKA NATIVE"
-                    }, {
-                        value: "demps_lv10_race___14",
-                        text: "NATIVE HAWAIIAN"
-                    }, {
-                        value: "demps_lv10_race___15",
-                        text: "GUAMANIAN"
-                    }, {
-                        value: "demps_lv10_race___16",
-                        text: "SAMOAN"
-                    }, {
-                        value: "demps_lv10_race___17",
-                        text: "OTHER PACIFIC ISLANDER (SPECIFY)"
-                    }, {
-                        value: "demps_lv10_race___18",
-                        text: "ASIAN INDIAN"
-                    }, {
-                        value: "demps_lv10_race___19",
-                        text: "CHINESE"
-                    }, {
-                        value: "demps_lv10_race___20",
-                        text: "FILIPINO"
-                    }, {
-                        value: "demps_lv10_race___21",
-                        text: "JAPANESE"
-                    }, {
-                        value: "demps_lv10_race___22",
-                        text: "KOREAN"
-                    }, {
-                        value: "demps_lv10_race___23",
-                        text: "VIETNAMESE"
-                    }, {
-                        value: "demps_lv10_race___24",
-                        text: "OTHER ASIAN (SPECIFY)"
-                    }, {
-                        value: "demps_lv10_race___25",
-                        text: "SOME OTHER RACE (SPECIFY)"
-                    }, {
-                        value: "demps_lv10_race_coded_1",
-                        text: "REFUSE"
-                    }, {
-                        value: "demps_lv10_race_coded_2",
-                        text: "DON'T KNOW"
-                    }]
-                }, {
-                    type: "text",
-                    name: "demps_lv10_race_specify_pac_isl",
-                    visible: false,
-                    visibleIf: "{demps_lv10_race} = 'demps_lv10_race___17'",
-                    title: "Please specify other Pacific Islander:"
-                }, {
-                    type: "text",
-                    name: "demps_lv10_race_specify_asian",
-                    visible: false,
-                    visibleIf: "{demps_lv10_race} = 'demps_lv10_race___24'",
-                    title: "Please specify other Asian:"
-                }, {
-                    type: "text",
-                    name: "demps_lv10_race_specify_other_race",
-                    visible: false,
-                    visibleIf: "{demps_lv10_race} = 'demps_lv10_race___25'",
-                    title: "Please specify some other race:"
+                "name": "page4",
+                "elements": [{
+                    "type": "text",
+                    "name": "question3",
+                    "title": "What is your current age (in years)?",
+                    "isRequired": true,
+                    "inputType": "number",
+                    "min": 0,
+                    "max": 99
                 }]
             }, {
-                name: "page4",
-                elements: [{
-                    type: "radiogroup",
-                    name: "demps_lv10_engprimary",
-                    title: "Is English your primary language?",
-                    choices: [{
-                        value: "1",
-                        text: "Yes"
+                "name": "page5",
+                "elements": [{
+                    "type": "dropdown",
+                    "name": "question4",
+                    "title": "Select the country you live in:",
+                    "isRequired": true,
+                    "choices": [{
+                        "value": "item1",
+                        "text": "Afghanistan"
                     }, {
-                        value: "2",
-                        text: "No"
+                        "value": "item2",
+                        "text": "Albania"
+                    }, {
+                        "value": "item3",
+                        "text": "Algeria"
+                    }, {
+                        "value": "item4",
+                        "text": "Andorra"
+                    }, {
+                        "value": "item5",
+                        "text": "Angola"
+                    }, {
+                        "value": "item6",
+                        "text": "Antigua & Deps"
+                    }, {
+                        "value": "item7",
+                        "text": "Argentina"
+                    }, {
+                        "value": "item8",
+                        "text": "Armenia"
+                    }, {
+                        "value": "item9",
+                        "text": "Australia"
+                    }, {
+                        "value": "item10",
+                        "text": "Austria"
+                    }, {
+                        "value": "item11",
+                        "text": "Azerbaijan"
+                    }, {
+                        "value": "item12",
+                        "text": "Bahamas"
+                    }, {
+                        "value": "item13",
+                        "text": "Bahrain"
+                    }, {
+                        "value": "item14",
+                        "text": "Bangladesh"
+                    }, {
+                        "value": "item15",
+                        "text": "Barbados"
+                    }, {
+                        "value": "item16",
+                        "text": "Belarus"
+                    }, {
+                        "value": "item17",
+                        "text": "Belgium"
+                    }, {
+                        "value": "item18",
+                        "text": "Belize"
+                    }, {
+                        "value": "item19",
+                        "text": "Benin"
+                    }, {
+                        "value": "item20",
+                        "text": "Bhutan"
+                    }, {
+                        "value": "item21",
+                        "text": "Bolivia"
+                    }, {
+                        "value": "item22",
+                        "text": "Bosnia Herzegovina"
+                    }, {
+                        "value": "item23",
+                        "text": "Botswana"
+                    }, {
+                        "value": "item24",
+                        "text": "Brazil"
+                    }, {
+                        "value": "item25",
+                        "text": "Brunei"
+                    }, {
+                        "value": "item26",
+                        "text": "Bulgaria"
+                    }, {
+                        "value": "item27",
+                        "text": "Burkina"
+                    }, {
+                        "value": "item28",
+                        "text": "Burundi"
+                    }, {
+                        "value": "item29",
+                        "text": "Cambodia"
+                    }, {
+                        "value": "item30",
+                        "text": "Cameroon"
+                    }, {
+                        "value": "item31",
+                        "text": "Canada"
+                    }, {
+                        "value": "item32",
+                        "text": "Cape Verde"
+                    }, {
+                        "value": "item33",
+                        "text": "Central African Rep"
+                    }, {
+                        "value": "item34",
+                        "text": "Chad"
+                    }, {
+                        "value": "item35",
+                        "text": "Chile"
+                    }, {
+                        "value": "item36",
+                        "text": "China"
+                    }, {
+                        "value": "item37",
+                        "text": "Colombia"
+                    }, {
+                        "value": "item38",
+                        "text": "Comoros"
+                    }, {
+                        "value": "item39",
+                        "text": "Congo"
+                    }, {
+                        "value": "item40",
+                        "text": "Congo {Democratic Rep}"
+                    }, {
+                        "value": "item41",
+                        "text": "Costa Rica"
+                    }, {
+                        "value": "item42",
+                        "text": "Croatia"
+                    }, {
+                        "value": "item43",
+                        "text": "Cuba"
+                    }, {
+                        "value": "item44",
+                        "text": "Cyprus"
+                    }, {
+                        "value": "item45",
+                        "text": "Czech Republic"
+                    }, {
+                        "value": "item46",
+                        "text": "Denmark"
+                    }, {
+                        "value": "item47",
+                        "text": "Djibouti"
+                    }, {
+                        "value": "item48",
+                        "text": "Dominica"
+                    }, {
+                        "value": "item49",
+                        "text": "Dominican Republic"
+                    }, {
+                        "value": "item50",
+                        "text": "East Timor"
+                    }, {
+                        "value": "item51",
+                        "text": "Ecuador"
+                    }, {
+                        "value": "item52",
+                        "text": "Egypt"
+                    }, {
+                        "value": "item53",
+                        "text": "El Salvador"
+                    }, {
+                        "value": "item54",
+                        "text": "Equatorial Guinea"
+                    }, {
+                        "value": "item55",
+                        "text": "Eritrea"
+                    }, {
+                        "value": "item56",
+                        "text": "Estonia"
+                    }, {
+                        "value": "item57",
+                        "text": "Ethiopia"
+                    }, {
+                        "value": "item58",
+                        "text": "Fiji"
+                    }, {
+                        "value": "item59",
+                        "text": "Finland"
+                    }, {
+                        "value": "item60",
+                        "text": "France"
+                    }, {
+                        "value": "item61",
+                        "text": "Gabon"
+                    }, {
+                        "value": "item62",
+                        "text": "Gambia"
+                    }, {
+                        "value": "item63",
+                        "text": "Georgia"
+                    }, {
+                        "value": "item64",
+                        "text": "Germany"
+                    }, {
+                        "value": "item65",
+                        "text": "Ghana"
+                    }, {
+                        "value": "item66",
+                        "text": "Greece"
+                    }, {
+                        "value": "item67",
+                        "text": "Grenada"
+                    }, {
+                        "value": "item68",
+                        "text": "Guatemala"
+                    }, {
+                        "value": "item69",
+                        "text": "Guinea"
+                    }, {
+                        "value": "item70",
+                        "text": "Guinea-Bissau"
+                    }, {
+                        "value": "item71",
+                        "text": "Guyana"
+                    }, {
+                        "value": "item72",
+                        "text": "Haiti"
+                    }, {
+                        "value": "item73",
+                        "text": "Honduras"
+                    }, {
+                        "value": "item74",
+                        "text": "Hungary"
+                    }, {
+                        "value": "item75",
+                        "text": "Iceland"
+                    }, {
+                        "value": "item76",
+                        "text": "India"
+                    }, {
+                        "value": "item77",
+                        "text": "Indonesia"
+                    }, {
+                        "value": "item78",
+                        "text": "Iran"
+                    }, {
+                        "value": "item79",
+                        "text": "Iraq"
+                    }, {
+                        "value": "item80",
+                        "text": "Ireland {Republic}"
+                    }, {
+                        "value": "item81",
+                        "text": "Israel"
+                    }, {
+                        "value": "item82",
+                        "text": "Italy"
+                    }, {
+                        "value": "item83",
+                        "text": "Ivory Coast"
+                    }, {
+                        "value": "item84",
+                        "text": "Jamaica"
+                    }, {
+                        "value": "item85",
+                        "text": "Japan"
+                    }, {
+                        "value": "item86",
+                        "text": "Jordan"
+                    }, {
+                        "value": "item87",
+                        "text": "Kazakhstan"
+                    }, {
+                        "value": "item88",
+                        "text": "Kenya"
+                    }, {
+                        "value": "item89",
+                        "text": "Kiribati"
+                    }, {
+                        "value": "item90",
+                        "text": "Korea North"
+                    }, {
+                        "value": "item91",
+                        "text": "Korea South"
+                    }, {
+                        "value": "item92",
+                        "text": "Kosovo"
+                    }, {
+                        "value": "item93",
+                        "text": "Kuwait"
+                    }, {
+                        "value": "item94",
+                        "text": "Kyrgyzstan"
+                    }, {
+                        "value": "item95",
+                        "text": "Laos"
+                    }, {
+                        "value": "item96",
+                        "text": "Latvia"
+                    }, {
+                        "value": "item97",
+                        "text": "Lebanon"
+                    }, {
+                        "value": "item98",
+                        "text": "Lesotho"
+                    }, {
+                        "value": "item99",
+                        "text": "Liberia"
+                    }, {
+                        "value": "item100",
+                        "text": "Libya"
+                    }, {
+                        "value": "item101",
+                        "text": "Liechtenstein"
+                    }, {
+                        "value": "item102",
+                        "text": "Lithuania"
+                    }, {
+                        "value": "item103",
+                        "text": "Luxembourg"
+                    }, {
+                        "value": "item104",
+                        "text": "Macedonia"
+                    }, {
+                        "value": "item105",
+                        "text": "Madagascar"
+                    }, {
+                        "value": "item106",
+                        "text": "Malawi"
+                    }, {
+                        "value": "item107",
+                        "text": "Malaysia"
+                    }, {
+                        "value": "item108",
+                        "text": "Maldives"
+                    }, {
+                        "value": "item109",
+                        "text": "Mali"
+                    }, {
+                        "value": "item110",
+                        "text": "Malta"
+                    }, {
+                        "value": "item111",
+                        "text": "Marshall Islands"
+                    }, {
+                        "value": "item112",
+                        "text": "Mauritania"
+                    }, {
+                        "value": "item113",
+                        "text": "Mauritius"
+                    }, {
+                        "value": "item114",
+                        "text": "Mexico"
+                    }, {
+                        "value": "item115",
+                        "text": "Micronesia"
+                    }, {
+                        "value": "item116",
+                        "text": "Moldova"
+                    }, {
+                        "value": "item117",
+                        "text": "Monaco"
+                    }, {
+                        "value": "item118",
+                        "text": "Mongolia"
+                    }, {
+                        "value": "item119",
+                        "text": "Montenegro"
+                    }, {
+                        "value": "item120",
+                        "text": "Morocco"
+                    }, {
+                        "value": "item121",
+                        "text": "Mozambique"
+                    }, {
+                        "value": "item122",
+                        "text": "Myanmar, {Burma}"
+                    }, {
+                        "value": "item123",
+                        "text": "Namibia"
+                    }, {
+                        "value": "item124",
+                        "text": "Nauru"
+                    }, {
+                        "value": "item125",
+                        "text": "Nepal"
+                    }, {
+                        "value": "item126",
+                        "text": "Netherlands"
+                    }, {
+                        "value": "item127",
+                        "text": "New Zealand"
+                    }, {
+                        "value": "item128",
+                        "text": "Nicaragua"
+                    }, {
+                        "value": "item129",
+                        "text": "Niger"
+                    }, {
+                        "value": "item130",
+                        "text": "Nigeria"
+                    }, {
+                        "value": "item131",
+                        "text": "Norway"
+                    }, {
+                        "value": "item132",
+                        "text": "Oman"
+                    }, {
+                        "value": "item133",
+                        "text": "Pakistan"
+                    }, {
+                        "value": "item134",
+                        "text": "Palau"
+                    }, {
+                        "value": "item135",
+                        "text": "Panama"
+                    }, {
+                        "value": "item136",
+                        "text": "Papua New Guinea"
+                    }, {
+                        "value": "item137",
+                        "text": "Paraguay"
+                    }, {
+                        "value": "item138",
+                        "text": "Peru"
+                    }, {
+                        "value": "item139",
+                        "text": "Philippines"
+                    }, {
+                        "value": "item140",
+                        "text": "Poland"
+                    }, {
+                        "value": "item141",
+                        "text": "Portugal"
+                    }, {
+                        "value": "item142",
+                        "text": "Qatar"
+                    }, {
+                        "value": "item143",
+                        "text": "Romania"
+                    }, {
+                        "value": "item144",
+                        "text": "Russian Federation"
+                    }, {
+                        "value": "item145",
+                        "text": "Rwanda"
+                    }, {
+                        "value": "item146",
+                        "text": "St Kitts & Nevis"
+                    }, {
+                        "value": "item147",
+                        "text": "St Lucia"
+                    }, {
+                        "value": "item148",
+                        "text": "Saint Vincent & the Grenadines"
+                    }, {
+                        "value": "item149",
+                        "text": "Samoa"
+                    }, {
+                        "value": "item150",
+                        "text": "San Marino"
+                    }, {
+                        "value": "item151",
+                        "text": "Sao Tome & Principe"
+                    }, {
+                        "value": "item152",
+                        "text": "Saudi Arabia"
+                    }, {
+                        "value": "item153",
+                        "text": "Senegal"
+                    }, {
+                        "value": "item154",
+                        "text": "Serbia"
+                    }, {
+                        "value": "item155",
+                        "text": "Seychelles"
+                    }, {
+                        "value": "item156",
+                        "text": "Sierra Leone"
+                    }, {
+                        "value": "item157",
+                        "text": "Singapore"
+                    }, {
+                        "value": "item158",
+                        "text": "Slovakia"
+                    }, {
+                        "value": "item159",
+                        "text": "Slovenia"
+                    }, {
+                        "value": "item160",
+                        "text": "Solomon Islands"
+                    }, {
+                        "value": "item161",
+                        "text": "Somalia"
+                    }, {
+                        "value": "item162",
+                        "text": "South Africa"
+                    }, {
+                        "value": "item163",
+                        "text": "South Sudan"
+                    }, {
+                        "value": "item164",
+                        "text": "Spain"
+                    }, {
+                        "value": "item165",
+                        "text": "Sri Lanka"
+                    }, {
+                        "value": "item166",
+                        "text": "Sudan"
+                    }, {
+                        "value": "item167",
+                        "text": "Suriname"
+                    }, {
+                        "value": "item168",
+                        "text": "Swaziland"
+                    }, {
+                        "value": "item169",
+                        "text": "Sweden"
+                    }, {
+                        "value": "item170",
+                        "text": "Switzerland"
+                    }, {
+                        "value": "item171",
+                        "text": "Syria"
+                    }, {
+                        "value": "item172",
+                        "text": "Taiwan"
+                    }, {
+                        "value": "item173",
+                        "text": "Tajikistan"
+                    }, {
+                        "value": "item174",
+                        "text": "Tanzania"
+                    }, {
+                        "value": "item175",
+                        "text": "Thailand"
+                    }, {
+                        "value": "item176",
+                        "text": "Togo"
+                    }, {
+                        "value": "item177",
+                        "text": "Tonga"
+                    }, {
+                        "value": "item178",
+                        "text": "Trinidad & Tobago"
+                    }, {
+                        "value": "item179",
+                        "text": "Tunisia"
+                    }, {
+                        "value": "item180",
+                        "text": "Turkey"
+                    }, {
+                        "value": "item181",
+                        "text": "Turkmenistan"
+                    }, {
+                        "value": "item182",
+                        "text": "Tuvalu"
+                    }, {
+                        "value": "item183",
+                        "text": "Uganda"
+                    }, {
+                        "value": "item184",
+                        "text": "Ukraine"
+                    }, {
+                        "value": "item185",
+                        "text": "United Arab Emirates"
+                    }, {
+                        "value": "item186",
+                        "text": "United Kingdom"
+                    }, {
+                        "value": "item187",
+                        "text": "United States"
+                    }, {
+                        "value": "item188",
+                        "text": "Uruguay"
+                    }, {
+                        "value": "item189",
+                        "text": "Uzbekistan"
+                    }, {
+                        "value": "item190",
+                        "text": "Vanuatu"
+                    }, {
+                        "value": "item191",
+                        "text": "Vatican City"
+                    }, {
+                        "value": "item192",
+                        "text": "Venezuela"
+                    }, {
+                        "value": "item193",
+                        "text": "Vietnam"
+                    }, {
+                        "value": "item194",
+                        "text": "Yemen"
+                    }, {
+                        "value": "item195",
+                        "text": "Zambia"
+                    }, {
+                        "value": "item196",
+                        "text": "Zimbabwe"
                     }]
                 }]
             }, {
-                name: "page6",
-                elements: [{
-                    type: "radiogroup",
-                    name: "demps_lv10_current_marital_status",
-                    title: "Are you now married, widowed, divorced, separated, never married or living with a partner?",
-                    choices: [{
-                        value: "1",
-                        text: "MARRIED"
+                "name": "page6",
+                "elements": [{
+                    "type": "checkbox",
+                    "name": "question6",
+                    "title": "What is your race? Please select one or more of these options:",
+                    "isRequired": true,
+                    "choices": [{
+                        "value": "item1",
+                        "text": "Asian"
                     }, {
-                        value: "2",
-                        text: "WIDOWED"
+                        "value": "item2",
+                        "text": "Black/African American"
                     }, {
-                        value: "3",
-                        text: "DIVORCED"
+                        "value": "item3",
+                        "text": "American Indian/Alaskan Native"
                     }, {
-                        value: "4",
-                        text: "SEPARATED"
+                        "value": "item6",
+                        "text": "Native Hawaiian/Pacific Islander"
                     }, {
-                        value: "5",
-                        text: "NEVER MARRIED"
+                        "value": "item5",
+                        "text": "White"
                     }, {
-                        value: "6",
-                        text: "LIVING WITH PARTNER"
+                        "value": "item7",
+                        "text": "Prefer not to answer"
                     }, {
-                        value: "11",
-                        text: "OTHER"
-                    }, {
-                        value: "7",
-                        text: "REFUSED"
-                    }, {
-                        value: "9",
-                        text: "DON'T KNOW"
-                    }]
+                        "value": "item8",
+                        "text": "I don't know"
+                    }],
+                    "showOtherItem": true
                 }, {
-                    type: "comment",
-                    name: "demps_lv10_maritalstatusdesc",
-                    visible: false,
-                    visibleIf: "{demps_lv10_current_marital_status} = 11",
-                    title: "Marital Status (Other):Please describe"
-                }]
-            }, {
-                name: "page7",
-                elements: [{
-                    type: "radiogroup",
-                    name: "demps_lv10_prevmarried",
-                    title: "Have you ever been married?",
-                    choices: [{
-                        value: "1",
-                        text: "Yes"
+                    "type": "radiogroup",
+                    "name": "question5",
+                    "title": "Are you Hispanic/Latinx [where did your ancestors come from]?",
+                    "isRequired": true,
+                    "choices": [{
+                        "value": "item1",
+                        "text": "Yes"
                     }, {
-                        value: "0",
-                        text: "No"
-                    }]
-                }, {
-                    type: "dropdown",
-                    name: "demps_lv10_nmarried",
-                    visible: false,
-                    visibleIf: "{demps_lv10_prevmarried} = 1",
-                    title: "How many times have you been married?",
-                    isRequired: true,
-                    choices: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]
-                }, {
-                    type: "dropdown",
-                    name: "demps_lv10_ndivorce",
-                    visible: false,
-                    visibleIf: "{demps_lv10_prevmarried} = 1",
-                    title: "How many of your marriages ended in divorce or annulment?",
-                    isRequired: true,
-                    choices: ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]
-                }, {
-                    type: "html",
-                    name: "demps_lv10_ndivorce_error",
-                    visible: false,
-                    visibleIf: "{demps_lv10_ndivorce} > {demps_lv10_nmarried}",
-                    html: "<strong>ERROR! You should not have divorced more times than you were married. Please check number of times you have been married and how many of your marriages ended in divorce or annulment.</strong>"
-                }, {
-                    type: "text",
-                    name: "demps_lv10_agemarriage1",
-                    visible: false,
-                    visibleIf: "{demps_lv10_prevmarried} = 1",
-                    title: "How old were you when you got married for the first time?",
-                    inputType: "number",
-                    placeHolder: "e.g. 20"
-                }]
-            }, {
-                name: "page8",
-                elements: [{
-                    type: "dropdown",
-                    name: "demps_lv10_nchild",
-                    title: "How many biological children do you have?\t",
-                    isRequired: true,
-                    choices: ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]
-                }]
-            }, {
-                name: "page9",
-                elements: [{
-                    type: "dropdown",
-                    name: "demps_lv10_nsachild",
-                    title: "How many step-children or adopted children do you have?",
-                    isRequired: true,
-                    choices: ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]
-                }]
-            }, {
-                name: "page10",
-                elements: [{
-                    type: "radiogroup",
-                    name: "demps_lv10_residence",
-                    title: "What best describes the building where you currently live?",
-                    isRequired: true,
-                    choices: [{
-                        value: "1",
-                        text: "Mobile home"
+                        "value": "item2",
+                        "text": "No"
                     }, {
-                        value: "2",
-                        text: "One-family house detached from any other house"
+                        "value": "item3",
+                        "text": "Prefer not to say"
                     }, {
-                        value: "3",
-                        text: "One-family house attached to one or more houses"
-                    }, {
-                        value: "4",
-                        text: "Building with 2 or more apartments"
-                    }, {
-                        value: "5",
-                        text: "Boat, RV, van, etc."
-                    }, {
-                        value: "6",
-                        text: "Other"
-                    }]
-                }, {
-                    type: "text",
-                    name: "demps_lv10_residencedesc",
-                    visible: false,
-                    visibleIf: "{demps_lv10_residence} = 5",
-                    title: "Please describe:"
-                }]
-            }, {
-                name: "page11",
-                elements: [{
-                    type: "radiogroup",
-                    name: "demps_lv10_current_educational_attainment",
-                    title: "What is the highest grade or level of school you have completed or the highest degree you have received?",
-                    isRequired: true,
-                    choices: [{
-                        value: "0",
-                        text: "NEVER ATTENDED/KINDERGARTEN ONLY"
-                    }, {
-                        value: "1",
-                        text: "1ST GRADE"
-                    }, {
-                        value: "2",
-                        text: "2ND GRADE"
-                    }, {
-                        value: "3",
-                        text: "3RD GRADE"
-                    }, {
-                        value: "4",
-                        text: "4TH GRADE"
-                    }, {
-                        value: "5",
-                        text: "5TH GRADE"
-                    }, {
-                        value: "6",
-                        text: "6TH GRADE"
-                    }, {
-                        value: "7",
-                        text: "7TH GRADE"
-                    }, {
-                        value: "8",
-                        text: "8TH GRADE"
-                    }, {
-                        value: "9",
-                        text: "9TH GRADE"
-                    }, {
-                        value: "10",
-                        text: "10TH GRADE"
-                    }, {
-                        value: "11",
-                        text: "11TH GRADE"
-                    }, {
-                        value: "12",
-                        text: "12TH GRADE, NO DIPLOMA"
-                    }, {
-                        value: "13",
-                        text: "HIGH SCHOOL GRADUATE"
-                    }, {
-                        value: "14",
-                        text: "GED OR EQUIVALENT"
-                    }, {
-                        value: "15",
-                        text: "SOME COLLEGE, NO DEGREE"
-                    }, {
-                        value: "16",
-                        text: "ASSOCIATE DEGREE: OCCUPATIONAL, TECHNICAL, OR VOCATIONAL PROGRAM"
-                    }, {
-                        value: "17",
-                        text: "ASSOCIATE DEGREE: ACADEMIC PROGRAM"
-                    }, {
-                        value: "18",
-                        text: "BACHELOR'S DEGREE (EXAMPLE: BA, AB, BS, BBA)"
-                    }, {
-                        value: "19",
-                        text: "MASTER'S DEGREE (EXAMPLE: MA, MS, MEng, MEd, MBA)"
-                    }, {
-                        value: "20",
-                        text: "PROFESSIONAL SCHOOL DEGREE (EXAMPLE: MD, DDS, DVM, JD)"
-                    }, {
-                        value: "21",
-                        text: "DOCTORAL DEGREE (EXAMPLE: PhD, EdD)"
-                    }, {
-                        value: "77",
-                        text: "REFUSED"
-                    }, {
-                        value: "99",
-                        text: "DON'T KNOW"
+                        "value": "item4",
+                        "text": "I don't know"
                     }]
                 }]
             }, {
-                name: "page12",
-                elements: [{
-                    type: "radiogroup",
-                    name: "demps_lv10_employment",
-                    title: "What kind of work do you normally do?",
-                    isRequired: true,
-                    choices: [{
-                        value: "1",
-                        text: "Legislators and Senior Officials"
+                "name": "page7",
+                "elements": [{
+                    "type": "radiogroup",
+                    "name": "question7",
+                    "title": "Is English your primary language?",
+                    "isRequired": true,
+                    "choices": [{
+                        "value": "item1",
+                        "text": "Yes"
                     }, {
-                        value: "2",
-                        text: "Corporate Managers"
-                    }, {
-                        value: "3",
-                        text: "General Managers"
-                    }, {
-                        value: "4",
-                        text: "Physical, Mathematical and Engineering Science Professionals"
-                    }, {
-                        value: "5",
-                        text: "Life Science and Health Professionals"
-                    }, {
-                        value: "6",
-                        text: "Teaching Professionals"
-                    }, {
-                        value: "7",
-                        text: "Other Professionals"
-                    }, {
-                        value: "8",
-                        text: "Physical and Engineering Science Associate Professionals"
-                    }, {
-                        value: "9",
-                        text: "Life Science and Health Associate Professionals"
-                    }, {
-                        value: "10",
-                        text: "Teaching Associate Professionals"
-                    }, {
-                        value: "11",
-                        text: "Other Associate Professionals"
-                    }, {
-                        value: "12",
-                        text: "Office Clerks"
-                    }, {
-                        value: "13",
-                        text: "Customer Service Clerks"
-                    }, {
-                        value: "14",
-                        text: "Personal and Protective Services Workers"
-                    }, {
-                        value: "15",
-                        text: "Models, Salespersons and Demonstrators"
-                    }, {
-                        value: "16",
-                        text: "Market-oriented Skilled Agricultural and Fishery Workers"
-                    }, {
-                        value: "17",
-                        text: "Subsistence Agricultural and Fishery Workers"
-                    }, {
-                        value: "18",
-                        text: "Extraction and Building Trade Workers"
-                    }, {
-                        value: "19",
-                        text: "Metal, Machinery and Related Trade Workers"
-                    }, {
-                        value: "20",
-                        text: "Precision, Handicraft, Printing and Related Trade Workers"
-                    }, {
-                        value: "21",
-                        text: "Other Craft and Related Trade Workers"
-                    }, {
-                        value: "22",
-                        text: "Stationary Plant and Related Operators"
-                    }, {
-                        value: "23",
-                        text: "Machine Operators and Assemblers"
-                    }, {
-                        value: "24",
-                        text: "Drivers and Mobile Plant Operators"
-                    }, {
-                        value: "25",
-                        text: "Sales and Services Elementary Occupations"
-                    }, {
-                        value: "26",
-                        text: "Agricultural, Fishery and Related Laborers"
-                    }, {
-                        value: "27",
-                        text: "Laborers in Mining, Construction, Manufacturing and Transport"
-                    }, {
-                        value: "28",
-                        text: "Armed Forces"
-                    }, {
-                        value: "29",
-                        text: "Unemployed"
-                    }, {
-                        value: "30",
-                        text: "Disabled"
-                    }, {
-                        value: "31",
-                        text: "Other"
+                        "value": "item2",
+                        "text": "No"
                     }]
                 }, {
-                    type: "text",
-                    name: "demps_lv10_employmentdesc",
-                    visible: false,
-                    visibleIf: "{demps_lv10_employment} = 29 or {demps_lv10_employment} = 30 or {demps_lv10_employment} = 31",
-                    title: "Please describe:"
+                    "type": "text",
+                    "name": "question8",
+                    "visibleIf": "{question7} = 'item2'",
+                    "title": "What is your primary language?",
+                    "isRequired": true,
+                    "requiredIf": "{question7} = 'item2'"
                 }]
             }, {
-                name: "page13",
-                elements: [{
-                    type: "radiogroup",
-                    name: "demps_lv10_leftjobreason",
-                    title: "Why did you leave your last job?\t",
-                    isRequired: true,
-                    choices: [{
-                        value: "1",
-                        text: "Fired"
+                "name": "page8",
+                "elements": [{
+                    "type": "radiogroup",
+                    "name": "question9",
+                    "title": "What is your current relationship status?",
+                    "isRequired": true,
+                    "choices": [{
+                        "value": "item1",
+                        "text": "Single/Never married"
                     }, {
-                        value: "2",
-                        text: "Laid off"
+                        "value": "item2",
+                        "text": "Married"
                     }, {
-                        value: "3",
-                        text: "Plant/company closed"
+                        "value": "item3",
+                        "text": "Separated"
                     }, {
-                        value: "4",
-                        text: "Quit"
+                        "value": "item4",
+                        "text": "Divorced"
                     }, {
-                        value: "5",
-                        text: "Retired"
+                        "value": "item5",
+                        "text": "Widowed"
                     }, {
-                        value: "6",
-                        text: "Work force reduction"
+                        "value": "item6",
+                        "text": "Living with partner (unmarried)"
                     }, {
-                        value: "7",
-                        text: "Return to school"
-                    }, {
-                        value: "8",
-                        text: "Other"
-                    }]
-                }, {
-                    type: "text",
-                    name: "demps_lv10_leftjobreasondesc",
-                    visible: false,
-                    visibleIf: "{demps_lv10_leftjobreason} = 8",
-                    title: "Please describe:",
-                    isRequired: true
+                        "value": "item7",
+                        "text": "Prefer not to answer"
+                    }],
+                    "showOtherItem": true
                 }]
             }, {
-                name: "page14",
-                elements: [{
-                    type: "radiogroup",
-                    name: "mkturk_other",
-                    title: "Have you completed any other Mechanical Turk HITS besides this one?",
-                    isRequired: true,
-                    choices: [{
-                        value: "1",
-                        text: "Yes"
+                "name": "page9",
+                "elements": [{
+                    "type": "dropdown",
+                    "name": "question10",
+                    "title": "How many biological children do you have?",
+                    "isRequired": true,
+                    "choices": [{
+                        "value": "item1",
+                        "text": "0"
                     }, {
-                        value: "0",
-                        text: "No"
-                    }]
-                }, {
-                    type: "dropdown",
-                    name: "question1",
-                    visible: false,
-                    visibleIf: "{mkturk_other} = 1",
-                    title: "How many Mechanical Turk HITS have you completed?",
-                    isRequired: true,
-                    choices: [{
-                        value: "1",
-                        text: "1-10"
+                        "value": "item2",
+                        "text": "1"
                     }, {
-                        value: "2",
-                        text: "11-20"
+                        "value": "item3",
+                        "text": "2"
                     }, {
-                        value: "3",
-                        text: "21-30"
+                        "value": "item4",
+                        "text": "3"
                     }, {
-                        value: "4",
-                        text: "31-40"
+                        "value": "item5",
+                        "text": "4"
                     }, {
-                        value: "5",
-                        text: "41-50"
+                        "value": "item6",
+                        "text": "5"
                     }, {
-                        value: "6",
-                        text: "51-60"
+                        "value": "item7",
+                        "text": "6"
                     }, {
-                        value: "7",
-                        text: "61-70"
+                        "value": "item8",
+                        "text": "7"
                     }, {
-                        value: "8",
-                        text: "71-80"
+                        "value": "item9",
+                        "text": "8"
                     }, {
-                        value: "9",
-                        text: "81-90"
+                        "value": "item10",
+                        "text": "9"
                     }, {
-                        value: "10",
-                        text: "91-100"
-                    }, {
-                        value: ">10",
-                        text: "> 100"
+                        "value": "item11",
+                        "text": "10+"
                     }]
                 }]
-            }]
+            }, {
+                "name": "page10",
+                "elements": [{
+                    "type": "dropdown",
+                    "name": "question11",
+                    "title": "How many stepchildren or adopted children do you have?",
+                    "isRequired": true,
+                    "choices": [{
+                        "value": "item1",
+                        "text": "0"
+                    }, {
+                        "value": "item2",
+                        "text": "1"
+                    }, {
+                        "value": "item3",
+                        "text": "2"
+                    }, {
+                        "value": "item4",
+                        "text": "3"
+                    }, {
+                        "value": "item5",
+                        "text": "4"
+                    }, {
+                        "value": "item6",
+                        "text": "5"
+                    }, {
+                        "value": "item7",
+                        "text": "6"
+                    }, {
+                        "value": "item8",
+                        "text": "7"
+                    }, {
+                        "value": "item9",
+                        "text": "8"
+                    }, {
+                        "value": "item10",
+                        "text": "9"
+                    }, {
+                        "value": "item11",
+                        "text": "10+"
+                    }]
+                }]
+            }, {
+                "name": "page11",
+                "elements": [{
+                    "type": "radiogroup",
+                    "name": "question12",
+                    "title": "What describes the building you currently live in?",
+                    "isRequired": true,
+                    "choices": [{
+                        "value": "item1",
+                        "text": "Mobile home"
+                    }, {
+                        "value": "item2",
+                        "text": "One-family house detached from any other house"
+                    }, {
+                        "value": "item3",
+                        "text": "One-family house attached to one or more houses"
+                    }, {
+                        "value": "item4",
+                        "text": "Building with 2 or more apartments"
+                    }, {
+                        "value": "item5",
+                        "text": "Boat, RV, van, etc."
+                    }],
+                    "showOtherItem": true,
+                    "showNoneItem": true
+                }]
+            }, {
+                "name": "page12",
+                "elements": [{
+                    "type": "radiogroup",
+                    "name": "question13",
+                    "title": "What is the highest level of education or schooling you have completed or the highest degree you have received?",
+                    "isRequired": true,
+                    "choices": [{
+                        "value": "item1",
+                        "text": "Never attended/Kindergarten only"
+                    }, {
+                        "value": "item2",
+                        "text": "Grade 1"
+                    }, {
+                        "value": "item3",
+                        "text": "Grade 2"
+                    }, {
+                        "value": "item4",
+                        "text": "Grade 3"
+                    }, {
+                        "value": "item5",
+                        "text": "Grade 4"
+                    }, {
+                        "value": "item6",
+                        "text": "Grade 5"
+                    }, {
+                        "value": "item7",
+                        "text": "Grade 6"
+                    }, {
+                        "value": "item8",
+                        "text": "Grade 7"
+                    }, {
+                        "value": "item9",
+                        "text": "Grade 8"
+                    }, {
+                        "value": "item10",
+                        "text": "Grade 9"
+                    }, {
+                        "value": "item11",
+                        "text": "Grade 10"
+                    }, {
+                        "value": "item12",
+                        "text": "Grade 11"
+                    }, {
+                        "value": "item13",
+                        "text": "Grade 12, no diploma"
+                    }, {
+                        "value": "item14",
+                        "text": "High school graduate"
+                    }, {
+                        "value": "item15",
+                        "text": "GED or equivalent"
+                    }, {
+                        "value": "item16",
+                        "text": "Some college, no degree"
+                    }, {
+                        "value": "item17",
+                        "text": "Associate degree: occupational, technical, or vocational program"
+                    }, {
+                        "value": "item18",
+                        "text": "Associate degree: academic program"
+                    }, {
+                        "value": "item19",
+                        "text": "Bachelor's degree (examples: BA, BS, AB, BBA)"
+                    }, {
+                        "value": "item20",
+                        "text": "Master's degree (examples: MS, MA, MBA, MEd, MEng)"
+                    }, {
+                        "value": "item21",
+                        "text": "Professional school degree (examples: MD, JD, DDS, DVM)"
+                    }, {
+                        "value": "item22",
+                        "text": "Doctoral degree (examples: PhD, EdD)"
+                    }, {
+                        "value": "item23",
+                        "text": "Prefer not to say"
+                    }, {
+                        "value": "item24",
+                        "text": "I don't know"
+                    }],
+                    "showOtherItem": true
+                }]
+            }, {
+                "name": "page13",
+                "elements": [{
+                    "type": "radiogroup",
+                    "name": "question16",
+                    "title": "What is your employment status?",
+                    "isRequired": true,
+                    "choices": [{
+                        "value": "item1",
+                        "text": "Full-Time Employed"
+                    }, {
+                        "value": "item2",
+                        "text": "Part-Time Employed"
+                    }, {
+                        "value": "item3",
+                        "text": "Unemployed"
+                    }, {
+                        "value": "item4",
+                        "text": "Prefer not to answer"
+                    }],
+                    "showOtherItem": true
+                }]
+            }, {
+                "name": "page14",
+                "elements": [{
+                    "type": "radiogroup",
+                    "name": "question14",
+                    "visibleIf": "{question16} = 'item1' or {question16} = 'item2'",
+                    "title": "What kind of work do you normally do?",
+                    "isRequired": true,
+                    "choices": [{
+                        "value": "item1",
+                        "text": "Entertainment/Performing"
+                    }, {
+                        "value": "item2",
+                        "text": "Management (corporate or general)"
+                    }, {
+                        "value": "item3",
+                        "text": "Education"
+                    }, {
+                        "value": "item4",
+                        "text": "Sales/Demonstrater"
+                    }, {
+                        "value": "item5",
+                        "text": "Manual labor"
+                    }, {
+                        "value": "item6",
+                        "text": "Law enforcement/Armed forces"
+                    }, {
+                        "value": "item7",
+                        "text": "Healthcare/Life sciences"
+                    }, {
+                        "value": "item8",
+                        "text": "Physics/Mathematics/Engineering"
+                    }, {
+                        "value": "item9",
+                        "text": "Agriculture/Fishery"
+                    }, {
+                        "value": "item10",
+                        "text": "Machine operation/assembly"
+                    }],
+                    "showOtherItem": true
+                }]
+            }, {
+                "name": "page15",
+                "elements": [{
+                    "type": "radiogroup",
+                    "name": "question17",
+                    "visibleIf": "{question15.Row 3} = 'Column 1'",
+                    "title": "What is your unemployment status?",
+                    "isRequired": true,
+                    "choices": [{
+                        "value": "item1",
+                        "text": "Unemployed (on disability)"
+                    }, {
+                        "value": "item2",
+                        "text": "Unemployed (not on disability)"
+                    }, {
+                        "value": "item3",
+                        "text": "Prefer not to say"
+                    }]
+                }]
+            }, {
+                "name": "page16",
+                "elements": [{
+                    "type": "checkbox",
+                    "name": "question18",
+                    "title": "Do you have any of the following conditions? (Select all that apply)",
+                    "isRequired": true,
+                    "choices": [{
+                        "value": "item1",
+                        "text": "ADD/ADHD"
+                    }, {
+                        "value": "item2",
+                        "text": "Blindness/Low vision"
+                    }, {
+                        "value": "item3",
+                        "text": "Brain injury"
+                    }, {
+                        "value": "item4",
+                        "text": "Deaf/Hard of hearing"
+                    }, {
+                        "value": "item5",
+                        "text": "Learning disability"
+                    }, {
+                        "value": "item6",
+                        "text": "Medical disability (examples: cancer, chronic fatigue, diabetes)"
+                    }, {
+                        "value": "item7",
+                        "text": "Physical disability (examples: cerebral palsy, amputation, cardiac conditions)"
+                    }, {
+                        "value": "item8",
+                        "text": "Speech and language disability"
+                    }, {
+                        "value": "item9",
+                        "text": "Prefer not to say"
+                    }],
+                    "showOtherItem": true,
+                    "showNoneItem": true,
+                    "showSelectAllItem": true
+                }]
+            }],
+            "showTitle": false
         }
+        
         window.survey = new Survey.Model(json);
 
 

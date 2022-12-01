@@ -1,7 +1,8 @@
 {
     "name": "WBMTURK Social Media T1",
     "order": [
-        "/?index=0&task=social_media&run=Pilot_R1.json",
+        "/?index=0&survey=demo&session=1",
+        "/?index=1&task=social_media&run=Pilot_R1.json",
         "/completeMobile?"
     ],
     "fullscreen": true,
