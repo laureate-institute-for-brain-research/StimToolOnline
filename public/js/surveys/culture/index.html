@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <style type="text/css">
+        @font-face {
+            font-family: gotham;
+            src: url(/gotham-book-regular.otf);
+        }
+
+        * {
+            font-family: Helvetica Neue;
+        }
+
+        a:link,
+        a:visited {
+            color: #5e3f99;
+        }
+
+        input[type=text]:focus {
+            border-color: #f68826;
+            box-shadow: 0 0 5px #f68826 !important;
+        }
+
+        input[type=email]:focus {
+            border-color: #f68826;
+            box-shadow: 0 0 5px #f68826 !important;
+        }
+
+        .sv-root-modern .sv-container-modern {
+            color: white !important;
+            fill: white !important;
+        }
+        .sv-radio__svg {
+            border-color: white !important;
+        }
+
+        .sv-root-modern .sv-radio--checked .sv-radio__svg  {
+            fill: white !important;
+        }
+
+        .sv-root-modern input.sv-text, textarea.sv-comment, select.sv-dropdown{
+            color: white !important;
+        }
+        
+    </style>
+    <title>Cultural Survey</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+        crossorigin="anonymous"></script>
+
+    <!-- Latest compiled and minified CSS -->
+    <!-- Using Bootsawtch theme: https://bootswatch.com/cyborg/ -->
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js" integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous"></script>
+
+    <link href="https://unpkg.com/survey-knockout@1.8.41/modern.css" type="text/css" rel="stylesheet"/>
+    <script src="https://unpkg.com/jquery"></script>
+    <script src="https://unpkg.com/survey-jquery@1.8.41/survey.jquery.min.js"></script>
+
+    <script type="text/javascript" src='/js/StimToolLib.js'></script>
+
+</head>
+
+<body>
+
+    <div class="container" style="max-width: 400px;">
+        <div class="py-5 text-center">
+            <img class="d-block mx-auto mb-4" src="/images/logo_reversed.jpg" alt="" width="180" height="50">
+            <!-- <h4>Cultural Survey</h4> -->
+          </div>
+    </div>
+
+    <div class="container" style="max-width: 400px;">
+        <div class="row" >
+            <div id="surveyElement" style="margin-bottom:40px"></div>
+            
+            <div id="surveyResult"></div>
+        </div>
+    </div>
+
+    <div class="jumbotron container" style="margin-bottom:0;max-width: 400px;">
+        <table class="table table-hover">
+            <tbody>
+                <tr>
+                  <th scope="row">ID:</th>
+                  <td><a id="participant"></a></td>
+                </tr>
+                <tr>
+                    <th scope="row">Session:</th>
+                    <td><a id="session"></a></td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Study:</th>
+                    <td><a id="study"></a></td>
+                  </tr>
+              </tbody>
+        </table>
+        <p style="text-align: center;">&copy; 2021 <a href="http://www.laureateinstitute.org">laureateinstitute.org</a>. All rights reserved.</p>
+    </div>
+
+    <script type="text/javascript">
+
+        Survey
+            .StylesManager
+            .applyTheme("modern");
+        // Survey.Survey.cssType = "bootstrap";
+        // Survey.defaultBootstrapCss.navigationButton = "btn";
+        var json = {
+            title: "Vertical and Horizontal Individualism and Collectivism",
+            description: "Singelis et. al., 1995",
+            logoPosition: "right",
+            pages: [
+                {
+                name: "page1",
+                elements: [
+                    {
+                    type: "rating",
+                    name: "question1",
+                    title: 'I often do "my own thing"',
+                    rateMax: 9,
+                    },
+                    {
+                    type: "rating",
+                    name: "question2",
+                    title: "One should live one's life independently of others",
+                    rateMax: 9,
+                    },
+                    {
+                    type: "rating",
+                    name: "question3",
+                    title: "I like my privacy",
+                    rateMax: 9,
+                    },
+                    {
+                    type: "rating",
+                    name: "question4",
+                    title:
+                        "I prefer to be direct and forthright when discussing with people",
+                    rateMax: 9,
+                    },
+                    {
+                    type: "rating",
+                    name: "question5",
+                    title: "I am a unique individual",
+                    rateMax: 9,
+                    },
+                    {
+                    type: "rating",
+                    name: "question6",
+                    title: "What happens to me in my own doing",
+                    rateMax: 9,
+                    },
+                    {
+                    type: "rating",
+                    name: "question8",
+                    title: "When I succeed, it is usually because of my abilities",
+                    rateMax: 9,
+                    },
+                    {
+                    type: "rating",
+                    name: "question7",
+                    title: "I enjoy being unique and different from others in many ways",
+                    rateMax: 9,
+                    },
+                ],
+                description: "HI",
+                },
+                {
+                name: "page2",
+                elements: [
+                    {
+                    type: "rating",
+                    name: "question9",
+                    title: "It annoys me when other people perform better than I do",
+                    rateMax: 9,
+                    },
+                    {
+                    type: "rating",
+                    name: "question10",
+                    title: "Competition is the law of nature",
+                    rateMax: 9,
+                    },
+                    {
+                    type: "rating",
+                    name: "question11",
+                    title:
+                        "When another person does better than I do, I get tense and aroused",
+                    rateMax: 9,
+                    },
+                    {
+                    type: "rating",
+                    name: "question12",
+                    title:
+                        "Without competition, it is not possible to have a good society",
+                    rateMax: 9,
+                    },
+                    {
+                    type: "rating",
+                    name: "question13",
+                    title: "Winning is everything",
+                    rateMax: 9,
+                    },
+                    {
+                    type: "rating",
+                    name: "question14",
+                    title: "It is important that I do my job better than others",
+                    rateMax: 9,
+                    },
+                    {
+                    type: "rating",
+                    name: "question15",
+                    title:
+                        "I enjoy working in situations involving competition with others",
+                    rateMax: 9,
+                    },
+                    {
+                    type: "rating",
+                    name: "question16",
+                    title: "Some people emphasize winning; I'm not one of them",
+                    rateMax: 9,
+                    },
+                ],
+                description: "VI",
+                },
+                {
+                name: "page3",
+                elements: [
+                    {
+                    type: "rating",
+                    name: "question17",
+                    title: "The well-being of my co-workers is important to me",
+                    rateMax: 9,
+                    },
+                    {
+                    type: "rating",
+                    name: "question18",
+                    title: "If a co-worker gets a prize, I would feel proud",
+                    rateMax: 9,
+                    },
+                    {
+                    type: "rating",
+                    name: "question19",
+                    title:
+                        "If a relative were in a financial difficulty, I would help within my means",
+                    rateMax: 9,
+                    },
+                    {
+                    type: "rating",
+                    name: "question20",
+                    title: "It is important to maintain harmony within my group",
+                    rateMax: 9,
+                    },
+                    {
+                    type: "rating",
+                    name: "question21",
+                    title: "I like sharing little things with my neighbors",
+                    rateMax: 9,
+                    },
+                    {
+                    type: "rating",
+                    name: "question22",
+                    title: "I feel good when I cooperate with others",
+                    rateMax: 9,
+                    },
+                    {
+                    type: "rating",
+                    name: "question23",
+                    title:
+                        "My happiness depends very much on the happiness of those around me",
+                    rateMax: 9,
+                    },
+                    {
+                    type: "rating",
+                    name: "question24",
+                    title: "To me, pleasure is spending time with others",
+                    rateMax: 9,
+                    },
+                ],
+                description: "HC",
+                },
+                {
+                name: "page4",
+                elements: [
+                    {
+                    type: "rating",
+                    name: "question25",
+                    title:
+                        "I would sacrifice an activity that I enjoy very much if my family did not approve of it",
+                    rateMax: 9,
+                    },
+                    {
+                    type: "rating",
+                    name: "question26",
+                    title:
+                        "I would do what would please my family, even if I detested that activity",
+                    rateMax: 9,
+                    },
+                    {
+                    type: "rating",
+                    name: "question27",
+                    title:
+                        "Before taking a major trip, I consult with most members of my family and many friends",
+                    rateMax: 9,
+                    },
+                    {
+                    type: "rating",
+                    name: "question28",
+                    title:
+                        "I usually sacrifice my self-interest for the benefit of my group",
+                    rateMax: 9,
+                    },
+                    {
+                    type: "rating",
+                    name: "question29",
+                    title: "Children should be taught to place duty before pleasure",
+                    rateMax: 9,
+                    },
+                    {
+                    type: "rating",
+                    name: "question30",
+                    title: "I hate to disagree with others in my group",
+                    rateMax: 9,
+                    },
+                    {
+                    type: "rating",
+                    name: "question31",
+                    title: "We should keep out aging parents with us at home",
+                    rateMax: 9,
+                    },
+                    {
+                    type: "rating",
+                    name: "question32",
+                    title:
+                        "Children should feel honored if their parents receive a distinguished award",
+                    rateMax: 9,
+                    },
+                ],
+                description: "VC",
+                },
+            ],
+            };
+
+        window.survey = new Survey.Model(json);
+
+
+        // Recor the response time or how long they spent on a page
+        lastpage = survey.currentPage;
+        function timerLoop(elapsed) {
+            var page = survey.currentPage; // page variable is the currentPage on the survey
+            if (!page) return;
+            if (lastpage != page) {
+                // set new start date
+                start = new Date().getTime(); // sets new start Date object when page has changed.
+                lastpage = page // sets the last page to currente page 
+
+            }
+            var valueName = "TRQ" + survey.pages.indexOf(page);
+
+            var ms = survey.getValue(valueName); // gets the value of the valuename. e.g: TRQ1
+
+            if (ms == null) ms = 0;
+            else ms = elapsed;
+            survey.setValue(valueName, ms);
+            $('#timeEl').text(elapsed + ' ms');
+        }
+
+
+        function getQueryVariable(variable) {
+            var query = window.location.search.substring(1);
+            var vars = query.split('&');
+            for (var i = 0; i < vars.length; i++) {
+                var pair = vars[i].split('=');
+                if (decodeURIComponent(pair[0]) == variable) {
+                    return decodeURIComponent(pair[1]);
+                }
+            }
+            return 'NULL'
+        }
+
+        survey.showProgressBar = "bottom";
+
+        survey.goNextPageAutomatic = false
+        survey.showNavigationButtons = true;
+        survey.showCompletedPage = false;
+
+        // Get Query Variables
+        var surveyname = getQueryVariable('survey');
+
+        var expInfo = { 'participant': '' ,'session': '',  'task': surveyname, 'date' : formatDate(), 'study': '', 'id': getQueryVariable('id') };
+
+        // Get info Promize
+        const getInfoPromise = new Promise((resolve, reject) => {
+            $.ajax({
+                type: "POST",
+                url: '/getInfo',
+                data: { 'id': expInfo.id },
+                dataType: 'JSON',
+                success: function (data) {
+                    resolve(data)
+                }
+            })
+        })
+            // Read getINFO 
+            .then((values) => {
+                console.log(values)
+                if (values.subject && values.session && values.study) {
+                    expInfo.participant = values.subject
+                    expInfo.study = values.study
+                    expInfo.session = values.session
+                    expInfo.run_id = getQueryVariable('run')
+                }
+
+                survey.onComplete.add(function (result) {
+                    //result.preventDefault();
+                    postSurveyData(result.data, expInfo.session, expInfo.participant);
+                });
+
+                $("#surveyElement").Survey({model: survey});
+    
+                $("#participant").text(expInfo.participant);
+                $("#session").text(expInfo.session);
+                $("#study").text(expInfo.study);
+
+            })
+
+        function postSurveyData(data, session, mkturkid) {
+            
+            $.ajax({
+                type: "POST",
+                url: '/save',
+                data: {
+                    "trials_data": data,
+                    "expInfo": expInfo
+                },
+                dataType: 'JSON',
+                statusCode: {
+                    200: function() {
+                        console.log('sucess saved on backend')
+                        window.location.replace('/link?id=' + expInfo.id  + '&index=' + (parseInt(getQueryVariable('index')) + 1))
+                    }
+                }
+            }) 
+                
+        }
+
+        var start = new Date().getTime(),
+            elapsed = '0.0';
+
+        // executes timerCallback every 100 ms
+        timerID = window.setInterval(function () {
+
+            var time = new Date().getTime() - start;
+            elapsed = Math.floor(time);
+
+            //alert(elapsed);
+            //$('#timeEl').text(elapsed + ' ms');
+
+            //displayTime(1);
+            timerLoop(elapsed);
+
+        }, 5);
+    </script>
+
+</body>
+
+</html>
