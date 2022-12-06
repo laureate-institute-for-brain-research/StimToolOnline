@@ -260,8 +260,27 @@ var resources = [
 	{ name: 'MAIN_ready', path: '/js/tasks/cooperation_task/media/instructions/Slide16.jpeg' },
 	{ name: 'MAIN_ready_audio.mp3', path: '/js/tasks/cooperation_task/media/instructions_audio/Slide16.mp3'},
 	{ name: 'BEGIN_slide', path: '/js/tasks/cooperation_task/media/instructions/Slide17.jpeg' },
-	{ name: 'step_1_backg', path: '/js/tasks/invitation_task/media/building_street.jpeg'}
-
+	{ name: 'step_1_backg', path: '/js/tasks/invitation_task/media/images/building_street.jpeg' },
+	{ name: 'b-a_r-1', path: '/js/tasks/invitation_task/media/images/b-a_r-1.png' },
+	{ name: 'b-a_r-2', path: '/js/tasks/invitation_task/media/images/b-a_r-2.png' },
+	{ name: 'b-a_r-3', path: '/js/tasks/invitation_task/media/images/b-a_r-3.png' },
+	{ name: 'b-a_r-4', path: '/js/tasks/invitation_task/media/images/b-a_r-4.png' },
+	{ name: 'b-a_r-5', path: '/js/tasks/invitation_task/media/images/b-a_r-5.png' },
+	{ name: 'b-a_r-6', path: '/js/tasks/invitation_task/media/images/b-a_r-6.png' },
+	{ name: 'b-a_r-7', path: '/js/tasks/invitation_task/media/images/b-a_r-7.png' },
+	{ name: 'b-b_r-1', path: '/js/tasks/invitation_task/media/images/b-b_r-1.png' },
+	{ name: 'b-b_r-2', path: '/js/tasks/invitation_task/media/images/b-b_r-2.png' },
+	{ name: 'b-b_r-3', path: '/js/tasks/invitation_task/media/images/b-b_r-3.png' },
+	{ name: 'b-b_r-4', path: '/js/tasks/invitation_task/media/images/b-b_r-4.png' },
+	{ name: 'b-b_r-5', path: '/js/tasks/invitation_task/media/images/b-b_r-5.png' },
+	{ name: 'b-b_r-6', path: '/js/tasks/invitation_task/media/images/b-b_r-6.png' },
+	{ name: 'b-b_r-7', path: '/js/tasks/invitation_task/media/images/b-b_r-7.png' },
+	{ name: 'red_door', path: '/js/tasks/invitation_task/media/images/red_door.png' },
+	{ name: 'orange_door', path: '/js/tasks/invitation_task/media/images/orange_door.png' },
+	{ name: 'yellow_door', path: '/js/tasks/invitation_task/media/images/yellow_door.png' },
+	{ name: 'green_door', path: '/js/tasks/invitation_task/media/images/green_door.png' },
+	{ name: 'blue_door', path: '/js/tasks/invitation_task/media/images/blue_door.png' },
+	{ name: 'pink_door', path: '/js/tasks/invitation_task/media/images/pink_door.png' },
 ]
 
 // schedule the experiment:
@@ -383,7 +402,48 @@ function experimentInit() {
 		win : psychoJS.window,
 		name : 'step_1_backg', units : 'height', 
 		image : 'step_1_backg', mask : undefined,
-		ori : 0, pos : [0, 0],
+		ori : 0, pos : [0, 0], size: 1,
+		color : new util.Color([1, 1, 1]), opacity : 1,
+		flipHoriz : false, flipVert : false,
+		texRes : 128, interpolate : true, depth : 0
+	});
+
+	g.step_2_background = new visual.ImageStim({
+		win : psychoJS.window,
+		name : 'step_2_background', units : 'height', 
+		image : 'b-a_r-1', mask : undefined,
+		ori : 0, pos : [0, 0], size: 0.8,
+		color : new util.Color([1, 1, 1]), opacity : 1,
+		flipHoriz : false, flipVert : false,
+		texRes : 128, interpolate : true, depth : 0
+	});
+
+	g.placement_pos = {
+		'door': {
+			'left': [ -0.6, 0],
+			'right': [ 0.6, 0]
+		},
+		'door_text': {
+			'left': [ -0.85, -0.3],
+			'right': [ 0.85, -0.3]
+		}
+	}
+
+	g.left_door = new visual.ImageStim({
+		win : psychoJS.window,
+		name : 'left_door', units : 'height', 
+		image : 'blue_door', mask : undefined,
+		ori : 0, pos : g.placement_pos['door']['left'], size: 0.15,
+		color : new util.Color([1, 1, 1]), opacity : 1,
+		flipHoriz : false, flipVert : false,
+		texRes : 128, interpolate : true, depth : 0
+	});
+
+	g.right_door = new visual.ImageStim({
+		win : psychoJS.window,
+		name : 'right_door', units : 'height', 
+		image : 'green_door', mask : undefined,
+		ori : 0, pos : g.placement_pos['door']['right'], size: 0.15,
 		color : new util.Color([1, 1, 1]), opacity : 1,
 		flipHoriz : false, flipVert : false,
 		texRes : 128, interpolate : true, depth : 0
@@ -408,10 +468,10 @@ function experimentInit() {
 	g.text_trial_number  = new visual.TextStim({
 		win: psychoJS.window,
 		name: 'text_trial_number',
-		text: 'Choice Number:',alignHoriz: 'left',
+		text: 'Trial:',alignHoriz: 'left',
 		font: 'Arial',
 		units: 'norm',
-		pos: [-0.95, 0.8], height: 0.06, wrapWidth: undefined, ori: 0,
+		pos: [0.7, 0.9], height: 0.06, wrapWidth: undefined, ori: 0,
 		color: new util.Color('white'), opacity: 1,
 		depth: 0.0
 	});
@@ -422,31 +482,87 @@ function experimentInit() {
 		text: '1',alignHoriz: 'right',
 		font: 'Arial',
 		units: 'norm',
-		pos: [-0.3, 0.8], height: 0.06, wrapWidth: undefined, ori: 0,
+		pos: [0.9, 0.9], height: 0.06, wrapWidth: undefined, ori: 0,
 		color: new util.Color('white'), opacity: 1,
 		depth: 0.0
 	});
 
-
-	g.text_game_type  = new visual.TextStim({
+	g.choice_number = 0;
+	g.text_choice_number  = new visual.TextStim({
 		win: psychoJS.window,
-		name: 'text_game_type',
-		text: 'Game Type:',alignHoriz: 'left',
+		name: 'text_choice_number',
+		text: 'Choice:',alignHoriz: 'left',
 		font: 'Arial',
 		units: 'norm',
-		pos: [0.2, 0.9], height: 0.06, wrapWidth: undefined, ori: 0,
+		pos: [0.7, 0.8], height: 0.06, wrapWidth: undefined, ori: 0,
 		color: new util.Color('white'), opacity: 1,
 		depth: 0.0
 	});
 
-	g.text_val_game_type = new visual.TextStim({
+	g.text_val_choice_number = new visual.TextStim({
 		win: psychoJS.window,
-		name: 'text_val_game_type',
+		name: 'text_val_choice_number',
 		text: '0',alignHoriz: 'right',
 		font: 'Arial',
 		units: 'norm',
-		pos: [0.85, 0.9], height: 0.06, wrapWidth: undefined, ori: 0,
+		pos: [0.9, 0.8], height: 0.06, wrapWidth: undefined, ori: 0,
 		color: new util.Color('white'), opacity: 1,
+		depth: 0.0
+	});
+
+	g.total_invites = 0;
+	g.text_invites  = new visual.TextStim({
+		win: psychoJS.window,
+		name: 'text_invites',
+		text: 'Invites:',alignHoriz: 'left',
+		font: 'Arial',
+		units: 'norm',
+		pos: [0.7, 0.7], height: 0.06, wrapWidth: undefined, ori: 0,
+		color: new util.Color('white'), opacity: 1,
+		depth: 0.0
+	});
+
+	g.text_val_invites = new visual.TextStim({
+		win: psychoJS.window,
+		name: 'text_val_invites',
+		text: '0',alignHoriz: 'right',
+		font: 'Arial',
+		units: 'norm',
+		pos: [0.9, 0.7], height: 0.06, wrapWidth: undefined, ori: 0,
+		color: new util.Color('white'), opacity: 1,
+		depth: 0.0
+	});
+
+	g.prompt_text = new visual.TextStim({
+		win: psychoJS.window,
+		name: 'prompt_text',
+		text: 'Which building do you choose?',alignHoriz: 'center',
+		font: 'Arial',
+		units: 'norm',
+		pos: [0, 0.85], height: 0.06, wrapWidth: undefined, ori: 0,
+		color: new util.Color('black'), opacity: 1,
+		depth: 0.0
+	});
+
+	g.choice_1 = new visual.TextStim({
+		win: psychoJS.window,
+		name: 'choice_1',
+		text: '1',alignHoriz: 'center',
+		font: 'Arial',
+		units: 'norm',
+		pos: [-0.4, 0.6], height: 0.15, wrapWidth: undefined, ori: 0,
+		color: new util.Color('black'), opacity: 1,
+		depth: 0.0
+	});
+
+	g.choice_2 = new visual.TextStim({
+		win: psychoJS.window,
+		name: 'choice_2',
+		text: '2',alignHoriz: 'center',
+		font: 'Arial',
+		units: 'norm',
+		pos: [0.25, 0.4], height: 0.15, wrapWidth: undefined, ori: 0,
+		color: new util.Color('black'), opacity: 1,
 		depth: 0.0
 	});
 
@@ -753,7 +869,6 @@ function instructRoutineEnd(trials) {
 		if (track) {
 			track.stop()
 		}
-
 		//------Ending Routine 'instruct'-------
 		for (const thisComponent of instructComponents) {
 			if (typeof thisComponent.setAutoDraw === 'function') {
@@ -762,7 +877,6 @@ function instructRoutineEnd(trials) {
 		}
 		// the Routine "instruct" was not non-slip safe, so reset the non-slip timer
 		routineTimer.reset();
-
 		return Scheduler.Event.NEXT;
 	};
 }
@@ -844,6 +958,7 @@ function readyRoutineBegin(block_type, image_stim, audio_stim) {
 	};
 }
 
+
 function readyRoutineEachFrame() {
 	return function () {
 		//------Loop for each frame of Routine 'ready'-------
@@ -917,7 +1032,8 @@ function practiceTrialsLoopBegin(thisScheduler) {
 		thisScheduler.add(importConditions(snapshot));
 		thisScheduler.add(initialFixation(snapshot));
 		thisScheduler.add(trialRoutineBegin(snapshot)); 	 // setup block
-		thisScheduler.add(trialStep1(snapshot));
+		thisScheduler.add(trialStep1(snapshot));			 // step 1
+		thisScheduler.add(trialStep2(snapshot));			 // step 2
 		thisScheduler.add(blockRoutineOutcome(snapshot)); 	 // show result
 		thisScheduler.add(blockRoutineEnd(snapshot));		 // end block
 		thisScheduler.add(endLoopIteration(thisScheduler, snapshot));
@@ -977,8 +1093,12 @@ function trialsLoopEnd() {
 	g.text_trial_number.setAutoDraw(false); // 'Choice Number:'
 	g.text_val_trial_number.setAutoDraw(false); // the choice val '16/16'
 
-	g.text_val_game_type.setAutoDraw(false); // Top right text
+	g.text_choice_number.setAutoDraw(false);
+	g.text_val_choice_number.setAutoDraw(false); 
 
+	g.text_invites.setAutoDraw(false);
+	g.text_val_invites.setAutoDraw(false);
+	
 	g.game_type_text_stim.setAutoDraw(false); // bottom text
 
 	g.slideStim.setAutoDraw(false)
@@ -997,107 +1117,120 @@ g.faces_choice = {
 	3: ''
 }
 
-// TextStim Dictionary  for the text
-g.faces_text = {
-	1: new visual.TextStim({
-		win: psychoJS.window,
-		name: 'Face_1',
-		text: '1',
-		font: 'Arial',
-		units: 'norm',
-		pos: [-0.6, 0.3], height: 0.1, wrapWidth: undefined, ori: 0,
-		color: new util.Color('white'), opacity: 1,
-		depth: 0.0
-	}),
-	2: new visual.TextStim({
-		win: psychoJS.window,
-		name: '2',
-		text: '2',
-		font: 'Arial',
-		units: 'norm',
-		pos: [0, 0.3], height: 0.1, wrapWidth: undefined, ori: 0,
-		color: new util.Color('white'), opacity: 1,
-		depth: 0.0
-	}),
-	3 : new visual.TextStim({
-		win: psychoJS.window,
-		name: '3',
-		text: '3',
-		font: 'Arial',
-		units: 'norm',
-		pos: [0.6, 0.3], height: 0.1, wrapWidth: undefined, ori: 0,
-		color: new util.Color('white'), opacity: 1,
-		depth: 0.0
-	})
-}
+function clearStims() {
+	g.step_1_background.setAutoDraw(false);
+	g.step_1_background.status = PsychoJS.Status.NOT_STARTED;
 
-// RectStim for the boxes
-g.rect = {
-	1: new visual.Rect({
-		win: psychoJS.window,
-		name: 'rect_1',
-		width: 0.35,
-		height: 1,
-		units: 'norm',
-		pos: [-0.5, 0 ], ori: 0,
-		// fillColor: new util.Color('black'),
-		lineColor: new util.Color('white'), opacity: 1,
-		depth: 0.0
-	}),
-	2: new visual.Rect({
-		win: psychoJS.window,
-		name: 'rect_2',
-		width: 0.35,
-		height: 1,
-		units: 'norm',
-		pos: [0, 0 ], ori: 0,
-		// fillColor: new util.Color('black'),
-		lineColor: new util.Color('white'), opacity: 1,
-		depth: 0.0
-	}),
-	3 : new visual.Rect({
-		win: psychoJS.window,
-		name: 'rect_1',
-		width: 0.35,
-		height: 1,
-		units: 'norm',
-		pos: [0.5, 0 ], ori: 0,
-		// fillColor: new util.Color('black'),
-		lineColor: new util.Color('white'), opacity: 1,
-		depth: 0.0
-	})
+	g.prompt_text.setAutoDraw(false);
+	g.prompt_text.status = PsychoJS.Status.NOT_STARTED;
+
+	g.choice_1.setAutoDraw(false);
+	g.choice_1.status = PsychoJS.Status.NOT_STARTED;
+
+	g.choice_2.setAutoDraw(false);
+	g.choice_2.status = PsychoJS.Status.NOT_STARTED;
+
 }
 
 /**
  * Routine for the routine before block starts
  * Userse for intialize and setting the stims
- * @param {*} block 
+ * @param {*} trial 
  * @returns 
  */
-function trialRoutineBegin(block) {
+function trialRoutineBegin(trial) {
 	return function () {
 		//------Prepare to start Routine 'trial'-------
 		t = 0;
-		trial_type = trials_block + '_' + probability_1 + '_' + probability_2 + '_' + probability_3
+		trial_type = '';
 		
+		g.text_trial_number.setAutoDraw(true);
+		g.text_val_trial_number.setText(g.trial_number);
+		g.text_val_trial_number.setAutoDraw(true);
+
+		g.text_choice_number.setAutoDraw(true);
+		g.text_val_choice_number.setText(g.choice_number);
+		g.text_val_choice_number.setAutoDraw(true);
+
+		g.text_invites.setAutoDraw(true);
+		g.text_val_invites.setText(g.total_invites);
+		g.text_val_invites.setAutoDraw(true);
 
 		blockClock.reset(); // clock
 
-		mark_event(trials_data, globalClock, block.thisIndex, trial_type, event_types['BLOCK_ONSET'],
+		mark_event(trials_data, globalClock, g.trial_number, trial_type, event_types['BLOCK_ONSET'],
 				'NA', 'NA' , face_1 + ' | ' + face_2 + ' | ' + face_3)
 		return Scheduler.Event.NEXT;
 	};
 }
 
+/**
+ * Step 1: 
+ * Subjec is outside. Give option to turn on 'light'
+ * Allow them to select left/right building
+ * @param {*} trial 
+ * @returns 
+ */
 function trialStep1(trial) {
 	return function () {
-		
 		if (g.step_1_background.status == PsychoJS.Status.NOT_STARTED) {
-			g.step_1_background.setAutoDraw(true)
+			g.step_1_background.setAutoDraw(true);
+			g.prompt_text.setAutoDraw(true);
+
+			g.choice_1.setAutoDraw(true);
+			g.choice_2.setAutoDraw(true);
+		}
+
+		if (ready.status === PsychoJS.Status.STARTED) {
+			let theseKeys = ready.getKeys({ keyList: ['1', '2', '3'], waitRelease: false });
+			if (theseKeys.length > 0) {
+				// Force Progression
+				if (theseKeys[0].name == '1') {  // at least one key was pressed
+				}
+
+				if (theseKeys[0].name == '2') {  // at least one key was pressed
+					
+				}
+				if (theseKeys[0].name == '3') {
+				
+				}
+
+				// prepare for next step
+				clearStims();
+				g.prompt_text.setText('Where do you want to go next?');
+				g.choice_1.pos = g.placement_pos['door_text']['left'];
+				g.choice_1.color = 'white';
+				g.choice_2.pos = g.placement_pos['door_text']['right'];
+				g.choice_2.color = 'white';
+				return Scheduler.Event.NEXT;
+			}
+
+			
 		}
 
 		return Scheduler.Event.FLIP_REPEAT;
-	
+	}
+}
+
+/**
+ * Step 2
+ * Inside Building, Give option to go left or right
+ * @param {*} trial 
+ * @returns 
+ */
+function trialStep2(trial) {
+	return function () {
+		if (g.step_2_background.status == PsychoJS.Status.NOT_STARTED) {
+			g.step_2_background.setAutoDraw(true);
+			g.prompt_text.setAutoDraw(true);
+
+			g.left_door.setAutoDraw(true);
+			g.right_door.setAutoDraw(true);
+
+			g.choice_1.setAutoDraw(true);
+			g.choice_2.setAutoDraw(true);
+		}
+		return Scheduler.Event.FLIP_REPEAT
 	}
 }
 
@@ -1463,69 +1596,6 @@ function reset_choice_counter(){
 }
 
 /**
- * Cleat the outcome faces
- */
-function clear_outcome_faces() {
-	if (g.outcome[1]['negative'].length > 0) {
-		g.outcome[1]['negative'].forEach((item) => {
-			item.setAutoDraw(false)
-			item.status = PsychoJS.Status.NOT_STARTED
-		});
-		
-	}
-	if (g.outcome[1]['positive'].length > 0) {
-		g.outcome[1]['positive'].forEach((item) => {
-			item.setAutoDraw(false)
-			item.status = PsychoJS.Status.NOT_STARTED
-		});
-	}
-	if (g.outcome[1]['meaningless'].length > 0) {
-		g.outcome[1]['meaningless'].forEach((item) => {
-			item.setAutoDraw(false)
-			item.status = PsychoJS.Status.NOT_STARTED
-		});
-	}
-
-	if (g.outcome[2]['negative'].length > 0) {
-		g.outcome[2]['negative'].forEach((item) => {
-			item.setAutoDraw(false)
-			item.status = PsychoJS.Status.NOT_STARTED
-		});
-	}
-	if (g.outcome[2]['positive'].length > 0) {
-		g.outcome[2]['positive'].forEach((item) => {
-			item.setAutoDraw(false)
-			item.status = PsychoJS.Status.NOT_STARTED
-		});
-	}
-	if (g.outcome[2]['meaningless'].length > 0) {
-		g.outcome[2]['meaningless'].forEach((item) => {
-			item.setAutoDraw(false)
-			item.status = PsychoJS.Status.NOT_STARTED
-		});
-	}
-
-	if (g.outcome[3]['negative'].length > 0) {
-		g.outcome[3]['negative'].forEach((item) => {
-			item.setAutoDraw(false)
-			item.status = PsychoJS.Status.NOT_STARTED
-		});
-	}
-	if (g.outcome[3]['positive'].length > 0) {
-		g.outcome[3]['positive'].forEach((item) => {
-			item.setAutoDraw(false)
-			item.status = PsychoJS.Status.NOT_STARTED
-		});
-	}
-	if (g.outcome[3]['meaningless'].length > 0) {
-		g.outcome[3]['meaningless'].forEach((item) => {
-			item.setAutoDraw(false)
-			item.status = PsychoJS.Status.NOT_STARTED
-		});
-	}
-}
-
-/**
  * Trial Routine End
  * @param {*} trials 
  * @returns 
@@ -1547,8 +1617,6 @@ function blockRoutineEnd(trials) {
 			sendData()
 
 			reset_choice_counter() // resetCounter
-
-			clear_outcome_faces() // undraw the faces
 
 			// Clear Fixation
 			points_fixation_stim.setAutoDraw(false)

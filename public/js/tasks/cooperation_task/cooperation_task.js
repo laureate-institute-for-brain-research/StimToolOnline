@@ -349,8 +349,8 @@ var resources = [
 	{ name: 'positive_face', path: '/js/tasks/cooperation_task/media/green_smile.png' },
 	{ name: 'negative_face', path: '/js/tasks/cooperation_task/media/red_sad.png' },
 	{ name: 'neutral_face', path: '/js/tasks/cooperation_task/media/neutral_face.png' },
-	{ name: 'neutral_sound.mp3', path: '/js/tasks/cooperation_task/media/coop_neut_sound.mp3' },
-	{ name: 'postive_sound.mp3', path: '/js/tasks/cooperation_task/media/coop_pos_sound.mp3'}
+	{ name: 'coop_neut_sound.mp3', path: '/js/tasks/cooperation_task/media/coop_neut_sound.mp3' },
+	{ name: 'coop_pos_sound.mp3', path: '/js/tasks/cooperation_task/media/coop_pos_sound.mp3'}
 ]
 
 // schedule the experiment:
@@ -1440,7 +1440,7 @@ function getOutcomePair(outcome, game_type, choice) {
 		// Outcome Sound Stim
 		g.outcome_sound = new Sound({
 			win: psychoJS.window,
-			value: 'neutral_sound.mp3'
+			value: 'coop_neut_sound.mp3'
 		});
 	} else {
 		// Outcome_image Stim
@@ -1456,7 +1456,7 @@ function getOutcomePair(outcome, game_type, choice) {
 		// Outcome Sound Stim
 		g.outcome_sound = new Sound({
 			win: psychoJS.window,
-			value: g.outcome_triple[1]
+			value: 'coop_pos_sound.mp3'
 		});
 	}
 	g.outcome_sound.setVolume(1.0);
@@ -1703,8 +1703,9 @@ function blockRoutineTrials(trials) {
 				g.global_trial_number++ // incremeante global trial number
 
 				// Start Timer
-				g.OUTCOME_TEXT_DURATION = 2; // the time duration for the text to display after selecting the person
-				g.outcomeTimer.reset( g.outcome_sound.getDuration() + g.OUTCOME_TEXT_DURATION) ;
+				g.OUTCOME_TEXT_DURATION = 1.5; // the time duration for the text to display after selecting the person
+				g.OUTCOME_SOUND_DURATION = 1; // the duration of the outcome sounds. both neutral and positive.
+				g.outcomeTimer.reset(g.OUTCOME_SOUND_DURATION + g.OUTCOME_TEXT_DURATION);
 				
 				// g.black_rectangle.setAutoDraw(true)
 				g.outcome_text.setText(g.outcome_text_response)
