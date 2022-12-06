@@ -45,7 +45,7 @@ g.outcome_text_response = '';
 
 // Text to show at the bottom of the screen during each trial
 g.game_type_text = {
-	'pleasant': `You will be shown the meaningless image unless the person you choose decides to help you.`,
+	'pleasant': `You will be shown the neutral image unless the person you choose decides to help you.`,
 	'unpleasant': `You will be shown the unpleasant image unless the person you choose decides to help you.`
 }
 
