@@ -342,14 +342,15 @@ var resources = [
 	{ name: 'practice_schedule.csv', path: '/js/tasks/cooperation_task/practice_schedule.csv' },
 	{ name: 'faces_paths.csv', path: '/js/tasks/cooperation_task/faces_paths.csv' }, // faces lists
 	{ name: 'PRACTICE_ready', path: '/js/tasks/cooperation_task/media/instructions/Slide15.jpeg' },
-	{ name: 'PRACTICE_ready_audio.mp3', path: '/js/tasks/cooperation_task/media/instructions_audio/Slide15.mp3'},
+	{ name: 'PRACTICE_ready_audio.mp3', path: '/js/tasks/cooperation_task/media/instructions_audio/Slide15.mp3' },
 	{ name: 'MAIN_ready', path: '/js/tasks/cooperation_task/media/instructions/Slide16.jpeg' },
-	{ name: 'MAIN_ready_audio.mp3', path: '/js/tasks/cooperation_task/media/instructions_audio/Slide16.mp3'},
+	{ name: 'MAIN_ready_audio.mp3', path: '/js/tasks/cooperation_task/media/instructions_audio/Slide16.mp3' },
 	{ name: 'BEGIN_slide', path: '/js/tasks/cooperation_task/media/instructions/Slide17.jpeg' },
 	{ name: 'positive_face', path: '/js/tasks/cooperation_task/media/green_smile.png' },
 	{ name: 'negative_face', path: '/js/tasks/cooperation_task/media/red_sad.png' },
 	{ name: 'neutral_face', path: '/js/tasks/cooperation_task/media/neutral_face.png' },
-	{ name: 'neutral_sound.mp3', path: '/js/tasks/cooperation_task/media/neutral_sound.mp3'}
+	{ name: 'neutral_sound.mp3', path: '/js/tasks/cooperation_task/media/coop_neut_sound.mp3' },
+	{ name: 'postive_sound.mp3', path: '/js/tasks/cooperation_task/media/coop_pos_sound.mp3'}
 ]
 
 // schedule the experiment:
