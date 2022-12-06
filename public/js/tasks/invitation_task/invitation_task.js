@@ -424,8 +424,8 @@ function experimentInit() {
 			'right': [ 0.6, 0]
 		},
 		'door_text': {
-			'left': [ -0.85, -0.3],
-			'right': [ 0.85, -0.3]
+			'left': [ -0.6, -0.15],
+			'right': [ 0.6, -0.15]
 		}
 	}
 
@@ -549,8 +549,8 @@ function experimentInit() {
 		name: 'choice_1',
 		text: '1',alignHoriz: 'center',
 		font: 'Arial',
-		units: 'norm',
-		pos: [-0.4, 0.6], height: 0.15, wrapWidth: undefined, ori: 0,
+		units: 'height',
+		pos: [-0.35, 0.25], height: 0.05, wrapWidth: undefined, ori: 0,
 		color: new util.Color('black'), opacity: 1,
 		depth: 0.0
 	});
@@ -560,8 +560,8 @@ function experimentInit() {
 		name: 'choice_2',
 		text: '2',alignHoriz: 'center',
 		font: 'Arial',
-		units: 'norm',
-		pos: [0.25, 0.4], height: 0.15, wrapWidth: undefined, ori: 0,
+		units: 'height',
+		pos: [0.20, 0.1], height: 0.05, wrapWidth: undefined, ori: 0,
 		color: new util.Color('black'), opacity: 1,
 		depth: 0.0
 	});
