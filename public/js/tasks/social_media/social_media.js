@@ -568,7 +568,7 @@ function loadingAnimationText() {
 	// if (frameN > max_frame) return
 	// topic_text_test = normalize_elements(topic_text.split(' '))
 	postStims[trial_num].post_text.setText( topic_text_elements.slice(0, loadingCounter).join(' ') )
-	if (frameN % 5 == 0) loadingCounter++
+	if (frameN % 2 == 0) loadingCounter++
 
 }
 
@@ -1691,7 +1691,7 @@ var trials;
 var currentLoop;
 var lastTrialKeyPressed;
 var total_games;
-var animation_duration = 2
+var animation_duration = 1.35
 function trialsLoopBegin(thisScheduler) {
 	// set up handler to look up the conditions
 	resetSocialApprovalScore()

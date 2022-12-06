@@ -19,7 +19,7 @@ EXAMPLE_BLOCK|BLOCK_ONSET    <h6/h1>_<Likes/Dislikes> CHATROOM_ONSET   RESPONSE 
 INSTRUCT_ROLEREVERSAL BLOCK_ONSET        ROLE_REVERSAL BLOCK_ONSET                                   RESPONSE
 INSTRUCT_ROLEREVERSAL AUDIO_ONSET                                                                       SCORE
 
-                                                                                     < - - - - - -(1.5s)- - - - - - >
+                                                                                     <- - - - - - (0.85s) - - - - - >
 [task start]---- -> (([chatroom/trial shown/ready]-------------- -> [selection]-- -> [post shown]--- -> [score shown])x(9 or 5))x80 ->
 ^                     ^                                                  ^           ^                  ^
 MAIN|BLOCK_ONSET      <h6/h1>_<Likes/Dislikes> CHATROOM_ONSET         RESPONSE       ANIMATION_ONSET    SCORE
