@@ -13,7 +13,7 @@
 	'RESPONSE': 6,
 	'BLOCK_ONSET': 7,
 	'FEEDBACK': 8,
-	'ISI': 9
+	'ISI': 9,
  }
 
  var trials_data = []
@@ -1555,7 +1555,7 @@ function trialResult(trials) {
 		if (points_fixation_stim.status == PsychoJS.Status.NOT_STARTED) {
 			points_fixation_stim.setAutoDraw(true)
 			mark_event(trials_data, globalClock, trials.thisIndex, trial_type,
-				event_types['FEEDBACK'], 'NA' , 1,  points_fixation_stim.text)
+				event_types['FEEDBACK'], 'NA' , 1,  totalDates)
 		}
 
 		if (t >= 1) {
