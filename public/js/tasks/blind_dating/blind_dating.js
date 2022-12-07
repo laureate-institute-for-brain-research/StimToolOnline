@@ -1555,7 +1555,7 @@ function trialResult(trials) {
 		if (points_fixation_stim.status == PsychoJS.Status.NOT_STARTED) {
 			points_fixation_stim.setAutoDraw(true)
 			mark_event(trials_data, globalClock, trials.thisIndex, trial_type,
-				event_types['FEEDBACK'], 'NA' , 1,  totalDates)
+				event_types['FEEDBACK'], 'NA' , 'NA',  totalDates)
 		}
 
 		if (t >= 1) {
