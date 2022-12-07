@@ -30,8 +30,8 @@ g.PLEASANT_COLOR = 'green';
 g.UNPLEASANT_COLOR = 'red';
 
 g.outcome_media = {
-	'negative': [], 	// holds negateive image-audio pair
-	'positive': []		// holds positive image-audio pair
+	'negative': [], 	// holds negative image
+	'positive': []		// holds positive imaage
 }
 
 // Text response to dislpay after choosing a selection.
@@ -216,7 +216,7 @@ window.onload = function () {
 			return new Promise((resolve, reject) => {
 				$.ajax({
 					type: 'GET',
-					url: '/js/tasks/cooperation_task/outcome_media.csv',
+					url: '/js/tasks/cooperation_task/outcome_media_schedule.csv',
 					dataType: 'text',
 					async: false,
 					success: (data) => {
@@ -237,28 +237,23 @@ window.onload = function () {
 							}
 
 							// If there's media add to resources
-							if (obj.image_path_scramble && obj.image_path_scramble != undefined) {
-								resources.push({ name: obj.image_path_scramble , path: obj.image_path_scramble  })
+							if (obj.neutral_image_path && obj.neutral_image_path != undefined) {
+								resources.push({ name: obj.neutral_image_path , path: obj.neutral_image_path  })
 							}
 
-							// If there's media add to resources
-							if (obj.sound_path && obj.sound_path != undefined) {
-								resources.push({ name: obj.sound_path , path: obj.sound_path  })
-							}
+							
 
 							// Push to their designated outcome lists
 							if (obj.outcome_type == 'negative') {
 								g.outcome_media.negative.push([
 									obj.image_path,
-									obj.sound_path,
-									obj.image_path_scramble,
+									obj.neutral_image_path
 								])
 							} 
 							if (obj.outcome_type == 'positive')  {
 								g.outcome_media.positive.push([
 									obj.image_path,
-									obj.sound_path,
-									obj.image_path_scramble,
+									obj.neutral_image_path
 								])
 							}	
 						}
@@ -1072,7 +1067,7 @@ function practiceTrialsLoopBegin(thisScheduler) {
 	});
 	g.global_trial_number = 0;
 	g.game_number = 1;
-	randomizePair(blocks) // randomize outcome
+	//randomizePair(blocks) // randomize outcome
 
 	psychoJS.experiment.addLoop(blocks); // add the loop to the experiment
 	endClock.reset()
@@ -1113,7 +1108,7 @@ function trialsLoopBegin(thisScheduler) {
 
 	g.global_trial_number = 0;
 	g.game_number = 1;
-	randomizePair(blocks) // randomize outcome
+	//randomizePair(blocks) // randomize outcome
 
 	psychoJS.experiment.addLoop(blocks); // add the loop to the experiment
 
@@ -1367,25 +1362,48 @@ g.outcome = {
 	1: {
 		'negative': [],
 		'positive': [],
-		'meaningless': []
+		'neutral': []
 	},
 	2: {
 		'negative': [],
 		'positive': [],
-		'meaningless': []
+		'neutral': []
 	},
 	3: {
 		'negative': [],
 		'positive': [],
-		'meaningless': []
+		'neutral': []
 	}
 }
 
 // Used for counting the positive/negative levels for each choice selection
 g.choice_counter = {
-	1: { 'negative': 0, 'positive': 0, 'meaningless': 0},
-	2: { 'negative': 0, 'positive': 0, 'meaningless': 0},
-	3: { 'negative': 0, 'positive': 0, 'meaningless': 0},
+	'negative': 0,
+	'positive': 0,
+}
+
+
+/**
+ * Increment the outcome counter after it's been used.
+ * @param {*} outcome_type either a positve or negative outcome type
+ */
+function incrementCounters(outcome_type){
+	switch (outcome_type) {
+		case 'positive':
+			g.choice_counter['positive']++
+			// reset back to 0 after reached max length
+			if (g.choice_counter['positive'] == 91) {
+				g.choice_counter['positive'] = 0
+			}
+			break;
+		case 'negative':
+			g.choice_counter['negative']++
+			// reset back to 0 after reached max length
+			if (g.choice_counter['negative'] == 91) {
+				g.choice_counter['negative'] = 0
+			}
+			break;
+	}
 }
 
 /**
@@ -1397,41 +1415,46 @@ function getRandomOutcome(probability, game_type) {
 		// returns the game_type. Either 'plesant' or 'unpleasant'
 		return (game_type == 'pleasant' ? 'positive': 'negative');
 	} else {
-		return 'meaningless'
+		return 'neutral'
 	}
 }
 
+
 /**
  * Returns an image/audio outcome pair based on given income
- * @param {*} outcome string of either 'negative' or 'positive' or 'meaningless'
+ * @param {*} outcome string of either 'negative' or 'positive' or 'neutral'
  */
 function getOutcomePair(outcome, game_type, choice) {
 	switch (outcome) {
-		case 'meaningless':
+		case 'neutral':
 			// returns outcome_triple based on game_type
 			if (game_type == 'pleasant') {
-				g.outcome_triple = g.outcome_media.positive[ g.global_trial_number ];
+				g.outcome_triple = g.outcome_media.positive[g.choice_counter['positive']];
+				incrementCounters('positive')
 			} else {
-				g.outcome_triple = g.outcome_media.negative[ g.global_trial_number ];
+				g.outcome_triple = g.outcome_media.negative[g.choice_counter['negative']];
+				incrementCounters('negative')
 			}
 			break;
 		case 'positive':
-			g.outcome_triple = g.outcome_media.positive[ g.global_trial_number];
+			g.outcome_triple = g.outcome_media.positive[g.choice_counter['positive']];
+			incrementCounters('positive')
 			break;
 		case 'negative':
-			g.outcome_triple = g.outcome_media.negative[ g.global_trial_number ];
+			g.outcome_triple = g.outcome_media.negative[g.choice_counter['negative']];
+			incrementCounters('negative')
 			break;
 	}
 
 	console.log('Outcome: ', outcome, game_type, g.outcome_triple)
 
-	// use neutral sound if the outcome is meaningless
-	if (outcome == 'meaningless') {
+	// use neutral sound if the outcome is neutral
+	if (outcome == 'neutral') {
 		// Outcome_image Stim
 		g.outcome_image = new visual.ImageStim({
 			win : psychoJS.window,
 			name : 'outcome_image', units : 'norm', 
-			image : g.outcome_triple[2], mask : undefined,
+			image : g.outcome_triple[1], mask : undefined,
 			ori: 0,pos: [0,0], opacity : 1,size: [2,2],
 			flipHoriz : false, flipVert : false,
 			texRes : 128, interpolate : true, depth : 2
@@ -1463,73 +1486,9 @@ function getOutcomePair(outcome, game_type, choice) {
 }
 
 /**
- * Function call for when a choice is made
- * @param {string} outcome outcome returned from getRandomOutcome()
- * @param {string} choice choice given. either '1', '2', or '3'
- */
-function setOutcome(outcome, choice) {
-	switch (outcome) {
-		case 'positive':
-			g.outcome[choice]['positive'].push(
-				new visual.ImageStim({
-				win : psychoJS.window,
-				name : 'outcome_choice_' + choice, units : 'norm',
-				image : 'positive_face', mask : undefined,
-				ori: 0,
-					pos: g.choice_outcome_pos[choice]['unscramble'][
-						g.choice_counter[choice]['positive']
-				],
-				color : new util.Color([1, 1, 1]), opacity : 1,
-				flipHoriz : false, flipVert : false,
-				texRes : 128, interpolate : true, depth : 0
-				})
-			)
-			// g.outcome[choice]['positive'][g.choice_counter[choice]['positive']].setAutoDraw(true)
-			g.choice_counter[choice]['positive']++
-			break;
-		case 'negative':
-			g.outcome[choice]['negative'].push(
-				new visual.ImageStim({
-				win : psychoJS.window,
-				name : 'outcome_negative_choice_' + choice, units : 'norm', 
-				image : 'negative_face', mask : undefined,
-				ori: 0,
-					pos: g.choice_outcome_pos[choice]['unscramble'][
-						g.choice_counter[choice]['negative']
-				],
-				color : new util.Color([1, 1, 1]), opacity : 1,
-				flipHoriz : false, flipVert : false,
-				texRes : 128, interpolate : true, depth : 0
-				})
-			)
-			// g.outcome[choice]['negative'][g.choice_counter[choice]['negative']].setAutoDraw(true)
-			g.choice_counter[choice]['negative']++
-			break;
-		case 'meaningless':
-			g.outcome[choice]['meaningless'].push(
-				new visual.ImageStim({
-				win : psychoJS.window,
-				name : 'outcome_negative_choice_' + choice, units : 'norm', 
-				image : 'neutral_face', mask : undefined,
-				ori: 0,
-					pos: g.choice_outcome_pos[choice]['scramble'][
-						g.choice_counter[choice]['meaningless']
-				],
-				color : new util.Color([1, 1, 1]), opacity : 1,
-				flipHoriz : false, flipVert : false,
-				texRes : 128, interpolate : true, depth : 0
-				})
-			)
-			// g.outcome[choice]['meaningless'][g.choice_counter[choice]['meaningless']].setAutoDraw(true)
-			g.choice_counter[choice]['meaningless']++
-			break;
-	}
-}
-
-/**
  * Sets the outcome reponse based on outcome and game type
  * reference to #56 https://github.com/laureate-institute-for-brain-research/StimToolOnline/issues/56
- * @param {*} outcome the random outcome. i.e. 'pleasant', 'unpleasant', 'meaningless'
+ * @param {*} outcome the random outcome. i.e. 'pleasant', 'unpleasant', 'neutral'
  * @param {*} game_type the game type from the schedule. ie. 'unpleasant' or 'pleasant'
  * @param {*} choice the choice number the subjet selected, ie. 1, 2,3
  */
@@ -1672,7 +1631,7 @@ function blockRoutineTrials(trials) {
 					let choice = 1
 					outcome = getRandomOutcome(probability_1, game_type)
 					getOutcomePair(outcome, game_type, choice) // Generate a random image/sound pair based on outcome
-					setOutcome(outcome, choice)
+					//setOutcome(outcome, choice)
 					setOutcomeResponse(outcome, game_type, choice)
 				}
 				
@@ -1681,7 +1640,7 @@ function blockRoutineTrials(trials) {
 					let choice = 2
 					outcome = getRandomOutcome(probability_2, game_type)
 					getOutcomePair(outcome, game_type, choice) // Generate a random image/sound pair based on outcome
-					setOutcome(outcome, choice)
+					//setOutcome(outcome, choice)
 					setOutcomeResponse(outcome, game_type, choice)
 				}
 				
@@ -1690,7 +1649,7 @@ function blockRoutineTrials(trials) {
 					let choice = 3
 					outcome = getRandomOutcome(probability_3, game_type)
 					getOutcomePair(outcome, game_type, choice) // Generate a random image/sound pair based on outcome
-					setOutcome(outcome, choice)
+					//setOutcome(outcome, choice)
 					setOutcomeResponse(outcome, game_type, choice)
 				}
 
@@ -1828,17 +1787,8 @@ function sendData() {
  * (Usuually done after each block)
  */
 function reset_choice_counter(){
-	g.choice_counter[1]['negative'] = 0;
-	g.choice_counter[1]['positive'] = 0;
-	g.choice_counter[1]['meaningless'] = 0;
-
-	g.choice_counter[2]['negative'] = 0;
-	g.choice_counter[2]['positive'] = 0;
-	g.choice_counter[2]['meaningless'] = 0;
-
-	g.choice_counter[3]['negative'] = 0;
-	g.choice_counter[3]['positive'] = 0;
-	g.choice_counter[3]['meaningless'] = 0;
+	g.choice_counter['negative'] = 0;
+	g.choice_counter['positive'] = 0;
 }
 
 /**
@@ -1858,8 +1808,8 @@ function clear_outcome_faces() {
 			item.status = PsychoJS.Status.NOT_STARTED
 		});
 	}
-	if (g.outcome[1]['meaningless'].length > 0) {
-		g.outcome[1]['meaningless'].forEach((item) => {
+	if (g.outcome[1]['neutral'].length > 0) {
+		g.outcome[1]['neutral'].forEach((item) => {
 			item.setAutoDraw(false)
 			item.status = PsychoJS.Status.NOT_STARTED
 		});
@@ -1877,8 +1827,8 @@ function clear_outcome_faces() {
 			item.status = PsychoJS.Status.NOT_STARTED
 		});
 	}
-	if (g.outcome[2]['meaningless'].length > 0) {
-		g.outcome[2]['meaningless'].forEach((item) => {
+	if (g.outcome[2]['neutral'].length > 0) {
+		g.outcome[2]['neutral'].forEach((item) => {
 			item.setAutoDraw(false)
 			item.status = PsychoJS.Status.NOT_STARTED
 		});
@@ -1896,8 +1846,8 @@ function clear_outcome_faces() {
 			item.status = PsychoJS.Status.NOT_STARTED
 		});
 	}
-	if (g.outcome[3]['meaningless'].length > 0) {
-		g.outcome[3]['meaningless'].forEach((item) => {
+	if (g.outcome[3]['neutral'].length > 0) {
+		g.outcome[3]['neutral'].forEach((item) => {
 			item.setAutoDraw(false)
 			item.status = PsychoJS.Status.NOT_STARTED
 		});
