@@ -402,7 +402,7 @@ function experimentInit() {
 		win : psychoJS.window,
 		name : 'step_1_backg', units : 'height', 
 		image : 'step_1_backg', mask : undefined,
-		ori : 0, pos : [0, 0], size: 1,
+		ori : 0, pos : [0, 0], size: 0.8,
 		color : new util.Color([1, 1, 1]), opacity : 1,
 		flipHoriz : false, flipVert : false,
 		texRes : 128, interpolate : true, depth : 0

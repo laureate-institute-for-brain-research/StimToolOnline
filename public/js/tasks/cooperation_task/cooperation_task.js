@@ -345,7 +345,8 @@ var resources = [
 	{ name: 'negative_face', path: '/js/tasks/cooperation_task/media/red_sad.png' },
 	{ name: 'neutral_face', path: '/js/tasks/cooperation_task/media/neutral_face.png' },
 	{ name: 'coop_neut_sound.mp3', path: '/js/tasks/cooperation_task/media/coop_neut_sound.mp3' },
-	{ name: 'coop_pos_sound.mp3', path: '/js/tasks/cooperation_task/media/coop_pos_sound.mp3'}
+	{ name: 'coop_pos_sound.mp3', path: '/js/tasks/cooperation_task/media/coop_pos_sound.mp3' },
+	{ name: 'scream.wav', path: '/js/tasks/cooperation_task/media/FearConditioning_media_Scream2sx3B.wav'}
 ]
 
 // schedule the experiment:
@@ -1435,53 +1436,64 @@ function getOutcomePair(outcome, game_type, choice) {
 				g.outcome_triple = g.outcome_media.negative[g.choice_counter['negative']];
 				incrementCounters('negative')
 			}
+			g.outcome_image = new visual.ImageStim({
+				win : psychoJS.window,
+				name : 'outcome_image', units : 'norm', 
+				image : g.outcome_triple[1], mask : undefined,
+				ori: 0,pos: [0,0], opacity : 1,size: [2,2],
+				flipHoriz : false, flipVert : false,
+				texRes : 128, interpolate : true, depth : 2
+			})
+			
+			// Outcome Sound Stim
+			g.outcome_sound = new Sound({
+				win: psychoJS.window,
+				value: 'coop_neut_sound.mp3'
+			});
+
 			break;
 		case 'positive':
 			g.outcome_triple = g.outcome_media.positive[g.choice_counter['positive']];
 			incrementCounters('positive')
+
+			g.outcome_image = new visual.ImageStim({
+				win : psychoJS.window,
+				name : 'outcome_image', units : 'norm', 
+				image : g.outcome_triple[0], mask : undefined,
+				ori: 0,pos: [0,0], opacity : 1,size: [2,2],
+				flipHoriz : false, flipVert : false,
+				texRes : 128, interpolate : true, depth : 2
+			})
+	
+			// Outcome Sound Stim
+			g.outcome_sound = new Sound({
+				win: psychoJS.window,
+				value: 'coop_pos_sound.mp3'
+			});
+
 			break;
 		case 'negative':
 			g.outcome_triple = g.outcome_media.negative[g.choice_counter['negative']];
 			incrementCounters('negative')
+
+			g.outcome_image = new visual.ImageStim({
+				win : psychoJS.window,
+				name : 'outcome_image', units : 'norm', 
+				image : g.outcome_triple[0], mask : undefined,
+				ori: 0,pos: [0,0], opacity : 1,size: [2,2],
+				flipHoriz : false, flipVert : false,
+				texRes : 128, interpolate : true, depth : 2
+			})
+	
+			// Outcome Sound Stim
+			g.outcome_sound = new Sound({
+				win: psychoJS.window,
+				value: 'scream.wav'
+			});
+
 			break;
 	}
 
-	console.log('Outcome: ', outcome, game_type, g.outcome_triple)
-
-	// use neutral sound if the outcome is neutral
-	if (outcome == 'neutral') {
-		// Outcome_image Stim
-		g.outcome_image = new visual.ImageStim({
-			win : psychoJS.window,
-			name : 'outcome_image', units : 'norm', 
-			image : g.outcome_triple[1], mask : undefined,
-			ori: 0,pos: [0,0], opacity : 1,size: [2,2],
-			flipHoriz : false, flipVert : false,
-			texRes : 128, interpolate : true, depth : 2
-		})
-		
-		// Outcome Sound Stim
-		g.outcome_sound = new Sound({
-			win: psychoJS.window,
-			value: 'coop_neut_sound.mp3'
-		});
-	} else {
-		// Outcome_image Stim
-		g.outcome_image = new visual.ImageStim({
-			win : psychoJS.window,
-			name : 'outcome_image', units : 'norm', 
-			image : g.outcome_triple[0], mask : undefined,
-			ori: 0,pos: [0,0], opacity : 1,size: [2,2],
-			flipHoriz : false, flipVert : false,
-			texRes : 128, interpolate : true, depth : 2
-		})
-
-		// Outcome Sound Stim
-		g.outcome_sound = new Sound({
-			win: psychoJS.window,
-			value: 'coop_pos_sound.mp3'
-		});
-	}
 	g.outcome_sound.setVolume(1.0);
 }
 
