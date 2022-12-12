@@ -337,14 +337,14 @@ var resources = [
 	{ name: 'rate_faces_schedule.csv', path: '/js/tasks/emotional_faces/rate_faces_schedule.csv' }, // faces lists
 	{ name: 'user.png', path: '/js/tasks/emotional_faces/media/user.png' },
 	{ name: 'user_filled.png', path: '/js/tasks/emotional_faces/media/user_filled.png' },
-	{ name: 'PRACTICE_ready', path: '/js/tasks/emotional_faces/media/instructions/Slide11.jpeg'},
-	{ name: 'MAIN_ready', path: '/js/tasks/emotional_faces/media/instructions/Slide12.jpeg' },
+	{ name: 'PRACTICE_ready', path: '/js/tasks/emotional_faces/media/instructions/Slide10.jpeg'},
+	{ name: 'MAIN_ready', path: '/js/tasks/emotional_faces/media/instructions/Slide11.jpeg' },
 	{ name: 'PRACTICE_ready_audio.mp3', path: '/js/tasks/emotional_faces/media/instructions_audio/Slide11.mp3' },
 	{ name: 'MAIN_ready_audio.mp3', path: '/js/tasks/emotional_faces/media/instructions_audio/Slide12.mp3'},
 	{ name: 'male.png', path: '/js/tasks/emotional_faces/media/male.png' },
 	{ name: 'female.png', path: '/js/tasks/emotional_faces/media/female.png' },
-	{ name: 'high_tone.mp3', path: '/js/tasks/emotional_faces/media/tones/high_tone.mp3' },
-	{ name: 'low_tone.mp3', path: '/js/tasks/emotional_faces/media/tones/low_tone.mp3'},
+	{ name: 'high_tone.mp3', path: '/js/tasks/emotional_faces/media/tones/youre_fired2.mp3' },
+	{ name: 'low_tone.mp3', path: '/js/tasks/emotional_faces/media/tones/go_away1.mp3'},
 ]
 
 
@@ -609,15 +609,15 @@ function experimentInit() {
 	});
 
 	// Tone Sounds
-	high_tone = new Sound({
-		win: psychoJS.window,
-		value: 'high_tone.mp3'
-	});
+	// high_tone = new Sound({
+	// 	win: psychoJS.window,
+	// 	value: 'high_tone.mp3'
+	// });
 
-	low_tone = new Sound({
-		win: psychoJS.window,
-		value: 'low_tone.mp3'
-	});
+	// low_tone = new Sound({
+	// 	win: psychoJS.window,
+	// 	value: 'low_tone.mp3'
+	// });
 
 
 	// Create some handy timers
@@ -1435,9 +1435,19 @@ function trialRoutineBegin(trials) {
 
 		// Set High or Low Tone
 		if (tone == 'high') {
-			tone_sound = high_tone
+			//tone_sound = high_tone
+
+			tone_sound = new Sound({
+				win: psychoJS.window,
+				value: 'high_tone.mp3'
+			});
 		} else if (tone == 'low') {
-			tone_sound = low_tone
+			//tone_sound = low_tone
+
+			tone_sound = new Sound({
+				win: psychoJS.window,
+				value: 'low_tone.mp3'
+			});
 		}
 
 		// Set the Sounds Ojbect 
@@ -1468,7 +1478,11 @@ function trialRoutineBegin(trials) {
 
 		trial_type = stim_type + '_' + intensity
 		mark_event(trials_data, globalClock, trials.thisIndex, trial_type, event_types['TONE_ONSET'],
-				'NA', 'NA' , tone)
+			'NA', 'NA', tone)
+		// Play Tone
+		if (tone_sound) {
+			tone_sound.play();
+		}
 		return Scheduler.Event.NEXT;
 	};
 }
@@ -1488,13 +1502,13 @@ function trialRoutinePlayTone(trials) {
 		// get current time
 		t = toneClock.getTime();
 
-		// Play Tone
-		if (tone_sound) {
-			tone_sound.play();
-		}
+		// // Play Tone
+		// if (tone_sound) {
+		// 	tone_sound.play();
+		// }
 
 		// Tone plays for only 300ms
-		if (t >= 0.3) {
+		if (t >= 1.0) {
 			continueRoutine = false
 		}
 
