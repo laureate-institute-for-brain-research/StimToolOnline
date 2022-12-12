@@ -21,10 +21,10 @@ INSTRUCTIONS|BLOCK_ONSET
 ^                     ^                ^                 ^                ^               ^         ^
 PRACTICE|BLOCK_ONSET  FIXATION_ONSET   TONE_ONSET        FACE_ONSET       CHOICE_ONSET    RESPONSE  FEEDBACK
 
-                 (3.0s) or (~0s)     (300ms)           (150ms)             (2.5s)                      (2.0s)
-[trial]------ -> ([fixation]----> [sound played] -> [image shown] -> [2 choices shown]------ -> [feedback/fixation shown])x(336) ->
-^                 ^               ^                 ^                ^               ^         ^
-MAIN|BLOCK_ONSET  FIXATION_ONSET  TONE_ONSET        FACE_ONSET       CHOICE_ONSET    RESPONSE  FEEDBACK
+                  (3.0s or 0.5s ~ 1.5s)     (300ms)           (150ms)            (2.5s)                (conditional 2.0s)
+[trial]------ -> ([fixation]-----------> [sound played] -> [image shown] -> [2 choices shown]------ -> [feedback shown])x(336) ->
+^                 ^               ^                 ^                ^               ^          ^
+MAIN|BLOCK_ONSET  FIXATION_ONSET  TONE_ONSET        FACE_ONSET       CHOICE_ONSET    RESPONSE   FEEDBACK
 ```
 
 # INPUT DETAILS
@@ -88,7 +88,7 @@ result: file path of the sound played
 FEEDBACK (9)
 response_time: not used
 response: not used
-result: "+" for on time response or "too slow" for not on time response
+result: "too slow" when a response was not made in time
 
 AUDIO_ONSET (10) (NOT USED)
 response_time: not used
