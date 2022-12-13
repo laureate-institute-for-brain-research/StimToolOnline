@@ -1787,8 +1787,8 @@ function trialRoutineEnd(trials) {
 			console.log('End Fixation')
 		}
 		
-		// Send Data
-		if (t <= 2) {
+		// hold the fixation for 2 second
+		if (t <= ITI) {
 			return Scheduler.Event.FLIP_REPEAT;
 		} else {
 			resp.stop()
