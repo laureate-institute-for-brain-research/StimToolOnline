@@ -28,6 +28,7 @@ var trials_data = []
 var g = {}				// global variables
 g.PLEASANT_COLOR = 'green';
 g.UNPLEASANT_COLOR = 'red';
+g.FORCED_DELAY = 1; // forced delay duration (amount of time after outcome and wait for press)
 
 g.outcome_media = {
 	'negative': [], 	// holds negative image
@@ -1340,6 +1341,8 @@ function blockRoutineBegin(block) {
 
 		g.new_trial_marked = false;
 
+		g.forced_dealy_abs = 0; // 
+
 		mark_event(trials_data, globalClock, 'BLOCK=' + block.thisIndex, trial_type, event_types['BLOCK_ONSET'],
 				'NA', 'NA' , face_1 + ' | ' + face_2 + ' | ' + face_3)
 		return Scheduler.Event.NEXT;
@@ -1650,6 +1653,10 @@ function blockRoutineTrials(trials) {
 				continueRoutine = false;
 			}
 
+
+			// set the time to add force delay after outcome
+			g.forced_dealy_abs = globalClock.getTime() + g.FORCED_DELAY
+
 			g.outcome_sound = undefined;
 		}
 
@@ -1657,7 +1664,7 @@ function blockRoutineTrials(trials) {
 
 			let theseKeys = ready.getKeys({ keyList: ['1', '2', '3'], waitRelease: false });
 			
-			if (theseKeys.length > 0 && g.outcomeTimer.getTime() <= 0) {
+			if (theseKeys.length > 0 && g.outcomeTimer.getTime() <= 0 && globalClock.getTime() >= g.forced_dealy_abs) {
 				// Chose 1
 				if (theseKeys[0].name == '1') {
 					let choice = 1
