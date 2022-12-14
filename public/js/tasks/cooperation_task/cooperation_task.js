@@ -1918,6 +1918,12 @@ function blockRoutineEnd(trials) {
 
 			clear_outcome_faces() // undraw the faces
 
+			g.faces_choice[1].setAutoDraw(false) // face options
+			g.faces_choice[2].setAutoDraw(false)
+			g.faces_choice[3].setAutoDraw(false)
+
+			g.game_type_text_image_stim.setAutoDraw(false) // bottom text
+
 			// Clear Fixation
 			points_fixation_stim.setAutoDraw(false)
 			points_fixation_stim.status = PsychoJS.Status.NOT_STARTED
