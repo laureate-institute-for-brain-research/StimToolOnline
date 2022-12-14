@@ -28,6 +28,7 @@ var trials_data = []
 var g = {}				// global variables
 g.PLEASANT_COLOR = 'green';
 g.UNPLEASANT_COLOR = 'red';
+g.FORCED_DELAY = 1; // forced delay duration (amount of time after outcome and wait for press)
 
 g.outcome_media = {
 	'negative': [], 	// holds negative image
@@ -346,7 +347,9 @@ var resources = [
 	{ name: 'neutral_face', path: '/js/tasks/cooperation_task/media/neutral_face.png' },
 	{ name: 'coop_neut_sound.mp3', path: '/js/tasks/cooperation_task/media/coop_neut_sound.mp3' },
 	{ name: 'coop_pos_sound.mp3', path: '/js/tasks/cooperation_task/media/coop_pos_sound.mp3' },
-	{ name: 'scream.wav', path: '/js/tasks/cooperation_task/media/FearConditioning_media_Scream2sx3B.wav'}
+	{ name: 'scream.wav', path: '/js/tasks/cooperation_task/media/FearConditioning_media_Scream2sx3B.wav' },
+	{ name: 'pleasant_bottom_text', path: '/js/tasks/cooperation_task/media/pleasant_text_bottom.png' },
+	{ name: 'unpleasant_bottom_text', path: '/js/tasks/cooperation_task/media/unpleasant_text_bottom.png'},
 ]
 
 // schedule the experiment:
@@ -585,15 +588,13 @@ function experimentInit() {
 	});
 
 	// Game Type  Explanation
-	g.game_type_text_stim = new visual.TextStim({
-		win: psychoJS.window,
-		name: 'game_type explanation',
-		text: g.game_type_text['pleasant'],
-		font: 'Arial',
-		units: 'norm',
-		pos: [0, -0.8], height: 0.05, wrapWidth: 1.4, ori: 0,
-		color: new util.Color('white'), opacity: 1,
-		depth: 0.0
+	g.game_type_text_image_stim = new visual.ImageStim({
+		win : psychoJS.window,
+		name : 'bottom_text_image', units : 'height', 
+		image : 'pleasant_bottom_text', mask : undefined,
+		ori : 0, pos: [0, -0.2], opacity : 1,
+		flipHoriz : false, flipVert : false,
+		texRes : 128, interpolate : true, depth : 0
 	});
 
 	endClock = new util.Clock();
@@ -1144,7 +1145,7 @@ function trialsLoopEnd() {
 
 	g.text_val_game_type.setAutoDraw(false); // Top right text
 
-	g.game_type_text_stim.setAutoDraw(false); // bottom text
+	g.game_type_text_image_stim.setAutoDraw(false) // bottom text
 
 	g.slideStim.setAutoDraw(false)
 
@@ -1297,15 +1298,33 @@ function blockRoutineBegin(block) {
 		// g.text_game_type.setAutoDraw(true)
 		if (game_type == 'pleasant') {
 			g.text_val_game_type.color = g.PLEASANT_COLOR;
+
 			g.text_val_game_type.setText('Positive Outcome Games')
+			g.game_type_text_image_stim = new visual.ImageStim({
+				win : psychoJS.window,
+				name : 'bottom_text_image', units : 'height', 
+				image : 'pleasant_bottom_text', mask : undefined,
+				ori : 0, pos: [0, -0.35], opacity : 1, size: [1,0.13],
+				flipHoriz : false, flipVert : false,
+				texRes : 128, interpolate : true, depth : 0
+			});
 		} else {
 			g.text_val_game_type.color = g.UNPLEASANT_COLOR;
 			g.text_val_game_type.setText('Negative Outcome Games')
+
+			g.game_type_text_image_stim = new visual.ImageStim({
+				win : psychoJS.window,
+				name : 'bottom_text_image', units : 'height', 
+				image : 'unpleasant_bottom_text', mask : undefined,
+				ori : 0, pos: [0, -0.35], opacity : 1, size: [1,0.13],
+				flipHoriz : false, flipVert : false,
+				texRes : 128, interpolate : true, depth : 0
+			});
 		}
 		g.text_val_game_type.setAutoDraw(true)
 
-		g.game_type_text_stim.setText(g.game_type_text[game_type])
-		g.game_type_text_stim.setAutoDraw(true);
+		
+		g.game_type_text_image_stim.setAutoDraw(true);
 
 		// g.rect[1].setAutoDraw(true)
 		// g.rect[2].setAutoDraw(true)
@@ -1321,6 +1340,8 @@ function blockRoutineBegin(block) {
 		g.faces_text[3].setAutoDraw(true)
 
 		g.new_trial_marked = false;
+
+		g.forced_dealy_abs = 0; // 
 
 		mark_event(trials_data, globalClock, 'BLOCK=' + block.thisIndex, trial_type, event_types['BLOCK_ONSET'],
 				'NA', 'NA' , face_1 + ' | ' + face_2 + ' | ' + face_3)
@@ -1388,7 +1409,8 @@ g.choice_counter = {
  * Increment the outcome counter after it's been used.
  * @param {*} outcome_type either a positve or negative outcome type
  */
-function incrementCounters(outcome_type){
+function incrementCounters(outcome_type) {
+	// console.log('increment (pre): ',outcome_type,g.choice_counter['positive'], g.choice_counter['negative']  )
 	switch (outcome_type) {
 		case 'positive':
 			g.choice_counter['positive']++
@@ -1405,6 +1427,7 @@ function incrementCounters(outcome_type){
 			}
 			break;
 	}
+	// console.log('increment (post): ',outcome_type,g.choice_counter['positive'], g.choice_counter['negative']  )
 }
 
 /**
@@ -1412,6 +1435,7 @@ function incrementCounters(outcome_type){
  * @param {*} probability probabilty 
  */
 function getRandomOutcome(probability, game_type) {
+	console.log('get random: ', game_type, probability )
 	if (Math.random() < probability) {
 		// returns the game_type. Either 'plesant' or 'unpleasant'
 		return (game_type == 'pleasant' ? 'positive': 'negative');
@@ -1428,7 +1452,6 @@ function getRandomOutcome(probability, game_type) {
 function getOutcomePair(outcome, game_type, choice) {
 	switch (outcome) {
 		case 'neutral':
-			// returns outcome_triple based on game_type
 			if (game_type == 'pleasant') {
 				g.outcome_triple = g.outcome_media.positive[g.choice_counter['positive']];
 				incrementCounters('positive')
@@ -1630,6 +1653,10 @@ function blockRoutineTrials(trials) {
 				continueRoutine = false;
 			}
 
+
+			// set the time to add force delay after outcome
+			g.forced_dealy_abs = globalClock.getTime() + g.FORCED_DELAY
+
 			g.outcome_sound = undefined;
 		}
 
@@ -1637,7 +1664,7 @@ function blockRoutineTrials(trials) {
 
 			let theseKeys = ready.getKeys({ keyList: ['1', '2', '3'], waitRelease: false });
 			
-			if (theseKeys.length > 0 && g.outcomeTimer.getTime() <= 0) {
+			if (theseKeys.length > 0 && g.outcomeTimer.getTime() <= 0 && globalClock.getTime() >= g.forced_dealy_abs) {
 				// Chose 1
 				if (theseKeys[0].name == '1') {
 					let choice = 1

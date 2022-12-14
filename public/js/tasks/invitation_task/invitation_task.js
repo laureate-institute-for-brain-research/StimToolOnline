@@ -418,6 +418,26 @@ function experimentInit() {
 		texRes : 128, interpolate : true, depth : 0
 	});
 
+	g.step_3_background = new visual.ImageStim({
+		win : psychoJS.window,
+		name : 'step_3_background', units : 'height', 
+		image : 'b-a_r-2', mask : undefined,
+		ori : 0, pos : [0, 0], size: 0.8,
+		color : new util.Color([1, 1, 1]), opacity : 1,
+		flipHoriz : false, flipVert : false,
+		texRes : 128, interpolate : true, depth : 0
+	});
+
+	g.step_4_background = new visual.ImageStim({
+		win : psychoJS.window,
+		name : 'step_4_background', units : 'height', 
+		image : 'b-a_r-3', mask : undefined,
+		ori : 0, pos : [0, 0], size: 0.8,
+		color : new util.Color([1, 1, 1]), opacity : 1,
+		flipHoriz : false, flipVert : false,
+		texRes : 128, interpolate : true, depth : 0
+	});
+
 	g.placement_pos = {
 		'door': {
 			'left': [ -0.6, 0],
@@ -1031,11 +1051,12 @@ function practiceTrialsLoopBegin(thisScheduler) {
 		const snapshot = blocks.getSnapshot();
 		thisScheduler.add(importConditions(snapshot));
 		thisScheduler.add(initialFixation(snapshot));
-		thisScheduler.add(trialRoutineBegin(snapshot)); 	 // setup block
-		thisScheduler.add(trialStep1(snapshot));			 // step 1
-		thisScheduler.add(trialStep2(snapshot));			 // step 2
-		thisScheduler.add(blockRoutineOutcome(snapshot)); 	 // show result
-		thisScheduler.add(blockRoutineEnd(snapshot));		 // end block
+		thisScheduler.add(trialRoutineBegin(snapshot)); 	// setup block
+		thisScheduler.add(trialStep1(snapshot));			// step 1
+		thisScheduler.add(trialStep2(snapshot));			// step 2
+		thisScheduler.add(trialStep3(snapshot));			// step 3
+		thisScheduler.add(trialStep4(snapshot));			// step 4
+		thisScheduler.add(blockRoutineEnd(snapshot));		// end block
 		thisScheduler.add(endLoopIteration(thisScheduler, snapshot));
 	}
 	trial_type = 'PRACTICE'
@@ -1070,8 +1091,10 @@ function trialsLoopBegin(thisScheduler) {
 		thisScheduler.add(importConditions(snapshot));
 		thisScheduler.add(initialFixation(snapshot));
 		thisScheduler.add(trialRoutineBegin(snapshot)); 	 // setup block
-		thisScheduler.add(blockRoutineTrials(snapshot));	 // do trials
-		thisScheduler.add(blockRoutineOutcome(snapshot)); 	 // show result
+		thisScheduler.add(trialStep1(snapshot));			// step 1
+		thisScheduler.add(trialStep2(snapshot));			// step 2
+		thisScheduler.add(trialStep3(snapshot));			// step 3
+		thisScheduler.add(trialStep4(snapshot));			// step 4
 		thisScheduler.add(blockRoutineEnd(snapshot));		 // end block
 		thisScheduler.add(endLoopIteration(thisScheduler, snapshot));
 	}
@@ -1088,25 +1111,8 @@ function instruct_pagesLoopEnd() {
 
 // SHow the points in the trial 
 function trialsLoopEnd() {
-	g.text_game_number.setAutoDraw(false); // 'Game Number:'
-	g.text_val_game_number.setAutoDraw(false); // the game vale '2/2'
-	g.text_trial_number.setAutoDraw(false); // 'Choice Number:'
-	g.text_val_trial_number.setAutoDraw(false); // the choice val '16/16'
-
-	g.text_choice_number.setAutoDraw(false);
-	g.text_val_choice_number.setAutoDraw(false); 
-
-	g.text_invites.setAutoDraw(false);
-	g.text_val_invites.setAutoDraw(false);
-	
-	g.game_type_text_stim.setAutoDraw(false); // bottom text
-
 	g.slideStim.setAutoDraw(false)
-
 	psychoJS.experiment.removeLoop(blocks);
-
-	psychoJS.experiment.addData('globalClock', globalClock.getTime());
-
 	return Scheduler.Event.NEXT;
 }
 
@@ -1117,9 +1123,21 @@ g.faces_choice = {
 	3: ''
 }
 
+/**
+ * Function call to unset and clear the stims
+ */
 function clearStims() {
 	g.step_1_background.setAutoDraw(false);
 	g.step_1_background.status = PsychoJS.Status.NOT_STARTED;
+
+	g.step_2_background.setAutoDraw(false);
+	g.step_2_background.status = PsychoJS.Status.NOT_STARTED;
+
+	g.step_3_background.setAutoDraw(false);
+	g.step_3_background.status = PsychoJS.Status.NOT_STARTED;
+
+	g.step_4_background.setAutoDraw(false);
+	g.step_4_background.status = PsychoJS.Status.NOT_STARTED;
 
 	g.prompt_text.setAutoDraw(false);
 	g.prompt_text.status = PsychoJS.Status.NOT_STARTED;
@@ -1129,6 +1147,12 @@ function clearStims() {
 
 	g.choice_2.setAutoDraw(false);
 	g.choice_2.status = PsychoJS.Status.NOT_STARTED;
+
+	g.left_door.setAutoDraw(false);
+	g.left_door.status = PsychoJS.Status.NOT_STARTED;
+
+	g.right_door.setAutoDraw(false);
+	g.right_door.status = PsychoJS.Status.NOT_STARTED;
 
 }
 
@@ -1174,8 +1198,15 @@ function trialRoutineBegin(trial) {
 function trialStep1(trial) {
 	return function () {
 		if (g.step_1_background.status == PsychoJS.Status.NOT_STARTED) {
+			console.log('Step 1');
 			g.step_1_background.setAutoDraw(true);
 			g.prompt_text.setAutoDraw(true);
+
+			// set choice text placencemt
+			g.choice_1.pos = [-0.35, 0.25];
+			g.choice_1.color = 'black';
+			g.choice_2.pos = [0.20, 0.1];
+			g.choice_2.color = 'black';
 
 			g.choice_1.setAutoDraw(true);
 			g.choice_2.setAutoDraw(true);
@@ -1202,10 +1233,29 @@ function trialStep1(trial) {
 				g.choice_1.color = 'white';
 				g.choice_2.pos = g.placement_pos['door_text']['right'];
 				g.choice_2.color = 'white';
+
+				g.left_door = new visual.ImageStim({
+					win : psychoJS.window,
+					name : 'left_door', units : 'height', 
+					image : 'blue_door', mask : undefined,
+					ori : 0, pos : g.placement_pos['door']['left'], size: 0.15,
+					color : new util.Color([1, 1, 1]), opacity : 1,
+					flipHoriz : false, flipVert : false,
+					texRes : 128, interpolate : true, depth : 0
+				});
+
+				g.right_door = new visual.ImageStim({
+					win : psychoJS.window,
+					name : 'right_door', units : 'height', 
+					image : 'green_door', mask : undefined,
+					ori : 0, pos : g.placement_pos['door']['right'], size: 0.15,
+					color : new util.Color([1, 1, 1]), opacity : 1,
+					flipHoriz : false, flipVert : false,
+					texRes : 128, interpolate : true, depth : 0
+				});
+
 				return Scheduler.Event.NEXT;
 			}
-
-			
 		}
 
 		return Scheduler.Event.FLIP_REPEAT;
@@ -1221,6 +1271,7 @@ function trialStep1(trial) {
 function trialStep2(trial) {
 	return function () {
 		if (g.step_2_background.status == PsychoJS.Status.NOT_STARTED) {
+			console.log('Step 2');
 			g.step_2_background.setAutoDraw(true);
 			g.prompt_text.setAutoDraw(true);
 
@@ -1230,10 +1281,186 @@ function trialStep2(trial) {
 			g.choice_1.setAutoDraw(true);
 			g.choice_2.setAutoDraw(true);
 		}
+
+		if (ready.status === PsychoJS.Status.STARTED) {
+			let theseKeys = ready.getKeys({ keyList: ['1', '2'], waitRelease: false });
+			if (theseKeys.length > 0) {
+				// Force Progression
+				if (theseKeys[0].name == '1') {  // at least one key was pressed
+				}
+
+				if (theseKeys[0].name == '2') {  // at least one key was pressed
+					
+				}
+
+				// prepare for next step
+				clearStims();
+				g.prompt_text.setText('Where do you want to go next?');
+				g.choice_1.pos = g.placement_pos['door_text']['left'];
+				g.choice_1.color = 'white';
+				g.choice_2.pos = g.placement_pos['door_text']['right'];
+				g.choice_2.color = 'white';
+
+				g.left_door = new visual.ImageStim({
+					win : psychoJS.window,
+					name : 'left_door', units : 'height', 
+					image : 'red_door', mask : undefined,
+					ori : 0, pos : g.placement_pos['door']['left'], size: 0.15,
+					color : new util.Color([1, 1, 1]), opacity : 1,
+					flipHoriz : false, flipVert : false,
+					texRes : 128, interpolate : true, depth : 0
+				});
+
+				g.right_door = new visual.ImageStim({
+					win : psychoJS.window,
+					name : 'right_door', units : 'height', 
+					image : 'yellow_door', mask : undefined,
+					ori : 0, pos : g.placement_pos['door']['right'], size: 0.15,
+					color : new util.Color([1, 1, 1]), opacity : 1,
+					flipHoriz : false, flipVert : false,
+					texRes : 128, interpolate : true, depth : 0
+				});
+
+				console.log('next on step 2')
+
+				return Scheduler.Event.NEXT;
+			}
+		}
 		return Scheduler.Event.FLIP_REPEAT
 	}
 }
 
+/**
+ * Step 3
+ * Inside Building, Give option to go left or right
+ * @param {*} trial 
+ * @returns 
+ */
+ function trialStep3(trial) {
+	return function () {
+		if (g.step_3_background.status == PsychoJS.Status.NOT_STARTED) {
+			console.log('Step 3');
+			g.step_3_background.setAutoDraw(true);
+			g.prompt_text.setAutoDraw(true);
+
+			g.left_door.setAutoDraw(true);
+			g.right_door.setAutoDraw(true);
+
+			g.choice_1.setAutoDraw(true);
+			g.choice_2.setAutoDraw(true);
+		}
+
+		if (ready.status === PsychoJS.Status.STARTED) {
+			let theseKeys = ready.getKeys({ keyList: ['1', '2'], waitRelease: false });
+			if (theseKeys.length > 0) {
+				// Force Progression
+				if (theseKeys[0].name == '1') {  // at least one key was pressed
+				}
+
+				if (theseKeys[0].name == '2') {  // at least one key was pressed
+					
+				}
+
+				// prepare for next step
+				clearStims();
+				g.prompt_text.setText('Where do you want to go next?');
+				g.choice_1.pos = g.placement_pos['door_text']['left'];
+				g.choice_1.color = 'white';
+				g.choice_2.pos = g.placement_pos['door_text']['right'];
+				g.choice_2.color = 'white';
+
+				g.left_door = new visual.ImageStim({
+					win : psychoJS.window,
+					name : 'left_door', units : 'height', 
+					image : 'orange_door', mask : undefined,
+					ori : 0, pos : g.placement_pos['door']['left'], size: 0.15,
+					color : new util.Color([1, 1, 1]), opacity : 1,
+					flipHoriz : false, flipVert : false,
+					texRes : 128, interpolate : true, depth : 0
+				});
+
+				g.right_door = new visual.ImageStim({
+					win : psychoJS.window,
+					name : 'right_door', units : 'height', 
+					image : 'pink_door', mask : undefined,
+					ori : 0, pos : g.placement_pos['door']['right'], size: 0.15,
+					color : new util.Color([1, 1, 1]), opacity : 1,
+					flipHoriz : false, flipVert : false,
+					texRes : 128, interpolate : true, depth : 0
+				});
+
+				return Scheduler.Event.NEXT;
+			}
+		}
+		return Scheduler.Event.FLIP_REPEAT
+	}
+ }
+
+ /**
+ * Step 4
+ * Inside Building, Give option to go left or right
+ * @param {*} trial 
+ * @returns 
+ */
+function trialStep4(trial) {
+	return function () {
+		if (g.step_4_background.status == PsychoJS.Status.NOT_STARTED) {
+			console.log('Step 4');
+			g.step_4_background.setAutoDraw(true);
+			g.prompt_text.setAutoDraw(true);
+
+			g.left_door.setAutoDraw(true);
+			g.right_door.setAutoDraw(true);
+
+			g.choice_1.setAutoDraw(true);
+			g.choice_2.setAutoDraw(true);
+		}
+
+		if (ready.status === PsychoJS.Status.STARTED) {
+			let theseKeys = ready.getKeys({ keyList: ['1', '2'], waitRelease: false });
+			if (theseKeys.length > 0) {
+				// Force Progression
+				if (theseKeys[0].name == '1') {  // at least one key was pressed
+				}
+
+				if (theseKeys[0].name == '2') {  // at least one key was pressed
+					
+				}
+
+				// prepare for next step
+				clearStims();
+				g.prompt_text.setText('Where do you want to go next?');
+				g.choice_1.pos = g.placement_pos['door_text']['left'];
+				g.choice_1.color = 'white';
+				g.choice_2.pos = g.placement_pos['door_text']['right'];
+				g.choice_2.color = 'white';
+
+				// g.left_door = new visual.ImageStim({
+				// 	win : psychoJS.window,
+				// 	name : 'left_door', units : 'height', 
+				// 	image : 'orange_door', mask : undefined,
+				// 	ori : 0, pos : g.placement_pos['door']['left'], size: 0.15,
+				// 	color : new util.Color([1, 1, 1]), opacity : 1,
+				// 	flipHoriz : false, flipVert : false,
+				// 	texRes : 128, interpolate : true, depth : 0
+				// });
+
+				// g.right_door = new visual.ImageStim({
+				// 	win : psychoJS.window,
+				// 	name : 'right_door', units : 'height', 
+				// 	image : 'pink_door', mask : undefined,
+				// 	ori : 0, pos : g.placement_pos['door']['right'], size: 0.15,
+				// 	color : new util.Color([1, 1, 1]), opacity : 1,
+				// 	flipHoriz : false, flipVert : false,
+				// 	texRes : 128, interpolate : true, depth : 0
+				// });
+
+				return Scheduler.Event.NEXT;
+			}
+		}
+		return Scheduler.Event.FLIP_REPEAT
+	}
+}
 
 /**
  * Returns either positive or negative given random probability
@@ -1446,43 +1673,6 @@ function setOutcomeResponse(outcome, game_type, choice) {
 	}
 }
 
-var outcome;
-var outcome_response;
-function blockRoutineTrials(trials) {
-	return function () {
-		//------Loop for each frame of Routine 'trial'-------
-		let continueRoutine = true; // until we're told otherwise
-
-		if (t >= 0 && ready.status === PsychoJS.Status.NOT_STARTED) {
-			// keep track of start time/frame for later
-			ready.tStart = t;  // (not accounting for frame time here)
-			ready.frameNStart = frameN;  // exact frame index
-
-			// keyboard checking is just starting
-			psychoJS.window.callOnFlip(function () { ready.clock.reset(); });  // t=0 on next screen flip
-			psychoJS.window.callOnFlip(function () { ready.start(); }); // start on screen flip
-			psychoJS.window.callOnFlip(function () { ready.clearEvents(); });
-		}
-
-		if (ready.status === PsychoJS.Status.STARTED) {
-
-			let theseKeys = ready.getKeys({ keyList: ['1', '2', '3'], waitRelease: false });
-		}
-
-		// check for quit (typically the Esc key)
-		if (psychoJS.eventManager.getKeys({keyList:['escape']}).length > 0) {
-			return quitPsychoJS('The [Escape] key was pressed. Goodbye!', false);
-		}
-
-		// check if the Routine should terminate
-		if (continueRoutine) {
-			return Scheduler.Event.FLIP_REPEAT;
-		}
-		else {
-			return Scheduler.Event.NEXT;
-		}
-	};
-}
 
 /**
  * Show Stim Eithe the Sad or Angry Faces
@@ -1578,24 +1768,6 @@ function sendData() {
 }
 
 /**
- * Reset the choice counters
- * (Usuually done after each block)
- */
-function reset_choice_counter(){
-	g.choice_counter[1]['negative'] = 0;
-	g.choice_counter[1]['positive'] = 0;
-	g.choice_counter[1]['meaningless'] = 0;
-
-	g.choice_counter[2]['negative'] = 0;
-	g.choice_counter[2]['positive'] = 0;
-	g.choice_counter[2]['meaningless'] = 0;
-
-	g.choice_counter[3]['negative'] = 0;
-	g.choice_counter[3]['positive'] = 0;
-	g.choice_counter[3]['meaningless'] = 0;
-}
-
-/**
  * Trial Routine End
  * @param {*} trials 
  * @returns 
@@ -1614,9 +1786,9 @@ function blockRoutineEnd(trials) {
 		} else {
 			resp.stop()
 			resp.status = PsychoJS.Status.NOT_STARTED
-			sendData()
+			sendData();
 
-			reset_choice_counter() // resetCounter
+			clearStims();
 
 			// Clear Fixation
 			points_fixation_stim.setAutoDraw(false)
