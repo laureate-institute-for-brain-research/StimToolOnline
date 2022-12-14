@@ -44,6 +44,10 @@ var keyList = [LEFT_KEY, RIGHT_KEY]
 
 var highOfferVal = 80
 
+// global flags
+var set_fixation_flag = true
+var init_fixation_flag = true
+
 
 // init psychoJS:
 const psychoJS = new PsychoJS({
@@ -1094,6 +1098,7 @@ function practiceTrialsLoopBegin(thisScheduler) {
 	resp.stop()
 	resp.clearEvents()
 	resp.status = PsychoJS.Status.NOT_STARTED
+	init_fixation_flag = true
 	// Schedule all the trials in the trialList:
 	for (const thisTrial of trials) {
 		const snapshot = trials.getSnapshot();
@@ -1132,6 +1137,8 @@ function trialsLoopBegin(thisScheduler) {
 
 	psychoJS.experiment.addLoop(trials); // add the loop to the experiment
 	currentLoop = trials;  // we're now the current loop
+
+	init_fixation_flag = true
 
 	// Schedule all the trials in the trialList:
 	for (const thisTrial of trials) {
@@ -1697,6 +1704,7 @@ function trialRoutineRespond(trials) {
 			right_rect.setAutoDraw(false)
 			right_rect.status = PsychoJS.Status.NOT_STARTED
 
+			set_fixation_flag = true
 			endClock.reset()
 			return Scheduler.Event.NEXT;
 		}
@@ -1710,6 +1718,11 @@ function initialFixation(trials) {
 		//------Loop for each frame of Routine 'trial'-------
 		let continueRoutine = true; // until we're told otherwise	
 		if (trial_number != 1) continueRoutine = false // if not the firt trial, skip this routine
+
+		if (!init_fixation_flag)
+		{
+			return Scheduler.Event.NEXT;
+		}
 	
 		// get current time
 		t_end = endClock.getTime();
@@ -1743,6 +1756,8 @@ function initialFixation(trials) {
 		else {
 			points_fixation_stim.setAutoDraw(false)
 			points_fixation_stim.status = PsychoJS.Status.NOT_STARTED
+
+			init_fixation_flag = false
 			
 			endClock.reset()
 			return Scheduler.Event.NEXT;
@@ -1781,39 +1796,72 @@ function sendData() {
  * @param {*} trials 
  * @returns 
  */
-function trialRoutineEnd(trials) {
+function trialRoutineEnd(trials) { //TODO: Change this so that there is a jittered fixation (with event) after the potential too slow feedback.
 	return function () {
 		//------Ending Routine 'trial'-------
 		t = endClock.getTime()
 
-		if (points_fixation_stim.status == PsychoJS.Status.NOT_STARTED) {
+		if (points_fixation_stim.status == PsychoJS.Status.NOT_STARTED)
+		{
 
 			if (too_slow) {
 				points_fixation_stim.setText('too slow')
 				mark_event(trials_data, globalClock, 'NA', trial_type, event_types['FEEDBACK'],
-				'NA', 'NA' , 'too slow')
+					'NA', 'NA', 'too slow')
 			} else {
 				points_fixation_stim.setText('+')
-				mark_event(trials_data, globalClock, 'NA', trial_type, event_types['FEEDBACK'],
-				'NA', 'NA' , '+')
+				mark_event(trials_data, globalClock, 'NA', trial_type, event_types['FIXATION_ONSET'],
+					'NA', 'NA' , 'NA')
 			}
 			points_fixation_stim.setAutoDraw(true)
-			console.log('End Fixation')
+			//console.log('End Fixation')
+		}
+		else
+		{
+			if (too_slow && set_fixation_flag) {
+				if (t >= 2.0)
+				{
+					points_fixation_stim.setText('+')
+					set_fixation_flag = false
+					mark_event(trials_data, globalClock, 'NA', trial_type, event_types['FIXATION_ONSET'],
+						'NA', 'NA' , 'NA')
+				}
+			}
 		}
 		
-		// hold the fixation for 2 second
-		if (t <= ITI) {
-			return Scheduler.Event.FLIP_REPEAT;
-		} else {
-			resp.stop()
-			resp.status = PsychoJS.Status.NOT_STARTED
-			sendData()
+		if (too_slow)
+		{
+			// hold the fixation for 2 second + jitter
+			if (t <= ITI + 2.0) {
+				return Scheduler.Event.FLIP_REPEAT;
+			} else {
+				resp.stop()
+				resp.status = PsychoJS.Status.NOT_STARTED
+				sendData()
 
-			// Clear Fixation
-			points_fixation_stim.setAutoDraw(false)
-			points_fixation_stim.status = PsychoJS.Status.NOT_STARTED
+				// Clear Fixation
+				points_fixation_stim.setAutoDraw(false)
+				points_fixation_stim.status = PsychoJS.Status.NOT_STARTED
 
-			return Scheduler.Event.NEXT;
+				return Scheduler.Event.NEXT;
+			}
+		}
+		else
+		{
+			// hold the fixation for jitter time
+			if (t <= ITI) {
+				return Scheduler.Event.FLIP_REPEAT;
+			} else {
+				resp.stop()
+				resp.status = PsychoJS.Status.NOT_STARTED
+				sendData()
+
+				// Clear Fixation
+				points_fixation_stim.setAutoDraw(false)
+				points_fixation_stim.status = PsychoJS.Status.NOT_STARTED
+
+				return Scheduler.Event.NEXT;
+			}
 		}
 	};
 }
