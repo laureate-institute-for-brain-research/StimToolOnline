@@ -1,0 +1,2287 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <style type="text/css">
+        @font-face {
+            font-family: gotham;
+            src: url(/gotham-book-regular.otf);
+        }
+
+        * {
+            font-family: Helvetica Neue;
+        }
+
+        a:link,
+        a:visited {
+            color: #5e3f99;
+        }
+
+        input[type=text]:focus {
+            border-color: #f68826;
+            box-shadow: 0 0 5px #f68826 !important;
+        }
+
+        input[type=email]:focus {
+            border-color: #f68826;
+            box-shadow: 0 0 5px #f68826 !important;
+        }
+
+        .sv-root-modern .sv-container-modern {
+            color: white !important;
+            fill: white !important;
+        }
+        .sv-radio__svg {
+            border-color: white !important;
+        }
+
+        .sv-root-modern .sv-radio--checked .sv-radio__svg  {
+            fill: white !important;
+        }
+
+        .sv-root-modern input.sv-text, textarea.sv-comment, select.sv-dropdown{
+            color: white !important;
+        }
+        
+    </style>
+    <title>Well-Being Assessement</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+        crossorigin="anonymous"></script>
+
+    <!-- Latest compiled and minified CSS -->
+    <!-- Using Bootsawtch theme: https://bootswatch.com/cyborg/ -->
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js" integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous"></script>
+
+    <link href="https://unpkg.com/survey-knockout@1.8.41/modern.css" type="text/css" rel="stylesheet"/>
+    <script src="https://unpkg.com/jquery"></script>
+    <script src="https://unpkg.com/survey-jquery@1.8.41/survey.jquery.min.js"></script>
+
+    <script type="text/javascript" src='/js/StimToolLib.js'></script>
+
+</head>
+
+<body>
+
+    <div class="container" style="max-width: 800px;">
+        <div class="py-5 text-center">
+            <img class="d-block mx-auto mb-4" src="/images/logo_reversed.jpg" alt="" width="180" height="50">
+            <!-- <h4>Cultural Survey</h4> -->
+          </div>
+    </div>
+
+    <div class="container" style="max-width: 800px;">
+        <div class="row" >
+            <div id="surveyElement" style="margin-bottom:40px"></div>
+            
+            <div id="surveyResult"></div>
+        </div>
+    </div>
+
+    <div class="jumbotron container" style="margin-bottom:0;max-width: 400px;">
+        <table class="table table-hover">
+            <tbody>
+                <tr>
+                  <th scope="row">ID:</th>
+                  <td><a id="participant"></a></td>
+                </tr>
+                <tr>
+                    <th scope="row">Session:</th>
+                    <td><a id="session"></a></td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Study:</th>
+                    <td><a id="study"></a></td>
+                  </tr>
+              </tbody>
+        </table>
+        <p style="text-align: center;">&copy; 2021 <a href="http://www.laureateinstitute.org">laureateinstitute.org</a>. All rights reserved.</p>
+    </div>
+
+    <script type="text/javascript">
+
+        Survey
+            .StylesManager
+            .applyTheme("modern");
+        // Survey.Survey.cssType = "bootstrap";
+        // Survey.defaultBootstrapCss.navigationButton = "btn";
+        var json = {
+                        "title": "Well-Being Assessment (WBA)",
+                        "logoPosition": "right",
+                        "pages": [
+                        {
+                        "name": "page1",
+                        "elements": [
+                            {
+                            "type": "radiogroup",
+                            "name": "question1",
+                            "title": "Overall, how satisfied are you with life as a whole these days?",
+                            "choices": [
+                            {
+                            "value": "Item 1",
+                            "text": "0 (Not satisfied at all)"
+                            },
+                            {
+                            "value": "Item 2",
+                            "text": "1"
+                            },
+                            {
+                            "value": "Item 3",
+                            "text": "2"
+                            },
+                            {
+                            "value": "Item 4",
+                            "text": "3"
+                            },
+                            {
+                            "value": "Item 5",
+                            "text": "4"
+                            },
+                            {
+                            "value": "Item 6",
+                            "text": "5"
+                            },
+                            {
+                            "value": "Item 7",
+                            "text": "6"
+                            },
+                            {
+                            "value": "Item 8",
+                            "text": "7"
+                            },
+                            {
+                            "value": "Item 9",
+                            "text": "8"
+                            },
+                            {
+                            "value": "Item 10",
+                            "text": "9"
+                            },
+                            {
+                            "value": "Item 11",
+                            "text": "10 (Completely satisfied)"
+                            }
+                            ]
+                            },
+                            {
+                            "type": "radiogroup",
+                            "name": "question3",
+                            "title": "On average, how happy have you felt during the last 7 days?",
+                            "choices": [
+                            {
+                            "value": "Item 1",
+                            "text": "0 (Extremely unhappy)"
+                            },
+                            {
+                            "value": "Item 2",
+                            "text": "1"
+                            },
+                            {
+                            "value": "Item 3",
+                            "text": "2"
+                            },
+                            {
+                            "value": "Item 4",
+                            "text": "3"
+                            },
+                            {
+                            "value": "Item 5",
+                            "text": "4"
+                            },
+                            {
+                            "value": "Item 6",
+                            "text": "5"
+                            },
+                            {
+                            "value": "Item 7",
+                            "text": "6"
+                            },
+                            {
+                            "value": "Item 8",
+                            "text": "7"
+                            },
+                            {
+                            "value": "Item 9",
+                            "text": "8"
+                            },
+                            {
+                            "value": "Item 10",
+                            "text": "9"
+                            },
+                            {
+                            "value": "Item 11",
+                            "text": "10 (Extremely happy)"
+                            }
+                            ]
+                            },
+                            {
+                            "type": "radiogroup",
+                            "name": "question4",
+                            "title": "I expect more good things in my life than bad.",
+                            "choices": [
+                            {
+                            "value": "Item 1",
+                            "text": "0 (Strongly disagree)"
+                            },
+                            {
+                            "value": "Item 2",
+                            "text": "1"
+                            },
+                            {
+                            "value": "Item 3",
+                            "text": "2"
+                            },
+                            {
+                            "value": "Item 4",
+                            "text": "3"
+                            },
+                            {
+                            "value": "Item 5",
+                            "text": "4"
+                            },
+                            {
+                            "value": "Item 6",
+                            "text": "5"
+                            },
+                            {
+                            "value": "Item 7",
+                            "text": "6"
+                            },
+                            {
+                            "value": "Item 8",
+                            "text": "7"
+                            },
+                            {
+                            "value": "Item 9",
+                            "text": "8"
+                            },
+                            {
+                            "value": "Item 10",
+                            "text": "9"
+                            },
+                            {
+                            "value": "Item 11",
+                            "text": "10 (Strongly agree)"
+                            }
+                            ]
+                            },
+                            {
+                            "type": "radiogroup",
+                            "name": "question5",
+                            "title": "How would you rate your overall mental health?",
+                            "choices": [
+                            {
+                            "value": "Item 1",
+                            "text": "0 (Poor)"
+                            },
+                            {
+                            "value": "Item 2",
+                            "text": "1"
+                            },
+                            {
+                            "value": "Item 3",
+                            "text": "2"
+                            },
+                            {
+                            "value": "Item 4",
+                            "text": "3"
+                            },
+                            {
+                            "value": "Item 5",
+                            "text": "4"
+                            },
+                            {
+                            "value": "Item 6",
+                            "text": "5"
+                            },
+                            {
+                            "value": "Item 7",
+                            "text": "6"
+                            },
+                            {
+                            "value": "Item 8",
+                            "text": "7"
+                            },
+                            {
+                            "value": "Item 9",
+                            "text": "8"
+                            },
+                            {
+                            "value": "Item 10",
+                            "text": "9"
+                            },
+                            {
+                            "value": "Item 11",
+                            "text": "10 (Excellent)"
+                            }
+                            ]
+                            },
+                            {
+                            "type": "radiogroup",
+                            "name": "question6",
+                            "title": "Are you depressed?",
+                            "choices": [
+                            {
+                            "value": "Item 1",
+                            "text": "0 (Not at all depressed)"
+                            },
+                            {
+                            "value": "Item 2",
+                            "text": "1"
+                            },
+                            {
+                            "value": "Item 3",
+                            "text": "2"
+                            },
+                            {
+                            "value": "Item 4",
+                            "text": "3"
+                            },
+                            {
+                            "value": "Item 5",
+                            "text": "4"
+                            },
+                            {
+                            "value": "Item 6",
+                            "text": "5"
+                            },
+                            {
+                            "value": "Item 7",
+                            "text": "6"
+                            },
+                            {
+                            "value": "Item 8",
+                            "text": "7"
+                            },
+                            {
+                            "value": "Item 9",
+                            "text": "8"
+                            },
+                            {
+                            "value": "Item 10",
+                            "text": "9"
+                            },
+                            {
+                            "value": "Item 11",
+                            "text": "10 (Very depressed)"
+                            }
+                            ]
+                            },
+                            {
+                            "type": "radiogroup",
+                            "name": "question7",
+                            "title": "Do you have anxiety that keeps you from doing the things in life that you need to do?",
+                            "choices": [
+                            {
+                            "value": "Item 1",
+                            "text": "0 (Never)"
+                            },
+                            {
+                            "value": "Item 2",
+                            "text": "1"
+                            },
+                            {
+                            "value": "Item 3",
+                            "text": "2"
+                            },
+                            {
+                            "value": "Item 4",
+                            "text": "3"
+                            },
+                            {
+                            "value": "Item 5",
+                            "text": "4"
+                            },
+                            {
+                            "value": "Item 6",
+                            "text": "5"
+                            },
+                            {
+                            "value": "Item 7",
+                            "text": "6"
+                            },
+                            {
+                            "value": "Item 8",
+                            "text": "7"
+                            },
+                            {
+                            "value": "Item 9",
+                            "text": "8"
+                            },
+                            {
+                            "value": "Item 10",
+                            "text": "9"
+                            },
+                            {
+                            "value": "Item 11",
+                            "text": "10 (Always)"
+                            }
+                            ]
+                            },
+                            {
+                            "type": "radiogroup",
+                            "name": "question8",
+                            "title": "In stressful situations, I manage my emotions so that I am still in control of myself.",
+                            "choices": [
+                            {
+                            "value": "Item 1",
+                            "text": "0 (Strongly disagree)"
+                            },
+                            {
+                            "value": "Item 2",
+                            "text": "1"
+                            },
+                            {
+                            "value": "Item 3",
+                            "text": "2"
+                            },
+                            {
+                            "value": "Item 4",
+                            "text": "3"
+                            },
+                            {
+                            "value": "Item 5",
+                            "text": "4"
+                            },
+                            {
+                            "value": "Item 6",
+                            "text": "5"
+                            },
+                            {
+                            "value": "Item 7",
+                            "text": "6"
+                            },
+                            {
+                            "value": "Item 8",
+                            "text": "7"
+                            },
+                            {
+                            "value": "Item 9",
+                            "text": "8"
+                            },
+                            {
+                            "value": "Item 10",
+                            "text": "9"
+                            },
+                            {
+                            "value": "Item 11",
+                            "text": "10 (Strongly agree)"
+                            }
+                            ]
+                            },
+                            {
+                            "type": "radiogroup",
+                            "name": "question9",
+                            "title": "In general, how would you rate your physical health?",
+                            "choices": [
+                            {
+                            "value": "Item 1",
+                            "text": "0 (Poor)"
+                            },
+                            {
+                            "value": "Item 2",
+                            "text": "1"
+                            },
+                            {
+                            "value": "Item 3",
+                            "text": "2"
+                            },
+                            {
+                            "value": "Item 4",
+                            "text": "3"
+                            },
+                            {
+                            "value": "Item 5",
+                            "text": "4"
+                            },
+                            {
+                            "value": "Item 6",
+                            "text": "5"
+                            },
+                            {
+                            "value": "Item 7",
+                            "text": "6"
+                            },
+                            {
+                            "value": "Item 8",
+                            "text": "7"
+                            },
+                            {
+                            "value": "Item 9",
+                            "text": "8"
+                            },
+                            {
+                            "value": "Item 10",
+                            "text": "9"
+                            },
+                            {
+                            "value": "Item 11",
+                            "text": "10 (Excellent)"
+                            }
+                            ]
+                            },
+                            {
+                            "type": "radiogroup",
+                            "name": "question10",
+                            "title": "I have no major illnesses or injuries.",
+                            "choices": [
+                            {
+                            "value": "Item 1",
+                            "text": "0 (Strongly disagree)"
+                            },
+                            {
+                            "value": "Item 2",
+                            "text": "1"
+                            },
+                            {
+                            "value": "Item 3",
+                            "text": "2"
+                            },
+                            {
+                            "value": "Item 4",
+                            "text": "3"
+                            },
+                            {
+                            "value": "Item 5",
+                            "text": "4"
+                            },
+                            {
+                            "value": "Item 6",
+                            "text": "5"
+                            },
+                            {
+                            "value": "Item 7",
+                            "text": "6"
+                            },
+                            {
+                            "value": "Item 8",
+                            "text": "7"
+                            },
+                            {
+                            "value": "Item 9",
+                            "text": "8"
+                            },
+                            {
+                            "value": "Item 10",
+                            "text": "9"
+                            },
+                            {
+                            "value": "Item 11",
+                            "text": "10 (Strongly agree)"
+                            }
+                            ]
+                            },
+                            {
+                            "type": "radiogroup",
+                            "name": "question2",
+                            "title": "I do not routinely get sick.",
+                            "choices": [
+                            {
+                            "value": "Item 1",
+                            "text": "0 (Strongly disagree)"
+                            },
+                            {
+                            "value": "Item 2",
+                            "text": "1"
+                            },
+                            {
+                            "value": "Item 3",
+                            "text": "2"
+                            },
+                            {
+                            "value": "Item 4",
+                            "text": "3"
+                            },
+                            {
+                            "value": "Item 5",
+                            "text": "4"
+                            },
+                            {
+                            "value": "Item 6",
+                            "text": "5"
+                            },
+                            {
+                            "value": "Item 7",
+                            "text": "6"
+                            },
+                            {
+                            "value": "Item 8",
+                            "text": "7"
+                            },
+                            {
+                            "value": "Item 9",
+                            "text": "8"
+                            },
+                            {
+                            "value": "Item 10",
+                            "text": "9"
+                            },
+                            {
+                            "value": "Item 11",
+                            "text": "10 (Strongly agree)"
+                            }
+                            ]
+                            },
+                            {
+                            "type": "radiogroup",
+                            "name": "question11",
+                            "title": "My health does not prevent me from doing what I would like.",
+                            "choices": [
+                            {
+                            "value": "Item 1",
+                            "text": "0 (Strongly disagree)"
+                            },
+                            {
+                            "value": "Item 2",
+                            "text": "1"
+                            },
+                            {
+                            "value": "Item 3",
+                            "text": "2"
+                            },
+                            {
+                            "value": "Item 4",
+                            "text": "3"
+                            },
+                            {
+                            "value": "Item 5",
+                            "text": "4"
+                            },
+                            {
+                            "value": "Item 6",
+                            "text": "5"
+                            },
+                            {
+                            "value": "Item 7",
+                            "text": "6"
+                            },
+                            {
+                            "value": "Item 8",
+                            "text": "7"
+                            },
+                            {
+                            "value": "Item 9",
+                            "text": "8"
+                            },
+                            {
+                            "value": "Item 10",
+                            "text": "9"
+                            },
+                            {
+                            "value": "Item 11",
+                            "text": "10 (Strongly agree)"
+                            }
+                            ]
+                            },
+                            {
+                            "type": "radiogroup",
+                            "name": "question12",
+                            "title": "My pain makes it hard for me to do my usual activities.",
+                            "choices": [
+                            {
+                            "value": "Item 1",
+                            "text": "0 (Strongly disagree)"
+                            },
+                            {
+                            "value": "Item 2",
+                            "text": "1"
+                            },
+                            {
+                            "value": "Item 3",
+                            "text": "2"
+                            },
+                            {
+                            "value": "Item 4",
+                            "text": "3"
+                            },
+                            {
+                            "value": "Item 5",
+                            "text": "4"
+                            },
+                            {
+                            "value": "Item 6",
+                            "text": "5"
+                            },
+                            {
+                            "value": "Item 7",
+                            "text": "6"
+                            },
+                            {
+                            "value": "Item 8",
+                            "text": "7"
+                            },
+                            {
+                            "value": "Item 9",
+                            "text": "8"
+                            },
+                            {
+                            "value": "Item 10",
+                            "text": "9"
+                            },
+                            {
+                            "value": "Item 11",
+                            "text": "10 (Strongly agree)"
+                            }
+                            ]
+                            },
+                            {
+                            "type": "radiogroup",
+                            "name": "question13",
+                            "title": "Based on my past health, I expect to be healthy long into the future.",
+                            "choices": [
+                            {
+                            "value": "Item 1",
+                            "text": "0 (Strongly disagree)"
+                            },
+                            {
+                            "value": "Item 2",
+                            "text": "1"
+                            },
+                            {
+                            "value": "Item 3",
+                            "text": "2"
+                            },
+                            {
+                            "value": "Item 4",
+                            "text": "3"
+                            },
+                            {
+                            "value": "Item 5",
+                            "text": "4"
+                            },
+                            {
+                            "value": "Item 6",
+                            "text": "5"
+                            },
+                            {
+                            "value": "Item 7",
+                            "text": "6"
+                            },
+                            {
+                            "value": "Item 8",
+                            "text": "7"
+                            },
+                            {
+                            "value": "Item 9",
+                            "text": "8"
+                            },
+                            {
+                            "value": "Item 10",
+                            "text": "9"
+                            },
+                            {
+                            "value": "Item 11",
+                            "text": "10 (Strongly agree)"
+                            }
+                            ]
+                            },
+                            {
+                            "type": "radiogroup",
+                            "name": "question14",
+                            "title": "I regularly do things to maintain and improve my health, in diet, exercise, and health care.",
+                            "choices": [
+                            {
+                            "value": "Item 1",
+                            "text": "0 (Strongly disagree)"
+                            },
+                            {
+                            "value": "Item 2",
+                            "text": "1"
+                            },
+                            {
+                            "value": "Item 3",
+                            "text": "2"
+                            },
+                            {
+                            "value": "Item 4",
+                            "text": "3"
+                            },
+                            {
+                            "value": "Item 5",
+                            "text": "4"
+                            },
+                            {
+                            "value": "Item 6",
+                            "text": "5"
+                            },
+                            {
+                            "value": "Item 7",
+                            "text": "6"
+                            },
+                            {
+                            "value": "Item 8",
+                            "text": "7"
+                            },
+                            {
+                            "value": "Item 9",
+                            "text": "8"
+                            },
+                            {
+                            "value": "Item 10",
+                            "text": "9"
+                            },
+                            {
+                            "value": "Item 11",
+                            "text": "10 (Strongly agree)"
+                            }
+                            ]
+                            },
+                            {
+                            "type": "radiogroup",
+                            "name": "question15",
+                            "title": "I know what gives meaning to my life.",
+                            "choices": [
+                            {
+                            "value": "Item 1",
+                            "text": "0 (Strongly disagree)"
+                            },
+                            {
+                            "value": "Item 2",
+                            "text": "1"
+                            },
+                            {
+                            "value": "Item 3",
+                            "text": "2"
+                            },
+                            {
+                            "value": "Item 4",
+                            "text": "3"
+                            },
+                            {
+                            "value": "Item 5",
+                            "text": "4"
+                            },
+                            {
+                            "value": "Item 6",
+                            "text": "5"
+                            },
+                            {
+                            "value": "Item 7",
+                            "text": "6"
+                            },
+                            {
+                            "value": "Item 8",
+                            "text": "7"
+                            },
+                            {
+                            "value": "Item 9",
+                            "text": "8"
+                            },
+                            {
+                            "value": "Item 10",
+                            "text": "9"
+                            },
+                            {
+                            "value": "Item 11",
+                            "text": "10 (Strongly agree)"
+                            }
+                            ]
+                            },
+                            {
+                            "type": "radiogroup",
+                            "name": "question16",
+                            "title": "I have values and beliefs that help me understand who I am.",
+                            "choices": [
+                            {
+                            "value": "Item 1",
+                            "text": "0 (Strongly disagree)"
+                            },
+                            {
+                            "value": "Item 2",
+                            "text": "1"
+                            },
+                            {
+                            "value": "Item 3",
+                            "text": "2"
+                            },
+                            {
+                            "value": "Item 4",
+                            "text": "3"
+                            },
+                            {
+                            "value": "Item 5",
+                            "text": "4"
+                            },
+                            {
+                            "value": "Item 6",
+                            "text": "5"
+                            },
+                            {
+                            "value": "Item 7",
+                            "text": "6"
+                            },
+                            {
+                            "value": "Item 8",
+                            "text": "7"
+                            },
+                            {
+                            "value": "Item 9",
+                            "text": "8"
+                            },
+                            {
+                            "value": "Item 10",
+                            "text": "9"
+                            },
+                            {
+                            "value": "Item 11",
+                            "text": "10 (Strongly agree)"
+                            }
+                            ]
+                            },
+                            {
+                            "type": "radiogroup",
+                            "name": "question17",
+                            "title": "My life has a clear sense of purpose.",
+                            "choices": [
+                            {
+                            "value": "Item 1",
+                            "text": "0 (Strongly disagree)"
+                            },
+                            {
+                            "value": "Item 2",
+                            "text": "1"
+                            },
+                            {
+                            "value": "Item 3",
+                            "text": "2"
+                            },
+                            {
+                            "value": "Item 4",
+                            "text": "3"
+                            },
+                            {
+                            "value": "Item 5",
+                            "text": "4"
+                            },
+                            {
+                            "value": "Item 6",
+                            "text": "5"
+                            },
+                            {
+                            "value": "Item 7",
+                            "text": "6"
+                            },
+                            {
+                            "value": "Item 8",
+                            "text": "7"
+                            },
+                            {
+                            "value": "Item 9",
+                            "text": "8"
+                            },
+                            {
+                            "value": "Item 10",
+                            "text": "9"
+                            },
+                            {
+                            "value": "Item 11",
+                            "text": "10 (Strongly agree)"
+                            }
+                            ]
+                            },
+                            {
+                            "type": "radiogroup",
+                            "name": "question18",
+                            "title": "I understand my purpose in life.",
+                            "choices": [
+                            {
+                            "value": "Item 1",
+                            "text": "0 (Strongly disagree)"
+                            },
+                            {
+                            "value": "Item 2",
+                            "text": "1"
+                            },
+                            {
+                            "value": "Item 3",
+                            "text": "2"
+                            },
+                            {
+                            "value": "Item 4",
+                            "text": "3"
+                            },
+                            {
+                            "value": "Item 5",
+                            "text": "4"
+                            },
+                            {
+                            "value": "Item 6",
+                            "text": "5"
+                            },
+                            {
+                            "value": "Item 7",
+                            "text": "6"
+                            },
+                            {
+                            "value": "Item 8",
+                            "text": "7"
+                            },
+                            {
+                            "value": "Item 9",
+                            "text": "8"
+                            },
+                            {
+                            "value": "Item 10",
+                            "text": "9"
+                            },
+                            {
+                            "value": "Item 11",
+                            "text": "10 (Strongly agree)"
+                            }
+                            ]
+                            },
+                            {
+                            "type": "radiogroup",
+                            "name": "question19",
+                            "title": "Overall, to what extent do you feel the things you do in your life are worthwhile?",
+                            "choices": [
+                            {
+                            "value": "Item 1",
+                            "text": "0 (Not at all worthwhile)"
+                            },
+                            {
+                            "value": "Item 2",
+                            "text": "1"
+                            },
+                            {
+                            "value": "Item 3",
+                            "text": "2"
+                            },
+                            {
+                            "value": "Item 4",
+                            "text": "3"
+                            },
+                            {
+                            "value": "Item 5",
+                            "text": "4"
+                            },
+                            {
+                            "value": "Item 6",
+                            "text": "5"
+                            },
+                            {
+                            "value": "Item 7",
+                            "text": "6"
+                            },
+                            {
+                            "value": "Item 8",
+                            "text": "7"
+                            },
+                            {
+                            "value": "Item 9",
+                            "text": "8"
+                            },
+                            {
+                            "value": "Item 10",
+                            "text": "9"
+                            },
+                            {
+                            "value": "Item 11",
+                            "text": "10 (Completely worthwhile)"
+                            }
+                            ]
+                            },
+                            {
+                            "type": "radiogroup",
+                            "name": "question20",
+                            "title": "I am pursuing what is most important to me in my life.",
+                            "choices": [
+                            {
+                            "value": "Item 1",
+                            "text": "0 (Strongly disagree)"
+                            },
+                            {
+                            "value": "Item 2",
+                            "text": "1"
+                            },
+                            {
+                            "value": "Item 3",
+                            "text": "2"
+                            },
+                            {
+                            "value": "Item 4",
+                            "text": "3"
+                            },
+                            {
+                            "value": "Item 5",
+                            "text": "4"
+                            },
+                            {
+                            "value": "Item 6",
+                            "text": "5"
+                            },
+                            {
+                            "value": "Item 7",
+                            "text": "6"
+                            },
+                            {
+                            "value": "Item 8",
+                            "text": "7"
+                            },
+                            {
+                            "value": "Item 9",
+                            "text": "8"
+                            },
+                            {
+                            "value": "Item 10",
+                            "text": "9"
+                            },
+                            {
+                            "value": "Item 11",
+                            "text": "10 (Strongly agree)"
+                            }
+                            ]
+                            },
+                            {
+                            "type": "radiogroup",
+                            "name": "question21",
+                            "title": "I always act to promote good in all circumstances, even in difficult and challenging situations.",
+                            "choices": [
+                            {
+                            "value": "Item 1",
+                            "text": "0 (Not true of me)"
+                            },
+                            {
+                            "value": "Item 2",
+                            "text": "1"
+                            },
+                            {
+                            "value": "Item 3",
+                            "text": "2"
+                            },
+                            {
+                            "value": "Item 4",
+                            "text": "3"
+                            },
+                            {
+                            "value": "Item 5",
+                            "text": "4"
+                            },
+                            {
+                            "value": "Item 6",
+                            "text": "5"
+                            },
+                            {
+                            "value": "Item 7",
+                            "text": "6"
+                            },
+                            {
+                            "value": "Item 8",
+                            "text": "7"
+                            },
+                            {
+                            "value": "Item 9",
+                            "text": "8"
+                            },
+                            {
+                            "value": "Item 10",
+                            "text": "9"
+                            },
+                            {
+                            "value": "Item 11",
+                            "text": "10 (Completely true of me)"
+                            }
+                            ]
+                            },
+                            {
+                            "type": "radiogroup",
+                            "name": "question22",
+                            "title": "I always know the right thing to do.",
+                            "choices": [
+                            {
+                            "value": "Item 1",
+                            "text": "0 (Not true of me)"
+                            },
+                            {
+                            "value": "Item 2",
+                            "text": "1"
+                            },
+                            {
+                            "value": "Item 3",
+                            "text": "2"
+                            },
+                            {
+                            "value": "Item 4",
+                            "text": "3"
+                            },
+                            {
+                            "value": "Item 5",
+                            "text": "4"
+                            },
+                            {
+                            "value": "Item 6",
+                            "text": "5"
+                            },
+                            {
+                            "value": "Item 7",
+                            "text": "6"
+                            },
+                            {
+                            "value": "Item 8",
+                            "text": "7"
+                            },
+                            {
+                            "value": "Item 9",
+                            "text": "8"
+                            },
+                            {
+                            "value": "Item 10",
+                            "text": "9"
+                            },
+                            {
+                            "value": "Item 11",
+                            "text": "10 (Completely true of me)"
+                            }
+                            ]
+                            },
+                            {
+                            "type": "radiogroup",
+                            "name": "question23",
+                            "title": "I always treat everyone with kindness, fairness, and respect.",
+                            "choices": [
+                            {
+                            "value": "Item 1",
+                            "text": "0 (Not true of me)"
+                            },
+                            {
+                            "value": "Item 2",
+                            "text": "1"
+                            },
+                            {
+                            "value": "Item 3",
+                            "text": "2"
+                            },
+                            {
+                            "value": "Item 4",
+                            "text": "3"
+                            },
+                            {
+                            "value": "Item 5",
+                            "text": "4"
+                            },
+                            {
+                            "value": "Item 6",
+                            "text": "5"
+                            },
+                            {
+                            "value": "Item 7",
+                            "text": "6"
+                            },
+                            {
+                            "value": "Item 8",
+                            "text": "7"
+                            },
+                            {
+                            "value": "Item 9",
+                            "text": "8"
+                            },
+                            {
+                            "value": "Item 10",
+                            "text": "9"
+                            },
+                            {
+                            "value": "Item 11",
+                            "text": "10 (Completely true of me)"
+                            }
+                            ]
+                            },
+                            {
+                            "type": "radiogroup",
+                            "name": "question24",
+                            "title": "I am always able to give up some happiness now for greater happiness later.",
+                            "choices": [
+                            {
+                            "value": "Item 1",
+                            "text": "0 (Not true of me)"
+                            },
+                            {
+                            "value": "Item 2",
+                            "text": "1"
+                            },
+                            {
+                            "value": "Item 3",
+                            "text": "2"
+                            },
+                            {
+                            "value": "Item 4",
+                            "text": "3"
+                            },
+                            {
+                            "value": "Item 5",
+                            "text": "4"
+                            },
+                            {
+                            "value": "Item 6",
+                            "text": "5"
+                            },
+                            {
+                            "value": "Item 7",
+                            "text": "6"
+                            },
+                            {
+                            "value": "Item 8",
+                            "text": "7"
+                            },
+                            {
+                            "value": "Item 9",
+                            "text": "8"
+                            },
+                            {
+                            "value": "Item 10",
+                            "text": "9"
+                            },
+                            {
+                            "value": "Item 11",
+                            "text": "10 (Completely true of me)"
+                            }
+                            ]
+                            },
+                            {
+                            "type": "radiogroup",
+                            "name": "question25",
+                            "title": "I am willing to face difficulties in order to do what is right.* must provide value",
+                            "choices": [
+                            {
+                            "value": "Item 1",
+                            "text": "0 (Not true of me)"
+                            },
+                            {
+                            "value": "Item 2",
+                            "text": "1"
+                            },
+                            {
+                            "value": "Item 3",
+                            "text": "2"
+                            },
+                            {
+                            "value": "Item 4",
+                            "text": "3"
+                            },
+                            {
+                            "value": "Item 5",
+                            "text": "4"
+                            },
+                            {
+                            "value": "Item 6",
+                            "text": "5"
+                            },
+                            {
+                            "value": "Item 7",
+                            "text": "6"
+                            },
+                            {
+                            "value": "Item 8",
+                            "text": "7"
+                            },
+                            {
+                            "value": "Item 9",
+                            "text": "8"
+                            },
+                            {
+                            "value": "Item 10",
+                            "text": "9"
+                            },
+                            {
+                            "value": "Item 11",
+                            "text": "10 (Completely true of me)"
+                            }
+                            ]
+                            },
+                            {
+                            "type": "radiogroup",
+                            "name": "question26",
+                            "title": "I give up personal pleasures whenever it is possible to do some good instead.",
+                            "choices": [
+                            {
+                            "value": "Item 1",
+                            "text": "0 (Not true of me)"
+                            },
+                            {
+                            "value": "Item 2",
+                            "text": "1"
+                            },
+                            {
+                            "value": "Item 3",
+                            "text": "2"
+                            },
+                            {
+                            "value": "Item 4",
+                            "text": "3"
+                            },
+                            {
+                            "value": "Item 5",
+                            "text": "4"
+                            },
+                            {
+                            "value": "Item 6",
+                            "text": "5"
+                            },
+                            {
+                            "value": "Item 7",
+                            "text": "6"
+                            },
+                            {
+                            "value": "Item 8",
+                            "text": "7"
+                            },
+                            {
+                            "value": "Item 9",
+                            "text": "8"
+                            },
+                            {
+                            "value": "Item 10",
+                            "text": "9"
+                            },
+                            {
+                            "value": "Item 11",
+                            "text": "10 (Completely true of me)"
+                            }
+                            ]
+                            },
+                            {
+                            "type": "radiogroup",
+                            "name": "question27",
+                            "title": "I get to use my strengths to help others.",
+                            "choices": [
+                            {
+                            "value": "Item 1",
+                            "text": "0 (Not true of me)"
+                            },
+                            {
+                            "value": "Item 2",
+                            "text": "1"
+                            },
+                            {
+                            "value": "Item 3",
+                            "text": "2"
+                            },
+                            {
+                            "value": "Item 4",
+                            "text": "3"
+                            },
+                            {
+                            "value": "Item 5",
+                            "text": "4"
+                            },
+                            {
+                            "value": "Item 6",
+                            "text": "5"
+                            },
+                            {
+                            "value": "Item 7",
+                            "text": "6"
+                            },
+                            {
+                            "value": "Item 8",
+                            "text": "7"
+                            },
+                            {
+                            "value": "Item 9",
+                            "text": "8"
+                            },
+                            {
+                            "value": "Item 10",
+                            "text": "9"
+                            },
+                            {
+                            "value": "Item 11",
+                            "text": "10 (Completely true of me)"
+                            }
+                            ]
+                            },
+                            {
+                            "type": "radiogroup",
+                            "name": "question28",
+                            "title": "My relationships are as satisfying as I would want them to be.",
+                            "choices": [
+                            {
+                            "value": "Item 1",
+                            "text": "0 (Strongly disagree)"
+                            },
+                            {
+                            "value": "Item 2",
+                            "text": "1"
+                            },
+                            {
+                            "value": "Item 3",
+                            "text": "2"
+                            },
+                            {
+                            "value": "Item 4",
+                            "text": "3"
+                            },
+                            {
+                            "value": "Item 5",
+                            "text": "4"
+                            },
+                            {
+                            "value": "Item 6",
+                            "text": "5"
+                            },
+                            {
+                            "value": "Item 7",
+                            "text": "6"
+                            },
+                            {
+                            "value": "Item 8",
+                            "text": "7"
+                            },
+                            {
+                            "value": "Item 9",
+                            "text": "8"
+                            },
+                            {
+                            "value": "Item 10",
+                            "text": "9"
+                            },
+                            {
+                            "value": "Item 11",
+                            "text": "10 (Strongly agree)"
+                            }
+                            ]
+                            },
+                            {
+                            "type": "radiogroup",
+                            "name": "question29",
+                            "title": "There are people who really understand me.",
+                            "choices": [
+                            {
+                            "value": "Item 1",
+                            "text": "0 (Never)"
+                            },
+                            {
+                            "value": "Item 2",
+                            "text": "1"
+                            },
+                            {
+                            "value": "Item 3",
+                            "text": "2"
+                            },
+                            {
+                            "value": "Item 4",
+                            "text": "3"
+                            },
+                            {
+                            "value": "Item 5",
+                            "text": "4"
+                            },
+                            {
+                            "value": "Item 6",
+                            "text": "5"
+                            },
+                            {
+                            "value": "Item 7",
+                            "text": "6"
+                            },
+                            {
+                            "value": "Item 8",
+                            "text": "7"
+                            },
+                            {
+                            "value": "Item 9",
+                            "text": "8"
+                            },
+                            {
+                            "value": "Item 10",
+                            "text": "9"
+                            },
+                            {
+                            "value": "Item 11",
+                            "text": "10 (Always)"
+                            }
+                            ]
+                            },
+                            {
+                            "type": "radiogroup",
+                            "name": "question30",
+                            "title": "How often do you feel lonely?",
+                            "choices": [
+                            {
+                            "value": "Item 1",
+                            "text": "0 (Never)"
+                            },
+                            {
+                            "value": "Item 2",
+                            "text": "1"
+                            },
+                            {
+                            "value": "Item 3",
+                            "text": "2"
+                            },
+                            {
+                            "value": "Item 4",
+                            "text": "3"
+                            },
+                            {
+                            "value": "Item 5",
+                            "text": "4"
+                            },
+                            {
+                            "value": "Item 6",
+                            "text": "5"
+                            },
+                            {
+                            "value": "Item 7",
+                            "text": "6"
+                            },
+                            {
+                            "value": "Item 8",
+                            "text": "7"
+                            },
+                            {
+                            "value": "Item 9",
+                            "text": "8"
+                            },
+                            {
+                            "value": "Item 10",
+                            "text": "9"
+                            },
+                            {
+                            "value": "Item 11",
+                            "text": "10 (Almost always)"
+                            }
+                            ]
+                            },
+                            {
+                            "type": "radiogroup",
+                            "name": "question31",
+                            "title": "I am content with my friendships and relationships.",
+                            "choices": [
+                            {
+                            "value": "Item 1",
+                            "text": "0 (Strongly disagree)"
+                            },
+                            {
+                            "value": "Item 2",
+                            "text": "1"
+                            },
+                            {
+                            "value": "Item 3",
+                            "text": "2"
+                            },
+                            {
+                            "value": "Item 4",
+                            "text": "3"
+                            },
+                            {
+                            "value": "Item 5",
+                            "text": "4"
+                            },
+                            {
+                            "value": "Item 6",
+                            "text": "5"
+                            },
+                            {
+                            "value": "Item 7",
+                            "text": "6"
+                            },
+                            {
+                            "value": "Item 8",
+                            "text": "7"
+                            },
+                            {
+                            "value": "Item 9",
+                            "text": "8"
+                            },
+                            {
+                            "value": "Item 10",
+                            "text": "9"
+                            },
+                            {
+                            "value": "Item 11",
+                            "text": "10 (Strongly agree)"
+                            }
+                            ]
+                            },
+                            {
+                            "type": "radiogroup",
+                            "name": "question32",
+                            "title": "I have enough people I feel comfortable asking for help at any time.",
+                            "choices": [
+                            {
+                            "value": "Item 1",
+                            "text": "0 (Strongly disagree)"
+                            },
+                            {
+                            "value": "Item 2",
+                            "text": "1"
+                            },
+                            {
+                            "value": "Item 3",
+                            "text": "2"
+                            },
+                            {
+                            "value": "Item 4",
+                            "text": "3"
+                            },
+                            {
+                            "value": "Item 5",
+                            "text": "4"
+                            },
+                            {
+                            "value": "Item 6",
+                            "text": "5"
+                            },
+                            {
+                            "value": "Item 7",
+                            "text": "6"
+                            },
+                            {
+                            "value": "Item 8",
+                            "text": "7"
+                            },
+                            {
+                            "value": "Item 9",
+                            "text": "8"
+                            },
+                            {
+                            "value": "Item 10",
+                            "text": "9"
+                            },
+                            {
+                            "value": "Item 11",
+                            "text": "10 (Strongly agree)"
+                            }
+                            ]
+                            },
+                            {
+                            "type": "radiogroup",
+                            "name": "question33",
+                            "title": "I feel connected to the broader community around me.",
+                            "choices": [
+                            {
+                            "value": "Item 1",
+                            "text": "0 (Strongly disagree)"
+                            },
+                            {
+                            "value": "Item 2",
+                            "text": "1"
+                            },
+                            {
+                            "value": "Item 3",
+                            "text": "2"
+                            },
+                            {
+                            "value": "Item 4",
+                            "text": "3"
+                            },
+                            {
+                            "value": "Item 5",
+                            "text": "4"
+                            },
+                            {
+                            "value": "Item 6",
+                            "text": "5"
+                            },
+                            {
+                            "value": "Item 7",
+                            "text": "6"
+                            },
+                            {
+                            "value": "Item 8",
+                            "text": "7"
+                            },
+                            {
+                            "value": "Item 9",
+                            "text": "8"
+                            },
+                            {
+                            "value": "Item 10",
+                            "text": "9"
+                            },
+                            {
+                            "value": "Item 11",
+                            "text": "10 (Strongly agree)"
+                            }
+                            ]
+                            },
+                            {
+                            "type": "radiogroup",
+                            "name": "question34",
+                            "title": "People in my broader community trust and respect one another.",
+                            "choices": [
+                            {
+                            "value": "Item 1",
+                            "text": "0 (Strongly disagree)"
+                            },
+                            {
+                            "value": "Item 2",
+                            "text": "1"
+                            },
+                            {
+                            "value": "Item 3",
+                            "text": "2"
+                            },
+                            {
+                            "value": "Item 4",
+                            "text": "3"
+                            },
+                            {
+                            "value": "Item 5",
+                            "text": "4"
+                            },
+                            {
+                            "value": "Item 6",
+                            "text": "5"
+                            },
+                            {
+                            "value": "Item 7",
+                            "text": "6"
+                            },
+                            {
+                            "value": "Item 8",
+                            "text": "7"
+                            },
+                            {
+                            "value": "Item 9",
+                            "text": "8"
+                            },
+                            {
+                            "value": "Item 10",
+                            "text": "9"
+                            },
+                            {
+                            "value": "Item 11",
+                            "text": "10 (Strongly agree)"
+                            }
+                            ]
+                            },
+                            {
+                            "type": "radiogroup",
+                            "name": "question35",
+                            "title": "I am able to meet my normal monthly living expenses without any difficulty.",
+                            "choices": [
+                            {
+                            "value": "Item 1",
+                            "text": "0 (Completely disagree)"
+                            },
+                            {
+                            "value": "Item 2",
+                            "text": "1"
+                            },
+                            {
+                            "value": "Item 3",
+                            "text": "2"
+                            },
+                            {
+                            "value": "Item 4",
+                            "text": "3"
+                            },
+                            {
+                            "value": "Item 5",
+                            "text": "4"
+                            },
+                            {
+                            "value": "Item 6",
+                            "text": "5"
+                            },
+                            {
+                            "value": "Item 7",
+                            "text": "6"
+                            },
+                            {
+                            "value": "Item 8",
+                            "text": "7"
+                            },
+                            {
+                            "value": "Item 9",
+                            "text": "8"
+                            },
+                            {
+                            "value": "Item 10",
+                            "text": "9"
+                            },
+                            {
+                            "value": "Item 11",
+                            "text": "10 (Completely agree)"
+                            }
+                            ]
+                            },
+                            {
+                            "type": "radiogroup",
+                            "name": "question36",
+                            "title": "How often do you worry about food, housing, or health expenses?",
+                            "choices": [
+                            {
+                            "value": "Item 1",
+                            "text": "0 (Do not ever worry)"
+                            },
+                            {
+                            "value": "Item 2",
+                            "text": "1"
+                            },
+                            {
+                            "value": "Item 3",
+                            "text": "2"
+                            },
+                            {
+                            "value": "Item 4",
+                            "text": "3"
+                            },
+                            {
+                            "value": "Item 5",
+                            "text": "4"
+                            },
+                            {
+                            "value": "Item 6",
+                            "text": "5"
+                            },
+                            {
+                            "value": "Item 7",
+                            "text": "6"
+                            },
+                            {
+                            "value": "Item 8",
+                            "text": "7"
+                            },
+                            {
+                            "value": "Item 9",
+                            "text": "8"
+                            },
+                            {
+                            "value": "Item 10",
+                            "text": "9"
+                            },
+                            {
+                            "value": "Item 11",
+                            "text": "10 (Worry all of the time)"
+                            }
+                            ]
+                            },
+                            {
+                            "type": "radiogroup",
+                            "name": "question37",
+                            "title": "I have sufficient savings that I could cover 6 months of expenses.",
+                            "choices": [
+                            {
+                            "value": "Item 1",
+                            "text": "0 (Strongly disagree)"
+                            },
+                            {
+                            "value": "Item 2",
+                            "text": "1"
+                            },
+                            {
+                            "value": "Item 3",
+                            "text": "2"
+                            },
+                            {
+                            "value": "Item 4",
+                            "text": "3"
+                            },
+                            {
+                            "value": "Item 5",
+                            "text": "4"
+                            },
+                            {
+                            "value": "Item 6",
+                            "text": "5"
+                            },
+                            {
+                            "value": "Item 7",
+                            "text": "6"
+                            },
+                            {
+                            "value": "Item 8",
+                            "text": "7"
+                            },
+                            {
+                            "value": "Item 9",
+                            "text": "8"
+                            },
+                            {
+                            "value": "Item 10",
+                            "text": "9"
+                            },
+                            {
+                            "value": "Item 11",
+                            "text": "10 (Strongly agree)"
+                            }
+                            ]
+                            },
+                            {
+                            "type": "radiogroup",
+                            "name": "question38",
+                            "title": "My financial circumstances give me freedom to pursue my goals.",
+                            "choices": [
+                            {
+                            "value": "Item 1",
+                            "text": "0 (Strongly disagree)"
+                            },
+                            {
+                            "value": "Item 2",
+                            "text": "1"
+                            },
+                            {
+                            "value": "Item 3",
+                            "text": "2"
+                            },
+                            {
+                            "value": "Item 4",
+                            "text": "3"
+                            },
+                            {
+                            "value": "Item 5",
+                            "text": "4"
+                            },
+                            {
+                            "value": "Item 6",
+                            "text": "5"
+                            },
+                            {
+                            "value": "Item 7",
+                            "text": "6"
+                            },
+                            {
+                            "value": "Item 8",
+                            "text": "7"
+                            },
+                            {
+                            "value": "Item 9",
+                            "text": "8"
+                            },
+                            {
+                            "value": "Item 10",
+                            "text": "9"
+                            },
+                            {
+                            "value": "Item 11",
+                            "text": "10 (Strongly agree)"
+                            }
+                            ]
+                            },
+                            {
+                            "type": "radiogroup",
+                            "name": "question39",
+                            "title": "Given my age, I have done adequate financial planning for the future.",
+                            "choices": [
+                            {
+                            "value": "Item 1",
+                            "text": "0 (Strongly disagree)"
+                            },
+                            {
+                            "value": "Item 2",
+                            "text": "1"
+                            },
+                            {
+                            "value": "Item 3",
+                            "text": "2"
+                            },
+                            {
+                            "value": "Item 4",
+                            "text": "3"
+                            },
+                            {
+                            "value": "Item 5",
+                            "text": "4"
+                            },
+                            {
+                            "value": "Item 6",
+                            "text": "5"
+                            },
+                            {
+                            "value": "Item 7",
+                            "text": "6"
+                            },
+                            {
+                            "value": "Item 8",
+                            "text": "7"
+                            },
+                            {
+                            "value": "Item 9",
+                            "text": "8"
+                            },
+                            {
+                            "value": "Item 10",
+                            "text": "9"
+                            },
+                            {
+                            "value": "Item 11",
+                            "text": "10 (Strongly agree)"
+                            }
+                            ]
+                            },
+                            {
+                            "type": "radiogroup",
+                            "name": "question40",
+                            "title": "The amount of debt I have often overwhelms me.",
+                            "choices": [
+                            {
+                            "value": "Item 1",
+                            "text": "0 (Strongly disagree)"
+                            },
+                            {
+                            "value": "Item 2",
+                            "text": "1"
+                            },
+                            {
+                            "value": "Item 3",
+                            "text": "2"
+                            },
+                            {
+                            "value": "Item 4",
+                            "text": "3"
+                            },
+                            {
+                            "value": "Item 5",
+                            "text": "4"
+                            },
+                            {
+                            "value": "Item 6",
+                            "text": "5"
+                            },
+                            {
+                            "value": "Item 7",
+                            "text": "6"
+                            },
+                            {
+                            "value": "Item 8",
+                            "text": "7"
+                            },
+                            {
+                            "value": "Item 9",
+                            "text": "8"
+                            },
+                            {
+                            "value": "Item 10",
+                            "text": "9"
+                            },
+                            {
+                            "value": "Item 11",
+                            "text": "10 (Strongly agree)"
+                            }
+                            ]
+                            }
+                        ]
+                        }
+                        ]
+                        }
+        window.survey = new Survey.Model(json);
+
+
+        // Recor the response time or how long they spent on a page
+        lastpage = survey.currentPage;
+        function timerLoop(elapsed) {
+            var page = survey.currentPage; // page variable is the currentPage on the survey
+            if (!page) return;
+            if (lastpage != page) {
+                // set new start date
+                start = new Date().getTime(); // sets new start Date object when page has changed.
+                lastpage = page // sets the last page to currente page 
+
+            }
+            var valueName = "TRQ" + survey.pages.indexOf(page);
+
+            var ms = survey.getValue(valueName); // gets the value of the valuename. e.g: TRQ1
+
+            if (ms == null) ms = 0;
+            else ms = elapsed;
+            survey.setValue(valueName, ms);
+            $('#timeEl').text(elapsed + ' ms');
+        }
+
+
+        function getQueryVariable(variable) {
+            var query = window.location.search.substring(1);
+            var vars = query.split('&');
+            for (var i = 0; i < vars.length; i++) {
+                var pair = vars[i].split('=');
+                if (decodeURIComponent(pair[0]) == variable) {
+                    return decodeURIComponent(pair[1]);
+                }
+            }
+            return 'NULL'
+        }
+
+        survey.showProgressBar = "bottom";
+
+        survey.goNextPageAutomatic = false
+        survey.showNavigationButtons = true;
+        survey.showCompletedPage = false;
+
+        // Get Query Variables
+        var surveyname = getQueryVariable('survey');
+
+        var expInfo = { 'participant': '' ,'session': '',  'task': surveyname, 'date' : formatDate(), 'study': '', 'id': getQueryVariable('id') };
+
+        // Get info Promize
+        const getInfoPromise = new Promise((resolve, reject) => {
+            $.ajax({
+                type: "POST",
+                url: '/getInfo',
+                data: { 'id': expInfo.id },
+                dataType: 'JSON',
+                success: function (data) {
+                    resolve(data)
+                }
+            })
+        })
+            // Read getINFO 
+            .then((values) => {
+                console.log(values)
+                if (values.subject && values.session && values.study) {
+                    expInfo.participant = values.subject
+                    expInfo.study = values.study
+                    expInfo.session = values.session
+                    expInfo.run_id = getQueryVariable('run')
+                }
+
+                survey.onComplete.add(function (result) {
+                    //result.preventDefault();
+                    postSurveyData(result.data, expInfo.session, expInfo.participant);
+                });
+
+                $("#surveyElement").Survey({model: survey});
+    
+                $("#participant").text(expInfo.participant);
+                $("#session").text(expInfo.session);
+                $("#study").text(expInfo.study);
+
+            })
+
+        function postSurveyData(data, session, mkturkid) {
+            
+            $.ajax({
+                type: "POST",
+                url: '/save',
+                data: {
+                    "trials_data": data,
+                    "expInfo": expInfo
+                },
+                dataType: 'JSON',
+                statusCode: {
+                    200: function() {
+                        console.log('sucess saved on backend')
+                        window.location.replace('/link?id=' + expInfo.id  + '&index=' + (parseInt(getQueryVariable('index')) + 1))
+                    }
+                }
+            }) 
+                
+        }
+
+        var start = new Date().getTime(),
+            elapsed = '0.0';
+
+        // executes timerCallback every 100 ms
+        timerID = window.setInterval(function () {
+
+            var time = new Date().getTime() - start;
+            elapsed = Math.floor(time);
+
+            //alert(elapsed);
+            //$('#timeEl').text(elapsed + ' ms');
+
+            //displayTime(1);
+            timerLoop(elapsed);
+
+        }, 5);
+    </script>
+
+</body>
+
+</html>
