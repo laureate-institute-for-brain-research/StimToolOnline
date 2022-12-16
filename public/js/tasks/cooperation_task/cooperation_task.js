@@ -1070,6 +1070,7 @@ function practiceTrialsLoopBegin(thisScheduler) {
 	g.global_trial_number = 0;
 	g.game_number = 1;
 	//randomizePair(blocks) // randomize outcome
+	reset_choice_counter() // resetCounter
 
 	psychoJS.experiment.addLoop(blocks); // add the loop to the experiment
 	endClock.reset()
@@ -1099,6 +1100,7 @@ function trialsLoopBegin(thisScheduler) {
 	resp.stop()
 	resp.clearEvents()
 	resp.status = PsychoJS.Status.NOT_STARTED
+	reset_choice_counter() // resetCounter
 
 	blocks = new TrialHandler({
 		psychoJS: psychoJS,
@@ -1410,7 +1412,7 @@ g.choice_counter = {
  * @param {*} outcome_type either a positve or negative outcome type
  */
 function incrementCounters(outcome_type) {
-	// console.log('increment (pre): ',outcome_type,g.choice_counter['positive'], g.choice_counter['negative']  )
+	console.log('increment (pre): ',outcome_type,g.choice_counter['positive'], g.choice_counter['negative']  )
 	switch (outcome_type) {
 		case 'positive':
 			g.choice_counter['positive']++
@@ -1427,7 +1429,7 @@ function incrementCounters(outcome_type) {
 			}
 			break;
 	}
-	// console.log('increment (post): ',outcome_type,g.choice_counter['positive'], g.choice_counter['negative']  )
+	console.log('increment (post): ',outcome_type,g.choice_counter['positive'], g.choice_counter['negative']  )
 }
 
 /**
@@ -1450,6 +1452,7 @@ function getRandomOutcome(probability, game_type) {
  * @param {*} outcome string of either 'negative' or 'positive' or 'neutral'
  */
 function getOutcomePair(outcome, game_type, choice) {
+	
 	switch (outcome) {
 		case 'neutral':
 			if (game_type == 'pleasant') {
@@ -1516,7 +1519,7 @@ function getOutcomePair(outcome, game_type, choice) {
 
 			break;
 	}
-
+	console.log('outcome: ', outcome, g.outcome_triple)
 	g.outcome_sound.setVolume(1.0);
 }
 
@@ -1913,8 +1916,6 @@ function blockRoutineEnd(trials) {
 			resp.stop()
 			resp.status = PsychoJS.Status.NOT_STARTED
 			sendData()
-
-			reset_choice_counter() // resetCounter
 
 			clear_outcome_faces() // undraw the faces
 
