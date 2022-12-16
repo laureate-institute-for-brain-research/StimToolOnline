@@ -3,7 +3,7 @@
     "order": [
         "/?index=0&survey=demo&session=1",
         "/?index=1&survey=well_being&session=1",
-        "/?index=2&survey=cultural&session=1",
+        "/?index=2&survey=culture&session=1",
         "/?index=3&task=emotional_faces&run=Pilot_R1.json",
         "/completeMobile?"
     ],
