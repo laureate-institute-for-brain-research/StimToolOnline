@@ -245,7 +245,7 @@ dialogCancelScheduler.add(quitPsychoJS, '', false);
 
 // Add Slides to resources
 var resources = [
-	{ name: 'practice_schedule.xls', path: '/js/tasks/blind_dating/practice_schedule.xls'},
+	{ name: 'practice_schedule.csv', path: '/js/tasks/blind_dating/practice_schedule.csv'},
 	{ name: 'user.png', path: '/js/tasks/blind_dating/media/user.png' },
 	{ name: 'user_filled.png', path: '/js/tasks/blind_dating/media/user_filled.png'},
 	{ name: 'ready.jpeg', path: '/js/tasks/blind_dating/media/instructions/Slide22.jpeg'},
@@ -1077,7 +1077,7 @@ function practiceTrialsLoopBegin(thisScheduler) {
 		psychoJS: psychoJS,
 		nReps: 1, method: TrialHandler.Method.SEQUENTIAL,
 		extraInfo: expInfo, originPath: undefined,
-		trialList: 'practice_schedule.xls',
+		trialList: 'practice_schedule.csv',
 		seed: undefined, name: 'trials'
 	});
 
