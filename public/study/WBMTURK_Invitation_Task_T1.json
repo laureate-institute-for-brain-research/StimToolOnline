@@ -5,6 +5,7 @@
         "/?index=1&survey=well_being&session=1",
         "/?index=2&survey=culture&session=1",
         "/?index=3&task=invitation_task&run=Pilot_R1.json",
+        "/?index=4&survey=feedback&session=1",
         "/completeMobile?"
     ],
     "fullscreen": true,
