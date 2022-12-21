@@ -1129,10 +1129,10 @@ function practiceTrialsLoopBegin(thisScheduler) {
 		thisScheduler.add(importConditions(snapshot));
 		thisScheduler.add(initialFixation(snapshot));
 		thisScheduler.add(trialRoutineBegin(snapshot)); 	// setup block
-		thisScheduler.add(trialStep1(snapshot));			// step 1
-		thisScheduler.add(trialStep2(snapshot));			// step 2
-		thisScheduler.add(trialStep3(snapshot));			// step 3
-		thisScheduler.add(trialStep4(snapshot));			// step 4
+		thisScheduler.add(position1(snapshot));			// step 1
+		thisScheduler.add(position2(snapshot));			// step 2
+		thisScheduler.add(position3(snapshot));			// step 3
+		thisScheduler.add(position4(snapshot));			// step 4
 		thisScheduler.add(blockRoutineEnd(snapshot));		// end block
 		thisScheduler.add(endLoopIteration(thisScheduler, snapshot));
 	}
@@ -1168,10 +1168,10 @@ function trialsLoopBegin(thisScheduler) {
 		thisScheduler.add(importConditions(snapshot));
 		thisScheduler.add(initialFixation(snapshot));
 		thisScheduler.add(trialRoutineBegin(snapshot)); 	 // setup block
-		thisScheduler.add(trialStep1(snapshot));			// step 1
-		thisScheduler.add(trialStep2(snapshot));			// step 2
-		thisScheduler.add(trialStep3(snapshot));			// step 3
-		thisScheduler.add(trialStep4(snapshot));			// step 4
+		thisScheduler.add(position1(snapshot));			// step 1
+		thisScheduler.add(position2(snapshot));			// step 2
+		thisScheduler.add(position3(snapshot));			// step 3
+		thisScheduler.add(position4(snapshot));			// step 4
 		thisScheduler.add(blockRoutineEnd(snapshot));		 // end block
 		thisScheduler.add(endLoopIteration(thisScheduler, snapshot));
 	}
@@ -1290,7 +1290,7 @@ function trialRoutineBegin(trial) {
  * @param {*} trial 
  * @returns 
  */
-function trialStep1(trial) {
+function position1(trial) {
 	return function () {
 		if (g.left_choice_rectangle.status == PsychoJS.Status.NOT_STARTED) {
 			console.log('Step 1');
@@ -1408,7 +1408,7 @@ function trialStep1(trial) {
  * @param {*} trial 
  * @returns 
  */
-function trialStep2(trial) {
+function position2(trial) {
 	return function () {
 		if (g.step_2_background.status == PsychoJS.Status.NOT_STARTED) {
 			console.log('Step 2');
@@ -1476,7 +1476,7 @@ function trialStep2(trial) {
  * @param {*} trial 
  * @returns 
  */
- function trialStep3(trial) {
+ function position3(trial) {
 	return function () {
 		if (g.step_3_background.status == PsychoJS.Status.NOT_STARTED) {
 			console.log('Step 3');
@@ -1542,7 +1542,7 @@ function trialStep2(trial) {
  * @param {*} trial 
  * @returns 
  */
-function trialStep4(trial) {
+function position4(trial) {
 	return function () {
 		if (g.step_4_background.status == PsychoJS.Status.NOT_STARTED) {
 			console.log('Step 4');
