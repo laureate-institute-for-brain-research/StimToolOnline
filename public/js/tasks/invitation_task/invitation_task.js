@@ -261,9 +261,13 @@ var resources = [
 	{ name: 'MAIN_ready_audio.mp3', path: '/js/tasks/cooperation_task/media/instructions_audio/Slide16.mp3'},
 	{ name: 'BEGIN_slide', path: '/js/tasks/cooperation_task/media/instructions/Slide17.jpeg' },
 	{ name: 'step_1_backg', path: '/js/tasks/invitation_task/media/images/building_street.jpeg' },
-	{ name: 'b-a_r-1', path: '/js/tasks/invitation_task/media/images/b-a_r-1.png' },
-	{ name: 'b-a_r-2', path: '/js/tasks/invitation_task/media/images/b-a_r-2.png' },
-	{ name: 'b-a_r-3', path: '/js/tasks/invitation_task/media/images/b-a_r-3.png' },
+	{ name: 'library_building', path: '/js/tasks/invitation_task/media/images/library_building2.jpg' },
+	{ name: 'office_building', path: '/js/tasks/invitation_task/media/images/office_building1.jpg' },
+	{ name: 'switch-off', path: '/js/tasks/invitation_task/media/switch-off.png' },
+	{ name: 'switch-on', path: '/js/tasks/invitation_task/media/switch-on.png' },
+	{ name: 'b-a_r-1', path: '/js/tasks/invitation_task/media/images/library_6.3.jpg' },
+	{ name: 'b-a_r-2', path: '/js/tasks/invitation_task/media/images/library_3.jpg' },
+	{ name: 'b-a_r-3', path: '/js/tasks/invitation_task/media/images/library_5.4.jpg' },
 	{ name: 'b-a_r-4', path: '/js/tasks/invitation_task/media/images/b-a_r-4.png' },
 	{ name: 'b-a_r-5', path: '/js/tasks/invitation_task/media/images/b-a_r-5.png' },
 	{ name: 'b-a_r-6', path: '/js/tasks/invitation_task/media/images/b-a_r-6.png' },
@@ -408,11 +412,73 @@ function experimentInit() {
 		texRes : 128, interpolate : true, depth : 0
 	});
 
+	g.library_building = new visual.ImageStim({
+		win : psychoJS.window,
+		name : 'library_building', units : 'height', 
+		image : 'library_building', mask : undefined,
+		ori : 0, pos : [-0.33, 0], size: [0.3,0.2],
+		color : new util.Color([1, 1, 1]), opacity : 1,
+		flipHoriz : false, flipVert : false,
+		texRes : 128, interpolate : true, depth : 0
+	});
+
+	g.office_building = new visual.ImageStim({
+		win : psychoJS.window,
+		name : 'office_building', units : 'height', 
+		image : 'office_building', mask : undefined,
+		ori : 0, pos : [0, 0], size: [0.3,0.2],
+		color : new util.Color([1, 1, 1]), opacity : 1,
+		flipHoriz : false, flipVert : false,
+		texRes : 128, interpolate : true, depth : 0
+	});
+
+	g.left_choice_rectangle = new visual.Rect({
+		win: psychoJS.window,
+		name: 'left_choice_rectangle',
+		width: 0.3, height:0.2,
+		units: 'height',
+		pos: [-0.33, 0 ], ori: 0,
+		fillColor: new util.Color('black'),
+		lineColor: new util.Color('white'), opacity: 1,
+		depth: 0
+	})
+
+	g.right_choice_rectangle = new visual.Rect({
+		win: psychoJS.window,
+		name: 'right_choice_rectangle',
+		width: 0.3, height:0.2,
+		units: 'height',
+		pos: [0, 0 ], ori: 0,
+		fillColor: new util.Color('black'),
+		lineColor: new util.Color('white'), opacity: 1,
+		depth: 0
+	})
+
+	g.switch_off = new visual.ImageStim({
+		win : psychoJS.window,
+		name : 'switch-off', units : 'height', 
+		image : 'switch-off', mask : undefined,
+		ori : 0, pos : [0.33, 0], size: [0.1,0.1],
+		color : new util.Color([1, 1, 1]), opacity : 1,
+		flipHoriz : false, flipVert : false,
+		texRes : 128, interpolate : true, depth : 0
+	});
+
+	g.switch_on = new visual.ImageStim({
+		win : psychoJS.window,
+		name : 'switch-on', units : 'height', 
+		image : 'switch-on', mask : undefined,
+		ori : 0, pos : [0.33, 0], size: [0.1,0.1],
+		color : new util.Color([1, 1, 1]), opacity : 1,
+		flipHoriz : false, flipVert : false,
+		texRes : 128, interpolate : true, depth : 0
+	});
+
 	g.step_2_background = new visual.ImageStim({
 		win : psychoJS.window,
 		name : 'step_2_background', units : 'height', 
 		image : 'b-a_r-1', mask : undefined,
-		ori : 0, pos : [0, 0], size: 0.8,
+		ori : 0, pos : [0, 0], size: [0.6,0.4],
 		color : new util.Color([1, 1, 1]), opacity : 1,
 		flipHoriz : false, flipVert : false,
 		texRes : 128, interpolate : true, depth : 0
@@ -422,7 +488,7 @@ function experimentInit() {
 		win : psychoJS.window,
 		name : 'step_3_background', units : 'height', 
 		image : 'b-a_r-2', mask : undefined,
-		ori : 0, pos : [0, 0], size: 0.8,
+		ori : 0, pos : [0, 0], size: [0.6,0.4],
 		color : new util.Color([1, 1, 1]), opacity : 1,
 		flipHoriz : false, flipVert : false,
 		texRes : 128, interpolate : true, depth : 0
@@ -432,7 +498,7 @@ function experimentInit() {
 		win : psychoJS.window,
 		name : 'step_4_background', units : 'height', 
 		image : 'b-a_r-3', mask : undefined,
-		ori : 0, pos : [0, 0], size: 0.8,
+		ori : 0, pos : [0, 0], size: [0.6,0.4],
 		color : new util.Color([1, 1, 1]), opacity : 1,
 		flipHoriz : false, flipVert : false,
 		texRes : 128, interpolate : true, depth : 0
@@ -440,19 +506,19 @@ function experimentInit() {
 
 	g.placement_pos = {
 		'door': {
-			'left': [ -0.6, 0],
-			'right': [ 0.6, 0]
+			'left': [ -0.4, 0],
+			'right': [ 0.4, 0]
 		},
 		'door_text': {
-			'left': [ -0.6, -0.15],
-			'right': [ 0.6, -0.15]
+			'left': [ -0.4, -0.15],
+			'right': [ 0.4, -0.15]
 		}
 	}
 
 	g.left_door = new visual.ImageStim({
 		win : psychoJS.window,
 		name : 'left_door', units : 'height', 
-		image : 'blue_door', mask : undefined,
+		image : 'orange_door', mask : undefined,
 		ori : 0, pos : g.placement_pos['door']['left'], size: 0.15,
 		color : new util.Color([1, 1, 1]), opacity : 1,
 		flipHoriz : false, flipVert : false,
@@ -462,7 +528,7 @@ function experimentInit() {
 	g.right_door = new visual.ImageStim({
 		win : psychoJS.window,
 		name : 'right_door', units : 'height', 
-		image : 'green_door', mask : undefined,
+		image : 'blue_door', mask : undefined,
 		ori : 0, pos : g.placement_pos['door']['right'], size: 0.15,
 		color : new util.Color([1, 1, 1]), opacity : 1,
 		flipHoriz : false, flipVert : false,
@@ -491,7 +557,7 @@ function experimentInit() {
 		text: 'Trial:',alignHoriz: 'left',
 		font: 'Arial',
 		units: 'norm',
-		pos: [0.7, 0.9], height: 0.06, wrapWidth: undefined, ori: 0,
+		pos: [0.6, 0.9], height: 0.04, wrapWidth: undefined, ori: 0,
 		color: new util.Color('white'), opacity: 1,
 		depth: 0.0
 	});
@@ -502,7 +568,7 @@ function experimentInit() {
 		text: '1',alignHoriz: 'right',
 		font: 'Arial',
 		units: 'norm',
-		pos: [0.9, 0.9], height: 0.06, wrapWidth: undefined, ori: 0,
+		pos: [0.9, 0.9], height: 0.04, wrapWidth: undefined, ori: 0,
 		color: new util.Color('white'), opacity: 1,
 		depth: 0.0
 	});
@@ -514,7 +580,7 @@ function experimentInit() {
 		text: 'Choice:',alignHoriz: 'left',
 		font: 'Arial',
 		units: 'norm',
-		pos: [0.7, 0.8], height: 0.06, wrapWidth: undefined, ori: 0,
+		pos: [0.6, 0.85], height: 0.04, wrapWidth: undefined, ori: 0,
 		color: new util.Color('white'), opacity: 1,
 		depth: 0.0
 	});
@@ -525,7 +591,7 @@ function experimentInit() {
 		text: '0',alignHoriz: 'right',
 		font: 'Arial',
 		units: 'norm',
-		pos: [0.9, 0.8], height: 0.06, wrapWidth: undefined, ori: 0,
+		pos: [0.9, 0.85], height: 0.04, wrapWidth: undefined, ori: 0,
 		color: new util.Color('white'), opacity: 1,
 		depth: 0.0
 	});
@@ -537,7 +603,7 @@ function experimentInit() {
 		text: 'Invites:',alignHoriz: 'left',
 		font: 'Arial',
 		units: 'norm',
-		pos: [0.7, 0.7], height: 0.06, wrapWidth: undefined, ori: 0,
+		pos: [0.6, 0.8], height: 0.04, wrapWidth: undefined, ori: 0,
 		color: new util.Color('white'), opacity: 1,
 		depth: 0.0
 	});
@@ -548,7 +614,7 @@ function experimentInit() {
 		text: '0',alignHoriz: 'right',
 		font: 'Arial',
 		units: 'norm',
-		pos: [0.9, 0.7], height: 0.06, wrapWidth: undefined, ori: 0,
+		pos: [0.9, 0.8], height: 0.04, wrapWidth: undefined, ori: 0,
 		color: new util.Color('white'), opacity: 1,
 		depth: 0.0
 	});
@@ -556,11 +622,11 @@ function experimentInit() {
 	g.prompt_text = new visual.TextStim({
 		win: psychoJS.window,
 		name: 'prompt_text',
-		text: 'Which building do you choose?',alignHoriz: 'center',
+		text: 'Which building do you choose?\nPress 3 to show the buildings.',alignHoriz: 'center',
 		font: 'Arial',
 		units: 'norm',
-		pos: [0, 0.85], height: 0.06, wrapWidth: undefined, ori: 0,
-		color: new util.Color('black'), opacity: 1,
+		pos: [0, 0.55], height: 0.06, wrapWidth: undefined, ori: 0,
+		color: new util.Color('white'), opacity: 1,
 		depth: 0.0
 	});
 
@@ -570,8 +636,8 @@ function experimentInit() {
 		text: '1',alignHoriz: 'center',
 		font: 'Arial',
 		units: 'height',
-		pos: [-0.35, 0.25], height: 0.05, wrapWidth: undefined, ori: 0,
-		color: new util.Color('black'), opacity: 1,
+		pos: [-0.33, 0.1], height: 0.05, wrapWidth: undefined, ori: 0,
+		color: new util.Color('white'), opacity: 1,
 		depth: 0.0
 	});
 
@@ -581,8 +647,19 @@ function experimentInit() {
 		text: '2',alignHoriz: 'center',
 		font: 'Arial',
 		units: 'height',
-		pos: [0.20, 0.1], height: 0.05, wrapWidth: undefined, ori: 0,
-		color: new util.Color('black'), opacity: 1,
+		pos: [0, 0.1], height: 0.05, wrapWidth: undefined, ori: 0,
+		color: new util.Color('white'), opacity: 1,
+		depth: 0.0
+	});
+
+	g.choice_3 = new visual.TextStim({
+		win: psychoJS.window,
+		name: 'choice_3',
+		text: '3',alignHoriz: 'center',
+		font: 'Arial',
+		units: 'height',
+		pos: [0.33, -0.1], height: 0.05, wrapWidth: undefined, ori: 0,
+		color: new util.Color('white'), opacity: 1,
 		depth: 0.0
 	});
 
@@ -1127,8 +1204,23 @@ g.faces_choice = {
  * Function call to unset and clear the stims
  */
 function clearStims() {
-	g.step_1_background.setAutoDraw(false);
-	g.step_1_background.status = PsychoJS.Status.NOT_STARTED;
+	g.library_building.setAutoDraw(false);
+	g.library_building.status = PsychoJS.Status.NOT_STARTED;
+
+	g.left_choice_rectangle.setAutoDraw(false);
+	g.left_choice_rectangle.status = PsychoJS.Status.NOT_STARTED;
+
+	g.right_choice_rectangle.setAutoDraw(false);
+	g.right_choice_rectangle.status = PsychoJS.Status.NOT_STARTED;
+
+	g.office_building.setAutoDraw(false);
+	g.office_building.status = PsychoJS.Status.NOT_STARTED;
+
+	g.switch_off.setAutoDraw(false);
+	g.switch_off.status = PsychoJS.Status.NOT_STARTED;
+
+	g.switch_on.setAutoDraw(false);
+	g.switch_on.status = PsychoJS.Status.NOT_STARTED;
 
 	g.step_2_background.setAutoDraw(false);
 	g.step_2_background.status = PsychoJS.Status.NOT_STARTED;
@@ -1147,6 +1239,9 @@ function clearStims() {
 
 	g.choice_2.setAutoDraw(false);
 	g.choice_2.status = PsychoJS.Status.NOT_STARTED;
+
+	g.choice_3.setAutoDraw(false);
+	g.choice_3.status = PsychoJS.Status.NOT_STARTED;
 
 	g.left_door.setAutoDraw(false);
 	g.left_door.status = PsychoJS.Status.NOT_STARTED;
@@ -1197,19 +1292,26 @@ function trialRoutineBegin(trial) {
  */
 function trialStep1(trial) {
 	return function () {
-		if (g.step_1_background.status == PsychoJS.Status.NOT_STARTED) {
+		if (g.left_choice_rectangle.status == PsychoJS.Status.NOT_STARTED) {
 			console.log('Step 1');
-			g.step_1_background.setAutoDraw(true);
+			
+			g.left_choice_rectangle.setAutoDraw(true);
+			g.right_choice_rectangle.setAutoDraw(true);
+
+			g.switch_off.setAutoDraw(true);
+
 			g.prompt_text.setAutoDraw(true);
 
 			// set choice text placencemt
-			g.choice_1.pos = [-0.35, 0.25];
-			g.choice_1.color = 'black';
-			g.choice_2.pos = [0.20, 0.1];
-			g.choice_2.color = 'black';
+			g.choice_1.pos = [-0.33, -0.18];
+			g.choice_1.color = 'white';
+			g.choice_2.pos = [0, -0.18];
+			g.choice_2.color = 'white';
+			g.choice_3.pos = [0.33, -0.18];
 
 			g.choice_1.setAutoDraw(true);
 			g.choice_2.setAutoDraw(true);
+			g.choice_3.setAutoDraw(true);
 		}
 
 		if (ready.status === PsychoJS.Status.STARTED) {
@@ -1217,44 +1319,82 @@ function trialStep1(trial) {
 			if (theseKeys.length > 0) {
 				// Force Progression
 				if (theseKeys[0].name == '1') {  // at least one key was pressed
+					// prepare for next step
+					
+					g.prompt_text.setText('Where do you want to go next?');
+					g.choice_1.pos = g.placement_pos['door_text']['left'];
+					g.choice_1.color = 'white';
+					g.choice_2.pos = g.placement_pos['door_text']['right'];
+					g.choice_2.color = 'white';
+
+					g.left_door = new visual.ImageStim({
+						win : psychoJS.window,
+						name : 'left_door', units : 'height', 
+						image : 'orange_door', mask : undefined,
+						ori : 0, pos : g.placement_pos['door']['left'], size: 0.15,
+						color : new util.Color([1, 1, 1]), opacity : 1,
+						flipHoriz : false, flipVert : false,
+						texRes : 128, interpolate : true, depth : 0
+					});
+
+					g.right_door = new visual.ImageStim({
+						win : psychoJS.window,
+						name : 'right_door', units : 'height', 
+						image : 'blue_door', mask : undefined,
+						ori : 0, pos : g.placement_pos['door']['right'], size: 0.15,
+						color : new util.Color([1, 1, 1]), opacity : 1,
+						flipHoriz : false, flipVert : false,
+						texRes : 128, interpolate : true, depth : 0
+					});
+
+					console.log('step 1, pressed 1')
+					clearStims();
+					return Scheduler.Event.NEXT;
 				}
 
 				if (theseKeys[0].name == '2') {  // at least one key was pressed
-					
+					// prepare for next step
+					g.prompt_text.setText('Where do you want to go next?');
+					g.choice_1.pos = g.placement_pos['door_text']['left'];
+					g.choice_1.color = 'white';
+					g.choice_2.pos = g.placement_pos['door_text']['right'];
+					g.choice_2.color = 'white';
+
+					g.left_door = new visual.ImageStim({
+						win : psychoJS.window,
+						name : 'left_door', units : 'height', 
+						image : 'orange_door', mask : undefined,
+						ori : 0, pos : g.placement_pos['door']['left'], size: 0.15,
+						color : new util.Color([1, 1, 1]), opacity : 1,
+						flipHoriz : false, flipVert : false,
+						texRes : 128, interpolate : true, depth : 0
+					});
+
+					g.right_door = new visual.ImageStim({
+						win : psychoJS.window,
+						name : 'right_door', units : 'height', 
+						image : 'blue_door', mask : undefined,
+						ori : 0, pos : g.placement_pos['door']['right'], size: 0.15,
+						color : new util.Color([1, 1, 1]), opacity : 1,
+						flipHoriz : false, flipVert : false,
+						texRes : 128, interpolate : true, depth : 0
+					});
+					console.log('step 1, pressed 2');
+					clearStims();
+					return Scheduler.Event.NEXT;
 				}
 				if (theseKeys[0].name == '3') {
-				
+					g.library_building.setAutoDraw(true);
+					g.office_building.setAutoDraw(true);
+
+					// toggle
+					g.switch_off.setAutoDraw(false);
+					g.switch_off.status = PsychoJS.Status.NOT_STARTED;
+
+					g.switch_on.setAutoDraw(true);
 				}
 
-				// prepare for next step
-				clearStims();
-				g.prompt_text.setText('Where do you want to go next?');
-				g.choice_1.pos = g.placement_pos['door_text']['left'];
-				g.choice_1.color = 'white';
-				g.choice_2.pos = g.placement_pos['door_text']['right'];
-				g.choice_2.color = 'white';
-
-				g.left_door = new visual.ImageStim({
-					win : psychoJS.window,
-					name : 'left_door', units : 'height', 
-					image : 'blue_door', mask : undefined,
-					ori : 0, pos : g.placement_pos['door']['left'], size: 0.15,
-					color : new util.Color([1, 1, 1]), opacity : 1,
-					flipHoriz : false, flipVert : false,
-					texRes : 128, interpolate : true, depth : 0
-				});
-
-				g.right_door = new visual.ImageStim({
-					win : psychoJS.window,
-					name : 'right_door', units : 'height', 
-					image : 'green_door', mask : undefined,
-					ori : 0, pos : g.placement_pos['door']['right'], size: 0.15,
-					color : new util.Color([1, 1, 1]), opacity : 1,
-					flipHoriz : false, flipVert : false,
-					texRes : 128, interpolate : true, depth : 0
-				});
-
-				return Scheduler.Event.NEXT;
+				
 			}
 		}
 
@@ -1314,7 +1454,7 @@ function trialStep2(trial) {
 				g.right_door = new visual.ImageStim({
 					win : psychoJS.window,
 					name : 'right_door', units : 'height', 
-					image : 'yellow_door', mask : undefined,
+					image : 'blue_door', mask : undefined,
 					ori : 0, pos : g.placement_pos['door']['right'], size: 0.15,
 					color : new util.Color([1, 1, 1]), opacity : 1,
 					flipHoriz : false, flipVert : false,
@@ -1382,7 +1522,7 @@ function trialStep2(trial) {
 				g.right_door = new visual.ImageStim({
 					win : psychoJS.window,
 					name : 'right_door', units : 'height', 
-					image : 'pink_door', mask : undefined,
+					image : 'blue_door', mask : undefined,
 					ori : 0, pos : g.placement_pos['door']['right'], size: 0.15,
 					color : new util.Color([1, 1, 1]), opacity : 1,
 					flipHoriz : false, flipVert : false,
