@@ -13,8 +13,12 @@ import * as visual from '/lib/visual-2020.1.js';
 import { Sound } from '/lib/sound-2020.1.js';
 
 var practice = false;
-var LEFT_KEY = 'comma'
-var RIGHT_KEY = 'period'
+var LEFT_KEY = '1'
+var RIGHT_KEY = '2'
+
+var send_choice_onset = true
+
+var start_time = 0;
 
 
 // init psychoJS:
@@ -959,7 +963,7 @@ function trialRoutineEachFrame(trials) {
 
 
 		// update/draw components on each frame
-		if (t >= 0.3) {
+		if (t >= 0.5) {
 			// keep track of start time/frame for later
 			// word.tStart = t;  // (not accounting for frame time here)
 			// word.frameNStart = frameN;  // exact frame index
@@ -1009,7 +1013,6 @@ function trialRoutineEachFrame(trials) {
 				}
 			}
 			
-			
 			bandit_left_up_handle.setAutoDraw(true)
 			bandit_right_up_handle.setAutoDraw(true)
 
@@ -1017,6 +1020,14 @@ function trialRoutineEachFrame(trials) {
 			// Draw the Tracker and Points Counter
 			gameNumtracker.setAutoDraw(true)
 			totalPointsTracker.setAutoDraw(true)
+			if (send_choice_onset)
+			{
+				psychoJS.experiment.addData('timestamp', (Date.now()- start_time));
+				psychoJS.experiment.addData('event', "choice onset");
+				sendData(psychoJS.experiment._trialsData)
+				send_choice_onset = false
+				psychoJS.experiment.nextEntry()
+			}
 		}
 
 		if (showLastTrial) {
@@ -1068,6 +1079,9 @@ function trialRoutineEachFrame(trials) {
 				resp.keys = theseKeys[0].name;  // just the last key pressed
 				resp.rt = theseKeys[0].rt;
 
+				psychoJS.experiment.addData('timestamp', (Date.now() - start_time));
+				psychoJS.experiment.addData('event', "response");
+
 				// console.log(theseKeys)
 				lastTrialKeyPressed = resp.keys; // store the value globally
 				
@@ -1093,11 +1107,12 @@ function trialRoutineEachFrame(trials) {
 				// console.log(left_reward)
 
 				// If it's the last trial, hang here for a second to show points
-				if (isLastTrial(game_type, trial_num)){
+				if (isLastTrial(game_type, trial_num)) {
 					// wait a second
 					showLastTrial = true;
 					bandits_rect['right'][trial_num].fillColor = false
 					bandits_rect['left'][trial_num].fillColor = false
+					trialClock.reset(); // clock
 
 					
 					now = trialClock.getTime();
@@ -1108,6 +1123,18 @@ function trialRoutineEachFrame(trials) {
 					time_continue = 999999
 				}
 			}
+			// // UNCOMMENT TO TIME LIMIT THE TRIAL.
+			// else if(t >= 1.7) // TODO: add an else(timer runs out) to end the trial. Mark this as a new event. 
+			// {
+			// 	bandits['left'][trial_num].setText('XX') 
+			// 	// Set the other bandit as XX
+			// 	bandits['right'][trial_num].setText('XX')
+			// 	psychoJS.experiment.addData('timestamp', Date.now());
+			// 	psychoJS.experiment.addData('event', "Trial Time Ran Out");
+			// 	sendData(psychoJS.experiment._trialsData)
+			// 	psychoJS.experiment.nextEntry()
+			// 	return Scheduler.Event.NEXT;
+			// }
 		}
 
 		// check for quit (typically the Esc key)
@@ -1145,7 +1172,9 @@ var key_map = {
 	'left': 'left',
 	'right': 'right',
 	'comma': 'left',
-	'period': 'right'
+	'period': 'right',
+	'1': 'left',
+	'2': 'right'
 }
 
 function sendData(trial_data) {
@@ -1249,9 +1278,14 @@ function readyRoutineEachFrame(trials) {
 		// console.log('in ready routine')
 		goodLuckStim.setAutoDraw(true)
 
-		if (psychoJS.eventManager.getKeys({ keyList: ['right'] }).length > 0) {
+		if (psychoJS.eventManager.getKeys({ keyList: ['5'] }).length > 0) {
 			track.stop();
 			continueRoutine = false
+			psychoJS.experiment.addData('timestamp', 0);
+			start_time = Date.now()
+			psychoJS.experiment.addData('event', "Task Start");
+			sendData(psychoJS.experiment._trialsData)
+			psychoJS.experiment.nextEntry()
 		}
 
 		// check for quit (typically the Esc key)
@@ -1416,6 +1450,7 @@ function endLoopIteration(thisScheduler, loop = undefined) {
 			{
 				// Send Data for Every Trial
 				sendData(psychoJS.experiment._trialsData)
+				send_choice_onset = true
 				const thisTrial = loop.getCurrentTrial();
 				if (typeof thisTrial === 'undefined' || !('isTrials' in thisTrial) || thisTrial.isTrials)
 				{
