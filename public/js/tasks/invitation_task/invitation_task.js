@@ -37,6 +37,40 @@ g.outcome_media = {
 	'positive': []		// holds positive image-audio pair
 }
 
+// the image path where key is the current position and the value is the path to the 
+// room image.
+// position 1 is when user is outisde selecting the building
+g.library_path =  {
+	2: {
+		'left': 'image_path to this room',
+		'right': 'image path to the right rooom'
+	},
+	3: {
+		'left': 'image path position 4 left room',
+		'right':  'image path to position 4 right room',
+	},
+	4: {
+		'left': ' left to exit building?',
+		'right': 'right to ext building?'
+	}
+}
+
+// the image path for the office building
+g.office_path = {
+	2: {
+		'left': 'image_path to this room',
+		'right': 'image path to the right rooom'
+	},
+	3: {
+		'left': 'image path position 4 left room',
+		'right':  'image path to position 4 right room',
+	},
+	4: {
+		'left': ' left to exit building?',
+		'right': 'right to ext building?'
+	}
+}
+
 // Text response to dislpay after choosing a selection.
 g.outcome_text_responses = {
 	'accept': "Sure, I'll help!",
