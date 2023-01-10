@@ -20,6 +20,8 @@ var send_choice_onset = true
 
 var start_time = 0;
 
+var points_fixation_stim;
+
 
 // init psychoJS:
 const psychoJS = new PsychoJS({
@@ -227,7 +229,7 @@ dialogCancelScheduler.add(quitPsychoJS, '', false);
 // Add Slides to resources
 var resources = [
 	// { name: 'game_type.xls', path: '/js/tasks/horizon/game_type.xls' },
-	{ name: 'game_type_practice.xls', path: '/js/tasks/horizon/game_type_practice.xls' },
+	{ name: 'game_type_practice_2.xls', path: '/js/tasks/horizon/game_type_practice_2.xls' },
 	// { name: 'instruct_schedule.xls', path: '/js/tasks/horizon/media/instruct_schedule.xls' },
 	{ name: 'example_play.xls', path: '/js/tasks/horizon/media/example_play.xls' },
 	{ name: 'instruct_slide_r2.xls', path: '/js/tasks/horizon/media/instruct_slide_r2.xls' },
@@ -346,6 +348,17 @@ function experimentInit() {
 	
 	// Initialize components for Routine "instruct"
 	instructClock = new util.Clock();
+
+	points_fixation_stim = new visual.TextStim({
+		win: psychoJS.window,
+		name: 'pointsTracker',
+		text: 'X',
+		font: 'Arial',
+		units: 'norm',
+		pos: [0, 0], height: 0.12, wrapWidth: undefined, ori: 0,
+		color: new util.Color('white'), opacity: 1,
+		depth: 0.0
+	});
 
 	instrBelow = new visual.TextStim({
 		win: psychoJS.window,
@@ -630,7 +643,7 @@ function instruct_pagesLoopBegin(thisScheduler) {
 		thisScheduler.add(instructRoutineBegin(snapshot));
 		thisScheduler.add(instructSlideRoutineEachFrame(snapshot));
 		thisScheduler.add(instructRoutineEnd(snapshot));
-		thisScheduler.add(endLoopIteration(thisScheduler, snapshot));
+		thisScheduler.add(endInstructLoopIteration(thisScheduler, snapshot));
 	}
 
 	// console.log(thisScheduler)
@@ -798,7 +811,7 @@ function trialsLoopBegin(thisScheduler) {
 			psychoJS: psychoJS,
 			nReps: 1, method: TrialHandler.Method.SEQUENTIAL,
 			extraInfo: expInfo, originPath: undefined,
-			trialList: 'game_type_practice.xls',
+			trialList: 'game_type_practice_2.xls',
 			seed: undefined, name: 'trials'
 		});
 	} else {
@@ -907,6 +920,12 @@ function trialRoutineBegin(trials) {
 			bandits_rect['right'][trial_num].fillColor = false
 			bandits_rect['left'][trial_num].fillColor = false
 			clearBandits()
+			for (var i = 0; i < horizon_map[game_type]; i++){
+				bandits_rect['left'][i].setAutoDraw(true)
+				bandits_rect['right'][i].setAutoDraw(true)
+				bandits_rect['right'][i].lineColor = new util.Color(rightColor)
+				bandits_rect['left'][i].lineColor = new util.Color(leftColor)
+			}
 		}
 
 		// Set components from last trial
@@ -985,9 +1004,67 @@ function trialRoutineEachFrame(trials) {
 			}
 		
 			if (showLastTrial) {
+				console.log("hello")
 				if (trialClock.getTime() >= time_continue) {
-					showLastTrial = false
-					return Scheduler.Event.NEXT;
+					console.log("hello2")
+					//showLastTrial = false
+					// TODO add in fixation logic.
+					if (points_fixation_stim.status == PsychoJS.Status.NOT_STARTED) {
+						points_fixation_stim.color = new util.Color('white')
+						// bandits_rect['right'][trial_num].fillColor = false
+						// bandits_rect['left'][trial_num].fillColor = false
+						for (var i = 0; i < horizon_map[game_type]; i++){
+							bandits_rect['right'][i].fillColor = false
+							bandits_rect['left'][i].fillColor = false
+							bandits_rect['right'][i].lineColor = false
+							bandits_rect['left'][i].lineColor = false
+							bandits_rect['left'][i].setAutoDraw(true)
+							bandits_rect['right'][i].setAutoDraw(true)
+						}
+						// // Show only last Trials
+						// for (var i = 0; i < trial_num; i++){
+						// 	bandits['left'][i].setAutoDraw(true)
+						// 	// Init  Right TexStims
+						// 	bandits['right'][i].setAutoDraw(true)
+						// }
+						bandit_left_up_handle.setAutoDraw(false)
+						bandit_right_up_handle.setAutoDraw(false)
+						currentTrialNumber.setAutoDraw(false)
+						// Draw the Tracker and Points Counter
+						gameNumtracker.setAutoDraw(false)
+						totalPointsTracker.setAutoDraw(false)
+
+						psychoJS.experiment.addData('timestamp', (Date.now() - start_time));
+						psychoJS.experiment.addData('event', "fixation onset");
+						sendData(psychoJS.experiment._trialsData)
+						psychoJS.experiment.nextEntry()
+						
+						points_fixation_stim.setText('+')
+						points_fixation_stim.setAutoDraw(true)
+						// bandit_left_up_handle.setAutoDraw(false)
+						// bandit_right_up_handle.setAutoDraw(false)
+						// currentTrialNumber.setAutoDraw(false)
+						// // Draw the Tracker and Points Counter
+						// gameNumtracker.setAutoDraw(false)
+						// totalPointsTracker.setAutoDraw(false)
+						// clearBandits()
+			
+						// mark_event(trials_data, globalClock, 'NA', trial_type, event_types['FIXATION_ONSET'],
+						// 	'NA', 'NA' , 'NA')
+						console.log('hello3')
+			
+					}
+					console.log(trialClock.getTime())
+					console.log(time_continue + ITI)
+					if (trialClock.getTime() >= time_continue + ITI) {
+						points_fixation_stim.setAutoDraw(false)
+						points_fixation_stim.status = PsychoJS.Status.NOT_STARTED
+						console.log('hello4')
+						showLastTrial = false
+						return Scheduler.Event.NEXT;
+					}
+					console.log('hello5')
+					return Scheduler.Event.FLIP_REPEAT;
 				}
 		
 			}
@@ -1082,6 +1159,16 @@ function trialRoutineEachFrame(trials) {
 				psychoJS.experiment.addData('timestamp', (Date.now() - start_time));
 				psychoJS.experiment.addData('event', "response");
 
+				psychoJS.experiment.addData('resp.keys', key_map[resp.keys]);
+
+				// sendData(psychoJS.experiment._trialsData)
+				// send_choice_onset = true
+				// const thisTrial = loop.getCurrentTrial();
+				// if (typeof thisTrial === 'undefined' || !('isTrials' in thisTrial) || thisTrial.isTrials)
+				// {
+				// 	psychoJS.experiment.nextEntry(loop);
+				// }
+
 				// console.log(theseKeys)
 				lastTrialKeyPressed = resp.keys; // store the value globally
 				
@@ -1105,6 +1192,15 @@ function trialRoutineEachFrame(trials) {
 					bandit_right_down_handle.setAutoDraw(true)
 				}
 				// console.log(left_reward)
+
+				psychoJS.experiment.addData('points', totalPoints);
+				sendData(psychoJS.experiment._trialsData)
+				console.log(trials)
+				const thisTrial = trials.getCurrentTrial();
+				if (typeof thisTrial === 'undefined' || !('isTrials' in thisTrial) || thisTrial.isTrials)
+				{
+					psychoJS.experiment.nextEntry(trials);
+				}
 
 				// If it's the last trial, hang here for a second to show points
 				if (isLastTrial(game_type, trial_num)) {
@@ -1214,11 +1310,11 @@ function trialRoutineEnd(trials) {
 		// 	}
 		// }
 		// store data for thisExp (ExperimentHandler)
-		psychoJS.experiment.addData('resp.keys', key_map[resp.keys]);
-		psychoJS.experiment.addData('points', totalPoints);
+		// psychoJS.experiment.addData('resp.keys', key_map[resp.keys]);
+		// psychoJS.experiment.addData('points', totalPoints);
 		// psychoJS.experiment.addData('resp.corr', resp.corr);
 		if (typeof resp.keys !== 'undefined') {  // we had a response
-			psychoJS.experiment.addData('resp.rt', resp.rt);
+			// psychoJS.experiment.addData('resp.rt', resp.rt);
 			routineTimer.reset();
 		}
 		bandits_rect['right'][trial_num].fillColor = false
@@ -1283,6 +1379,7 @@ function readyRoutineEachFrame(trials) {
 			continueRoutine = false
 			psychoJS.experiment.addData('timestamp', 0);
 			start_time = Date.now()
+			psychoJS.experiment.addData('points', start_time);
 			psychoJS.experiment.addData('event', "Task Start");
 			sendData(psychoJS.experiment._trialsData)
 			psychoJS.experiment.nextEntry()
@@ -1427,6 +1524,43 @@ function thanksRoutineEnd(trials) {
 
 
 function endLoopIteration(thisScheduler, loop = undefined) {
+	// ------Prepare for next entry------
+	return function () {
+		if (typeof loop !== 'undefined')
+		{
+			
+			
+		// console.log(psychoJS.experiment._trialsData)
+			// ------Check if user ended loop early------
+			if (loop.finished)
+			{
+				// Check for and save orphaned data
+				if (psychoJS.experiment.isEntryEmpty())
+				{
+					psychoJS.experiment.nextEntry(loop);
+				}
+				thisScheduler.stop();
+
+				// Send Data at last loop 
+				sendData(psychoJS.experiment._trialsData)
+			} else
+			{
+				// Send Data for Every Trial
+				// sendData(psychoJS.experiment._trialsData)
+				send_choice_onset = true
+				// const thisTrial = loop.getCurrentTrial();
+				// if (typeof thisTrial === 'undefined' || !('isTrials' in thisTrial) || thisTrial.isTrials)
+				// {
+				// 	psychoJS.experiment.nextEntry(loop);
+				// }
+			}
+		}
+
+		return Scheduler.Event.NEXT;
+	};
+}
+
+function endInstructLoopIteration(thisScheduler, loop = undefined) {
 	// ------Prepare for next entry------
 	return function () {
 		if (typeof loop !== 'undefined')

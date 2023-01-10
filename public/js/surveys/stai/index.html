@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <style type="text/css">
+        @font-face {
+            font-family: gotham;
+            src: url(/gotham-book-regular.otf);
+        }
+
+        * {
+            font-family: Helvetica Neue;
+        }
+
+        a:link,
+        a:visited {
+            color: #5e3f99;
+        }
+
+        input[type=text]:focus {
+            border-color: #f68826;
+            box-shadow: 0 0 5px #f68826 !important;
+        }
+
+        input[type=email]:focus {
+            border-color: #f68826;
+            box-shadow: 0 0 5px #f68826 !important;
+        }
+
+        .sv-root-modern .sv-container-modern {
+            color: white !important;
+            fill: white !important;
+        }
+        .sv-radio__svg {
+            border-color: white !important;
+        }
+
+        .sv-root-modern .sv-radio--checked .sv-radio__svg  {
+            fill: white !important;
+        }
+
+        .sv-root-modern input.sv-text, textarea.sv-comment, select.sv-dropdown{
+            color: white !important;
+        }
+        
+    </style>
+    <title>STAI Survey</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+        crossorigin="anonymous"></script>
+
+    <!-- Latest compiled and minified CSS -->
+    <!-- Using Bootsawtch theme: https://bootswatch.com/cyborg/ -->
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js" integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous"></script>
+
+    <link href="https://unpkg.com/survey-knockout@1.8.41/modern.css" type="text/css" rel="stylesheet"/>
+    <script src="https://unpkg.com/jquery"></script>
+    <script src="https://unpkg.com/survey-jquery@1.8.41/survey.jquery.min.js"></script>
+
+    <script type="text/javascript" src='/js/StimToolLib.js'></script>
+
+</head>
+
+<body>
+
+    <div class="container" style="max-width: 800px;">
+        <div class="py-5 text-center">
+            <img class="d-block mx-auto mb-4" src="/images/logo_reversed.jpg" alt="" width="180" height="50">
+            <!-- <h4>Cultural Survey</h4> -->
+          </div>
+    </div>
+
+    <div class="container" style="max-width: 800px;">
+        <div class="row" >
+            <div id="surveyElement" style="margin-bottom:40px"></div>
+            
+            <div id="surveyResult"></div>
+        </div>
+    </div>
+
+    <div class="jumbotron container" style="margin-bottom:0;max-width: 400px;">
+        <table class="table table-hover">
+            <tbody>
+                <tr>
+                  <th scope="row">ID:</th>
+                  <td><a id="participant"></a></td>
+                </tr>
+                <tr>
+                    <th scope="row">Session:</th>
+                    <td><a id="session"></a></td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Study:</th>
+                    <td><a id="study"></a></td>
+                  </tr>
+              </tbody>
+        </table>
+        <p style="text-align: center;">&copy; 2021 <a href="http://www.laureateinstitute.org">laureateinstitute.org</a>. All rights reserved.</p>
+    </div>
+
+    <script type="text/javascript">
+
+        var select_item = 0
+
+        var focused_question = 1
+
+        Survey
+            .StylesManager
+            .applyTheme("modern");
+        // Survey.Survey.cssType = "bootstrap";
+        // Survey.defaultBootstrapCss.navigationButton = "btn";
+        var json = {
+            title: "State-trait Anxiety Inventory",
+            description: "",
+            logoPosition: "right",
+            pages: [
+                {
+                name: "page1",
+                elements: [
+                    {
+                    type: "radiogroup",
+                    name: "stai1",
+                    title: "I feel calm.",
+                    isRequired: true,
+                    choices: [{
+                        value: "1",
+                        text: "Not at all"
+                    }, {
+                        value: "2",
+                        text: "Somewhat"
+                    }, {
+                        value: "3",
+                        text: "Moderately so"
+                    }, {
+                        value: "4",
+                        text: "Very much so"
+                    }]
+                    },
+                ]},
+                {
+                name: "page2",
+                elements: [
+                    {
+                    type: "radiogroup",
+                    name: "stai2",
+                    title: "I feel secure.",
+                    isRequired: true,
+                    choices: [{
+                        value: "1",
+                        text: "Not at all"
+                    }, {
+                        value: "2",
+                        text: "Somewhat"
+                    }, {
+                        value: "3",
+                        text: "Moderately so"
+                    }, {
+                        value: "4",
+                        text: "Very much so"
+                    }]
+                    },
+                ]},
+                {
+                name: "page3",
+                elements: [
+                    {
+                    type: "radiogroup",
+                    name: "stai3",
+                    title: "I am tense.",
+                    isRequired: true,
+                    choices: [{
+                        value: "1",
+                        text: "Not at all"
+                    }, {
+                        value: "2",
+                        text: "Somewhat"
+                    }, {
+                        value: "3",
+                        text: "Moderately so"
+                    }, {
+                        value: "4",
+                        text: "Very much so"
+                    }]
+                    },
+                ]},
+                {
+                name: "page4",
+                elements: [
+                    {
+                    type: "radiogroup",
+                    name: "stai4",
+                    title: "I feel strained.",
+                    isRequired: true,
+                    choices: [{
+                        value: "1",
+                        text: "Not at all"
+                    }, {
+                        value: "2",
+                        text: "Somewhat"
+                    }, {
+                        value: "3",
+                        text: "Moderately so"
+                    }, {
+                        value: "4",
+                        text: "Very much so"
+                    }]
+                    },
+                ]},
+                {
+                name: "page5",
+                elements: [
+                    {
+                    type: "radiogroup",
+                    name: "stai5",
+                    title: "I feel at ease.",
+                    isRequired: true,
+                    choices: [{
+                        value: "1",
+                        text: "Not at all"
+                    }, {
+                        value: "2",
+                        text: "Somewhat"
+                    }, {
+                        value: "3",
+                        text: "Moderately so"
+                    }, {
+                        value: "4",
+                        text: "Very much so"
+                    }]
+                    },
+                ]},
+                {
+                name: "page6",
+                elements: [
+                    {
+                    type: "radiogroup",
+                    name: "stai6",
+                    title: "I feel upset.",
+                    isRequired: true,
+                    choices: [{
+                        value: "1",
+                        text: "Not at all"
+                    }, {
+                        value: "2",
+                        text: "Somewhat"
+                    }, {
+                        value: "3",
+                        text: "Moderately so"
+                    }, {
+                        value: "4",
+                        text: "Very much so"
+                    }]
+                    },
+                ]},
+                {
+                name: "page7",
+                elements: [
+                    {
+                    type: "radiogroup",
+                    name: "stai7",
+                    title: "I am presentyl worrying over possible misfortunes.",
+                    isRequired: true,
+                    choices: [{
+                        value: "1",
+                        text: "Not at all"
+                    }, {
+                        value: "2",
+                        text: "Somewhat"
+                    }, {
+                        value: "3",
+                        text: "Moderately so"
+                    }, {
+                        value: "4",
+                        text: "Very much so"
+                    }]
+                    },
+                ]},
+                {
+                name: "page8",
+                elements: [
+                    {
+                    type: "radiogroup",
+                    name: "stai8",
+                    title: "I feel satisfied.",
+                    isRequired: true,
+                    choices: [{
+                        value: "1",
+                        text: "Not at all"
+                    }, {
+                        value: "2",
+                        text: "Somewhat"
+                    }, {
+                        value: "3",
+                        text: "Moderately so"
+                    }, {
+                        value: "4",
+                        text: "Very much so"
+                    }]
+                    },
+                ]},
+                {
+                name: "page9",
+                elements: [
+                    {
+                    type: "radiogroup",
+                    name: "stai9",
+                    title: "I feel frightened.",
+                    isRequired: true,
+                    choices: [{
+                        value: "1",
+                        text: "Not at all"
+                    }, {
+                        value: "2",
+                        text: "Somewhat"
+                    }, {
+                        value: "3",
+                        text: "Moderately so"
+                    }, {
+                        value: "4",
+                        text: "Very much so"
+                    }]
+                    },
+                ]},
+                {
+                name: "page10",
+                elements: [
+                    {
+                    type: "radiogroup",
+                    name: "stai10",
+                    title: "I feel comfortable.",
+                    isRequired: true,
+                    choices: [{
+                        value: "1",
+                        text: "Not at all"
+                    }, {
+                        value: "2",
+                        text: "Somewhat"
+                    }, {
+                        value: "3",
+                        text: "Moderately so"
+                    }, {
+                        value: "4",
+                        text: "Very much so"
+                    }]
+                    },
+                ]},
+                {
+                name: "page11",
+                elements: [
+                    {
+                    type: "radiogroup",
+                    name: "stai11",
+                    title: "I feel self-confident.",
+                    isRequired: true,
+                    choices: [{
+                        value: "1",
+                        text: "Not at all"
+                    }, {
+                        value: "2",
+                        text: "Somewhat"
+                    }, {
+                        value: "3",
+                        text: "Moderately so"
+                    }, {
+                        value: "4",
+                        text: "Very much so"
+                    }]
+                    },
+                ]},
+                {
+                name: "page12",
+                elements: [
+                    {
+                    type: "radiogroup",
+                    name: "stai12",
+                    title: "I feel nervous.",
+                    isRequired: true,
+                    choices: [{
+                        value: "1",
+                        text: "Not at all"
+                    }, {
+                        value: "2",
+                        text: "Somewhat"
+                    }, {
+                        value: "3",
+                        text: "Moderately so"
+                    }, {
+                        value: "4",
+                        text: "Very much so"
+                    }]
+                    },
+                ]},
+                {
+                name: "page13",
+                elements: [
+                    {
+                    type: "radiogroup",
+                    name: "stai13",
+                    title: "I am jittery.",
+                    isRequired: true,
+                    choices: [{
+                        value: "1",
+                        text: "Not at all"
+                    }, {
+                        value: "2",
+                        text: "Somewhat"
+                    }, {
+                        value: "3",
+                        text: "Moderately so"
+                    }, {
+                        value: "4",
+                        text: "Very much so"
+                    }]
+                    },
+                ]},
+                {
+                name: "page14",
+                elements: [
+                    {
+                    type: "radiogroup",
+                    name: "stai14",
+                    title: "I feel indecisive.",
+                    isRequired: true,
+                    choices: [{
+                        value: "1",
+                        text: "Not at all"
+                    }, {
+                        value: "2",
+                        text: "Somewhat"
+                    }, {
+                        value: "3",
+                        text: "Moderately so"
+                    }, {
+                        value: "4",
+                        text: "Very much so"
+                    }]
+                    },
+                ]},
+                {
+                name: "page15",
+                elements: [
+                    {
+                    type: "radiogroup",
+                    name: "stai15",
+                    title: "I am relaxed.",
+                    isRequired: true,
+                    choices: [{
+                        value: "1",
+                        text: "Not at all"
+                    }, {
+                        value: "2",
+                        text: "Somewhat"
+                    }, {
+                        value: "3",
+                        text: "Moderately so"
+                    }, {
+                        value: "4",
+                        text: "Very much so"
+                    }]
+                    },
+                ]},
+                {
+                name: "page16",
+                elements: [
+                    {
+                    type: "radiogroup",
+                    name: "stai16",
+                    title: "I feel content.",
+                    isRequired: true,
+                    choices: [{
+                        value: "1",
+                        text: "Not at all"
+                    }, {
+                        value: "2",
+                        text: "Somewhat"
+                    }, {
+                        value: "3",
+                        text: "Moderately so"
+                    }, {
+                        value: "4",
+                        text: "Very much so"
+                    }]
+                    },
+                ]},
+                {
+                name: "page17",
+                elements: [
+                    {
+                    type: "radiogroup",
+                    name: "stai17",
+                    title: "I am worried.",
+                    isRequired: true,
+                    choices: [{
+                        value: "1",
+                        text: "Not at all"
+                    }, {
+                        value: "2",
+                        text: "Somewhat"
+                    }, {
+                        value: "3",
+                        text: "Moderately so"
+                    }, {
+                        value: "4",
+                        text: "Very much so"
+                    }]
+                    },
+                ]},
+                {
+                name: "page18",
+                elements: [
+                    {
+                    type: "radiogroup",
+                    name: "stai18",
+                    title: "I feel confused.",
+                    isRequired: true,
+                    choices: [{
+                        value: "1",
+                        text: "Not at all"
+                    }, {
+                        value: "2",
+                        text: "Somewhat"
+                    }, {
+                        value: "3",
+                        text: "Moderately so"
+                    }, {
+                        value: "4",
+                        text: "Very much so"
+                    }]
+                    },
+                ]},
+                {
+                name: "page19",
+                elements: [
+                    {
+                    type: "radiogroup",
+                    name: "stai19",
+                    title: "I feel steady.",
+                    isRequired: true,
+                    choices: [{
+                        value: "1",
+                        text: "Not at all"
+                    }, {
+                        value: "2",
+                        text: "Somewhat"
+                    }, {
+                        value: "3",
+                        text: "Moderately so"
+                    }, {
+                        value: "4",
+                        text: "Very much so"
+                    }]
+                    },
+                ]},
+                {
+                name: "page20",
+                elements: [
+                    {
+                    type: "radiogroup",
+                    name: "stai20",
+                    title: "I feel pleasant.",
+                    isRequired: true,
+                    choices: [{
+                        value: "1",
+                        text: "Not at all"
+                    }, {
+                        value: "2",
+                        text: "Somewhat"
+                    }, {
+                        value: "3",
+                        text: "Moderately so"
+                    }, {
+                        value: "4",
+                        text: "Very much so"
+                    }]
+                    },
+                ]},
+            ],
+            };
+
+        window.survey = new Survey.Model(json);
+
+        $(document).keydown(function(e) {
+
+            // Set self as the current item in focus
+            var self = $(':focus'),
+                // Set the form by the current item in focus
+                form = self.parents('form:eq(0)'),
+                focusable;
+
+            // Array of Indexable/Tab-able items
+            //focusable = form.find('a,select,button,textarea,div[contenteditable=true]').filter(':visible');
+            focusable = form.find('div').filter(':visible');
+
+            function oneKey(){
+                if (e.key === "1") {
+                    survey.currentPage.questions.forEach((choice) => {
+                        if(choice.name == `stai${focused_question}`)
+                        {
+                            choices_number = choice.visibleChoices.length
+                        }
+                    })
+
+                    if(survey.getValue(`stai${focused_question}`))
+                    {
+                        select_item = survey.getValue(`stai${focused_question}`)
+                        select_item--
+                        if(choices_number == 4)
+                        {
+                            if(select_item == 0)
+                            {
+                                select_item = choices_number
+                            }
+                        }
+                        else
+                        {
+                            if(select_item == -1)
+                            {
+                                select_item = select_item = choices_number - 1
+                            }
+                        }
+                    }
+
+                    survey.setValue(`stai${focused_question}`, select_item.toString())
+                    select_item--
+                    if(choices_number == 4)
+                    {
+                        if(select_item == 0)
+                        {
+                            select_item = choices_number
+                        }
+                    }
+                    else
+                    {
+                        if(select_item == -1)
+                        {
+                            select_item = select_item = choices_number - 1
+                        }
+                    }
+                }
+            }
+
+            function twoKey(){
+                if (e.key === "2") { // 2 key
+
+                    survey.currentPage.questions.forEach((choice) => {
+                        console.log(choice.name)
+                        if(choice.name == `stai${focused_question}`)
+                        {
+                            //the 0 index is the issue here
+                            choices_number = choice.visibleChoices.length
+                            console.log(choices_number)
+                            //console.log(survey.currentPage.questions[0].visibleChoices.length)
+                        }
+                    })
+
+                    if(survey.getValue(`stai${focused_question}`))
+                    {
+                        select_item = survey.getValue(`stai${focused_question}`)
+                        select_item++
+                        if(choices_number == 4)
+                        {
+                            if(select_item == choices_number + 1)
+                            {
+                                select_item = 1
+                            }
+                        }
+                        else
+                        {
+                            if(select_item == choices_number)
+                            {
+                                select_item = 0
+                            // console.log(select_item)
+                            }
+                        }
+                    }
+
+                    console.log("setting forward to: ", select_item)
+
+
+                    survey.setValue(`stai${focused_question}`, select_item.toString())
+                    select_item++
+                    if(choices_number == 4)
+                    {
+                        if(select_item == choices_number + 1)
+                        {
+                            select_item = 1
+                        }
+                    }
+                    else
+                    {
+                        if(select_item == choices_number)
+                        {
+                            select_item = 0
+                        // console.log(select_item)
+                        }
+                    }
+                }
+            }
+
+            function threeKey(){
+                if (e.key === "3") { // 2 key
+
+                    focused_question++
+                    //console.log(survey.currentPage)
+
+                    if(survey.isLastPage)
+                    {
+                        survey.completeLastPage()
+                    }
+
+                    stat = survey.nextPage()
+
+                    if(stat == false)
+                    {
+                        focused_question--
+                    }
+                }
+            }
+
+            function fourKey(){
+                if (e.key === "4") { // 2 key
+
+                    focused_question--
+                    survey.prevPage()
+                }
+            }
+            twoKey()
+            oneKey()
+            threeKey()
+            fourKey()
+        });
+
+
+        // Recor the response time or how long they spent on a page
+        lastpage = survey.currentPage;
+        function timerLoop(elapsed) {
+            var page = survey.currentPage; // page variable is the currentPage on the survey
+            if (!page) return;
+            if (lastpage != page) {
+                // set new start date
+                start = new Date().getTime(); // sets new start Date object when page has changed.
+                lastpage = page // sets the last page to currente page 
+
+            }
+            var valueName = "TRQ" + survey.pages.indexOf(page);
+
+            var ms = survey.getValue(valueName); // gets the value of the valuename. e.g: TRQ1
+
+            if (ms == null) ms = 0;
+            else ms = elapsed;
+            survey.setValue(valueName, ms);
+            $('#timeEl').text(elapsed + ' ms');
+        }
+
+
+        function getQueryVariable(variable) {
+            var query = window.location.search.substring(1);
+            var vars = query.split('&');
+            for (var i = 0; i < vars.length; i++) {
+                var pair = vars[i].split('=');
+                if (decodeURIComponent(pair[0]) == variable) {
+                    return decodeURIComponent(pair[1]);
+                }
+            }
+            return 'NULL'
+        }
+
+        survey.showProgressBar = "bottom";
+
+        survey.goNextPageAutomatic = false
+        survey.showNavigationButtons = true;
+        survey.showCompletedPage = false;
+
+        // Get Query Variables
+        var surveyname = getQueryVariable('survey');
+
+        var expInfo = { 'participant': '' ,'session': '',  'task': surveyname, 'date' : formatDate(), 'study': '', 'id': getQueryVariable('id') };
+
+        // Get info Promize
+        const getInfoPromise = new Promise((resolve, reject) => {
+            $.ajax({
+                type: "POST",
+                url: '/getInfo',
+                data: { 'id': expInfo.id },
+                dataType: 'JSON',
+                success: function (data) {
+                    resolve(data)
+                }
+            })
+        })
+            // Read getINFO 
+            .then((values) => {
+                console.log(values)
+                if (values.subject && values.session && values.study) {
+                    expInfo.participant = values.subject
+                    expInfo.study = values.study
+                    expInfo.session = values.session
+                    expInfo.run_id = getQueryVariable('run')
+                }
+
+                survey.onComplete.add(function (result) {
+                    //result.preventDefault();
+                    postSurveyData(result.data, expInfo.session, expInfo.participant);
+                });
+
+                $("#surveyElement").Survey({model: survey});
+    
+                $("#participant").text(expInfo.participant);
+                $("#session").text(expInfo.session);
+                $("#study").text(expInfo.study);
+
+            })
+
+        function postSurveyData(data, session, mkturkid) {
+
+            console.log("hi")
+            console.log(data)
+            console.log(expInfo)
+            expInfo.session = parseInt(getQueryVariable('session'))
+            console.log(expInfo)
+            
+            $.ajax({
+                type: "POST",
+                url: '/save',
+                data: {
+                    "trials_data": data,
+                    "expInfo": expInfo
+                },
+                dataType: 'JSON',
+                statusCode: {
+                    200: function() {
+                        console.log('sucess saved on backend')
+                        window.location.replace('/link?id=' + expInfo.id  + '&index=' + (parseInt(getQueryVariable('index')) + 1))
+                    }
+                }
+            }) 
+                
+        }
+
+        var start = new Date().getTime(),
+            elapsed = '0.0';
+
+        // executes timerCallback every 100 ms
+        timerID = window.setInterval(function () {
+
+            var time = new Date().getTime() - start;
+            elapsed = Math.floor(time);
+
+            //alert(elapsed);
+            //$('#timeEl').text(elapsed + ' ms');
+
+            //displayTime(1);
+            timerLoop(elapsed);
+
+        }, 5);
+    </script>
+
+</body>
+
+</html>

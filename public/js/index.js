@@ -156,6 +156,7 @@ $('#study-list').change(function () {
         'CognitiveControl',
         'Driving2',
         'METH_Pilot',
+        'METH_Scan_Pilot',
         'WBMTURK_Social_Media',
         'WBMTURK_Blind_Dating',
         'WBMTURK_Emotional_Faces',
