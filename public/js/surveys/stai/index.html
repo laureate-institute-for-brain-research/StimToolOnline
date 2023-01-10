@@ -4,12 +4,16 @@
 <head>
     <style type="text/css">
         @font-face {
-            font-family: gotham;
-            src: url(/gotham-book-regular.otf);
+            /*font-family: gotham;
+            src: url(/gotham-book-regular.otf);*/
+            font-family: system-ui;
+            src: url('system-ui.woff2') format('woff2');
         }
 
         * {
-            font-family: Helvetica Neue;
+            /*font-family: Helvetica Neue;*/
+            font-family: system-ui;
+            font-size: 1.3rem;
         }
 
         a:link,
@@ -109,13 +113,22 @@
 
         var focused_question = 1
 
+        var elem = document.documentElement;
+
+        function openFullscreen() {
+            if (elem.requestFullscreen) {
+                elem.requestFullscreen();
+            }
+        }
+
+
         Survey
             .StylesManager
             .applyTheme("modern");
         // Survey.Survey.cssType = "bootstrap";
         // Survey.defaultBootstrapCss.navigationButton = "btn";
         var json = {
-            title: "State-trait Anxiety Inventory",
+            title: "",
             description: "",
             logoPosition: "right",
             pages: [
@@ -263,7 +276,7 @@
                     {
                     type: "radiogroup",
                     name: "stai7",
-                    title: "I am presentyl worrying over possible misfortunes.",
+                    title: "I am presently worrying over possible misfortunes.",
                     isRequired: true,
                     choices: [{
                         value: "1",
@@ -598,6 +611,7 @@
 
             function oneKey(){
                 if (e.key === "1") {
+                    openFullscreen()
                     survey.currentPage.questions.forEach((choice) => {
                         if(choice.name == `stai${focused_question}`)
                         {
@@ -646,6 +660,7 @@
 
             function twoKey(){
                 if (e.key === "2") { // 2 key
+                    openFullscreen()
 
                     survey.currentPage.questions.forEach((choice) => {
                         console.log(choice.name)

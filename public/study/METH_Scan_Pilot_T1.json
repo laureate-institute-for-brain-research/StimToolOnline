@@ -1,14 +1,15 @@
 {
     "name": "METH_Scan_Pilot T1",
     "order": [
-        "/?index=0&survey=scales&session=1",
-        "/?index=1&survey=stai&session=1",
-        "/?index=2&task=horizon&run=METH_Scan_Pilot_R1.json",
-        "/?index=3&survey=scales&session=2",
-        "/?index=4&survey=stai&session=2",
-        "/?index=5&task=horizon&run=METH_Scan_Pilot_R2.json",
-        "/?index=6&survey=scales&session=3",
-        "/?index=7&survey=stai&session=3",
+        "/?index=0&task=horizon_practice&run=METH_Scan_Pilot_R1.json",
+        "/?index=1&survey=scales&session=1",
+        "/?index=2&survey=stai&session=1",
+        "/?index=3&task=horizon&run=METH_Scan_Pilot_R1.json",
+        "/?index=4&survey=scales&session=2",
+        "/?index=5&survey=stai&session=2",
+        "/?index=6&task=horizon&run=METH_Scan_Pilot_R2.json",
+        "/?index=7&survey=scales&session=3",
+        "/?index=8&survey=stai&session=3",
         "/completed?"
     ],
     "fullscreen": true,

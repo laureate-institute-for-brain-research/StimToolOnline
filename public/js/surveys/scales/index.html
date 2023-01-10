@@ -4,12 +4,16 @@
 <head>
     <style type="text/css">
         @font-face {
-            font-family: gotham;
-            src: url(/gotham-book-regular.otf);
+            /*font-family: gotham;
+            src: url(/gotham-book-regular.otf);*/
+            font-family: system-ui;
+            src: url('system-ui.woff2') format('woff2');
         }
 
         * {
-            font-family: Helvetica Neue;
+            /*font-family: Helvetica Neue;*/
+            font-family: system-ui;
+            font-size: 1.3rem;
         }
 
         a:link,
@@ -109,13 +113,21 @@
 
         var focused_question = 1
 
+        var elem = document.documentElement;
+
+        function openFullscreen() {
+            if (elem.requestFullscreen) {
+                elem.requestFullscreen();
+            }
+        }
+
         Survey
             .StylesManager
             .applyTheme("modern");
         // Survey.Survey.cssType = "bootstrap";
         // Survey.defaultBootstrapCss.navigationButton = "btn";
         var json = {
-            title: "Pre-Task Scales",
+            title: "",
             description: "",
             logoPosition: "right",
             pages: [
@@ -291,7 +303,7 @@
                     {
                     type: "image",
                     name: "scales5image",
-                    imageLink: "https://172.16.10.3/images/Manikin-Happy-Scale.jpg",
+                    imageLink: "https://172.16.10.3/images/Manikin-Excite-Scale.jpg",
                     imageWidth: "668px",
                     imageHeight: "143px",
                     imageFit: "contain"
@@ -363,7 +375,6 @@
                     }]
                     },
                 ],
-                description: "scales questions",
                 },
             ],
             };
@@ -384,6 +395,7 @@
 
             function oneKey(){
                 if (e.key === "1") {
+                    openFullscreen()
                     survey.currentPage.questions.forEach((choice) => {
                         if(choice.name == `scales${focused_question}`)
                         {
@@ -432,6 +444,7 @@
 
             function twoKey(){
                 if (e.key === "2") { // 2 key
+                    openFullscreen()
 
                     survey.currentPage.questions.forEach((choice) => {
                         console.log(choice.name)

@@ -185,7 +185,7 @@ flowScheduler.add(updateInfo); // add timeStamp
 flowScheduler.add(experimentInit);
 
 // instruction slide
-if (false) {
+if (!getQueryVariable('skip_instructions')) {
 	const instruct_pagesLoopScheduler = new Scheduler(psychoJS);
 	flowScheduler.add(instruct_pagesLoopBegin, instruct_pagesLoopScheduler);
 	flowScheduler.add(instruct_pagesLoopScheduler);
@@ -194,25 +194,16 @@ if (false) {
 
 
 // // // Example Play
-if (getQueryVariable('run').includes('R1') ){
+if (getQueryVariable('run').includes('R1')){
 	const example_playScheduler = new Scheduler(psychoJS);
 	flowScheduler.add(trials_exampleLoopBegin, example_playScheduler);
 	flowScheduler.add(example_playScheduler);
 	flowScheduler.add(exampleLoopEnd);
 
 	// Ready Routine
-	flowScheduler.add(readyRoutineBegin());
-	flowScheduler.add(readyRoutineEachFrame());
-	flowScheduler.add(readyRoutineEnd());
-
-}
-
-if (getQueryVariable('run').includes('R2')) {
-	
-	// Ready Routine
-	flowScheduler.add(readyRoutineBegin());
-	flowScheduler.add(readyRoutineEachFrame());
-	flowScheduler.add(readyRoutineEnd());
+	// flowScheduler.add(readyRoutineBegin());
+	// flowScheduler.add(readyRoutineEachFrame());
+	// flowScheduler.add(readyRoutineEnd());
 
 }
 
@@ -222,13 +213,13 @@ if (getQueryVariable('run').includes('R2')) {
 // flowScheduler.add(thanksRoutineEachFrame());
 // flowScheduler.add(thanksRoutineEnd());
 
-const trialsLoopScheduler = new Scheduler(psychoJS);
-flowScheduler.add(trialsLoopBegin, trialsLoopScheduler);
-flowScheduler.add(trialsLoopScheduler);
-flowScheduler.add(trialsLoopEnd);
-flowScheduler.add(thanksRoutineBegin());
-flowScheduler.add(thanksRoutineEachFrame());
-flowScheduler.add(thanksRoutineEnd());
+// const trialsLoopScheduler = new Scheduler(psychoJS);
+// flowScheduler.add(trialsLoopBegin, trialsLoopScheduler);
+// flowScheduler.add(trialsLoopScheduler);
+// flowScheduler.add(trialsLoopEnd);
+// flowScheduler.add(thanksRoutineBegin());
+// flowScheduler.add(thanksRoutineEachFrame());
+// flowScheduler.add(thanksRoutineEnd());
 flowScheduler.add(quitPsychoJS, '', true);
 
 // quit if user presses Cancel in dialog box:
@@ -1444,13 +1435,13 @@ function thanksRoutineBegin(trials) {
 		
 		if (getQueryVariable('study') == 'vanderbelt' || getQueryVariable('study') == 'johns_hopkins') {
 			// 1000 points = 10 cents
-			thanksText.setText(`This is the end of the task run.\n\n\n Total Points Earned: ${totalPoints} \n\n`)
+			thanksText.setText(`This is the end of the task run.\n\n\n Total Points Earned: ${totalPoints} \n\n Total Cents Earned: ${totalPoints / 100 } =  $${ (totalPoints / 10000).toFixed(2)}`)
 		} else if (getQueryVariable('run') == 'BK_Pilot_R1.json' || getQueryVariable('run') == 'BK_Pilot_R2.json' || getQueryVariable('run') == 'METH_Pilot_R1.json' || getQueryVariable('run') == 'METH_Pilot_R2.json' ) {
 			thanksText.setText(`This is the end of the task run.\n\n\n Total Points Earned: ${totalPoints} `)
 		}
 		else {
 			// 100 points = 10 cents
-			thanksText.setText(`This is the end of the task run.\n\n\n Total Points Earned: ${totalPoints}`)
+			thanksText.setText(`This is the end of the task run.\n\n\n Total Points Earned: ${totalPoints} \n\n Total Cents Earned: ${totalPoints / 10 } =  $${ (totalPoints / 1000).toFixed(2)}`)
 		}
 		
 
