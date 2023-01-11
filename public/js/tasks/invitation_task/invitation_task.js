@@ -28,14 +28,9 @@ var event_types = {
 */
 
 var trials_data = []
-var g = {}				// global variables
-g.PLEASANT_COLOR = 'green';
-g.UNPLEASANT_COLOR = 'red';
-
-g.outcome_media = {
-	'negative': [], 	// holds negateive image-audio pair
-	'positive': []		// holds positive image-audio pair
-}
+var g = {}					// global variables
+g.FIXATION_DURATION = 2; 	/// fixation duration. in seconds
+g.MODULE_3_TIMER = 2.5; 	// module 3 time limit
 
 // the image path where key is the current position and the value is the path to the 
 // room image.
@@ -418,7 +413,7 @@ if (!getQueryVariable('skip_instructions')) {
 }
 
 // PRACTICE BLOCK
-// Pratice blocks skipped over if it's a R2
+// Pratice trials skipped over if it's a R2
 if (!getQueryVariable('skip_practice') && !getQueryVariable('run').includes('R2')  ) {
 	// Single Slide
 	flowScheduler.add(readyRoutineBegin('PRACTICE'));
@@ -478,7 +473,6 @@ var slides;
 var instructClock;
 var ready;
 var blockClock;
-var points_fixation_stim;
 var t_end;
 var readyClock;
 var endClock;
@@ -658,6 +652,17 @@ function experimentInit() {
 		depth: 0.0
 	});
 
+	g.time_left_text = new visual.TextStim({
+		win: psychoJS.window,
+		name: 'time_left',
+		text: 'X.Xs left',alignHoriz: 'center',
+		font: 'Arial',
+		units: 'norm',
+		pos: [0, 0.8], height: 0.06, wrapWidth: undefined, ori: 0,
+		color: new util.Color('white'), opacity: 1,
+		depth: 0.0
+	});
+
 	g.prompt_text = new visual.TextStim({
 		win: psychoJS.window,
 		name: 'prompt_text',
@@ -703,7 +708,7 @@ function experimentInit() {
 		depth: 0.0
 	});
 
-	points_fixation_stim = new visual.TextStim({
+	g.points_fixation_stim = new visual.TextStim({
 		win: psychoJS.window,
 		name: 'pointsTracker',
 		text: 'X',
@@ -774,6 +779,8 @@ function experimentInit() {
 	globalClock = new util.Clock();  // to track the time since experiment started
 	routineTimer = new util.CountdownTimer();  // to track time remaining of each (non-slip) routine
 	g.outcomeTimer = new util.CountdownTimer(); // timer for when to go to next trial
+	g.module3Timer = new util.CountdownTimer(); // timer for module 3
+	g.fixationTimer = new util.CountdownTimer(); // timer for fixation
 
 	globalClock.reset() // start Global Clock
 
@@ -1144,30 +1151,31 @@ function readyRoutineEnd(trials) {
 	};
 }
 
-var blocks;
+var trials;
 var trial_type;
 function practiceTrialsLoopBegin(thisScheduler) {
-	blocks = new TrialHandler({
+	trials = new TrialHandler({
 		psychoJS: psychoJS,
 		nReps: 1, method: TrialHandler.Method.SEQUENTIAL,
 		extraInfo: expInfo, originPath: undefined,
 		trialList: 'practice_schedule.csv',
-		seed: undefined, name: 'blocks'
+		seed: undefined, name: 'trials'
 	});
 	g.global_trial_number = 0;
 	g.game_number = 1;
 
-	psychoJS.experiment.addLoop(blocks); // add the loop to the experiment
+	psychoJS.experiment.addLoop(trials); // add the loop to the experiment
 	endClock.reset()
 	resp.stop()
 	resp.clearEvents()
 	resp.status = PsychoJS.Status.NOT_STARTED
 	// Schedule all the trials in the trialList:
-	for (const thisBlock of blocks) {
-		const snapshot = blocks.getSnapshot();
+	for (const thisBlock of trials) {
+		const snapshot = trials.getSnapshot();
 		thisScheduler.add(importConditions(snapshot));
 		thisScheduler.add(initialFixation(snapshot));
 		thisScheduler.add(trialRoutineBegin(snapshot)); 	// setup block
+		thisScheduler.add(fixation(snapshot));				// fixation
 		thisScheduler.add(runModule(snapshot));				// run MOdule
 		thisScheduler.add(trialOutcome(snapshot));			// trial outcome
 		thisScheduler.add(blockRoutineEnd(snapshot));		// end block
@@ -1191,7 +1199,7 @@ function trialsLoopBegin(thisScheduler) {
 	resp.clearEvents()
 	resp.status = PsychoJS.Status.NOT_STARTED
 
-	blocks = new TrialHandler({
+	trials = new TrialHandler({
 		psychoJS: psychoJS,
 		nReps: 1, method: TrialHandler.Method.SEQUENTIAL,
 		extraInfo: expInfo, originPath: undefined,
@@ -1202,15 +1210,17 @@ function trialsLoopBegin(thisScheduler) {
 	g.global_trial_number = 0;
 	g.game_number = 1;
 
-	psychoJS.experiment.addLoop(blocks); // add the loop to the experiment
+	psychoJS.experiment.addLoop(trials); // add the loop to the experiment
 
-	// Schedule all the blocks in the trialList:
-	for (const thisTrial of blocks) {
-		const snapshot = blocks.getSnapshot();
+	// Schedule all the trials in the trialList:
+	for (const thisBlock of trials) {
+		const snapshot = trials.getSnapshot();
 		thisScheduler.add(importConditions(snapshot));
 		thisScheduler.add(initialFixation(snapshot));
 		thisScheduler.add(trialRoutineBegin(snapshot)); 	// setup block
-		thisScheduler.add(runModule(snapshot));				// step 1
+		thisScheduler.add(fixation(snapshot));				// fixation
+		thisScheduler.add(runModule(snapshot));				// run MOdule
+		thisScheduler.add(trialOutcome(snapshot));			// trial outcome
 		thisScheduler.add(blockRoutineEnd(snapshot));		// end block
 		thisScheduler.add(endLoopIteration(thisScheduler, snapshot));
 	}
@@ -1228,7 +1238,7 @@ function instruct_pagesLoopEnd() {
 // SHow the points in the trial 
 function trialsLoopEnd() {
 	g.slideStim.setAutoDraw(false)
-	psychoJS.experiment.removeLoop(blocks);
+	psychoJS.experiment.removeLoop(trials);
 	return Scheduler.Event.NEXT;
 }
 
@@ -1255,6 +1265,9 @@ function clearStims() {
 	g.prompt_text.setAutoDraw(false);
 	g.prompt_text.status = PsychoJS.Status.NOT_STARTED;
 
+	g.time_left_text.setAutoDraw(false);
+	g.time_left_text.status = PsychoJS.Status.NOT_STARTED;
+
 	g.rooms_left_text.setAutoDraw(false);
 	g.rooms_left_text.status = PsychoJS.Status.NOT_STARTED;
 
@@ -1272,6 +1285,9 @@ function clearStims() {
 
 	g.outcome_text.setAutoDraw(false);
 	g.outcome_text.status = PsychoJS.Status.NOT_STARTED;
+
+	g.points_fixation_stim.setAutoDraw(false);
+	g.points_fixation_stim.status = PsychoJS.Status.NOT_STARTED;
 }
 
 /**
@@ -1306,6 +1322,9 @@ function trialRoutineBegin(trial) {
 
 		g.prompt_text.setText('Where do you want to go next?');
 		g.rooms_left_text.setText(`${g.depth - 1} rooms left.`)
+		g.time_left_text.setText(`${Math.round(g.module3Timer.getTime())}s left`);
+		
+		g.outcome_text.color = 'white';
 		
 		g.room_image.setImage(trial.building_type + '_' + g.current_path)
 
@@ -1443,7 +1462,80 @@ function module_2(trial) {
  */
 function module_3(trial) {
 	return function () {
-		return Scheduler.Event.FLIP_REPEAT;
+		g.time_left_text.setText(`${ Math.round(g.module3Timer.getTime() )}s left`);
+		if (g.room_image.status == PsychoJS.Status.NOT_STARTED) {
+			console.log('CURRENT DEPTH: ', g.depth);
+			g.room_image.setImage(trial.building_type + '_' + g.current_path);
+			g.room_image.setAutoDraw(true);
+			g.prompt_text.setAutoDraw(true);
+			g.time_left_text.setAutoDraw(true);
+			g.rooms_left_text.setAutoDraw(true);
+
+			g.left_door.setAutoDraw(true);
+			g.right_door.setAutoDraw(true);
+
+			g.choice_1.setAutoDraw(true);
+			g.choice_2.setAutoDraw(true);
+
+			g.module3Timer.reset(g.MODULE_3_TIMER); // start the timer
+		}
+
+		if (g.module3Timer.getTime() <= 0 || g.depth <= 0 || g.current_path == 0 ) {
+			// move to next routine if reached max depth
+			// or of the current path is 0 (when there is no more rooms)
+			// trial routine depth is no 0. Move to next trial
+			// or in this module. when the timer run out
+			clearStims();
+			
+			if ((g.module3Timer.getTime() <= 0) && (g.depth > 0)) {
+				g.outcome_text.setText(`Times up`)
+				g.outcome_text.color = 'red';
+			}
+			return Scheduler.Event.NEXT;
+		}
+
+
+
+		if (ready.status === PsychoJS.Status.STARTED) {
+			let theseKeys = ready.getKeys({ keyList: ['1', '2'], waitRelease: false });
+			if (theseKeys.length > 0) {
+				// increment trial invites
+				// based ond current position and the building type
+				g.trial_invites = g.trial_invites + g.path[g.current_path]['invites'][trial.building_type];
+				
+				// total invites
+				g.total_invites = g.total_invites + g.path[g.current_path]['invites'][trial.building_type];
+
+				if (theseKeys[0].name == '1') {
+					g.current_path = g.path[g.current_path]['left'];
+				}
+
+				if (theseKeys[0].name == '2') {  
+					g.current_path = g.path[g.current_path]['right'];
+				}
+
+				g.depth--; // decrement the depth counter
+				g.rooms_left_text.setText(`${g.depth - 1} rooms left.`)
+				g.outcome_text.setText(`Trial Total Invites: ${g.trial_invites}`)
+			}
+		}
+		return Scheduler.Event.FLIP_REPEAT
+	}
+}
+
+function fixation() {
+	return function () {
+		if (g.points_fixation_stim.status == PsychoJS.Status.NOT_STARTED) {
+			g.points_fixation_stim.setAutoDraw(true);
+			// start time
+			g.fixationTimer.reset(g.FIXATION_DURATION);
+		}
+
+		if (g.fixationTimer.getTime() <= 0) {
+			clearStims();
+			return Scheduler.Event.NEXT
+		}
+		return Scheduler.Event.FLIP_REPEAT
 	}
 }
 
@@ -1499,10 +1591,10 @@ function initialFixation(trials) {
 		// get current time
 		t_end = endClock.getTime();
 		
-		if (points_fixation_stim.status == PsychoJS.Status.NOT_STARTED) {
-			points_fixation_stim.color = new util.Color('white')
-			points_fixation_stim.setText('+')
-			points_fixation_stim.setAutoDraw(true)
+		if (g.points_fixation_stim.status == PsychoJS.Status.NOT_STARTED) {
+			g.points_fixation_stim.color = new util.Color('white')
+			g.points_fixation_stim.setText('+')
+			g.points_fixation_stim.setAutoDraw(true)
 			console.log('Initial Fixation')
 
 			mark_event(trials_data, globalClock, 'NA', trial_type, event_types['FIXATION_ONSET'],
@@ -1511,8 +1603,8 @@ function initialFixation(trials) {
 
 		if (t_end >= 3) {
 			continueRoutine = false
-			points_fixation_stim.setAutoDraw(false)
-			points_fixation_stim.status = PsychoJS.Status.NOT_STARTED
+			g.points_fixation_stim.setAutoDraw(false)
+			g.points_fixation_stim.status = PsychoJS.Status.NOT_STARTED
 		}
 		
 		// check for quit (typically the Esc key)
@@ -1525,10 +1617,11 @@ function initialFixation(trials) {
 			return Scheduler.Event.FLIP_REPEAT;
 		}
 		else {
-			points_fixation_stim.setAutoDraw(false)
-			points_fixation_stim.status = PsychoJS.Status.NOT_STARTED
+			g.points_fixation_stim.setAutoDraw(false)
+			g.points_fixation_stim.status = PsychoJS.Status.NOT_STARTED
 			
-			endClock.reset()
+			endClock.reset();
+
 			return Scheduler.Event.NEXT;
 		}
 	};
@@ -1576,8 +1669,8 @@ function blockRoutineEnd(trials) {
 			clearStims();
 
 			// Clear Fixation
-			points_fixation_stim.setAutoDraw(false)
-			points_fixation_stim.status = PsychoJS.Status.NOT_STARTED
+			g.points_fixation_stim.setAutoDraw(false)
+			g.points_fixation_stim.status = PsychoJS.Status.NOT_STARTED
 
 			return Scheduler.Event.NEXT;
 		}
