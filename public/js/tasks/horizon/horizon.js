@@ -1013,9 +1013,7 @@ function trialRoutineEachFrame(trials) {
 			}
 		
 			if (showLastTrial) {
-				console.log("hello")
 				if (trialClock.getTime() >= time_continue) {
-					console.log("hello2")
 					//showLastTrial = false
 					// TODO add in fixation logic.
 					if (points_fixation_stim.status == PsychoJS.Status.NOT_STARTED) {
@@ -1046,7 +1044,7 @@ function trialRoutineEachFrame(trials) {
 						psychoJS.experiment.addData('timestamp', (Date.now() - start_time));
 						psychoJS.experiment.addData('event', "fixation onset");
 						sendData(psychoJS.experiment._trialsData)
-						psychoJS.experiment.nextEntry()
+						psychoJS.experiment.nextEntry(trials)
 						
 						points_fixation_stim.setText('+')
 						points_fixation_stim.setAutoDraw(true)
@@ -1060,19 +1058,14 @@ function trialRoutineEachFrame(trials) {
 			
 						// mark_event(trials_data, globalClock, 'NA', trial_type, event_types['FIXATION_ONSET'],
 						// 	'NA', 'NA' , 'NA')
-						console.log('hello3')
 			
 					}
-					console.log(trialClock.getTime())
-					console.log(time_continue + ITI)
 					if (trialClock.getTime() >= time_continue + ITI) {
 						points_fixation_stim.setAutoDraw(false)
 						points_fixation_stim.status = PsychoJS.Status.NOT_STARTED
-						console.log('hello4')
 						showLastTrial = false
 						return Scheduler.Event.NEXT;
 					}
-					console.log('hello5')
 					return Scheduler.Event.FLIP_REPEAT;
 				}
 		
@@ -1112,7 +1105,7 @@ function trialRoutineEachFrame(trials) {
 				psychoJS.experiment.addData('event', "choice onset");
 				sendData(psychoJS.experiment._trialsData)
 				send_choice_onset = false
-				psychoJS.experiment.nextEntry()
+				psychoJS.experiment.nextEntry(trials)
 			}
 		}
 
@@ -1204,7 +1197,6 @@ function trialRoutineEachFrame(trials) {
 
 				psychoJS.experiment.addData('points', totalPoints);
 				sendData(psychoJS.experiment._trialsData)
-				console.log(trials)
 				const thisTrial = trials.getCurrentTrial();
 				if (typeof thisTrial === 'undefined' || !('isTrials' in thisTrial) || thisTrial.isTrials)
 				{
@@ -1550,6 +1542,8 @@ function endLoopIteration(thisScheduler, loop = undefined) {
 				}
 				thisScheduler.stop();
 
+				send_choice_onset = true
+
 				// Send Data at last loop 
 				sendData(psychoJS.experiment._trialsData)
 			} else
@@ -1586,6 +1580,8 @@ function endInstructLoopIteration(thisScheduler, loop = undefined) {
 					psychoJS.experiment.nextEntry(loop);
 				}
 				thisScheduler.stop();
+
+				send_choice_onset = true
 
 				// Send Data at last loop 
 				sendData(psychoJS.experiment._trialsData)
