@@ -231,7 +231,7 @@ var resources = [
 	// { name: 'game_type.xls', path: '/js/tasks/horizon/game_type.xls' },
 	{ name: 'game_type_practice_2.xls', path: '/js/tasks/horizon/game_type_practice_2.xls' },
 	// { name: 'instruct_schedule.xls', path: '/js/tasks/horizon/media/instruct_schedule.xls' },
-	{ name: 'example_play.xls', path: '/js/tasks/horizon/media/example_play.xls' },
+	{ name: 'example_play.csv', path: '/js/tasks/horizon/media/example_play.csv' },
 	{ name: 'instruct_slide_r2.xls', path: '/js/tasks/horizon/media/instruct_slide_r2.xls' },
 	{ name: `/js/tasks/horizon/media/horizonInstructions/Slide22.jpeg`, path: `/js/tasks/horizon/media/horizonInstructions/Slide22.jpeg` },
 	{ name: `/js/tasks/horizon/media/instruction_audio/slide22.m4a`, path: `/js/tasks/horizon/media/instruction_audio/slide22.m4a` }
@@ -850,7 +850,7 @@ function trials_exampleLoopBegin(thisScheduler) {
 		psychoJS: psychoJS,
 		nReps: 1, method: TrialHandler.Method.SEQUENTIAL,
 		extraInfo: expInfo, originPath: undefined,
-		trialList: 'example_play.xls',
+		trialList: 'example_play.csv',
 		seed: undefined, name: 'example_trials'
 	});
 	psychoJS.experiment.addLoop(example_trials); // add the loop to the experiment

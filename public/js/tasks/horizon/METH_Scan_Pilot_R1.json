@@ -1,4 +1,4 @@
 {
-    "schedule": "/js/tasks/horizon/mri.horizon.schedule.xlsx",
+    "schedule": "/js/tasks/horizon/Horizon_schedule_updated.csv",
     "instruct_schedule": "/js/tasks/horizon/media/BLK_instruct_slide_R1.csv"
 }
