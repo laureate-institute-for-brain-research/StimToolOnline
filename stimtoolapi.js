@@ -170,6 +170,8 @@ module.exports = function (app){
             file_name = req.sanitize(req.body.expInfo.task) + '_' + req.sanitize(req.body.expInfo.participant) + '_' + req.sanitize(req.body.expInfo.session) + '_' + req.sanitize(req.body.expInfo.date)+ '.csv'
 
             path_to_save = `${process.env.DATA_PATH}/${req.sanitize(req.body.expInfo.study)}/${file_name}` // save results directly the cephfs local path
+
+            //logger.info(`trying to save to ${path_to_save}`);
             
             fs.access(path.dirname(path_to_save), error => {
                 if (!error) {

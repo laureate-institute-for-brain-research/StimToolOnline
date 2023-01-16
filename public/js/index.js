@@ -156,7 +156,6 @@ $('#study-list').change(function () {
         'CognitiveControl',
         'Driving2',
         'METH_Pilot',
-        'WBMTURK_Social_Media',
         'WBMTURK_Blind_Dating',
         'WBMTURK_Emotional_Faces',
         'WBMTURK_Cooperation_Task',
@@ -291,7 +290,7 @@ document.getElementById('skip').addEventListener('click', (event) => {
                 elem = result.order[i]
                 select_op.value = elem
                 
-                if (elem.includes('completed')) {
+                if (elem.includes('completed') || elem.includes('complete')) {
                     continue
                 }
                 select_op.appendChild( document.createTextNode(elem) );
