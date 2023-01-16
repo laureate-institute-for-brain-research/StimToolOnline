@@ -17,9 +17,9 @@ var LEFT_KEY = '1'
 var RIGHT_KEY = '2'
 
 var send_choice_onset = true
+var init_fix_entry = true
 
 var start_time = 0;
-
 var points_fixation_stim;
 
 
@@ -221,6 +221,8 @@ if (getQueryVariable('run').includes('R2')) {
 // flowScheduler.add(thanksRoutineBegin());
 // flowScheduler.add(thanksRoutineEachFrame());
 // flowScheduler.add(thanksRoutineEnd());
+
+flowScheduler.add(initialFixation());
 
 const trialsLoopScheduler = new Scheduler(psychoJS);
 flowScheduler.add(trialsLoopBegin, trialsLoopScheduler);
@@ -803,6 +805,36 @@ function instructRoutineEnd(trials) {
 
 		return Scheduler.Event.NEXT;
 	};
+}
+
+function initialFixation(trials)
+{
+	return function () {
+		if (init_fix_entry == true) {
+			trialClock.reset();
+			init_fix_entry = false
+		}
+
+		if (points_fixation_stim.status == PsychoJS.Status.NOT_STARTED) {
+			points_fixation_stim.color = new util.Color('white')
+
+			psychoJS.experiment.addData('timestamp', (Date.now() - start_time));
+			psychoJS.experiment.addData('event', "fixation onset");
+			psychoJS.experiment.addData('ITI', "5");
+			sendData(psychoJS.experiment._trialsData)
+			psychoJS.experiment.nextEntry(trials)
+		
+			points_fixation_stim.setText('+')
+			points_fixation_stim.setAutoDraw(true)
+		}
+		if (trialClock.getTime() >= 5.0) {
+			points_fixation_stim.setAutoDraw(false)
+			points_fixation_stim.status = PsychoJS.Status.NOT_STARTED
+			//showLastTrial = false
+			return Scheduler.Event.NEXT;
+		}
+		return Scheduler.Event.FLIP_REPEAT;
+	}
 }
 
 var trials;
