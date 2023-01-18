@@ -32,8 +32,9 @@ var g = {}					// global variables
 g.FIXATION_DURATION = 1; 	/// fixation duration. in seconds
 g.RESPONSE_DURATION = 1;	// duration for when the invitation response should show
 g.OUTCOME_DURATION = 1.5; 	// outcome duration.
-g.PLANNING_DURATION = 3;	// the planning phase duration.
+g.PLANNING_DURATION = 9;	// the planning phase duration.
 g.SELCTION_DURATION = 3;	// the selection phase duration.
+g.ANIMATION_DURATION = 1.5;	// the duration of an animation 'slide'
 
 // CONSTANCT for Trial Status
 g.TRIAL_BEGIN = 0;			// for when trial beginning
@@ -881,14 +882,14 @@ function experimentInit() {
 	});
 
 	// Create some handy timers
-	globalClock = new util.Clock();  // to track the time since experiment started
-	routineTimer = new util.CountdownTimer();  // to track time remaining of each (non-slip) routine
-	g.responseTimer = new util.CountdownTimer(); // to track time remaing for invite response duration
-	g.outcomeTimer = new util.CountdownTimer(); // timer for when to go to next trial
-	g.module3Timer = new util.CountdownTimer(); // timer for module 3
-	g.fixationTimer = new util.CountdownTimer(); // timer for fixation
-	g.planningTimer = new util.CountdownTimer(); // timer for planning duration
-	g.selectionTimer = new util.CountdownTimer();// timer for entering moves phase
+	globalClock = new util.Clock();					// to track the time since experiment started
+	routineTimer = new util.CountdownTimer();		// to track time remaining of each (non-slip) routine
+	g.responseTimer = new util.CountdownTimer();	// to track time remaing for invite response duration
+	g.outcomeTimer = new util.CountdownTimer();		// timer for when to go to next trial
+	g.fixationTimer = new util.CountdownTimer();	// timer for fixation
+	g.planningTimer = new util.CountdownTimer();	// timer for planning duration
+	g.selectionTimer = new util.CountdownTimer();	// timer for entering moves phase
+	g.animationTimer = new util.CountdownTimer();	// timer for animation.
 
 	globalClock.reset() // start Global Clock
 
@@ -1729,13 +1730,6 @@ function module_2(trial) {
  */
 function module_3(trial) {
 	return function () {
-		if ( (g.trial_phase == g.TRIAL_BEGIN) && (g.depth <= 0 || g.current_path >= 8)) {
-			// move to next routine if reached max depth
-			// or of the current path is 0 (when there is no more rooms)
-			// trial routine depth is no 0. Move to next trial
-			return Scheduler.Event.NEXT;
-		}
-
 		// Make Selection
 		if (g.room_image.status == PsychoJS.Status.NOT_STARTED && g.trial_phase == g.TRIAL_BEGIN) {
 			console.log('CURRENT DEPTH: ', g.depth)
@@ -1784,9 +1778,9 @@ function module_3(trial) {
 					// all moves entered
 					// go to animation
 					g.trial_phase = g.RESPONSE_ANIMATION;
-					clearStims();
 					g.responseTimer.reset(2);
-					g.outcome_text.setText(`Animation Goes here`)
+					clearStims();
+					
 				} else {
 					// subject did not enter enough moves
 					clearStims();
@@ -1816,7 +1810,6 @@ function module_3(trial) {
 						g.response = 'right';
 					}
 					
-					g.current_path = g.path[g.current_path][g.response];
 					g.depth--;
 					g.moves_entered.push(g.response);
 				}
@@ -1826,8 +1819,33 @@ function module_3(trial) {
 		// Animation Phase
 		if (g.trial_phase == g.RESPONSE_ANIMATION) {
 			if (g.outcome_text.status == PsychoJS.Status.NOT_STARTED) {
+				g.outcome_text.setText(`Animation Goes here`)
 				g.outcome_text.setAutoDraw(true);
+				g.animationTimer.reset(g.ANIMATION_DURATION);
+				g.current_move = 0;			// start iterative over entered moves
+				g.current_path = g.path[g.current_path][g.moves_entered[g.current_move]];
+				g.room_image_invite.setImage(trial.building_type + '_invite_' + g.current_path)
+				g.room_image_invite.setAutoDraw(true);
 			}
+
+			// Single Invite Room Instance
+			if (g.animationTimer.getTime() <= 0) {
+
+				// check if there moves left
+				if (g.current_move == (g.moves_entered.length - 1)) {
+					// out of moves - go to next routine
+					clearStims();
+					return Scheduler.Event.NEXT
+				}
+
+				// reset the slides
+				g.current_move++;
+				g.current_path = g.path[g.current_path][g.moves_entered[g.current_move]];
+				g.room_image_invite.setImage(trial.building_type + '_invite_' + g.current_path)
+
+				g.animationTimer.reset(g.ANIMATION_DURATION); // reset timer
+			}
+
 		}
 
 		// Inavlid Trial
@@ -1835,6 +1853,13 @@ function module_3(trial) {
 		if (g.trial_phase == g.INVALID_TRIAL) {
 			if (g.outcome_text.status == PsychoJS.Status.NOT_STARTED) {
 				g.outcome_text.setAutoDraw(true);
+				g.animationTimer.reset(g.ANIMATION_DURATION)
+			}
+
+			if (g.animationTimer.getTime() <= 0) {
+				// after it displays the Times Up for g.ANIMATION_DURATION seconds
+				// go to next trial
+				return Scheduler.Event.NEXT
 			}
 		}
 
@@ -1892,9 +1917,10 @@ function module_3(trial) {
 function fixation(trial) {
 	return function () {
 		if (g.points_fixation_stim.status == PsychoJS.Status.NOT_STARTED) {
+			console.log('FIXATION ROUTINE: ', trial.ITI);
 			g.points_fixation_stim.setAutoDraw(true);
 			// start time
-			g.fixationTimer.reset(g.ITI);
+			g.fixationTimer.reset(trial.ITI);
 		}
 
 		if (g.fixationTimer.getTime() <= 0) {
@@ -1928,6 +1954,8 @@ function runModule(trial) {
 function trialOutcome(trial) {
 	return function () {
 		if (g.outcome_text.status == PsychoJS.Status.NOT_STARTED) {
+			console.log('Trial Outcome Routine')
+			g.outcome_text.setText(`Trial Total Invites: ${g.trial_invites}`)
 			g.outcomeTimer.reset(g.OUTCOME_DURATION); // reset the time with ITI 
 			g.outcome_text.setAutoDraw(true);
 		}
