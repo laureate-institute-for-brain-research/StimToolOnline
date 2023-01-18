@@ -32,13 +32,15 @@ var g = {}					// global variables
 g.FIXATION_DURATION = 1; 	/// fixation duration. in seconds
 g.RESPONSE_DURATION = 1;	// duration for when the invitation response should show
 g.OUTCOME_DURATION = 1.5; 	// outcome duration.
-g.MODULE_3_TIMER = 2.5; 	// module 3 time limit
+g.PLANNING_DURATION = 3;	// the planning phase duration.
+g.SELCTION_DURATION = 3;	// the selection phase duration.
 
 // CONSTANCT for Trial Status
 g.TRIAL_BEGIN = 0;			// for when trial beginning
 g.WAITING_SELECTION = 1; 	// for waiting selection choice
 g.WAITING_INVITE_KEY = 2;	// for waiting invitation key
 g.RESPONSE_ANIMATION = 3;	// for response animation
+g.PLANNING_PHASE = 4;		// for when subject needs to plan 
 
 // the image path where key is the current position and the value is the path to the 
 // room image.
@@ -766,17 +768,6 @@ function experimentInit() {
 		depth: 0.0
 	});
 
-	g.time_left_text = new visual.TextStim({
-		win: psychoJS.window,
-		name: 'time_left',
-		text: 'X.Xs left',alignHoriz: 'center',
-		font: 'Arial',
-		units: 'norm',
-		pos: [0, 0.8], height: 0.06, wrapWidth: undefined, ori: 0,
-		color: new util.Color('white'), opacity: 1,
-		depth: 0.0
-	});
-
 	g.prompt_text = new visual.TextStim({
 		win: psychoJS.window,
 		name: 'prompt_text',
@@ -896,6 +887,8 @@ function experimentInit() {
 	g.outcomeTimer = new util.CountdownTimer(); // timer for when to go to next trial
 	g.module3Timer = new util.CountdownTimer(); // timer for module 3
 	g.fixationTimer = new util.CountdownTimer(); // timer for fixation
+	g.planningTimer = new util.CountdownTimer(); // timer for planning duration
+	g.selectionTimer = new util.CountdownTimer();// timer for entering moves phase
 
 	globalClock.reset() // start Global Clock
 
@@ -1383,9 +1376,6 @@ function clearStims() {
 	g.prompt_text.setAutoDraw(false);
 	g.prompt_text.status = PsychoJS.Status.NOT_STARTED;
 
-	g.time_left_text.setAutoDraw(false);
-	g.time_left_text.status = PsychoJS.Status.NOT_STARTED;
-
 	g.rooms_left_text.setAutoDraw(false);
 	g.rooms_left_text.status = PsychoJS.Status.NOT_STARTED;
 
@@ -1497,7 +1487,6 @@ function trialRoutineBegin(trial) {
 
 		g.prompt_text.setText('Where do you want to go next?');
 		g.rooms_left_text.setText(`${g.depth - 1} rooms left.`)
-		g.time_left_text.setText(`${Math.round(g.module3Timer.getTime())}s left`);
 		
 		g.outcome_text.color = 'white';
 		
@@ -1740,13 +1729,23 @@ function module_2(trial) {
  */
 function module_3(trial) {
 	return function () {
-		g.time_left_text.setText(`${ Math.round(g.module3Timer.getTime() )}s left`);
-		if (g.room_image.status == PsychoJS.Status.NOT_STARTED) {
-			console.log('CURRENT DEPTH: ', g.depth);
+		if ( (g.trial_phase == g.TRIAL_BEGIN) && (g.depth <= 0 || g.current_path >= 8)) {
+			// move to next routine if reached max depth
+			// or of the current path is 0 (when there is no more rooms)
+			// trial routine depth is no 0. Move to next trial
+			return Scheduler.Event.NEXT;
+		}
+
+		// Make Selection
+		if (g.room_image.status == PsychoJS.Status.NOT_STARTED && g.trial_phase == g.TRIAL_BEGIN) {
+			console.log('CURRENT DEPTH: ', g.depth)
 			g.room_image.setImage(trial.building_type + '_' + g.current_path);
 			g.room_image.setAutoDraw(true);
+
 			g.prompt_text.setAutoDraw(true);
-			g.time_left_text.setAutoDraw(true);
+			g.prompt_text.setText('Plan your moves.');
+
+			g.rooms_left_text.setText(`9s`)
 			g.rooms_left_text.setAutoDraw(true);
 
 			g.left_door.setAutoDraw(true);
@@ -1754,49 +1753,132 @@ function module_3(trial) {
 
 			g.choice_1.setAutoDraw(true);
 			g.choice_2.setAutoDraw(true);
-
-			g.module3Timer.reset(g.MODULE_3_TIMER); // start the timer
+			g.trial_phase = g.PLANNING_PHASE;
+			g.planningTimer.reset(g.PLANNING_DURATION);
+			g.moves_entered = [];
 		}
 
-		if (g.module3Timer.getTime() <= 0 || g.depth <= 0 || g.current_path == 0 ) {
-			// move to next routine if reached max depth
-			// or of the current path is 0 (when there is no more rooms)
-			// trial routine depth is no 0. Move to next trial
-			// or in this module. when the timer run out
-			clearStims();
+		// Planning Phase
+		if (g.trial_phase == g.PLANNING_PHASE) {
+			// update the text each frame
+			g.rooms_left_text.setText(`${Math.ceil(g.planningTimer.getTime())}s left`)
+
+			if (g.planningTimer.getTime() <= 0) {
+				// go to next phase
+				g.prompt_text.setText(`Enter your moves (${g.SELCTION_DURATION})s`);
+				g.rooms_left_text.setText(`${g.depth - 1} moves left.`)
+	
+				g.trial_phase = g.WAITING_SELECTION;
+				g.selectionTimer.reset(g.SELCTION_DURATION);
+			} 
+		}
+
+		// Entering Moves Phase
+		if (g.trial_phase == g.WAITING_SELECTION) {
+			g.prompt_text.setText(`Enter your moves (${Math.ceil(g.selectionTimer.getTime())})s`);
+			g.rooms_left_text.setText(`${g.depth} moves left.`)
+			if (g.selectionTimer.getTime() <= 0) {
+				// go to next phase.
+				console.log('SELECT TIME UP: ', g.moves_entered.length, g.depth, trial.depth)
+				if (g.moves_entered.length == trial.depth) {
+					// all moves entered
+					// go to animation
+					g.trial_phase = g.RESPONSE_ANIMATION;
+					clearStims();
+					g.responseTimer.reset(2);
+					g.outcome_text.setText(`Animation Goes here`)
+				} else {
+					// subject did not enter enough moves
+					clearStims();
+					g.outcome_text.color = 'red';
+					g.outcome_text.setText(`Times Up!`)
+					g.trial_phase = g.INVALID_TRIAL;
+				}
+			}
+
+			// allow moves to be entered for the trial depth value
+			if (g.moves_entered.length < trial.depth) {
+				// can still enter moves and within time limit
+				let theseKeys = ready.getKeys({ keyList: ['1', '2'], waitRelease: false });
+				if (theseKeys.length > 0) {
+					// increment trial invites
+					// based ond current position and the building type
+					g.trial_invites = g.trial_invites + g.path[g.current_path]['invites'][trial.building_type];
+					
+					// total invites
+					g.total_invites = g.total_invites + g.path[g.current_path]['invites'][trial.building_type];
+
+					if (theseKeys[0].name == '1') {
+						g.response = 'left';
+					}
+
+					if (theseKeys[0].name == '2') { 
+						g.response = 'right';
+					}
+					
+					g.current_path = g.path[g.current_path][g.response];
+					g.depth--;
+					g.moves_entered.push(g.response);
+				}
+			}
+		}
+
+		// Animation Phase
+		if (g.trial_phase == g.RESPONSE_ANIMATION) {
+			if (g.outcome_text.status == PsychoJS.Status.NOT_STARTED) {
+				g.outcome_text.setAutoDraw(true);
+			}
+		}
+
+		// Inavlid Trial
+		// just display 'Times UP'
+		if (g.trial_phase == g.INVALID_TRIAL) {
+			if (g.outcome_text.status == PsychoJS.Status.NOT_STARTED) {
+				g.outcome_text.setAutoDraw(true);
+			}
+		}
+
+
+		// Click Invite Button
+		// if (g.room_image_invite.status == PsychoJS.Status.NOT_STARTED && g.trial_phase == g.WAITING_INVITE_KEY) {
+		// 	// pressed invited button
+		// 	g.prompt_text.setText('Press to space key to invite.');
+		// 	g.prompt_text.setAutoDraw(true);
+		// 	g.room_image.setImage(trial.building_type + '_' + g.current_path);
+		// 	g.room_image.setAutoDraw(true);
 			
-			if ((g.module3Timer.getTime() <= 0) && (g.depth > 0)) {
-				g.outcome_text.setText(`Times up`)
-				g.outcome_text.color = 'red';
-			}
-			return Scheduler.Event.NEXT;
-		}
+		// }
 
+		// if (g.trial_phase == g.WAITING_INVITE_KEY && g.current_path > 1){
+		// 	let theseKeys = ready.getKeys({ keyList: ['space'], waitRelease: false });
+		// 	if (theseKeys.length >0 ){
+		// 		if (theseKeys[0].name == 'space') {
+		// 			// prepare for next phase
+		// 			clearStims();
+		// 			g.trial_phase = g.RESPONSE_ANIMATION;
+		// 		}
+		// 	}
+		// }
 
+		// Show the Invitation Response
+		// if (g.room_image_invite.status == PsychoJS.Status.NOT_STARTED && g.trial_phase == g.RESPONSE_ANIMATION) {
+		// 	g.room_image_invite.setImage(trial.building_type + '_invite_' + g.current_path)
+		// 	g.room_image_invite.setAutoDraw(true);
+		// 	g.responseTimer.reset(g.RESPONSE_DURATION); // start timer
+		// }
 
-		if (ready.status === PsychoJS.Status.STARTED) {
-			let theseKeys = ready.getKeys({ keyList: ['1', '2'], waitRelease: false });
-			if (theseKeys.length > 0) {
-				// increment trial invites
-				// based ond current position and the building type
-				g.trial_invites = g.trial_invites + g.path[g.current_path]['invites'][trial.building_type];
-				
-				// total invites
-				g.total_invites = g.total_invites + g.path[g.current_path]['invites'][trial.building_type];
-
-				if (theseKeys[0].name == '1') {
-					g.current_path = g.path[g.current_path]['left'];
-				}
-
-				if (theseKeys[0].name == '2') {  
-					g.current_path = g.path[g.current_path]['right'];
-				}
-
-				g.depth--; // decrement the depth counter
-				g.rooms_left_text.setText(`${g.depth - 1} rooms left.`)
-				g.outcome_text.setText(`Trial Total Invites: ${g.trial_invites}`)
-			}
-		}
+		// Resopnse Animation
+		// if (g.trial_phase == g.RESPONSE_ANIMATION && g.responseTimer.getTime() <= 0) {
+		// 	console.log('test')
+		// 	clearStims();
+		// 	// go back to trial begin
+		// 	g.outcome_text.setText(`Trial Total Invites: ${g.trial_invites}`)
+		// 	g.trial_phase = g.TRIAL_BEGIN;
+		// 	// next current path 
+		// 	g.depth--;
+		// 	// return Scheduler.Event.NEXT;
+		// 	console.log('NEXT PATH', g.current_path)
+		// }
 		return Scheduler.Event.FLIP_REPEAT
 	}
 }
