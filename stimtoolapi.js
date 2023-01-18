@@ -170,6 +170,8 @@ module.exports = function (app){
             file_name = req.sanitize(req.body.expInfo.task) + '_' + req.sanitize(req.body.expInfo.participant) + '_' + req.sanitize(req.body.expInfo.session) + '_' + req.sanitize(req.body.expInfo.date)+ '.csv'
 
             path_to_save = `${process.env.DATA_PATH}/${req.sanitize(req.body.expInfo.study)}/${file_name}` // save results directly the cephfs local path
+
+            //logger.info(`trying to save to ${path_to_save}`);
             
             fs.access(path.dirname(path_to_save), error => {
                 if (!error) {
@@ -185,7 +187,7 @@ module.exports = function (app){
                     // Save to local
                     path_to_save = `data/free/${file_name}`
                     
-                    fs.writeFile(path_to_save, csv, function(err) {
+                    fs.appendFile(path_to_save, csv, function(err) {
                         if (err) return console.error(err);
                         logger.info(`${path_to_save} saved`);
                         
@@ -193,6 +195,17 @@ module.exports = function (app){
                 }
             });
         });
+        res.status(200).send('data saved')
+    })
+
+    app.post('/SaveHitCSV', (req, res)=>{
+        csvpath = req.body.csvpath
+        content = req.body.content
+
+        fs.appendFile(csvpath, content, (err) => {
+            console.log(err)
+        })
+
         res.status(200).send('data saved')
     })
 

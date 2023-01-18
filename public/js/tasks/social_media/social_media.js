@@ -49,6 +49,7 @@ const psychoJS = new PsychoJS({
 
 
 var tweets;
+var show_fixation = false;
 
 window.onload = function () {
 	var id = getQueryVariable('id')
@@ -393,6 +394,7 @@ var bookmarkTextStim;
 var listTextStim;
 var profileTextStim;
 var moreTextStim;
+var points_fixation_stim;
 
 // Object for posts realted things
 var posts_height = 0.17
@@ -981,6 +983,17 @@ function experimentInit() {
 		ori : 0, pos : [0.19, 0.78],
 	});
 	beginButton.setAnchor('center')
+
+	points_fixation_stim = new visual.TextStim({
+		win: psychoJS.window,
+		name: 'pointsTracker',
+		text: 'X',
+		font: 'Arial',
+		units: 'norm',
+		pos: [0, 0], height: 0.12, wrapWidth: undefined, ori: 0,
+		color: new util.Color('white'), opacity: 1,
+		depth: 0.0
+	});
 
 	
 	mouse = new core.Mouse({win: psychoJS.window})
@@ -1692,6 +1705,7 @@ var currentLoop;
 var lastTrialKeyPressed;
 var total_games;
 var animation_duration = 1.35
+var fixation_duration = 0
 function trialsLoopBegin(thisScheduler) {
 	// set up handler to look up the conditions
 	resetSocialApprovalScore()
@@ -2329,7 +2343,9 @@ function trialRoutineEachFrameWaitforInput(trials) {
 	return function () {
 		//------Loop for each frame of Routine 'trial'-------
 		let continueRoutine = true; // until we're told otherwise
-	
+
+		fixation_duration = ITI
+
 		// get current time
 		t = trialClock.getTime();
 		frameN = frameN + 1;// number of completed frames (so 0 is the first frame)
@@ -2651,9 +2667,32 @@ function trialRoutineEachFrameShowPost(trials) {
 
 				if (theseKeys.length > 0) {
 					trialClock.reset();
+					t = trialClock.getTime();
 					clear_All_stims() // clear all Stims
-					return Scheduler.Event.NEXT;
+					show_fixation = true
 				}
+			}
+		}
+		if (show_fixation)
+		{
+			if (t <= fixation_duration)
+			{
+				if (points_fixation_stim.status == PsychoJS.Status.NOT_STARTED) {
+					points_fixation_stim.color = new util.Color('white')
+					points_fixation_stim.setText('+')
+					points_fixation_stim.setAutoDraw(true)
+					mark_event(trials_data, globalClock, trial_num, trial_type, event_types['FIXATION_ONSET'],
+						'NA', 'NA' , 'NA')
+				}
+				return Scheduler.Event.FLIP_REPEAT;
+			}
+			else
+			{
+				trialClock.reset();
+				show_fixation = false
+				points_fixation_stim.setAutoDraw(false)
+				points_fixation_stim.status = PsychoJS.Status.NOT_STARTED
+				return Scheduler.Event.NEXT;
 			}
 		}
 		return Scheduler.Event.FLIP_REPEAT;

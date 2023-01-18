@@ -1,3 +1,7 @@
+
+//var hit_code = null;
+//var fs = require('fs');
+
 /* ---- particles.js config ---- */
 
 colors = [
@@ -373,3 +377,8 @@ if(performance.navigation.type == 2){
 //         window.location.href="/studies";
 //     }
 // }); 
+
+// function writeToHitCSV(path, content)
+// {
+//     fs.writeFile(path, content)
+// }
