@@ -2,10 +2,11 @@
     "name": "WBMTURK Social Media T3",
     "order": [
         "/?index=0&survey=demo&session=1",
-        "/?index=1&survey=panasx&session=1",
-        "/?index=2&task=social_media&run=Pilot_R1.json",
-        "/?index=3&survey=post_task&session=1",
-        "/?index=4&survey=feedback&session=1",
+        "/?index=1&survey=well_being&session=1",
+        "/?index=2&survey=panasx&session=1",
+        "/?index=3&task=social_media&run=Pilot_R1.json",
+        "/?index=4&survey=post_task&session=1",
+        "/?index=5&survey=feedback&session=1",
         "/completeMobile?"
     ],
     "fullscreen": true,

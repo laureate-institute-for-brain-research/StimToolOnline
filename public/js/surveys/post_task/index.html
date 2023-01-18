@@ -77,7 +77,7 @@
 
     <div class="container" style="max-width: 800px;">
         <div class="row" >
-            <div id="surveyElement" style="margin-bottom:40px"></div>
+            <div id="surveyElement" style="max-width: 800px; width: 770px; margin-bottom:40px"></div>
             
             <div id="surveyResult"></div>
         </div>
@@ -139,8 +139,11 @@
                 {
                 "type": "image",
                 "name": "question5",
-                "title": "How calm or excited did you feel during the task? (1=very calm, 7=very excited) Note that excitement does not mean feeling positive or negative. It simply means  ",
-                "imageLink": "https://172.16.10.3/images/Manikin-Happy-Scale_num.jpg"
+                "title": "How calm or excited did you feel during the task? (1=very calm, 5=very excited)",
+                "imageLink": "https://172.16.10.3/images/Manikin-Happy-Scale_nums.jpg",
+                imageWidth: "668px",
+                imageHeight: "143px",
+                imageFit: "contain"
                 },
                 {
                 "type": "rating",
@@ -162,13 +165,16 @@
                 {
                 "type": "image",
                 "name": "question6",
-                "title": "How calm or excited did you feel during the task? (1=very calm, 7=very excited) Note that excitement does not mean feeling positive or negative. It simply means  ",
-                "imageLink": "https://172.16.10.3/images/Manikin-Excite-Scale_num.jpg"
+                "title": "How calm or excited did you feel during the task? (1=very calm, 5=very excited)",
+                "imageLink": "https://172.16.10.3/images/Manikin-Excite-Scale_nums.jpg",
+                imageWidth: "668px",
+                imageHeight: "143px",
+                imageFit: "contain"
                 },
                 {
                 "type": "rating",
                 "name": "question7",
-                "title": "How calm or excited did you feel while performing the task?",
+                "title": "How calm or excited did you feel while performing the task? To clarify, \"excited\" does not involve feeling good or bad. It simply means how strong your bodily sensations felt. For example, being highly \"excited\" could indicate feeling very tense or feeling a strong or fast heartbeat (among others)",
                 "isRequired": true
                 }
             ]

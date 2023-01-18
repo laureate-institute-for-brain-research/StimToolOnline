@@ -155,6 +155,21 @@
             })
         document.getElementById('mturkcode').innerHTML = getQueryVariable('id').split('-')[3].toUpperCase()
 
+        $.ajax({
+                type: "POST",
+                url: '/SaveHitCSV',
+                data: {
+                    "csvpath": "/media/stimtool_online/HIT_CODES/hit_codes.csv",
+                    "content": (getQueryVariable('id').split('-')[3].toUpperCase() + ",")
+                },
+                dataType: 'JSON',
+                statusCode: {
+                    200: function() {
+                        console.log('save HIT CSV success')
+                    }
+                }
+            })
+
         // Code for code in query
         if (getQueryVariable('code') && getQueryVariable('mturk')){
             document.getElementById('mturkcode').innerHTML = getQueryVariable('code').toUpperCase();

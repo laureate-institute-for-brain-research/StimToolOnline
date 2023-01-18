@@ -187,7 +187,7 @@ module.exports = function (app){
                     // Save to local
                     path_to_save = `data/free/${file_name}`
                     
-                    fs.writeFile(path_to_save, csv, function(err) {
+                    fs.appendFile(path_to_save, csv, function(err) {
                         if (err) return console.error(err);
                         logger.info(`${path_to_save} saved`);
                         
@@ -195,6 +195,17 @@ module.exports = function (app){
                 }
             });
         });
+        res.status(200).send('data saved')
+    })
+
+    app.post('/SaveHitCSV', (req, res)=>{
+        csvpath = req.body.csvpath
+        content = req.body.content
+
+        fs.appendFile(csvpath, content, (err) => {
+            console.log(err)
+        })
+
         res.status(200).send('data saved')
     })
 
