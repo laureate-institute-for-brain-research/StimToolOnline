@@ -48,121 +48,181 @@ g.PLANNING_PHASE = 4;		// for when subject needs to plan
 // position 1 is when user is outisde selecting the building
 g.path = {
 	1: {
-		'invites': {
-			'office': 0,
-			'library': 0
-		}, 
+		'accepted': {
+			'office': 2,
+			'library': 23
+		},
+		'rejected': {
+			'office': 4,
+			'library': 5
+		},
 		'left': 2,
 		'right': 3
 	},
 	2: {
-		'invites': {
-			'office': 2, // number of invitations for office in this position
-			'library': 3 // number of invitations for library in this position
+		'accepted': {
+			'office': 5,
+			'library': 10
+		},
+		'rejected': {
+			'office': 8,
+			'library': 99
 		},
 		'left': 4,
 		'right': 5
 	},
 	3: {
-		'invites': {
-			'office': 4,
-			'library': 5
+		'accepted': {
+			'office': 23,
+			'library': 9
+		},
+		'rejected': {
+			'office': 67,
+			'library': 34
 		},
 		'left': 6,
 		'right': 7,
 	},
 	4: {
-		'invites': {
-			'office': 4,
-			'library': 3
+		'accepted': {
+			'office': 54,
+			'library': 19
+		},
+		'rejected': {
+			'office': 77,
+			'library': 19
 		},
 		'left': 8,
 		'right': 9
 	},
 	5: {
-		'invites': {
-			'office': 2,
-			'library': 2
+		'accepted': {
+			'office': 33,
+			'library': 55
+		},
+		'rejected': {
+			'office': 46,
+			'library': 59
 		},
 		'left': 10,
 		'right': 11
 	},
 	6: {
-		'invites': {
-			'office': 4,
-			'library': 8
+		'accepted': {
+			'office': 50,
+			'library': 44
+		},
+		'rejected': {
+			'office': 37,
+			'library': 20
 		},
 		'left': 12,
 		'right': 13
 	},
 	7: {
-		'invites': {
-			'office': 5,
-			'library': 9
+		'accepted': {
+			'office': 80,
+			'library': 40
+		},
+		'rejected': {
+			'office': 22,
+			'library': 33
 		},
 		'left': 14,
 		'right': 15
 	},
 	8: {
-		'invites': {
+		'accepted': {
 			'office': 10,
-			'library': 8
+			'library': 80
+		},
+		'rejected': {
+			'office': 70,
+			'library': 55
 		},
 		'left': 0,
 		'right': 0
 	},
 	9: {
-		'invites': {
+		'accepted': {
+			'office': 2,
+			'library': 7
+		},
+		'rejected': {
 			'office': 6,
-			'library': 4
+			'library': 5
 		},
 		'left': 0,
 		'right': 0
 	},
 	10: {
-		'invites': {
-			'office': 2,
-			'library': 3
+		'accepted': {
+			'office': 7,
+			'library': 5
+		},
+		'rejected': {
+			'office': 0,
+			'library': 19
 		},
 		'left': 0,
 		'right': 0
 	},
 	11: {
-		'invites': {
-			'office': 2,
-			'library': 9
+		'accepted': {
+			'office': 3,
+			'library': 5
 		},
-		'left': 0,
-		'right': 0
-	},
-	12: {
-		'invites': {
-			'office': 2,
-			'library': 4
-		},
-		'left': 0,
-		'right': 0
-	},
-	13: {
-		'invites': {
-			'office': 1,
-			'library': 8
-		},
-		'left': 0,
-		'right': 0
-	},
-	14: {
-		'invites': {
-			'office': 2,
+		'rejected': {
+			'office': 6,
 			'library': 3
 		},
 		'left': 0,
 		'right': 0
 	},
+	12: {
+		'accepted': {
+			'office': 5,
+			'library': 7
+		},
+		'rejected': {
+			'office': 8,
+			'library': 7
+		},
+		'left': 0,
+		'right': 0
+	},
+	13: {
+		'accepted': {
+			'office': 6,
+			'library': 9
+		},
+		'rejected': {
+			'office': 5,
+			'library': 3
+		},
+		'left': 0,
+		'right': 0
+	},
+	14: {
+		'accepted': {
+			'office': 2,
+			'library': 1
+		},
+		'rejected': {
+			'office': 4,
+			'library': 7
+		},
+		'left': 0,
+		'right': 0
+	},
 	15: {
-		'invites': {
-			'office': 3,
-			'library': 8
+		'accepted': {
+			'office': 20,
+			'library': 77
+		},
+		'rejected': {
+			'office': 45,
+			'library': 2
 		},
 		'left': 0,
 		'right': 0
@@ -571,7 +631,7 @@ function experimentInit() {
 		win : psychoJS.window,
 		name : 'room_image', units : 'height', 
 		image : 'office_1', mask : undefined,
-		ori : 0, pos : [0, -0.05], size: [0.9,0.6],
+		ori : 0, pos : [0, -0.08], size: [0.9,0.6],
 		color : new util.Color([1, 1, 1]), opacity : 1,
 		flipHoriz : false, flipVert : false,
 		texRes : 128, interpolate : true, depth : 0
@@ -581,7 +641,7 @@ function experimentInit() {
 		win : psychoJS.window,
 		name : 'room_image_invite', units : 'height', 
 		image : 'office_invite_2', mask : undefined,
-		ori : 0, pos : [0, -0.05], size: [0.9,0.6],
+		ori : 0, pos : [0, -0.08], size: [0.9,0.6],
 		color : new util.Color([1, 1, 1]), opacity : 1,
 		flipHoriz : false, flipVert : false,
 		texRes : 128, interpolate : true, depth : 0
@@ -775,7 +835,7 @@ function experimentInit() {
 		text: 'X rooms left',alignHoriz: 'center',
 		font: 'Arial',
 		units: 'norm',
-		pos: [0, 0.7], height: 0.09, wrapWidth: undefined, ori: 0,
+		pos: [0, 0.8], height: 0.09, wrapWidth: undefined, ori: 0,
 		color: new util.Color('white'), opacity: 1,
 		depth: 0.0
 	});
@@ -786,10 +846,22 @@ function experimentInit() {
 		text: 'Which room do you want to go next?',alignHoriz: 'center',
 		font: 'Arial',
 		units: 'norm',
-		pos: [0, 0.6], height: 0.06, wrapWidth: undefined, ori: 0,
+		pos: [0, 0.7], height: 0.06, wrapWidth: undefined, ori: 0,
 		color: new util.Color('white'), opacity: 1,
 		depth: 0.0
 	});
+
+	g.invites_text = new visual.TextStim({
+		win: psychoJS.window,
+		name: 'invites_text',
+		text: "Total Accepted: XX\nTotal Rejected: XX",alignHoriz: 'left',
+		font: 'Arial',
+		units: 'norm',
+		pos: [-0.13, 0.55], height: 0.06, wrapWidth: undefined, ori: 0,
+		color: new util.Color('white'), opacity: 1,
+		depth: 0.0
+	});
+
 
 	
 
@@ -1399,6 +1471,9 @@ function clearStims() {
 
 	g.points_fixation_stim.setAutoDraw(false);
 	g.points_fixation_stim.status = PsychoJS.Status.NOT_STARTED;
+
+	g.invites_text.setAutoDraw(false);
+	g.invites_text.stauts = PsychoJS.Status.NOT_STARTED;
 }
 
 /**
@@ -1527,6 +1602,7 @@ function module_1(trial) {
 			g.rooms_left_text.setText(`${g.depth - 1} rooms left.`)
 			g.rooms_left_text.setAutoDraw(true);
 			g.trial_phase = g.WAITING_INVITE_KEY
+			console.log(trial)
 		}
 
 		// Click Invite Button
@@ -1553,6 +1629,13 @@ function module_1(trial) {
 		if (g.room_image_invite.status == PsychoJS.Status.NOT_STARTED && g.trial_phase == g.RESPONSE_ANIMATION) {
 			g.room_image_invite.setImage(trial.building_type + '_invite_' + g.current_path)
 			g.room_image_invite.setAutoDraw(true);
+
+			// set accpeted/rejected invites text
+			console.log(g.current_path, trial.building_type)
+			g.accepted_invites = g.path[g.current_path]['accepted'][trial.building_type];
+			g.rejected_invites = g.path[g.current_path]['rejected'][trial.building_type];
+			g.invites_text.setText(`Total Accepted: ${g.accepted_invites}\nTotal Rejected: ${g.rejected_invites}`)
+			g.invites_text.setAutoDraw(true);
 			g.responseTimer.reset(g.RESPONSE_DURATION); // start timer
 		}
 
@@ -1591,10 +1674,10 @@ function module_1(trial) {
 			if (theseKeys.length > 0) {
 				// increment trial invites
 				// based ond current position and the building type
-				g.trial_invites = g.trial_invites + g.path[g.current_path]['invites'][trial.building_type];
+				// g.trial_invites = g.trial_invites + g.path[g.current_path]['invites'][trial.building_type];
 				
 				// total invites
-				g.total_invites = g.total_invites + g.path[g.current_path]['invites'][trial.building_type];
+				// g.total_invites = g.total_invites + g.path[g.current_path]['invites'][trial.building_type];
 
 				if (theseKeys[0].name == '1') { g.response = 'left'; }
 				if (theseKeys[0].name == '2') { g.response = 'right'; }
@@ -1865,7 +1948,6 @@ function module_3(trial) {
 function fixation(trial) {
 	return function () {
 		if (g.points_fixation_stim.status == PsychoJS.Status.NOT_STARTED) {
-			console.log('FIXATION ROUTINE: ', trial.ITI);
 			g.points_fixation_stim.setAutoDraw(true);
 			// start time
 			g.fixationTimer.reset(trial.ITI);
