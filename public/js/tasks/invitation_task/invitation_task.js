@@ -711,7 +711,7 @@ function experimentInit() {
 		text: '1',alignHoriz: 'right',
 		font: 'Arial',
 		units: 'norm',
-		pos: [0.85, 0.85], height: 0.04, wrapWidth: undefined, ori: 0,
+		pos: [0.85, 0.8], height: 0.05, wrapWidth: undefined, ori: 0,
 		color: new util.Color('white'), opacity: 1,
 		depth: 0.0
 	});
@@ -758,7 +758,7 @@ function experimentInit() {
 		text: '0',alignHoriz: 'right',
 		font: 'Arial',
 		units: 'norm',
-		pos: [0.85, 0.75], height: 0.04, wrapWidth: undefined, ori: 0,
+		pos: [0.85, 0.75], height: 0.05, wrapWidth: undefined, ori: 0,
 		color: new util.Color('white'), opacity: 1,
 		depth: 0.0
 	});
@@ -1530,36 +1530,37 @@ function trialRoutineBegin(trial) {
 		t = 0;
 		trial_type = '';
 
-		g.trial_number = trial.trial_number;
+		g.trial_number = ( trial.trial_number + 1 );
 		g.depth = trial.depth;
 		g.current_path = trial.start;
+		// console.log('TRIAL INFO: ',trial)
 		
 		// Status Stims
-		g.text_trial_number.setAutoDraw(true);
-		g.text_val_trial_number.setText(g.trial_number);
+		// g.text_trial_number.setAutoDraw(true);
+		g.text_val_trial_number.setText(
+			'Trial ' + g.trial_number +
+			' of ' + trial.nTotal);
 		g.text_val_trial_number.setAutoDraw(true);
 
-		g.text_depth.setAutoDraw(true);
-		g.text_val_depth_number.setText(trial.depth);
-		g.text_val_depth_number.setAutoDraw(true);
+		// g.text_depth.setAutoDraw(true);
+		// g.text_val_depth_number.setText(trial.depth);
+		// g.text_val_depth_number.setAutoDraw(true);
 
-		g.text_invites.setAutoDraw(true);
-		g.text_val_invites.setText(g.total_invites);
+		// g.text_invites.setAutoDraw(true);
+		g.text_val_invites.setText('Total Invites: ' + g.total_invites);
 		g.text_val_invites.setAutoDraw(true);
-
 	
-		g.text_module.setAutoDraw(true);
-		g.text_val_module.setText(trial.module);
-		g.text_val_module.setAutoDraw(true);
+		// g.text_module.setAutoDraw(true);
+		// g.text_val_module.setText(trial.module);
+		// g.text_val_module.setAutoDraw(true);
 
-		g.text_path.setAutoDraw(true);
-		g.text_val_path.setText(g.current_path);
-		g.text_val_path.setAutoDraw(true);
+		// g.text_path.setAutoDraw(true);
+		// g.text_val_path.setText(g.current_path);
+		// g.text_val_path.setAutoDraw(true);
 
-		g.text_building.setAutoDraw(true);
-		g.text_val_building.setText(trial.building_type);
-		g.text_val_building.setAutoDraw(true);
-
+		// g.text_building.setAutoDraw(true);
+		// g.text_val_building.setText(trial.building_type);
+		// g.text_val_building.setAutoDraw(true);
 		
 		g.trial_invites = 0; // always start trial invites to 0
 
@@ -1601,8 +1602,7 @@ function module_1(trial) {
 			g.room_image.setAutoDraw(true);
 			g.rooms_left_text.setText(`${g.depth - 1} rooms left.`)
 			g.rooms_left_text.setAutoDraw(true);
-			g.trial_phase = g.WAITING_INVITE_KEY
-			console.log(trial)
+			g.trial_phase = g.WAITING_INVITE_KEY;
 		}
 
 		// Click Invite Button
@@ -1631,12 +1631,20 @@ function module_1(trial) {
 			g.room_image_invite.setAutoDraw(true);
 
 			// set accpeted/rejected invites text
-			console.log(g.current_path, trial.building_type)
 			g.accepted_invites = g.path[g.current_path]['accepted'][trial.building_type];
 			g.rejected_invites = g.path[g.current_path]['rejected'][trial.building_type];
 			g.invites_text.setText(`Total Accepted: ${g.accepted_invites}\nTotal Rejected: ${g.rejected_invites}`)
 			g.invites_text.setAutoDraw(true);
 			g.responseTimer.reset(g.RESPONSE_DURATION); // start timer
+
+			// increment trial invites
+			// based ond current position and the building type
+			g.trial_invites = g.trial_invites + g.accepted_invites;
+			
+			// total invites
+			g.total_invites = g.total_invites + g.accepted_invites;
+
+			g.text_val_invites.setText('Total Invites: ' + g.total_invites);
 		}
 
 		if (g.trial_phase == g.RESPONSE_ANIMATION && g.responseTimer.getTime() <= 0) {
@@ -1672,12 +1680,6 @@ function module_1(trial) {
 		if (g.trial_phase == g.WAITING_SELECTION) {
 			let theseKeys = ready.getKeys({ keyList: ['1', '2'], waitRelease: false });
 			if (theseKeys.length > 0) {
-				// increment trial invites
-				// based ond current position and the building type
-				// g.trial_invites = g.trial_invites + g.path[g.current_path]['invites'][trial.building_type];
-				
-				// total invites
-				// g.total_invites = g.total_invites + g.path[g.current_path]['invites'][trial.building_type];
 
 				if (theseKeys[0].name == '1') { g.response = 'left'; }
 				if (theseKeys[0].name == '2') { g.response = 'right'; }
@@ -1713,7 +1715,6 @@ function module_2(trial) {
 		// Make Selection
 		// Show Doors if path = 1
 		if (g.room_image.status == PsychoJS.Status.NOT_STARTED && g.trial_phase == g.TRIAL_BEGIN) {
-			console.log('CURRENT DEPTH: ', g.depth)
 			g.room_image.setImage(trial.building_type + '_' + g.current_path);
 			g.room_image.setAutoDraw(true);
 			
@@ -1787,7 +1788,6 @@ function module_2(trial) {
 		}
 
 		if (g.trial_phase == g.RESPONSE_ANIMATION && g.responseTimer.getTime() <= 0) {
-			console.log('test')
 			clearStims();
 			// go back to trial begin
 			g.outcome_text.setText(`Trial Total Invites: ${g.trial_invites}`)
@@ -1795,7 +1795,6 @@ function module_2(trial) {
 			// next current path 
 			g.depth--;
 			// return Scheduler.Event.NEXT;
-			console.log('NEXT PATH', g.current_path)
 		}
 		return Scheduler.Event.FLIP_REPEAT
 	}
@@ -1984,7 +1983,6 @@ function runModule(trial) {
 function trialOutcome(trial) {
 	return function () {
 		if (g.outcome_text.status == PsychoJS.Status.NOT_STARTED) {
-			console.log('Trial Outcome Routine')
 			g.outcome_text.setText(`Trial Total Invites: ${g.trial_invites}`)
 			g.outcomeTimer.reset(g.OUTCOME_DURATION); // reset the time with ITI 
 			g.outcome_text.setAutoDraw(true);
@@ -2013,7 +2011,6 @@ function initialFixation(trials) {
 			g.points_fixation_stim.color = new util.Color('white')
 			g.points_fixation_stim.setText('+')
 			g.points_fixation_stim.setAutoDraw(true)
-			console.log('Initial Fixation')
 
 			mark_event(trials_data, globalClock, 'NA', trial_type, event_types['FIXATION_ONSET'],
 				'NA', 'NA' , 'NA')
