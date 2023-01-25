@@ -840,6 +840,17 @@ function experimentInit() {
 		depth: 0.0
 	});
 
+	g.time_left_text = new visual.TextStim({
+		win: psychoJS.window,
+		name: 'rooms_left',
+		text: 'Xs',alignHoriz: 'center',
+		font: 'Arial',
+		units: 'norm',
+		pos: [0, 0.7], height: 0.08, wrapWidth: undefined, ori: 0,
+		color: new util.Color('white'), opacity: 1,
+		depth: 0.0
+	});
+
 	g.prompt_text = new visual.TextStim({
 		win: psychoJS.window,
 		name: 'prompt_text',
@@ -1454,6 +1465,9 @@ function clearStims() {
 	g.rooms_left_text.setAutoDraw(false);
 	g.rooms_left_text.status = PsychoJS.Status.NOT_STARTED;
 
+	g.time_left_text.setAutoDraw(false);
+	g.time_left_text.status = PsychoJS.Status.NOT_STARTED;
+
 	g.choice_1.setAutoDraw(false);
 	g.choice_1.status = PsychoJS.Status.NOT_STARTED;
 
@@ -1633,7 +1647,7 @@ function module_1(trial) {
 			// set accpeted/rejected invites text
 			g.accepted_invites = g.path[g.current_path]['accepted'][trial.building_type];
 			g.rejected_invites = g.path[g.current_path]['rejected'][trial.building_type];
-			g.invites_text.setText(`Total Accepted: ${g.accepted_invites}\nTotal Rejected: ${g.rejected_invites}`)
+			g.invites_text.setText(`Total Accepted: ${g.accepted_invites}\nTotal Rejected: ${g.rejected_invites}`);
 			g.invites_text.setAutoDraw(true);
 			g.responseTimer.reset(g.RESPONSE_DURATION); // start timer
 
@@ -1814,17 +1828,17 @@ function module_3(trial) {
 			g.room_image.setImage(trial.building_type + '_' + g.current_path);
 			g.room_image.setAutoDraw(true);
 
+			g.prompt_text.pos = [0, 0.62];
+
 			g.prompt_text.setAutoDraw(true);
 			g.prompt_text.setText('Plan your moves.');
 
-			g.rooms_left_text.setText(`9s`)
+			g.rooms_left_text.setText(`${g.depth - 1} moves left.`)
 			g.rooms_left_text.setAutoDraw(true);
 
-			g.left_door.setAutoDraw(true);
-			g.right_door.setAutoDraw(true);
+			g.time_left_text.setText('9s');
+			g.time_left_text.setAutoDraw(true);
 
-			g.choice_1.setAutoDraw(true);
-			g.choice_2.setAutoDraw(true);
 			g.trial_phase = g.PLANNING_PHASE;
 			g.planningTimer.reset(g.PLANNING_DURATION);
 			g.moves_entered = [];
@@ -1833,28 +1847,39 @@ function module_3(trial) {
 		// Planning Phase
 		if (g.trial_phase == g.PLANNING_PHASE) {
 			// update the text each frame
-			g.rooms_left_text.setText(`${Math.ceil(g.planningTimer.getTime())}s left`)
+			g.time_left_text.setText(`${Math.ceil(g.planningTimer.getTime())}s`)
 
 			if (g.planningTimer.getTime() <= 0) {
 				// go to next phase
-				g.prompt_text.setText(`Enter your moves (${g.SELCTION_DURATION})s`);
-				g.rooms_left_text.setText(`${g.depth - 1} moves left.`)
+				g.prompt_text.setText(`Enter moves now (${g.SELCTION_DURATION})s`);
+				
 	
 				g.trial_phase = g.WAITING_SELECTION;
 				g.selectionTimer.reset(g.SELCTION_DURATION);
+
+				g.left_door.setAutoDraw(true);
+				g.right_door.setAutoDraw(true);
+
+				g.choice_1.setAutoDraw(true);
+				g.choice_2.setAutoDraw(true);
 			} 
 		}
 
 		// Entering Moves Phase
 		if (g.trial_phase == g.WAITING_SELECTION) {
 			g.prompt_text.setText(`Enter your moves (${Math.ceil(g.selectionTimer.getTime())})s`);
-			g.rooms_left_text.setText(`${g.depth} moves left.`)
+			if (g.depth <= 0) {
+				g.rooms_left_text.setText(`no moves left.`)
+			} else {
+				g.rooms_left_text.setText(`${g.depth - 1} moves left.`)
+			}
+
 			if (g.selectionTimer.getTime() <= 0) {
 				// go to next phase.
-				console.log('SELECT TIME UP: ', g.moves_entered.length, g.depth, trial.depth)
 				if (g.moves_entered.length == trial.depth) {
 					// all moves entered
 					// go to animation
+					console.log('Moves Entered: ', g.moves_entered.length, ' Trial Depth:',trial.depth)
 					g.trial_phase = g.RESPONSE_ANIMATION;
 					g.responseTimer.reset(2);
 					clearStims();
@@ -1873,12 +1898,14 @@ function module_3(trial) {
 				// can still enter moves and within time limit
 				let theseKeys = ready.getKeys({ keyList: ['1', '2'], waitRelease: false });
 				if (theseKeys.length > 0) {
+					g.accepted_invites = g.path[g.current_path]['accepted'][trial.building_type];
+					g.rejected_invites = g.path[g.current_path]['rejected'][trial.building_type];
 					// increment trial invites
 					// based ond current position and the building type
-					g.trial_invites = g.trial_invites + g.path[g.current_path]['invites'][trial.building_type];
+					g.trial_invites = g.trial_invites + g.accepted_invites;
 					
 					// total invites
-					g.total_invites = g.total_invites + g.path[g.current_path]['invites'][trial.building_type];
+					g.total_invites = g.total_invites + g.accepted_invites;
 
 					if (theseKeys[0].name == '1') { g.response = 'left'; }
 					if (theseKeys[0].name == '2') { g.response = 'right';}
