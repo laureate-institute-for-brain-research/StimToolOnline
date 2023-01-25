@@ -832,7 +832,7 @@ function experimentInit() {
 	g.rooms_left_text = new visual.TextStim({
 		win: psychoJS.window,
 		name: 'rooms_left',
-		text: 'X rooms left',alignHoriz: 'center',
+		text: 'You have X moves.',alignHoriz: 'center',
 		font: 'Arial',
 		units: 'norm',
 		pos: [0, 0.8], height: 0.09, wrapWidth: undefined, ori: 0,
@@ -1579,7 +1579,7 @@ function trialRoutineBegin(trial) {
 		g.trial_invites = 0; // always start trial invites to 0
 
 		g.prompt_text.setText('Where do you want to go next?');
-		g.rooms_left_text.setText(`${g.depth - 1} rooms left.`)
+		g.rooms_left_text.setText(`You have ${g.depth} moves`)
 		
 		g.outcome_text.color = 'white';
 		
@@ -1614,7 +1614,7 @@ function module_1(trial) {
 		if (g.room_image.status == PsychoJS.Status.NOT_STARTED && g.trial_phase == g.TRIAL_BEGIN) {
 			g.room_image.setImage(trial.building_type + '_' + g.current_path);
 			g.room_image.setAutoDraw(true);
-			g.rooms_left_text.setText(`${g.depth - 1} rooms left.`)
+			g.rooms_left_text.setText(`You have ${g.depth} moves`)
 			g.rooms_left_text.setAutoDraw(true);
 			g.trial_phase = g.WAITING_INVITE_KEY;
 		}
@@ -1732,7 +1732,7 @@ function module_2(trial) {
 			g.room_image.setImage(trial.building_type + '_' + g.current_path);
 			g.room_image.setAutoDraw(true);
 			
-			g.rooms_left_text.setText(`${g.depth - 1} rooms left.`)
+			g.rooms_left_text.setText(`You have ${g.depth} moves`)
 			g.rooms_left_text.setAutoDraw(true);
 			
 			if (trial.forced_choice == 'L') {
@@ -1831,9 +1831,9 @@ function module_3(trial) {
 			g.prompt_text.pos = [0, 0.62];
 
 			g.prompt_text.setAutoDraw(true);
-			g.prompt_text.setText('Plan your moves.');
+			g.prompt_text.setText('Please plan your moves now.');
 
-			g.rooms_left_text.setText(`${g.depth - 1} moves left.`)
+			g.rooms_left_text.setText(`You have ${g.depth} moves`)
 			g.rooms_left_text.setAutoDraw(true);
 
 			g.time_left_text.setText('9s');
@@ -1842,6 +1842,7 @@ function module_3(trial) {
 			g.trial_phase = g.PLANNING_PHASE;
 			g.planningTimer.reset(g.PLANNING_DURATION);
 			g.moves_entered = [];
+			g.current_path = trial.start;			// start iterative over entered moves
 		}
 
 		// Planning Phase
@@ -1862,6 +1863,7 @@ function module_3(trial) {
 
 				g.choice_1.setAutoDraw(true);
 				g.choice_2.setAutoDraw(true);
+				
 			} 
 		}
 
@@ -1871,7 +1873,7 @@ function module_3(trial) {
 			if (g.depth <= 0) {
 				g.rooms_left_text.setText(`no moves left.`)
 			} else {
-				g.rooms_left_text.setText(`${g.depth - 1} moves left.`)
+				g.rooms_left_text.setText(`You have ${g.depth} moves`)
 			}
 
 			if (g.selectionTimer.getTime() <= 0) {
@@ -1898,17 +1900,20 @@ function module_3(trial) {
 				// can still enter moves and within time limit
 				let theseKeys = ready.getKeys({ keyList: ['1', '2'], waitRelease: false });
 				if (theseKeys.length > 0) {
-					g.accepted_invites = g.path[g.current_path]['accepted'][trial.building_type];
-					g.rejected_invites = g.path[g.current_path]['rejected'][trial.building_type];
+					
+
+					if (theseKeys[0].name == '1') { g.response = 'left'; }
+					if (theseKeys[0].name == '2') { g.response = 'right'; }
+					
+					g.current_path = g.path[g.current_path][g.response];
 					// increment trial invites
+					g.accepted_invites = g.path[g.current_path]['accepted'][trial.building_type];
+					
 					// based ond current position and the building type
 					g.trial_invites = g.trial_invites + g.accepted_invites;
 					
 					// total invites
 					g.total_invites = g.total_invites + g.accepted_invites;
-
-					if (theseKeys[0].name == '1') { g.response = 'left'; }
-					if (theseKeys[0].name == '2') { g.response = 'right';}
 					
 					g.depth--;
 					g.moves_entered.push(g.response);
@@ -1923,9 +1928,16 @@ function module_3(trial) {
 				g.outcome_text.setAutoDraw(true);
 				g.animationTimer.reset(g.ANIMATION_DURATION);
 				g.current_move = 0;			// start iterative over entered moves
+				g.current_path = trial.start;
 				g.current_path = g.path[g.current_path][g.moves_entered[g.current_move]];
 				g.room_image_invite.setImage(trial.building_type + '_invite_' + g.current_path)
 				g.room_image_invite.setAutoDraw(true);
+
+				// display accepted/rejected amounts
+				g.accepted_invites = g.path[g.current_path]['accepted'][trial.building_type];
+				g.rejected_invites = g.path[g.current_path]['rejected'][trial.building_type];
+				g.invites_text.setText(`Total Accepted: ${g.accepted_invites}\nTotal Rejected: ${g.rejected_invites}`);
+				g.invites_text.setAutoDraw(true);
 			}
 
 			// Single Invite Room Instance
@@ -1942,6 +1954,10 @@ function module_3(trial) {
 				g.current_move++;
 				g.current_path = g.path[g.current_path][g.moves_entered[g.current_move]];
 				g.room_image_invite.setImage(trial.building_type + '_invite_' + g.current_path)
+				// display accepted/rejected amounts
+				g.accepted_invites = g.path[g.current_path]['accepted'][trial.building_type];
+				g.rejected_invites = g.path[g.current_path]['rejected'][trial.building_type];
+				g.invites_text.setText(`Total Accepted: ${g.accepted_invites}\nTotal Rejected: ${g.rejected_invites}`);
 
 				g.animationTimer.reset(g.ANIMATION_DURATION); // reset timer
 			}
