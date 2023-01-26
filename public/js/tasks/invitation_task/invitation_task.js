@@ -49,23 +49,23 @@ g.PLANNING_PHASE = 4;		// for when subject needs to plan
 g.path = {
 	1: {
 		'accepted': {
-			'office': 2,
-			'library': 23
+			'office': 0,
+			'library': 0
 		},
 		'rejected': {
-			'office': 4,
-			'library': 5
+			'office': 0,
+			'library': 0
 		},
 		'left': 2,
 		'right': 3
 	},
 	2: {
 		'accepted': {
-			'office': 5,
-			'library': 10
+			'office': 10,
+			'library': 0
 		},
 		'rejected': {
-			'office': 8,
+			'office': 5,
 			'library': 99
 		},
 		'left': 4,
@@ -73,108 +73,108 @@ g.path = {
 	},
 	3: {
 		'accepted': {
-			'office': 23,
-			'library': 9
+			'office': 5,
+			'library': 5
 		},
 		'rejected': {
-			'office': 67,
-			'library': 34
+			'office': 0,
+			'library': 5
 		},
 		'left': 6,
 		'right': 7,
 	},
 	4: {
 		'accepted': {
-			'office': 54,
-			'library': 19
+			'office': 5,
+			'library': 5
 		},
 		'rejected': {
-			'office': 77,
-			'library': 19
+			'office': 5,
+			'library': 0
 		},
 		'left': 8,
 		'right': 9
 	},
 	5: {
 		'accepted': {
-			'office': 33,
-			'library': 55
+			'office': 0,
+			'library': 20
 		},
 		'rejected': {
-			'office': 46,
-			'library': 59
+			'office': 20,
+			'library': 0
 		},
 		'left': 10,
 		'right': 11
 	},
 	6: {
 		'accepted': {
-			'office': 50,
-			'library': 44
+			'office': 5,
+			'library': 10
 		},
 		'rejected': {
-			'office': 37,
-			'library': 20
+			'office': 0,
+			'library': 0
 		},
 		'left': 12,
 		'right': 13
 	},
 	7: {
 		'accepted': {
-			'office': 80,
-			'library': 40
+			'office': 5,
+			'library': 5
 		},
 		'rejected': {
-			'office': 22,
-			'library': 33
+			'office': 2,
+			'library': 10
 		},
 		'left': 14,
 		'right': 15
 	},
 	8: {
 		'accepted': {
-			'office': 10,
-			'library': 80
+			'office': 0,
+			'library': 5
 		},
 		'rejected': {
-			'office': 70,
-			'library': 55
+			'office': 10,
+			'library': 0
 		},
 		'left': 0,
 		'right': 0
 	},
 	9: {
 		'accepted': {
-			'office': 2,
-			'library': 7
+			'office': 0,
+			'library': 10
 		},
 		'rejected': {
-			'office': 6,
-			'library': 5
+			'office': 5,
+			'library': 10
 		},
 		'left': 0,
 		'right': 0
 	},
 	10: {
 		'accepted': {
-			'office': 7,
-			'library': 5
+			'office': 10,
+			'library': 0
 		},
 		'rejected': {
 			'office': 0,
-			'library': 19
+			'library': 2
 		},
 		'left': 0,
 		'right': 0
 	},
 	11: {
 		'accepted': {
-			'office': 3,
-			'library': 5
+			'office': 5,
+			'library': 0
 		},
 		'rejected': {
-			'office': 6,
-			'library': 3
+			'office': 2,
+			'library': 5
 		},
 		'left': 0,
 		'right': 0
@@ -182,47 +182,47 @@ g.path = {
 	12: {
 		'accepted': {
 			'office': 5,
-			'library': 7
+			'library': 5
 		},
 		'rejected': {
-			'office': 8,
-			'library': 7
+			'office': 0,
+			'library': 0
 		},
 		'left': 0,
 		'right': 0
 	},
 	13: {
 		'accepted': {
-			'office': 6,
-			'library': 9
+			'office': 0,
+			'library': 10
 		},
 		'rejected': {
-			'office': 5,
-			'library': 3
+			'office': 10,
+			'library': 0
 		},
 		'left': 0,
 		'right': 0
 	},
 	14: {
 		'accepted': {
-			'office': 2,
-			'library': 1
+			'office': 0,
+			'library': 20
 		},
 		'rejected': {
-			'office': 4,
-			'library': 7
+			'office': 5,
+			'library': 0
 		},
 		'left': 0,
 		'right': 0
 	},
 	15: {
 		'accepted': {
-			'office': 20,
-			'library': 77
+			'office': 10,
+			'library': 0
 		},
 		'rejected': {
-			'office': 45,
-			'library': 2
+			'office': 10,
+			'library': 0
 		},
 		'left': 0,
 		'right': 0
@@ -427,64 +427,64 @@ var resources = [
 	{ name: 'MAIN_ready', path: '/js/tasks/cooperation_task/media/instructions/Slide16.jpeg' },
 	{ name: 'MAIN_ready_audio.mp3', path: '/js/tasks/cooperation_task/media/instructions_audio/Slide16.mp3'},
 	{ name: 'BEGIN_slide', path: '/js/tasks/cooperation_task/media/instructions/Slide17.jpeg' },
-	{ name: 'library_1', path: '/js/tasks/invitation_task/media/images/library_1.jpg' },
-	{ name: 'library_2', path: '/js/tasks/invitation_task/media/images/library_2.jpg' },
-	{ name: 'library_3', path: '/js/tasks/invitation_task/media/images/library_3.jpg' },
-	{ name: 'library_4', path: '/js/tasks/invitation_task/media/images/library_4.jpg' },
-	{ name: 'library_5', path: '/js/tasks/invitation_task/media/images/library_5.jpg' },
-	{ name: 'library_6', path: '/js/tasks/invitation_task/media/images/library_6.jpg' },
-	{ name: 'library_7', path: '/js/tasks/invitation_task/media/images/library_7.jpg' },
-	{ name: 'library_8', path: '/js/tasks/invitation_task/media/images/library_8.jpg' },
-	{ name: 'library_9', path: '/js/tasks/invitation_task/media/images/library_9.jpg' },
-	{ name: 'library_10', path: '/js/tasks/invitation_task/media/images/library_10.jpg' },
-	{ name: 'library_11', path: '/js/tasks/invitation_task/media/images/library_11.jpg' },
-	{ name: 'library_12', path: '/js/tasks/invitation_task/media/images/library_12.jpg' },
-	{ name: 'library_13', path: '/js/tasks/invitation_task/media/images/library_13.jpg' },
-	{ name: 'library_14', path: '/js/tasks/invitation_task/media/images/library_14.jpg' },
-	{ name: 'library_15', path: '/js/tasks/invitation_task/media/images/library_15.jpg' },
-	{ name: 'library_invite_2', path: '/js/tasks/invitation_task/media/images/library_invite_2.jpg' },
-	{ name: 'library_invite_3', path: '/js/tasks/invitation_task/media/images/library_invite_3.jpg' },
-	{ name: 'library_invite_4', path: '/js/tasks/invitation_task/media/images/library_invite_4.jpg' },
-	{ name: 'library_invite_5', path: '/js/tasks/invitation_task/media/images/library_invite_5.jpg' },
-	{ name: 'library_invite_6', path: '/js/tasks/invitation_task/media/images/library_invite_6.jpg' },
-	{ name: 'library_invite_7', path: '/js/tasks/invitation_task/media/images/library_invite_7.jpg' },
-	{ name: 'library_invite_8', path: '/js/tasks/invitation_task/media/images/library_invite_8.jpg' },
-	{ name: 'library_invite_9', path: '/js/tasks/invitation_task/media/images/library_invite_9.jpg' },
-	{ name: 'library_invite_10', path: '/js/tasks/invitation_task/media/images/library_invite_10.jpg' },
-	{ name: 'library_invite_11', path: '/js/tasks/invitation_task/media/images/library_invite_11.jpg' },
-	{ name: 'library_invite_12', path: '/js/tasks/invitation_task/media/images/library_invite_12.jpg' },
-	{ name: 'library_invite_13', path: '/js/tasks/invitation_task/media/images/library_invite_13.jpg' },
-	{ name: 'library_invite_14', path: '/js/tasks/invitation_task/media/images/library_invite_14.jpg' },
-	{ name: 'library_invite_15', path: '/js/tasks/invitation_task/media/images/library_invite_15.jpg' },
-	{ name: 'office_1', path: '/js/tasks/invitation_task/media/images/office_1.jpg' },
-	{ name: 'office_2', path: '/js/tasks/invitation_task/media/images/office_2.jpg' },
-	{ name: 'office_3', path: '/js/tasks/invitation_task/media/images/office_3.jpg' },
-	{ name: 'office_4', path: '/js/tasks/invitation_task/media/images/office_4.jpg' },
-	{ name: 'office_5', path: '/js/tasks/invitation_task/media/images/office_5.jpg' },
-	{ name: 'office_6', path: '/js/tasks/invitation_task/media/images/office_6.jpg' },
-	{ name: 'office_7', path: '/js/tasks/invitation_task/media/images/office_7.jpg' },
-	{ name: 'office_8', path: '/js/tasks/invitation_task/media/images/office_8.jpg' },
-	{ name: 'office_9', path: '/js/tasks/invitation_task/media/images/office_9.jpg' },
-	{ name: 'office_10', path: '/js/tasks/invitation_task/media/images/office_10.jpg' },
-	{ name: 'office_11', path: '/js/tasks/invitation_task/media/images/office_11.jpg' },
-	{ name: 'office_12', path: '/js/tasks/invitation_task/media/images/office_12.jpg' },
-	{ name: 'office_13', path: '/js/tasks/invitation_task/media/images/office_13.jpg' },
-	{ name: 'office_14', path: '/js/tasks/invitation_task/media/images/office_14.jpg' },
-	{ name: 'office_15', path: '/js/tasks/invitation_task/media/images/office_15.jpg' },
-	{ name: 'office_invite_2', path: '/js/tasks/invitation_task/media/images/office_invite_2.jpg' },
-	{ name: 'office_invite_3', path: '/js/tasks/invitation_task/media/images/office_invite_3.jpg' },
-	{ name: 'office_invite_4', path: '/js/tasks/invitation_task/media/images/office_invite_4.jpg' },
-	{ name: 'office_invite_5', path: '/js/tasks/invitation_task/media/images/office_invite_5.jpg' },
-	{ name: 'office_invite_6', path: '/js/tasks/invitation_task/media/images/office_invite_6.jpg' },
-	{ name: 'office_invite_7', path: '/js/tasks/invitation_task/media/images/office_invite_7.jpg' },
-	{ name: 'office_invite_8', path: '/js/tasks/invitation_task/media/images/office_invite_8.jpg' },
-	{ name: 'office_invite_9', path: '/js/tasks/invitation_task/media/images/office_invite_9.jpg' },
-	{ name: 'office_invite_10', path: '/js/tasks/invitation_task/media/images/office_invite_10.jpg' },
-	{ name: 'office_invite_11', path: '/js/tasks/invitation_task/media/images/office_invite_11.jpg' },
-	{ name: 'office_invite_12', path: '/js/tasks/invitation_task/media/images/office_invite_12.jpg' },
-	{ name: 'office_invite_13', path: '/js/tasks/invitation_task/media/images/office_invite_13.jpg' },
-	{ name: 'office_invite_14', path: '/js/tasks/invitation_task/media/images/office_invite_14.jpg' },
-	{ name: 'office_invite_15', path: '/js/tasks/invitation_task/media/images/office_invite_15.jpg' },
+	{ name: 'library_1', path: '/js/tasks/invitation_task/media/game_slides/lib_1.jpeg' },
+	{ name: 'library_2', path: '/js/tasks/invitation_task/media/game_slides/lib_2.jpeg' },
+	{ name: 'library_3', path: '/js/tasks/invitation_task/media/game_slides/lib_3.jpeg' },
+	{ name: 'library_4', path: '/js/tasks/invitation_task/media/game_slides/lib_4.jpeg' },
+	{ name: 'library_5', path: '/js/tasks/invitation_task/media/game_slides/lib_5.jpeg' },
+	{ name: 'library_6', path: '/js/tasks/invitation_task/media/game_slides/lib_6.jpeg' },
+	{ name: 'library_7', path: '/js/tasks/invitation_task/media/game_slides/lib_7.jpeg' },
+	{ name: 'library_8', path: '/js/tasks/invitation_task/media/game_slides/lib_8.jpeg' },
+	{ name: 'library_9', path: '/js/tasks/invitation_task/media/game_slides/lib_9.jpeg' },
+	{ name: 'library_10', path: '/js/tasks/invitation_task/media/game_slides/lib_10.jpeg' },
+	{ name: 'library_11', path: '/js/tasks/invitation_task/media/game_slides/lib_11.jpeg' },
+	{ name: 'library_12', path: '/js/tasks/invitation_task/media/game_slides/lib_12.jpeg' },
+	{ name: 'library_13', path: '/js/tasks/invitation_task/media/game_slides/lib_13.jpeg' },
+	{ name: 'library_14', path: '/js/tasks/invitation_task/media/game_slides/lib_14.jpeg' },
+	{ name: 'library_15', path: '/js/tasks/invitation_task/media/game_slides/lib_15.jpeg' },
+	{ name: 'library_invite_2', path: '/js/tasks/invitation_task/media/game_slides/lib_2_invite.jpeg' },
+	{ name: 'library_invite_3', path: '/js/tasks/invitation_task/media/game_slides/lib_3_invite.jpeg' },
+	{ name: 'library_invite_4', path: '/js/tasks/invitation_task/media/game_slides/lib_4_invite.jpeg' },
+	{ name: 'library_invite_5', path: '/js/tasks/invitation_task/media/game_slides/lib_5_invite.jpeg' },
+	{ name: 'library_invite_6', path: '/js/tasks/invitation_task/media/game_slides/lib_6_invite.jpeg' },
+	{ name: 'library_invite_7', path: '/js/tasks/invitation_task/media/game_slides/lib_7_invite.jpeg' },
+	{ name: 'library_invite_8', path: '/js/tasks/invitation_task/media/game_slides/lib_8_invite.jpeg' },
+	{ name: 'library_invite_9', path: '/js/tasks/invitation_task/media/game_slides/lib_9_invite.jpeg' },
+	{ name: 'library_invite_10', path: '/js/tasks/invitation_task/media/game_slides/lib_10_invite.jpeg' },
+	{ name: 'library_invite_11', path: '/js/tasks/invitation_task/media/game_slides/lib_11_invite.jpeg' },
+	{ name: 'library_invite_12', path: '/js/tasks/invitation_task/media/game_slides/lib_12_invite.jpeg' },
+	{ name: 'library_invite_13', path: '/js/tasks/invitation_task/media/game_slides/lib_13_invite.jpeg' },
+	{ name: 'library_invite_14', path: '/js/tasks/invitation_task/media/game_slides/lib_14_invite.jpeg' },
+	{ name: 'library_invite_15', path: '/js/tasks/invitation_task/media/game_slides/lib_15_invite.jpeg' },
+	{ name: 'office_1', path: '/js/tasks/invitation_task/media/game_slides/office_1.jpeg' },
+	{ name: 'office_2', path: '/js/tasks/invitation_task/media/game_slides/office_2.jpeg' },
+	{ name: 'office_3', path: '/js/tasks/invitation_task/media/game_slides/office_3.jpeg' },
+	{ name: 'office_4', path: '/js/tasks/invitation_task/media/game_slides/office_4.jpeg' },
+	{ name: 'office_5', path: '/js/tasks/invitation_task/media/game_slides/office_5.jpeg' },
+	{ name: 'office_6', path: '/js/tasks/invitation_task/media/game_slides/office_6.jpeg' },
+	{ name: 'office_7', path: '/js/tasks/invitation_task/media/game_slides/office_7.jpeg' },
+	{ name: 'office_8', path: '/js/tasks/invitation_task/media/game_slides/office_8.jpeg' },
+	{ name: 'office_9', path: '/js/tasks/invitation_task/media/game_slides/office_9.jpeg' },
+	{ name: 'office_10', path: '/js/tasks/invitation_task/media/game_slides/office_10.jpeg' },
+	{ name: 'office_11', path: '/js/tasks/invitation_task/media/game_slides/office_11.jpeg' },
+	{ name: 'office_12', path: '/js/tasks/invitation_task/media/game_slides/office_12.jpeg' },
+	{ name: 'office_13', path: '/js/tasks/invitation_task/media/game_slides/office_13.jpeg' },
+	{ name: 'office_14', path: '/js/tasks/invitation_task/media/game_slides/office_14.jpeg' },
+	{ name: 'office_15', path: '/js/tasks/invitation_task/media/game_slides/office_15.jpeg' },
+	{ name: 'office_invite_2', path: '/js/tasks/invitation_task/media/game_slides/office_2_invite.jpeg' },
+	{ name: 'office_invite_3', path: '/js/tasks/invitation_task/media/game_slides/office_3_invite.jpeg' },
+	{ name: 'office_invite_4', path: '/js/tasks/invitation_task/media/game_slides/office_4_invite.jpeg' },
+	{ name: 'office_invite_5', path: '/js/tasks/invitation_task/media/game_slides/office_5_invite.jpeg' },
+	{ name: 'office_invite_6', path: '/js/tasks/invitation_task/media/game_slides/office_6_invite.jpeg' },
+	{ name: 'office_invite_7', path: '/js/tasks/invitation_task/media/game_slides/office_7_invite.jpeg' },
+	{ name: 'office_invite_8', path: '/js/tasks/invitation_task/media/game_slides/office_8_invite.jpeg' },
+	{ name: 'office_invite_9', path: '/js/tasks/invitation_task/media/game_slides/office_9_invite.jpeg' },
+	{ name: 'office_invite_10', path: '/js/tasks/invitation_task/media/game_slides/office_10_invite.jpeg' },
+	{ name: 'office_invite_11', path: '/js/tasks/invitation_task/media/game_slides/office_11_invite.jpeg' },
+	{ name: 'office_invite_12', path: '/js/tasks/invitation_task/media/game_slides/office_12_invite.jpeg' },
+	{ name: 'office_invite_13', path: '/js/tasks/invitation_task/media/game_slides/office_13_invite.jpeg' },
+	{ name: 'office_invite_14', path: '/js/tasks/invitation_task/media/game_slides/office_14_invite.jpeg' },
+	{ name: 'office_invite_15', path: '/js/tasks/invitation_task/media/game_slides/office_15_invite.jpeg' },
 	{ name: 'orange_door', path: '/js/tasks/invitation_task/media/images/orange_door.png' },
 	{ name: 'blue_door', path: '/js/tasks/invitation_task/media/images/blue_door.png' },
 ]
@@ -626,12 +626,16 @@ function experimentInit() {
 		depth: 0
 	})
 
+	// constants for room attributes
+	g.ROOM_POS = [0, -0.05];
+	g.ROOM_SIZE = [1.2, 0.7];
+
 
 	g.room_image = new visual.ImageStim({
 		win : psychoJS.window,
 		name : 'room_image', units : 'height', 
 		image : 'office_1', mask : undefined,
-		ori : 0, pos : [0, -0.08], size: [0.9,0.6],
+		ori : 0, pos : g.ROOM_POS, size: g.ROOM_SIZE,
 		color : new util.Color([1, 1, 1]), opacity : 1,
 		flipHoriz : false, flipVert : false,
 		texRes : 128, interpolate : true, depth : 0
@@ -641,7 +645,7 @@ function experimentInit() {
 		win : psychoJS.window,
 		name : 'room_image_invite', units : 'height', 
 		image : 'office_invite_2', mask : undefined,
-		ori : 0, pos : [0, -0.08], size: [0.9,0.6],
+		ori : 0, pos : g.ROOM_POS, size: g.ROOM_SIZE,
 		color : new util.Color([1, 1, 1]), opacity : 1,
 		flipHoriz : false, flipVert : false,
 		texRes : 128, interpolate : true, depth : 0
@@ -1647,8 +1651,8 @@ function module_1(trial) {
 			// set accpeted/rejected invites text
 			g.accepted_invites = g.path[g.current_path]['accepted'][trial.building_type];
 			g.rejected_invites = g.path[g.current_path]['rejected'][trial.building_type];
-			g.invites_text.setText(`Total Accepted: ${g.accepted_invites}\nTotal Rejected: ${g.rejected_invites}`);
-			g.invites_text.setAutoDraw(true);
+			// g.invites_text.setText(`Total Accepted: ${g.accepted_invites}\nTotal Rejected: ${g.rejected_invites}`);
+			// g.invites_text.setAutoDraw(true);
 			g.responseTimer.reset(g.RESPONSE_DURATION); // start timer
 
 			// increment trial invites
@@ -1729,8 +1733,17 @@ function module_2(trial) {
 		// Make Selection
 		// Show Doors if path = 1
 		if (g.room_image.status == PsychoJS.Status.NOT_STARTED && g.trial_phase == g.TRIAL_BEGIN) {
-			g.room_image.setImage(trial.building_type + '_' + g.current_path);
-			g.room_image.setAutoDraw(true);
+			
+			if (trial.start == 1) {
+				g.room_image.setImage(trial.building_type + '_' + g.current_path);
+				g.room_image.setAutoDraw(true);
+			} else {
+				g.room_image_invite.setImage(trial.building_type + '_invite_' + g.current_path)
+				g.room_image_invite.setAutoDraw(true);
+			}
+			
+
+			
 			
 			g.rooms_left_text.setText(`You have ${g.depth} moves`)
 			g.rooms_left_text.setAutoDraw(true);
@@ -1757,10 +1770,12 @@ function module_2(trial) {
 			if (theseKeys.length > 0) {
 				// increment trial invites
 				// based ond current position and the building type
-				g.trial_invites = g.trial_invites + g.path[g.current_path]['invites'][trial.building_type];
+				g.accepted_invites = g.path[g.current_path]['accepted'][trial.building_type];
+				g.rejected_invites = g.path[g.current_path]['rejected'][trial.building_type];
+				g.trial_invites = g.trial_invites + g.accepted_invites;
 				
 				// total invites
-				g.total_invites = g.total_invites + g.path[g.current_path]['invites'][trial.building_type];
+				g.total_invites = g.total_invites + g.accepted_invites;
 
 				if (theseKeys[0].name == '1') { g.response = 'left'; }
 				if (theseKeys[0].name == '2') { g.response = 'right';}
@@ -1936,8 +1951,8 @@ function module_3(trial) {
 				// display accepted/rejected amounts
 				g.accepted_invites = g.path[g.current_path]['accepted'][trial.building_type];
 				g.rejected_invites = g.path[g.current_path]['rejected'][trial.building_type];
-				g.invites_text.setText(`Total Accepted: ${g.accepted_invites}\nTotal Rejected: ${g.rejected_invites}`);
-				g.invites_text.setAutoDraw(true);
+				// g.invites_text.setText(`Total Accepted: ${g.accepted_invites}\nTotal Rejected: ${g.rejected_invites}`);
+				// g.invites_text.setAutoDraw(true);
 			}
 
 			// Single Invite Room Instance
