@@ -42,6 +42,7 @@ g.WAITING_SELECTION = 1; 	// for waiting selection choice
 g.WAITING_INVITE_KEY = 2;	// for waiting invitation key
 g.RESPONSE_ANIMATION = 3;	// for response animation
 g.PLANNING_PHASE = 4;		// for when subject needs to plan 
+g.WAITING_KEY = 5;			// for when waiting for a key press
 
 // the image path where key is the current position and the value is the path to the 
 // room image.
@@ -738,7 +739,7 @@ function experimentInit() {
 		text: '0',alignHoriz: 'right',
 		font: 'Arial',
 		units: 'norm',
-		pos: [0.85, 0.80], height: 0.04, wrapWidth: undefined, ori: 0,
+		pos: [0.85, 0.80], height: 0.05, wrapWidth: undefined, ori: 0,
 		color: new util.Color('white'), opacity: 1,
 		depth: 0.0
 	});
@@ -748,10 +749,10 @@ function experimentInit() {
 	g.text_invites  = new visual.TextStim({
 		win: psychoJS.window,
 		name: 'text_invites',
-		text: 'Invites:',alignHoriz: 'left',
+		text: 'Total Invites Accepted:',alignHoriz: 'left',
 		font: 'Arial',
 		units: 'norm',
-		pos: [0.55, 0.75], height: 0.04, wrapWidth: undefined, ori: 0,
+		pos: [0.5, 0.75], height: 0.05, wrapWidth: undefined, ori: 0,
 		color: new util.Color('white'), opacity: 1,
 		depth: 0.0
 	});
@@ -763,7 +764,7 @@ function experimentInit() {
 		font: 'Arial',
 		units: 'norm',
 		pos: [0.85, 0.75], height: 0.05, wrapWidth: undefined, ori: 0,
-		color: new util.Color('white'), opacity: 1,
+		color: new util.Color('green'), opacity: 1,
 		depth: 0.0
 	});
 
@@ -825,10 +826,10 @@ function experimentInit() {
 	g.text_val_building = new visual.TextStim({
 		win: psychoJS.window,
 		name: 'text_val_building',
-		text: '0',alignHoriz: 'right',
+		text: '0',alignHoriz: 'center',
 		font: 'Arial',
 		units: 'norm',
-		pos: [0.85, 0.60], height: 0.04, wrapWidth: undefined, ori: 0,
+		pos: [0, -0.85], height: 0.08, wrapWidth: undefined, ori: 0,
 		color: new util.Color('white'), opacity: 1,
 		depth: 0.0
 	});
@@ -1492,6 +1493,8 @@ function clearStims() {
 
 	g.invites_text.setAutoDraw(false);
 	g.invites_text.stauts = PsychoJS.Status.NOT_STARTED;
+
+	clearStatuStims();
 }
 
 /**
@@ -1558,15 +1561,13 @@ function trialRoutineBegin(trial) {
 		g.text_val_trial_number.setText(
 			'Trial ' + g.trial_number +
 			' of ' + trial.nTotal);
-		g.text_val_trial_number.setAutoDraw(true);
 
 		// g.text_depth.setAutoDraw(true);
 		// g.text_val_depth_number.setText(trial.depth);
 		// g.text_val_depth_number.setAutoDraw(true);
 
-		// g.text_invites.setAutoDraw(true);
-		g.text_val_invites.setText('Total Invites: ' + g.total_invites);
-		g.text_val_invites.setAutoDraw(true);
+		g.text_val_invites.setText(g.total_invites);
+		
 	
 		// g.text_module.setAutoDraw(true);
 		// g.text_val_module.setText(trial.module);
@@ -1577,10 +1578,12 @@ function trialRoutineBegin(trial) {
 		// g.text_val_path.setAutoDraw(true);
 
 		// g.text_building.setAutoDraw(true);
-		// g.text_val_building.setText(trial.building_type);
-		// g.text_val_building.setAutoDraw(true);
+		g.text_val_building.setText(trial.building_type);
+		
 		
 		g.trial_invites = 0; // always start trial invites to 0
+
+		g.current_move = 0; // reset move at 0
 
 		g.prompt_text.setText('Where do you want to go next?');
 		g.rooms_left_text.setText(`You have ${g.depth} moves`)
@@ -1616,11 +1619,32 @@ function module_1(trial) {
 		// Make Selection
 		// Show Doors if path = 1
 		if (g.room_image.status == PsychoJS.Status.NOT_STARTED && g.trial_phase == g.TRIAL_BEGIN) {
-			g.room_image.setImage(trial.building_type + '_' + g.current_path);
-			g.room_image.setAutoDraw(true);
+			console.log("Module: 1")
+			if (g.current_move == 0) {
+				g.room_image.setImage(trial.building_type + '_' + g.current_path);
+				g.room_image.setAutoDraw(true);
+			} else {
+				g.room_image_invite.setImage(trial.building_type + '_invite_' + g.current_path)
+				g.room_image_invite.setAutoDraw(true);
+			}
+			
 			g.rooms_left_text.setText(`You have ${g.depth} moves`)
 			g.rooms_left_text.setAutoDraw(true);
-			g.trial_phase = g.WAITING_INVITE_KEY;
+			g.prompt_text.setText('Where do you want to go next?');
+			g.prompt_text.setAutoDraw(true);
+			g.left_door.setAutoDraw(true);
+			g.right_door.setAutoDraw(true);
+
+			// status stims
+			g.text_val_trial_number.setAutoDraw(true);
+			g.text_val_building.setAutoDraw(true);
+			g.text_invites.setAutoDraw(true);
+			g.text_val_invites.setAutoDraw(true);
+
+			g.choice_1.setAutoDraw(true);
+			g.choice_2.setAutoDraw(true);
+	
+			g.trial_phase = g.WAITING_SELECTION;
 		}
 
 		// Click Invite Button
@@ -1704,9 +1728,18 @@ function module_1(trial) {
 				
 				clearStims();
 				g.current_path = g.path[g.current_path][g.response];
-
+				g.depth--; 		  // decremente depth
+				g.current_move++; // increment move
 				// prepare for next phase
 				g.trial_phase = g.TRIAL_BEGIN;
+
+				if ( g.depth <= 0 || g.current_path >= 8) {
+					// move to next routine if reached max depth
+					// or of the current path is 0 (when there is no more rooms)
+					// trial routine depth is no 0. Move to next trial
+					clearStims();
+					return Scheduler.Event.NEXT;
+				}
 			}
 		}
 
@@ -1727,13 +1760,14 @@ function module_2(trial) {
 			// move to next routine if reached max depth
 			// or of the current path is 0 (when there is no more rooms)
 			// trial routine depth is no 0. Move to next trial
+			clearStims();
 			return Scheduler.Event.NEXT;
 		}
 
 		// Make Selection
 		// Show Doors if path = 1
 		if (g.room_image.status == PsychoJS.Status.NOT_STARTED && g.trial_phase == g.TRIAL_BEGIN) {
-			
+			// console.log('Module 2', g.current_path)
 			if (trial.start == 1) {
 				g.room_image.setImage(trial.building_type + '_' + g.current_path);
 				g.room_image.setAutoDraw(true);
@@ -1743,8 +1777,6 @@ function module_2(trial) {
 			}
 			
 
-			
-			
 			g.rooms_left_text.setText(`You have ${g.depth} moves`)
 			g.rooms_left_text.setAutoDraw(true);
 			
@@ -1779,52 +1811,67 @@ function module_2(trial) {
 
 				if (theseKeys[0].name == '1') { g.response = 'left'; }
 				if (theseKeys[0].name == '2') { g.response = 'right';}
-				
+				g.depth--;
 				clearStims();
 				g.current_path = g.path[g.current_path][g.response];
 
 				// prepare for next phase
-				g.trial_phase = g.WAITING_INVITE_KEY
+				g.trial_phase = g.RESPONSE_ANIMATION
+
 			}
 		}
 
 		// Click Invite Button
-		if (g.room_image_invite.status == PsychoJS.Status.NOT_STARTED && g.trial_phase == g.WAITING_INVITE_KEY) {
-			// pressed invited button
-			g.prompt_text.setText('Press to space key to invite.');
-			g.prompt_text.setAutoDraw(true);
-			g.room_image.setImage(trial.building_type + '_' + g.current_path);
-			g.room_image.setAutoDraw(true);
+		// if (g.room_image_invite.status == PsychoJS.Status.NOT_STARTED && g.trial_phase == g.WAITING_INVITE_KEY) {
+		// 	// pressed invited button
+		// 	g.prompt_text.setText('Press to space key to invite.');
+		// 	g.prompt_text.setAutoDraw(true);
+		// 	g.room_image.setImage(trial.building_type + '_' + g.current_path);
+		// 	g.room_image.setAutoDraw(true);
 			
-		}
+		// }
 
-		if (g.trial_phase == g.WAITING_INVITE_KEY && g.current_path > 1){
-			let theseKeys = ready.getKeys({ keyList: ['space'], waitRelease: false });
-			if (theseKeys.length >0 ){
-				if (theseKeys[0].name == 'space') {
-					// prepare for next phase
-					clearStims();
-					g.trial_phase = g.RESPONSE_ANIMATION;
-				}
-			}
-		}
+		// if (g.trial_phase == g.WAITING_INVITE_KEY && g.current_path > 1){
+		// 	let theseKeys = ready.getKeys({ keyList: ['space'], waitRelease: false });
+		// 	if (theseKeys.length >0 ){
+		// 		if (theseKeys[0].name == 'space') {
+		// 			// prepare for next phase
+		// 			clearStims();
+		// 			g.trial_phase = g.RESPONSE_ANIMATION;
+		// 		}
+		// 	}
+		// }
 
 		// Show the Invitation Response
 		if (g.room_image_invite.status == PsychoJS.Status.NOT_STARTED && g.trial_phase == g.RESPONSE_ANIMATION) {
 			g.room_image_invite.setImage(trial.building_type + '_invite_' + g.current_path)
 			g.room_image_invite.setAutoDraw(true);
-			g.responseTimer.reset(g.RESPONSE_DURATION); // start timer
+			g.prompt_text.setText('Press the space key to go to the next trial.');
+			g.prompt_text.setAutoDraw(true);
+			g.trial_phase = g.WAITING_KEY;
+			// g.responseTimer.reset(g.RESPONSE_DURATION); // start timer
 		}
 
-		if (g.trial_phase == g.RESPONSE_ANIMATION && g.responseTimer.getTime() <= 0) {
-			clearStims();
-			// go back to trial begin
-			g.outcome_text.setText(`Trial Total Invites: ${g.trial_invites}`)
-			g.trial_phase = g.TRIAL_BEGIN;
-			// next current path 
-			g.depth--;
-			// return Scheduler.Event.NEXT;
+		if (g.trial_phase == g.WAITING_KEY) {
+			let theseKeys = ready.getKeys({ keyList: ['space'], waitRelease: false });
+			if (theseKeys.length >0 ){
+				if (theseKeys[0].name == 'space') {
+					// prepare for next phase
+					clearStims();
+					return Scheduler.Event.NEXT;
+				}
+			}
 		}
+
+		// if (g.trial_phase == g.RESPONSE_ANIMATION && g.responseTimer.getTime() <= 0) {
+		// 	clearStims();
+		// 	// go back to trial begin
+		// 	g.outcome_text.setText(`Trial Total Invites: ${g.trial_invites}`)
+		// 	g.trial_phase = g.TRIAL_BEGIN;
+		// 	// next current path 
+			
+		// 	// return Scheduler.Event.NEXT;
+		// }
 		return Scheduler.Event.FLIP_REPEAT
 	}
 }
@@ -2040,15 +2087,33 @@ function runModule(trial) {
  */
 function trialOutcome(trial) {
 	return function () {
+		if (trial.module == 2) {
+			// module 2 doesn't need to show the total invites
+			return Scheduler.Event.NEXT;
+		}
 		if (g.outcome_text.status == PsychoJS.Status.NOT_STARTED) {
 			g.outcome_text.setText(`Trial Total Invites: ${g.trial_invites}`)
 			g.outcomeTimer.reset(g.OUTCOME_DURATION); // reset the time with ITI 
 			g.outcome_text.setAutoDraw(true);
+
+			g.prompt_text.setText('Press to space key to go to the next trial.');
+			g.prompt_text.setAutoDraw(true);
 		}
-		if (g.outcomeTimer.getTime() <= 0) {
-			clearStims();
-			return Scheduler.Event.NEXT;
-		}
+
+		// Wait for space key press to go to next trial
+		let theseKeys = ready.getKeys({ keyList: ['space'], waitRelease: false });
+			if (theseKeys.length > 0 ){
+				if (theseKeys[0].name == 'space') {
+					// prepare for next phase
+					clearStims();
+					return Scheduler.Event.NEXT;
+				}
+			}
+
+		// if (g.outcomeTimer.getTime() <= 0) {
+		// 	clearStims();
+		// 	return Scheduler.Event.NEXT;
+		// }
 		return Scheduler.Event.FLIP_REPEAT;
 	}
 }
