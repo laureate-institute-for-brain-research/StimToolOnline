@@ -77,12 +77,11 @@
     <div class="container" style="max-width: 400px;">
         <div class="py-5 text-center">
             <img class="d-block mx-auto mb-4" src="/images/logo_reversed.jpg" alt="" width="180" height="50">
-            <h4>PANAS-X Survey</h4>
           </div>
     </div>
 
     <div class="container" style="font-size: 19px; color: white; margin-top: 5px; max-width: 400px;">
-        <p>How do you feel in <u>general</u>?</p>
+        <p>Indicate to what extent you feel this way right now (that is, at the present moment).</p>
         <p>Take your time and please respond as honestly as possible.</p>
     </div>
 
@@ -1655,7 +1654,8 @@
                         text: "Extremely"
                     }]
                 }]
-            },]
+            },],
+            "showTitle": false
         }
 
         window.survey = new Survey.Model(json);

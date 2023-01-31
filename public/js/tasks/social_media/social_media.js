@@ -50,6 +50,7 @@ const psychoJS = new PsychoJS({
 
 var tweets;
 var show_fixation = false;
+var do_not_draw = false;
 
 window.onload = function () {
 	var id = getQueryVariable('id')
@@ -313,8 +314,8 @@ dialogCancelScheduler.add(quitPsychoJS, '', false);
 var resources = [
 	{ name: 'example_play.xls', path: '/js/tasks/social_media/example_play.xls' },
 	{ name: 'role_reversal_shedule.xls', path:'/js/tasks/social_media/role_reversal_shedule.xls' },
-	{ name: 'ready.jpeg', path: '/js/tasks/social_media/media/instructions/Slide35.jpeg' },
-	{ name: 'ready.mp3', path: '/js/tasks/social_media/media/instructions_audio/Slide35.mp3'},
+	{ name: 'ready.jpeg', path: '/js/tasks/social_media/media/instructions/Slide33.jpeg' },
+	{ name: 'ready.mp3', path: '/js/tasks/social_media/media/instructions_audio/Slide33.mp3'},
 	{ name: 'role_reversal_instruct_schedule.csv', path: '/js/tasks/social_media/media/role_reversal_instruct_schedule.csv'},
 	{ name: 'logo.png', path: '/js/tasks/social_media/media/body-organ.png' },
 	{ name: 'home.png', path: '/js/tasks/social_media/media/home.png' },
@@ -768,7 +769,7 @@ function experimentInit() {
 		text: 'Notifications',
 		font: 'lucida grande',
 		units: 'norm',
-		pos : [-0.725, 0.39], height: 0.06,
+		pos : [-0.74, 0.39], height: 0.06,
 		wrapWidth: undefined, ori: 0,
 		color: new util.Color('white'), opacity: 1,
 		depth: 0.0
@@ -790,7 +791,7 @@ function experimentInit() {
 		text: 'Messages',
 		font: 'lucida grande',
 		units: 'norm',
-		pos : [-0.75, 0.22], height: 0.06,
+		pos : [-0.765, 0.22], height: 0.06,
 		wrapWidth: undefined, ori: 0,
 		color: new util.Color('white'), opacity: 1,
 		depth: 0.0
@@ -812,7 +813,7 @@ function experimentInit() {
 		text: 'Bookmarks',
 		font: 'lucida grande',
 		units: 'norm',
-		pos : [-0.74, 0.05], height: 0.06,
+		pos : [-0.75, 0.05], height: 0.06,
 		wrapWidth: undefined, ori: 0,
 		color: new util.Color('white'), opacity: 1,
 		depth: 0.0
@@ -1704,7 +1705,7 @@ var trials;
 var currentLoop;
 var lastTrialKeyPressed;
 var total_games;
-var animation_duration = 1.35
+var animation_duration = 1.00
 var fixation_duration = 0
 function trialsLoopBegin(thisScheduler) {
 	// set up handler to look up the conditions
@@ -1873,7 +1874,7 @@ function trialRoutineBegin(trials) {
 		// If it's a new game, clear other texts
 		// console.log(lastGameNumber)
 		if (game_number != lastGameNumber) {
-			console.log('new chat room')
+			//console.log('new chat room')
 			resetSocialApprovalScore() // reset the score
 			chatRoomNumber.setText(`${game_number + 1}/${total_games}`)
 
@@ -2267,7 +2268,7 @@ function isLastTrial(game_type, trial_num) {
 
 function reset_stims() {
 
-	console.log('reset stims called')
+	//console.log('reset stims called')
 	choice1Button.setAutoDraw(false)
 	choice2Button.setAutoDraw(false)
 	beginButton.setAutoDraw(false)
@@ -2624,7 +2625,8 @@ function trialRoutineEachFrameShowPost(trials) {
 		//postStims[trial_num].rect.opacity = 0.5
 
 		if (t > 0.5 && postStims[trial_num].post_text.status != PsychoJS.Status.FINISHED) {
-			loadingAnimationText()
+			//loadingAnimationText()
+			postStims[trial_num].post_text.setText(topic_text)
 		}
 		if (t > 0.5 && postStims[trial_num].profile_photo.status == PsychoJS.Status.NOT_STARTED) {
 			postStims[trial_num].profile_photo.setAutoDraw(true)
@@ -2641,7 +2643,7 @@ function trialRoutineEachFrameShowPost(trials) {
 		}
 
 		// After 3 seconds go to the next Trial (post) or next chat room
-		if (t > animation_duration) {
+		if ((t > animation_duration) && !do_not_draw) {
 			postStims[trial_num].like_posts.setAutoDraw(true)
 			totalLikesTracker.setText(socialApprovalScore)
 
@@ -2678,6 +2680,7 @@ function trialRoutineEachFrameShowPost(trials) {
 			if (t <= fixation_duration)
 			{
 				if (points_fixation_stim.status == PsychoJS.Status.NOT_STARTED) {
+					do_not_draw = true
 					points_fixation_stim.color = new util.Color('white')
 					points_fixation_stim.setText('+')
 					points_fixation_stim.setAutoDraw(true)
@@ -2688,6 +2691,7 @@ function trialRoutineEachFrameShowPost(trials) {
 			}
 			else
 			{
+				do_not_draw = false
 				trialClock.reset();
 				show_fixation = false
 				points_fixation_stim.setAutoDraw(false)
@@ -2765,7 +2769,8 @@ function trialRoleReversalRoutineEachFrameWaitforInput(trials) {
 
 			postStims[trial_num].post_text.setAutoDraw(true)
 
-			loadingAnimationText()
+			//loadingAnimationText()
+			postStims[trial_num].post_text.setText(topic_text)
 
 			postStims[trial_num].profileRR_photo.setAutoDraw(true)
 		}
@@ -3027,7 +3032,7 @@ function thanksRoutineBegin(trials) {
 		// keep track of which components have finished
 
 		// Show Final Points and money earned
-		thanksText.setText(`This is the end of the task.`)
+		thanksText.setText(`This is the end of the task. Please wait for the upcoming survey.`)
 		
 		thanksComponents = [];
 		thanksComponents.push(thanksText);
