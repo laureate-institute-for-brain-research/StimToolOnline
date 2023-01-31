@@ -1705,7 +1705,7 @@ var trials;
 var currentLoop;
 var lastTrialKeyPressed;
 var total_games;
-var animation_duration = 1.00
+var animation_duration = 0.55
 var fixation_duration = 0
 function trialsLoopBegin(thisScheduler) {
 	// set up handler to look up the conditions
