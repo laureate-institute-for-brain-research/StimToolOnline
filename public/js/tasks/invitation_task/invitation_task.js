@@ -515,8 +515,8 @@ if (!getQueryVariable('skip_instructions')) {
 }
 
 // PRACTICE BLOCK
-// Pratice trials skipped over if it's a R2
-if (!getQueryVariable('skip_practice') && !getQueryVariable('run').includes('R2')  ) {
+// Pratice trials skipped over if it's a a PR run.
+if (!getQueryVariable('skip_practice') && !getQueryVariable('run').includes('PR')  ) {
 	// Single Slide
 	flowScheduler.add(readyRoutineBegin('PRACTICE'));
 	flowScheduler.add(readyRoutineEachFrame());
@@ -1643,6 +1643,8 @@ function module_1(trial) {
 
 			g.choice_1.setAutoDraw(true);
 			g.choice_2.setAutoDraw(true);
+
+			ready.clearEvents();
 	
 			g.trial_phase = g.WAITING_SELECTION;
 		}
@@ -1793,7 +1795,7 @@ function module_2(trial) {
 			}
 
 			g.prompt_text.setAutoDraw(true);
-		
+			ready.clearEvents();
 			g.trial_phase = g.WAITING_SELECTION;
 		}
 
@@ -1916,7 +1918,7 @@ function module_3(trial) {
 				// go to next phase
 				g.prompt_text.setText(`Enter moves now (${g.SELCTION_DURATION})s`);
 				
-	
+				ready.clearEvents();
 				g.trial_phase = g.WAITING_SELECTION;
 				g.selectionTimer.reset(g.SELCTION_DURATION);
 
@@ -2029,6 +2031,7 @@ function module_3(trial) {
 		// just display 'Times UP'
 		if (g.trial_phase == g.INVALID_TRIAL) {
 			if (g.outcome_text.status == PsychoJS.Status.NOT_STARTED) {
+				console.log('Invalid trial', g.ANIMATION_DURATION)
 				g.outcome_text.setAutoDraw(true);
 				g.animationTimer.reset(g.ANIMATION_DURATION)
 			}
@@ -2036,6 +2039,7 @@ function module_3(trial) {
 			if (g.animationTimer.getTime() <= 0) {
 				// after it displays the Times Up for g.ANIMATION_DURATION seconds
 				// go to next trial
+				clearStims();
 				return Scheduler.Event.NEXT
 			}
 		}
@@ -2092,6 +2096,7 @@ function trialOutcome(trial) {
 			return Scheduler.Event.NEXT;
 		}
 		if (g.outcome_text.status == PsychoJS.Status.NOT_STARTED) {
+			g.outcome_text.color = 'white';
 			g.outcome_text.setText(`Trial Total Invites: ${g.trial_invites}`)
 			g.outcomeTimer.reset(g.OUTCOME_DURATION); // reset the time with ITI 
 			g.outcome_text.setAutoDraw(true);

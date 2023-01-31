@@ -1,0 +1,6 @@
+module,trial_number,start,building_type,depth,OLL_ONLL,ITI,forced_choice,path_version
+1,0,1,office,2,NA,0.5,X,1
+1,1,1,office,3,NA,1.5,X,1
+1,2,1,office,4,NA,1.5,X,1
+1,3,1,office,2,NA,0.5,X,1
+1,4,1,office,3,NA,1.5,X,1
