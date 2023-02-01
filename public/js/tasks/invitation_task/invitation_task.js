@@ -32,8 +32,8 @@ var g = {}					// global variables
 g.FIXATION_DURATION = 1; 	/// fixation duration. in seconds
 g.RESPONSE_DURATION = 1;	// duration for when the invitation response should show
 g.OUTCOME_DURATION = 1.5; 	// outcome duration.
-g.PLANNING_DURATION = 9;	// the planning phase duration.
-g.SELCTION_DURATION = 3;	// the selection phase duration.
+g.PLANNING_DURATION = 6;	// the planning phase duration.
+g.SELCTION_DURATION = 1.5;	// the selection phase duration. (Time to enter moves)
 g.ANIMATION_DURATION = 1.5;	// the duration of an animation 'slide'
 
 // CONSTANCT for Trial Status
