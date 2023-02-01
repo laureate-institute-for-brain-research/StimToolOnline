@@ -1200,6 +1200,28 @@ function rateFacesRoutingBegin(trials) {
 		
 		right_text.pos[1] = -0.2
 		right_rect.pos[1] = right_text.pos[1]
+
+		if (window.screen.width == 2560)
+		{
+			left_text.pos[1] = -0.4
+			left_rect.pos[1] = left_text.pos[1]
+			
+			feedback_result_stim.pos[1] = -0.6
+		
+			right_text.pos[1] = -0.4
+			right_rect.pos[1] = right_text.pos[1]
+		}
+	
+		if (window.screen.width == 1280)
+		{
+			left_text.pos[1] = -0.4
+			left_rect.pos[1] = left_text.pos[1]
+
+			feedback_result_stim.pos[1] = -0.6
+		
+			right_text.pos[1] = -0.4
+			right_rect.pos[1] = right_text.pos[1]
+		}
 	
 
 		left_text.setAutoDraw(true) // show left text (angry)
