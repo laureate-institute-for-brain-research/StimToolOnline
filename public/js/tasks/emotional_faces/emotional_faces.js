@@ -48,6 +48,7 @@ var highOfferVal = 80
 var set_fixation_flag = true
 var init_fixation_flag = true
 
+var incorrect_rating = false
 
 // init psychoJS:
 const psychoJS = new PsychoJS({
@@ -1242,7 +1243,7 @@ function rateFacesRespond(trials) {
 
 		// console.log(resp.clock.getTime())
 		// Get User Input
-		if (resp.status === PsychoJS.Status.NOT_STARTED) {
+		if (resp.status === PsychoJS.Status.NOT_STARTED /*|| incorrect_rating*/) {
 			// keep track of start time/frame for later
 			resp.tStart = t;  // (not accounting for frame time here)
 			resp.frameNStart = frameN;  // exact frame index
@@ -1261,24 +1262,22 @@ function rateFacesRespond(trials) {
 			respond_time = resp.clock.getTime()
 
 			if (resp.keys == LEFT_KEY) {
-				//console.log('Pressed Left')
 				response = 'angry'
 				left_rect.setAutoDraw(true)
 				// left_rect.fillColor = new util.Color(selectColor)
 				left_rect.lineColor = new util.Color(selectColor)
-				left_rect.height += 0.02
-				left_rect.width += 0.1
+				left_rect.height = 0.12
+				left_rect.width = 0.26
 
 				right_rect.setAutoDraw(false)
 				
 			} else if (resp.keys == RIGHT_KEY) {
-				//console.log('Pressed Right')
 				response = 'sad'
 				right_rect.setAutoDraw(true)
 				// right_rect.fillColor = new util.Color(selectColor)
 				right_rect.lineColor = new util.Color(selectColor)
-				right_rect.height += 0.02
-				right_rect.width += 0.02
+				right_rect.height = 0.11
+				right_rect.width = 0.18
 
 				left_rect.setAutoDraw(false)
 			}
@@ -1286,10 +1285,34 @@ function rateFacesRespond(trials) {
 			if (result == 'incorrect') {
 				feedback_result_stim.setText(result + '. Please Try Again')
 
-				left_rect.setAutoDraw(false)
-				right_rect.setAutoDraw(false)
+				// Save Data on each Press
+				mark_event(trials_data, globalClock, trials.thisIndex, 'RATE_FACES', event_types['RESPONSE'],
+				resp.rt, key_map[resp.keys] , result)
+
+				resp.keys = undefined;
+				resp.rt = undefined;
+
+				incorrect_rating = true
+				resp.status = PsychoJS.Status.NOT_STARTED
+				pressed = false
+
+				feedback_result_stim.setAutoDraw(true)
+				if (resp.keys == LEFT_KEY) {
+					left_rect.setAutoDraw(true)
+					left_rect.lineColor = new util.Color(selectColor)
+	
+					right_rect.setAutoDraw(false)
+				} else if (resp.keys == RIGHT_KEY) {
+					right_rect.setAutoDraw(true)
+					right_rect.lineColor = new util.Color(selectColor)
+	
+					left_rect.setAutoDraw(false)
+				}
+				
+				return Scheduler.Event.FLIP_REPEAT;
 			} else {
 				feedback_result_stim.setText(result)
+				incorrect_rating = false
 			}
 			
 
@@ -1302,7 +1325,7 @@ function rateFacesRespond(trials) {
 		}
 
 		// Show Slight Feedback
-		if (resp.clock.getTime() >= (respond_time + button_fb_duration)) {
+		if ((resp.clock.getTime() >= (respond_time + button_fb_duration)) && incorrect_rating == false) {
 			// Continue Routine After Pressing Key
 
 			// Prepare for next routin
