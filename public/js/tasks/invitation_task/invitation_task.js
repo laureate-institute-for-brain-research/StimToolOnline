@@ -1770,13 +1770,8 @@ function module_2(trial) {
 		// Show Doors if path = 1
 		if (g.room_image.status == PsychoJS.Status.NOT_STARTED && g.trial_phase == g.TRIAL_BEGIN) {
 			// console.log('Module 2', g.current_path)
-			if (trial.start == 1) {
-				g.room_image.setImage(trial.building_type + '_' + g.current_path);
-				g.room_image.setAutoDraw(true);
-			} else {
-				g.room_image_invite.setImage(trial.building_type + '_invite_' + g.current_path)
-				g.room_image_invite.setAutoDraw(true);
-			}
+			g.room_image.setImage(trial.building_type + '_' + g.current_path);
+			g.room_image.setAutoDraw(true);
 			
 
 			g.rooms_left_text.setText(`You have ${g.depth} moves`)
@@ -1795,6 +1790,7 @@ function module_2(trial) {
 			}
 
 			g.prompt_text.setAutoDraw(true);
+			g.text_val_building.setAutoDraw(true);
 			ready.clearEvents();
 			g.trial_phase = g.WAITING_SELECTION;
 		}
@@ -1850,6 +1846,7 @@ function module_2(trial) {
 			g.room_image_invite.setAutoDraw(true);
 			g.prompt_text.setText('Press the space key to go to the next trial.');
 			g.prompt_text.setAutoDraw(true);
+			g.text_val_building.setAutoDraw(true);
 			g.trial_phase = g.WAITING_KEY;
 			// g.responseTimer.reset(g.RESPONSE_DURATION); // start timer
 		}
