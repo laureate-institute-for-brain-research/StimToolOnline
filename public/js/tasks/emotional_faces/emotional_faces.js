@@ -1209,7 +1209,7 @@ function rateFacesRoutingBegin(trials) {
 		resetRects() // reset rect stims
 		
 
-		console.log("Face: ", stim_paths)
+		//console.log("Face: ", stim_paths)
 	
 		resp.keys = undefined;
 		resp.rt = undefined;
@@ -1261,7 +1261,7 @@ function rateFacesRespond(trials) {
 			respond_time = resp.clock.getTime()
 
 			if (resp.keys == LEFT_KEY) {
-				console.log('Pressed Left')
+				//console.log('Pressed Left')
 				response = 'angry'
 				left_rect.setAutoDraw(true)
 				// left_rect.fillColor = new util.Color(selectColor)
@@ -1272,7 +1272,7 @@ function rateFacesRespond(trials) {
 				right_rect.setAutoDraw(false)
 				
 			} else if (resp.keys == RIGHT_KEY) {
-				console.log('Pressed Right')
+				//console.log('Pressed Right')
 				response = 'sad'
 				right_rect.setAutoDraw(true)
 				// right_rect.fillColor = new util.Color(selectColor)
@@ -1342,10 +1342,18 @@ function rateFacesFeedback(trials) {
 		}
 
 		let theseKeys = resp.getKeys({ keyList: [correct_key], waitRelease: false });
+		if (theseKeys.length > 0) {
+			result = getResult(theseKeys[0].name)
+		}
 
 		// For Correct Trials, just show text and go to next routine
 		if (result == 'correct' && t <= 0 ) {
 			continueRoutine = false;
+			if (correct_key == LEFT_KEY) {
+				left_rect.setAutoDraw(true)
+			} else {
+				right_rect.setAutoDraw(true)
+			}
 		}
 
 		// For incorrect trials, wait for keyboard press
@@ -1364,10 +1372,10 @@ function rateFacesFeedback(trials) {
 		// Another exit is after some time after the correct press was entered
 		// This is for the incorrect trials
 		// Show Slight Feedback
-		if (resp.clock.getTime() >= (respond_time + 1)) {
-			// Continue Routine After Pressing Key
-			continueRoutine = false;
-		}
+		// if (resp.clock.getTime() >= (respond_time + 1)) {
+		// 	// Continue Routine After Pressing Key
+		// 	continueRoutine = false;
+		// }
 	
 		 
 		if (continueRoutine) {
@@ -1638,7 +1646,7 @@ function trialRoutineRespond(trials) {
 			pressed = true
 
 			if (resp.keys == LEFT_KEY) {
-				console.log('Pressed Left')
+				//console.log('Pressed Left')
 				response = 'angry'
 				left_rect.setAutoDraw(true)
 				// left_rect.fillColor = new util.Color(selectColor)
@@ -1649,7 +1657,7 @@ function trialRoutineRespond(trials) {
 				right_rect.setAutoDraw(false)
 				
 			} else if (resp.keys == RIGHT_KEY) {
-				console.log('Pressed Right')
+				//console.log('Pressed Right')
 				response = 'sad'
 				right_rect.setAutoDraw(true)
 				// right_rect.fillColor = new util.Color(selectColor)
@@ -1731,7 +1739,7 @@ function initialFixation(trials) {
 			points_fixation_stim.color = new util.Color('white')
 			points_fixation_stim.setText('+')
 			points_fixation_stim.setAutoDraw(true)
-			console.log('Initial Fixation')
+			//console.log('Initial Fixation')
 
 			mark_event(trials_data, globalClock, 'NA', trial_type, event_types['FIXATION_ONSET'],
 				'NA', 'NA' , 'NA')
