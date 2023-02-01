@@ -1660,7 +1660,7 @@ function module_1(trial) {
 		// Wait for Invite Key
 		if (g.trial_phase == g.WAITING_INVITE_KEY && g.current_path > 1){
 			let theseKeys = ready.getKeys({ keyList: ['space'], waitRelease: false });
-			if (theseKeys.length >0 ){
+			if (theseKeys.length > 0 ){
 				if (theseKeys[0].name == 'space') {
 					// prepare for next phase
 					// clearStims();
@@ -1710,7 +1710,7 @@ function module_1(trial) {
 			g.choice_2.setAutoDraw(true);
 			g.trial_phase = g.WAITING_SELECTION;
 
-			if ( g.depth <= 0 || g.current_path >= 8) {
+			if ( g.depth < 0 || g.current_path >= 8) {
 				// move to next routine if reached max depth
 				// or of the current path is 0 (when there is no more rooms)
 				// trial routine depth is no 0. Move to next trial
@@ -1735,7 +1735,7 @@ function module_1(trial) {
 				// prepare for next phase
 				g.trial_phase = g.TRIAL_BEGIN;
 
-				if ( g.depth <= 0 || g.current_path >= 8) {
+				if ( g.depth < 0 || g.current_path >= 8) {
 					// move to next routine if reached max depth
 					// or of the current path is 0 (when there is no more rooms)
 					// trial routine depth is no 0. Move to next trial
@@ -2230,7 +2230,7 @@ function thanksRoutineBegin(trials) {
 
 		// Show Final Points and money earned
 		// 100 points = 10 cents
-		thanksText.setText(`This is the end of the task run.\n\n\n Total Dates Earned: ${totalDates}`)
+		thanksText.setText(`This is the end of the task run.\n\n\n Total Invites Accepted: ${g.total_invites}`)
 		// update component parameters for each repeat
 		// keep track of which components have finished
 		thanksComponents = [];
