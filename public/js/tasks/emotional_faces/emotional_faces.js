@@ -50,6 +50,8 @@ var init_fixation_flag = true
 
 var incorrect_rating = false
 
+var response_for_result = null;
+
 // init psychoJS:
 const psychoJS = new PsychoJS({
 	debug: false
@@ -349,7 +351,13 @@ var resources = [
 	{ name: 'male.png', path: '/js/tasks/emotional_faces/media/male.png' },
 	{ name: 'female.png', path: '/js/tasks/emotional_faces/media/female.png' },
 	{ name: 'high_tone.mp3', path: '/js/tasks/emotional_faces/media/tones/youre_fired2.mp3' },
-	{ name: 'low_tone.mp3', path: '/js/tasks/emotional_faces/media/tones/go_away1.mp3'},
+	{ name: 'low_tone.mp3', path: '/js/tasks/emotional_faces/media/tones/go_away1.mp3' },
+	{ name: 'rightangry.JPG', path: '/js/tasks/emotional_faces/media/rightangry.JPG' },
+	{ name: 'wrongangry.JPG', path: '/js/tasks/emotional_faces/media/wrongangry.JPG' },
+	{ name: 'slowangry.JPG', path: '/js/tasks/emotional_faces/media/slowangry.JPG' },
+	{ name: 'rightsad.JPG', path: '/js/tasks/emotional_faces/media/rightsad.JPG' },
+	{ name: 'wrongsad.JPG', path: '/js/tasks/emotional_faces/media/wrongsad.JPG' },
+	{ name: 'slowsad.JPG', path: '/js/tasks/emotional_faces/media/slowsad.JPG' },
 ]
 
 
@@ -426,6 +434,12 @@ var globalClock;
 var routineTimer;
 var feedbackTimer;
 var feedback_result_stim;
+var rightangryStim;
+var wrongangryStim;
+var slowangryStim;
+var rightsadStim;
+var wrongsadStim;
+var slowsadStim;
 function experimentInit() {
 	// Check if there is an practice
 	if (getQueryVariable('practice') == 'true') {
@@ -591,6 +605,56 @@ function experimentInit() {
 		pos: [0, -0.5], height: 0.12, wrapWidth: undefined, ori: 0,
 		color: new util.Color('white'), opacity: 1,
 		depth: 0.0
+	});
+
+	rightangryStim = new visual.ImageStim({
+		win : psychoJS.window,
+		name : 'rightangry', units : 'height', 
+		image : 'rightangry.JPG', mask : undefined,
+		ori : 0, pos : [0, 0], opacity : 1,
+		flipHoriz : false, flipVert : false,
+		texRes : 128, interpolate : true, depth : 0
+	});
+	wrongangryStim = new visual.ImageStim({
+		win : psychoJS.window,
+		name : 'wrongangry', units : 'height', 
+		image : 'wrongangry.JPG', mask : undefined,
+		ori : 0, pos : [0, 0], opacity : 1,
+		flipHoriz : false, flipVert : false,
+		texRes : 128, interpolate : true, depth : 0
+	});
+	slowangryStim = new visual.ImageStim({
+		win : psychoJS.window,
+		name : 'slowangry', units : 'height', 
+		image : 'slowangry.JPG', mask : undefined,
+		ori : 0, pos : [0, 0], opacity : 1,
+		flipHoriz : false, flipVert : false,
+		texRes : 128, interpolate : true, depth : 0
+	});
+
+	rightsadStim = new visual.ImageStim({
+		win : psychoJS.window,
+		name : 'rightsad', units : 'height', 
+		image : 'rightsad.JPG', mask : undefined,
+		ori : 0, pos : [0, 0], opacity : 1,
+		flipHoriz : false, flipVert : false,
+		texRes : 128, interpolate : true, depth : 0
+	});
+	wrongsadStim = new visual.ImageStim({
+		win : psychoJS.window,
+		name : 'wrongsad', units : 'height', 
+		image : 'wrongsad.JPG', mask : undefined,
+		ori : 0, pos : [0, 0], opacity : 1,
+		flipHoriz : false, flipVert : false,
+		texRes : 128, interpolate : true, depth : 0
+	});
+	slowsadStim = new visual.ImageStim({
+		win : psychoJS.window,
+		name : 'slowsad', units : 'height', 
+		image : 'slowsad.JPG', mask : undefined,
+		ori : 0, pos : [0, 0], opacity : 1,
+		flipHoriz : false, flipVert : false,
+		texRes : 128, interpolate : true, depth : 0
 	});
 
 	endClock = new util.Clock();
@@ -1305,7 +1369,7 @@ function rateFacesRespond(trials) {
 			}
 			result = getResult(key_map[resp.keys])
 			if (result == 'incorrect') {
-				feedback_result_stim.setText(result + '. Please Try Again')
+				feedback_result_stim.setText('Incorrect. Please Try Again.')
 
 				// Save Data on each Press
 				mark_event(trials_data, globalClock, trials.thisIndex, 'RATE_FACES', event_types['RESPONSE'],
@@ -1333,7 +1397,7 @@ function rateFacesRespond(trials) {
 				
 				return Scheduler.Event.FLIP_REPEAT;
 			} else {
-				feedback_result_stim.setText(result)
+				feedback_result_stim.setText('Correct')
 				incorrect_rating = false
 			}
 			
@@ -1691,6 +1755,7 @@ function trialRoutineRespond(trials) {
 			pressed = true
 
 			if (resp.keys == LEFT_KEY) {
+				response_for_result = LEFT_KEY
 				//console.log('Pressed Left')
 				response = 'angry'
 				left_rect.setAutoDraw(true)
@@ -1702,6 +1767,7 @@ function trialRoutineRespond(trials) {
 				right_rect.setAutoDraw(false)
 				
 			} else if (resp.keys == RIGHT_KEY) {
+				response_for_result = RIGHT_KEY
 				//console.log('Pressed Right')
 				response = 'sad'
 				right_rect.setAutoDraw(true)
@@ -1858,22 +1924,85 @@ function trialRoutineEnd(trials) { //TODO: Change this so that there is a jitter
 		{
 
 			if (too_slow) {
-				points_fixation_stim.setText('too slow')
-				mark_event(trials_data, globalClock, 'NA', trial_type, event_types['FEEDBACK'],
-					'NA', 'NA', 'too slow')
+				// //rightangryStim.setAutoDraw(false)
+				points_fixation_stim.setText('')
+				// mark_event(trials_data, globalClock, 'NA', trial_type, event_types['FEEDBACK'],
+				// 	'NA', 'NA', 'too slow')
+				points_fixation_stim.setAutoDraw(true)
 			} else {
-				points_fixation_stim.setText('+')
-				mark_event(trials_data, globalClock, 'NA', trial_type, event_types['FIXATION_ONSET'],
-					'NA', 'NA' , 'NA')
+				if (t < 1.5) {
+					if (response_for_result == LEFT_KEY && stim_type == 'angry') {
+						rightangryStim.setAutoDraw(true)
+						mark_event(trials_data, globalClock, 'NA', trial_type, event_types['FEEDBACK'],
+							'NA', 'NA', 'correct angry')
+					}
+					else if (response_for_result == RIGHT_KEY && stim_type == 'angry') {
+						wrongangryStim.setAutoDraw(true)
+						mark_event(trials_data, globalClock, 'NA', trial_type, event_types['FEEDBACK'],
+							'NA', 'NA', 'wrong angry')
+					}
+					else if (response_for_result == LEFT_KEY && stim_type == 'sad') {
+						wrongsadStim.setAutoDraw(true)
+						mark_event(trials_data, globalClock, 'NA', trial_type, event_types['FEEDBACK'],
+							'NA', 'NA', 'wrong sad')
+					}
+					else if (response_for_result == RIGHT_KEY && stim_type == 'sad') {
+						rightsadStim.setAutoDraw(true)
+						mark_event(trials_data, globalClock, 'NA', trial_type, event_types['FEEDBACK'],
+							'NA', 'NA', 'correct sad')
+					}
+				}
+				if (t >= 1.5)
+				{
+					if (response_for_result == LEFT_KEY && stim_type == 'angry') {
+						rightangryStim.setAutoDraw(false)
+					}
+					else if (response_for_result == RIGHT_KEY && stim_type == 'angry') {
+						wrongangryStim.setAutoDraw(false)
+					}
+					else if (response_for_result == LEFT_KEY && stim_type == 'sad') {
+						wrongsadStim.setAutoDraw(false)
+					}
+					else if (response_for_result == RIGHT_KEY && stim_type == 'sad') {
+						rightsadStim.setAutoDraw(false)
+					}
+					points_fixation_stim.setText('+')
+					mark_event(trials_data, globalClock, 'NA', trial_type, event_types['FIXATION_ONSET'],
+						'NA', 'NA', 'NA')
+					points_fixation_stim.setAutoDraw(true)
+				}
 			}
-			points_fixation_stim.setAutoDraw(true)
+			//rightangryStim.setAutoDraw(true)
+			//points_fixation_stim.setAutoDraw(true)
 			//console.log('End Fixation')
 		}
 		else
 		{
 			if (too_slow && set_fixation_flag) {
-				if (t >= 2.0)
+				if (t < 1.5)
 				{
+					points_fixation_stim.setAutoDraw(false)
+					points_fixation_stim.setText('+')
+					if (stim_type == 'angry') {
+						slowangryStim.setAutoDraw(true)
+						mark_event(trials_data, globalClock, 'NA', trial_type, event_types['FEEDBACK'],
+						 	'NA', 'NA', 'too slow angry')
+					}
+					else if (stim_type == 'sad') {
+						slowsadStim.setAutoDraw(true)
+						mark_event(trials_data, globalClock, 'NA', trial_type, event_types['FEEDBACK'],
+						 	'NA', 'NA', 'too slow sad')
+					}
+				}
+				if (t >= 1.5)
+				{
+					if (stim_type == 'angry') {
+						slowangryStim.setAutoDraw(false)
+					}
+					else if (stim_type == 'sad') {
+						slowsadStim.setAutoDraw(false)
+					}
+					points_fixation_stim.setAutoDraw(true)
 					points_fixation_stim.setText('+')
 					set_fixation_flag = false
 					mark_event(trials_data, globalClock, 'NA', trial_type, event_types['FIXATION_ONSET'],
@@ -1885,7 +2014,7 @@ function trialRoutineEnd(trials) { //TODO: Change this so that there is a jitter
 		if (too_slow)
 		{
 			// hold the fixation for 2 second + jitter
-			if (t <= ITI + 2.0) {
+			if (t <= ITI + 1.5) {
 				return Scheduler.Event.FLIP_REPEAT;
 			} else {
 				resp.stop()
@@ -1902,7 +2031,7 @@ function trialRoutineEnd(trials) { //TODO: Change this so that there is a jitter
 		else
 		{
 			// hold the fixation for jitter time
-			if (t <= ITI) {
+			if (t <= ITI + 1.5) {
 				return Scheduler.Event.FLIP_REPEAT;
 			} else {
 				resp.stop()
