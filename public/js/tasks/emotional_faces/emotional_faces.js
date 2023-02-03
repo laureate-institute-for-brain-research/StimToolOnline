@@ -38,8 +38,8 @@ import { Sound } from '/lib/sound-2020.1.js';
 
 // TASAK PARAMS
 var practice = false;
-var LEFT_KEY = 'left'
-var RIGHT_KEY = 'right'
+var LEFT_KEY = 'comma'
+var RIGHT_KEY = 'period'
 var keyList = [LEFT_KEY, RIGHT_KEY]
 
 var highOfferVal = 80
@@ -1075,7 +1075,7 @@ function readyRoutineEachFrame() {
 		}
 	
 		// update/draw components on each frame
-		let theseKeys = resp.getKeys({ keyList: [RIGHT_KEY], waitRelease: false });
+		let theseKeys = resp.getKeys({ keyList: [RIGHT_KEY, 'right'], waitRelease: false });
 		if (theseKeys.length > 0) {
 			if(track) track.stop();
 			continueRoutine = false
@@ -1701,9 +1701,9 @@ function trialRoutineShowStim(trials) {
  */
 function getResult(response) {
 	// stim_type is a global variable
-	if (response == LEFT_KEY && stim_type == 'angry') {
+	if ((response == LEFT_KEY || response == 'left') && stim_type == 'angry') {
 		return 'correct'
-	} else if (response == RIGHT_KEY && stim_type == 'sad') {
+	} else if ((response == RIGHT_KEY || response == 'right') && stim_type == 'sad') {
 		return 'correct'
 	}
 	return 'incorrect'
