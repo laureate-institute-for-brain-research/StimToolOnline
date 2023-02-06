@@ -30,11 +30,15 @@ import { Sound } from '/lib/sound-2020.1.js';
 
 // TASAK PARAMS
 var practice = false;
-var LEFT_KEY = 'left'
-var RIGHT_KEY = 'right'
+var LEFT_KEY = 'comma'
+var RIGHT_KEY = 'period'
 var keyList = [LEFT_KEY, RIGHT_KEY]
 
 var highOfferVal = 90
+
+var acceptance_tot = 0;
+var avg_sum = 0;
+var running_acceptance_avg = 0;
 
 
 // init psychoJS:
@@ -328,6 +332,7 @@ var currentTrialNumber;
 
 var totalDates = 0;
 var totalPointsTracker;
+var runningAverageTracker;
 
 var points_fixation_stim;
 
@@ -578,7 +583,7 @@ function experimentInit() {
 		text: 'Trial Number: ',
 		font: 'Arial',
 		units: 'norm',
-		pos: [0, -0.7], height: 0.08, wrapWidth: undefined, ori: 0,
+		pos: [0, -0.6], height: 0.08, wrapWidth: undefined, ori: 0,
 		color: new util.Color('white'), opacity: 1,
 		depth: 0.0
 	});
@@ -589,7 +594,7 @@ function experimentInit() {
 		text: '1/80',
 		font: 'Arial',
 		units: 'norm',
-		pos: [0, -0.8], height: 0.08, wrapWidth: undefined, ori: 0,
+		pos: [0, -0.31], height: 0.08, wrapWidth: undefined, ori: 0,
 		color: new util.Color('white'), opacity: 1,
 		depth: 0.0
 	});
@@ -600,8 +605,19 @@ function experimentInit() {
 		text: 'Total points: 0',
 		font: 'Arial',
 		units: 'norm',
-		pos: [0, -0.9], height: 0.08, wrapWidth: undefined, ori: 0,
-		color: new util.Color('#00fa40'), opacity: 1,
+		pos: [0, -0.9], height: 0.11, wrapWidth: undefined, ori: 0, bold: true,
+		color: new util.Color('#66ff99'), opacity: 1,
+		depth: 0.0
+	});
+
+	runningAverageTracker = new visual.TextStim({
+		win: psychoJS.window,
+		name: 'averageTracker',
+		text: 'Average Match Level: 0%',
+		font: 'Arial',
+		units: 'norm',
+		pos: [0, -0.75], height: 0.11, wrapWidth: true, ori: 0, bold: true,
+		color: new util.Color('#00ff00'), opacity: 1,
 		depth: 0.0
 	});
 
@@ -1033,7 +1049,7 @@ function readyRoutineEachFrame(trials) {
 		}
 	
 		// update/draw components on each frame
-		let theseKeys = resp.getKeys({ keyList: [RIGHT_KEY], waitRelease: false });
+		let theseKeys = resp.getKeys({ keyList: [RIGHT_KEY, 'right'], waitRelease: false });
 		if (theseKeys.length > 0) {
 			if(track) track.stop();
 			continueRoutine = false
@@ -1096,7 +1112,7 @@ function practiceTrialsLoopBegin(thisScheduler) {
 		thisScheduler.add(trialRoutineBegin(snapshot)); 	
 		thisScheduler.add(trialRoutineEachFrame(snapshot));
 		thisScheduler.add(trialResult(snapshot)); // show the result 
-		thisScheduler.add(trialIsi(snapshot));
+		//thisScheduler.add(trialIsi(snapshot));
 		thisScheduler.add(trialRoutineEnd(snapshot));
 		thisScheduler.add(endLoopIteration(thisScheduler, snapshot));
 	}
@@ -1124,6 +1140,10 @@ function trialsLoopBegin(thisScheduler) {
 		seed: undefined, name: 'trials'
 	});
 
+	avg_sum = 0
+	acceptance_tot = 0
+	running_acceptance_avg = 0
+
 	psychoJS.experiment.addLoop(trials); // add the loop to the experiment
 	currentLoop = trials;  // we're now the current loop
 
@@ -1136,7 +1156,7 @@ function trialsLoopBegin(thisScheduler) {
 		thisScheduler.add(trialRoutineBegin(snapshot));
 		thisScheduler.add(trialRoutineEachFrame(snapshot));
 		thisScheduler.add(trialResult(snapshot)); // show the result 
-		thisScheduler.add(trialIsi(snapshot));
+		//thisScheduler.add(trialIsi(snapshot));
 		thisScheduler.add(trialRoutineEnd(snapshot));
 		thisScheduler.add(endLoopIteration(thisScheduler, snapshot));
 	}
@@ -1155,6 +1175,7 @@ function instruct_pagesLoopEnd() {
 function trialsLoopEnd() {
 	currentTrialNumber.setAutoDraw(false)
 	totalPointsTracker.setAutoDraw(false)
+	runningAverageTracker.setAutoDraw(false)
 	slideStim.setAutoDraw(false)
 
 	
@@ -1216,12 +1237,13 @@ function trialRoutineBegin(trials) {
 
 		currentTrialNumber.setAutoDraw(true)
 		totalPointsTracker.setAutoDraw(true)
+		runningAverageTracker.setAutoDraw(true)
 
 		console.log(question_data)
 
 		// Draw the profile stims
 		draw_profile_icons()
-		draw_profile_outline()
+		draw_profile_outline(false)
 
 		// Draw the Accept and Wait Rect Stims
 		reset_rectangle_stims()
@@ -1239,12 +1261,13 @@ function trialRoutineBegin(trials) {
 		offer_stim_text.setAutoDraw(true)
 
 		currentTrialNumber.setText(`Event: ${trials.thisIndex + 1} / ${trials.nStim}`)
-		totalPointsTracker.setText(`Total Dates: ${totalDates}`)
+		totalPointsTracker.setText(`Total Dates Scheduled: ${totalDates}`)
+		runningAverageTracker.setText(`Average Match Level: ${running_acceptance_avg}%`)
 
 		// trial_type is the trial_length '_' + person with high match + '_' + person of when 0% match
 		trial_type = trial_length + '_' + ts_high + '_' + ts_withdrawal
-		mark_event(trials_data, globalClock, trials.thisIndex, trial_type, event_types['FIXATION_ONSET'],
-			'NA', 'NA', '+')
+		// mark_event(trials_data, globalClock, trials.thisIndex, trial_type, event_types['FIXATION_ONSET'],
+		// 	'NA', 'NA', '+')
 		mark_event(trials_data, globalClock, trials.thisIndex, trial_type, event_types['CHOICE_ONSET'],
 			'NA', initial_offer, totalDates)
 
@@ -1289,7 +1312,9 @@ function clear_stims() {
 	currentTrialNumber.status = PsychoJS.Status.NOT_STARTED
 
 	totalPointsTracker.setAutoDraw(false)
+	runningAverageTracker.setAutoDraw(false)
 	totalPointsTracker.status = PsychoJS.Status.NOT_STARTED
+	runningAverageTracker.status = PsychoJS.Status.NOT_STARTED
 
 	offer_stim_text.setAutoDraw(false)
 	offer_stim_text.status = PsychoJS.Status.NOT_STARTED
@@ -1345,10 +1370,12 @@ function draw_profile_icons() {
 }
 
 // Draws the current outline based on timepoint
-function draw_profile_outline() {
-	profile_outline.pos = male_profile_icon[trial_length][time_point].pos
-	profile_outline.setAutoDraw(true)
-
+function draw_profile_outline(accepted) {
+	if (!accepted)
+	{
+		profile_outline.pos = male_profile_icon[trial_length][time_point].pos
+		profile_outline.setAutoDraw(true)
+	}
 }
 
 // Reset the rectangle stims to their original structure
@@ -1378,6 +1405,9 @@ var missed_timepoint;
 var feedback_break;
 var feedback_break_time_end;
 var fixation_time_end;
+var result_time;
+var showing_result = false;
+var result_time_amount = 1.5;
 
 function trialRoutineEachFrame(trials) {
 	return function () {
@@ -1400,27 +1430,36 @@ function trialRoutineEachFrame(trials) {
 		}
 
 		let theseKeys = resp.getKeys({ keyList: keyList, waitRelease: false });
-		if (!feedback_break && theseKeys.length > 0) {
+		if (!feedback_break && !showing_result && theseKeys.length > 0) {
 			resp.keys = theseKeys[0].name;  // just the last key pressed
 			resp.rt = theseKeys[0].rt;
 
 			pressed = true
 
 			if (resp.keys == LEFT_KEY) {
-				console.log('Pressed Left')
+				//console.log('Pressed Left')
 				accepted = true
+				if (high_offer != true)
+				{
+					avg_sum += initial_offer
+				}
+				//acceptance_tot += 1
+				totalDates++
+				running_acceptance_avg = Math.round((avg_sum/totalDates))
+				profile_outline.lineColor = new util.Color('#00ff00')
+				result_time = t + result_time_amount
 				accept_rect_stim.fillColor = new util.Color(selectColor)
 				accept_rect_stim.lineColor = new util.Color(selectColor)
 				accept_rect_stim.height += 0.02
 				accept_rect_stim.width += 0.02
 
 				accept_text_stim.color = new util.Color('white')
-				totalDates++
+				//totalDates++
 
 				
 				
 			} else if (resp.keys == RIGHT_KEY) {
-				console.log('Pressed Right')
+				//console.log('Pressed Right')
 				waited = true
 				reject_rect_stim.fillColor = new util.Color(selectColor)
 				reject_rect_stim.lineColor = new util.Color(selectColor)
@@ -1430,10 +1469,11 @@ function trialRoutineEachFrame(trials) {
 				reject_text_stim.color = new util.Color('white')
 
 				if ((time_point + 1) == ts_high) {
+					avg_sum += 90
 					high_offer = true
 					offer_stim_text.setText('>' + highOfferVal + '% Match')
-					offer_stim_text.color = new util.Color('#00fa40')
-					profile_outline.lineColor = new util.Color('#00fa40')
+					offer_stim_text.color = new util.Color('#00ff00')
+					profile_outline.lineColor = new util.Color('#00ff00')
 
 					// Force Choice the Accept
 					keyList = [LEFT_KEY]
@@ -1443,6 +1483,8 @@ function trialRoutineEachFrame(trials) {
 
 				if ((time_point + 1) == ts_withdrawal) {
 					offer_withdrew = true;
+					profile_outline.lineColor = new util.Color('#ff0000')
+					result_time = t + result_time_amount
 					offer_stim_text.setText(0 + '% Match')
 					// offer_stim_text.setText('Offer revoked')
 				}
@@ -1451,6 +1493,8 @@ function trialRoutineEachFrame(trials) {
 				// Should still say end up alone
 				if (lastTimePoint) {
 					offer_withdrew = true;
+					profile_outline.lineColor = new util.Color('#ff0000')
+					result_time = t + result_time_amount
 				}
 
 			}
@@ -1460,6 +1504,18 @@ function trialRoutineEachFrame(trials) {
 			resp.keys = undefined;
 			resp.rt = undefined;
 
+			if (accepted)
+			{
+				mark_event(trials_data, globalClock, trials.thisIndex, trial_type,
+					event_types['FEEDBACK'], 'NA' , 'NA',  totalDates)
+			}
+
+			if (offer_withdrew)
+			{
+				mark_event(trials_data, globalClock, trials.thisIndex, trial_type,
+					event_types['FEEDBACK'], 'NA' , 'NA',  totalDates)
+			}
+
 			// resp.stop();
 			time_point++;
 
@@ -1468,13 +1524,13 @@ function trialRoutineEachFrame(trials) {
 				lastTimePoint = true
 			}
 
-			if (time_point == trial_length) {
-				continueRoutine = false
-			}
+			// if (time_point == trial_length) {
+			// 	continueRoutine = false
+			// }
 
 			if (time_point != trial_length) {
 				draw_profile_icons()
-				draw_profile_outline()
+				draw_profile_outline(accepted)
 			}
 			// small break
 			feedback_break = true
@@ -1496,12 +1552,25 @@ function trialRoutineEachFrame(trials) {
 		// Go to the next trial routine
 		if (accepted) {
 			if (points_fixation_stim.status == PsychoJS.Status.NOT_STARTED) {
-				clear_stims()
-				points_fixation_stim.color = new util.Color('#00fa40')
-				points_fixation_stim.setText(`YOU HAVE A DATE!`)
-				points_fixation_stim.setAutoDraw(true)
+				acceptance_tot += 1
+				//clear_stims()
+				// points_fixation_stim.color = new util.Color('#00fa40')
+				// points_fixation_stim.setText(`YOU HAVE A DATE!`)
+				// points_fixation_stim.setAutoDraw(true)
 
+				//continueRoutine = false
+				showing_result = true
+				offer_stim_text.color = new util.Color('#00ff00')
+				offer_stim_text.setText('YOU HAVE A DATE!')
+				offer_stim_text.bold = true
+				// mark_event(trials_data, globalClock, trials.thisIndex, trial_type,
+				// 	event_types['FEEDBACK'], 'NA' , 'NA',  totalDates)
+				//result_time = t + 1.0
+			}
+			if (t >= result_time)
+			{
 				continueRoutine = false
+				offer_stim_text.bold = false
 			}
 		}
 
@@ -1509,13 +1578,27 @@ function trialRoutineEachFrame(trials) {
 		// Go to next Routine
 		if (offer_withdrew) {
 			if (points_fixation_stim.status == PsychoJS.Status.NOT_STARTED) {
-				clear_stims()
-				points_fixation_stim.color = new util.Color('red')
-				points_fixation_stim.setText(`END UP ALONE.`)
-				points_fixation_stim.setAutoDraw(true)
+				acceptance_tot += 1
+				//clear_stims()
+				// points_fixation_stim.color = new util.Color('red')
+				// points_fixation_stim.setText(`END UP ALONE.`)
+				// points_fixation_stim.setAutoDraw(true)
 
 				console.log('no more dates')
+				//continueRoutine = false
+				showing_result = true
+				offer_stim_text.color = new util.Color('#ff0000')
+				offer_stim_text.setText(`END UP ALONE.`)
+				offer_stim_text.bold = true
+				// mark_event(trials_data, globalClock, trials.thisIndex, trial_type,
+				// 	event_types['FEEDBACK'], 'NA' , 'NA',  totalDates)
+				
+				// result_time = t + 1.0
+			}
+			if (t >= result_time)
+			{
 				continueRoutine = false
+				offer_stim_text.bold = false
 			}
 		}
 
@@ -1529,6 +1612,7 @@ function trialRoutineEachFrame(trials) {
 			return Scheduler.Event.FLIP_REPEAT;
 		}
 		else {
+			showing_result = false
 			clear_stims()  // clear stims for the next routine
 			endClock.reset() // reset the clock for the next routine
 			resp.clock.reset() 	// Reset Keyboard Clock
@@ -1541,6 +1625,7 @@ function trialRoutineEachFrame(trials) {
 	};
 }
 
+// THIS IS NOW FIXATION (ITI)
 /**
  * Show Trial Result Routine
  * @param {*} trials trial snapshot
@@ -1553,12 +1638,16 @@ function trialResult(trials) {
 		t = fbClock.getTime()
 
 		if (points_fixation_stim.status == PsychoJS.Status.NOT_STARTED) {
+			points_fixation_stim.color = new util.Color('white')
+			points_fixation_stim.setText('+')
 			points_fixation_stim.setAutoDraw(true)
-			mark_event(trials_data, globalClock, trials.thisIndex, trial_type,
-				event_types['FEEDBACK'], 'NA' , 'NA',  totalDates)
+			mark_event(trials_data, globalClock, trials.thisIndex, trial_type, event_types['FIXATION_ONSET'],
+			'NA', 'NA', '+')
+			// mark_event(trials_data, globalClock, trials.thisIndex, trial_type,
+			// 	event_types['FIXATION_ONSET'], 'NA' , 'NA',  totalDates)
 		}
 
-		if (t >= 1) {
+		if (t >= ITI) {
 			continueRoutine = false
 		}
 
