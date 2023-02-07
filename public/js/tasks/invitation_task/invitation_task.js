@@ -2031,6 +2031,7 @@ function module_3(trial) {
 				console.log('Invalid trial', g.ANIMATION_DURATION)
 				g.outcome_text.setAutoDraw(true);
 				g.animationTimer.reset(g.ANIMATION_DURATION)
+				g.trial_invites = 0; // no points for the trial
 			}
 
 			if (g.animationTimer.getTime() <= 0) {
