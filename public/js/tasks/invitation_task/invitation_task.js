@@ -1774,19 +1774,19 @@ function module_2(trial) {
 			g.room_image.setAutoDraw(true);
 			
 
-			g.rooms_left_text.setText(`You have ${g.depth} moves`)
-			g.rooms_left_text.setAutoDraw(true);
+			// g.rooms_left_text.setText(`You have ${g.depth} moves`)
+			// g.rooms_left_text.setAutoDraw(true);
 			
 			if (trial.forced_choice == 'L') {
 				g.left_door.setAutoDraw(true);
 				g.choice_1.setAutoDraw(true);
-				g.prompt_text.setText('Please choose the Left room');
+				g.prompt_text.setText('Please choose the LEFT room.');
 			}
 
 			if (trial.forced_choice == 'R') {
 				g.right_door.setAutoDraw(true);
 				g.choice_2.setAutoDraw(true);
-				g.prompt_text.setText('Please choose the Right room');
+				g.prompt_text.setText('Please choose the RIGHT room.');
 			}
 
 			g.prompt_text.setAutoDraw(true);
@@ -1844,7 +1844,7 @@ function module_2(trial) {
 		if (g.room_image_invite.status == PsychoJS.Status.NOT_STARTED && g.trial_phase == g.RESPONSE_ANIMATION) {
 			g.room_image_invite.setImage(trial.building_type + '_invite_' + g.current_path)
 			g.room_image_invite.setAutoDraw(true);
-			g.prompt_text.setText('Press the space key to go to the next trial.');
+			g.prompt_text.setText('Press SPACE key to exit the building.');
 			g.prompt_text.setAutoDraw(true);
 			g.text_val_building.setAutoDraw(true);
 			g.trial_phase = g.WAITING_KEY;
