@@ -209,6 +209,17 @@ module.exports = function (app){
         res.status(200).send('data saved')
     })
 
+    app.post('/SaveDevInfo', (req, res)=>{
+        csvpath = req.body.csvpath
+        content = `user: ${req.body.username} ::: ${req.body.dimensions} ::: ${req.body.content}`
+
+        fs.appendFile(csvpath, content, (err) => {
+            console.log(err)
+        })
+
+        res.status(200).send('dev data saved')
+    })
+
     // save Audio
     app.post('/saveAudio', (req, res) => {
         var q = url.parse(req.url, true).query;
