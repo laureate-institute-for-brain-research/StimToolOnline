@@ -752,7 +752,7 @@ function experimentInit() {
 		text: 'Total Invites Accepted:',alignHoriz: 'left',
 		font: 'Arial',
 		units: 'norm',
-		pos: [0.5, 0.75], height: 0.05, wrapWidth: undefined, ori: 0,
+		pos: [0.4, 0.7], height: 0.07, wrapWidth: undefined, ori: 0,
 		color: new util.Color('white'), opacity: 1,
 		depth: 0.0
 	});
@@ -763,8 +763,8 @@ function experimentInit() {
 		text: '0',alignHoriz: 'right',
 		font: 'Arial',
 		units: 'norm',
-		pos: [0.85, 0.75], height: 0.05, wrapWidth: undefined, ori: 0,
-		color: new util.Color('green'), opacity: 1,
+		pos: [0.85, 0.7], height: 0.07, wrapWidth: undefined, ori: 0,
+		color: new util.Color('#90EE90'), opacity: 1,
 		depth: 0.0
 	});
 
