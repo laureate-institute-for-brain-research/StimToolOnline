@@ -26,3 +26,4 @@ module,trial_number,start,building_type,depth,OLL_ONLL,ITI,forced_choice,path_ve
 2,23,2,office,1,NA,1.5,R,1
 2,24,2,office,1,NA,1.5,L,1
 2,25,1,office,1,NA,1.5,R,1
+2,26,1,office,1,NA,1.5,L,1
