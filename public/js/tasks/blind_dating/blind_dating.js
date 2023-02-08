@@ -252,7 +252,8 @@ var resources = [
 	{ name: 'practice_schedule.csv', path: '/js/tasks/blind_dating/practice_schedule.csv'},
 	{ name: 'user.png', path: '/js/tasks/blind_dating/media/user.png' },
 	{ name: 'user_filled.png', path: '/js/tasks/blind_dating/media/user_filled.png'},
-	{ name: 'ready.jpeg', path: '/js/tasks/blind_dating/media/instructions/Slide22.jpeg'},
+	{ name: 'ready.jpeg', path: '/js/tasks/blind_dating/media/instructions/Slide22.jpeg' },
+	{ name: 'MAIN_ready_audio.mp3', path: '/js/tasks/blind_dating/media/instructions_audio/Slide22.mp3'},
 	{ name: 'male.png', path: '/js/tasks/blind_dating/media/male.png' },
 	{ name: 'female.png', path: '/js/tasks/blind_dating/media/female.png'}
 ]
@@ -1034,6 +1035,11 @@ function readyRoutineBegin(trials) {
 		// keep track of which components have finished
 		readyComponents = [readyStim];
 		readyStim.setAutoDraw(true)
+		track = new Sound({
+			win: psychoJS.window,
+			value: 'MAIN_ready_audio.mp3'
+		});
+		track.setVolume(1.0);
 		return Scheduler.Event.NEXT;
 	};
 }
@@ -1046,6 +1052,11 @@ function readyRoutineEachFrame(trials) {
 		t = readyClock.getTime();
 		if (resp.status == PsychoJS.Status.NOT_STARTED) {
 			resp.start()
+			
+			if (track) {
+				console.log('ready track: ',track)
+				track.play()
+			}
 		}
 	
 		// update/draw components on each frame
