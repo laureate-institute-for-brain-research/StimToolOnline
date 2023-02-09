@@ -1599,7 +1599,7 @@ function trialRoutineEachFrame(trials) {
 				//continueRoutine = false
 				showing_result = true
 				offer_stim_text.color = new util.Color('#ff0000')
-				offer_stim_text.setText(`END UP ALONE.`)
+				offer_stim_text.setText(`END UP ALONE`)
 				offer_stim_text.bold = true
 				// mark_event(trials_data, globalClock, trials.thisIndex, trial_type,
 				// 	event_types['FEEDBACK'], 'NA' , 'NA',  totalDates)
