@@ -4,7 +4,7 @@
         "/?index=0&survey=demo&session=1",
         "/?index=1&survey=well_being&session=1",
         "/?index=2&survey=panasx&session=1",
-        "/?index=3&task=blind_dating&run=Pilot_R1.json",
+        "/?index=3&task=blind_dating&run=Pilot_R2.json",
         "/?index=4&survey=post_task&session=1",
         "/?index=5&survey=feedback&session=1",
         "/completeMobile?"

@@ -1,4 +1,4 @@
 {
-    "schedule": "/js/tasks/emotional_faces/main_schedule.csv",
+    "schedule": "/js/tasks/emotional_faces/faces_schedule1.csv",
     "instruct_schedule": "/js/tasks/emotional_faces/media/Pilot_R1_instructions.csv"
 }

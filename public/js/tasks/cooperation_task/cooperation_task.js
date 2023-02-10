@@ -1100,7 +1100,7 @@ function trialsLoopBegin(thisScheduler) {
 	resp.stop()
 	resp.clearEvents()
 	resp.status = PsychoJS.Status.NOT_STARTED
-	reset_choice_counter() // resetCounter
+	//reset_choice_counter() // resetCounter
 
 	blocks = new TrialHandler({
 		psychoJS: psychoJS,
