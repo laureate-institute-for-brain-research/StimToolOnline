@@ -851,7 +851,7 @@ function experimentInit() {
 		text: 'Xs',alignHoriz: 'center',
 		font: 'Arial',
 		units: 'norm',
-		pos: [0, 0.7], height: 0.08, wrapWidth: undefined, ori: 0,
+		pos: [0, 0.82], height: 0.1, wrapWidth: undefined, ori: 0,
 		color: new util.Color('white'), opacity: 1,
 		depth: 0.0
 	});
