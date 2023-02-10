@@ -2118,7 +2118,7 @@ function trialOutcome(trial) {
 		}
 		if (g.outcome_text.status == PsychoJS.Status.NOT_STARTED) {
 			g.outcome_text.color = 'white';
-			g.outcome_text.setText(`Trial Total Invites: ${g.trial_invites}`)
+			g.outcome_text.setText(`Overall Invites Accepted: ${g.trial_invites}`)
 			g.outcomeTimer.reset(g.OUTCOME_DURATION); // reset the time with ITI 
 			g.outcome_text.setAutoDraw(true);
 
