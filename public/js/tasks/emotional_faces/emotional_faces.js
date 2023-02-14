@@ -52,6 +52,8 @@ var incorrect_rating = false
 
 var response_for_result = null;
 
+var mark_feedback = true;
+
 // init psychoJS:
 const psychoJS = new PsychoJS({
 	debug: false
@@ -1933,23 +1935,35 @@ function trialRoutineEnd(trials) { //TODO: Change this so that there is a jitter
 				if (t < 1.5) {
 					if (response_for_result == LEFT_KEY && stim_type == 'angry') {
 						rightangryStim.setAutoDraw(true)
-						mark_event(trials_data, globalClock, 'NA', trial_type, event_types['FEEDBACK'],
-							'NA', 'NA', 'correct angry')
+						if (mark_feedback == true) {
+							mark_feedback = false
+							mark_event(trials_data, globalClock, 'NA', trial_type, event_types['FEEDBACK'],
+								'NA', 'NA', 'correct angry')
+						}
 					}
 					else if (response_for_result == RIGHT_KEY && stim_type == 'angry') {
 						wrongangryStim.setAutoDraw(true)
-						mark_event(trials_data, globalClock, 'NA', trial_type, event_types['FEEDBACK'],
-							'NA', 'NA', 'wrong angry')
+						if (mark_feedback == true) {
+							mark_feedback = false
+							mark_event(trials_data, globalClock, 'NA', trial_type, event_types['FEEDBACK'],
+								'NA', 'NA', 'wrong angry')
+						}
 					}
 					else if (response_for_result == LEFT_KEY && stim_type == 'sad') {
 						wrongsadStim.setAutoDraw(true)
-						mark_event(trials_data, globalClock, 'NA', trial_type, event_types['FEEDBACK'],
-							'NA', 'NA', 'wrong sad')
+						if (mark_feedback == true) {
+							mark_feedback = false
+							mark_event(trials_data, globalClock, 'NA', trial_type, event_types['FEEDBACK'],
+								'NA', 'NA', 'wrong sad')
+						}
 					}
 					else if (response_for_result == RIGHT_KEY && stim_type == 'sad') {
 						rightsadStim.setAutoDraw(true)
-						mark_event(trials_data, globalClock, 'NA', trial_type, event_types['FEEDBACK'],
-							'NA', 'NA', 'correct sad')
+						if (mark_feedback == true) {
+							mark_feedback = false
+							mark_event(trials_data, globalClock, 'NA', trial_type, event_types['FEEDBACK'],
+								'NA', 'NA', 'correct sad')
+						}
 					}
 				}
 				if (t >= 1.5)
@@ -1985,13 +1999,19 @@ function trialRoutineEnd(trials) { //TODO: Change this so that there is a jitter
 					points_fixation_stim.setText('+')
 					if (stim_type == 'angry') {
 						slowangryStim.setAutoDraw(true)
-						mark_event(trials_data, globalClock, 'NA', trial_type, event_types['FEEDBACK'],
-						 	'NA', 'NA', 'too slow angry')
+						if (mark_feedback == true) {
+							mark_feedback = false
+							mark_event(trials_data, globalClock, 'NA', trial_type, event_types['FEEDBACK'],
+								'NA', 'NA', 'too slow angry')
+						}
 					}
 					else if (stim_type == 'sad') {
 						slowsadStim.setAutoDraw(true)
-						mark_event(trials_data, globalClock, 'NA', trial_type, event_types['FEEDBACK'],
-						 	'NA', 'NA', 'too slow sad')
+						if (mark_feedback == true) {
+							mark_feedback = false
+							mark_event(trials_data, globalClock, 'NA', trial_type, event_types['FEEDBACK'],
+								'NA', 'NA', 'too slow sad')
+						}
 					}
 				}
 				if (t >= 1.5)
@@ -2024,6 +2044,7 @@ function trialRoutineEnd(trials) { //TODO: Change this so that there is a jitter
 				// Clear Fixation
 				points_fixation_stim.setAutoDraw(false)
 				points_fixation_stim.status = PsychoJS.Status.NOT_STARTED
+				mark_feedback = true;
 
 				return Scheduler.Event.NEXT;
 			}
@@ -2041,6 +2062,7 @@ function trialRoutineEnd(trials) { //TODO: Change this so that there is a jitter
 				// Clear Fixation
 				points_fixation_stim.setAutoDraw(false)
 				points_fixation_stim.status = PsychoJS.Status.NOT_STARTED
+				mark_feedback = true
 
 				return Scheduler.Event.NEXT;
 			}
