@@ -435,6 +435,9 @@ window.onload = function () {
 
 			// Sanitze the resources. Needs to be clean so that psychoJS doesn't complain
 			resources = sanitizeResources(resources)
+
+			// shuffle module_2a schedule
+			g.module_2a_schedule.sort((a, b) => 0.5 - Math.random());
 			
 			psychoJS.start({
 				expName, 
