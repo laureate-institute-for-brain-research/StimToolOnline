@@ -230,6 +230,44 @@ g.path = {
 	}
 }
 
+// The trial schedule for module 2a
+// using a variable instead of the schedule file since there's a potential for
+// repeats.
+// Each schedule is coded as:
+// - current room
+// - building
+// - the correct door that should have been pressed.
+g.module_2a_schedule = [
+	[ 7,'library', 'left' ],
+	[ 7,'library', 'left' ],
+	[ 6,'library', 'right' ],
+	[ 6,'library', 'right' ],
+	[ 5,'library', 'left' ],
+	[ 5,'library', 'left' ],
+	[ 4,'library', 'right' ],
+	[ 4,'library', 'right' ],
+	[ 3,'library', 'left' ],
+	[ 3,'library', 'left' ],
+	[ 2,'library', 'right' ],
+	[ 2,'library', 'right' ],
+	[ 1,'library', 'right' ],
+	[ 1,'library', 'right' ],
+	[ 7,'office', 'left' ],
+	[ 7,'office', 'left' ],
+	[ 6,'office', 'left' ],
+	[ 6,'office', 'left' ],
+	[ 5,'office', 'left' ],
+	[ 5,'office', 'left' ],
+	[ 4,'office', 'right' ],
+	[ 4,'office', 'right' ],
+	[ 3,'office', 'left' ],
+	[ 3,'office', 'left' ],
+	[ 2,'office', 'left' ],
+	[ 2,'office', 'left' ],
+	[ 1,'office', 'left' ],
+	[ 1,'office', 'left' ]
+]
+g.module_2a_index = 0; // keep track of index
 
 // Variable to hold the actual reponse
 g.outcome_text_response = '';
@@ -1899,6 +1937,125 @@ function module_2(trial) {
 }
 
 /**
+ * Module 2a:
+ * - Each room shown 2x.
+ * - Repeat room if they get it wrong.
+ * - Need to have at least each room 2x in a row
+ * @param {*} trial 
+ * @returns 
+ */
+function module_2a(trial) {
+	return function () {
+		if ( (g.trial_phase == g.TRIAL_BEGIN) && (g.depth <= 0 || g.current_path >= 8)) {
+			// move to next routine if reached max depth
+			// or of the current path is 0 (when there is no more rooms)
+			// trial routine depth is no 0. Move to next trial
+			clearStims();
+			return Scheduler.Event.NEXT;
+		}
+
+		// Make Selection
+		// Show Doors if path = 1
+		if (g.room_image.status == PsychoJS.Status.NOT_STARTED && g.trial_phase == g.TRIAL_BEGIN) {
+			// console.log('Module 2', g.current_path)
+			// current path is from the module 2a schedule
+			g.current_path = g.module_2a_schedule[g.module_2a_index][0];
+			g.building_type = g.module_2a_schedule[g.module_2a_index][1];
+			
+			g.room_image.setImage(g.building_type + '_' + g.current_path);
+			g.room_image.setAutoDraw(true);
+			
+			g.left_door.setAutoDraw(true);
+			g.choice_1.setAutoDraw(true);
+
+			g.right_door.setAutoDraw(true);
+			g.choice_2.setAutoDraw(true);
+			// g.rooms_left_text.setText(`You have ${g.depth} moves`)
+			// g.rooms_left_text.setAutoDraw(true);
+			
+			g.prompt_text.setText('Choose the door that will get you the most invites.');
+			g.prompt_text.pos = [0, 0.7];
+			g.prompt_text.setAutoDraw(true);
+
+			g.text_val_building.setText(g.building_type);
+			g.text_val_building.setAutoDraw(true);
+			ready.clearEvents();
+			g.trial_phase = g.WAITING_SELECTION;
+		}
+
+		if (g.trial_phase == g.WAITING_SELECTION) {
+			let theseKeys = ready.getKeys({ keyList: ['1', '2'], waitRelease: false });
+			if (theseKeys.length > 0) {
+				// increment trial invites
+				// based ond current position and the building type
+				g.accepted_invites = g.path[g.current_path]['accepted'][trial.building_type];
+				g.rejected_invites = g.path[g.current_path]['rejected'][trial.building_type];
+				g.trial_invites = g.trial_invites + g.accepted_invites;
+				
+				// total invites
+				g.total_invites = g.total_invites + g.accepted_invites;
+
+				if (theseKeys[0].name == '1') { g.response = 'left'; }
+				if (theseKeys[0].name == '2') { g.response = 'right'; }
+
+				// append the current tral to the schedule if they choose the wrong door
+				if (g.module_2a_schedule[g.module_2a_index][2] != g.response) {
+					g.module_2a_schedule.push(g.module_2a_schedule[g.module_2a_index]);
+				}
+
+				g.invite_path = g.path[g.current_path][g.response];
+				clearStims();
+				g.module_2a_index++;
+
+				// prepare for next phase
+				g.trial_phase = g.RESPONSE_ANIMATION
+
+			}
+		}
+
+
+		// Show the Invitation Response
+		if (g.room_image_invite.status == PsychoJS.Status.NOT_STARTED && g.trial_phase == g.RESPONSE_ANIMATION) {
+			
+			g.room_image_invite.setImage(g.building_type + '_invite_' + g.invite_path)
+			g.room_image_invite.setAutoDraw(true);
+			if (g.module_2a_index == g.module_2a_schedule.length) {
+				// last trial
+				g.prompt_text.setText('Press SPACE key to exit the building.');
+			} else {
+				g.prompt_text.setText('Press SPACE key to go to next trial.');
+			}
+			
+			g.prompt_text.setAutoDraw(true);
+			g.text_val_building.setAutoDraw(true);
+			g.trial_phase = g.WAITING_KEY;
+			// g.responseTimer.reset(g.RESPONSE_DURATION); // start timer
+		}
+
+		if (g.trial_phase == g.WAITING_KEY) {
+			let theseKeys = ready.getKeys({ keyList: ['space'], waitRelease: false });
+			if (theseKeys.length >0 ){
+				if (theseKeys[0].name == 'space') {
+					// prepare for next phase
+					clearStims();
+					if (g.module_2a_index >= g.module_2a_schedule.length) {
+						// last trial
+						g.prompt_text.setText('Press SPACE key to exit the building.');
+						return Scheduler.Event.NEXT;
+					} else {
+						g.prompt_text.setText('Press SPACE key to go to next trial.');
+						g.trial_phase = g.TRIAL_BEGIN;
+					}
+					
+				}
+			}
+		}
+
+		return Scheduler.Event.FLIP_REPEAT
+	}
+}
+
+/**
  * Module 3:
  * 	Like Module 1 but with time limit.
  * @param {*} trial 
@@ -2099,6 +2256,7 @@ function runModule(trial) {
 	switch (trial.module) {
 		case 1: return module_1(trial)
 		case 2: return module_2(trial)
+		case '2a': return module_2a(trial)
 		case 3: return module_3(trial)
 	}
 }
@@ -2112,7 +2270,7 @@ function runModule(trial) {
  */
 function trialOutcome(trial) {
 	return function () {
-		if (trial.module == 2) {
+		if (trial.module == 2 || trial.module == '2a') {
 			// module 2 doesn't need to show the total invites
 			return Scheduler.Event.NEXT;
 		}
