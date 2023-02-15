@@ -39,6 +39,7 @@ g.OUTCOME_DURATION = 1.5; 	// outcome duration.
 g.PLANNING_DURATION = 6;	// the planning phase duration.
 g.SELCTION_DURATION = 1.5;	// the selection phase duration. (Time to enter moves)
 g.ANIMATION_DURATION = 1.5;	// the duration of an animation 'slide'
+g.MODULE_2A_OUTCOME_DUATION = 0.5; // the duration of the ooutcome for module 2a
 g.LEFT_KEY = 'comma';			// the key to select the left door
 g.RIGHT_KEY = 'period';			// the key to select the right door
 
@@ -1993,7 +1994,6 @@ function module_2a(trial) {
 		if (g.trial_phase == g.WAITING_SELECTION) {
 			let theseKeys = ready.getKeys({ keyList: [ g.LEFT_KEY, g.RIGHT_KEY], waitRelease: false });
 			if (theseKeys.length > 0) {
-				console.log(theseKeys[0])
 				// increment trial invites
 				// based ond current position and the building type
 				g.accepted_invites = g.path[g.current_path]['accepted'][trial.building_type];
@@ -2008,18 +2008,45 @@ function module_2a(trial) {
 
 				// append the current tral to the schedule if they choose the wrong door
 				if (g.module_2a_schedule[g.module_2a_index][2] != g.response) {
+					// incorrect choice
 					g.module_2a_schedule.push(g.module_2a_schedule[g.module_2a_index]);
+					g.prompt_text.setText('Incorrect!');
+					g.prompt_text.color = 'red';
+					g.result = 'incorrect';
+				} else {
+					// correct
+					g.prompt_text.setText('Correct!');
+					g.prompt_text.color = 'green';
+					g.module_2a_index++;
+					g.result = 'correct';
 				}
 
 				g.invite_path = g.path[g.current_path][g.response];
-				clearStims();
-				g.module_2a_index++;
+				//clearStims();
+				
 
 				// prepare for next phase
-				g.trial_phase = g.RESPONSE_ANIMATION
+				g.trial_phase = g.OUTCOME_PHASE
+				// start timer
+				g.outcomeTimer.reset(g.MODULE_2A_OUTCOME_DUATION); // reset the time with ITI 
 
 			}
 		}
+
+		// result outcome
+		// show this for 500ms
+		if (g.trial_phase == g.OUTCOME_PHASE && g.outcomeTimer.getTime() < 0) {
+			// go to next trial
+			g.prompt_text.color = 'white';
+			clearStims();
+			
+			if (g.result == 'correct') {
+				g.trial_phase = g.RESPONSE_ANIMATION;
+			} else {
+				g.trial_phase = g.TRIAL_BEGIN;
+			}
+		}
+		
 
 
 		// Show the Invitation Response
