@@ -42,6 +42,8 @@ g.ANIMATION_DURATION = 1.5;	// the duration of an animation 'slide'
 g.MODULE_2A_OUTCOME_DUATION = 0.5; // the duration of the ooutcome for module 2a
 g.LEFT_KEY = 'comma';			// the key to select the left door
 g.RIGHT_KEY = 'period';			// the key to select the right door
+g.LEFT_KEY_TEXT = '<';			// the text to show under the left door
+g.RIGHT_KEY_TEXT = '>'; 		// the text to show under the right door.
 
 // CONSTANCT for Trial Status
 g.TRIAL_BEGIN = 0;			// for when trial beginning
@@ -931,7 +933,7 @@ function experimentInit() {
 	g.choice_1 = new visual.TextStim({
 		win: psychoJS.window,
 		name: 'choice_1',
-		text: '1',alignHoriz: 'center',
+		text: g.LEFT_KEY_TEXT,alignHoriz: 'center',
 		font: 'Arial',
 		units: 'height',
 		pos: [-0.55, -0.14], height: 0.05, wrapWidth: undefined, ori: 0,
@@ -942,7 +944,7 @@ function experimentInit() {
 	g.choice_2 = new visual.TextStim({
 		win: psychoJS.window,
 		name: 'choice_2',
-		text: '2',alignHoriz: 'center',
+		text: g.RIGHT_KEY_TEXT,alignHoriz: 'center',
 		font: 'Arial',
 		units: 'height',
 		pos: [0.55, -0.14], height: 0.05, wrapWidth: undefined, ori: 0,
