@@ -39,8 +39,8 @@ g.OUTCOME_DURATION = 1.5; 	// outcome duration.
 g.PLANNING_DURATION = 6;	// the planning phase duration.
 g.SELCTION_DURATION = 1.5;	// the selection phase duration. (Time to enter moves)
 g.ANIMATION_DURATION = 1.5;	// the duration of an animation 'slide'
-g.LEFT_KEY = '<';			// the key to select the left door
-g.RIGHT_KEY = '>';			// the key to select the right door
+g.LEFT_KEY = 'comma';			// the key to select the left door
+g.RIGHT_KEY = 'period';			// the key to select the right door
 
 // CONSTANCT for Trial Status
 g.TRIAL_BEGIN = 0;			// for when trial beginning
@@ -284,8 +284,6 @@ g.game_type_text = {
 	'unpleasant': `You will be shown the unpleasant image unless the person you choose decides to help you.`
 }
 
-var LEFT_KEY = 'left'
-var RIGHT_KEY = 'right'
 
  import { core, data, sound, util, visual } from '/psychojs/psychojs-2021.2.3.js';
  const { PsychoJS } = core;
@@ -1364,7 +1362,7 @@ function readyRoutineEachFrame() {
 		}
 	
 		// update/draw components on each frame
-		let theseKeys = resp.getKeys({ keyList: [RIGHT_KEY], waitRelease: false });
+		let theseKeys = resp.getKeys({ keyList: ['right'], waitRelease: false });
 		if (theseKeys.length > 0) {
 			if(track) track.stop();
 			continueRoutine = false
@@ -1993,8 +1991,9 @@ function module_2a(trial) {
 		}
 
 		if (g.trial_phase == g.WAITING_SELECTION) {
-			let theseKeys = ready.getKeys({ keyList: [g.LEFT_KEY, g.RIGHT_KEY], waitRelease: false });
+			let theseKeys = ready.getKeys({ keyList: [ g.LEFT_KEY, g.RIGHT_KEY], waitRelease: false });
 			if (theseKeys.length > 0) {
+				console.log(theseKeys[0])
 				// increment trial invites
 				// based ond current position and the building type
 				g.accepted_invites = g.path[g.current_path]['accepted'][trial.building_type];
