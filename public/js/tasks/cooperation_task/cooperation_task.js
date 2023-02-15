@@ -86,6 +86,26 @@ const { round } = util;
  
 import { Sound } from '/lib/sound-2020.1.js';
 
+function waitForElm(selector) {
+    return new Promise(resolve => {
+        if (document.querySelector(selector)) {
+            return resolve(document.querySelector(selector));
+        }
+
+        const observer = new MutationObserver(mutations => {
+            if (document.querySelector(selector)) {
+                resolve(document.querySelector(selector));
+                observer.disconnect();
+            }
+        });
+
+        observer.observe(document.body, {
+            childList: true,
+            subtree: true
+        });
+    });
+}
+
 /**
  * Returns array of unique paths
  * @param {*} resources 
@@ -383,6 +403,16 @@ psychoJS.schedule(psychoJS.gui.DlgFromDict({
 	dictionary: expInfo,
 	title: expName
 }));
+
+
+waitForElm('.ui-dialog').then((elm) => {
+	$("#buttonOk").button("option", "disabled", true);
+	$('#progressMsg').on('DOMSubtreeModified', function () {
+		if (document.getElementById('progressMsg').textContent == 'all resources downloaded') {
+			$("#buttonOk").button("option", "disabled", false);
+		}
+	});
+});
 
 const flowScheduler = new Scheduler(psychoJS);
 const dialogCancelScheduler = new Scheduler(psychoJS);
