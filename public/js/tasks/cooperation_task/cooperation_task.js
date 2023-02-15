@@ -383,11 +383,11 @@ var expInfo = { 'participant': '', 'session': '', 'run_id': '', 'date': formatDa
 var resources = [
 	{ name: 'practice_schedule.csv', path: '/js/tasks/cooperation_task/practice_schedule.csv' },
 	{ name: 'faces_paths.csv', path: '/js/tasks/cooperation_task/faces_paths.csv' }, // faces lists
-	{ name: 'PRACTICE_ready', path: '/js/tasks/cooperation_task/media/instructions/Slide15.jpeg' },
-	{ name: 'PRACTICE_ready_audio.mp3', path: '/js/tasks/cooperation_task/media/instructions_audio/Slide15.mp3' },
-	{ name: 'MAIN_ready', path: '/js/tasks/cooperation_task/media/instructions/Slide16.jpeg' },
-	{ name: 'MAIN_ready_audio.mp3', path: '/js/tasks/cooperation_task/media/instructions_audio/Slide16.mp3' },
-	{ name: 'BEGIN_slide', path: '/js/tasks/cooperation_task/media/instructions/Slide17.jpeg' },
+	{ name: 'PRACTICE_ready', path: '/js/tasks/cooperation_task/media/instructions/Slide18.jpeg' },
+	{ name: 'PRACTICE_ready_audio.mp3', path: '/js/tasks/cooperation_task/media/instructions_audio/Slide18.mp3' },
+	{ name: 'MAIN_ready', path: '/js/tasks/cooperation_task/media/instructions/Slide19.jpeg' },
+	{ name: 'MAIN_ready_audio.mp3', path: '/js/tasks/cooperation_task/media/instructions_audio/Slide19.mp3' },
+	{ name: 'BEGIN_slide', path: '/js/tasks/cooperation_task/media/instructions/Slide20.jpeg' },
 	{ name: 'positive_face', path: '/js/tasks/cooperation_task/media/green_smile.png' },
 	{ name: 'negative_face', path: '/js/tasks/cooperation_task/media/red_sad.png' },
 	{ name: 'neutral_face', path: '/js/tasks/cooperation_task/media/neutral_face.png' },
@@ -979,6 +979,11 @@ function readyRoutineBegin(block_type, image_stim, audio_stim) {
 					texRes : 128, interpolate : true, depth : 0
 				});
 
+				// track = new Sound({
+				// 	win: psychoJS.window,
+				// 	value: 'MAIN_ready_audio.mp3'
+				// });
+				// track.setVolume(1.0);
 				if (audio_stim) {
 					track = new Sound({
 						win: psychoJS.window,
@@ -999,7 +1004,17 @@ function readyRoutineBegin(block_type, image_stim, audio_stim) {
 					flipHoriz: false, flipVert: false,
 					texRes: 128, interpolate: true, depth: 0
 				});
-				track = undefined;
+				//track = undefined;
+				if (audio_stim) {
+					track = new Sound({
+						win: psychoJS.window,
+						value: audio_stim
+					});
+					track.setVolume(1.0);
+				} else {
+					track = undefined;
+				}
+				// track.setVolume(1.0);
 		}
 		
 		mark_event(trials_data, globalClock, 'NA', block_type, event_types['BLOCK_ONSET'],
