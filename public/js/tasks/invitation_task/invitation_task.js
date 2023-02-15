@@ -29,12 +29,21 @@ var event_types = {
 
 var trials_data = []
 var g = {}					// global variables
+
+////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////  CONFIGURATION    ////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 g.FIXATION_DURATION = 1; 	/// fixation duration. in seconds
 g.RESPONSE_DURATION = 1;	// duration for when the invitation response should show
 g.OUTCOME_DURATION = 1.5; 	// outcome duration.
 g.PLANNING_DURATION = 6;	// the planning phase duration.
 g.SELCTION_DURATION = 1.5;	// the selection phase duration. (Time to enter moves)
 g.ANIMATION_DURATION = 1.5;	// the duration of an animation 'slide'
+g.MODULE_2A_OUTCOME_DUATION = 0.5; // the duration of the ooutcome for module 2a
+g.LEFT_KEY = 'comma';			// the key to select the left door
+g.RIGHT_KEY = 'period';			// the key to select the right door
+g.LEFT_KEY_TEXT = '<';			// the text to show under the left door
+g.RIGHT_KEY_TEXT = '>'; 		// the text to show under the right door.
 
 // CONSTANCT for Trial Status
 g.TRIAL_BEGIN = 0;			// for when trial beginning
@@ -230,6 +239,44 @@ g.path = {
 	}
 }
 
+// The trial schedule for module 2a
+// using a variable instead of the schedule file since there's a potential for
+// repeats.
+// Each schedule is coded as:
+// - current room
+// - building
+// - the correct door that should have been pressed.
+g.module_2a_schedule = [
+	[ 7,'library', 'left' ],
+	[ 7,'library', 'left' ],
+	[ 6,'library', 'right' ],
+	[ 6,'library', 'right' ],
+	[ 5,'library', 'left' ],
+	[ 5,'library', 'left' ],
+	[ 4,'library', 'right' ],
+	[ 4,'library', 'right' ],
+	[ 3,'library', 'left' ],
+	[ 3,'library', 'left' ],
+	[ 2,'library', 'right' ],
+	[ 2,'library', 'right' ],
+	[ 1,'library', 'right' ],
+	[ 1,'library', 'right' ],
+	[ 7,'office', 'left' ],
+	[ 7,'office', 'left' ],
+	[ 6,'office', 'left' ],
+	[ 6,'office', 'left' ],
+	[ 5,'office', 'left' ],
+	[ 5,'office', 'left' ],
+	[ 4,'office', 'right' ],
+	[ 4,'office', 'right' ],
+	[ 3,'office', 'left' ],
+	[ 3,'office', 'left' ],
+	[ 2,'office', 'left' ],
+	[ 2,'office', 'left' ],
+	[ 1,'office', 'left' ],
+	[ 1,'office', 'left' ]
+]
+g.module_2a_index = 0; // keep track of index
 
 // Variable to hold the actual reponse
 g.outcome_text_response = '';
@@ -240,8 +287,6 @@ g.game_type_text = {
 	'unpleasant': `You will be shown the unpleasant image unless the person you choose decides to help you.`
 }
 
-var LEFT_KEY = 'left'
-var RIGHT_KEY = 'right'
 
  import { core, data, sound, util, visual } from '/psychojs/psychojs-2021.2.3.js';
  const { PsychoJS } = core;
@@ -397,6 +442,9 @@ window.onload = function () {
 
 			// Sanitze the resources. Needs to be clean so that psychoJS doesn't complain
 			resources = sanitizeResources(resources)
+
+			// shuffle module_2a schedule
+			g.module_2a_schedule.sort((a, b) => 0.5 - Math.random());
 			
 			psychoJS.start({
 				expName, 
@@ -851,7 +899,7 @@ function experimentInit() {
 		text: 'Xs',alignHoriz: 'center',
 		font: 'Arial',
 		units: 'norm',
-		pos: [0, 0.7], height: 0.08, wrapWidth: undefined, ori: 0,
+		pos: [0, 0.82], height: 0.1, wrapWidth: undefined, ori: 0,
 		color: new util.Color('white'), opacity: 1,
 		depth: 0.0
 	});
@@ -885,7 +933,7 @@ function experimentInit() {
 	g.choice_1 = new visual.TextStim({
 		win: psychoJS.window,
 		name: 'choice_1',
-		text: '1',alignHoriz: 'center',
+		text: g.LEFT_KEY_TEXT,alignHoriz: 'center',
 		font: 'Arial',
 		units: 'height',
 		pos: [-0.55, -0.14], height: 0.05, wrapWidth: undefined, ori: 0,
@@ -896,7 +944,7 @@ function experimentInit() {
 	g.choice_2 = new visual.TextStim({
 		win: psychoJS.window,
 		name: 'choice_2',
-		text: '2',alignHoriz: 'center',
+		text: g.RIGHT_KEY_TEXT,alignHoriz: 'center',
 		font: 'Arial',
 		units: 'height',
 		pos: [0.55, -0.14], height: 0.05, wrapWidth: undefined, ori: 0,
@@ -1317,7 +1365,7 @@ function readyRoutineEachFrame() {
 		}
 	
 		// update/draw components on each frame
-		let theseKeys = resp.getKeys({ keyList: [RIGHT_KEY], waitRelease: false });
+		let theseKeys = resp.getKeys({ keyList: ['right'], waitRelease: false });
 		if (theseKeys.length > 0) {
 			if(track) track.stop();
 			continueRoutine = false
@@ -1738,11 +1786,11 @@ function module_1(trial) {
 		// WAITING SELECTION
 		// as subject where they want to go next
 		if (g.trial_phase == g.WAITING_SELECTION) {
-			let theseKeys = ready.getKeys({ keyList: ['1', '2'], waitRelease: false });
+			let theseKeys = ready.getKeys({ keyList: [g.LEFT_KEY, g.RIGHT_KEY], waitRelease: false });
 			if (theseKeys.length > 0) {
 
-				if (theseKeys[0].name == '1') { g.response = 'left'; }
-				if (theseKeys[0].name == '2') { g.response = 'right'; }
+				if (theseKeys[0].name == g.LEFT_KEY) { g.response = 'left'; }
+				if (theseKeys[0].name == g.RIGHT_KEY) { g.response = 'right'; }
 
 				
 				clearStims();
@@ -1899,6 +1947,152 @@ function module_2(trial) {
 }
 
 /**
+ * Module 2a:
+ * - Each room shown 2x.
+ * - Repeat room if they get it wrong.
+ * - Need to have at least each room 2x in a row
+ * @param {*} trial 
+ * @returns 
+ */
+function module_2a(trial) {
+	return function () {
+		if ( (g.trial_phase == g.TRIAL_BEGIN) && (g.depth <= 0 || g.current_path >= 8)) {
+			// move to next routine if reached max depth
+			// or of the current path is 0 (when there is no more rooms)
+			// trial routine depth is no 0. Move to next trial
+			clearStims();
+			return Scheduler.Event.NEXT;
+		}
+
+		// Make Selection
+		// Show Doors if path = 1
+		if (g.room_image.status == PsychoJS.Status.NOT_STARTED && g.trial_phase == g.TRIAL_BEGIN) {
+			// console.log('Module 2', g.current_path)
+			// current path is from the module 2a schedule
+			g.current_path = g.module_2a_schedule[g.module_2a_index][0];
+			g.building_type = g.module_2a_schedule[g.module_2a_index][1];
+			
+			g.room_image.setImage(g.building_type + '_' + g.current_path);
+			g.room_image.setAutoDraw(true);
+			
+			g.left_door.setAutoDraw(true);
+			g.choice_1.setAutoDraw(true);
+
+			g.right_door.setAutoDraw(true);
+			g.choice_2.setAutoDraw(true);
+			// g.rooms_left_text.setText(`You have ${g.depth} moves`)
+			// g.rooms_left_text.setAutoDraw(true);
+			
+			g.prompt_text.setText('Choose the door that will get you the most invites.');
+			g.prompt_text.pos = [0, 0.7];
+			g.prompt_text.setAutoDraw(true);
+
+			g.text_val_building.setText(g.building_type);
+			g.text_val_building.setAutoDraw(true);
+			ready.clearEvents();
+			g.trial_phase = g.WAITING_SELECTION;
+		}
+
+		if (g.trial_phase == g.WAITING_SELECTION) {
+			let theseKeys = ready.getKeys({ keyList: [ g.LEFT_KEY, g.RIGHT_KEY], waitRelease: false });
+			if (theseKeys.length > 0) {
+				// increment trial invites
+				// based ond current position and the building type
+				g.accepted_invites = g.path[g.current_path]['accepted'][trial.building_type];
+				g.rejected_invites = g.path[g.current_path]['rejected'][trial.building_type];
+				g.trial_invites = g.trial_invites + g.accepted_invites;
+				
+				// total invites
+				g.total_invites = g.total_invites + g.accepted_invites;
+
+				if (theseKeys[0].name == g.LEFT_KEY) { g.response = 'left'; }
+				if (theseKeys[0].name == g.RIGHT_KEY) { g.response = 'right'; }
+
+				// append the current tral to the schedule if they choose the wrong door
+				if (g.module_2a_schedule[g.module_2a_index][2] != g.response) {
+					// incorrect choice
+					g.module_2a_schedule.push(g.module_2a_schedule[g.module_2a_index]);
+					g.prompt_text.setText('Incorrect!');
+					g.prompt_text.color = 'red';
+					g.result = 'incorrect';
+				} else {
+					// correct
+					g.prompt_text.setText('Correct!');
+					g.prompt_text.color = 'green';
+					g.module_2a_index++;
+					g.result = 'correct';
+				}
+
+				g.invite_path = g.path[g.current_path][g.response];
+				//clearStims();
+				
+
+				// prepare for next phase
+				g.trial_phase = g.OUTCOME_PHASE
+				// start timer
+				g.outcomeTimer.reset(g.MODULE_2A_OUTCOME_DUATION); // reset the time with ITI 
+
+			}
+		}
+
+		// result outcome
+		// show this for 500ms
+		if (g.trial_phase == g.OUTCOME_PHASE && g.outcomeTimer.getTime() < 0) {
+			// go to next trial
+			g.prompt_text.color = 'white';
+			clearStims();
+			
+			if (g.result == 'correct') {
+				g.trial_phase = g.RESPONSE_ANIMATION;
+			} else {
+				g.trial_phase = g.TRIAL_BEGIN;
+			}
+		}
+		
+
+
+		// Show the Invitation Response
+		if (g.room_image_invite.status == PsychoJS.Status.NOT_STARTED && g.trial_phase == g.RESPONSE_ANIMATION) {
+			
+			g.room_image_invite.setImage(g.building_type + '_invite_' + g.invite_path)
+			g.room_image_invite.setAutoDraw(true);
+			if (g.module_2a_index == g.module_2a_schedule.length) {
+				// last trial
+				g.prompt_text.setText('Press SPACE key to exit the building.');
+			} else {
+				g.prompt_text.setText('Press SPACE key to go to next trial.');
+			}
+			
+			g.prompt_text.setAutoDraw(true);
+			g.text_val_building.setAutoDraw(true);
+			g.trial_phase = g.WAITING_KEY;
+			// g.responseTimer.reset(g.RESPONSE_DURATION); // start timer
+		}
+
+		if (g.trial_phase == g.WAITING_KEY) {
+			let theseKeys = ready.getKeys({ keyList: ['space'], waitRelease: false });
+			if (theseKeys.length >0 ){
+				if (theseKeys[0].name == 'space') {
+					// prepare for next phase
+					clearStims();
+					if (g.module_2a_index >= g.module_2a_schedule.length) {
+						// last trial
+						g.prompt_text.setText('Press SPACE key to exit the building.');
+						return Scheduler.Event.NEXT;
+					} else {
+						g.prompt_text.setText('Press SPACE key to go to next trial.');
+						g.trial_phase = g.TRIAL_BEGIN;
+					}
+					
+				}
+			}
+		}
+
+		return Scheduler.Event.FLIP_REPEAT
+	}
+}
+
+/**
  * Module 3:
  * 	Like Module 1 but with time limit.
  * @param {*} trial 
@@ -1982,12 +2176,12 @@ function module_3(trial) {
 			// allow moves to be entered for the trial depth value
 			if (g.moves_entered.length < trial.depth) {
 				// can still enter moves and within time limit
-				let theseKeys = ready.getKeys({ keyList: ['1', '2'], waitRelease: false });
+				let theseKeys = ready.getKeys({ keyList: [g.LEFT_KEY, g.RIGHT_KEY], waitRelease: false });
 				if (theseKeys.length > 0) {
 					
 
-					if (theseKeys[0].name == '1') { g.response = 'left'; }
-					if (theseKeys[0].name == '2') { g.response = 'right'; }
+					if (theseKeys[0].name == g.LEFT_KEY) { g.response = 'left'; }
+					if (theseKeys[0].name == g.RIGHT_KEY) { g.response = 'right'; }
 					
 					g.current_path = g.path[g.current_path][g.response];
 					// increment trial invites
@@ -2099,6 +2293,7 @@ function runModule(trial) {
 	switch (trial.module) {
 		case 1: return module_1(trial)
 		case 2: return module_2(trial)
+		case '2a': return module_2a(trial)
 		case 3: return module_3(trial)
 	}
 }
@@ -2112,13 +2307,13 @@ function runModule(trial) {
  */
 function trialOutcome(trial) {
 	return function () {
-		if (trial.module == 2) {
+		if (trial.module == 2 || trial.module == '2a') {
 			// module 2 doesn't need to show the total invites
 			return Scheduler.Event.NEXT;
 		}
 		if (g.outcome_text.status == PsychoJS.Status.NOT_STARTED) {
 			g.outcome_text.color = 'white';
-			g.outcome_text.setText(`Trial Total Invites: ${g.trial_invites}`)
+			g.outcome_text.setText(`Overall Invites Accepted: ${g.trial_invites}`)
 			g.outcomeTimer.reset(g.OUTCOME_DURATION); // reset the time with ITI 
 			g.outcome_text.setAutoDraw(true);
 
