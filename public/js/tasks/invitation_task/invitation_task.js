@@ -29,12 +29,18 @@ var event_types = {
 
 var trials_data = []
 var g = {}					// global variables
+
+////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////  CONFIGURATION    ////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 g.FIXATION_DURATION = 1; 	/// fixation duration. in seconds
 g.RESPONSE_DURATION = 1;	// duration for when the invitation response should show
 g.OUTCOME_DURATION = 1.5; 	// outcome duration.
 g.PLANNING_DURATION = 6;	// the planning phase duration.
 g.SELCTION_DURATION = 1.5;	// the selection phase duration. (Time to enter moves)
 g.ANIMATION_DURATION = 1.5;	// the duration of an animation 'slide'
+g.LEFT_KEY = '<';			// the key to select the left door
+g.RIGHT_KEY = '>';			// the key to select the right door
 
 // CONSTANCT for Trial Status
 g.TRIAL_BEGIN = 0;			// for when trial beginning
@@ -1779,11 +1785,11 @@ function module_1(trial) {
 		// WAITING SELECTION
 		// as subject where they want to go next
 		if (g.trial_phase == g.WAITING_SELECTION) {
-			let theseKeys = ready.getKeys({ keyList: ['1', '2'], waitRelease: false });
+			let theseKeys = ready.getKeys({ keyList: [g.LEFT_KEY, g.RIGHT_KEY], waitRelease: false });
 			if (theseKeys.length > 0) {
 
-				if (theseKeys[0].name == '1') { g.response = 'left'; }
-				if (theseKeys[0].name == '2') { g.response = 'right'; }
+				if (theseKeys[0].name == g.LEFT_KEY) { g.response = 'left'; }
+				if (theseKeys[0].name == g.RIGHT_KEY) { g.response = 'right'; }
 
 				
 				clearStims();
@@ -1987,7 +1993,7 @@ function module_2a(trial) {
 		}
 
 		if (g.trial_phase == g.WAITING_SELECTION) {
-			let theseKeys = ready.getKeys({ keyList: ['1', '2'], waitRelease: false });
+			let theseKeys = ready.getKeys({ keyList: [g.LEFT_KEY, g.RIGHT_KEY], waitRelease: false });
 			if (theseKeys.length > 0) {
 				// increment trial invites
 				// based ond current position and the building type
@@ -1998,8 +2004,8 @@ function module_2a(trial) {
 				// total invites
 				g.total_invites = g.total_invites + g.accepted_invites;
 
-				if (theseKeys[0].name == '1') { g.response = 'left'; }
-				if (theseKeys[0].name == '2') { g.response = 'right'; }
+				if (theseKeys[0].name == g.LEFT_KEY) { g.response = 'left'; }
+				if (theseKeys[0].name == g.RIGHT_KEY) { g.response = 'right'; }
 
 				// append the current tral to the schedule if they choose the wrong door
 				if (g.module_2a_schedule[g.module_2a_index][2] != g.response) {
@@ -2142,12 +2148,12 @@ function module_3(trial) {
 			// allow moves to be entered for the trial depth value
 			if (g.moves_entered.length < trial.depth) {
 				// can still enter moves and within time limit
-				let theseKeys = ready.getKeys({ keyList: ['1', '2'], waitRelease: false });
+				let theseKeys = ready.getKeys({ keyList: [g.LEFT_KEY, g.RIGHT_KEY], waitRelease: false });
 				if (theseKeys.length > 0) {
 					
 
-					if (theseKeys[0].name == '1') { g.response = 'left'; }
-					if (theseKeys[0].name == '2') { g.response = 'right'; }
+					if (theseKeys[0].name == g.LEFT_KEY) { g.response = 'left'; }
+					if (theseKeys[0].name == g.RIGHT_KEY) { g.response = 'right'; }
 					
 					g.current_path = g.path[g.current_path][g.response];
 					// increment trial invites
