@@ -1780,7 +1780,7 @@ function getOutcomePair(outcome, game_type, choice) {
 				texRes : 128, interpolate : true, depth : 2
 			})
 			incrementCounters('positive')
-			g.outcome_triple = g.outcome_media.neutral[g.choice_counter['positive']][0]
+			g.outcome_triple = g.outcome_media.positive[g.choice_counter['positive']][0]
 	
 			// Outcome Sound Stim
 			g.outcome_sound = new Sound({
@@ -1811,7 +1811,7 @@ function getOutcomePair(outcome, game_type, choice) {
 				texRes : 128, interpolate : true, depth : 2
 			})
 			incrementCounters('negative')
-			g.outcome_triple = g.outcome_media.neutral[g.choice_counter['negative']][0]
+			g.outcome_triple = g.outcome_media.negative[g.choice_counter['negative']][0]
 	
 			// Outcome Sound Stim
 			g.outcome_sound = new Sound({
