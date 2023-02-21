@@ -926,10 +926,6 @@ function experimentInit() {
 		depth: 0.0
 	});
 
-
-	
-
-
 	g.choice_1 = new visual.TextStim({
 		win: psychoJS.window,
 		name: 'choice_1',
@@ -1844,9 +1840,6 @@ function module_2(trial) {
 			g.room_image.setImage(trial.building_type + '_' + g.current_path);
 			g.room_image.setAutoDraw(true);
 			
-
-			// g.rooms_left_text.setText(`You have ${g.depth} moves`)
-			// g.rooms_left_text.setAutoDraw(true);
 			
 			if (trial.forced_choice == 'L') {
 				g.left_door.setAutoDraw(true);
@@ -1867,7 +1860,7 @@ function module_2(trial) {
 		}
 
 		if (g.trial_phase == g.WAITING_SELECTION) {
-			let theseKeys = ready.getKeys({ keyList: ['1', '2'], waitRelease: false });
+			let theseKeys = ready.getKeys({ keyList: [g.LEFT_KEY, g.RIGHT_KEY], waitRelease: false });
 			if (theseKeys.length > 0) {
 				// increment trial invites
 				// based ond current position and the building type
@@ -1878,8 +1871,8 @@ function module_2(trial) {
 				// total invites
 				g.total_invites = g.total_invites + g.accepted_invites;
 
-				if (theseKeys[0].name == '1') { g.response = 'left'; }
-				if (theseKeys[0].name == '2') { g.response = 'right';}
+				if (theseKeys[0].name == g.LEFT_KEY) { g.response = 'left'; }
+				if (theseKeys[0].name == g.RIGHT_KEY) { g.response = 'right';}
 				g.depth--;
 				clearStims();
 				g.current_path = g.path[g.current_path][g.response];
@@ -2026,7 +2019,6 @@ function module_2a(trial) {
 				g.invite_path = g.path[g.current_path][g.response];
 				//clearStims();
 				
-
 				// prepare for next phase
 				g.trial_phase = g.OUTCOME_PHASE
 				// start timer
@@ -2041,15 +2033,8 @@ function module_2a(trial) {
 			// go to next trial
 			g.prompt_text.color = 'white';
 			clearStims();
-			
-			if (g.result == 'correct') {
-				g.trial_phase = g.RESPONSE_ANIMATION;
-			} else {
-				g.trial_phase = g.TRIAL_BEGIN;
-			}
+			g.trial_phase = g.RESPONSE_ANIMATION;
 		}
-		
-
 
 		// Show the Invitation Response
 		if (g.room_image_invite.status == PsychoJS.Status.NOT_STARTED && g.trial_phase == g.RESPONSE_ANIMATION) {
