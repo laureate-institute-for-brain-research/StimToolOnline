@@ -915,6 +915,17 @@ function experimentInit() {
 		depth: 0.0
 	});
 
+	g.result_outcome = new visual.TextStim({
+		win: psychoJS.window,
+		name: 'module_2a_outcome',
+		text: 'Correct',alignHoriz: 'center',
+		font: 'Arial',
+		units: 'norm',
+		pos: [0, 0.78], height: 0.09, wrapWidth: undefined, ori: 0,
+		color: new util.Color('white'), opacity: 1,
+		depth: 0.0
+	});
+
 	g.invites_text = new visual.TextStim({
 		win: psychoJS.window,
 		name: 'invites_text',
@@ -1536,7 +1547,10 @@ function clearStims() {
 	g.points_fixation_stim.status = PsychoJS.Status.NOT_STARTED;
 
 	g.invites_text.setAutoDraw(false);
-	g.invites_text.stauts = PsychoJS.Status.NOT_STARTED;
+	g.invites_text.status = PsychoJS.Status.NOT_STARTED;
+
+	g.result_outcome.setAutoDraw(false);
+	g.result_outcome.status = PsychoJS.Status.NOT_STARTED;
 
 	clearStatuStims();
 }
@@ -1975,9 +1989,8 @@ function module_2a(trial) {
 			g.choice_2.setAutoDraw(true);
 			// g.rooms_left_text.setText(`You have ${g.depth} moves`)
 			// g.rooms_left_text.setAutoDraw(true);
-			
+			g.prompt_text.pos = [0,0.67]
 			g.prompt_text.setText('Choose the door that will get you the most invites.');
-			g.prompt_text.pos = [0, 0.7];
 			g.prompt_text.setAutoDraw(true);
 
 			g.text_val_building.setText(g.building_type);
@@ -2001,21 +2014,24 @@ function module_2a(trial) {
 				if (theseKeys[0].name == g.LEFT_KEY) { g.response = 'left'; }
 				if (theseKeys[0].name == g.RIGHT_KEY) { g.response = 'right'; }
 
+				g.prompt_text.setAutoDraw(false);
+
 				// append the current tral to the schedule if they choose the wrong door
 				if (g.module_2a_schedule[g.module_2a_index][2] != g.response) {
 					// incorrect choice
 					g.module_2a_schedule.push(g.module_2a_schedule[g.module_2a_index]);
-					g.prompt_text.setText('Incorrect!');
-					g.prompt_text.color = 'red';
+					g.result_outcome.setText('INCORRECT');
+					g.result_outcome.color = 'red';
 					g.result = 'incorrect';
 				} else {
 					// correct
-					g.prompt_text.setText('Correct!');
-					g.prompt_text.color = 'green';
+					g.result_outcome.setText('CORRECT');
+					g.result_outcome.color = 'green';
 					g.module_2a_index++;
 					g.result = 'correct';
 				}
-
+				
+				g.result_outcome.setAutoDraw(true);
 				g.invite_path = g.path[g.current_path][g.response];
 				//clearStims();
 				
@@ -2033,6 +2049,7 @@ function module_2a(trial) {
 			// go to next trial
 			g.prompt_text.color = 'white';
 			clearStims();
+			g.result_outcome.setAutoDraw(true);
 			g.trial_phase = g.RESPONSE_ANIMATION;
 		}
 
@@ -2047,7 +2064,6 @@ function module_2a(trial) {
 			} else {
 				g.prompt_text.setText('Press SPACE key to go to next trial.');
 			}
-			
 			g.prompt_text.setAutoDraw(true);
 			g.text_val_building.setAutoDraw(true);
 			g.trial_phase = g.WAITING_KEY;
@@ -2068,7 +2084,6 @@ function module_2a(trial) {
 						g.prompt_text.setText('Press SPACE key to go to next trial.');
 						g.trial_phase = g.TRIAL_BEGIN;
 					}
-					
 				}
 			}
 		}
