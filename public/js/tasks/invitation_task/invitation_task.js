@@ -246,7 +246,7 @@ g.path = {
 // - current room
 // - building
 // - the correct door that should have been pressed.
-g.module_2a_schedule = [
+g.module_2b_schedule = [
 	[ 7,'library', 'left' ],
 	[ 7,'library', 'left' ],
 	[ 6,'library', 'right' ],
@@ -276,7 +276,7 @@ g.module_2a_schedule = [
 	[ 1,'office', 'left' ],
 	[ 1,'office', 'left' ]
 ]
-g.module_2a_index = 0; // keep track of index
+g.module_2b_index = 0; // keep track of index
 
 // Variable to hold the actual reponse
 g.outcome_text_response = '';
@@ -443,8 +443,8 @@ window.onload = function () {
 			// Sanitze the resources. Needs to be clean so that psychoJS doesn't complain
 			resources = sanitizeResources(resources)
 
-			// shuffle module_2a schedule
-			g.module_2a_schedule.sort((a, b) => 0.5 - Math.random());
+			// shuffle module_2b schedule
+			g.module_2b_schedule.sort((a, b) => 0.5 - Math.random());
 			
 			psychoJS.start({
 				expName, 
@@ -471,11 +471,11 @@ var expInfo = { 'participant': '', 'session': '', 'run_id': '', 'date': formatDa
 // Add Slides to resources
 var resources = [
 	{ name: 'practice_schedule.csv', path: '/js/tasks/invitation_task/practice_schedule.csv' },
-	{ name: 'PRACTICE_ready', path: '/js/tasks/cooperation_task/media/instructions/Slide15.jpeg' },
+	{ name: 'PRACTICE_ready', path: '/js/tasks/invitation_task/media/instructions/Slide4.jpeg' },
 	{ name: 'PRACTICE_ready_audio.mp3', path: '/js/tasks/cooperation_task/media/instructions_audio/Slide15.mp3'},
-	{ name: 'MAIN_ready', path: '/js/tasks/cooperation_task/media/instructions/Slide16.jpeg' },
+	{ name: 'MAIN_ready', path: '/js/tasks/invitation_task/media/instructions/Slide4.jpeg' },
 	{ name: 'MAIN_ready_audio.mp3', path: '/js/tasks/cooperation_task/media/instructions_audio/Slide16.mp3'},
-	{ name: 'BEGIN_slide', path: '/js/tasks/cooperation_task/media/instructions/Slide17.jpeg' },
+	{ name: 'BEGIN_slide', path: '/js/tasks/invitation_task/media/instructions/Slide4.jpeg' },
 	{ name: 'library_1', path: '/js/tasks/invitation_task/media/game_slides/lib_1.jpeg' },
 	{ name: 'library_2', path: '/js/tasks/invitation_task/media/game_slides/lib_2.jpeg' },
 	{ name: 'library_3', path: '/js/tasks/invitation_task/media/game_slides/lib_3.jpeg' },
@@ -917,7 +917,7 @@ function experimentInit() {
 
 	g.result_outcome = new visual.TextStim({
 		win: psychoJS.window,
-		name: 'module_2a_outcome',
+		name: 'module_2b_outcome',
 		text: 'Correct',alignHoriz: 'center',
 		font: 'Arial',
 		units: 'norm',
@@ -1831,13 +1831,13 @@ function module_1(trial) {
 }
 
 /**
- * Module 2:
+ * Module 2a:
  * - Forced Choice.
  * - Schedule in schedule file. Iterage over each room 2x
  * @param {*} trial 
  * @returns 
  */
-function module_2(trial) {
+function module_2a(trial) {
 	return function () {
 		if ( (g.trial_phase == g.TRIAL_BEGIN) && (g.depth <= 0 || g.current_path >= 8)) {
 			// move to next routine if reached max depth
@@ -1954,14 +1954,14 @@ function module_2(trial) {
 }
 
 /**
- * Module 2a:
+ * Module 2b:
  * - Each room shown 2x.
  * - Repeat room if they get it wrong.
  * - Need to have at least each room 2x in a row
  * @param {*} trial 
  * @returns 
  */
-function module_2a(trial) {
+function module_2b(trial) {
 	return function () {
 		if ( (g.trial_phase == g.TRIAL_BEGIN) && (g.depth <= 0 || g.current_path >= 8)) {
 			// move to next routine if reached max depth
@@ -1976,8 +1976,8 @@ function module_2a(trial) {
 		if (g.room_image.status == PsychoJS.Status.NOT_STARTED && g.trial_phase == g.TRIAL_BEGIN) {
 			// console.log('Module 2', g.current_path)
 			// current path is from the module 2a schedule
-			g.current_path = g.module_2a_schedule[g.module_2a_index][0];
-			g.building_type = g.module_2a_schedule[g.module_2a_index][1];
+			g.current_path = g.module_2b_schedule[g.module_2b_index][0];
+			g.building_type = g.module_2b_schedule[g.module_2b_index][1];
 			
 			g.room_image.setImage(g.building_type + '_' + g.current_path);
 			g.room_image.setAutoDraw(true);
@@ -2017,9 +2017,9 @@ function module_2a(trial) {
 				g.prompt_text.setAutoDraw(false);
 
 				// append the current tral to the schedule if they choose the wrong door
-				if (g.module_2a_schedule[g.module_2a_index][2] != g.response) {
+				if (g.module_2b_schedule[g.module_2b_index][2] != g.response) {
 					// incorrect choice
-					g.module_2a_schedule.push(g.module_2a_schedule[g.module_2a_index]);
+					g.module_2b_schedule.push(g.module_2b_schedule[g.module_2b_index]);
 					g.result_outcome.setText('INCORRECT');
 					g.result_outcome.color = 'red';
 					g.result = 'incorrect';
@@ -2027,7 +2027,7 @@ function module_2a(trial) {
 					// correct
 					g.result_outcome.setText('CORRECT');
 					g.result_outcome.color = 'green';
-					g.module_2a_index++;
+					g.module_2b_index++;
 					g.result = 'correct';
 				}
 				
@@ -2058,7 +2058,7 @@ function module_2a(trial) {
 			
 			g.room_image_invite.setImage(g.building_type + '_invite_' + g.invite_path)
 			g.room_image_invite.setAutoDraw(true);
-			if (g.module_2a_index == g.module_2a_schedule.length) {
+			if (g.module_2b_index == g.module_2b_schedule.length) {
 				// last trial
 				g.prompt_text.setText('Press SPACE key to exit the building.');
 			} else {
@@ -2076,7 +2076,7 @@ function module_2a(trial) {
 				if (theseKeys[0].name == 'space') {
 					// prepare for next phase
 					clearStims();
-					if (g.module_2a_index >= g.module_2a_schedule.length) {
+					if (g.module_2b_index >= g.module_2b_schedule.length) {
 						// last trial
 						g.prompt_text.setText('Press SPACE key to exit the building.');
 						return Scheduler.Event.NEXT;
@@ -2292,8 +2292,8 @@ function fixation(trial) {
 function runModule(trial) {
 	switch (trial.module) {
 		case 1: return module_1(trial)
-		case 2: return module_2(trial)
 		case '2a': return module_2a(trial)
+		case '2b': return module_2b(trial)
 		case 3: return module_3(trial)
 	}
 }
