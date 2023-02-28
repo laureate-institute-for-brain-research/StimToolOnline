@@ -247,36 +247,44 @@ g.path = {
 // - building
 // - the correct door that should have been pressed.
 g.module_2b_schedule = [
-	[ 7,'library', 'left' ],
-	[ 7,'library', 'left' ],
-	[ 6,'library', 'right' ],
-	[ 6,'library', 'right' ],
-	[ 5,'library', 'left' ],
-	[ 5,'library', 'left' ],
-	[ 4,'library', 'right' ],
-	[ 4,'library', 'right' ],
-	[ 3,'library', 'left' ],
-	[ 3,'library', 'left' ],
-	[ 2,'library', 'right' ],
-	[ 2,'library', 'right' ],
-	[ 1,'library', 'right' ],
-	[ 1,'library', 'right' ],
-	[ 7,'office', 'left' ],
-	[ 7,'office', 'left' ],
-	[ 6,'office', 'left' ],
-	[ 6,'office', 'left' ],
-	[ 5,'office', 'left' ],
-	[ 5,'office', 'left' ],
-	[ 4,'office', 'right' ],
-	[ 4,'office', 'right' ],
-	[ 3,'office', 'left' ],
-	[ 3,'office', 'left' ],
-	[ 2,'office', 'left' ],
-	[ 2,'office', 'left' ],
-	[ 1,'office', 'left' ],
-	[ 1,'office', 'left' ]
+	[ 7,'library', g.path[g.path[7]['left']]['accepted']['library'], 'left' ],
+	[ 7,'library', g.path[g.path[7]['right']]['accepted']['library'], 'right' ],
+	[ 6,'library', g.path[g.path[6]['left']]['accepted']['library'], 'left' ],
+	[ 6,'library', g.path[g.path[6]['right']]['accepted']['library'], 'right' ],
+	[ 5,'library', g.path[g.path[5]['left']]['accepted']['library'], 'left' ],
+	[ 5,'library', g.path[g.path[5]['right']]['accepted']['library'], 'right' ],
+	[ 4,'library', g.path[g.path[4]['left']]['accepted']['library'], 'left' ],
+	[ 4,'library', g.path[g.path[4]['right']]['accepted']['library'], 'right' ],
+	[ 3,'library', g.path[g.path[3]['left']]['accepted']['library'], 'left' ],
+	[ 3,'library', g.path[g.path[3]['right']]['accepted']['library'], 'right' ],
+	[ 2,'library', g.path[g.path[2]['left']]['accepted']['library'], 'left' ],
+	[ 2,'library', g.path[g.path[2]['right']]['accepted']['library'], 'right' ],
+	[ 1,'library', g.path[g.path[1]['left']]['accepted']['library'], 'left' ],
+	[ 1,'library', g.path[g.path[1]['right']]['accepted']['library'], 'right' ],
+	[ 7,'office', g.path[g.path[7]['left']]['accepted']['office'], 'left' ],
+	[ 7,'office', g.path[g.path[7]['right']]['accepted']['office'], 'right' ],
+	[ 6,'office', g.path[g.path[6]['left']]['accepted']['office'], 'left' ],
+	[ 6,'office', g.path[g.path[6]['right']]['accepted']['office'], 'right' ],
+	[ 5,'office', g.path[g.path[5]['left']]['accepted']['office'], 'left' ],
+	[ 5,'office', g.path[g.path[5]['right']]['accepted']['office'], 'right' ],
+	[ 4,'office', g.path[g.path[4]['left']]['accepted']['library'], 'left' ],
+	[ 4,'office', g.path[g.path[4]['right']]['accepted']['library'], 'right' ],
+	[ 3,'office', g.path[g.path[3]['left']]['accepted']['office'], 'left' ],
+	[ 3,'office', g.path[g.path[3]['right']]['accepted']['office'], 'right' ],
+	[ 2,'office', g.path[g.path[2]['left']]['accepted']['office'], 'left' ],
+	[ 2,'office', g.path[g.path[2]['right']]['accepted']['office'], 'right' ],
+	[ 1,'office', g.path[g.path[1]['left']]['accepted']['office'], 'left' ],
+	[ 1,'office', g.path[g.path[1]['right']]['accepted']['office'] , 'right']
 ]
 g.module_2b_index = 0; // keep track of index
+
+// mapping for the button options
+g.option_map = {
+	'a': 0,
+	'b': 5,
+	'c': 10,
+	'd': 20
+}
 
 // Variable to hold the actual reponse
 g.outcome_text_response = '';
@@ -922,6 +930,16 @@ function experimentInit() {
 		font: 'Arial',
 		units: 'norm',
 		pos: [0, 0.78], height: 0.09, wrapWidth: undefined, ori: 0,
+		color: new util.Color('white'), opacity: 1,
+		depth: 0.0
+	});
+
+	g.options_text = new visual.TextStim({
+		win: psychoJS.window,
+		name: 'options_text',
+		text: 'a = 0          b = 5          c = 10          d = 20',
+		alignHoriz: 'center',font: 'Arial',units: 'norm',
+		pos: [0, 0.67], height: 0.09, wrapWidth: undefined, ori: 0,
 		color: new util.Color('white'), opacity: 1,
 		depth: 0.0
 	});
@@ -1978,19 +1996,27 @@ function module_2b(trial) {
 			// current path is from the module 2a schedule
 			g.current_path = g.module_2b_schedule[g.module_2b_index][0];
 			g.building_type = g.module_2b_schedule[g.module_2b_index][1];
-			
+			g.forced_choice = g.module_2b_schedule[g.module_2b_index][3];
+			// g.room_image.size = [1.2, 0.7];
+			// g.room_image.pos = [0, -0.09];
 			g.room_image.setImage(g.building_type + '_' + g.current_path);
 			g.room_image.setAutoDraw(true);
-			
-			g.left_door.setAutoDraw(true);
-			g.choice_1.setAutoDraw(true);
 
-			g.right_door.setAutoDraw(true);
-			g.choice_2.setAutoDraw(true);
+			g.options_text.setAutoDraw(true);
+
+			if (g.forced_choice == 'left') {
+				g.left_door.setAutoDraw(true);
+				g.choice_1.setAutoDraw(true);
+			}
+			if (g.forced_choice == 'right') {
+				g.right_door.setAutoDraw(true);
+				g.choice_2.setAutoDraw(true);
+			}
+			
 			// g.rooms_left_text.setText(`You have ${g.depth} moves`)
 			// g.rooms_left_text.setAutoDraw(true);
-			g.prompt_text.pos = [0,0.67]
-			g.prompt_text.setText('Choose the door that will get you the most invites.');
+			g.prompt_text.pos = [0,0.88]
+			g.prompt_text.setText('How many YES will you recieve in the next room?');
 			g.prompt_text.setAutoDraw(true);
 
 			g.text_val_building.setText(g.building_type);
@@ -2000,7 +2026,7 @@ function module_2b(trial) {
 		}
 
 		if (g.trial_phase == g.WAITING_SELECTION) {
-			let theseKeys = ready.getKeys({ keyList: [ g.LEFT_KEY, g.RIGHT_KEY], waitRelease: false });
+			let theseKeys = ready.getKeys({ keyList: [ 'a','b','c','d'], waitRelease: false });
 			if (theseKeys.length > 0) {
 				// increment trial invites
 				// based ond current position and the building type
@@ -2010,14 +2036,14 @@ function module_2b(trial) {
 				
 				// total invites
 				g.total_invites = g.total_invites + g.accepted_invites;
-
-				if (theseKeys[0].name == g.LEFT_KEY) { g.response = 'left'; }
-				if (theseKeys[0].name == g.RIGHT_KEY) { g.response = 'right'; }
-
+				g.response = theseKeys[0].name;
+				g.correct_yes = g.option_map[g.response];
 				g.prompt_text.setAutoDraw(false);
 
+				// console.log(g.response, g.correct_yes, g.module_2b_schedule[g.module_2b_index][2])
+
 				// append the current tral to the schedule if they choose the wrong door
-				if (g.module_2b_schedule[g.module_2b_index][2] != g.response) {
+				if (g.module_2b_schedule[g.module_2b_index][2] != g.correct_yes) {
 					// incorrect choice
 					g.module_2b_schedule.push(g.module_2b_schedule[g.module_2b_index]);
 					g.result_outcome.setText('INCORRECT');
@@ -2032,7 +2058,7 @@ function module_2b(trial) {
 				}
 				
 				g.result_outcome.setAutoDraw(true);
-				g.invite_path = g.path[g.current_path][g.response];
+				g.invite_path = g.path[g.current_path][g.forced_choice];
 				//clearStims();
 				
 				// prepare for next phase
