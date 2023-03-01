@@ -1,0 +1,13 @@
+module,trial_number,start,building_type,depth,OLL_ONLL,ITI,forced_choice,path_version
+2b,0,2,library,1,NA,1,X,1
+2b,1,4,office,1,NA,1.5,X,1
+2b,2,6,library,1,NA,0.5,X,1
+2b,3,3,office,1,NA,1,X,1
+2b,4,4,library,1,NA,0.5,X,1
+2b,5,2,office,1,NA,1,X,1
+2b,6,3,library,1,NA,1.5,X,1
+2b,7,6,office,1,NA,0.5,X,1
+2b,8,5,library,1,NA,1.5,X,1
+2b,9,5,office,1,NA,1,X,1
+2b,10,7,library,1,NA,1.5,X,1
+2b,11,7,office,1,NA,0.5,X,1

@@ -452,7 +452,7 @@ window.onload = function () {
 			resources = sanitizeResources(resources)
 
 			// shuffle module_2b schedule
-			g.module_2b_schedule.sort((a, b) => 0.5 - Math.random());
+			// g.module_2b_schedule.sort((a, b) => 0.5 - Math.random());
 			
 			psychoJS.start({
 				expName, 
@@ -1423,6 +1423,28 @@ function readyRoutineEnd(trials) {
 	};
 }
 
+/**
+ * Generate the Module 2b schedule from schedule file
+ * @param {*} trials 
+ */
+function generateModule2bSchedule(trials) {
+	// g.module_2b_schedule = [
+	// [ 7,'library', g.path[g.path[7]['left']]['accepted']['library'], 'left' ],
+	// g.module_2b_schedule = []
+	// iterate over trial list
+	trials._trialList.forEach(trial => {
+		// console.log(trial)
+		let start = trial.start;
+		let building_type = trial.building_type;
+		let forced_choice = trial.forced_choice;
+		// g.module_2b_schedule.push([
+		// 	start, building_type, 
+		// 	g.path[g.path[start][forced_choice]]['accepted'][building_type],
+		// 	forced_choice
+		// ])
+	})
+}
+
 var trials;
 var trial_type;
 function practiceTrialsLoopBegin(thisScheduler) {
@@ -1478,6 +1500,9 @@ function trialsLoopBegin(thisScheduler) {
 		trialList: 'run_schedule.xls',
 		seed: undefined, name: 'trials'
 	});
+
+	// make module 2b schedule
+	generateModule2bSchedule(trials)
 
 	g.global_trial_number = 0;
 	g.game_number = 1;
