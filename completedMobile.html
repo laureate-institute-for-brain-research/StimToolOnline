@@ -153,14 +153,17 @@
                 $("#study").text(expInfo.study);
 
             })
-        document.getElementById('mturkcode').innerHTML = getQueryVariable('id').split('-')[3].toUpperCase()
+
+        // OLD WAY and NEW WAY. The difference is adding two random single digit integer (0-9) to the end to make it likely that the code is slightly different between sessions.
+        //document.getElementById('mturkcode').innerHTML = getQueryVariable('id').split('-')[3].toUpperCase()
+        document.getElementById('mturkcode').innerHTML = getQueryVariable('id').split('-')[3].toUpperCase() + Math.floor(Math.random() * 10) + Math.floor(Math.random() * 10)
 
         $.ajax({
                 type: "POST",
                 url: '/SaveHitCSV',
                 data: {
                     "csvpath": "/media/stimtool_online/HIT_CODES/hit_codes.csv",
-                    "content": (getQueryVariable('id').split('-')[3].toUpperCase() + ",")
+                    "content": (document.getElementById('mturkcode').innerHTML + ",")
                 },
                 dataType: 'JSON',
                 statusCode: {
