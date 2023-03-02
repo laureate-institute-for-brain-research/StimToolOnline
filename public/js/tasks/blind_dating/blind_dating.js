@@ -46,6 +46,25 @@ const psychoJS = new PsychoJS({
 	debug: false
 });
 
+function waitForElm(selector) {
+    return new Promise(resolve => {
+        if (document.querySelector(selector)) {
+            return resolve(document.querySelector(selector));
+        }
+
+        const observer = new MutationObserver(mutations => {
+            if (document.querySelector(selector)) {
+                resolve(document.querySelector(selector));
+                observer.disconnect();
+            }
+        });
+
+        observer.observe(document.body, {
+            childList: true,
+            subtree: true
+        });
+    });
+}
 
 window.onload = function () {
 	var id = getQueryVariable('id')
@@ -190,6 +209,15 @@ psychoJS.schedule(psychoJS.gui.DlgFromDict({
 	dictionary: expInfo,
 	title: expName
 }));
+
+waitForElm('.ui-dialog').then((elm) => {
+	$("#buttonOk").button("option", "disabled", true);
+	$('#progressMsg').on('DOMSubtreeModified', function () {
+		if (document.getElementById('progressMsg').textContent == 'all resources downloaded') {
+			$("#buttonOk").button("option", "disabled", false);
+		}
+	});
+});
 
 const flowScheduler = new Scheduler(psychoJS);
 const dialogCancelScheduler = new Scheduler(psychoJS);
