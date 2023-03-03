@@ -2065,6 +2065,24 @@ function trialRoutineEnd(trials) { //TODO: Change this so that there is a jitter
 			// hold the fixation for 2 second + jitter
 			if (t <= ITI + 1.5) {
 				return Scheduler.Event.FLIP_REPEAT;
+			}
+			else if (t < ITI + 1.5 + 1.5) {
+				if (trial_number + 1 == 56) {
+					points_fixation_stim.setText('~ 25 minutes remaining')
+				}
+				else if (trial_number + 1 == 112) {
+					points_fixation_stim.setText('~ 20 minutes remaining')
+				}
+				else if (trial_number + 1 == 168) {
+					points_fixation_stim.setText('~ 15 minutes remaining')
+				}
+				else if (trial_number + 1 == 224) {
+					points_fixation_stim.setText('~ 10 minutes remaining')
+				}
+				else if (trial_number + 1 == 280) {
+					points_fixation_stim.setText('~ 5 minutes remaining')
+				}
+				return Scheduler.Event.FLIP_REPEAT;
 			} else {
 				resp.stop()
 				resp.status = PsychoJS.Status.NOT_STARTED
@@ -2082,6 +2100,24 @@ function trialRoutineEnd(trials) { //TODO: Change this so that there is a jitter
 		{
 			// hold the fixation for jitter time
 			if (t <= ITI + 1.5) {
+				return Scheduler.Event.FLIP_REPEAT;
+			}
+			else if (t < ITI + 1.5 + 1.5) {
+				if (trial_number + 1 == 56) {
+					points_fixation_stim.setText('~ 25 minutes remaining')
+				}
+				else if (trial_number + 1 == 112) {
+					points_fixation_stim.setText('~ 20 minutes remaining')
+				}
+				else if (trial_number + 1 == 168) {
+					points_fixation_stim.setText('~ 15 minutes remaining')
+				}
+				else if (trial_number + 1 == 224) {
+					points_fixation_stim.setText('~ 10 minutes remaining')
+				}
+				else if (trial_number + 1 == 280) {
+					points_fixation_stim.setText('~ 5 minutes remaining')
+				}
 				return Scheduler.Event.FLIP_REPEAT;
 			} else {
 				resp.stop()
