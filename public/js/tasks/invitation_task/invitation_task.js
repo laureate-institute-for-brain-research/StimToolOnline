@@ -808,7 +808,7 @@ function experimentInit() {
 		text: 'Total Invites Accepted:',alignHoriz: 'right',
 		font: 'Arial',
 		units: 'norm',
-		pos: [0.79, 0.82], height: 0.07, wrapWidth: undefined, ori: 0,
+		pos: [0.76, 0.82], height: 0.07, wrapWidth: undefined, ori: 0,
 		color: new util.Color('white'), opacity: 1,
 		depth: 0.0
 	});
