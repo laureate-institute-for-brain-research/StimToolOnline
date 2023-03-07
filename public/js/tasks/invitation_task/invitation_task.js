@@ -1027,7 +1027,10 @@ function experimentInit() {
 
 	endClock = new util.Clock();
 
-	resp = new core.Keyboard({ psychoJS, clock: new util.Clock(), waitForStart: true });
+	resp = new core.Keyboard({
+		psychoJS, clock: new util.Clock(),
+		waitForStart: true
+	});
 
 	// Initiali comnponenents for Routine 'read'y
 	readyClock = new util.Clock();
@@ -1361,8 +1364,10 @@ function readyRoutineBegin(block_type, image_stim, audio_stim) {
 				track = undefined;
 		}
 		
-		mark_event(trials_data, globalClock, 0, block_type, event_types['BLOCK_ONSET'],
-				'NA', 'NA', 'NA')
+		mark_event(
+			trials_data, globalClock, 0, block_type, event_types['BLOCK_ONSET'],
+			'NA', 'NA', 'NA'
+		)
 	
 		routineTimer.add(2.000000);
 		// update component parameters for each repeat
@@ -1669,7 +1674,6 @@ function trialRoutineBegin(trial) {
 
 		g.text_val_invites.setText(g.total_invites);
 		
-	
 		// g.text_module.setAutoDraw(true);
 		// g.text_val_module.setText(trial.module);
 		// g.text_val_module.setAutoDraw(true);
@@ -2167,6 +2171,11 @@ function module_3(trial) {
 
 			g.time_left_text.setText('9s');
 			g.time_left_text.setAutoDraw(true);
+
+			g.text_val_trial_number.setAutoDraw(true);
+			g.text_invites.setAutoDraw(true);
+			g.text_val_invites.setText(g.total_invites);
+			g.text_val_invites.setAutoDraw(true);
 
 			g.trial_phase = g.PLANNING_PHASE;
 			g.planningTimer.reset(g.PLANNING_DURATION);
