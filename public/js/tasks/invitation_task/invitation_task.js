@@ -247,34 +247,34 @@ g.path = {
 // - building
 // - the correct door that should have been pressed.
 g.module_2b_schedule = [
-	[ 7,'library', g.path[g.path[7]['left']]['accepted']['library'], 'left' ],
-	[ 7,'library', g.path[g.path[7]['right']]['accepted']['library'], 'right' ],
-	[ 6,'library', g.path[g.path[6]['left']]['accepted']['library'], 'left' ],
-	[ 6,'library', g.path[g.path[6]['right']]['accepted']['library'], 'right' ],
-	[ 5,'library', g.path[g.path[5]['left']]['accepted']['library'], 'left' ],
-	[ 5,'library', g.path[g.path[5]['right']]['accepted']['library'], 'right' ],
-	[ 4,'library', g.path[g.path[4]['left']]['accepted']['library'], 'left' ],
-	[ 4,'library', g.path[g.path[4]['right']]['accepted']['library'], 'right' ],
-	[ 3,'library', g.path[g.path[3]['left']]['accepted']['library'], 'left' ],
-	[ 3,'library', g.path[g.path[3]['right']]['accepted']['library'], 'right' ],
-	[ 2,'library', g.path[g.path[2]['left']]['accepted']['library'], 'left' ],
-	[ 2,'library', g.path[g.path[2]['right']]['accepted']['library'], 'right' ],
-	[ 1,'library', g.path[g.path[1]['left']]['accepted']['library'], 'left' ],
-	[ 1,'library', g.path[g.path[1]['right']]['accepted']['library'], 'right' ],
-	[ 7,'office', g.path[g.path[7]['left']]['accepted']['office'], 'left' ],
-	[ 7,'office', g.path[g.path[7]['right']]['accepted']['office'], 'right' ],
-	[ 6,'office', g.path[g.path[6]['left']]['accepted']['office'], 'left' ],
-	[ 6,'office', g.path[g.path[6]['right']]['accepted']['office'], 'right' ],
-	[ 5,'office', g.path[g.path[5]['left']]['accepted']['office'], 'left' ],
-	[ 5,'office', g.path[g.path[5]['right']]['accepted']['office'], 'right' ],
-	[ 4,'office', g.path[g.path[4]['left']]['accepted']['library'], 'left' ],
-	[ 4,'office', g.path[g.path[4]['right']]['accepted']['library'], 'right' ],
-	[ 3,'office', g.path[g.path[3]['left']]['accepted']['office'], 'left' ],
-	[ 3,'office', g.path[g.path[3]['right']]['accepted']['office'], 'right' ],
-	[ 2,'office', g.path[g.path[2]['left']]['accepted']['office'], 'left' ],
-	[ 2,'office', g.path[g.path[2]['right']]['accepted']['office'], 'right' ],
-	[ 1,'office', g.path[g.path[1]['left']]['accepted']['office'], 'left' ],
-	[ 1,'office', g.path[g.path[1]['right']]['accepted']['office'] , 'right']
+	// [ 7,'library', g.path[g.path[7]['left']]['accepted']['library'], 'left' ],
+	// [ 7,'library', g.path[g.path[7]['right']]['accepted']['library'], 'right' ],
+	// [ 6,'library', g.path[g.path[6]['left']]['accepted']['library'], 'left' ],
+	// [ 6,'library', g.path[g.path[6]['right']]['accepted']['library'], 'right' ],
+	// [ 5,'library', g.path[g.path[5]['left']]['accepted']['library'], 'left' ],
+	// [ 5,'library', g.path[g.path[5]['right']]['accepted']['library'], 'right' ],
+	// [ 4,'library', g.path[g.path[4]['left']]['accepted']['library'], 'left' ],
+	// [ 4,'library', g.path[g.path[4]['right']]['accepted']['library'], 'right' ],
+	// [ 3,'library', g.path[g.path[3]['left']]['accepted']['library'], 'left' ],
+	// [ 3,'library', g.path[g.path[3]['right']]['accepted']['library'], 'right' ],
+	// [ 2,'library', g.path[g.path[2]['left']]['accepted']['library'], 'left' ],
+	// [ 2,'library', g.path[g.path[2]['right']]['accepted']['library'], 'right' ],
+	// [ 1,'library', g.path[g.path[1]['left']]['accepted']['library'], 'left' ],
+	// [ 1,'library', g.path[g.path[1]['right']]['accepted']['library'], 'right' ],
+	// [ 7,'office', g.path[g.path[7]['left']]['accepted']['office'], 'left' ],
+	// [ 7,'office', g.path[g.path[7]['right']]['accepted']['office'], 'right' ],
+	// [ 6,'office', g.path[g.path[6]['left']]['accepted']['office'], 'left' ],
+	// [ 6,'office', g.path[g.path[6]['right']]['accepted']['office'], 'right' ],
+	// [ 5,'office', g.path[g.path[5]['left']]['accepted']['office'], 'left' ],
+	// [ 5,'office', g.path[g.path[5]['right']]['accepted']['office'], 'right' ],
+	// [ 4,'office', g.path[g.path[4]['left']]['accepted']['library'], 'left' ],
+	// [ 4,'office', g.path[g.path[4]['right']]['accepted']['library'], 'right' ],
+	// [ 3,'office', g.path[g.path[3]['left']]['accepted']['office'], 'left' ],
+	// [ 3,'office', g.path[g.path[3]['right']]['accepted']['office'], 'right' ],
+	// [ 2,'office', g.path[g.path[2]['left']]['accepted']['office'], 'left' ],
+	// [ 2,'office', g.path[g.path[2]['right']]['accepted']['office'], 'right' ],
+	// [ 1,'office', g.path[g.path[1]['left']]['accepted']['office'], 'left' ],
+	// [ 1,'office', g.path[g.path[1]['right']]['accepted']['office'] , 'right']
 ]
 g.module_2b_index = 0; // keep track of index
 
@@ -284,6 +284,23 @@ g.option_map = {
 	'b': 5,
 	'c': 10,
 	'd': 20
+}
+g.options_pos = {
+	'choice_a_text':   [-0.50, 0.34], 
+	'choice_a_accept': [-0.43, 0.34],
+	'choice_a_reject': [-0.37, 0.34],
+
+	'choice_b_text':   [-0.18, 0.34], 
+	'choice_b_accept': [-0.13, 0.34], 
+	'choice_b_reject': [-0.06, 0.34], 
+
+	'choice_c_text':   [ 0.10, 0.34], 
+	'choice_c_accept': [ 0.16, 0.34], 
+	'choice_c_reject': [ 0.23, 0.34],
+
+	'choice_d_text':   [ 0.37, 0.34], 
+	'choice_d_accept': [ 0.43, 0.34], 
+	'choice_d_reject': [ 0.51, 0.34], 
 }
 
 // Variable to hold the actual reponse
@@ -937,10 +954,138 @@ function experimentInit() {
 	g.options_text = new visual.TextStim({
 		win: psychoJS.window,
 		name: 'options_text',
-		text: 'a = 0          b = 5          c = 10          d = 20',
-		alignHoriz: 'center',font: 'Arial',units: 'norm',
-		pos: [0, 0.67], height: 0.09, wrapWidth: undefined, ori: 0,
+		text: 'a =__ | __  b = __ | __  c = __ | __  d = __ | __',
+		alignHoriz: 'center', alignVert: 'center', font: 'Arial', units: 'norm',
+		pos: [0, 0.65], height: 0.09, width: 2, wrapWidth: true, ori: 0,
 		color: new util.Color('white'), opacity: 1,
+		depth: 0.0
+	});
+
+	g.accept_text = new visual.TextStim({
+		win: psychoJS.window,
+		name: 'accept_text',
+		text: 'ACCEPTED',
+		alignHoriz: 'center', alignVert: 'center', font: 'Arial', units: 'height',
+		pos: [-0.147, 0.457], height: 0.03, width: 2, wrapWidth: true, ori: 0,
+		color: new util.Color('green'), opacity: 1,
+		depth: 0.0
+	});
+	g.reject_text = new visual.TextStim({
+		win: psychoJS.window,
+		name: 'reject_text',
+		text: 'REJECTED',
+		alignHoriz: 'center', alignVert: 'center', font: 'Arial', units: 'height',
+		pos: [0.025, 0.457], height: 0.03, width: 2, wrapWidth: true, ori: 0,
+		color: new util.Color('red'), opacity: 1,
+		depth: 0.0
+	});
+
+	g.choice_a_text = new visual.TextStim({
+		win: psychoJS.window,
+		name: 'choice_a_text',
+		text: 'a=',
+		alignHoriz: 'center',font: 'Arial',units: 'height',
+		pos: g.options_pos['choice_a_text'], height: 0.05, wrapWidth: undefined, ori: 0,
+		color: new util.Color('white'), opacity: 1,
+		depth: 0.0
+	});
+	g.choice_a_accept = new visual.TextStim({
+		win: psychoJS.window,
+		name: 'choice_a_accept',
+		text: '0',
+		alignHoriz: 'center',font: 'Arial',units: 'height',
+		pos: g.options_pos['choice_a_accept'], height: 0.05, wrapWidth: undefined, ori: 0,
+		color: new util.Color('green'), opacity: 1,
+		depth: 0.0
+	});
+	g.choice_a_reject = new visual.TextStim({
+		win: psychoJS.window,
+		name: 'choice_a_reject',
+		text: '0',
+		alignHoriz: 'center',font: 'Arial',units: 'height',
+		pos: g.options_pos['choice_a_reject'], height: 0.05, wrapWidth: undefined, ori: 0,
+		color: new util.Color('red'), opacity: 1,
+		depth: 0.0
+	});
+	g.choice_b_text = new visual.TextStim({
+		win: psychoJS.window,
+		name: 'choice_b_text',
+		text: 'b=',
+		alignHoriz: 'center',font: 'Arial',units: 'height',
+		pos: g.options_pos['choice_b_text'], height: 0.05, wrapWidth: undefined, ori: 0,
+		color: new util.Color('white'), opacity: 1,
+		depth: 0.0
+	});
+	g.choice_b_accept = new visual.TextStim({
+		win: psychoJS.window,
+		name: 'choice_b_accept',
+		text: '0',
+		alignHoriz: 'center',font: 'Arial',units: 'height',
+		pos: g.options_pos['choice_b_accept'], height: 0.05, wrapWidth: undefined, ori: 0,
+		color: new util.Color('green'), opacity: 1,
+		depth: 0.0
+	});
+	g.choice_b_reject = new visual.TextStim({
+		win: psychoJS.window,
+		name: 'choice_b_reject',
+		text: '0',
+		alignHoriz: 'center',font: 'Arial',units: 'height',
+		pos: g.options_pos['choice_b_reject'], height: 0.05, wrapWidth: undefined, ori: 0,
+		color: new util.Color('red'), opacity: 1,
+		depth: 0.0
+	});
+	g.choice_c_text = new visual.TextStim({
+		win: psychoJS.window,
+		name: 'choice_c_text',
+		text: 'c=',
+		alignHoriz: 'center',font: 'Arial',units: 'height',
+		pos: g.options_pos['choice_c_text'], height: 0.05, wrapWidth: undefined, ori: 0,
+		color: new util.Color('white'), opacity: 1,
+		depth: 0.0
+	});
+	g.choice_c_accept = new visual.TextStim({
+		win: psychoJS.window,
+		name: 'choice_c_accept',
+		text: '0',
+		alignHoriz: 'center',font: 'Arial',units: 'height',
+		pos: g.options_pos['choice_c_accept'], height: 0.05, wrapWidth: undefined, ori: 0,
+		color: new util.Color('green'), opacity: 1,
+		depth: 0.0
+	});
+	g.choice_c_reject = new visual.TextStim({
+		win: psychoJS.window,
+		name: 'choice_c_reject',
+		text: '0',
+		alignHoriz: 'center',font: 'Arial',units: 'height',
+		pos: g.options_pos['choice_c_reject'], height: 0.05, wrapWidth: undefined, ori: 0,
+		color: new util.Color('red'), opacity: 1,
+		depth: 0.0
+	});
+	g.choice_d_text = new visual.TextStim({
+		win: psychoJS.window,
+		name: 'choice_d_text',
+		text: 'd=',
+		alignHoriz: 'center',font: 'Arial',units: 'height',
+		pos: g.options_pos['choice_d_text'], height: 0.05, wrapWidth: undefined, ori: 0,
+		color: new util.Color('white'), opacity: 1,
+		depth: 0.0
+	});
+	g.choice_d_accept = new visual.TextStim({
+		win: psychoJS.window,
+		name: 'choice_d_accept',
+		text: '0',
+		alignHoriz: 'center',font: 'Arial',units: 'height',
+		pos: g.options_pos['choice_d_accept'], height: 0.05, wrapWidth: undefined, ori: 0,
+		color: new util.Color('green'), opacity: 1,
+		depth: 0.0
+	});
+	g.choice_d_reject = new visual.TextStim({
+		win: psychoJS.window,
+		name: 'choice_d_reject',
+		text: '0',
+		alignHoriz: 'center',font: 'Arial',units: 'height',
+		pos: g.options_pos['choice_d_reject'], height: 0.05, wrapWidth: undefined, ori: 0,
+		color: new util.Color('red'), opacity: 1,
 		depth: 0.0
 	});
 
@@ -1514,8 +1659,29 @@ function trialsLoopBegin(thisScheduler) {
 
 	psychoJS.experiment.addLoop(trials); // add the loop to the experiment
 
-	// Schedule all the trials in the trialList:
-	for (const thisBlock of trials) {
+	// for module 2b dontt add all trials
+	if (getQueryVariable('run').includes('PR2b')) {
+		for (const thisBlock of trials) {
+			// add trials information to the module_2b_schedule
+			let start = thisBlock.start;
+			let building_type = thisBlock.building_type;
+			let forced_choice = thisBlock.forced_choice;
+			let path_version = thisBlock.path_version;
+			// console.log(thisBlock)
+			let single_question = [
+				start,
+				building_type,
+				g.path[g.path[start][forced_choice]]['accepted'][building_type],
+				forced_choice,
+				path_version,
+				thisBlock.a,
+				thisBlock.b,
+				thisBlock.c,
+				thisBlock.d
+			];
+			g.module_2b_schedule.push(single_question)
+				// [ 7,'library', g.path[g.path[7]['left']]['accepted']['library'], 'left' ],
+		}
 		const snapshot = trials.getSnapshot();
 		thisScheduler.add(importConditions(snapshot));
 		thisScheduler.add(initialFixation(snapshot));
@@ -1525,7 +1691,22 @@ function trialsLoopBegin(thisScheduler) {
 		thisScheduler.add(trialOutcome(snapshot));			// trial outcome
 		thisScheduler.add(blockRoutineEnd(snapshot));		// end block
 		thisScheduler.add(endLoopIteration(thisScheduler, snapshot));
+	} else {
+		// Schedule all the trials in the trialList:
+		for (const thisBlock of trials) {
+			const snapshot = trials.getSnapshot();
+			thisScheduler.add(importConditions(snapshot));
+			thisScheduler.add(initialFixation(snapshot));
+			thisScheduler.add(trialRoutineBegin(snapshot)); 	// setup block
+			thisScheduler.add(fixation(snapshot));				// fixation
+			thisScheduler.add(runModule(snapshot));				// run MOdule
+			thisScheduler.add(trialOutcome(snapshot));			// trial outcome
+			thisScheduler.add(blockRoutineEnd(snapshot));		// end block
+			thisScheduler.add(endLoopIteration(thisScheduler, snapshot));
+		}
 	}
+
+	
 	trial_type = 'MAIN'
 	mark_event(trials_data, globalClock, 'NA', trial_type, event_types['BLOCK_ONSET'],
 				'NA', 'NA' , 'NA')
@@ -1599,6 +1780,13 @@ function clearStims() {
 
 	g.result_outcome.setAutoDraw(false);
 	g.result_outcome.status = PsychoJS.Status.NOT_STARTED;
+
+	g.accept_text.setAutoDraw(false);
+	g.accept_text.status = PsychoJS.Status.NOT_STARTED;
+
+	g.reject_text.setAutoDraw(false);
+	g.reject_text.status = PsychoJS.Status.NOT_STARTED;
+	
 
 	clearStatuStims();
 }
@@ -2026,12 +2214,42 @@ function module_2b(trial) {
 			g.current_path = g.module_2b_schedule[g.module_2b_index][0];
 			g.building_type = g.module_2b_schedule[g.module_2b_index][1];
 			g.forced_choice = g.module_2b_schedule[g.module_2b_index][3];
+			g.choice_a = g.module_2b_schedule[g.module_2b_index][5];
+			g.choice_b = g.module_2b_schedule[g.module_2b_index][6];
+			g.choice_c = g.module_2b_schedule[g.module_2b_index][7];
+			g.choice_d = g.module_2b_schedule[g.module_2b_index][8];
 			// g.room_image.size = [1.2, 0.7];
 			// g.room_image.pos = [0, -0.09];
 			g.room_image.setImage(g.building_type + '_' + g.current_path);
 			g.room_image.setAutoDraw(true);
 
-			g.options_text.setAutoDraw(true);
+			// g.options_text.setAutoDraw(true);
+			// set options
+			g.choice_a_accept.setText(g.choice_a.split('-')[0]);
+			g.choice_a_reject.setText(g.choice_a.split('-')[1]);
+			g.choice_b_accept.setText(g.choice_b.split('-')[0]);
+			g.choice_b_reject.setText(g.choice_b.split('-')[1]);
+			g.choice_c_accept.setText(g.choice_c.split('-')[0]);
+			g.choice_c_reject.setText(g.choice_c.split('-')[1]);
+			g.choice_d_accept.setText(g.choice_d.split('-')[0]);
+			g.choice_d_reject.setText(g.choice_d.split('-')[1]);
+			
+
+			g.choice_a_text.setAutoDraw(true);
+			g.choice_a_accept.setAutoDraw(true);
+			g.choice_a_reject.setAutoDraw(true);
+
+			g.choice_b_text.setAutoDraw(true);
+			g.choice_b_accept.setAutoDraw(true);
+			g.choice_b_reject.setAutoDraw(true);
+
+			g.choice_c_text.setAutoDraw(true);
+			g.choice_c_accept.setAutoDraw(true);
+			g.choice_c_reject.setAutoDraw(true);
+
+			g.choice_d_text.setAutoDraw(true);
+			g.choice_d_accept.setAutoDraw(true);
+			g.choice_d_reject.setAutoDraw(true);
 
 			if (g.forced_choice == 'left') {
 				g.left_door.setAutoDraw(true);
@@ -2044,8 +2262,12 @@ function module_2b(trial) {
 			
 			// g.rooms_left_text.setText(`You have ${g.depth} moves`)
 			// g.rooms_left_text.setAutoDraw(true);
-			g.prompt_text.pos = [0,0.88]
-			g.prompt_text.setText('How many YES will you recieve in the next room?');
+			g.accept_text.setAutoDraw(true);
+			g.reject_text.setAutoDraw(true);
+			g.prompt_text.pos = [0, 0.44];
+			g.prompt_text.height = 0.03;
+			g.prompt_text.units = 'height';
+			g.prompt_text.setText('How many invites                      /                      will you receive in the next room?');
 			g.prompt_text.setAutoDraw(true);
 
 			g.text_val_building.setText(g.building_type);
@@ -2068,6 +2290,8 @@ function module_2b(trial) {
 				g.response = theseKeys[0].name;
 				g.correct_yes = g.option_map[g.response];
 				g.prompt_text.setAutoDraw(false);
+				g.accept_text.setAutoDraw(false);
+				g.reject_text.setAutoDraw(false);
 
 				// console.log(g.response, g.correct_yes, g.module_2b_schedule[g.module_2b_index][2])
 
@@ -2201,7 +2425,6 @@ function module_3(trial) {
 
 				g.choice_1.setAutoDraw(true);
 				g.choice_2.setAutoDraw(true);
-				
 			} 
 		}
 
