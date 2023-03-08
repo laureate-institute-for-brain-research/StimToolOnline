@@ -278,13 +278,7 @@ g.module_2b_schedule = [
 ]
 g.module_2b_index = 0; // keep track of index
 
-// mapping for the button options
-g.option_map = {
-	'a': 0,
-	'b': 5,
-	'c': 10,
-	'd': 20
-}
+// optiions positions
 g.options_pos = {
 	'choice_a_text':   [-0.50, 0.34], 
 	'choice_a_accept': [-0.43, 0.34],
@@ -1677,7 +1671,8 @@ function trialsLoopBegin(thisScheduler) {
 				thisBlock.a,
 				thisBlock.b,
 				thisBlock.c,
-				thisBlock.d
+				thisBlock.d,
+				thisBlock.correct
 			];
 			g.module_2b_schedule.push(single_question)
 				// [ 7,'library', g.path[g.path[7]['left']]['accepted']['library'], 'left' ],
@@ -2288,7 +2283,6 @@ function module_2b(trial) {
 				// total invites
 				g.total_invites = g.total_invites + g.accepted_invites;
 				g.response = theseKeys[0].name;
-				g.correct_yes = g.option_map[g.response];
 				g.prompt_text.setAutoDraw(false);
 				g.accept_text.setAutoDraw(false);
 				g.reject_text.setAutoDraw(false);
@@ -2296,7 +2290,7 @@ function module_2b(trial) {
 				// console.log(g.response, g.correct_yes, g.module_2b_schedule[g.module_2b_index][2])
 
 				// append the current tral to the schedule if they choose the wrong door
-				if (g.module_2b_schedule[g.module_2b_index][2] != g.correct_yes) {
+				if (g.module_2b_schedule[g.module_2b_index][9] != g.response) {
 					// incorrect choice
 					g.module_2b_schedule.push(g.module_2b_schedule[g.module_2b_index]);
 					g.result_outcome.setText('INCORRECT');
