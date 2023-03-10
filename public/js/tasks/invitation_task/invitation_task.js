@@ -281,20 +281,20 @@ g.module_2b_index = 0; // keep track of index
 // optiions positions
 g.options_pos = {
 	'choice_a_text':   [-0.500, 0.36], 
-	'choice_a_accept': [-0.385, 0.36],
-	'choice_a_reject': [-0.365, 0.36],
+	'choice_a_accept': [-0.400, 0.36],
+	'choice_a_reject': [-0.379, 0.36],
 
 	'choice_b_text':   [-0.180, 0.36], 
-	'choice_b_accept': [-0.130, 0.36], 
-	'choice_b_reject': [-0.110, 0.36], 
+	'choice_b_accept': [-0.138, 0.36], 
+	'choice_b_reject': [-0.117, 0.36], 
 
 	'choice_c_text':   [ 0.100, 0.36], 
-	'choice_c_accept': [ 0.150, 0.36], 
-	'choice_c_reject': [ 0.170, 0.36],
+	'choice_c_accept': [ 0.145, 0.36], 
+	'choice_c_reject': [ 0.160, 0.36],
 
 	'choice_d_text':   [ 0.370, 0.36], 
-	'choice_d_accept': [ 0.420, 0.36], 
-	'choice_d_reject': [ 0.440, 0.36], 
+	'choice_d_accept': [ 0.415, 0.36], 
+	'choice_d_reject': [ 0.435, 0.36], 
 }
 
 // Variable to hold the actual reponse
@@ -988,7 +988,7 @@ function experimentInit() {
 	g.choice_a_text = new visual.TextStim({
 		win: psychoJS.window,
 		name: 'choice_a_text',
-		text: 'A=    /   ',
+		text: 'A.    /   ',
 		alignHoriz: 'left',font: 'Arial',units: 'height',
 		pos: g.options_pos['choice_a_text'], height: 0.05, wrapWidth: undefined, ori: 0,
 		color: new util.Color('white'), opacity: 1,
@@ -1015,7 +1015,7 @@ function experimentInit() {
 	g.choice_b_text = new visual.TextStim({
 		win: psychoJS.window,
 		name: 'choice_b_text',
-		text: 'B=    /   ',
+		text: 'B.    /   ',
 		alignHoriz: 'center',font: 'Arial',units: 'height',
 		pos: g.options_pos['choice_b_text'], height: 0.05, wrapWidth: undefined, ori: 0,
 		color: new util.Color('white'), opacity: 1,
@@ -1042,7 +1042,7 @@ function experimentInit() {
 	g.choice_c_text = new visual.TextStim({
 		win: psychoJS.window,
 		name: 'choice_c_text',
-		text: 'C=    /   ',
+		text: 'C.    /   ',
 		alignHoriz: 'center',font: 'Arial',units: 'height',
 		pos: g.options_pos['choice_c_text'], height: 0.05, wrapWidth: undefined, ori: 0,
 		color: new util.Color('white'), opacity: 1,
@@ -1069,7 +1069,7 @@ function experimentInit() {
 	g.choice_d_text = new visual.TextStim({
 		win: psychoJS.window,
 		name: 'choice_d_text',
-		text: 'D=    /   ',
+		text: 'D.    /   ',
 		alignHoriz: 'center',font: 'Arial',units: 'height',
 		pos: g.options_pos['choice_d_text'], height: 0.05, wrapWidth: undefined, ori: 0,
 		color: new util.Color('white'), opacity: 1,
