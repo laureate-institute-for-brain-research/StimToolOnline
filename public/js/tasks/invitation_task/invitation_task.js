@@ -280,21 +280,21 @@ g.module_2b_index = 0; // keep track of index
 
 // optiions positions
 g.options_pos = {
-	'choice_a_text':   [-0.50, 0.34], 
-	'choice_a_accept': [-0.43, 0.34],
-	'choice_a_reject': [-0.37, 0.34],
+	'choice_a_text':   [-0.500, 0.36], 
+	'choice_a_accept': [-0.385, 0.36],
+	'choice_a_reject': [-0.375, 0.36],
 
-	'choice_b_text':   [-0.18, 0.34], 
-	'choice_b_accept': [-0.13, 0.34], 
-	'choice_b_reject': [-0.06, 0.34], 
+	'choice_b_text':   [-0.180, 0.36], 
+	'choice_b_accept': [-0.130, 0.36], 
+	'choice_b_reject': [-0.120, 0.36], 
 
-	'choice_c_text':   [ 0.10, 0.34], 
-	'choice_c_accept': [ 0.16, 0.34], 
-	'choice_c_reject': [ 0.23, 0.34],
+	'choice_c_text':   [ 0.100, 0.36], 
+	'choice_c_accept': [ 0.150, 0.36], 
+	'choice_c_reject': [ 0.160, 0.36],
 
-	'choice_d_text':   [ 0.37, 0.34], 
-	'choice_d_accept': [ 0.43, 0.34], 
-	'choice_d_reject': [ 0.51, 0.34], 
+	'choice_d_text':   [ 0.370, 0.36], 
+	'choice_d_accept': [ 0.420, 0.36], 
+	'choice_d_reject': [ 0.430, 0.36], 
 }
 
 // Variable to hold the actual reponse
@@ -555,6 +555,7 @@ var resources = [
 	{ name: 'office_invite_15', path: '/js/tasks/invitation_task/media/game_slides/office_15_invite.jpeg' },
 	{ name: 'orange_door', path: '/js/tasks/invitation_task/media/images/orange_door.png' },
 	{ name: 'blue_door', path: '/js/tasks/invitation_task/media/images/blue_door.png' },
+	{ name: 'prompt_2b_text', path: '/js/tasks/invitation_task/media/2b_prompt.png' }
 ]
 
 // schedule the experiment:
@@ -759,6 +760,16 @@ function experimentInit() {
 		flipHoriz : false, flipVert : false,
 		texRes : 128, interpolate : true, depth : 0
 	});
+
+	g.prompt_2b_text = new visual.ImageStim({
+		win : psychoJS.window,
+		name : 'prompt_2b_text', units : 'height', 
+		image : 'prompt_2b_text', mask : undefined,
+		ori : 0, pos : [0, 0.47],size: [1.24,0.048],
+		color : new util.Color([1, 1, 1]), opacity : 1,
+		flipHoriz : false, flipVert : false,
+		texRes : 128, interpolate : true, depth : 0
+	});
 	
 	ready = new core.Keyboard({ psychoJS, clock: new util.Clock(), waitForStart: true });
 
@@ -939,8 +950,8 @@ function experimentInit() {
 		name: 'module_2b_outcome',
 		text: 'Correct',alignHoriz: 'center',
 		font: 'Arial',
-		units: 'norm',
-		pos: [0, 0.78], height: 0.09, wrapWidth: undefined, ori: 0,
+		units: 'height',
+		pos: [0, 0.415], height: 0.04, wrapWidth: undefined, ori: 0,
 		color: new util.Color('white'), opacity: 1,
 		depth: 0.0
 	});
@@ -977,8 +988,8 @@ function experimentInit() {
 	g.choice_a_text = new visual.TextStim({
 		win: psychoJS.window,
 		name: 'choice_a_text',
-		text: 'a=',
-		alignHoriz: 'center',font: 'Arial',units: 'height',
+		text: 'a=    /   ',
+		alignHoriz: 'left',font: 'Arial',units: 'height',
 		pos: g.options_pos['choice_a_text'], height: 0.05, wrapWidth: undefined, ori: 0,
 		color: new util.Color('white'), opacity: 1,
 		depth: 0.0
@@ -987,16 +998,16 @@ function experimentInit() {
 		win: psychoJS.window,
 		name: 'choice_a_accept',
 		text: '0',
-		alignHoriz: 'center',font: 'Arial',units: 'height',
+		alignHoriz: 'right',font: 'Arial',units: 'height',
 		pos: g.options_pos['choice_a_accept'], height: 0.05, wrapWidth: undefined, ori: 0,
-		color: new util.Color('green'), opacity: 1,
+		color: new util.Color('#72F34A'), opacity: 1,
 		depth: 0.0
 	});
 	g.choice_a_reject = new visual.TextStim({
 		win: psychoJS.window,
 		name: 'choice_a_reject',
 		text: '0',
-		alignHoriz: 'center',font: 'Arial',units: 'height',
+		alignHoriz: 'left',font: 'Arial',units: 'height',
 		pos: g.options_pos['choice_a_reject'], height: 0.05, wrapWidth: undefined, ori: 0,
 		color: new util.Color('red'), opacity: 1,
 		depth: 0.0
@@ -1004,7 +1015,7 @@ function experimentInit() {
 	g.choice_b_text = new visual.TextStim({
 		win: psychoJS.window,
 		name: 'choice_b_text',
-		text: 'b=',
+		text: 'b=    /   ',
 		alignHoriz: 'center',font: 'Arial',units: 'height',
 		pos: g.options_pos['choice_b_text'], height: 0.05, wrapWidth: undefined, ori: 0,
 		color: new util.Color('white'), opacity: 1,
@@ -1014,16 +1025,16 @@ function experimentInit() {
 		win: psychoJS.window,
 		name: 'choice_b_accept',
 		text: '0',
-		alignHoriz: 'center',font: 'Arial',units: 'height',
+		alignHoriz: 'right',font: 'Arial',units: 'height',
 		pos: g.options_pos['choice_b_accept'], height: 0.05, wrapWidth: undefined, ori: 0,
-		color: new util.Color('green'), opacity: 1,
+		color: new util.Color('#72F34A'), opacity: 1,
 		depth: 0.0
 	});
 	g.choice_b_reject = new visual.TextStim({
 		win: psychoJS.window,
 		name: 'choice_b_reject',
 		text: '0',
-		alignHoriz: 'center',font: 'Arial',units: 'height',
+		alignHoriz: 'left',font: 'Arial',units: 'height',
 		pos: g.options_pos['choice_b_reject'], height: 0.05, wrapWidth: undefined, ori: 0,
 		color: new util.Color('red'), opacity: 1,
 		depth: 0.0
@@ -1031,7 +1042,7 @@ function experimentInit() {
 	g.choice_c_text = new visual.TextStim({
 		win: psychoJS.window,
 		name: 'choice_c_text',
-		text: 'c=',
+		text: 'c=    /   ',
 		alignHoriz: 'center',font: 'Arial',units: 'height',
 		pos: g.options_pos['choice_c_text'], height: 0.05, wrapWidth: undefined, ori: 0,
 		color: new util.Color('white'), opacity: 1,
@@ -1041,16 +1052,16 @@ function experimentInit() {
 		win: psychoJS.window,
 		name: 'choice_c_accept',
 		text: '0',
-		alignHoriz: 'center',font: 'Arial',units: 'height',
+		alignHoriz: 'right',font: 'Arial',units: 'height',
 		pos: g.options_pos['choice_c_accept'], height: 0.05, wrapWidth: undefined, ori: 0,
-		color: new util.Color('green'), opacity: 1,
+		color: new util.Color('#72F34A'), opacity: 1,
 		depth: 0.0
 	});
 	g.choice_c_reject = new visual.TextStim({
 		win: psychoJS.window,
 		name: 'choice_c_reject',
 		text: '0',
-		alignHoriz: 'center',font: 'Arial',units: 'height',
+		alignHoriz: 'left',font: 'Arial',units: 'height',
 		pos: g.options_pos['choice_c_reject'], height: 0.05, wrapWidth: undefined, ori: 0,
 		color: new util.Color('red'), opacity: 1,
 		depth: 0.0
@@ -1058,7 +1069,7 @@ function experimentInit() {
 	g.choice_d_text = new visual.TextStim({
 		win: psychoJS.window,
 		name: 'choice_d_text',
-		text: 'd=',
+		text: 'd=    /   ',
 		alignHoriz: 'center',font: 'Arial',units: 'height',
 		pos: g.options_pos['choice_d_text'], height: 0.05, wrapWidth: undefined, ori: 0,
 		color: new util.Color('white'), opacity: 1,
@@ -1068,16 +1079,16 @@ function experimentInit() {
 		win: psychoJS.window,
 		name: 'choice_d_accept',
 		text: '0',
-		alignHoriz: 'center',font: 'Arial',units: 'height',
+		alignHoriz: 'right',font: 'Arial',units: 'height',
 		pos: g.options_pos['choice_d_accept'], height: 0.05, wrapWidth: undefined, ori: 0,
-		color: new util.Color('green'), opacity: 1,
+		color: new util.Color('#72F34A'), opacity: 1,
 		depth: 0.0
 	});
 	g.choice_d_reject = new visual.TextStim({
 		win: psychoJS.window,
 		name: 'choice_d_reject',
 		text: '0',
-		alignHoriz: 'center',font: 'Arial',units: 'height',
+		alignHoriz: 'left',font: 'Arial',units: 'height',
 		pos: g.options_pos['choice_d_reject'], height: 0.05, wrapWidth: undefined, ori: 0,
 		color: new util.Color('red'), opacity: 1,
 		depth: 0.0
@@ -2257,13 +2268,16 @@ function module_2b(trial) {
 			
 			// g.rooms_left_text.setText(`You have ${g.depth} moves`)
 			// g.rooms_left_text.setAutoDraw(true);
-			g.accept_text.setAutoDraw(true);
-			g.reject_text.setAutoDraw(true);
-			g.prompt_text.pos = [0, 0.44];
-			g.prompt_text.height = 0.03;
-			g.prompt_text.units = 'height';
-			g.prompt_text.setText('How many invites                      /                      will you receive in the next room?');
-			g.prompt_text.setAutoDraw(true);
+			// g.accept_text.setAutoDraw(true);
+			// g.reject_text.setAutoDraw(true);
+
+			// g.prompt_text.pos = [0, 0.44];
+			// g.prompt_text.height = 0.03;
+			// g.prompt_text.units = 'height';
+			// g.prompt_text.setText('How many invites                      /                      will you receive in the next room?');
+			// g.prompt_text.setAutoDraw(true);
+
+			g.prompt_2b_text.setAutoDraw(true);
 
 			g.text_val_building.setText(g.building_type);
 			g.text_val_building.setAutoDraw(true);
