@@ -2100,12 +2100,14 @@ function module_2a(trial) {
 				g.left_door.setAutoDraw(true);
 				g.choice_1.setAutoDraw(true);
 				g.prompt_text.setText('Please choose the LEFT room.');
+				g.keyList = [g.LEFT_KEY];
 			}
 
 			if (trial.forced_choice == 'R') {
 				g.right_door.setAutoDraw(true);
 				g.choice_2.setAutoDraw(true);
 				g.prompt_text.setText('Please choose the RIGHT room.');
+				g.keyList = [g.RIGHT_KEY];
 			}
 
 			g.prompt_text.setAutoDraw(true);
@@ -2115,7 +2117,7 @@ function module_2a(trial) {
 		}
 
 		if (g.trial_phase == g.WAITING_SELECTION) {
-			let theseKeys = ready.getKeys({ keyList: [g.LEFT_KEY, g.RIGHT_KEY], waitRelease: false });
+			let theseKeys = ready.getKeys({ keyList: g.keyList , waitRelease: false });
 			if (theseKeys.length > 0) {
 				// increment trial invites
 				// based ond current position and the building type
