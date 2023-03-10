@@ -2109,7 +2109,7 @@ function module_2a(trial) {
 				g.prompt_text.setText('Please choose the RIGHT room.');
 				g.keyList = [g.RIGHT_KEY];
 			}
-
+			g.prompt_text.pos = [0, 0.75];
 			g.prompt_text.setAutoDraw(true);
 			g.text_val_building.setAutoDraw(true);
 			ready.clearEvents();
