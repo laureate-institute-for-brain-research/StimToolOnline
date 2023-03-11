@@ -280,21 +280,21 @@ g.module_2b_index = 0; // keep track of index
 
 // optiions positions
 g.options_pos = {
-	'choice_a_text':   [-0.500, 0.36], 
-	'choice_a_accept': [-0.400, 0.36],
-	'choice_a_reject': [-0.379, 0.36],
+	'choice_a_text':   [-0.500, 0.38], 
+	'choice_a_accept': [-0.400, 0.38],
+	'choice_a_reject': [-0.379, 0.38],
 
-	'choice_b_text':   [-0.180, 0.36], 
-	'choice_b_accept': [-0.138, 0.36], 
-	'choice_b_reject': [-0.117, 0.36], 
+	'choice_b_text':   [-0.180, 0.38], 
+	'choice_b_accept': [-0.138, 0.38], 
+	'choice_b_reject': [-0.117, 0.38], 
 
-	'choice_c_text':   [ 0.100, 0.36], 
-	'choice_c_accept': [ 0.145, 0.36], 
-	'choice_c_reject': [ 0.160, 0.36],
+	'choice_c_text':   [ 0.100, 0.38], 
+	'choice_c_accept': [ 0.145, 0.38], 
+	'choice_c_reject': [ 0.160, 0.38],
 
-	'choice_d_text':   [ 0.370, 0.36], 
-	'choice_d_accept': [ 0.415, 0.36], 
-	'choice_d_reject': [ 0.435, 0.36], 
+	'choice_d_text':   [ 0.370, 0.38], 
+	'choice_d_accept': [ 0.415, 0.38], 
+	'choice_d_reject': [ 0.435, 0.38], 
 }
 
 // Variable to hold the actual reponse
@@ -555,7 +555,9 @@ var resources = [
 	{ name: 'office_invite_15', path: '/js/tasks/invitation_task/media/game_slides/office_15_invite.jpeg' },
 	{ name: 'orange_door', path: '/js/tasks/invitation_task/media/images/orange_door.png' },
 	{ name: 'blue_door', path: '/js/tasks/invitation_task/media/images/blue_door.png' },
-	{ name: 'prompt_2b_text', path: '/js/tasks/invitation_task/media/2b_prompt.png' }
+	{ name: 'prompt_2b_text', path: '/js/tasks/invitation_task/media/2b_prompt.png' },
+	{ name: 'correct', path: '/js/tasks/invitation_task/media/correct.png' },
+	{ name: 'incorrect', path: 'js/tasks/invitation_task/media/incorrect.png' },
 ]
 
 // schedule the experiment:
@@ -765,7 +767,17 @@ function experimentInit() {
 		win : psychoJS.window,
 		name : 'prompt_2b_text', units : 'height', 
 		image : 'prompt_2b_text', mask : undefined,
-		ori : 0, pos : [0, 0.47],size: [1.24,0.048],
+		ori : 0, pos : [0, 0.45],size: [1.24,0.048],
+		color : new util.Color([1, 1, 1]), opacity : 1,
+		flipHoriz : false, flipVert : false,
+		texRes : 128, interpolate : true, depth : 0
+	});
+
+	g.result_image = new visual.ImageStim({
+		win : psychoJS.window,
+		name : 'result_image', units : 'height', 
+		image : 'correct', mask : undefined,
+		ori : 0, pos : [0, 0.15],size: [0.45,0.10],
 		color : new util.Color([1, 1, 1]), opacity : 1,
 		flipHoriz : false, flipVert : false,
 		texRes : 128, interpolate : true, depth : 0
@@ -1793,6 +1805,8 @@ function clearStims() {
 	g.reject_text.setAutoDraw(false);
 	g.reject_text.status = PsychoJS.Status.NOT_STARTED;
 	
+	g.result_image.setAutoDraw(false);
+	g.result_image.status = PsychoJS.Status.NOT_STARTED;
 
 	clearStatuStims();
 }
@@ -2312,15 +2326,21 @@ function module_2b(trial) {
 					g.result_outcome.setText('INCORRECT');
 					g.result_outcome.color = 'red';
 					g.result = 'incorrect';
+			
+					g.result_image.setImage('incorrect');
+					g.result_image.size = [0.45,0.10]
 				} else {
 					// correct
 					g.result_outcome.setText('CORRECT');
 					g.result_outcome.color = 'green';
 					g.module_2b_index++;
 					g.result = 'correct';
+					g.result_image.setImage('correct');
+					g.result_image.size = [0.38,0.10]
 				}
 				
-				g.result_outcome.setAutoDraw(true);
+				g.result_image.setAutoDraw(true);
+				// g.result_outcome.setAutoDraw(true);
 				g.invite_path = g.path[g.current_path][g.forced_choice];
 				//clearStims();
 				
@@ -2338,7 +2358,8 @@ function module_2b(trial) {
 			// go to next trial
 			g.prompt_text.color = 'white';
 			clearStims();
-			g.result_outcome.setAutoDraw(true);
+			// g.result_image.setAutoDraw(true);
+			// g.result_outcome.setAutoDraw(true);
 			g.trial_phase = g.RESPONSE_ANIMATION;
 		}
 
@@ -2353,8 +2374,10 @@ function module_2b(trial) {
 			} else {
 				g.prompt_text.setText('Press SPACE key to go to next trial.');
 			}
+			g.prompt_text.pos = [0, 0.65];
 			g.prompt_text.setAutoDraw(true);
 			g.text_val_building.setAutoDraw(true);
+			g.result_image.setAutoDraw(true);
 			g.trial_phase = g.WAITING_KEY;
 			// g.responseTimer.reset(g.RESPONSE_DURATION); // start timer
 		}
