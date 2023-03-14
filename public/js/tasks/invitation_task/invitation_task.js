@@ -586,21 +586,21 @@ if (!getQueryVariable('skip_instructions')) {
 
 // PRACTICE BLOCK
 // Pratice trials skipped over if it's a a PR run.
-if (!getQueryVariable('skip_practice') && !getQueryVariable('run').includes('PR')  ) {
-	// Single Slide
-	flowScheduler.add(readyRoutineBegin('PRACTICE'));
-	flowScheduler.add(readyRoutineEachFrame());
-	flowScheduler.add(readyRoutineEnd());
+// if (!getQueryVariable('skip_practice') && !getQueryVariable('run').includes('PR')  ) {
+// 	// Single Slide
+// 	flowScheduler.add(readyRoutineBegin('PRACTICE'));
+// 	flowScheduler.add(readyRoutineEachFrame());
+// 	flowScheduler.add(readyRoutineEnd());
 
-	const practiceTrialsLoopScheduler = new Scheduler(psychoJS);
-	flowScheduler.add(practiceTrialsLoopBegin, practiceTrialsLoopScheduler);
-	flowScheduler.add(practiceTrialsLoopScheduler);
-	flowScheduler.add(trialsLoopEnd);
+// 	const practiceTrialsLoopScheduler = new Scheduler(psychoJS);
+// 	flowScheduler.add(practiceTrialsLoopBegin, practiceTrialsLoopScheduler);
+// 	flowScheduler.add(practiceTrialsLoopScheduler);
+// 	flowScheduler.add(trialsLoopEnd);
 
-	flowScheduler.add(readyRoutineBegin('SLIDE', 'MAIN_ready', 'MAIN_ready_audio.mp3'));
-	flowScheduler.add(readyRoutineEachFrame());
-	flowScheduler.add(readyRoutineEnd());
-}
+// 	flowScheduler.add(readyRoutineBegin('SLIDE', 'MAIN_ready', 'MAIN_ready_audio.mp3'));
+// 	flowScheduler.add(readyRoutineEachFrame());
+// 	flowScheduler.add(readyRoutineEnd());
+// }
 
 // MAIN BLOCK
 // Ready Routine
