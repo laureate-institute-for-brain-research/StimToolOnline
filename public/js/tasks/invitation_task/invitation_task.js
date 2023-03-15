@@ -2374,9 +2374,10 @@ function module_2b(trial) {
 			} else {
 				g.prompt_text.setText('Press SPACE key to go to next trial.');
 			}
-			g.prompt_text.pos = [0, 0.65];
+			g.prompt_text.pos = [0, -0.85];
+			g.prompt_text.height = 0.08;
 			g.prompt_text.setAutoDraw(true);
-			g.text_val_building.setAutoDraw(true);
+			// g.text_val_building.setAutoDraw(true);
 			g.result_image.setAutoDraw(true);
 			g.trial_phase = g.WAITING_KEY;
 			// g.responseTimer.reset(g.RESPONSE_DURATION); // start timer
