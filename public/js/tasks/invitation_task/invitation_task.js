@@ -1932,11 +1932,6 @@ function module_1(trial) {
 		// Make Selection
 		// Show Doors if path = 1
 		if (g.room_image.status == PsychoJS.Status.NOT_STARTED && g.trial_phase == g.TRIAL_BEGIN) {
-			console.log(
-				"Module: 1, Depth: ", g.depth,
-				"Current Path: ", g.current_path,
-				"Trial Invites: ", g.total_invites
-			)
 			if (g.current_move == 0) {
 				g.room_image.setImage(trial.building_type + '_' + g.current_path);
 				g.room_image.setAutoDraw(true);
@@ -1952,8 +1947,7 @@ function module_1(trial) {
 			} else {
 				g.rooms_left_text.setText(`You have ${g.depth} moves`)
 				g.rooms_left_text.setAutoDraw(true);
-				g.left_door.setAutoDraw(true);
-				g.right_door.setAutoDraw(true);
+				
 				g.prompt_text.setText('Where do you want to go next?');
 				
 				// status stims
@@ -1962,8 +1956,46 @@ function module_1(trial) {
 				g.text_invites.setAutoDraw(true);
 				g.text_val_invites.setAutoDraw(true);
 
-				g.choice_1.setAutoDraw(true);
-				g.choice_2.setAutoDraw(true);
+				// set forced choice if any
+				g.forced_choices = trial.forced_choice.split(',')
+				g.forced_choice_idx = trial.depth - g.depth;
+				if (g.forced_choices.length == 1) {
+					// only 1 so either ALL 'L' or 'R' or 'X'
+					g.current_forced_choice = g.forced_choices[0]
+				} else {
+					// multiple forced choice
+					g.current_forced_choice = g.forced_choices[g.forced_choice_idx];
+				}
+
+				switch(g.current_forced_choice){
+					case 'X':
+						g.choice_1.setAutoDraw(true);
+						g.choice_2.setAutoDraw(true);
+						g.left_door.setAutoDraw(true);
+						g.right_door.setAutoDraw(true);
+						g.keyList = [g.LEFT_KEY, g.RIGHT_KEY];
+						break;
+					case 'L':
+						g.choice_1.setAutoDraw(true);
+						g.left_door.setAutoDraw(true);
+						g.keyList = [g.LEFT_KEY];
+						break;
+					case 'R':
+						g.choice_2.setAutoDraw(true);
+						g.right_door.setAutoDraw(true);
+						g.keyList = [g.RIGHT_KEY];
+						break;
+				}
+			
+				
+				console.log(
+					"Module: 1, Depth: ", g.depth,
+					"Current Path: ", g.current_path,
+					"Trial Invites: ", g.total_invites,
+					'Forced Choices: ', g.forced_choices,
+					'Forced choice idx: ', g.forced_choice_idx
+				)
+				
 		
 				g.trial_phase = g.WAITING_SELECTION;
 			}
@@ -2051,7 +2083,7 @@ function module_1(trial) {
 		// WAITING SELECTION
 		// as subject where they want to go next
 		if (g.trial_phase == g.WAITING_SELECTION) {
-			let theseKeys = ready.getKeys({ keyList: [g.LEFT_KEY, g.RIGHT_KEY], waitRelease: false });
+			let theseKeys = ready.getKeys({ keyList: g.keyList, waitRelease: false });
 			if (theseKeys.length > 0) {
 
 				if (theseKeys[0].name == g.LEFT_KEY) { g.response = 'left'; }
