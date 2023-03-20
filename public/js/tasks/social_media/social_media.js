@@ -2607,7 +2607,7 @@ function trialRoutineEachFrameWaitforInput(trials) {
 				}
 
 				mark_event(trials_data, globalClock, trial_num, trial_type,
-					event_types['RESPONSE'], 'NA',
+					event_types['RESPONSE'], resp.rt,
 					resp.keys, trial_reward)
 
 				// console.log(postStims[trial_num].like_posts)
@@ -2837,7 +2837,7 @@ function trialRoleReversalRoutineEachFrameWaitforInput(trials) {
 					}
 					
 				}
-				mark_event(trials_data, globalClock, trial_num, trial_type, event_types['RESPONSE'], 'NA',
+				mark_event(trials_data, globalClock, trial_num, trial_type, event_types['RESPONSE'], resp.rt,
 					resp.keys, trial_reward)
 				
 				return Scheduler.Event.NEXT;
