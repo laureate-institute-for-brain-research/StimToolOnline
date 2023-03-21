@@ -123,17 +123,17 @@
             "elements": [
                 {
                 "type": "rating",
-                "name": "question1",
-                "title": "How well do you believe you performed on the previous task? (1=very bad, 7=very good)",
+                "name": "question1_performance",
+                "title": "How well do you believe you performed on the previous task? (1=very bad, 9=very good)",
                 "isRequired": true,
-                "rateMax": 7
+                "rateMax": 9
                 },
                 {
                 "type": "rating",
-                "name": "question2",
-                "title": "How difficult was it to make decisions on the previous task? (1=not difficult at all, 7=extremely difficult)",
+                "name": "question2_difficulty",
+                "title": "How difficult was it to make decisions on the previous task? (1=not difficult at all, 9=extremely difficult)",
                 "isRequired": true,
-                "rateMax": 7
+                "rateMax": 9
                 }
             ]
             },
@@ -151,13 +151,13 @@
                 },
                 {
                 "type": "rating",
-                "name": "question4",
+                "name": "question4_happy",
                 "title": "How happy or unhappy did you feel while performing the game?",
                 "isRequired": true
                 },
                 {
                 "type": "rating",
-                "name": "question3",
+                "name": "question3_attention",
                 "title": "How much are you paying attention right now? (Choose 4)",
                 "isRequired": true
                 }
@@ -177,7 +177,7 @@
                 },
                 {
                 "type": "rating",
-                "name": "question7",
+                "name": "question7_calm",
                 "title": "How calm or excited did you feel while performing the game? To clarify, \"excited\" does not involve feeling good or bad. It simply means how strong your bodily sensations felt. For example, being highly \"excited\" could indicate feeling very tense or feeling a strong or fast heartbeat (among others)",
                 "isRequired": true
                 }
@@ -188,38 +188,65 @@
             "elements": [
                 {
                 "type": "rating",
-                "name": "question3",
-                "title": "I found the positive pictures enjoyable (1=not at all, 7=very much)",
+                "name": "question12_pos-general",
+                "title": "How pleasant or unpleasant did you find the positive pictures? (1=extremely unpleasant, 9=extremely pleasant)",
                 "isRequired": true,
-                "rateMax": 7
+                "rateMax": 9
                 },
                 {
                 "type": "rating",
-                "name": "question8",
-                "title": "The negative pictures made me feel anxious or uncomfortable (1=not at all, 7=very much)",
+                "name": "question8_neutral-general",
+                "title": "How pleasant or unpleasant did you find the neutral pictures? (1=extremely unpleasant, 9=extremely pleasant)",
                 "isRequired": true,
-                "rateMax": 7
+                "rateMax": 9
                 },
                 {
                 "type": "rating",
-                "name": "question9",
-                "title": "When a negative picture and sound were displayed, I kept my eyes open and looked at the picture (1=not at all, 7=very much)",
+                "name": "question9_neg-general",
+                "title": "How pleasant or unpleasant did you find the negative pictures? (1=extremely unpleasant, 9=extremely pleasant)",
                 "isRequired": true,
-                "rateMax": 7
+                "rateMax": 9
+                },
+            ],
+            "description": "Please respond with how much you agree with the following statements."
+            },
+            {
+            "name": "page5",
+            "elements": [
+                {
+                "type": "rating",
+                "name": "question12_pos",
+                "title": "I found the positive pictures enjoyable (1=not at all, 9=very much)",
+                "isRequired": true,
+                "rateMax": 9
                 },
                 {
                 "type": "rating",
-                "name": "question10",
-                "title": "When a negative picture and sound were displayed, I tried to think about something unrelated to the picture to distract myself (1=not at all, 7=very much)",
+                "name": "question8_neg",
+                "title": "The negative pictures made me feel anxious or uncomfortable (1=not at all, 9=very much)",
                 "isRequired": true,
-                "rateMax": 7
+                "rateMax": 9
                 },
                 {
                 "type": "rating",
-                "name": "question11",
-                "title": "When a negative picture and sound were displayed, I tried other strategies to manage emotions triggered by the pictures (1=not at all, 7=very much)",
+                "name": "question9_looked",
+                "title": "When a negative picture and sound were displayed, I kept my eyes open and looked at the picture (1=not at all, 9=very much)",
                 "isRequired": true,
-                "rateMax": 7
+                "rateMax": 9
+                },
+                {
+                "type": "rating",
+                "name": "question10_distract",
+                "title": "When a negative picture and sound were displayed, I tried to think about something unrelated to the picture to distract myself (1=not at all, 9=very much)",
+                "isRequired": true,
+                "rateMax": 9
+                },
+                {
+                "type": "rating",
+                "name": "question11_coping",
+                "title": "When a negative picture and sound were displayed, I tried other strategies to manage emotions triggered by the pictures (1=not at all, 9=very much)",
+                "isRequired": true,
+                "rateMax": 9
                 }
             ],
             "description": "Please respond with how much you agree with the following statements."
