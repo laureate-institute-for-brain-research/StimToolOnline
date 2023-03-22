@@ -5,7 +5,6 @@
  * @author James Touthang <james@touthang.info>
  */
 
-
 var event_types = {
 	'INSTRUCT_ONSET': 1,
 	'TASK_ONSET': 2,
@@ -306,22 +305,19 @@ g.game_type_text = {
 	'unpleasant': `You will be shown the unpleasant image unless the person you choose decides to help you.`
 }
 
-
- import { core, data, sound, util, visual } from '/psychojs/psychojs-2021.2.3.js';
- const { PsychoJS } = core;
- const { TrialHandler } = data;
- const { Scheduler } = util;
+import { core, data, sound, util, visual } from '/psychojs/psychojs-2021.2.3.js';
+const { PsychoJS } = core;
+const { TrialHandler } = data;
+const { Scheduler } = util;
  //some handy aliases as in the psychopy scripts;
 const { round } = util;
  
 import { Sound } from '/lib/sound-2020.1.js';
 
-
 // init psychoJS:
 const psychoJS = new PsychoJS({
 	debug: false
 });
-
 
 window.onload = function () {
 	var id = getQueryVariable('id')
@@ -339,7 +335,6 @@ window.onload = function () {
 			}
 		})
 	})
-
 		// Read getINFO 
 		.then((values) => {
 			// console.log(values)
@@ -415,7 +410,6 @@ window.onload = function () {
 						resolve(data)
 					}
 				})
-				
 			})
 		})
 
@@ -471,7 +465,6 @@ window.onload = function () {
 				resources: resources,
 			  })
 			psychoJS._config.experiment.saveFormat = undefined // don't save to client side
-			// console.log(psychoJS)
 		})
 }
 
@@ -1286,7 +1279,9 @@ function instructRoutineBegin(trials) {
 			time_audio_end = t + track.getDuration()
 			track.setVolume(1.0);
 			track.play();
-			mark_event(trials_data, globalClock, trials.thisIndex, block_type, event_types['AUDIO_ONSET'],
+			mark_event(
+				trials_data, globalClock, trials.thisIndex,
+				block_type, event_types['AUDIO_ONSET'],
 				'NA', instruct_slide, audio_path)
 		}
 
