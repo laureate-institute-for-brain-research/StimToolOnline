@@ -202,11 +202,6 @@ $('#study-list').change(function () {
     
     sessions_.appendChild(option_disabled);
 
-    // <select id='session-list' required class="form-control" name='session'>
-    //                           <option selected disabled>Choose Session</option>
-    //                           <option value="T1">T1</option>
-    //                       </select>
-
     //Create and append the options
     for (var i = 1; i <= max_session; i++) {
         var option = document.createElement("option");
@@ -214,13 +209,6 @@ $('#study-list').change(function () {
         option.text = 'T'+i;
         sessions_.appendChild(option);
     }
-    // if (!two_session_studies.includes(document.getElementById('study-list').value)) {
-    //     var selectobject = document.getElementById("session-list");
-    //     for (var i=0; i<selectobject.length; i++) {
-    //         if (selectobject.options[i].value == 'T2')
-    //             selectobject.remove(i);
-    //     }
-    // }
 
     mobileonly_studies = ['Driving2']
     // Fire modal to aler user that this study is mobile
