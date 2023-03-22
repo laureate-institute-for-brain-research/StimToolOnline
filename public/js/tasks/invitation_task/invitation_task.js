@@ -1999,6 +1999,7 @@ function module_1(trial) {
 		
 				g.trial_phase = g.WAITING_SELECTION;
 			}
+			g.prompt_text.pos = [0, 0.62];
 			g.prompt_text.setAutoDraw(true);
 			ready.clearEvents();
 		}
@@ -2115,6 +2116,39 @@ function module_1(trial) {
 
 		return Scheduler.Event.FLIP_REPEAT
 	}
+}
+
+/**
+ * Module Break
+ * - This routine is the break.
+ * @param {*} trial 
+ * @returns 
+ */
+function module_break(trial){
+	return function () {
+		if (g.prompt_text.status == PsychoJS.Status.NOT_STARTED) {
+			g.prompt_text.setText(
+				`\nGreat Job!\n
+				We will now switch to the other building.\n
+				As before, on the first trial we will tell you which doors to choose.\n
+				Then you will be free to choose on your own from that point on.`)
+			g.prompt_text.pos = [0, 0.3];
+			g.prompt_text.setAutoDraw(true);
+
+			g.outcome_text.setText(`Press SPACE key to continue`);
+			g.outcome_text.pos = [0, -0.8];
+			g.outcome_text.setAutoDraw(true);
+		}
+
+		let theseKeys = ready.getKeys({ keyList: ['space'] , waitRelease: false });
+		if (theseKeys.length > 0) {
+			// increment trial invites
+			// based ond current position and the building type
+			return Scheduler.Event.NEXT;
+
+		}
+		return Scheduler.Event.FLIP_REPEAT;
+	 }
 }
 
 /**
@@ -2641,6 +2675,7 @@ function fixation(trial) {
 function runModule(trial) {
 	switch (trial.module) {
 		case 1: return module_1(trial)
+		case 'break': return module_break(trial)
 		case '2a': return module_2a(trial)
 		case '2b': return module_2b(trial)
 		case 3: return module_3(trial)
@@ -2656,7 +2691,7 @@ function runModule(trial) {
  */
 function trialOutcome(trial) {
 	return function () {
-		if (trial.module == 2 || trial.module == '2a') {
+		if (trial.module == 2 || trial.module == '2a' || trial.module == 'break') {
 			// module 2 doesn't need to show the total invites
 			return Scheduler.Event.NEXT;
 		}
@@ -2664,6 +2699,7 @@ function trialOutcome(trial) {
 			g.outcome_text.color = 'white';
 			g.outcome_text.setText(`Overall Invites Accepted: ${g.trial_invites}`)
 			g.outcomeTimer.reset(g.OUTCOME_DURATION); // reset the time with ITI 
+			g.outcome_text.pos = [0, 0];
 			g.outcome_text.setAutoDraw(true);
 
 			g.prompt_text.setText('Press to space key to go to the next trial.');

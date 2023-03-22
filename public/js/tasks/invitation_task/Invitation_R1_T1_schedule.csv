@@ -31,6 +31,7 @@ module,trial_number,start,building_type,depth,OLL_ONLL,ITI,forced_choice,path_ve
 1,29,1,office,3,NA,0.5,X,1
 1,30,1,office,3,NA,1.5,X,1
 1,31,1,office,3,NA,1,X,1
+break,0,1,office,1,NA,0.5,X,1
 1,32,1,library,3,NA,0.5,R,1
 1,33,1,library,3,NA,0.5,X,1
 1,34,1,library,3,NA,1,X,1
