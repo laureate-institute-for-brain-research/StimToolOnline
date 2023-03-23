@@ -166,19 +166,6 @@ $('#study-list').change(function () {
         'WBMTURK_Invitation_Task': 3
     }
 
-    
-    two_session_studies = [
-        'AAC-BET',
-        'BK_Pilot',
-        'CognitiveControl',
-        'Driving2',
-        'METH_Pilot',
-        'WBMTURK_Blind_Dating',
-        'WBMTURK_Emotional_Faces',
-        'WBMTURK_Cooperation_Task',
-        'WBMTURK_Invitation_Task'
-    ]
-
     // verify that the list of session list is the number of sessions
     let study_ = document.getElementById('study-list').value;
     var sessions_ = document.getElementById("session-list");
@@ -259,7 +246,6 @@ document.getElementById('begin').addEventListener('click', (event) => {
         });
         // console.log(values)
 
-        
         $.ajax({
             type: "POST",
             url: '/adduser',
@@ -285,10 +271,6 @@ document.getElementById('begin').addEventListener('click', (event) => {
         });
     }
 });
-
-
-
-
 
 
 // Skip Logic.

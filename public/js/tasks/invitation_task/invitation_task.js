@@ -1990,8 +1990,7 @@ function module_1(trial) {
 					'Forced Choices: ', g.forced_choices,
 					'Forced choice idx: ', g.forced_choice_idx
 				)
-				
-		
+			
 				g.trial_phase = g.WAITING_SELECTION;
 			}
 			g.prompt_text.pos = [0, 0.62];
@@ -2085,6 +2084,8 @@ function module_1(trial) {
 				if (theseKeys[0].name == g.LEFT_KEY) { g.response = 'left'; }
 				if (theseKeys[0].name == g.RIGHT_KEY) { g.response = 'right'; }
 
+				g.depth--; 		  // decremente depth
+				g.current_move++; // increment mov
 				
 				clearStims();
 				g.current_path = g.path[g.current_path][g.response];
@@ -2093,9 +2094,8 @@ function module_1(trial) {
 				// increment trial invites
 				// based ond current position and the building type
 				g.trial_invites = g.trial_invites + g.accepted_invites;
+				console.log('invites accepted: ', g.trial_invites)
 				
-				g.depth--; 		  // decremente depth
-				g.current_move++; // increment move
 				// prepare for next phase
 				g.trial_phase = g.TRIAL_BEGIN;
 
