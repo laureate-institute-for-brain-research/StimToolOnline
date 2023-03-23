@@ -30,23 +30,18 @@ var clear_keys = false;
 var score_one = 0;
 var score_two = 0;
 var score_three = 0;
+var score_one_pos = 0;
+var score_two_pos = 0;
+var score_three_pos = 0;
+var score_one_neg = 0;
+var score_two_neg = 0;
+var score_three_neg = 0;
 
 var trials_data = []
 var g = {}				// global variables
 g.PLEASANT_COLOR = '#00ff00' //'green';
 g.UNPLEASANT_COLOR = '#ff0000' //'red';
 g.PLEASANT_COLOR_2 = '#66ff99' //'pale green';
-//g.UNPLEASANT_COLOR_2 = '#d92f23' //'red';
-//g.UNPLEASANT_COLOR_2 = '#992200'
-//g.UNPLEASANT_COLOR_2 = '#d4372c'
-//g.UNPLEASANT_COLOR_2 = '#fa3628'
-//g.UNPLEASANT_COLOR_2 = '#a83232'
-//g.UNPLEASANT_COLOR_2 = '#ff5757'
-//g.UNPLEASANT_COLOR_2 = '#ff3333'
-//g.UNPLEASANT_COLOR_2 = '#ff2e2e'
-//g.UNPLEASANT_COLOR_2 = '#c70000'
-//g.UNPLEASANT_COLOR_2 = '#ff3333'
-//g.UNPLEASANT_COLOR_2 = '#ff0037'
 g.UNPLEASANT_COLOR_2 = '#f70546' // pinkish red
 
 g.FORCED_DELAY = 0.1; // forced delay duration (amount of time after outcome and wait for press)
@@ -62,6 +57,8 @@ g.outcome_text_responses = {
 	'accept': "Sure, I'll help!",
 	'reject': "Too bad!" 
 }
+
+var speech_img = 'speech_good'
 
 // Variable to hold the actual reponse
 g.outcome_text_response = '';
@@ -388,9 +385,13 @@ var resources = [
 	{ name: 'MAIN_ready', path: '/js/tasks/cooperation_task/media/instructions/Slide19.jpeg' },
 	{ name: 'MAIN_ready_audio.mp3', path: '/js/tasks/cooperation_task/media/instructions_audio/Slide19.mp3' },
 	{ name: 'BEGIN_slide', path: '/js/tasks/cooperation_task/media/instructions/Slide20.jpeg' },
-	{ name: 'positive_face', path: '/js/tasks/cooperation_task/media/green_smile.png' },
-	{ name: 'negative_face', path: '/js/tasks/cooperation_task/media/red_sad.png' },
-	{ name: 'neutral_face', path: '/js/tasks/cooperation_task/media/neutral_face.png' },
+	{ name: 'positive_face', path: '/js/tasks/cooperation_task/media/smile.png' },
+	{ name: 'negative_face', path: '/js/tasks/cooperation_task/media/frown.png' },
+	{ name: 'neutral_face', path: '/js/tasks/cooperation_task/media/neutral_noface.png' },
+	{ name: 'nothing', path: '/js/tasks/cooperation_task/media/nothing.png' },
+	{ name: 'speech', path: '/js/tasks/cooperation_task/media/speech.png' },
+	{ name: 'speech_good', path: '/js/tasks/cooperation_task/media/speech_good.png' },
+	{ name: 'speech_bad', path: '/js/tasks/cooperation_task/media/speech_bad.png' },
 	{ name: 'coop_neut_sound.mp3', path: '/js/tasks/cooperation_task/media/coop_neut_sound.mp3' },
 	{ name: 'coop_pos_sound.mp3', path: '/js/tasks/cooperation_task/media/coop_pos_sound.mp3' },
 	{ name: 'scream.wav', path: '/js/tasks/cooperation_task/media/FearConditioning_media_Scream2sx3B.wav' },
@@ -506,6 +507,12 @@ var routineTimer;
 var base_score_one;
 var base_score_two;
 var base_score_three;
+var base_score_one_pos;
+var base_score_two_pos;
+var base_score_three_pos;
+var base_score_one_neg;
+var base_score_two_neg;
+var base_score_three_neg;
 function experimentInit() {
 	// Check if there is an practice
 	if (getQueryVariable('practice') == 'true') {
@@ -653,7 +660,16 @@ function experimentInit() {
 		font: 'Arial',
 		units: 'norm',
 		pos: [0, -0.33], height: 0.05, wrapWidth: undefined, ori: 0,
-		color: new util.Color('white'), opacity: 1,
+		color: new util.Color('black'), opacity: 1,
+		depth: 1.0
+	});
+
+	// Outcome TextStim
+	g.outcome_text_bubble = new visual.ImageStim({
+		win: psychoJS.window,
+		image: 'speech',
+		units: 'norm',
+		pos: [0, -0.33], height: 0.05, wrapWidth: undefined, ori: 0,
 		depth: 0.0
 	});
 
@@ -1324,161 +1340,6 @@ g.rect = {
 	})
 }
 
-// UNUSED SCORING TICKS
-
-// g.outcome_scores_text = {
-// 	1: new visual.TextStim({
-// 		win: psychoJS.window,
-// 		name: 'Face_1',
-// 		text: '1: ',
-// 		font: 'Arial',
-// 		units: 'norm',
-// 		pos: [-0.95, 0.7], height: 0.06, wrapWidth: undefined, ori: 0,
-// 		color: new util.Color('white'), opacity: 1,
-// 		depth: 0.0
-// 	}),
-// 	2: new visual.TextStim({
-// 		win: psychoJS.window,
-// 		name: '2',
-// 		text: '2: ',
-// 		font: 'Arial',
-// 		units: 'norm',
-// 		pos: [-0.95, 0.62], height: 0.06, wrapWidth: undefined, ori: 0,
-// 		color: new util.Color('white'), opacity: 1,
-// 		depth: 0.0
-// 	}),
-// 	3 : new visual.TextStim({
-// 		win: psychoJS.window,
-// 		name: '3',
-// 		text: '3: ',
-// 		font: 'Arial',
-// 		units: 'norm',
-// 		pos: [-0.95, 0.54], height: 0.06, wrapWidth: undefined, ori: 0,
-// 		color: new util.Color('white'), opacity: 1,
-// 		depth: 0.0
-// 	})
-// }
-
-// g.outcome_scores_one = {}
-// g.outcome_scores_two = {}
-// g.outcome_scores_three = {}
-
-// base_score_one = new visual.TextStim({
-// 	win: psychoJS.window,
-// 	name: '3',
-// 	text: '',
-// 	font: 'Arial',
-// 	units: 'norm',
-// 	pos: [-0.925, 0.7], height: 0.1, wrapWidth: undefined, ori: 0,
-// 	color: new util.Color('white'), opacity: 1,
-// 	depth: 0.0
-// })
-
-// g.outcome_scores_one[0] = new visual.TextStim({
-// 	win: psychoJS.window,
-// 	name: '3',
-// 	text: '',
-// 	font: 'Arial',
-// 	units: 'norm',
-// 	pos: [-0.925, 0.7], height: 0.1, wrapWidth: undefined, ori: 0,
-// 	color: new util.Color('white'), opacity: 1,
-// 	depth: 0.0
-// })
-
-// for (let i = 1; i <= 16; i++)
-// {
-// 	base_score_one.text = '+'
-// 	base_score_one.pos[0] += 0.035
-// 	g.outcome_scores_one[i] = new visual.TextStim({
-// 		win: psychoJS.window,
-// 		name: '3',
-// 		text: base_score_one.text,
-// 		font: 'Arial',
-// 		units: 'norm',
-// 		pos: [base_score_one.pos[0], 0.7], height: 0.1, wrapWidth: undefined, ori: 0,
-// 		color: new util.Color('white'), opacity: 1,
-// 		depth: 0.0
-// 	})
-// }
-
-// base_score_two = new visual.TextStim({
-// 	win: psychoJS.window,
-// 	name: '3',
-// 	text: '',
-// 	font: 'Arial',
-// 	units: 'norm',
-// 	pos: [-0.925, 0.62], height: 0.1, wrapWidth: undefined, ori: 0,
-// 	color: new util.Color('white'), opacity: 1,
-// 	depth: 0.0
-// })
-
-// g.outcome_scores_two[0] = new visual.TextStim({
-// 	win: psychoJS.window,
-// 	name: '3',
-// 	text: '',
-// 	font: 'Arial',
-// 	units: 'norm',
-// 	pos: [-0.925, 0.62], height: 0.1, wrapWidth: undefined, ori: 0,
-// 	color: new util.Color('white'), opacity: 1,
-// 	depth: 0.0
-// })
-
-// for (let i = 1; i <= 16; i++)
-// {
-// 	base_score_two.text = '+'
-// 	base_score_two.pos[0] += 0.035
-// 	g.outcome_scores_two[i] = new visual.TextStim({
-// 		win: psychoJS.window,
-// 		name: '3',
-// 		text: base_score_two.text,
-// 		font: 'Arial',
-// 		units: 'norm',
-// 		pos: [base_score_two.pos[0], 0.62], height: 0.1, wrapWidth: undefined, ori: 0,
-// 		color: new util.Color('white'), opacity: 1,
-// 		depth: 0.0
-// 	})
-// }
-
-// base_score_three = new visual.TextStim({
-// 	win: psychoJS.window,
-// 	name: '3',
-// 	text: '',
-// 	font: 'Arial',
-// 	units: 'norm',
-// 	pos: [-0.925, 0.54], height: 0.1, wrapWidth: undefined, ori: 0,
-// 	color: new util.Color('white'), opacity: 1,
-// 	depth: 0.0
-// })
-
-// g.outcome_scores_three[0] = new visual.TextStim({
-// 	win: psychoJS.window,
-// 	name: '3',
-// 	text: '',
-// 	font: 'Arial',
-// 	units: 'norm',
-// 	pos: [-0.925, 0.54], height: 0.1, wrapWidth: undefined, ori: 0,
-// 	color: new util.Color('white'), opacity: 1,
-// 	depth: 0.0
-// })
-
-// for (let i = 1; i <= 16; i++)
-// {
-// 	base_score_three.text = '+'
-// 	base_score_three.pos[0] += 0.035
-// 	g.outcome_scores_three[i] = new visual.TextStim({
-// 		win: psychoJS.window,
-// 		name: '3',
-// 		text: base_score_three.text,
-// 		font: 'Arial',
-// 		units: 'norm',
-// 		pos: [base_score_three.pos[0], 0.54], height: 0.1, wrapWidth: undefined, ori: 0,
-// 		color: new util.Color('white'), opacity: 1,
-// 		depth: 0.0
-// 	})
-// }
-
-// END UNUSED SCORING TICKS
-
 /**
  * Routine for the routine before block starts
  * Userse for intialize and setting the stims
@@ -1487,6 +1348,354 @@ g.rect = {
  */
 function blockRoutineBegin(block) {
 	return function () {
+		
+		g.outcome_scores_one = {}
+		g.outcome_scores_two = {}
+		g.outcome_scores_three = {}
+		g.outcome_scores_one_neg = {}
+		g.outcome_scores_two_neg = {}
+		g.outcome_scores_three_neg = {}
+		g.outcome_scores_one_pos = {}
+		g.outcome_scores_two_pos = {}
+		g.outcome_scores_three_pos = {}
+		
+		base_score_one = new visual.ImageStim({
+			win: psychoJS.window,
+			name: '3',
+			image: 'nothing',
+			units: 'norm',
+			pos: [-0.9, -0.37], height: 0.075, wrapWidth: undefined, ori: 0,
+			// color: new util.Color('black'), opacity: 1,
+			opacity: 1,
+			depth: 0.0
+		})
+		
+		g.outcome_scores_one[0] = new visual.ImageStim({
+			win: psychoJS.window,
+			name: '3',
+			image: 'nothing',
+			units: 'norm',
+			pos: [-0.9, -0.37], height: 0.075, wrapWidth: undefined, ori: 0,
+			// color: new util.Color('black'), opacity: 1,
+			opacity: 1,
+			depth: 0.0
+		})
+		
+		for (let i = 1; i <= 16; i++)
+		{
+			base_score_one.image = 'neutral_face'
+			base_score_one.pos[0] += 0.035
+			g.outcome_scores_one[i] = new visual.ImageStim({
+				win: psychoJS.window,
+				name: '3',
+				image: base_score_one.image,
+				units: 'norm',
+				pos: [base_score_one.pos[0], -0.37], height: 0.075, wrapWidth: undefined, ori: 0,
+				// color: new util.Color('black'), opacity: 1,
+				opacity: 1,
+				depth: 0.0
+			})
+		}
+		
+		base_score_two = new visual.ImageStim({
+			win: psychoJS.window,
+			name: '3',
+			image: 'nothing',
+			units: 'norm',
+			pos: [-0.3, -0.37], height: 0.075, wrapWidth: undefined, ori: 0,
+			// color: new util.Color('black'), opacity: 1,
+			opacity: 1,
+			depth: 0.0
+		})
+		
+		g.outcome_scores_two[0] = new visual.ImageStim({
+			win: psychoJS.window,
+			name: '3',
+			image: 'nothing',
+			units: 'norm',
+			pos: [-0.3, -0.37], height: 0.075, wrapWidth: undefined, ori: 0,
+			// color: new util.Color('black'), opacity: 1,
+			opacity: 1,
+			depth: 0.0
+		})
+		
+		for (let i = 1; i <= 16; i++)
+		{
+			base_score_two.image = 'neutral_face'
+			base_score_two.pos[0] += 0.035
+			g.outcome_scores_two[i] = new visual.ImageStim({
+				win: psychoJS.window,
+				name: '3',
+				image: base_score_two.image,
+				units: 'norm',
+				pos: [base_score_two.pos[0], -0.37], height: 0.075, wrapWidth: undefined, ori: 0,
+				// color: new util.Color('black'), opacity: 1,
+				depth: 0.0
+			})
+		}
+		
+		base_score_three = new visual.ImageStim({
+			win: psychoJS.window,
+			name: '3',
+			image: 'nothing',
+			units: 'norm',
+			pos: [0.3, -0.37], height: 0.075, wrapWidth: undefined, ori: 0,
+			// color: new util.Color('black'), opacity: 1,
+			opacity: 1,
+			depth: 0.0
+		})
+		
+		g.outcome_scores_three[0] = new visual.ImageStim({
+			win: psychoJS.window,
+			name: '3',
+			image: 'nothing',
+			units: 'norm',
+			pos: [0.3, -0.37], height: 0.075, wrapWidth: undefined, ori: 0,
+			//color: new util.Color('black'), opacity: 1,
+			opacity: 1,
+			depth: 0.0
+		})
+		
+		for (let i = 1; i <= 16; i++)
+		{
+			base_score_three.image = 'neutral_face'
+			base_score_three.pos[0] += 0.035
+			g.outcome_scores_three[i] = new visual.ImageStim({
+				win: psychoJS.window,
+				name: '3',
+				image: base_score_three.image,
+				units: 'norm',
+				pos: [base_score_three.pos[0], -0.37], height: 0.075, wrapWidth: undefined, ori: 0,
+				// color: new util.Color('black'), opacity: 1,
+				depth: 0.0
+			})
+		}
+
+		base_score_one_pos = new visual.ImageStim({
+			win: psychoJS.window,
+			name: '3',
+			image: 'nothing',
+			units: 'norm',
+			pos: [-0.9, -0.3], height: 0.075, wrapWidth: undefined, ori: 0,
+			// color: new util.Color('black'), opacity: 1,
+			opacity: 1,
+			depth: 0.0
+		})
+		
+		g.outcome_scores_one_pos[0] = new visual.ImageStim({
+			win: psychoJS.window,
+			name: '3',
+			image: 'nothing',
+			units: 'norm',
+			pos: [-0.9, -0.3], height: 0.075, wrapWidth: undefined, ori: 0,
+			// color: new util.Color('black'), opacity: 1,
+			opacity: 1,
+			depth: 0.0
+		})
+		
+		for (let i = 1; i <= 16; i++)
+		{
+			base_score_one_pos.image = 'positive_face'
+			base_score_one_pos.pos[0] += 0.035
+			g.outcome_scores_one_pos[i] = new visual.ImageStim({
+				win: psychoJS.window,
+				name: '3',
+				image: base_score_one_pos.image,
+				units: 'norm',
+				pos: [base_score_one_pos.pos[0], -0.3], height: 0.075, wrapWidth: undefined, ori: 0,
+				// color: new util.Color('black'), opacity: 1,
+				opacity: 1,
+				depth: 0.0
+			})
+		}
+		
+		base_score_two_pos = new visual.ImageStim({
+			win: psychoJS.window,
+			name: '3',
+			image: 'nothing',
+			units: 'norm',
+			pos: [-0.3, -0.3], height: 0.075, wrapWidth: undefined, ori: 0,
+			// color: new util.Color('black'), opacity: 1,
+			opacity: 1,
+			depth: 0.0
+		})
+		
+		g.outcome_scores_two_pos[0] = new visual.ImageStim({
+			win: psychoJS.window,
+			name: '3',
+			image: 'nothing',
+			units: 'norm',
+			pos: [-0.3, -0.3], height: 0.075, wrapWidth: undefined, ori: 0,
+			// color: new util.Color('black'), opacity: 1,
+			opacity: 1,
+			depth: 0.0
+		})
+		
+		for (let i = 1; i <= 16; i++)
+		{
+			base_score_two_pos.image = 'positive_face'
+			base_score_two_pos.pos[0] += 0.035
+			g.outcome_scores_two_pos[i] = new visual.ImageStim({
+				win: psychoJS.window,
+				name: '3',
+				image: base_score_two_pos.image,
+				units: 'norm',
+				pos: [base_score_two_pos.pos[0], -0.3], height: 0.075, wrapWidth: undefined, ori: 0,
+				// color: new util.Color('black'), opacity: 1,
+				depth: 0.0
+			})
+		}
+		
+		base_score_three_pos = new visual.ImageStim({
+			win: psychoJS.window,
+			name: '3',
+			image: 'nothing',
+			units: 'norm',
+			pos: [0.3, -0.3], height: 0.075, wrapWidth: undefined, ori: 0,
+			// color: new util.Color('black'), opacity: 1,
+			opacity: 1,
+			depth: 0.0
+		})
+		
+		g.outcome_scores_three_pos[0] = new visual.ImageStim({
+			win: psychoJS.window,
+			name: '3',
+			image: 'nothing',
+			units: 'norm',
+			pos: [0.3, -0.3], height: 0.075, wrapWidth: undefined, ori: 0,
+			//color: new util.Color('black'), opacity: 1,
+			opacity: 1,
+			depth: 0.0
+		})
+		
+		for (let i = 1; i <= 16; i++)
+		{
+			base_score_three_pos.image = 'positive_face'
+			base_score_three_pos.pos[0] += 0.035
+			g.outcome_scores_three_pos[i] = new visual.ImageStim({
+				win: psychoJS.window,
+				name: '3',
+				image: base_score_three_pos.image,
+				units: 'norm',
+				pos: [base_score_three_pos.pos[0], -0.3], height: 0.075, wrapWidth: undefined, ori: 0,
+				// color: new util.Color('black'), opacity: 1,
+				depth: 0.0
+			})
+		}
+
+		base_score_one_neg = new visual.ImageStim({
+			win: psychoJS.window,
+			name: '3',
+			image: 'nothing',
+			units: 'norm',
+			pos: [-0.9, -0.3], height: 0.075, wrapWidth: undefined, ori: 0,
+			// color: new util.Color('black'), opacity: 1,
+			opacity: 1,
+			depth: 0.0
+		})
+		
+		g.outcome_scores_one_neg[0] = new visual.ImageStim({
+			win: psychoJS.window,
+			name: '3',
+			image: 'nothing',
+			units: 'norm',
+			pos: [-0.9, -0.3], height: 0.075, wrapWidth: undefined, ori: 0,
+			// color: new util.Color('black'), opacity: 1,
+			opacity: 1,
+			depth: 0.0
+		})
+		
+		for (let i = 1; i <= 16; i++)
+		{
+			base_score_one_neg.image = 'negative_face'
+			base_score_one_neg.pos[0] += 0.035
+			g.outcome_scores_one_neg[i] = new visual.ImageStim({
+				win: psychoJS.window,
+				name: '3',
+				image: base_score_one_neg.image,
+				units: 'norm',
+				pos: [base_score_one_neg.pos[0], -0.3], height: 0.075, wrapWidth: undefined, ori: 0,
+				// color: new util.Color('black'), opacity: 1,
+				opacity: 1,
+				depth: 0.0
+			})
+		}
+		
+		base_score_two_neg = new visual.ImageStim({
+			win: psychoJS.window,
+			name: '3',
+			image: 'nothing',
+			units: 'norm',
+			pos: [-0.3, -0.3], height: 0.075, wrapWidth: undefined, ori: 0,
+			// color: new util.Color('black'), opacity: 1,
+			opacity: 1,
+			depth: 0.0
+		})
+		
+		g.outcome_scores_two_neg[0] = new visual.ImageStim({
+			win: psychoJS.window,
+			name: '3',
+			image: 'nothing',
+			units: 'norm',
+			pos: [-0.3, -0.3], height: 0.075, wrapWidth: undefined, ori: 0,
+			// color: new util.Color('black'), opacity: 1,
+			opacity: 1,
+			depth: 0.0
+		})
+		
+		for (let i = 1; i <= 16; i++)
+		{
+			base_score_two_neg.image = 'negative_face'
+			base_score_two_neg.pos[0] += 0.035
+			g.outcome_scores_two_neg[i] = new visual.ImageStim({
+				win: psychoJS.window,
+				name: '3',
+				image: base_score_two_neg.image,
+				units: 'norm',
+				pos: [base_score_two_neg.pos[0], -0.3], height: 0.075, wrapWidth: undefined, ori: 0,
+				// color: new util.Color('black'), opacity: 1,
+				depth: 0.0
+			})
+		}
+		
+		base_score_three_neg = new visual.ImageStim({
+			win: psychoJS.window,
+			name: '3',
+			image: 'nothing',
+			units: 'norm',
+			pos: [0.3, -0.3], height: 0.075, wrapWidth: undefined, ori: 0,
+			// color: new util.Color('black'), opacity: 1,
+			opacity: 1,
+			depth: 0.0
+		})
+		
+		g.outcome_scores_three_neg[0] = new visual.ImageStim({
+			win: psychoJS.window,
+			name: '3',
+			image: 'nothing',
+			units: 'norm',
+			pos: [0.3, -0.3], height: 0.075, wrapWidth: undefined, ori: 0,
+			//color: new util.Color('black'), opacity: 1,
+			opacity: 1,
+			depth: 0.0
+		})
+		
+		for (let i = 1; i <= 16; i++)
+		{
+			base_score_three_neg.image = 'negative_face'
+			base_score_three_neg.pos[0] += 0.035
+			g.outcome_scores_three_neg[i] = new visual.ImageStim({
+				win: psychoJS.window,
+				name: '3',
+				image: base_score_three_neg.image,
+				units: 'norm',
+				pos: [base_score_three_neg.pos[0], -0.3], height: 0.075, wrapWidth: undefined, ori: 0,
+				// color: new util.Color('black'), opacity: 1,
+				depth: 0.0
+			})
+		}
+
+
 		//------Prepare to start Routine 'trial'-------
 		t = 0;
 		trial_type = trials_block + '_' + probability_1 + '_' + probability_2 + '_' + probability_3
@@ -1530,16 +1739,15 @@ function blockRoutineBegin(block) {
 		// Draw the static stims
 		// Top Information
 
-		// UNUSED SCORING TICKS
-
-		// g.outcome_scores_text[1].setAutoDraw(true)
-		// g.outcome_scores_text[2].setAutoDraw(true)
-		// g.outcome_scores_text[3].setAutoDraw(true)
-		// g.outcome_scores_one[0].setAutoDraw(true)
-		// g.outcome_scores_two[0].setAutoDraw(true)
-		// g.outcome_scores_three[0].setAutoDraw(true)
-
-		// END UNUSED SCORING TICKS
+		g.outcome_scores_one[0].setAutoDraw(true)
+		g.outcome_scores_two[0].setAutoDraw(true)
+		g.outcome_scores_three[0].setAutoDraw(true)
+		g.outcome_scores_one_pos[0].setAutoDraw(true)
+		g.outcome_scores_two_pos[0].setAutoDraw(true)
+		g.outcome_scores_three_pos[0].setAutoDraw(true)
+		g.outcome_scores_one_neg[0].setAutoDraw(true)
+		g.outcome_scores_two_neg[0].setAutoDraw(true)
+		g.outcome_scores_three_neg[0].setAutoDraw(true)
 
 		g.text_game_number.setAutoDraw(true);
 		g.text_val_game_number.setAutoDraw(true);
@@ -1836,63 +2044,51 @@ function setOutcomeResponse(outcome, game_type, choice) {
 	if (game_type == 'pleasant') {
 		if (outcome == 'positive') {
 			// pleasant outcomes with positive images
-			g.outcome_text_response = g.outcome_text_responses['accept']
+			speech_img = 'speech_good'
 		} else {
 			// pleasant outcomes with scrambled images
-			g.outcome_text_response = g.outcome_text_responses['reject']
+			speech_img = 'speech_bad'
 		}
 	} else {
 		if (outcome == 'negative') {
 			// unpleasant outcomes with negative images
-			g.outcome_text_response = g.outcome_text_responses['reject']
+			speech_img = 'speech_bad'
 		} else {
 			// unpleasant outcomes with scrambled iamges
-			g.outcome_text_response = g.outcome_text_responses['accept']
+			speech_img = 'speech_good'
 		}
 	}
 
 	// Set the text x-position based of the choice
 	switch (choice) {
 		case 1:
-			g.outcome_text = new visual.TextStim({
+			g.outcome_text_bubble = new visual.ImageStim({
 				win: psychoJS.window,
-				name: 'outcome_text',
-				text: g.outcome_text_response,
-				font: 'Arial',
+				image: speech_img,
 				units: 'norm',
-				pos: [
-					g.faces_choice[1].pos[0],
-					-0.33], height: 0.05, wrapWidth: undefined, ori: 0,
-				color: new util.Color('white'), opacity: 1,
-				depth: 0.0
+				pos: [g.faces_choice[1].pos[0] + 0.2, 0.15],
+				height: 0.05, wrapWidth: undefined, ori: 0,
+				depth: -1.0
 			});
 			break;
 		case 2:
-			g.outcome_text = new visual.TextStim({
+			g.outcome_text_bubble = new visual.ImageStim({
 				win: psychoJS.window,
-				name: 'outcome_text',
-				text: g.outcome_text_response,
-				font: 'Arial',
+				image: speech_img,
 				units: 'norm',
-				pos: [
-					g.faces_choice[2].pos[0],
-					-0.33], height: 0.05, wrapWidth: undefined, ori: 0,
-				color: new util.Color('white'), opacity: 1,
-				depth: 0.0
+				pos: [g.faces_choice[2].pos[0] + 0.2, 0.15],
+				height: 0.05, wrapWidth: undefined, ori: 0,
+				depth: -1.0
 			});
 			break;
 		case 3:
-			g.outcome_text = new visual.TextStim({
+			g.outcome_text_bubble = new visual.ImageStim({
 				win: psychoJS.window,
-				name: 'outcome_text',
-				text: g.outcome_text_response,
-				font: 'Arial',
+				image: speech_img,
 				units: 'norm',
-				pos: [
-					g.faces_choice[3].pos[0],
-					-0.33], height: 0.05, wrapWidth: undefined, ori: 0,
-				color: new util.Color('white'), opacity: 1,
-				depth: 0.0
+				pos: [g.faces_choice[3].pos[0] + 0.2, 0.15],
+				height: 0.05, wrapWidth: undefined, ori: 0,
+				depth: -1.0
 			});
 			break;
 	}
@@ -1937,7 +2133,7 @@ function blockRoutineTrials(trials) {
 			play_sound = true;
 			console.log('show outcome image')
 
-			g.outcome_text.setAutoDraw(false)
+			g.outcome_text_bubble.setAutoDraw(false)
 			g.black_rectangle.setAutoDraw(false)
 			// Start the outcome image and the sound
 			// Outcome image onset
@@ -2000,25 +2196,31 @@ function blockRoutineTrials(trials) {
 					{
 						if (outcome == 'positive')
 						{
-							score_one += 1
-							g.game_room_score.setText(`Number of Positive Outcomes: ${score_one + score_two + score_three}/${trials_block}`)
+							score_one_pos += 1
+							g.game_room_score.setText(`Number of Positive Outcomes: ${score_one_pos + score_two_pos + score_three_pos}/${trials_block}`)
 							//g.outcome_scores_one[score_one - 1].setAutoDraw(false)
 							
-							// UNUSED SCORING TICKS
-							//g.outcome_scores_one[score_one].setAutoDraw(true)
-							// END UNUSED SCORING TICKS
+							g.outcome_scores_one_pos[score_one_pos].setAutoDraw(true)
+						}
+						else
+						{
+							score_one += 1
+							g.outcome_scores_one[score_one].setAutoDraw(true)
 						}
 					}
 					if (game_type == 'unpleasant')
 					{
 						if (outcome == 'negative')
 						{
-							score_one += 1
-							g.game_room_score.setText(`Number of Negative Outcomes: ${score_one + score_two + score_three}/${trials_block}`)
+							score_one_neg += 1
+							g.game_room_score.setText(`Number of Negative Outcomes: ${score_one_neg + score_two_neg + score_three_neg}/${trials_block}`)
 							//g.outcome_scores_one[score_one - 1].setAutoDraw(false)
-							// UNUSED SCORING TICKS // for below to work as it originally did, negative outcome check should be neutral outcome check
-							//g.outcome_scores_one[score_one].setAutoDraw(true)
-							// END UNUSED SCORING TICKS
+							g.outcome_scores_one_neg[score_one_neg].setAutoDraw(true)
+						}
+						else
+						{
+							score_one += 1
+							g.outcome_scores_one[score_one].setAutoDraw(true)
 						}
 					}
 				}
@@ -2034,24 +2236,30 @@ function blockRoutineTrials(trials) {
 					{
 						if (outcome == 'positive')
 						{
-							score_two += 1
-							g.game_room_score.setText(`Number of Positive Outcomes: ${score_one + score_two + score_three}/${trials_block}`)
+							score_two_pos += 1
+							g.game_room_score.setText(`Number of Positive Outcomes: ${score_one_pos + score_two_pos + score_three_pos}/${trials_block}`)
 							//g.outcome_scores_two[score_two - 1].setAutoDraw(false)
-							// UNUSED SCORING TICKS
-							//g.outcome_scores_two[score_two].setAutoDraw(true)
-							// END UNUSED SCORING TICKS
+							g.outcome_scores_two_pos[score_two_pos].setAutoDraw(true)
+						}
+						else
+						{
+							score_two += 1
+							g.outcome_scores_two[score_two].setAutoDraw(true)
 						}
 					}
 					if (game_type == 'unpleasant')
 					{
 						if (outcome == 'negative')
 						{
-							score_two += 1
-							g.game_room_score.setText(`Number of Negative Outcomes: ${score_one + score_two + score_three}/${trials_block}`)
+							score_two_neg += 1
+							g.game_room_score.setText(`Number of Negative Outcomes: ${score_one_neg + score_two_neg + score_three_neg}/${trials_block}`)
 							//g.outcome_scores_two[score_two - 1].setAutoDraw(false)
-							// UNUSED SCORING TICKS
-							//g.outcome_scores_two[score_two].setAutoDraw(true)
-							// END UNUSED SCORING TICKS
+							g.outcome_scores_two_neg[score_two_neg].setAutoDraw(true)
+						}
+						else
+						{
+							score_two += 1
+							g.outcome_scores_two[score_two].setAutoDraw(true)
 						}
 					}
 				}
@@ -2067,24 +2275,30 @@ function blockRoutineTrials(trials) {
 					{
 						if (outcome == 'positive')
 						{
-							score_three += 1
-							g.game_room_score.setText(`Number of Positive Outcomes: ${score_one + score_two + score_three}/${trials_block}`)
+							score_three_pos += 1
+							g.game_room_score.setText(`Number of Positive Outcomes: ${score_one_pos + score_two_pos + score_three_pos}/${trials_block}`)
 							//g.outcome_scores_three[score_three - 1].setAutoDraw(false)
-							// UNUSED SCORING TICKS
-							//g.outcome_scores_three[score_three].setAutoDraw(true)
-							// END UNUSED SCORING TICKS
+							g.outcome_scores_three_pos[score_three_pos].setAutoDraw(true)
+						}
+						else
+						{
+							score_three += 1
+							g.outcome_scores_three[score_three].setAutoDraw(true)
 						}
 					}
 					if (game_type == 'unpleasant')
 					{
 						if (outcome == 'negative')
 						{
-							score_three += 1
-							g.game_room_score.setText(`Number of Negative Outcomes: ${score_one + score_two + score_three}/${trials_block}`)
+							score_three_neg += 1
+							g.game_room_score.setText(`Number of Negative Outcomes: ${score_one_neg + score_two_neg + score_three_neg}/${trials_block}`)
 							//g.outcome_scores_three[score_three - 1].setAutoDraw(false)
-							// UNUSED SCORING TICKS
-							//g.outcome_scores_three[score_three].setAutoDraw(true)
-							// END UNUSED SCORING TICKS
+							g.outcome_scores_three_neg[score_three_neg].setAutoDraw(true)
+						}
+						else
+						{
+							score_three += 1
+							g.outcome_scores_three[score_three].setAutoDraw(true)
 						}
 					}
 				}
@@ -2103,8 +2317,7 @@ function blockRoutineTrials(trials) {
 				g.outcomeTimer.reset(g.OUTCOME_SOUND_DURATION + g.OUTCOME_TEXT_DURATION);
 				
 				// g.black_rectangle.setAutoDraw(true)
-				g.outcome_text.setText(g.outcome_text_response)
-				g.outcome_text.setAutoDraw(true)
+				g.outcome_text_bubble.setAutoDraw(true)
 
 				ready.clock.reset(); // reset keyboard clock
 			}
@@ -2153,19 +2366,25 @@ function blockRoutineOutcome(trials) {
 			score_one = 0;
 			score_two = 0;
 			score_three = 0;
+			score_one_pos = 0;
+			score_two_pos = 0;
+			score_three_pos = 0;
+			score_one_neg = 0;
+			score_two_neg = 0;
+			score_three_neg = 0;
 
-			// UNUSED SCORING TICKS
-			// g.outcome_scores_text[1].setAutoDraw(false)
-			// g.outcome_scores_text[2].setAutoDraw(false)
-			// g.outcome_scores_text[3].setAutoDraw(false)
-
-			// for (let i = 0; i <= 16; i++)
-			// {
-			// 	g.outcome_scores_one[i].setAutoDraw(false)
-			// 	g.outcome_scores_two[i].setAutoDraw(false)
-			// 	g.outcome_scores_three[i].setAutoDraw(false)
-			// }
-			// END UNUSED SCORING TICKS
+			for (let i = 0; i <= 16; i++)
+			{
+				g.outcome_scores_one[i].setAutoDraw(false)
+				g.outcome_scores_two[i].setAutoDraw(false)
+				g.outcome_scores_three[i].setAutoDraw(false)
+				g.outcome_scores_one_pos[i].setAutoDraw(false)
+				g.outcome_scores_two_pos[i].setAutoDraw(false)
+				g.outcome_scores_three_pos[i].setAutoDraw(false)
+				g.outcome_scores_one_neg[i].setAutoDraw(false)
+				g.outcome_scores_two_neg[i].setAutoDraw(false)
+				g.outcome_scores_three_neg[i].setAutoDraw(false)
+			}
 
 			return Scheduler.Event.NEXT;
 		}
