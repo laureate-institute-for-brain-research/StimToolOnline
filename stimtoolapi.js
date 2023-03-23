@@ -167,7 +167,9 @@ module.exports = function (app){
             if (err) return logger.error(err);
 
             // File name is by taskname, participant id, session and date 
-            file_name = req.sanitize(req.body.expInfo.task) + '_' + req.sanitize(req.body.expInfo.participant) + '_' + req.sanitize(req.body.expInfo.session) + '_' + req.sanitize(req.body.expInfo.date)+ '.csv'
+            file_name = req.sanitize(req.body.expInfo.task) + '_' + req.sanitize(req.body.expInfo.participant) + '_' + req.sanitize(req.body.expInfo.session) + '_' + req.sanitize(req.body.expInfo.date) + '.csv'
+            
+            file_name = file_name.replace_all("/", "_")
 
             path_to_save = `${process.env.DATA_PATH}/${req.sanitize(req.body.expInfo.study)}/${file_name}` // save results directly the cephfs local path
 
@@ -236,6 +238,8 @@ module.exports = function (app){
         file_name = req.sanitize(req.body.expInfo.task) + '_' + req.sanitize(req.body.expInfo.participant) +
             '_B' + req.sanitize(req.body.expInfo.block) + '_' + req.sanitize(req.body.expInfo.session) +
             '_' + req.sanitize(req.body.expInfo.date) + '.wav'
+        
+        file_name = file_name.replace_all("/", "_")
         
         path_to_save = `${process.env.DATA_PATH}/${req.sanitize(req.body.expInfo.study)}/${file_name}` // save results directly the cephfs local path
         fs.access(path.dirname(path_to_save), error => {
