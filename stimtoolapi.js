@@ -162,6 +162,7 @@ module.exports = function (app){
         trials_data = req.body.trials_data
 
         // console.log(trials_data)
+        req.body.expInfo.date = req.body.expInfo.date.split("/").join("_")
         // Save to /data/folder based of study
         jsonexport(trials_data, function(err, csv) {
             if (err) return logger.error(err);
@@ -169,7 +170,7 @@ module.exports = function (app){
             // File name is by taskname, participant id, session and date 
             file_name = req.sanitize(req.body.expInfo.task) + '_' + req.sanitize(req.body.expInfo.participant) + '_' + req.sanitize(req.body.expInfo.session) + '_' + req.sanitize(req.body.expInfo.date) + '.csv'
             
-            file_name = file_name.replace_all("/", "_")
+            // file_name = file_name.replaceAll("/", "_")
 
             path_to_save = `${process.env.DATA_PATH}/${req.sanitize(req.body.expInfo.study)}/${file_name}` // save results directly the cephfs local path
 
