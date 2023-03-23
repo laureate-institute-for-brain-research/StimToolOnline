@@ -10,14 +10,11 @@ var event_types = {
 	'TASK_ONSET': 2,
 	'BLOCK_ONSET': 3,
 	'TRIAL_ONSET': 4,
-	'SELECTION': 5,
-	'BLOCK_RESULT_ONSET': 6,
-	'BLOCK_RESULT_OFFSET': 7,
-	'FINAL_RESULT_ONSET': 8,
-	'FINAL_RESULT_OFFSET': 9,
-	'FIXATION_ONSET': 10,
-	'OUTCOME_IMAGE_ONSET': 11,
-	'OUTCOME_SOUND_ONSET': 12,
+	'MODULE_ONSET': 5,
+	'WAITING_SELECTION_ONSET': 6,
+	'RESPONSE': 7,
+	'FIXATION_ONSET': 8,
+	'OUTCOME_ONSET': 9,
 }
 
 /*jshint -W069 */
@@ -1214,8 +1211,9 @@ function experimentInit() {
 
 	globalClock.reset() // start Global Clock
 
-	mark_event(trials_data, globalClock, 'NA', 'NA', event_types['TASK_ONSET'],
-				'NA', 'NA' , 'NA')
+	mark_event(
+		trials_data, globalClock, 'NA', 'NA', event_types['TASK_ONSET'],
+		'NA', 'NA', 'NA')
 	return Scheduler.Event.NEXT;
 }
 
@@ -1240,8 +1238,16 @@ function instruct_pagesLoopBegin(thisScheduler) {
 
 	// console.log(thisScheduler)
 	block_type = 'INSTRUCTIONS'
-	mark_event(trials_data, globalClock, 0, block_type, event_types['BLOCK_ONSET'],
-				'NA', 'NA', 'NA')
+	mark_event(
+		trials_data,
+		globalClock,
+		'NA',
+		block_type,
+		event_types['BLOCK_ONSET'],
+		'NA',
+		'NA',
+		'NA'
+	)
 
 	return Scheduler.Event.NEXT;
 }
@@ -1522,8 +1528,14 @@ function readyRoutineBegin(block_type, image_stim, audio_stim) {
 		}
 		
 		mark_event(
-			trials_data, globalClock, 0, block_type, event_types['BLOCK_ONSET'],
-			'NA', 'NA', 'NA'
+			trials_data,
+			globalClock,
+			0,
+			block_type,
+			event_types['BLOCK_ONSET'],
+			'NA',
+			'NA',
+			'NA'
 		)
 	
 		routineTimer.add(2.000000);
@@ -1720,9 +1732,9 @@ function trialsLoopBegin(thisScheduler) {
 	}
 
 	
-	trial_type = 'MAIN'
-	mark_event(trials_data, globalClock, 'NA', trial_type, event_types['BLOCK_ONSET'],
-				'NA', 'NA' , 'NA')
+	// trial_type = 'MAIN'
+	// mark_event(trials_data, globalClock, 'NA', trial_type, event_types['BLOCK_ONSET'],
+	// 			'NA', 'NA' , 'NA')
 	return Scheduler.Event.NEXT;
 }
 
@@ -1908,8 +1920,16 @@ function trialRoutineBegin(trial) {
 		// set trial status
 		g.trial_phase = g.TRIAL_BEGIN;
 
-		mark_event(trials_data, globalClock, g.trial_number, trial_type, event_types['BLOCK_ONSET'],
-				'NA', 'NA' , 'NA')
+		mark_event(
+			trials_data,
+			globalClock,
+			trial.trial_number,
+			trial.module,
+			event_types['TRIAL_ONSET'],
+			'NA',
+			'NA',
+			trial.OLL_ONLL
+		)
 		return Scheduler.Event.NEXT;
 	};
 }
@@ -1995,6 +2015,16 @@ function module_1(trial) {
 			}
 			g.prompt_text.pos = [0, 0.62];
 			g.prompt_text.setAutoDraw(true);
+			mark_event(
+				trials_data,
+				globalClock,
+				trial.trial_number,
+				trial.module,
+				event_types['MODULE_ONSET'],
+				'NA',
+				'NA',
+				'NA'
+			)
 			ready.clearEvents();
 		}
 
@@ -2065,6 +2095,9 @@ function module_1(trial) {
 			g.choice_1.setAutoDraw(true);
 			g.choice_2.setAutoDraw(true);
 			g.trial_phase = g.WAITING_SELECTION;
+			mark_event(trials_data, globalClock, trial.trial_number, 'NA', event_types['WAITING_SELECTION_ONSET'],
+				'NA', 'NA', 'NA')
+			ready.clearEvents();
 
 			// if ( g.depth < 0 || g.current_path >= 8) {
 			// 	// move to next routine if reached max depth
@@ -2078,6 +2111,7 @@ function module_1(trial) {
 		// WAITING SELECTION
 		// as subject where they want to go next
 		if (g.trial_phase == g.WAITING_SELECTION) {
+			
 			let theseKeys = ready.getKeys({ keyList: g.keyList, waitRelease: false });
 			if (theseKeys.length > 0) {
 
@@ -2095,6 +2129,17 @@ function module_1(trial) {
 				// based ond current position and the building type
 				g.trial_invites = g.trial_invites + g.accepted_invites;
 				console.log('invites accepted: ', g.trial_invites)
+
+				mark_event(
+					trials_data,
+					globalClock,
+					trial.trial_number,
+					trial.module,
+					event_types['RESPONSE'],
+					theseKeys[0].rt,
+					g.response,
+					g.accepted_invites
+				)
 				
 				// prepare for next phase
 				g.trial_phase = g.TRIAL_BEGIN;
@@ -2652,6 +2697,16 @@ function fixation(trial) {
 			g.points_fixation_stim.setAutoDraw(true);
 			// start time
 			g.fixationTimer.reset(trial.ITI);
+			mark_event(
+				trials_data,
+				globalClock,
+				trial.trial_number,
+				trial.module,
+				event_types['FIXATION_ONSET'],
+				trial.ITI,
+				'NA',
+				'NA'
+			)
 		}
 
 		if (g.fixationTimer.getTime() <= 0) {
@@ -2726,8 +2781,10 @@ function initialFixation(trials) {
 	return function () {
 		//------Loop for each frame of Routine 'trial'-------
 		let continueRoutine = true; // until we're told otherwise	
-		if (trial_number != 1) continueRoutine = false // if not the firt trial, skip this routine
-	
+		if (trials.trial_number != 0) {
+			continueRoutine = false // if not the firt trial, skip this routine
+			
+		} 
 		// get current time
 		t_end = endClock.getTime();
 		
@@ -2736,8 +2793,12 @@ function initialFixation(trials) {
 			g.points_fixation_stim.setText('+')
 			g.points_fixation_stim.setAutoDraw(true)
 
-			mark_event(trials_data, globalClock, 'NA', trial_type, event_types['FIXATION_ONSET'],
-				'NA', 'NA' , 'NA')
+			if (trials.trial_number == 0) {
+				// mark once
+				mark_event(
+					trials_data, globalClock, trials.trial_number, 'INITIAL', event_types['FIXATION_ONSET'],
+					'NA', 'NA' , 'NA')
+			}
 		}
 
 		if (t_end >= 3) {
