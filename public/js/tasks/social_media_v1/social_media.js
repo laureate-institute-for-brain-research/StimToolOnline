@@ -358,8 +358,8 @@ var resources = [
 	{ name: 'profile_pic.png', path: '/js/tasks/social_media/media/profile_photo.png' },
 	{ name: 'profile_picRR.png', path: '/js/tasks/social_media/media/profile_picRR.png' },
 	{ name: 'like.png', path: '/js/tasks/social_media/media/like.png' },
-	{ name: 'dislike.png', path: '/js/tasks/social_media/media/heart_outline_x4.png' },
-	{ name: 'dislike_outline.png', path: '/js/tasks/social_media/media/heart_outline.png'},
+	{ name: 'dislike.png', path: '/js/tasks/social_media/media/dislike.png' },
+	{ name: 'dislike_outline.png', path: '/js/tasks/social_media/media/dislike_outline.png'},
 	{ name: 'heart.png', path: '/js/tasks/social_media/media/heart.png' },
 	{ name: 'heart_outline.png', path: '/js/tasks/social_media/media/heart_outline.png' }
 ]
@@ -442,26 +442,26 @@ var postStims = {
 
 var post_stim_x_pos = {
 	'left': {
-		'post_text': 0.47,
-		'like_icon': -0.503,
-		'like_posts': -0.503,
-		'profile_photo': 0.52
+		'post_text': 0.6,
+		'like_icon': -0.373,
+		'like_posts': -0.373,
+		'profile_photo': 0.65
 	},
 	'right': {
-		'post_text': -0.46,
-		'like_icon': 0.52,
-		'like_posts': 0.52,
-		'profile_photo': -0.503
+		'post_text': -0.33,
+		'like_icon': 0.65,
+		'like_posts': 0.65,
+		'profile_photo': -0.373
 	}
 }
 
 // Create Y axis  points
 for (let i = 0; i <= 9; i++){
 	if (i == 0) {
-		postStims[i].post_y = 0.54
-		postStims[i].postphoto_y = 0.54
-		postStims[i].postlike_y = 0.57
-		postStims[i].postlikeIcon_y = 0.49
+		postStims[i].post_y = 0.62
+		postStims[i].postphoto_y = 0.62
+		postStims[i].postlike_y = 0.65
+		postStims[i].postlikeIcon_y = 0.57
 	} else {
 		postStims[i].post_y = postStims[i - 1].post_y - posts_height
 		postStims[i].postphoto_y = postStims[i - 1].postphoto_y - 0.17
@@ -690,7 +690,7 @@ function experimentInit() {
 		text: 'Home',
 		font: 'lucida grande',
 		units: 'norm',
-		pos: [-0.505, 0.84], height: 0.05,
+		pos: [-0.37, 0.94], height: 0.05,
 		wrapWidth: undefined, ori: 0,
 		bold:true,
 		color: new util.Color('white'), opacity: 1,
@@ -700,12 +700,12 @@ function experimentInit() {
 	questionText = new visual.TextStim({
 		win: psychoJS.window,
 		name: 'questionText',
-		text: 'Choose a topic',
+		text: 'Choose a topic:',
 		font: 'lucida grande',
 		alignHoriz: 'center',
 		alignVert: 'center',
 		units: 'norm',
-		pos: [0.065, 0.74], height: 0.05,
+		pos: [0.2, 0.93], height: 0.05,
 		wrapWidth: undefined, ori: 0,
 		bold:false,
 		color: new util.Color('white'), opacity: 1,
@@ -718,7 +718,7 @@ function experimentInit() {
 		width: 0.55,
 		height: 2.1,
 		units: 'norm',
-		pos: [-0.87, 0 ], ori: 0,
+		pos: [-0.74, 0 ], ori: 0,
 		lineColor: new util.Color('#292d2f'),
 		fillColor: new util.Color('black'),opacity: 1,
 		depth: 0.0
@@ -728,9 +728,9 @@ function experimentInit() {
 		win: psychoJS.window,
 		name: 'header',
 		width: 1.45,
-		height: 0.75,
+		height: 0.59,
 		units: 'norm',
-		pos: [-0.13, 1 ], ori: 0,
+		pos: [0, 1 ], ori: 0,
 		fillColor: new util.Color('black'),
 		lineColor: new util.Color('#292d2f'), opacity: 1,
 		depth: 0.0
@@ -928,7 +928,7 @@ function experimentInit() {
 		name : 'profile_pic_post', units : 'norm', 
 		image : 'profile_pic.png', mask : undefined,
 		ori: 0,
-		pos: [ -0.503, 0.74 ], 
+		pos: [ -0.373, 0.82 ], 
 		size: [0.09,0.11],
 		color: undefined, opacity: 1,
 		flipHoriz : false, flipVert : false,
@@ -979,7 +979,7 @@ function experimentInit() {
 		// opacity: .5,
 		letterHeight: 0.04,
 		font: 'lucida grande',
-		ori : 0, pos : [-.22, 0.72],
+		ori : 0, pos : [-.05, 0.8],
 	});
 
 	choice2Button = new visual.ButtonStim({
@@ -993,7 +993,7 @@ function experimentInit() {
 		// opacity: .5,
 		letterHeight: 0.04,
 		font: 'lucida grande',
-		ori : 0, pos : [0.36, 0.72],
+		ori : 0, pos : [0.45, 0.8],
 	});
 
 	beginButton = new visual.ButtonStim({
@@ -1037,7 +1037,7 @@ function experimentInit() {
 			width: 1.19,
 			height: posts_height,
 			units: 'norm',
-			pos: [0.00, postStims[i].post_y ], ori: 0,
+			pos: [0.13, postStims[i].post_y ], ori: 0,
 			lineColor: new util.Color('#292d2f'), opacity: 0.5,
 			depth: 0.0
 		});
@@ -1053,7 +1053,7 @@ function experimentInit() {
 			units: 'norm',
 			alignVert: 'left',
 			alignHoriz: 'left',
-			pos: [-0.6, postStims[i].post_y],
+			pos: [-0.2, postStims[i].post_y],
 			wrapWidth: 0.91, ori: 0,
 			color: new util.Color('white'), opacity: 1,
 			depth: 0.0
@@ -1065,8 +1065,8 @@ function experimentInit() {
 			name : `profile_pic_post_${i}`, units : 'norm', 
 			image : 'profile_pic.png', mask : undefined,
 			ori: 0,
-			pos: [ -0.473, postStims[i].postphoto_y ], 
-			size: [0.04, 0.09],
+			pos: [ -0.373, postStims[i].postphoto_y ], 
+			size: [0.07, 0.09],
 			color: undefined, opacity: 1,
 			flipHoriz : false, flipVert : false,
 			texRes : 128, interpolate : true, depth : 0
@@ -1078,8 +1078,8 @@ function experimentInit() {
 			name : `profile_picRR_post_${i}`, units : 'norm', 
 			image : 'profile_picRR.png', mask : undefined,
 			ori: 0,
-			pos: [ -0.473, postStims[i].postphoto_y ], 
-			size: [0.04, 0.09],
+			pos: [ -0.373, postStims[i].postphoto_y ], 
+			size: [0.07, 0.09],
 			color: undefined, opacity: 1,
 			flipHoriz : false, flipVert : false,
 			texRes : 128, interpolate : true, depth : 0
@@ -1091,7 +1091,7 @@ function experimentInit() {
 			name : `like_post_${i}`, units : 'pix', 
 			image : 'heart.png', mask : undefined,
 			ori: 0,
-			pos: [ 0.52, postStims[i].postlikeIcon_y ], 
+			pos: [ 0.65, postStims[i].postlikeIcon_y ], 
 			size: [0.04, 0.05],
 			color: undefined, opacity: 1,
 			flipHoriz : false, flipVert : false,
@@ -1104,7 +1104,7 @@ function experimentInit() {
 			name : `like_post_${i}_outline`, units : 'pix', 
 			image : 'heart_outline.png', mask : undefined,
 			ori: 0,
-			pos: [ 0.52, postStims[i].postlikeIcon_y ], 
+			pos: [ 0.65, postStims[i].postlikeIcon_y ], 
 			size: [0.04, 0.05],
 			color: undefined, opacity: 1,
 			flipHoriz : false, flipVert : false,
@@ -1117,7 +1117,7 @@ function experimentInit() {
 			name : `dislike_post_${i}`, units : 'pix', 
 			image : 'dislike.png', mask : undefined,
 			ori: 0,
-			pos: [ 0.52, postStims[i].postlikeIcon_y ], 
+			pos: [ 0.65, postStims[i].postlikeIcon_y ], 
 			size: [0.04, 0.05],
 			color: undefined, opacity: 1,
 			flipHoriz : false, flipVert : false,
@@ -1129,7 +1129,7 @@ function experimentInit() {
 			name : `dislike_post_${i}_outline`, units : 'pix', 
 			image : 'dislike_outline.png', mask : undefined,
 			ori: 0,
-			pos: [ 0.52, postStims[i].postlikeIcon_y ], 
+			pos: [ 0.65, postStims[i].postlikeIcon_y ], 
 			size: [0.04, 0.05],
 			color: undefined, opacity: 1,
 			flipHoriz : false, flipVert : false,
@@ -1144,7 +1144,7 @@ function experimentInit() {
 			bold: true,
 			fontFamily: 'lucida grande',
 			units: 'norm',
-			pos: [0.52, postStims[i].postlike_y],
+			pos: [0.65, postStims[i].postlike_y],
 			height: 0.07, wrapWidth: undefined, ori: 0,
 			color: new util.Color('white'), opacity: 1,
 			depth: 0.0
@@ -1166,12 +1166,12 @@ function experimentInit() {
 	totalLikesText = new visual.TextStim({
 		win: psychoJS.window,
 		name: 'pointsTracker',
-		text: 'SOCIAL APPROVAL:',
+		text: 'SOCIAL\nAPPROVAL:',
 		font: 'lucida grande',
 		units: 'norm',
 		alignHoriz: 'center',
 		alignVert: 'center',
-		pos: [0.065, 0.93], height: 0.1, wrapWidth: undefined, ori: 0,
+		pos: [0.86, 0.93], height: 0.05, wrapWidth: undefined, ori: 0,
 		color: new util.Color('white'), opacity: 1,
 		depth: 0.0
 	});
@@ -1184,7 +1184,7 @@ function experimentInit() {
 		alignHoriz: 'center',
 		alignVert: 'center',
 		units: 'norm',
-		pos: [ 0.065, 0.83], height: 0.12, wrapWidth: undefined, ori: 0,
+		pos: [ 0.86, 0.82], height: 0.09, wrapWidth: undefined, ori: 0,
 		color: new util.Color('#00FFFF'), opacity: 1,
 		depth: 0.0
 	});
@@ -1197,7 +1197,7 @@ function experimentInit() {
 		units: 'norm',
 		alignHoriz: 'center',
 		alignVert: 'center',
-		pos: [ 0.81, 0.75], height: 0.1, wrapWidth: undefined, ori: 0,
+		pos: [ 0.865, 0.65], height: 0.05, wrapWidth: undefined, ori: 0,
 		color: new util.Color('white'), opacity: 1,
 		depth: 0.0
 	});
@@ -1210,7 +1210,7 @@ function experimentInit() {
 		units: 'norm',
 		alignHoriz: 'center',
 		alignVert: 'center',
-		pos: [ 0.805, 0.64], height: 0.1, wrapWidth: undefined, ori: 0,
+		pos: [ 0.86, 0.55], height: 0.05, wrapWidth: undefined, ori: 0,
 		color: new util.Color('#00FF00'), opacity: 1,
 		depth: 0.0
 	});
@@ -1223,7 +1223,7 @@ function experimentInit() {
 		units: 'norm',
 		alignHoriz: 'center',
 		alignVert: 'center',
-		pos: [0.81, 0.38], height: 0.1, wrapWidth: undefined, ori: 0,
+		pos: [0.87, 0.38], height: 0.05, wrapWidth: undefined, ori: 0,
 		color: new util.Color('white'), opacity: 1,
 		depth: 0.0
 	});
@@ -1237,7 +1237,7 @@ function experimentInit() {
 		alignHoriz: 'center',
 		alignVert: 'center',
 		units: 'norm',
-		pos: [ 0.805, 0.27], height: 0.1, wrapWidth: undefined, ori: 0,
+		pos: [ 0.86, 0.31], height: 0.05, wrapWidth: undefined, ori: 0,
 		color: new util.Color('#FF137E'), opacity: 1,
 		depth: 0.0
 	});
@@ -1250,7 +1250,7 @@ function experimentInit() {
 		units: 'norm',
 		alignHoriz: 'center',
 		alignVert: 'center',
-		pos: [ 0.81, 0.05], height: 0.1, wrapWidth: undefined, ori: 0,
+		pos: [ 0.86, 0.14], height: 0.05, wrapWidth: undefined, ori: 0,
 		color: new util.Color('white'), opacity: 1,
 		depth: 0.0
 	});
@@ -1263,7 +1263,7 @@ function experimentInit() {
 		units: 'norm',
 		alignHoriz: 'center',
 		alignVert: 'center',
-		pos: [0.805, -0.05], height: 0.1, wrapWidth: undefined, ori: 0,
+		pos: [0.86, 0.08], height: 0.05, wrapWidth: undefined, ori: 0,
 		color: new util.Color('#FFFF00'), opacity: 1,
 		depth: 0.0
 	});
@@ -1733,7 +1733,7 @@ var trials;
 var currentLoop;
 var lastTrialKeyPressed;
 var total_games;
-var animation_duration = 0.25 //0.55
+var animation_duration = 0.55
 var fixation_duration = 0
 function trialsLoopBegin(thisScheduler) {
 	// set up handler to look up the conditions
@@ -1995,7 +1995,7 @@ function trialRoutineBegin(trials) {
 		fullNameStim.setAutoDraw(true)
 
 		pageName.setAutoDraw(true)
-		questionText.setText('Choose a topic')
+		questionText.setText('Choose a topic:')
 		questionText.setAutoDraw(true)
 		profilePicPostStim.setAutoDraw(true)
 
@@ -2652,11 +2652,11 @@ function trialRoutineEachFrameShowPost(trials) {
 
 		//postStims[trial_num].rect.opacity = 0.5
 
-		if (t > 0.2 && postStims[trial_num].post_text.status != PsychoJS.Status.FINISHED) {
+		if (t > 0.5 && postStims[trial_num].post_text.status != PsychoJS.Status.FINISHED) {
 			//loadingAnimationText()
 			postStims[trial_num].post_text.setText(topic_text)
 		}
-		if (t > 0.2 && postStims[trial_num].profile_photo.status == PsychoJS.Status.NOT_STARTED) {
+		if (t > 0.5 && postStims[trial_num].profile_photo.status == PsychoJS.Status.NOT_STARTED) {
 			postStims[trial_num].profile_photo.setAutoDraw(true)
 			mark_event(trials_data, globalClock, trial_num, trial_type, event_types['ANIMATION_ONSET'], 'NA', 'NA', topic_text)
 		}
@@ -2672,14 +2672,10 @@ function trialRoutineEachFrameShowPost(trials) {
 
 		// After 3 seconds go to the next Trial (post) or next chat room
 		if ((t > animation_duration) && !do_not_draw) {
-			if (dislike_room) {
-				postStims[trial_num].like_posts.setText(-(trial_reward))
-			}
 			postStims[trial_num].like_posts.setAutoDraw(true)
 			totalLikesTracker.setText(socialApprovalScore)
 
 			if (dislike_room) {
-				postStims[trial_num].like_posts.setText(-(trial_reward))
 				postStims[trial_num].dislike_icon.setAutoDraw(true) // show filled in heart
 			} else {
 				postStims[trial_num].like_icon.setAutoDraw(true) // show filled in heart
@@ -2789,7 +2785,7 @@ function trialRoleReversalRoutineEachFrameWaitforInput(trials) {
 
 
 		// *resp* updates
-		if (t >= 0.2) {
+		if (t >= 0.5) {
 			// keep track of start time/frame for later
 			resp.tStart = t;  // (not accounting for frame time here)
 			resp.frameNStart = frameN;  // exact frame index
