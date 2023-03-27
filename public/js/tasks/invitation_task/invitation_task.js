@@ -15,6 +15,14 @@ var event_types = {
 	'RESPONSE': 7,
 	'FIXATION_ONSET': 8,
 	'OUTCOME_ONSET': 9,
+	'OUTCOME_RESPONSE': 10,
+	'POINTS_ONSET': 11,
+	'EXIT_BUILDING': 12,
+	'BREAK_ONSET': 13,
+	'BREAK_RESPONSE': 14,
+	'ANIMATION_ONSET': 15,
+	'TIME_UP': 16,
+	'PLANNING_ONSET': 17
 }
 
 /*jshint -W069 */
@@ -242,36 +250,7 @@ g.path = {
 // - current room
 // - building
 // - the correct door that should have been pressed.
-g.module_2b_schedule = [
-	// [ 7,'library', g.path[g.path[7]['left']]['accepted']['library'], 'left' ],
-	// [ 7,'library', g.path[g.path[7]['right']]['accepted']['library'], 'right' ],
-	// [ 6,'library', g.path[g.path[6]['left']]['accepted']['library'], 'left' ],
-	// [ 6,'library', g.path[g.path[6]['right']]['accepted']['library'], 'right' ],
-	// [ 5,'library', g.path[g.path[5]['left']]['accepted']['library'], 'left' ],
-	// [ 5,'library', g.path[g.path[5]['right']]['accepted']['library'], 'right' ],
-	// [ 4,'library', g.path[g.path[4]['left']]['accepted']['library'], 'left' ],
-	// [ 4,'library', g.path[g.path[4]['right']]['accepted']['library'], 'right' ],
-	// [ 3,'library', g.path[g.path[3]['left']]['accepted']['library'], 'left' ],
-	// [ 3,'library', g.path[g.path[3]['right']]['accepted']['library'], 'right' ],
-	// [ 2,'library', g.path[g.path[2]['left']]['accepted']['library'], 'left' ],
-	// [ 2,'library', g.path[g.path[2]['right']]['accepted']['library'], 'right' ],
-	// [ 1,'library', g.path[g.path[1]['left']]['accepted']['library'], 'left' ],
-	// [ 1,'library', g.path[g.path[1]['right']]['accepted']['library'], 'right' ],
-	// [ 7,'office', g.path[g.path[7]['left']]['accepted']['office'], 'left' ],
-	// [ 7,'office', g.path[g.path[7]['right']]['accepted']['office'], 'right' ],
-	// [ 6,'office', g.path[g.path[6]['left']]['accepted']['office'], 'left' ],
-	// [ 6,'office', g.path[g.path[6]['right']]['accepted']['office'], 'right' ],
-	// [ 5,'office', g.path[g.path[5]['left']]['accepted']['office'], 'left' ],
-	// [ 5,'office', g.path[g.path[5]['right']]['accepted']['office'], 'right' ],
-	// [ 4,'office', g.path[g.path[4]['left']]['accepted']['library'], 'left' ],
-	// [ 4,'office', g.path[g.path[4]['right']]['accepted']['library'], 'right' ],
-	// [ 3,'office', g.path[g.path[3]['left']]['accepted']['office'], 'left' ],
-	// [ 3,'office', g.path[g.path[3]['right']]['accepted']['office'], 'right' ],
-	// [ 2,'office', g.path[g.path[2]['left']]['accepted']['office'], 'left' ],
-	// [ 2,'office', g.path[g.path[2]['right']]['accepted']['office'], 'right' ],
-	// [ 1,'office', g.path[g.path[1]['left']]['accepted']['office'], 'left' ],
-	// [ 1,'office', g.path[g.path[1]['right']]['accepted']['office'] , 'right']
-]
+g.module_2b_schedule = [];
 g.module_2b_index = 0; // keep track of index
 
 // optiions positions
@@ -1650,8 +1629,16 @@ function practiceTrialsLoopBegin(thisScheduler) {
 		thisScheduler.add(endLoopIteration(thisScheduler, snapshot));
 	}
 	trial_type = 'PRACTICE'
-	mark_event(trials_data, globalClock, 'NA', trial_type,
-		event_types['BLOCK_ONSET'], 'NA', 'NA' , 'NA')
+	mark_event(
+		trials_data,
+		globalClock,
+		'NA',
+		trial_type,
+		event_types['BLOCK_ONSET'],
+		'NA',
+		'NA',
+		'NA'
+	)
 	return Scheduler.Event.NEXT;
 }
 
@@ -1924,11 +1911,11 @@ function trialRoutineBegin(trial) {
 			trials_data,
 			globalClock,
 			trial.trial_number,
-			trial.module,
+			'MODULE=' + trial.module,
 			event_types['TRIAL_ONSET'],
 			'NA',
 			'NA',
-			trial.OLL_ONLL
+			trial.building_type + ' | ' + trial.OLL_ONLL
 		)
 		return Scheduler.Event.NEXT;
 	};
@@ -1959,6 +1946,16 @@ function module_1(trial) {
 				// last room: Change Prompt and take them to the wait space key
 				g.prompt_text.setText('Press SPACE key to exit the building.');
 				g.trial_phase = g.WAITING_KEY;
+				mark_event(
+					trials_data,
+					globalClock,
+					trial.trial_number,
+					'MODULE='+ trial.module,
+					event_types['EXIT_BUILDING'],
+					'NA',
+					'NA',
+					'NA'
+				)
 			} else {
 				g.rooms_left_text.setText(`You have ${g.depth} moves`)
 				g.rooms_left_text.setAutoDraw(true);
@@ -2019,20 +2016,13 @@ function module_1(trial) {
 				trials_data,
 				globalClock,
 				trial.trial_number,
-				trial.module,
+				'MODULE=1',
 				event_types['MODULE_ONSET'],
 				'NA',
 				'NA',
 				'NA'
 			)
 			ready.clearEvents();
-		}
-
-		// Click Invite Button
-		if (g.room_image_invite.status == PsychoJS.Status.NOT_STARTED && g.trial_phase == g.WAITING_INVITE_KEY) {
-			// pressed invited button
-			g.prompt_text.setText('Press to space key to invite.');
-			g.prompt_text.setAutoDraw(true);
 		}
 
 		// Wait for Invite Key
@@ -2043,6 +2033,7 @@ function module_1(trial) {
 					// prepare for next phase
 					// clearStims();
 					g.trial_phase = g.RESPONSE_ANIMATION;
+					
 				}
 			}
 		}
@@ -2057,6 +2048,7 @@ function module_1(trial) {
 					// prepare for next phase
 					g.outcome_text.setText(`Trial Total Invites: ${g.trial_invites}`)
 					clearStims();
+					
 					return Scheduler.Event.NEXT;
 				}
 			}
@@ -2081,7 +2073,6 @@ function module_1(trial) {
 			// clearStims();
 			// go back to trial begin
 			
-			
 			// next current path 
 			g.depth--;
 			g.room_image.setImage(trial.building_type + '_' + g.current_path);
@@ -2095,17 +2086,17 @@ function module_1(trial) {
 			g.choice_1.setAutoDraw(true);
 			g.choice_2.setAutoDraw(true);
 			g.trial_phase = g.WAITING_SELECTION;
-			mark_event(trials_data, globalClock, trial.trial_number, 'NA', event_types['WAITING_SELECTION_ONSET'],
-				'NA', 'NA', 'NA')
+			mark_event(
+				trials_data,
+				globalClock,
+				trial.trial_number,
+				'NA',
+				event_types['WAITING_SELECTION_ONSET'],
+				'NA',
+				'NA',
+				'NA'
+			)
 			ready.clearEvents();
-
-			// if ( g.depth < 0 || g.current_path >= 8) {
-			// 	// move to next routine if reached max depth
-			// 	// or of the current path is 0 (when there is no more rooms)
-			// 	// trial routine depth is no 0. Move to next trial
-			// 	clearStims()
-			// 	return Scheduler.Event.NEXT;
-			// }
 		}
 
 		// WAITING SELECTION
@@ -2124,6 +2115,7 @@ function module_1(trial) {
 				clearStims();
 				g.current_path = g.path[g.current_path][g.response];
 				g.accepted_invites = g.path[g.current_path]['accepted'][trial.building_type];
+				g.rejected_invites = g.path[g.current_path]['rejected'][trial.building_type];
 
 				// increment trial invites
 				// based ond current position and the building type
@@ -2134,23 +2126,15 @@ function module_1(trial) {
 					trials_data,
 					globalClock,
 					trial.trial_number,
-					trial.module,
+					g.depth + '_' + g.current_path + '_' + trial.building_type,
 					event_types['RESPONSE'],
 					theseKeys[0].rt,
 					g.response,
-					g.accepted_invites
+					g.accepted_invites + ' | ' + g.rejected_invites + ' | ' + g.total_invites
 				)
 				
 				// prepare for next phase
 				g.trial_phase = g.TRIAL_BEGIN;
-
-				// if ( g.depth < 0 || g.current_path >= 8) {
-				// 	// move to next routine if reached max depth
-				// 	// or of the current path is 0 (when there is no more rooms)
-				// 	// trial routine depth is no 0. Move to next trial
-				// 	clearStims();
-				// 	return Scheduler.Event.NEXT;
-				// }
 			}
 		}
 
@@ -2178,12 +2162,16 @@ function module_break(trial){
 			g.outcome_text.setText(`Press SPACE key to continue`);
 			g.outcome_text.pos = [0, -0.8];
 			g.outcome_text.setAutoDraw(true);
+			mark_event(trials_data, globalClock, trial.trial_number, 'NA', event_types['BREAK_ONSET'],
+				'NA', 'NA', 'NA')
 		}
 
 		let theseKeys = ready.getKeys({ keyList: ['space'] , waitRelease: false });
 		if (theseKeys.length > 0) {
 			// increment trial invites
 			// based ond current position and the building type
+			mark_event(trials_data, globalClock, trial.trial_number, 'NA', event_types['BREAK_RESPONSE'],
+				'NA', 'NA', 'NA')
 			return Scheduler.Event.NEXT;
 
 		}
@@ -2205,6 +2193,7 @@ function module_2a(trial) {
 			// or of the current path is 0 (when there is no more rooms)
 			// trial routine depth is no 0. Move to next trial
 			clearStims();
+			
 			return Scheduler.Event.NEXT;
 		}
 
@@ -2214,7 +2203,6 @@ function module_2a(trial) {
 			// console.log('Module 2', g.current_path)
 			g.room_image.setImage(trial.building_type + '_' + g.current_path);
 			g.room_image.setAutoDraw(true);
-			
 			
 			if (trial.forced_choice == 'L') {
 				g.left_door.setAutoDraw(true);
@@ -2234,6 +2222,16 @@ function module_2a(trial) {
 			g.text_val_building.setAutoDraw(true);
 			ready.clearEvents();
 			g.trial_phase = g.WAITING_SELECTION;
+			mark_event(
+				trials_data,
+				globalClock,
+				trial.trial_number,
+				'MODULE=2a',
+				event_types['MODULE_ONSET'],
+				'NA',
+				'NA',
+				'NA'
+			)
 		}
 
 		if (g.trial_phase == g.WAITING_SELECTION) {
@@ -2257,29 +2255,19 @@ function module_2a(trial) {
 				// prepare for next phase
 				g.trial_phase = g.RESPONSE_ANIMATION
 
+				mark_event(
+					trials_data,
+					globalClock,
+					trial.trial_number,
+					g.depth + '_' + g.current_path + '_' + trial.building_type,
+					event_types['RESPONSE'],
+					theseKeys[0].rt,
+					g.response,
+					g.accepted_invites + ' | ' + g.rejected_invites + ' | ' + g.total_invites
+				)
+
 			}
 		}
-
-		// Click Invite Button
-		// if (g.room_image_invite.status == PsychoJS.Status.NOT_STARTED && g.trial_phase == g.WAITING_INVITE_KEY) {
-		// 	// pressed invited button
-		// 	g.prompt_text.setText('Press to space key to invite.');
-		// 	g.prompt_text.setAutoDraw(true);
-		// 	g.room_image.setImage(trial.building_type + '_' + g.current_path);
-		// 	g.room_image.setAutoDraw(true);
-			
-		// }
-
-		// if (g.trial_phase == g.WAITING_INVITE_KEY && g.current_path > 1){
-		// 	let theseKeys = ready.getKeys({ keyList: ['space'], waitRelease: false });
-		// 	if (theseKeys.length >0 ){
-		// 		if (theseKeys[0].name == 'space') {
-		// 			// prepare for next phase
-		// 			clearStims();
-		// 			g.trial_phase = g.RESPONSE_ANIMATION;
-		// 		}
-		// 	}
-		// }
 
 		// Show the Invitation Response
 		if (g.room_image_invite.status == PsychoJS.Status.NOT_STARTED && g.trial_phase == g.RESPONSE_ANIMATION) {
@@ -2289,6 +2277,17 @@ function module_2a(trial) {
 			g.prompt_text.setAutoDraw(true);
 			g.text_val_building.setAutoDraw(true);
 			g.trial_phase = g.WAITING_KEY;
+			mark_event(
+				trials_data,
+				globalClock,
+				trial.trial_number,
+				'MODULE=' + trial.module,
+				event_types['EXIT_BUILDING'],
+				'NA',
+				'NA',
+				'NA'
+			)
+
 			// g.responseTimer.reset(g.RESPONSE_DURATION); // start timer
 		}
 
@@ -2302,16 +2301,6 @@ function module_2a(trial) {
 				}
 			}
 		}
-
-		// if (g.trial_phase == g.RESPONSE_ANIMATION && g.responseTimer.getTime() <= 0) {
-		// 	clearStims();
-		// 	// go back to trial begin
-		// 	g.outcome_text.setText(`Trial Total Invites: ${g.trial_invites}`)
-		// 	g.trial_phase = g.TRIAL_BEGIN;
-		// 	// next current path 
-			
-		// 	// return Scheduler.Event.NEXT;
-		// }
 		return Scheduler.Event.FLIP_REPEAT
 	}
 }
@@ -2405,6 +2394,17 @@ function module_2b(trial) {
 			g.text_val_building.setAutoDraw(true);
 			ready.clearEvents();
 			g.trial_phase = g.WAITING_SELECTION;
+
+			mark_event(
+				trials_data,
+				globalClock,
+				g.module_2b_index,
+				'MODULE=2b',
+				event_types['TRIAL_ONSET'],
+				'NA',
+				'NA',
+				g.forced_choice 
+			)
 		}
 
 		if (g.trial_phase == g.WAITING_SELECTION) {
@@ -2455,6 +2455,19 @@ function module_2b(trial) {
 				// start timer
 				g.outcomeTimer.reset(g.MODULE_2A_OUTCOME_DUATION); // reset the time with ITI 
 
+				mark_event(
+					trials_data,
+					globalClock,
+					g.module_2b_index,
+					'X' + '_' + g.current_path,
+					event_types['RESPONSE'],
+					theseKeys[0].rt,
+					g.response,
+					g.accepted_invites + ' | ' + g.rejected_invites + ' | ' + g.result
+				)
+
+				sendData();
+
 			}
 		}
 
@@ -2486,6 +2499,16 @@ function module_2b(trial) {
 			// g.text_val_building.setAutoDraw(true);
 			g.result_image.setAutoDraw(true);
 			g.trial_phase = g.WAITING_KEY;
+			mark_event(
+				trials_data,
+				globalClock,
+				g.module_2b_index,
+				'MODULE=2b',
+				event_types['OUTCOME_RESPONSE'],
+				'NA',
+				'NA',
+				'NA'
+			)
 			// g.responseTimer.reset(g.RESPONSE_DURATION); // start timer
 		}
 
@@ -2545,6 +2568,16 @@ function module_3(trial) {
 			g.planningTimer.reset(g.PLANNING_DURATION);
 			g.moves_entered = [];
 			g.current_path = trial.start;			// start iterative over entered moves
+			mark_event(
+				trials_data,
+				globalClock,
+				trial.trial_number,
+				g.depth + '_' + g.current_path + '_' + trial.building_type,
+				event_types['PLANNING_ONSET'],
+				'NA',
+				'NA',
+				'NA'
+			)
 		}
 
 		// Planning Phase
@@ -2609,12 +2642,24 @@ function module_3(trial) {
 					g.current_path = g.path[g.current_path][g.response];
 					// increment trial invites
 					g.accepted_invites = g.path[g.current_path]['accepted'][trial.building_type];
+					g.rejected_invites = g.path[g.current_path]['rejected'][trial.building_type];
 					
 					// based ond current position and the building type
 					g.trial_invites = g.trial_invites + g.accepted_invites;
 					
 					// total invites
 					g.total_invites = g.total_invites + g.accepted_invites;
+
+					mark_event(
+						trials_data,
+						globalClock,
+						trial.trial_number,
+						g.depth + '_' + g.current_path + '_' + trial.building_type,
+						event_types['RESPONSE'],
+						theseKeys[0].rt,
+						g.response,
+						g.accepted_invites + ' | ' + g.rejected_invites + ' | ' + g.total_invites
+					)
 					
 					g.depth--;
 					g.moves_entered.push(g.response);
@@ -2639,6 +2684,16 @@ function module_3(trial) {
 				g.rejected_invites = g.path[g.current_path]['rejected'][trial.building_type];
 				// g.invites_text.setText(`Total Accepted: ${g.accepted_invites}\nTotal Rejected: ${g.rejected_invites}`);
 				// g.invites_text.setAutoDraw(true);
+				mark_event(
+					trials_data,
+					globalClock,
+					trial.trial_number,
+					'MODULE=3',
+					event_types['ANIMATION_ONSET'],
+					g.ANIMATION_DURATION,
+					'NA',
+					'NA'
+				)
 			}
 
 			// Single Invite Room Instance
@@ -2672,6 +2727,16 @@ function module_3(trial) {
 				g.outcome_text.setAutoDraw(true);
 				g.animationTimer.reset(g.ANIMATION_DURATION)
 				g.trial_invites = 0; // no points for the trial
+				mark_event(
+					trials_data,
+					globalClock,
+					trial.trial_number,
+					'MODULE=3',
+					event_types['TIME_UP'],
+					'NA',
+					'NA',
+					'0'
+				)
 			}
 
 			if (g.animationTimer.getTime() <= 0) {
@@ -2701,7 +2766,7 @@ function fixation(trial) {
 				trials_data,
 				globalClock,
 				trial.trial_number,
-				trial.module,
+				'MODULE=' + trial.module,
 				event_types['FIXATION_ONSET'],
 				trial.ITI,
 				'NA',
@@ -2754,6 +2819,16 @@ function trialOutcome(trial) {
 
 			g.prompt_text.setText('Press to space key to go to the next trial.');
 			g.prompt_text.setAutoDraw(true);
+			mark_event(
+				trials_data,
+				globalClock,
+				trial.trial_number,
+				'MODULE=' + trial.module,
+				event_types['OUTCOME_ONSET'],
+				'NA',
+				'NA',
+				'NA'
+			)
 		}
 
 		// Wait for space key press to go to next trial
@@ -2762,6 +2837,16 @@ function trialOutcome(trial) {
 				if (theseKeys[0].name == 'space') {
 					// prepare for next phase
 					clearStims();
+					mark_event(
+						trials_data,
+						globalClock,
+						trial.trial_number,
+						'MODULE=' + trial.module,
+						event_types['OUTCOME_RESPONSE'],
+						'NA',
+						'space',
+						g.trial_invites
+					)
 					return Scheduler.Event.NEXT;
 				}
 			}
@@ -2774,7 +2859,6 @@ function trialOutcome(trial) {
 	}
 }
 
-var trial_number;
 // Initial Fixation
 // Show a 2 second fixation cross at the start of the first trial
 function initialFixation(trials) {
@@ -2796,8 +2880,15 @@ function initialFixation(trials) {
 			if (trials.trial_number == 0) {
 				// mark once
 				mark_event(
-					trials_data, globalClock, trials.trial_number, 'INITIAL', event_types['FIXATION_ONSET'],
-					'NA', 'NA' , 'NA')
+					trials_data,
+					globalClock,
+					trials.trial_number,
+					'MODULE=' + trials.module,
+					event_types['FIXATION_ONSET'],
+					'NA',
+					'NA',
+					'initial'
+				)
 			}
 		}
 
