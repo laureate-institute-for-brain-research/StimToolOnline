@@ -116,6 +116,7 @@ function sanitizeResources(resources) {
 /**
  * Marks the event
  * @param {*} task_data task data array
+ * @param {*} globalClock the global clock
  * @param {*} trial trial index
  * @param {*} trial_type trial type
  * @param {*} event_type event type/code
@@ -123,18 +124,27 @@ function sanitizeResources(resources) {
  * @param {*} response response
  * @param {*} result result
  */
- function mark_event(task_data, globalClock, trial, trial_type, event_type, response_time,
-    response, result) {
+function mark_event(
+    task_data,
+    globalClock,
+    trial,
+    trial_type,
+    event_type,
+    response_time,
+    response,
+    result) {
+    
+    let current_row = {
+        'trial': trial,
+        'trial_type': trial_type,
+        'event_type': event_type,
+        'absolute_time': globalClock.getTime(),
+        'response_time': response_time,
+        'response': response,
+        'result': result,
+        }
 
     // Add the following columne to the experiment data
-    task_data.push({
-    'trial': trial,
-    'trial_type': trial_type,
-    'event_type': event_type,
-    'absolute_time': globalClock.getTime(),
-    'response_time': response_time,
-    'response': response,
-    'result': result,
-    })
+    task_data.push(current_row);
 
 }

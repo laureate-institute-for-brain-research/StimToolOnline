@@ -1,0 +1,4 @@
+{
+    "schedule": "/js/tasks/invitation_task/Pilot_R0_T1_schedule.csv",
+    "instruct_schedule": "/js/tasks/invitation_task/media/Pilot_R0_instructions.csv"
+}

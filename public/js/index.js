@@ -150,23 +150,51 @@ $('#study-list').change(function () {
     document.getElementById('id_div').style.display = 'block';
     document.getElementById('session_div').style.display = 'block'; // Show session dropdown
 
-    two_session_studies = [
-        'AAC-BET',
-        'BK_Pilot',
-        'CognitiveControl',
-        'Driving2',
-        'METH_Pilot',
-        'WBMTURK_Blind_Dating',
-        'WBMTURK_Emotional_Faces',
-        'WBMTURK_Cooperation_Task',
-        'WBMTURK_Invitation_Task'
-    ]
-    if (!two_session_studies.includes(document.getElementById('study-list').value)) {
-        var selectobject = document.getElementById("session-list");
-        for (var i=0; i<selectobject.length; i++) {
-            if (selectobject.options[i].value == 'T2')
-                selectobject.remove(i);
+    studies_sessions = {
+        'AAC-BET' : 2,
+        'BK_Pilot': 2,
+        'METH_Pilot': 2,
+        'CognitiveControl': 2,
+        'NCAIR': 1,
+        'NCAIR-Arousal': 1,
+        'Driving2': 2,
+        'WB_Pilot': 1,
+        'WBMTURK_Social_Media': 1,
+        'WBMTURK_Blind_Dating': 2,
+        'WBMTURK_Emotional_Faces': 2,
+        'WBMTURK_Cooperation_Task': 2,
+        'WBMTURK_Invitation_Task': 3
+    }
+
+    // verify that the list of session list is the number of sessions
+    let study_ = document.getElementById('study-list').value;
+    var sessions_ = document.getElementById("session-list");
+    let max_session = studies_sessions[study_];
+    console.log(study_, max_session);
+    // sessions_.options[sessions_.options.length] = new Option('T2', 'T2')
+    //Create and append select list
+    // clreat all child
+    function removeAllChildNodes(parent) {
+        while (parent.firstChild) {
+            parent.removeChild(parent.firstChild);
         }
+    }
+    removeAllChildNodes(sessions_);
+
+    // add the disabled option
+    var option_disabled = document.createElement("option");
+    option_disabled.selected = true;
+    option_disabled.disabled = true;
+    option_disabled.text = 'Choose Session';
+    
+    sessions_.appendChild(option_disabled);
+
+    //Create and append the options
+    for (var i = 1; i <= max_session; i++) {
+        var option = document.createElement("option");
+        option.value = 'T'+i;
+        option.text = 'T'+i;
+        sessions_.appendChild(option);
     }
 
     mobileonly_studies = ['Driving2']
@@ -218,7 +246,6 @@ document.getElementById('begin').addEventListener('click', (event) => {
         });
         // console.log(values)
 
-        
         $.ajax({
             type: "POST",
             url: '/adduser',
@@ -244,10 +271,6 @@ document.getElementById('begin').addEventListener('click', (event) => {
         });
     }
 });
-
-
-
-
 
 
 // Skip Logic.

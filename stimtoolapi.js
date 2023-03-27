@@ -190,8 +190,8 @@ module.exports = function (app){
                     // Save to local
                     path_to_save = `data/free/${file_name}`
                     
-                    fs.appendFile(path_to_save, csv, function(err) {
-                        if (err) return console.error(err);
+                    fs.writeFile(path_to_save, csv, function(err) {
+                        if (err) return logger.error(err);
                         logger.info(`${path_to_save} saved`);
                         
                     });
