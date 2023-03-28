@@ -60,188 +60,9 @@ g.WAITING_KEY = 5;			// for when waiting for a key press
 // the image path where key is the current position and the value is the path to the 
 // room image.
 // position 1 is when user is outisde selecting the building
-g.path = {
-	1: {
-		'accepted': {
-			'office': 0,
-			'library': 0
-		},
-		'rejected': {
-			'office': 0,
-			'library': 0
-		},
-		'left': 2,
-		'right': 3
-	},
-	2: {
-		'accepted': {
-			'office': 10,
-			'library': 0
-		},
-		'rejected': {
-			'office': 5,
-			'library': 99
-		},
-		'left': 4,
-		'right': 5
-	},
-	3: {
-		'accepted': {
-			'office': 5,
-			'library': 5
-		},
-		'rejected': {
-			'office': 0,
-			'library': 5
-		},
-		'left': 6,
-		'right': 7,
-	},
-	4: {
-		'accepted': {
-			'office': 5,
-			'library': 5
-		},
-		'rejected': {
-			'office': 5,
-			'library': 0
-		},
-		'left': 8,
-		'right': 9
-	},
-	5: {
-		'accepted': {
-			'office': 0,
-			'library': 20
-		},
-		'rejected': {
-			'office': 20,
-			'library': 0
-		},
-		'left': 10,
-		'right': 11
-	},
-	6: {
-		'accepted': {
-			'office': 5,
-			'library': 10
-		},
-		'rejected': {
-			'office': 0,
-			'library': 0
-		},
-		'left': 12,
-		'right': 13
-	},
-	7: {
-		'accepted': {
-			'office': 5,
-			'library': 5
-		},
-		'rejected': {
-			'office': 2,
-			'library': 10
-		},
-		'left': 14,
-		'right': 15
-	},
-	8: {
-		'accepted': {
-			'office': 0,
-			'library': 5
-		},
-		'rejected': {
-			'office': 10,
-			'library': 0
-		},
-		'left': 0,
-		'right': 0
-	},
-	9: {
-		'accepted': {
-			'office': 0,
-			'library': 10
-		},
-		'rejected': {
-			'office': 5,
-			'library': 10
-		},
-		'left': 0,
-		'right': 0
-	},
-	10: {
-		'accepted': {
-			'office': 10,
-			'library': 0
-		},
-		'rejected': {
-			'office': 0,
-			'library': 2
-		},
-		'left': 0,
-		'right': 0
-	},
-	11: {
-		'accepted': {
-			'office': 5,
-			'library': 0
-		},
-		'rejected': {
-			'office': 2,
-			'library': 5
-		},
-		'left': 0,
-		'right': 0
-	},
-	12: {
-		'accepted': {
-			'office': 5,
-			'library': 5
-		},
-		'rejected': {
-			'office': 0,
-			'library': 0
-		},
-		'left': 0,
-		'right': 0
-	},
-	13: {
-		'accepted': {
-			'office': 0,
-			'library': 10
-		},
-		'rejected': {
-			'office': 10,
-			'library': 0
-		},
-		'left': 0,
-		'right': 0
-	},
-	14: {
-		'accepted': {
-			'office': 0,
-			'library': 20
-		},
-		'rejected': {
-			'office': 5,
-			'library': 0
-		},
-		'left': 0,
-		'right': 0
-	},
-	15: {
-		'accepted': {
-			'office': 10,
-			'library': 0
-		},
-		'rejected': {
-			'office': 10,
-			'library': 0
-		},
-		'left': 0,
-		'right': 0
-	}
-}
+g.path = {}; 				// place holder for path
+
+
 
 // The trial schedule for module 2a
 // using a variable instead of the schedule file since there's a potential for
@@ -421,6 +242,98 @@ window.onload = function () {
 				})
 			})
 		})
+
+		// Get the Different paths for offfice and library
+		.then((values) => {
+			return new Promise((resolve, reject) => {
+				$.ajax({
+					type: 'GET',
+					url: '/js/tasks/invitation_task/path_1_library.json',
+					dataType: 'text',
+					async: false,
+					success: (data) => {
+						g.path_1_library = JSON.parse(data);
+						resolve(data)
+					}
+				})
+			})
+		})
+
+		.then((values) => {
+			return new Promise((resolve, reject) => {
+				$.ajax({
+					type: 'GET',
+					url: '/js/tasks/invitation_task/path_1_office.json',
+					dataType: 'text',
+					async: false,
+					success: (data) => {
+						g.path_1_office = JSON.parse(data);
+						resolve(data)
+					}
+				})
+			})
+		})
+
+		.then((values) => {
+			return new Promise((resolve, reject) => {
+				$.ajax({
+					type: 'GET',
+					url: '/js/tasks/invitation_task/path_2_library.json',
+					dataType: 'text',
+					async: false,
+					success: (data) => {
+						g.path_2_library = JSON.parse(data);
+						resolve(data)
+					}
+				})
+			})
+		})
+
+		.then((values) => {
+			return new Promise((resolve, reject) => {
+				$.ajax({
+					type: 'GET',
+					url: '/js/tasks/invitation_task/path_2_office.json',
+					dataType: 'text',
+					async: false,
+					success: (data) => {
+						g.path_2_office = JSON.parse(data);
+						resolve(data)
+					}
+				})
+			})
+		})
+
+		.then((values) => {
+			return new Promise((resolve, reject) => {
+				$.ajax({
+					type: 'GET',
+					url: '/js/tasks/invitation_task/path_3_library.json',
+					dataType: 'text',
+					async: false,
+					success: (data) => {
+						g.path_3_library = JSON.parse(data);
+						resolve(data)
+					}
+				})
+			})
+		})
+
+		.then((values) => {
+			return new Promise((resolve, reject) => {
+				$.ajax({
+					type: 'GET',
+					url: '/js/tasks/invitation_task/path_3_office.json',
+					dataType: 'text',
+					async: false,
+					success: (data) => {
+						g.path_3_office = JSON.parse(data);
+						resolve(data)
+					}
+				})
+			})
+		})
+		
 		
 		.then((values) => {
 			// Query Preceeds /getInfo
@@ -1670,6 +1583,7 @@ function trialsLoopBegin(thisScheduler) {
 
 	psychoJS.experiment.addLoop(trials); // add the loop to the experiment
 
+
 	// for module 2b dontt add all trials
 	if (getQueryVariable('run').includes('PR2b')) {
 		for (const thisBlock of trials) {
@@ -1682,7 +1596,7 @@ function trialsLoopBegin(thisScheduler) {
 			let single_question = [
 				start,
 				building_type,
-				g.path[g.path[start][forced_choice]]['accepted'][building_type],
+				'',
 				forced_choice,
 				path_version,
 				thisBlock.a,
@@ -1870,26 +1784,12 @@ function trialRoutineBegin(trial) {
 			'Trial ' + g.trial_number +
 			' of ' + trial.nTotal);
 
-		// g.text_depth.setAutoDraw(true);
-		// g.text_val_depth_number.setText(trial.depth);
-		// g.text_val_depth_number.setAutoDraw(true);
-
-		g.text_val_invites.setText(g.total_invites);
 		
-		// g.text_module.setAutoDraw(true);
-		// g.text_val_module.setText(trial.module);
-		// g.text_val_module.setAutoDraw(true);
-
-		// g.text_path.setAutoDraw(true);
-		// g.text_val_path.setText(g.current_path);
-		// g.text_val_path.setAutoDraw(true);
-
-		// g.text_building.setAutoDraw(true);
+		g.text_val_invites.setText(g.total_invites);
 		g.text_val_building.setText(trial.building_type);
 		
-		
-		g.trial_invites = 0; // always start trial invites to 0
 
+		g.trial_invites = 0; // always start trial invites to 0
 		g.current_move = 0; // reset move at 0
 
 		g.prompt_text.setText('Where do you want to go next?');
@@ -1906,6 +1806,37 @@ function trialRoutineBegin(trial) {
 
 		// set trial status
 		g.trial_phase = g.TRIAL_BEGIN;
+
+		if (getQueryVariable('run').includes('PR2b')) {
+			// if it's module PR2b, we need to use the schedule variable not
+			// from the schedule file
+			trial.building_type = g.module_2b_schedule[g.module_2b_index][1];
+			trial.path_version = g.module_2b_schedule[g.module_2b_index][4];
+			console.log(trial.building_type, trial.path_version)
+		}
+		
+		// Set Paths
+		// Version 1
+		if (trial.building_type == 'office' && trial.path_version == 1) {
+			g.path = g.path_1_office;
+		}
+		if (trial.building_type == 'library' && trial.path_version == 1) {
+			g.path = g.path_1_library;
+		}
+		// Version 2
+		if (trial.building_type == 'office' && trial.path_version == 2) {
+			g.path = g.path_2_office;
+		}
+		if (trial.building_type == 'library' && trial.path_version == 2) {
+			g.path = g.path_2_library;
+		}
+		// Version 3
+		if (trial.building_type == 'office' && trial.path_version == 3) {
+			g.path = g.path_3_office;
+		}
+		if (trial.building_type == 'library' && trial.path_version == 3) {
+			g.path = g.path_3_library;
+		}
 
 		mark_event(
 			trials_data,
@@ -2060,8 +1991,8 @@ function module_1(trial) {
 			g.room_image_invite.setAutoDraw(true);
 
 			// set accpeted/rejected invites text
-			g.accepted_invites = g.path[g.current_path]['accepted'][trial.building_type];
-			g.rejected_invites = g.path[g.current_path]['rejected'][trial.building_type];
+			g.accepted_invites = g.path[g.current_path]['accepted'];
+			g.rejected_invites = g.path[g.current_path]['rejected'];
 			// g.invites_text.setText(`Total Accepted: ${g.accepted_invites}\nTotal Rejected: ${g.rejected_invites}`);
 			// g.invites_text.setAutoDraw(true);
 			g.responseTimer.reset(g.RESPONSE_DURATION); // start timer
@@ -2114,8 +2045,8 @@ function module_1(trial) {
 				
 				clearStims();
 				g.current_path = g.path[g.current_path][g.response];
-				g.accepted_invites = g.path[g.current_path]['accepted'][trial.building_type];
-				g.rejected_invites = g.path[g.current_path]['rejected'][trial.building_type];
+				g.accepted_invites = g.path[g.current_path]['accepted'];
+				g.rejected_invites = g.path[g.current_path]['rejected'];
 
 				// increment trial invites
 				// based ond current position and the building type
@@ -2239,8 +2170,8 @@ function module_2a(trial) {
 			if (theseKeys.length > 0) {
 				// increment trial invites
 				// based ond current position and the building type
-				g.accepted_invites = g.path[g.current_path]['accepted'][trial.building_type];
-				g.rejected_invites = g.path[g.current_path]['rejected'][trial.building_type];
+				g.accepted_invites = g.path[g.current_path]['accepted'];
+				g.rejected_invites = g.path[g.current_path]['rejected'];
 				g.trial_invites = g.trial_invites + g.accepted_invites;
 				
 				// total invites
@@ -2324,7 +2255,6 @@ function module_2b(trial) {
 		}
 
 		// Make Selection
-		// Show Doors if path = 1
 		if (g.room_image.status == PsychoJS.Status.NOT_STARTED && g.trial_phase == g.TRIAL_BEGIN) {
 			// console.log('Module 2', g.current_path)
 			// current path is from the module 2a schedule
@@ -2412,8 +2342,8 @@ function module_2b(trial) {
 			if (theseKeys.length > 0) {
 				// increment trial invites
 				// based ond current position and the building type
-				g.accepted_invites = g.path[g.current_path]['accepted'][trial.building_type];
-				g.rejected_invites = g.path[g.current_path]['rejected'][trial.building_type];
+				g.accepted_invites = g.path[g.current_path]['accepted'];
+				g.rejected_invites = g.path[g.current_path]['rejected'];
 				g.trial_invites = g.trial_invites + g.accepted_invites;
 				
 				// total invites
@@ -2641,8 +2571,8 @@ function module_3(trial) {
 					
 					g.current_path = g.path[g.current_path][g.response];
 					// increment trial invites
-					g.accepted_invites = g.path[g.current_path]['accepted'][trial.building_type];
-					g.rejected_invites = g.path[g.current_path]['rejected'][trial.building_type];
+					g.accepted_invites = g.path[g.current_path]['accepted'];
+					g.rejected_invites = g.path[g.current_path]['rejected'];
 					
 					// based ond current position and the building type
 					g.trial_invites = g.trial_invites + g.accepted_invites;
@@ -2680,8 +2610,8 @@ function module_3(trial) {
 				g.room_image_invite.setAutoDraw(true);
 
 				// display accepted/rejected amounts
-				g.accepted_invites = g.path[g.current_path]['accepted'][trial.building_type];
-				g.rejected_invites = g.path[g.current_path]['rejected'][trial.building_type];
+				g.accepted_invites = g.path[g.current_path]['accepted'];
+				g.rejected_invites = g.path[g.current_path]['rejected'];
 				// g.invites_text.setText(`Total Accepted: ${g.accepted_invites}\nTotal Rejected: ${g.rejected_invites}`);
 				// g.invites_text.setAutoDraw(true);
 				mark_event(
@@ -2711,8 +2641,8 @@ function module_3(trial) {
 				g.current_path = g.path[g.current_path][g.moves_entered[g.current_move]];
 				g.room_image_invite.setImage(trial.building_type + '_invite_' + g.current_path)
 				// display accepted/rejected amounts
-				g.accepted_invites = g.path[g.current_path]['accepted'][trial.building_type];
-				g.rejected_invites = g.path[g.current_path]['rejected'][trial.building_type];
+				g.accepted_invites = g.path[g.current_path]['accepted'];
+				g.rejected_invites = g.path[g.current_path]['rejected'];
 				g.invites_text.setText(`Total Accepted: ${g.accepted_invites}\nTotal Rejected: ${g.rejected_invites}`);
 
 				g.animationTimer.reset(g.ANIMATION_DURATION); // reset timer
