@@ -358,7 +358,7 @@ var resources = [
 	{ name: 'profile_pic.png', path: '/js/tasks/social_media/media/profile_photo.png' },
 	{ name: 'profile_picRR.png', path: '/js/tasks/social_media/media/profile_picRR.png' },
 	{ name: 'like.png', path: '/js/tasks/social_media/media/like.png' },
-	{ name: 'dislike.png', path: '/js/tasks/social_media/media/heart_outline_x4.png' },
+	{ name: 'dislike.png', path: '/js/tasks/social_media/media/heart_outline_x6.png' },
 	{ name: 'dislike_outline.png', path: '/js/tasks/social_media/media/heart_outline.png'},
 	{ name: 'heart.png', path: '/js/tasks/social_media/media/heart.png' },
 	{ name: 'heart_outline.png', path: '/js/tasks/social_media/media/heart_outline.png' }
@@ -977,10 +977,12 @@ function experimentInit() {
 		alignHoriz: 'center',
 		fillColor: new util.Color(leftColor),
 		// opacity: .5,
-		letterHeight: 0.04,
+		letterHeight: 0.065,
 		font: 'lucida grande',
 		ori : 0, pos : [-.22, 0.72],
 	});
+
+	choice1Button.setAlignment('center')
 
 	choice2Button = new visual.ButtonStim({
 		win : psychoJS.window,
@@ -991,10 +993,12 @@ function experimentInit() {
 		alignHoriz: 'center',
 		fillColor: new util.Color(rightColor),
 		// opacity: .5,
-		letterHeight: 0.04,
+		letterHeight: 0.065,
 		font: 'lucida grande',
 		ori : 0, pos : [0.36, 0.72],
 	});
+
+	choice2Button.setAlignment('center')
 
 	beginButton = new visual.ButtonStim({
 		win : psychoJS.window,
@@ -1185,7 +1189,7 @@ function experimentInit() {
 		alignVert: 'center',
 		units: 'norm',
 		pos: [ 0.065, 0.83], height: 0.12, wrapWidth: undefined, ori: 0,
-		color: new util.Color('#00FFFF'), opacity: 1,
+		color: new util.Color('#009600'), opacity: 1,
 		depth: 0.0
 	});
 
@@ -1836,6 +1840,123 @@ function getSocialApprovalScore() {
 	console.log('Left Reward: ',left_reward, ' Right Reward:',right_reward, 'TotalPoints: ',totalPoints, 'totalPossible: ', totalPossible, 'Score:',socialApprovalScore)
 	// Put in percentage
 	socialApprovalScore = `${Math.round(socialApprovalScore * 100)}%`
+
+	var score_num = (totalPoints / totalPossible) * 100
+	if (score_num >= 71) //bright shades
+	{
+		totalLikesTracker.color = new util.Color('#00ff04')
+	}
+	else if (score_num >= 41)
+	{
+		totalLikesTracker.color = new util.Color('#ffcc00')
+	}
+	else if (score_num >= 0)
+	{
+		totalLikesTracker.color = new util.Color('#ff0000')
+	}
+
+	// if (score_num >= 90) //bright shades
+	// {
+	// 	totalLikesTracker.color = new util.Color('#00ff04')
+	// }
+	// else if (score_num >= 80)
+	// {
+	// 	totalLikesTracker.color = new util.Color('#6fff00')
+	// }
+	// else if (score_num >= 70)
+	// {
+	// 	totalLikesTracker.color = new util.Color('#99ff00')
+	// }
+	// else if (score_num >= 60)
+	// {
+	// 	totalLikesTracker.color = new util.Color('#c8ff00')
+	// }
+	// else if (score_num >= 50)
+	// {
+	// 	totalLikesTracker.color = new util.Color('#ffc400')
+	// }
+	// else if (score_num >= 40)
+	// {
+	// 	totalLikesTracker.color = new util.Color('#ff9900')
+	// }
+	// else if (score_num >= 30)
+	// {
+	// 	totalLikesTracker.color = new util.Color('#ff8000')
+	// }
+	// else if (score_num >= 20)
+	// {
+	// 	totalLikesTracker.color = new util.Color('#ff5e00')
+	// }
+	// else if (score_num >= 10)
+	// {
+	// 	totalLikesTracker.color = new util.Color('#ff3c00')
+	// }
+	// else if (score_num >= 0)
+	// {
+	// 	totalLikesTracker.color = new util.Color('#ff0000')
+	// }
+
+	// if (score_num >= 90) // dark shades
+	// {
+	// 	totalLikesTracker.color = new util.Color('#009600')
+	// }
+	// else if (score_num >= 80)
+	// {
+	// 	totalLikesTracker.color = new util.Color('#2d9600')
+	// }
+	// else if (score_num >= 70)
+	// {
+	// 	totalLikesTracker.color = new util.Color('#6c9600')
+	// }
+	// else if (score_num >= 60)
+	// {
+	// 	totalLikesTracker.color = new util.Color('#8a9600')
+	// }
+	// else if (score_num >= 50)
+	// {
+	// 	totalLikesTracker.color = new util.Color('#968500')
+	// }
+	// else if (score_num >= 40)
+	// {
+	// 	totalLikesTracker.color = new util.Color('#966400')
+	// }
+	// else if (score_num >= 30)
+	// {
+	// 	totalLikesTracker.color = new util.Color('#964e00')
+	// }
+	// else if (score_num >= 20)
+	// {
+	// 	totalLikesTracker.color = new util.Color('#962d00')
+	// }
+	// else if (score_num >= 10)
+	// {
+	// 	totalLikesTracker.color = new util.Color('#961900')
+	// }
+	// else if (score_num >= 0)
+	// {
+	// 	totalLikesTracker.color = new util.Color('#ad0000')
+	// }
+
+	// if (score_num >= 80) // smaller gradient
+	// {
+	// 	totalLikesTracker.color = new util.Color('#00ff04')
+	// }
+	// else if (score_num >= 60)
+	// {
+	// 	totalLikesTracker.color = new util.Color('#c8ff00')
+	// }
+	// else if (score_num >= 40)
+	// {
+	// 	totalLikesTracker.color = new util.Color('#ffc400')
+	// }
+	// else if (score_num >= 20)
+	// {
+	// 	totalLikesTracker.color = new util.Color('#ff5e00')
+	// }
+	// else if (score_num >= 0)
+	// {
+	// 	totalLikesTracker.color = new util.Color('#ff0000')
+	// }
 }
 
 var trialComponents;
@@ -1921,7 +2042,7 @@ function trialRoutineBegin(trials) {
 			}
 
 			getSocialApprovalScore()
-			
+
 			
 			// Set the tweets
 			leftTopic = tweets[left_topic]
