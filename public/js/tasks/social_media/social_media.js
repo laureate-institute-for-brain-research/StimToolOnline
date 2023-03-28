@@ -1833,7 +1833,7 @@ function setupPosts(game_type) {
 function getSocialApprovalScore() {
 	// total possible is based on either h1 or h6
 	if (game_type == 'h1') totalPossible = 100
-	if (game_type == 'h6') totalPossible = 600
+	if (game_type == 'h6') totalPossible = 500
 
 	socialApprovalScore = ( totalPoints / totalPossible )
 
@@ -1842,11 +1842,11 @@ function getSocialApprovalScore() {
 	socialApprovalScore = `${Math.round(socialApprovalScore * 100)}%`
 
 	var score_num = (totalPoints / totalPossible) * 100
-	if (score_num >= 71) //bright shades
+	if (score_num >= 70) //bright shades
 	{
 		totalLikesTracker.color = new util.Color('#00ff04')
 	}
-	else if (score_num >= 41)
+	else if (score_num >= 40)
 	{
 		totalLikesTracker.color = new util.Color('#ffcc00')
 	}
@@ -2031,7 +2031,7 @@ function trialRoutineBegin(trials) {
 			if (dislike_room == 1) {
 				// Set TotalPoints since for dislikes they start with 100% score
 				if (game_type == 'h1') totalPoints = 100
-				if (game_type == 'h6') totalPoints = 600
+				if (game_type == 'h6') totalPoints = 500
 
 				totalPossible = totalPossible
 			} else {
