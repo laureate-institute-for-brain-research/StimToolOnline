@@ -977,7 +977,7 @@ function experimentInit() {
 		alignHoriz: 'center',
 		fillColor: new util.Color(leftColor),
 		// opacity: .5,
-		letterHeight: 0.065,
+		letterHeight: 0.055,
 		font: 'lucida grande',
 		ori : 0, pos : [-.22, 0.72],
 	});
@@ -993,7 +993,7 @@ function experimentInit() {
 		alignHoriz: 'center',
 		fillColor: new util.Color(rightColor),
 		// opacity: .5,
-		letterHeight: 0.065,
+		letterHeight: 0.055,
 		font: 'lucida grande',
 		ori : 0, pos : [0.36, 0.72],
 	});
@@ -1737,7 +1737,7 @@ var trials;
 var currentLoop;
 var lastTrialKeyPressed;
 var total_games;
-var animation_duration = 0.25 //0.55
+var animation_duration = 0.15 //0.55
 var fixation_duration = 0
 function trialsLoopBegin(thisScheduler) {
 	// set up handler to look up the conditions
@@ -2502,7 +2502,7 @@ function trialRoutineEachFrameWaitforInput(trials) {
 
 
 		// *resp* updates
-		if (t >= 0.5 && resp.status === PsychoJS.Status.NOT_STARTED) {
+		if (t >= 0.1 && resp.status === PsychoJS.Status.NOT_STARTED) {
 			// keep track of start time/frame for later
 			resp.tStart = t;  // (not accounting for frame time here)
 			resp.frameNStart = frameN;  // exact frame index
@@ -2773,11 +2773,11 @@ function trialRoutineEachFrameShowPost(trials) {
 
 		//postStims[trial_num].rect.opacity = 0.5
 
-		if (t > 0.2 && postStims[trial_num].post_text.status != PsychoJS.Status.FINISHED) {
+		if (t > 0.1 && postStims[trial_num].post_text.status != PsychoJS.Status.FINISHED) {
 			//loadingAnimationText()
 			postStims[trial_num].post_text.setText(topic_text)
 		}
-		if (t > 0.2 && postStims[trial_num].profile_photo.status == PsychoJS.Status.NOT_STARTED) {
+		if (t > 0.1 && postStims[trial_num].profile_photo.status == PsychoJS.Status.NOT_STARTED) {
 			postStims[trial_num].profile_photo.setAutoDraw(true)
 			mark_event(trials_data, globalClock, trial_num, trial_type, event_types['ANIMATION_ONSET'], 'NA', 'NA', topic_text)
 		}
@@ -2910,7 +2910,7 @@ function trialRoleReversalRoutineEachFrameWaitforInput(trials) {
 
 
 		// *resp* updates
-		if (t >= 0.2) {
+		if (t >= 0.1) {
 			// keep track of start time/frame for later
 			resp.tStart = t;  // (not accounting for frame time here)
 			resp.frameNStart = frameN;  // exact frame index
