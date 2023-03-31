@@ -102,6 +102,26 @@ g.game_type_text = {
 	'unpleasant': `You will be shown the unpleasant image unless the person you choose decides to help you.`
 }
 
+function waitForElm(selector) {
+    return new Promise(resolve => {
+        if (document.querySelector(selector)) {
+            return resolve(document.querySelector(selector));
+        }
+
+        const observer = new MutationObserver(mutations => {
+            if (document.querySelector(selector)) {
+                resolve(document.querySelector(selector));
+                observer.disconnect();
+            }
+        });
+
+        observer.observe(document.body, {
+            childList: true,
+            subtree: true
+        });
+    });
+}
+
 import { core, data, sound, util, visual } from '/psychojs/psychojs-2021.2.3.js';
 const { PsychoJS } = core;
 const { TrialHandler } = data;
@@ -363,6 +383,15 @@ psychoJS.openWindow({
 	color: new util.Color('black'),
 	units: 'height',
 	waitBlanking: true
+});
+
+waitForElm('.ui-dialog').then((elm) => {
+	$("#buttonOk").button("option", "disabled", true);
+	$('#progressMsg').on('DOMSubtreeModified', function () {
+		if (document.getElementById('progressMsg').textContent == 'all resources downloaded') {
+			$("#buttonOk").button("option", "disabled", false);
+		}
+	});
 });
 
 // store info about the experiment session:
