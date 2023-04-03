@@ -381,8 +381,8 @@ var resources = [
 	{ name: 'MAIN_ready_audio.mp3', path: '/js/tasks/emotional_faces/media/instructions_audio/Slide12.mp3'},
 	{ name: 'male.png', path: '/js/tasks/emotional_faces/media/male.png' },
 	{ name: 'female.png', path: '/js/tasks/emotional_faces/media/female.png' },
-	{ name: 'high_tone.mp3', path: '/js/tasks/emotional_faces/media/tones/Get_out_Final.mp3' },
-	{ name: 'low_tone.mp3', path: '/js/tasks/emotional_faces/media/tones/go_away1.mp3' },
+	{ name: 'high_tone.mp3', path: '/js/tasks/emotional_faces/media/tones/high_tone.mp3' },
+	{ name: 'low_tone.mp3', path: '/js/tasks/emotional_faces/media/tones/low_tone.mp3' },
 	{ name: 'rightangry.JPG', path: '/js/tasks/emotional_faces/media/rightangry.JPG' },
 	{ name: 'wrongangry.JPG', path: '/js/tasks/emotional_faces/media/wrongangry.JPG' },
 	{ name: 'slowangry.JPG', path: '/js/tasks/emotional_faces/media/slowangry.JPG' },
@@ -438,6 +438,18 @@ var left_text;
 var left_rect;
 var right_text;
 var right_rect;
+
+var score_bar;
+var score_slide;
+var score_bar_top_text;
+var score_bar_bottom_text;
+var score_bar_midtop_text;
+var score_bar_midbottom_text;
+var score_bar_mid_text;
+var score_bar_midline;
+
+var correct_score_text;
+var correct_text;
 
 var offer_stim_text;
 var offer_rect;
@@ -583,6 +595,99 @@ function experimentInit() {
 		depth: 0.0
 	});
 
+	score_bar = new visual.Rect({
+		win: psychoJS.window,
+		name: 'right_rect',
+		width: 0.06,
+		height: 0.8,
+		lineWidth: 3.5,
+		units: 'norm',
+		pos: [ 0.23, 0 ], ori: 0,
+		lineColor: new util.Color('grey'), opacity: 1,
+		depth: 0.0
+	});
+	
+	score_bar_midline = new visual.Rect({
+		win: psychoJS.window,
+		name: 'right_rect',
+		width: 0.06,
+		height: 0.01,
+		lineWidth: 3.5,
+		units: 'norm',
+		pos: [0.23, 0.0], ori: 0,
+		fillColor: new util.Color('#4d4d4d'),
+		lineColor: new util.Color('#4d4d4d'), opacity: 1,
+		depth: 0.0
+	});
+
+	score_slide = new visual.Rect({
+		win: psychoJS.window,
+		name: 'right_rect',
+		width: 0.06,
+		height: 0.01,
+		lineWidth: 3.5,
+		units: 'norm',
+		pos: [0.23, 0.4], ori: 0,
+		fillColor: new util.Color('grey'),
+		lineColor: new util.Color('grey'), opacity: 1,
+		depth: 0.0
+	});
+
+	score_bar_top_text = new visual.TextStim({
+		win: psychoJS.window,
+		name: 'bar_top_text',
+		text: '+50',
+		font: 'Arial',
+		units: 'norm',
+		pos: [ 0.29, 0.38], height: 0.05, wrapWidth: undefined, ori: 0,
+		color: new util.Color('grey'), opacity: 1,
+		depth: 0.0
+	});
+
+	score_bar_midtop_text = new visual.TextStim({
+		win: psychoJS.window,
+		name: 'bar_top_text',
+		text: '+25',
+		font: 'Arial',
+		units: 'norm',
+		pos: [ 0.29, 0.19], height: 0.05, wrapWidth: undefined, ori: 0,
+		color: new util.Color('grey'), opacity: 1,
+		depth: 0.0
+	});
+
+	score_bar_bottom_text = new visual.TextStim({
+		win: psychoJS.window,
+		name: 'bar_bottom_text',
+		text: '-50',
+		font: 'Arial',
+		units: 'norm',
+		pos: [ 0.29, -0.37], height: 0.05, wrapWidth: undefined, ori: 0,
+		color: new util.Color('grey'), opacity: 1,
+		depth: 0.0
+	});
+
+	score_bar_midbottom_text = new visual.TextStim({
+		win: psychoJS.window,
+		name: 'bar_bottom_text',
+		text: '-25',
+		font: 'Arial',
+		units: 'norm',
+		pos: [ 0.29, -0.18], height: 0.05, wrapWidth: undefined, ori: 0,
+		color: new util.Color('grey'), opacity: 1,
+		depth: 0.0
+	});
+
+	score_bar_mid_text = new visual.TextStim({
+		win: psychoJS.window,
+		name: 'bar_bottom_text',
+		text: '0',
+		font: 'Arial',
+		units: 'norm',
+		pos: [ 0.29, 0], height: 0.05, wrapWidth: undefined, ori: 0,
+		color: new util.Color('grey'), opacity: 1,
+		depth: 0.0
+	});
+
 	currentTrialNumber  = new visual.TextStim({
 		win: psychoJS.window,
 		name: 'trialTracker',
@@ -634,6 +739,28 @@ function experimentInit() {
 		font: 'Arial',
 		units: 'norm',
 		pos: [0, -0.5], height: 0.12, wrapWidth: undefined, ori: 0,
+		color: new util.Color('white'), opacity: 1,
+		depth: 0.0
+	});
+
+	correct_score_text = new visual.TextStim({
+		win: psychoJS.window,
+		name: 'correct_score_text',
+		text: '0',
+		font: 'Arial',
+		units: 'norm',
+		pos: [0.04, -0.165], height: 0.11, wrapWidth: undefined, ori: 0,
+		color: new util.Color('#00ff00'), opacity: 1,
+		depth: 0.0
+	});
+
+	correct_text = new visual.TextStim({
+		win: psychoJS.window,
+		name: 'correct_text',
+		text: 'Correct!',
+		font: 'Arial',
+		units: 'norm',
+		pos: [-0.15, -0.165], height: 0.11, wrapWidth: undefined, ori: 0,
 		color: new util.Color('white'), opacity: 1,
 		depth: 0.0
 	});
@@ -1740,6 +1867,8 @@ function getResult(response) {
 	return 'incorrect'
 }
 
+var old_t = 0
+var correct_score = 0
 
 var response;
 /**
@@ -1756,15 +1885,76 @@ function trialRoutineRespond(trials) {
 		// get current time
 		t = respondClock.getTime();
 
+		// For This block move the text slighty down
+		left_text.pos[0] = -0.25
+		left_text.pos[1] = -0.5
+		left_rect.pos[0] = left_text.pos[0]
+		left_rect.pos[1] = left_text.pos[1]
+		
+		right_text.pos[0] = 0.25
+		right_text.pos[1] = -0.5
+		right_rect.pos[0] = right_text.pos[0]
+		right_rect.pos[1] = right_text.pos[1]
+
+		if (window.screen.width == 2560)
+		{
+			left_text.pos[0] = -0.25
+			left_text.pos[1] = -0.7
+			left_rect.pos[0] = left_text.pos[0]
+			left_rect.pos[1] = left_text.pos[1]
+			
+			feedback_result_stim.pos[1] = -0.7
+		
+			right_text.pos[0] = 0.25
+			right_text.pos[1] = -0.7
+			right_rect.pos[0] = right_text.pos[0]
+			right_rect.pos[1] = right_text.pos[1]
+		}
+	
+		if (window.screen.width == 1280)
+		{
+			left_text.pos[0] = -0.25
+			left_text.pos[1] = -0.7
+			left_rect.pos[0] = left_text.pos[0]
+			left_rect.pos[1] = left_text.pos[1]
+
+			feedback_result_stim.pos[1] = -0.7
+		
+			right_text.pos[0] = 0.25
+			right_text.pos[1] = -0.7
+			right_rect.pos[0] = right_text.pos[0]
+			right_rect.pos[1] = right_text.pos[1]
+		}
+
 		// Draw the Texts
 		if (left_text.status == PsychoJS.Status.NOT_STARTED) {
 			// response_text.setAutoDraw(true)
 			left_text.setAutoDraw(true)
 			right_text.setAutoDraw(true)
+			stimImageStim.setAutoDraw(true)
+			score_bar.setAutoDraw(true)
+			score_bar_midline.setAutoDraw(true)
+			score_slide.setAutoDraw(true)
+			score_bar_top_text.setAutoDraw(true)
+			score_bar_bottom_text.setAutoDraw(true)
+			score_bar_midtop_text.setAutoDraw(true)
+			score_bar_midbottom_text.setAutoDraw(true)
+			score_bar_mid_text.setAutoDraw(true)
 
 			mark_event(trials_data, globalClock, trials.thisIndex, trial_type, event_types['CHOICE_ONSET'],
 				'NA', 'NA' , 'NA')
 		}
+
+		// animate the sliding bar
+		if (old_t != 0) {
+			// animate based on window refresh time, 
+			// in such a way that it goes from the top of the bar to the bottom in response_duration seconds.
+			score_slide.pos[1] -= (score_bar.height / (response_duration / (t - old_t)))
+			score_slide.draw()
+			score_slide.refresh()
+		}
+
+		old_t = t
 
 		// Get Resposne Keys
 		// Get User Input
@@ -1796,6 +1986,10 @@ function trialRoutineRespond(trials) {
 				left_rect.width += 0.02
 
 				right_rect.setAutoDraw(false)
+
+				//calculate possible score as function of time
+				// y = mx + b = ((y2 - y1)/(x2 - x1))x - b
+				correct_score = Math.round(((((-50) - (50)) / (response_duration - 0)) * t) + 50)
 				
 			} else if (resp.keys == RIGHT_KEY) {
 				response_for_result = RIGHT_KEY
@@ -1808,6 +2002,10 @@ function trialRoutineRespond(trials) {
 				right_rect.width += 0.02
 
 				left_rect.setAutoDraw(false)
+
+				//calculate possible score as function of time
+				// y = mx + b = ((y2 - y1)/(x2 - x1))x - b
+				correct_score = Math.round(((((-50) - (50)) / (response_duration - 0)) * t) + 50)
 			}
 
 			// Save Data on each Press
@@ -1853,6 +2051,21 @@ function trialRoutineRespond(trials) {
 			right_text.status = PsychoJS.Status.NOT_STARTED
 			right_rect.setAutoDraw(false)
 			right_rect.status = PsychoJS.Status.NOT_STARTED
+
+			stimImageStim.setAutoDraw(false)
+			score_bar.setAutoDraw(false)
+			score_bar_midline.setAutoDraw(false)
+			score_slide.setAutoDraw(false)
+			score_bar_top_text.setAutoDraw(false)
+			score_bar_bottom_text.setAutoDraw(false)
+			score_bar_midtop_text.setAutoDraw(false)
+			score_bar_midbottom_text.setAutoDraw(false)
+			score_bar_mid_text.setAutoDraw(false)
+
+			// reset score bar
+			score_slide.pos[1] = 0.4
+			score_slide.refresh()
+			old_t = 0
 
 			set_fixation_flag = true
 			endClock.reset()
@@ -1964,6 +2177,16 @@ function trialRoutineEnd(trials) { //TODO: Change this so that there is a jitter
 				if (t < 1.5) {
 					if (response_for_result == LEFT_KEY && stim_type == 'angry') {
 						rightangryStim.setAutoDraw(true)
+						correct_score_text.setText(correct_score)
+						if (correct_score < 0) {
+							correct_score_text.color = new util.Color('#ff0000')
+						}
+						else {
+							correct_score_text.setText("+" + correct_score)
+							correct_score_text.color = new util.Color('#00ff00')
+						}
+						correct_score_text.setAutoDraw(true)
+						correct_text.setAutoDraw(true)
 						if (mark_feedback == true) {
 							mark_feedback = false
 							mark_event(trials_data, globalClock, 'NA', trial_type, event_types['FEEDBACK'],
@@ -1988,6 +2211,16 @@ function trialRoutineEnd(trials) { //TODO: Change this so that there is a jitter
 					}
 					else if (response_for_result == RIGHT_KEY && stim_type == 'sad') {
 						rightsadStim.setAutoDraw(true)
+						correct_score_text.setText(correct_score)
+						if (correct_score < 0) {
+							correct_score_text.color = new util.Color('#ff0000')
+						}
+						else {
+							correct_score_text.setText("+" + correct_score)
+							correct_score_text.color = new util.Color('#00ff00')
+						}
+						correct_score_text.setAutoDraw(true)
+						correct_text.setAutoDraw(true)
 						if (mark_feedback == true) {
 							mark_feedback = false
 							mark_event(trials_data, globalClock, 'NA', trial_type, event_types['FEEDBACK'],
@@ -1999,6 +2232,8 @@ function trialRoutineEnd(trials) { //TODO: Change this so that there is a jitter
 				{
 					if (response_for_result == LEFT_KEY && stim_type == 'angry') {
 						rightangryStim.setAutoDraw(false)
+						correct_score_text.setAutoDraw(false)
+						correct_text.setAutoDraw(false)
 					}
 					else if (response_for_result == RIGHT_KEY && stim_type == 'angry') {
 						wrongangryStim.setAutoDraw(false)
@@ -2008,6 +2243,8 @@ function trialRoutineEnd(trials) { //TODO: Change this so that there is a jitter
 					}
 					else if (response_for_result == RIGHT_KEY && stim_type == 'sad') {
 						rightsadStim.setAutoDraw(false)
+						correct_score_text.setAutoDraw(false)
+						correct_text.setAutoDraw(false)
 					}
 					points_fixation_stim.setText('+')
 					mark_event(trials_data, globalClock, 'NA', trial_type, event_types['FIXATION_ONSET'],
