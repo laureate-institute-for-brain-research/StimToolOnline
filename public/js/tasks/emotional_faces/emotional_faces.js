@@ -1909,6 +1909,15 @@ function trialRoutineRespond(trials) {
 			right_text.pos[1] = -0.7
 			right_rect.pos[0] = right_text.pos[0]
 			right_rect.pos[1] = right_text.pos[1]
+
+			score_bar.pos[0] = .32
+			score_bar_midline.pos[0] = .32
+			score_slide.pos[0] = .32
+			score_bar_top_text.pos[0] = .38
+			score_bar_bottom_text.pos[0] = .38
+			score_bar_midtop_text.pos[0] = .38
+			score_bar_midbottom_text.pos[0] = .38
+			score_bar_mid_text.pos[0] = .38
 		}
 	
 		if (window.screen.width == 1280)
@@ -1924,6 +1933,15 @@ function trialRoutineRespond(trials) {
 			right_text.pos[1] = -0.7
 			right_rect.pos[0] = right_text.pos[0]
 			right_rect.pos[1] = right_text.pos[1]
+
+			score_bar.pos[0] = .32
+			score_bar_midline.pos[0] = .32
+			score_slide.pos[0] = .32
+			score_bar_top_text.pos[0] = .38
+			score_bar_bottom_text.pos[0] = .38
+			score_bar_midtop_text.pos[0] = .38
+			score_bar_midbottom_text.pos[0] = .38
+			score_bar_mid_text.pos[0] = .38
 		}
 
 		// Draw the Texts
@@ -1952,6 +1970,13 @@ function trialRoutineRespond(trials) {
 			score_slide.pos[1] -= (score_bar.height / (response_duration / (t - old_t)))
 			score_slide.draw()
 			score_slide.refresh()
+			score_bar.refresh()
+			score_bar_midline.refresh()
+			score_bar_top_text.refresh()
+			score_bar_bottom_text.refresh()
+			score_bar_midtop_text.refresh()
+			score_bar_midbottom_text.refresh()
+			score_bar_mid_text.refresh()
 		}
 
 		old_t = t
