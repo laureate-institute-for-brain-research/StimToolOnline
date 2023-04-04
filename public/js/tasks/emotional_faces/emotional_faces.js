@@ -1964,7 +1964,7 @@ function trialRoutineRespond(trials) {
 		}
 
 		// animate the sliding bar
-		if (old_t != 0) {
+		if (old_t != 0 && !pressed) {
 			// animate based on window refresh time, 
 			// in such a way that it goes from the top of the bar to the bottom in response_duration seconds.
 			score_slide.pos[1] -= (score_bar.height / (response_duration / (t - old_t)))
