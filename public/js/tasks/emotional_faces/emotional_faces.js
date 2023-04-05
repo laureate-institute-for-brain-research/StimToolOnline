@@ -54,6 +54,10 @@ var response_for_result = null;
 
 var mark_feedback = true;
 
+var total_trials = 0
+var total_score = 0
+var converted_tot = 0
+
 // init psychoJS:
 const psychoJS = new PsychoJS({
 	debug: false
@@ -448,6 +452,15 @@ var score_bar_midbottom_text;
 var score_bar_mid_text;
 var score_bar_midline;
 
+var tot_score_bar;
+var tot_score_bar_midline;
+var tot_score_slide;
+var tot_score_bar_left_text;
+var tot_score_bar_right_text;
+var tot_score_bar_midleft_text;
+var tot_score_bar_midright_text;
+var tot_score_bar_mid_text;
+
 var correct_score_text;
 var correct_text;
 
@@ -684,6 +697,99 @@ function experimentInit() {
 		font: 'Arial',
 		units: 'norm',
 		pos: [ 0.29, 0], height: 0.05, wrapWidth: undefined, ori: 0,
+		color: new util.Color('grey'), opacity: 1,
+		depth: 0.0
+	});
+
+	tot_score_bar = new visual.Rect({
+		win: psychoJS.window,
+		name: 'right_rect',
+		width: 1.05,
+		height: 0.06,
+		lineWidth: 3.5,
+		units: 'norm',
+		pos: [ 0, -0.4 ], ori: 0,
+		lineColor: new util.Color('grey'), opacity: 1,
+		depth: 0.0
+	});
+
+	tot_score_bar_midline = new visual.Rect({
+		win: psychoJS.window,
+		name: 'right_rect',
+		width: 0.005,
+		height: 0.06,
+		lineWidth: 3.5,
+		units: 'norm',
+		pos: [0, -0.4], ori: 0,
+		fillColor: new util.Color('#4d4d4d'),
+		lineColor: new util.Color('#4d4d4d'), opacity: 1,
+		depth: 0.0
+	});
+
+	tot_score_slide = new visual.Rect({
+		win: psychoJS.window,
+		name: 'right_rect',
+		width: 0.01,
+		height: 0.06,
+		lineWidth: 0.1,
+		units: 'norm',
+		pos: [-0.5, -0.4], ori: 0,
+		fillColor: new util.Color('grey'),
+		lineColor: new util.Color('grey'), opacity: 1,
+		depth: 0.0
+	});
+
+	tot_score_bar_left_text = new visual.TextStim({
+		win: psychoJS.window,
+		name: 'bar_top_text',
+		text: '-$$$',
+		font: 'Arial',
+		units: 'norm',
+		pos: [ -0.5, -0.3], height: 0.05, wrapWidth: undefined, ori: 0,
+		color: new util.Color('grey'), opacity: 1,
+		depth: 0.0
+	});
+
+	tot_score_bar_midleft_text = new visual.TextStim({
+		win: psychoJS.window,
+		name: 'bar_top_text',
+		text: '-$',
+		font: 'Arial',
+		units: 'norm',
+		pos: [ -0.25, -0.3], height: 0.05, wrapWidth: undefined, ori: 0,
+		color: new util.Color('grey'), opacity: 1,
+		depth: 0.0
+	});
+
+	tot_score_bar_right_text = new visual.TextStim({
+		win: psychoJS.window,
+		name: 'bar_bottom_text',
+		text: '+$$$',
+		font: 'Arial',
+		units: 'norm',
+		pos: [ 0.5, -0.3], height: 0.05, wrapWidth: undefined, ori: 0,
+		color: new util.Color('grey'), opacity: 1,
+		depth: 0.0
+	});
+
+	tot_score_bar_midright_text = new visual.TextStim({
+		win: psychoJS.window,
+		name: 'bar_bottom_text',
+		text: '+$',
+		font: 'Arial',
+		units: 'norm',
+		pos: [ 0.25, -0.3], height: 0.05, wrapWidth: undefined, ori: 0,
+		color: new util.Color('grey'), opacity: 1,
+		depth: 0.0
+	});
+
+	tot_score_bar_mid_text = new visual.TextStim({
+		win: psychoJS.window,
+		name: 'bar_bottom_text',
+		text: '0',
+		font: 'Arial',
+		units: 'norm',
+		pos: [ 0, -0.3], height: 0.05, wrapWidth: undefined, ori: 0,
 		color: new util.Color('grey'), opacity: 1,
 		depth: 0.0
 	});
@@ -1316,6 +1422,8 @@ function practiceTrialsLoopBegin(thisScheduler) {
 	});
 
 	psychoJS.experiment.addLoop(trials); // add the loop to the experiment
+	total_trials = trials.trialList.length
+	total_score = Math.round(total_trials/2) // initialize to 0 tick
 	currentLoop = trials;  // we're now the current loop
 	endClock.reset()
 	resp.stop()
@@ -1360,6 +1468,8 @@ function trialsLoopBegin(thisScheduler) {
 
 	psychoJS.experiment.addLoop(trials); // add the loop to the experiment
 	currentLoop = trials;  // we're now the current loop
+	total_trials = trials.trialList.length
+	total_score = Math.round(total_trials/2) // init to 0 tick
 
 	init_fixation_flag = true
 
@@ -2213,6 +2323,7 @@ function trialRoutineEnd(trials) { //TODO: Change this so that there is a jitter
 						correct_score_text.setAutoDraw(true)
 						correct_text.setAutoDraw(true)
 						if (mark_feedback == true) {
+							total_score += correct_score
 							mark_feedback = false
 							mark_event(trials_data, globalClock, 'NA', trial_type, event_types['FEEDBACK'],
 								'NA', 'NA', 'correct angry')
@@ -2221,6 +2332,7 @@ function trialRoutineEnd(trials) { //TODO: Change this so that there is a jitter
 					else if (response_for_result == RIGHT_KEY && stim_type == 'angry') {
 						wrongangryStim.setAutoDraw(true)
 						if (mark_feedback == true) {
+							total_score -= 50
 							mark_feedback = false
 							mark_event(trials_data, globalClock, 'NA', trial_type, event_types['FEEDBACK'],
 								'NA', 'NA', 'wrong angry')
@@ -2229,6 +2341,7 @@ function trialRoutineEnd(trials) { //TODO: Change this so that there is a jitter
 					else if (response_for_result == LEFT_KEY && stim_type == 'sad') {
 						wrongsadStim.setAutoDraw(true)
 						if (mark_feedback == true) {
+							total_score -= 50
 							mark_feedback = false
 							mark_event(trials_data, globalClock, 'NA', trial_type, event_types['FEEDBACK'],
 								'NA', 'NA', 'wrong sad')
@@ -2247,11 +2360,70 @@ function trialRoutineEnd(trials) { //TODO: Change this so that there is a jitter
 						correct_score_text.setAutoDraw(true)
 						correct_text.setAutoDraw(true)
 						if (mark_feedback == true) {
+							total_score += correct_score
 							mark_feedback = false
 							mark_event(trials_data, globalClock, 'NA', trial_type, event_types['FEEDBACK'],
 								'NA', 'NA', 'correct sad')
 						}
 					}
+
+					// // score range 0 - 16800
+					// if (total_score <= 0)
+					// {
+					// 	total_score = 0
+					// }
+					// tot_score_slide.pos[0] = ((0.5 - (-0.5)) / ((total_trials * 50))) * (total_score) - 0.5
+					// if (tot_score_slide.pos[0] < -0.5)
+					// {
+					// 	tot_score_slide.pos[0] = -0.5
+					// }
+					// else if (tot_score_slide.pos[0] > 0.5)
+					// {
+					// 	tot_score_slide.pos[0] = 0.5
+					// }
+
+
+					// // score range -67200 - 16800
+					// if (total_score < 0) {
+					// 	tot_score_slide.pos[0] = ((0 - (-0.5)) / (0 - (total_trials * (-200)))) * (total_score)
+					// }
+					// else {
+					// 	tot_score_slide.pos[0] = ((0.5 - (0)) / ((total_trials * 50))) * (total_score)
+					// }
+					// if (tot_score_slide.pos[0] < -0.5)
+					// {
+					// 	tot_score_slide.pos[0] = -0.5
+					// }
+
+					// // score range 0 - 336
+					if (total_score <= 0)
+					{
+						total_score = 0
+					}
+					else if (total_score >= total_trials)
+					{
+						total_score = total_trials
+					}
+					tot_score_slide.pos[0] = ((0.5 - (-0.5)) / ((total_trials * 50) / 50)) * (total_score) - 0.5
+					if (tot_score_slide.pos[0] < -0.5)
+					{
+						tot_score_slide.pos[0] = -0.5
+					}
+					else if (tot_score_slide.pos[0] > 0.5)
+					{
+						tot_score_slide.pos[0] = 0.5
+					}
+
+					tot_score_slide.refresh()
+
+					tot_score_bar.setAutoDraw(true)
+					tot_score_bar_midline.setAutoDraw(true)
+					tot_score_slide.setAutoDraw(true)
+					tot_score_bar_left_text.setAutoDraw(true)
+					tot_score_bar_midleft_text.setAutoDraw(true)
+					tot_score_bar_mid_text.setAutoDraw(true)
+					tot_score_bar_midright_text.setAutoDraw(true)
+					tot_score_bar_right_text.setAutoDraw(true)
 				}
 				if (t >= 1.5)
 				{
@@ -2274,7 +2446,16 @@ function trialRoutineEnd(trials) { //TODO: Change this so that there is a jitter
 					points_fixation_stim.setText('+')
 					mark_event(trials_data, globalClock, 'NA', trial_type, event_types['FIXATION_ONSET'],
 						'NA', 'NA', 'NA')
+					
 					points_fixation_stim.setAutoDraw(true)
+					tot_score_bar.setAutoDraw(false)
+					tot_score_bar_midline.setAutoDraw(false)
+					tot_score_slide.setAutoDraw(false)
+					tot_score_bar_left_text.setAutoDraw(false)
+					tot_score_bar_midleft_text.setAutoDraw(false)
+					tot_score_bar_mid_text.setAutoDraw(false)
+					tot_score_bar_midright_text.setAutoDraw(false)
+					tot_score_bar_right_text.setAutoDraw(false)
 				}
 			}
 			//rightangryStim.setAutoDraw(true)
@@ -2291,6 +2472,7 @@ function trialRoutineEnd(trials) { //TODO: Change this so that there is a jitter
 					if (stim_type == 'angry') {
 						slowangryStim.setAutoDraw(true)
 						if (mark_feedback == true) {
+							total_score -= 200
 							mark_feedback = false
 							mark_event(trials_data, globalClock, 'NA', trial_type, event_types['FEEDBACK'],
 								'NA', 'NA', 'too slow angry')
@@ -2299,11 +2481,70 @@ function trialRoutineEnd(trials) { //TODO: Change this so that there is a jitter
 					else if (stim_type == 'sad') {
 						slowsadStim.setAutoDraw(true)
 						if (mark_feedback == true) {
+							total_score -= 200
 							mark_feedback = false
 							mark_event(trials_data, globalClock, 'NA', trial_type, event_types['FEEDBACK'],
 								'NA', 'NA', 'too slow sad')
 						}
 					}
+
+					// // score range 0 - 16800
+					// if (total_score <= 0)
+					// {
+					// 	total_score = 0
+					// }
+					// tot_score_slide.pos[0] = ((0.5 - (-0.5)) / ((total_trials * 50))) * (total_score) - 0.5
+					// if (tot_score_slide.pos[0] < -0.5)
+					// {
+					// 	tot_score_slide.pos[0] = -0.5
+					// }
+					// else if (tot_score_slide.pos[0] > 0.5)
+					// {
+					// 	tot_score_slide.pos[0] = 0.5
+					// }
+
+
+					// // score range -67200 - 16800
+					// if (total_score < 0) {
+					// 	tot_score_slide.pos[0] = ((0 - (-0.5)) / (0 - (total_trials * (-200)))) * (total_score)
+					// }
+					// else {
+					// 	tot_score_slide.pos[0] = ((0.5 - (0)) / ((total_trials * 50))) * (total_score)
+					// }
+					// if (tot_score_slide.pos[0] < -0.5)
+					// {
+					// 	tot_score_slide.pos[0] = -0.5
+					// }
+
+					// // score range 0 - 336
+					if (total_score <= 0)
+					{
+						total_score = 0
+					}
+					else if (total_score >= total_trials)
+					{
+						total_score = total_trials
+					}
+					tot_score_slide.pos[0] = ((0.5 - (-0.5)) / ((total_trials * 50) / 50)) * (total_score) - 0.5
+					if (tot_score_slide.pos[0] < -0.5)
+					{
+						tot_score_slide.pos[0] = -0.5
+					}
+					else if (tot_score_slide.pos[0] > 0.5)
+					{
+						tot_score_slide.pos[0] = 0.5
+					}
+
+					tot_score_slide.refresh()
+
+					tot_score_bar.setAutoDraw(true)
+					tot_score_bar_midline.setAutoDraw(true)
+					tot_score_slide.setAutoDraw(true)
+					tot_score_bar_left_text.setAutoDraw(true)
+					tot_score_bar_midleft_text.setAutoDraw(true)
+					tot_score_bar_mid_text.setAutoDraw(true)
+					tot_score_bar_midright_text.setAutoDraw(true)
+					tot_score_bar_right_text.setAutoDraw(true)
 				}
 				if (t >= 1.5)
 				{
@@ -2317,7 +2558,16 @@ function trialRoutineEnd(trials) { //TODO: Change this so that there is a jitter
 					points_fixation_stim.setText('+')
 					set_fixation_flag = false
 					mark_event(trials_data, globalClock, 'NA', trial_type, event_types['FIXATION_ONSET'],
-						'NA', 'NA' , 'NA')
+						'NA', 'NA', 'NA')
+					
+					tot_score_bar.setAutoDraw(false)
+					tot_score_bar_midline.setAutoDraw(false)
+					tot_score_slide.setAutoDraw(false)
+					tot_score_bar_left_text.setAutoDraw(false)
+					tot_score_bar_midleft_text.setAutoDraw(false)
+					tot_score_bar_mid_text.setAutoDraw(false)
+					tot_score_bar_midright_text.setAutoDraw(false)
+					tot_score_bar_right_text.setAutoDraw(false)
 				}
 			}
 		}
