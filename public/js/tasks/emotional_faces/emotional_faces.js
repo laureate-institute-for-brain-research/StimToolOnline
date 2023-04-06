@@ -188,7 +188,7 @@ window.onload = function () {
 			return new Promise((resolve, reject) => {
 				$.ajax({
 					type: 'GET',
-					url: '/js/tasks/emotional_faces/rate_faces_schedule.csv',
+					url: '/js/tasks/emotional_faces/rate_faces_schedule_full.csv',
 					dataType: 'text',
 					async: false,
 					success: (data) => {
@@ -474,6 +474,29 @@ var totalDates = 0;
 var totalPointsTracker;
 
 var points_fixation_stim;
+
+var og_positions = {
+	'tot_score_bar': '',
+	'tot_score_bar_midline': '',
+	'tot_score_slide': '',
+	'tot_score_bar_left_text': '',
+	'tot_score_bar_right_text': '',
+	'tot_score_bar_midleft_text': '',
+	'tot_score_bar_midright_text': '',
+	'tot_score_bar_mid_text': '',
+	'left_text': '',
+	'left_rect': '',
+	'right_text': '',
+	'right_rect': '',
+	'score_bar': '',
+	'score_slide': '',
+	'score_bar_top_text': '',
+	'score_bar_bottom_text': '',
+	'score_bar_midtop_text': '',
+	'score_bar_midbottom_text': '',
+	'score_bar_mid_text': '',
+	'score_bar_midline': '',
+}
 
 var t_end;
 
@@ -940,6 +963,27 @@ function experimentInit() {
 		color: new util.Color('white'), opacity: 1,
 		depth: 0.0
 	});
+
+	og_positions['left_text'] = [-0.3, 0]
+	og_positions['left_rect'] = [-0.3, 0]
+	og_positions['right_text'] = [0.3, 0]
+	og_positions['right_rect'] = [0.3, 0]
+	og_positions['score_bar'] = [0.23, 0]
+	og_positions['score_bar_midline'] = [0.23, 0]
+	og_positions['score_slide'] = [0.23, 0.4]
+	og_positions['score_bar_top_text'] = [0.29, 0.38]
+	og_positions['score_bar_midtop_text'] = [0.29, 0.19]
+	og_positions['score_bar_bottom_text'] = [0.29, -0.37]
+	og_positions['score_bar_midbottom_text'] = [0.29, -0.18]
+	og_positions['score_bar_mid_text'] = [0.29, 0]
+	og_positions['tot_score_bar'] = [ 0, -0.4 ]
+	og_positions['tot_score_bar_midline'] = [ 0, -0.4 ]
+	og_positions['tot_score_slide'] = [-0.5, -0.4]
+	og_positions['tot_score_bar_left_text'] = [ -0.5, -0.3]
+	og_positions['tot_score_bar_midleft_text'] = [ -0.25, -0.3]
+	og_positions['tot_score_bar_right_text'] = [ 0.5, -0.3]
+	og_positions['tot_score_bar_midright_text'] = [ 0.25, -0.3]
+	og_positions['tot_score_bar_mid_text'] = [ 0, -0.3]
 
 	// Tone Sounds
 	// high_tone = new Sound({
@@ -1526,6 +1570,11 @@ function rateFacesRoutingBegin(trials) {
 		});
 		stimImageStim.setAutoDraw(true) // show image
 
+		left_text.pos[1] = og_positions['left_text'][1]
+		left_rect.pos[1] = og_positions['left_rect'][1]
+		right_text.pos[1] = og_positions['right_text'][1]
+		right_rect.pos[1] = og_positions['right_rect'][1]
+
 		// For This block move the text slighty down
 		left_text.pos[1] = -0.2
 		left_rect.pos[1] = left_text.pos[1]
@@ -1533,7 +1582,7 @@ function rateFacesRoutingBegin(trials) {
 		right_text.pos[1] = -0.2
 		right_rect.pos[1] = right_text.pos[1]
 
-		if (window.screen.width == 2560)
+		if (window.screen.width >= 2560)
 		{
 			left_text.pos[1] = -0.4
 			left_rect.pos[1] = left_text.pos[1]
@@ -1544,7 +1593,7 @@ function rateFacesRoutingBegin(trials) {
 			right_rect.pos[1] = right_text.pos[1]
 		}
 	
-		if (window.screen.width == 1280)
+		if (window.screen.width <= 1280)
 		{
 			left_text.pos[1] = -0.4
 			left_rect.pos[1] = left_text.pos[1]
@@ -1868,6 +1917,102 @@ function trialRoutineBegin(trials) {
 		pressed = false;
 		too_slow = false;
 
+		left_text.pos[1] = og_positions['left_text'][1]
+		left_rect.pos[1] = og_positions['left_rect'][1]
+		right_text.pos[1] = og_positions['right_text'][1]
+		right_rect.pos[1] = og_positions['right_rect'][1]
+
+		// For This block move the text slighty down
+		left_text.pos[0] = -0.25
+		left_text.pos[1] = -0.5
+		left_rect.pos[0] = left_text.pos[0]
+		left_rect.pos[1] = left_text.pos[1]
+		
+		right_text.pos[0] = 0.25
+		right_text.pos[1] = -0.5
+		right_rect.pos[0] = right_text.pos[0]
+		right_rect.pos[1] = right_text.pos[1]
+
+		correct_text.height = 0.11
+
+		if (window.screen.width >= 2560)
+		{
+			left_text.pos[0] = -0.25
+			left_text.pos[1] = -0.7
+			left_rect.pos[0] = left_text.pos[0]
+			left_rect.pos[1] = left_text.pos[1]
+			
+			feedback_result_stim.pos[1] = -0.7
+		
+			right_text.pos[0] = 0.25
+			right_text.pos[1] = -0.7
+			right_rect.pos[0] = right_text.pos[0]
+			right_rect.pos[1] = right_text.pos[1]
+
+			score_bar.pos[0] = .32
+			score_bar_midline.pos[0] = .32
+			score_slide.pos[0] = .32
+			score_bar_top_text.pos[0] = .38
+			score_bar_bottom_text.pos[0] = .38
+			score_bar_midtop_text.pos[0] = .38
+			score_bar_midbottom_text.pos[0] = .38
+			score_bar_mid_text.pos[0] = .38
+
+			tot_score_bar.pos[1] = -0.5
+			tot_score_bar_midline.pos[1] = -0.5
+			tot_score_slide.pos[1] = -0.5
+			tot_score_bar_left_text.pos[1] = -0.4
+			tot_score_bar_right_text.pos[1] = -0.4
+			tot_score_bar_midleft_text.pos[1] = -0.4
+			tot_score_bar_midright_text.pos[1] = -0.4
+			tot_score_bar_mid_text.pos[1] = -0.4
+
+			correct_text.height = 0.16
+			correct_score_text.height = 0.16
+			correct_score_text.pos[0] = 0.085
+		}
+	
+		if (window.screen.width <= 1280)
+		{
+			left_text.pos[0] = -0.25
+			left_text.pos[1] = -0.7
+			left_rect.pos[0] = left_text.pos[0]
+			left_rect.pos[1] = left_text.pos[1]
+
+			feedback_result_stim.pos[1] = -0.7
+		
+			right_text.pos[0] = 0.25
+			right_text.pos[1] = -0.7
+			right_rect.pos[0] = right_text.pos[0]
+			right_rect.pos[1] = right_text.pos[1]
+
+			score_bar.pos[0] = .32
+			score_bar_midline.pos[0] = .32
+			score_slide.pos[0] = .32
+			score_bar_top_text.pos[0] = .38
+			score_bar_bottom_text.pos[0] = .38
+			score_bar_midtop_text.pos[0] = .38
+			score_bar_midbottom_text.pos[0] = .38
+			score_bar_mid_text.pos[0] = .38
+
+			tot_score_bar.pos[1] = -0.5
+			tot_score_bar_midline.pos[1] = -0.5
+			tot_score_slide.pos[1] = -0.5
+			tot_score_bar_left_text.pos[1] = -0.4
+			tot_score_bar_right_text.pos[1] = -0.4
+			tot_score_bar_midleft_text.pos[1] = -0.4
+			tot_score_bar_midright_text.pos[1] = -0.4
+			tot_score_bar_mid_text.pos[1] = -0.4
+			correct_text.height = 0.16
+			correct_score_text.height = 0.16
+			correct_score_text.pos[0] = 0.085
+		}
+		
+		left_text.refresh()
+		right_text.refresh()
+		left_rect.refresh()
+		right_rect.refresh()
+
 		trial_type = stim_type + '_' + intensity
 		mark_event(trials_data, globalClock, trials.thisIndex, trial_type, event_types['TONE_ONSET'],
 			'NA', 'NA', tone)
@@ -1994,65 +2139,6 @@ function trialRoutineRespond(trials) {
 	
 		// get current time
 		t = respondClock.getTime();
-
-		// For This block move the text slighty down
-		left_text.pos[0] = -0.25
-		left_text.pos[1] = -0.5
-		left_rect.pos[0] = left_text.pos[0]
-		left_rect.pos[1] = left_text.pos[1]
-		
-		right_text.pos[0] = 0.25
-		right_text.pos[1] = -0.5
-		right_rect.pos[0] = right_text.pos[0]
-		right_rect.pos[1] = right_text.pos[1]
-
-		if (window.screen.width == 2560)
-		{
-			left_text.pos[0] = -0.25
-			left_text.pos[1] = -0.7
-			left_rect.pos[0] = left_text.pos[0]
-			left_rect.pos[1] = left_text.pos[1]
-			
-			feedback_result_stim.pos[1] = -0.7
-		
-			right_text.pos[0] = 0.25
-			right_text.pos[1] = -0.7
-			right_rect.pos[0] = right_text.pos[0]
-			right_rect.pos[1] = right_text.pos[1]
-
-			score_bar.pos[0] = .32
-			score_bar_midline.pos[0] = .32
-			score_slide.pos[0] = .32
-			score_bar_top_text.pos[0] = .38
-			score_bar_bottom_text.pos[0] = .38
-			score_bar_midtop_text.pos[0] = .38
-			score_bar_midbottom_text.pos[0] = .38
-			score_bar_mid_text.pos[0] = .38
-		}
-	
-		if (window.screen.width == 1280)
-		{
-			left_text.pos[0] = -0.25
-			left_text.pos[1] = -0.7
-			left_rect.pos[0] = left_text.pos[0]
-			left_rect.pos[1] = left_text.pos[1]
-
-			feedback_result_stim.pos[1] = -0.7
-		
-			right_text.pos[0] = 0.25
-			right_text.pos[1] = -0.7
-			right_rect.pos[0] = right_text.pos[0]
-			right_rect.pos[1] = right_text.pos[1]
-
-			score_bar.pos[0] = .32
-			score_bar_midline.pos[0] = .32
-			score_slide.pos[0] = .32
-			score_bar_top_text.pos[0] = .38
-			score_bar_bottom_text.pos[0] = .38
-			score_bar_midtop_text.pos[0] = .38
-			score_bar_midbottom_text.pos[0] = .38
-			score_bar_mid_text.pos[0] = .38
-		}
 
 		// Draw the Texts
 		if (left_text.status == PsychoJS.Status.NOT_STARTED) {
