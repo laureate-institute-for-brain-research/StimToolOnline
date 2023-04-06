@@ -2078,14 +2078,14 @@ function trialRoutineShowStim(trials) {
 
 		t = stimClock.getTime()
 		// Space for 200ms then show stim for 150ms
-		if (t >= 0.2 && stimImageStim.status == PsychoJS.Status.NOT_STARTED) {
+		if (t >= 0.05 && stimImageStim.status == PsychoJS.Status.NOT_STARTED) {
 			stimImageStim.setAutoDraw(true)
 		
 			mark_event(trials_data, globalClock, trials.thisIndex, trial_type, event_types['FACE_ONSET'],
 				'NA', 'NA' , stim_paths)
 		}
 
-		if (t >= 0.2 + STIM_DURATION) {
+		if (t >= 0.05 + STIM_DURATION) {
 			continueRoutine = false
 		}
 
@@ -2412,8 +2412,8 @@ function trialRoutineEnd(trials) { //TODO: Change this so that there is a jitter
 						if (mark_feedback == true) {
 							total_score += correct_score
 							mark_feedback = false
-							mark_event(trials_data, globalClock, 'NA', trial_type, event_types['FEEDBACK'],
-								'NA', 'NA', 'correct angry')
+							mark_event(trials_data, globalClock, trials.thisIndex, trial_type, event_types['FEEDBACK'],
+								'NA', correct_score, 'correct angry')
 						}
 					}
 					else if (response_for_result == RIGHT_KEY && stim_type == 'angry') {
@@ -2421,8 +2421,8 @@ function trialRoutineEnd(trials) { //TODO: Change this so that there is a jitter
 						if (mark_feedback == true) {
 							total_score -= 50
 							mark_feedback = false
-							mark_event(trials_data, globalClock, 'NA', trial_type, event_types['FEEDBACK'],
-								'NA', 'NA', 'wrong angry')
+							mark_event(trials_data, globalClock, trials.thisIndex, trial_type, event_types['FEEDBACK'],
+								'NA', -50, 'wrong angry')
 						}
 					}
 					else if (response_for_result == LEFT_KEY && stim_type == 'sad') {
@@ -2430,8 +2430,8 @@ function trialRoutineEnd(trials) { //TODO: Change this so that there is a jitter
 						if (mark_feedback == true) {
 							total_score -= 50
 							mark_feedback = false
-							mark_event(trials_data, globalClock, 'NA', trial_type, event_types['FEEDBACK'],
-								'NA', 'NA', 'wrong sad')
+							mark_event(trials_data, globalClock, trials.thisIndex, trial_type, event_types['FEEDBACK'],
+								'NA', -50, 'wrong sad')
 						}
 					}
 					else if (response_for_result == RIGHT_KEY && stim_type == 'sad') {
@@ -2449,8 +2449,8 @@ function trialRoutineEnd(trials) { //TODO: Change this so that there is a jitter
 						if (mark_feedback == true) {
 							total_score += correct_score
 							mark_feedback = false
-							mark_event(trials_data, globalClock, 'NA', trial_type, event_types['FEEDBACK'],
-								'NA', 'NA', 'correct sad')
+							mark_event(trials_data, globalClock, trials.thisIndex, trial_type, event_types['FEEDBACK'],
+								'NA', correct_score, 'correct sad')
 						}
 					}
 
@@ -2533,7 +2533,7 @@ function trialRoutineEnd(trials) { //TODO: Change this so that there is a jitter
 						correct_text.setAutoDraw(false)
 					}
 					points_fixation_stim.setText('+')
-					mark_event(trials_data, globalClock, 'NA', trial_type, event_types['FIXATION_ONSET'],
+					mark_event(trials_data, globalClock, trials.thisIndex, trial_type, event_types['FIXATION_ONSET'],
 						'NA', 'NA', 'NA')
 					
 					points_fixation_stim.setAutoDraw(true)
@@ -2563,8 +2563,8 @@ function trialRoutineEnd(trials) { //TODO: Change this so that there is a jitter
 						if (mark_feedback == true) {
 							total_score -= 200
 							mark_feedback = false
-							mark_event(trials_data, globalClock, 'NA', trial_type, event_types['FEEDBACK'],
-								'NA', 'NA', 'too slow angry')
+							mark_event(trials_data, globalClock, trials.thisIndex, trial_type, event_types['FEEDBACK'],
+								'NA', -200, 'too slow angry')
 						}
 					}
 					else if (stim_type == 'sad') {
@@ -2572,8 +2572,8 @@ function trialRoutineEnd(trials) { //TODO: Change this so that there is a jitter
 						if (mark_feedback == true) {
 							total_score -= 200
 							mark_feedback = false
-							mark_event(trials_data, globalClock, 'NA', trial_type, event_types['FEEDBACK'],
-								'NA', 'NA', 'too slow sad')
+							mark_event(trials_data, globalClock, trials.thisIndex, trial_type, event_types['FEEDBACK'],
+								'NA', -200, 'too slow sad')
 						}
 					}
 
