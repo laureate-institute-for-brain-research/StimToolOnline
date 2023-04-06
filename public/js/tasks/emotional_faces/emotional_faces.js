@@ -1467,6 +1467,7 @@ function practiceTrialsLoopBegin(thisScheduler) {
 
 	psychoJS.experiment.addLoop(trials); // add the loop to the experiment
 	total_trials = trials.trialList.length
+	total_trials = 300 // This is a good enough estimate
 	total_score = Math.round(total_trials/2) // initialize to 0 tick
 	currentLoop = trials;  // we're now the current loop
 	endClock.reset()
@@ -2007,7 +2008,7 @@ function trialRoutineBegin(trials) {
 			correct_score_text.height = 0.16
 			correct_score_text.pos[0] = 0.085
 		}
-		
+
 		left_text.refresh()
 		right_text.refresh()
 		left_rect.refresh()
@@ -2490,7 +2491,9 @@ function trialRoutineEnd(trials) { //TODO: Change this so that there is a jitter
 					{
 						total_score = total_trials
 					}
+
 					tot_score_slide.pos[0] = ((0.5 - (-0.5)) / ((total_trials * 50) / 50)) * (total_score) - 0.5
+					
 					if (tot_score_slide.pos[0] < -0.5)
 					{
 						tot_score_slide.pos[0] = -0.5
@@ -2611,7 +2614,9 @@ function trialRoutineEnd(trials) { //TODO: Change this so that there is a jitter
 					{
 						total_score = total_trials
 					}
+
 					tot_score_slide.pos[0] = ((0.5 - (-0.5)) / ((total_trials * 50) / 50)) * (total_score) - 0.5
+
 					if (tot_score_slide.pos[0] < -0.5)
 					{
 						tot_score_slide.pos[0] = -0.5
