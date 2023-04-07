@@ -379,10 +379,10 @@ var resources = [
 	{ name: 'rate_faces_schedule.csv', path: '/js/tasks/emotional_faces/rate_faces_schedule.csv' }, // faces lists
 	{ name: 'user.png', path: '/js/tasks/emotional_faces/media/user.png' },
 	{ name: 'user_filled.png', path: '/js/tasks/emotional_faces/media/user_filled.png' },
-	{ name: 'PRACTICE_ready', path: '/js/tasks/emotional_faces/media/instructions/Slide11.jpeg'},
-	{ name: 'MAIN_ready', path: '/js/tasks/emotional_faces/media/instructions/Slide12.jpeg' },
-	{ name: 'PRACTICE_ready_audio.mp3', path: '/js/tasks/emotional_faces/media/instructions_audio/Slide11.mp3' },
-	{ name: 'MAIN_ready_audio.mp3', path: '/js/tasks/emotional_faces/media/instructions_audio/Slide12.mp3'},
+	{ name: 'PRACTICE_ready', path: '/js/tasks/emotional_faces/media/instructions/Slide14.jpeg'},
+	{ name: 'MAIN_ready', path: '/js/tasks/emotional_faces/media/instructions/Slide15.jpeg' },
+	{ name: 'PRACTICE_ready_audio.mp3', path: '/js/tasks/emotional_faces/media/instructions_audio/Slide14.mp3' },
+	{ name: 'MAIN_ready_audio.mp3', path: '/js/tasks/emotional_faces/media/instructions_audio/Slide15.mp3'},
 	{ name: 'male.png', path: '/js/tasks/emotional_faces/media/male.png' },
 	{ name: 'female.png', path: '/js/tasks/emotional_faces/media/female.png' },
 	{ name: 'high_tone.mp3', path: '/js/tasks/emotional_faces/media/tones/high_tone.mp3' },
@@ -757,8 +757,8 @@ function experimentInit() {
 		lineWidth: 0.1,
 		units: 'norm',
 		pos: [-0.5, -0.4], ori: 0,
-		fillColor: new util.Color('grey'),
-		lineColor: new util.Color('grey'), opacity: 1,
+		fillColor: new util.Color('#13aed1'),
+		lineColor: new util.Color('#13aed1'), opacity: 1,
 		depth: 0.0
 	});
 
