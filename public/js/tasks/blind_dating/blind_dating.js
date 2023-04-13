@@ -1312,8 +1312,6 @@ function trialRoutineBegin(trials) {
 
 		endClock.reset()
 
-		//console.log(trial_type)
-
 		console.log('Trial Number: ', trials.thisIndex + 1, 'Total Points: ', totalDates)
 		// console.log(trials)
 		// console.log("Sexual Orientation: ",question_data.whichBestDescribesYourSexualIdentity )
@@ -1509,9 +1507,7 @@ function trialRoutineEachFrame(trials) {
 
 				reject_text_stim.color = new util.Color('white')
 
-				//console.log(time_point + 1)
-				//console.log(ts_high)
-				if ((time_point + 1) == ts_high) {
+				if ((time_point+2) == ts_high) {
 					avg_sum += 90
 					high_offer = true
 					offer_stim_text.setText('>' + highOfferVal + '% Match')
@@ -1524,9 +1520,7 @@ function trialRoutineEachFrame(trials) {
 					reject_text_stim.setAutoDraw(false)
 				}
 
-				//console.log(time_point + 1)
-				//console.log(ts_withdrawal)
-				if ((time_point + 1) == ts_withdrawal) {
+				if ((time_point+2) == ts_withdrawal) {
 					offer_withdrew = true;
 					profile_outline.lineColor = new util.Color('#ff0000')
 					result_time = t + result_time_amount
@@ -1545,7 +1539,7 @@ function trialRoutineEachFrame(trials) {
 			}
 
 			mark_event(trials_data, globalClock, trials.thisIndex, trial_type,
-				event_types['RESPONSE'], resp.rt , key_map[resp.keys], 'Turn ' + (time_point + 1))
+				event_types['RESPONSE'], resp.rt , key_map[resp.keys], 'Turn ' + (time_point + 2))
 			resp.keys = undefined;
 			resp.rt = undefined;
 
@@ -1575,9 +1569,9 @@ function trialRoutineEachFrame(trials) {
 
 			if (time_point != trial_length) {
 				draw_profile_icons()
-				//if (high_offer == false && offer_withdrew == false) {
+				// if (high_offer == false && offer_withdrew == false) {
 					draw_profile_outline(accepted)
-				//}
+				// }
 			}
 			// small break
 			feedback_break = true
