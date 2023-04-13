@@ -1568,7 +1568,7 @@ function practiceTrialsLoopBegin(thisScheduler) {
 		thisScheduler.add(trialRoutineBegin(snapshot)); 	// setup block
 		thisScheduler.add(fixation(snapshot));				// fixation
 		thisScheduler.add(runModule(snapshot));				// run MOdule
-		thisScheduler.add(trialOutcome(snapshot));			// trial outcome
+		//thisScheduler.add(trialOutcome(snapshot));			// trial outcome
 		thisScheduler.add(blockRoutineEnd(snapshot));		// end block
 		thisScheduler.add(endLoopIteration(thisScheduler, snapshot));
 	}
@@ -1645,7 +1645,7 @@ function trialsLoopBegin(thisScheduler) {
 		thisScheduler.add(trialRoutineBegin(snapshot)); 	// setup block
 		thisScheduler.add(fixation(snapshot));				// fixation
 		thisScheduler.add(runModule(snapshot));				// run MOdule
-		thisScheduler.add(trialOutcome(snapshot));			// trial outcome
+		//thisScheduler.add(trialOutcome(snapshot));			// trial outcome
 		thisScheduler.add(blockRoutineEnd(snapshot));		// end block
 		thisScheduler.add(endLoopIteration(thisScheduler, snapshot));
 	} else {
@@ -1657,7 +1657,7 @@ function trialsLoopBegin(thisScheduler) {
 			thisScheduler.add(trialRoutineBegin(snapshot)); 	// setup block
 			thisScheduler.add(fixation(snapshot));				// fixation
 			thisScheduler.add(runModule(snapshot));				// run MOdule
-			thisScheduler.add(trialOutcome(snapshot));			// trial outcome
+			//thisScheduler.add(trialOutcome(snapshot));			// trial outcome
 			thisScheduler.add(blockRoutineEnd(snapshot));		// end block
 			thisScheduler.add(endLoopIteration(thisScheduler, snapshot));
 		}
