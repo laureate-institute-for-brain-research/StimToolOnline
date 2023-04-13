@@ -74,6 +74,8 @@ g.path = {}; 				// place holder for path
 g.module_2b_schedule = [];
 g.module_2b_index = 0; // keep track of index
 
+g.module_1_trialnum = 0;
+
 // optiions positions
 g.options_pos = {
 	'choice_a_text':   [-0.500, 0.38], 
@@ -1809,9 +1811,24 @@ function trialRoutineBegin(trial) {
 		
 		// Status Stims
 		// g.text_trial_number.setAutoDraw(true);
-		g.text_val_trial_number.setText(
-			'Trial ' + g.trial_number +
-			' of ' + trial.nTotal);
+		if (trial.module == "1") {
+			if (g.trial_number <= ((trial.nTotal - 1) / 2))
+			{
+				g.module_1_trialnum = g.trial_number
+			}
+			else
+			{
+				g.module_1_trialnum = g.trial_number - ((trial.nTotal - 1) / 2)
+			}
+			g.text_val_trial_number.setText(
+				'Trial ' + g.module_1_trialnum +
+				' of ' + ((trial.nTotal-1)/2));
+		}
+		else {
+			g.text_val_trial_number.setText(
+				'Trial ' + g.trial_number +
+				' of ' + trial.nTotal);
+		}
 
 		
 		g.text_val_invites.setText(g.total_invites);
