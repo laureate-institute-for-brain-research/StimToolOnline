@@ -75,6 +75,7 @@ g.module_2b_schedule = [];
 g.module_2b_index = 0; // keep track of index
 
 g.module_1_trialnum = 0;
+g.module_1_type = 'accept'
 
 // optiions positions
 g.options_pos = {
@@ -567,6 +568,11 @@ var thanksClock;
 var thanksText;
 var globalClock;
 var routineTimer;
+var score_top_text;
+var score_pop
+var score_bottom_text;
+var score_bar;
+var score_slide;
 function experimentInit() {
 	// Check if there is an practice
 	if (getQueryVariable('practice') == 'true') {
@@ -719,7 +725,7 @@ function experimentInit() {
 		text: '1',alignHoriz: 'right',
 		font: 'Arial',
 		units: 'norm',
-		pos: [0.85, 0.88], height: 0.05, wrapWidth: undefined, ori: 0,
+		pos: [0.87, 0.88], height: 0.05, wrapWidth: undefined, ori: 0,
 		color: new util.Color('white'), opacity: 1,
 		depth: 0.0
 	});
@@ -748,6 +754,7 @@ function experimentInit() {
 	});
 
 	g.total_invites = 0; // variable for overal total invites
+	g.total_rejects = 0;
 	g.trial_invites = 0; // variable for trial total invites
 	g.text_invites  = new visual.TextStim({
 		win: psychoJS.window,
@@ -1097,6 +1104,66 @@ function experimentInit() {
 		units: 'norm',
 		pos: [0, -0.8], height: 0.05, wrapWidth: 1.4, ori: 0,
 		color: new util.Color('white'), opacity: 1,
+		depth: 0.0
+	});
+
+	g.score_pop = new visual.TextStim({
+		win: psychoJS.window,
+		name: 'score pop',
+		text: '+',
+		font: 'Arial',
+		units: 'norm',
+		pos: [0.0, 0.5], height: 0.12, wrapWidth: undefined, ori: 0,
+		color: new util.Color('green'), opacity: 1,
+		depth: 0.0
+	});
+
+	g.score_top_text = new visual.TextStim({
+		win: psychoJS.window,
+		name: 'outcome_text',
+		text: 'Awesome Party',
+		font: 'Arial',
+		units: 'norm',
+		pos: [0.8, 0.65], height: 0.05, wrapWidth: undefined, ori: 0,
+		color: new util.Color('grey'), opacity: 1,
+		depth: 0.0
+	});
+
+	g.score_bottom_text = new visual.TextStim({
+		win: psychoJS.window,
+		name: 'outcome_text',
+		text: 'Failed Party',
+		font: 'Arial',
+		units: 'norm',
+		pos: [0.8, -0.65], height: 0.05, wrapWidth: undefined, ori: 0,
+		color: new util.Color('grey'), opacity: 1,
+		depth: 0.0
+	});
+
+	g.score_bar = new visual.Rect({
+		win: psychoJS.window,
+		name: 'right_rect',
+		width: 0.06,
+		height: 1.2,
+		lineWidth: 3.5,
+		units: 'norm',
+		pos: [ 0.8, 0], ori: 0,
+		lineColor: new util.Color('grey'), opacity: 1,
+		depth: 0.0
+	});
+
+	g.original_slide_y = -0.6
+
+	g.score_slide = new visual.Rect({
+		win: psychoJS.window,
+		name: 'right_rect',
+		width: 0.06,
+		height: 0.01,
+		lineWidth: 3.5,
+		units: 'norm',
+		pos: [ 0.8, -0.6], ori: 0,
+		fillColor: new util.Color('grey'),
+		lineColor: new util.Color('grey'), opacity: 1,
 		depth: 0.0
 	});
 
@@ -1773,11 +1840,23 @@ function clearStatuStims() {
 	g.text_val_module.setAutoDraw(false);
 	g.text_val_module.status = PsychoJS.Status.NOT_STARTED;
 
-	g.text_invites.setAutoDraw(false);
-	g.text_invites.status = PsychoJS.Status.NOT_STARTED;
+	//g.text_invites.setAutoDraw(false);
+	//g.text_invites.status = PsychoJS.Status.NOT_STARTED;
 
 	g.text_val_invites.setAutoDraw(false);
 	g.text_val_invites.status = PsychoJS.Status.NOT_STARTED;
+
+	g.score_top_text.setAutoDraw(false);
+	g.score_top_text.status = PsychoJS.Status.NOT_STARTED;
+
+	g.score_bottom_text.setAutoDraw(false);
+	g.score_bottom_text.status = PsychoJS.Status.NOT_STARTED;
+
+	g.score_bar.setAutoDraw(false);
+	g.score_bar.status = PsychoJS.Status.NOT_STARTED;
+
+	g.score_slide.setAutoDraw(false);
+	g.score_slide.status = PsychoJS.Status.NOT_STARTED;
 
 	g.text_path.setAutoDraw(false);
 	g.text_path.status = PsychoJS.Status.NOT_STARTED;
@@ -1812,19 +1891,48 @@ function trialRoutineBegin(trial) {
 		// Status Stims
 		// g.text_trial_number.setAutoDraw(true);
 		if (trial.module == "1") {
-			if (g.trial_number <= ((trial.nTotal - 1) / 2))
+			if (g.trial_number <= ((trial.nTotal - 3) / 4))
 			{
 				g.module_1_trialnum = g.trial_number
+				g.module_1_type = 'accept'
+				// g.total_invites = 0; // variable for overal total invites
+				// g.total_rejects = 0;
+				//g.text_invites.setText("Total Invites Accepted:")
+				//g.text_val_invites.setColor(new util.Color('#90EE90'))
 			}
-			else
+			else if (g.trial_number > (((trial.nTotal - 3) / 2) + ((trial.nTotal - 3) / 4)))
 			{
-				g.module_1_trialnum = g.trial_number - ((trial.nTotal - 1) / 2)
+				g.module_1_trialnum = g.trial_number - (((trial.nTotal - 3) / 2) + ((trial.nTotal - 3) / 4))
+				g.module_1_type = 'reject'
+				// g.total_invites = 0; // variable for overal total invites
+				// g.total_rejects = 0;
+				//g.text_invites.setText("Total Invites Rejected:")
+				//g.text_val_invites.setColor(new util.Color('#ff0000'))
+			}
+			else if (g.trial_number > ((trial.nTotal - 3) / 2))
+			{
+				g.module_1_trialnum = g.trial_number - ((trial.nTotal - 3) / 2)
+				g.module_1_type = 'accept'
+				// g.total_invites = 0; // variable for overal total invites
+				// g.total_rejects = 0;
+				//g.text_invites.setText("Total Invites Accepted:")
+				//g.text_val_invites.setColor(new util.Color('#90EE90'))
+			}
+			else if (g.trial_number > ((trial.nTotal - 3) / 4))
+			{
+				g.module_1_trialnum = g.trial_number - ((trial.nTotal - 3) / 4)
+				g.module_1_type = 'reject'
+				// g.total_invites = 0; // variable for overal total invites
+				// g.total_rejects = 0;
+				//g.text_invites.setText("Total Invites Rejected:")
+				//g.text_val_invites.setColor(new util.Color('#ff0000'))
 			}
 			g.text_val_trial_number.setText(
 				'Trial ' + g.module_1_trialnum +
-				' of ' + ((trial.nTotal-1)/2));
+				' of ' + ((trial.nTotal-3)/4));
 		}
 		else {
+			//g.text_invites.setText("Total Invites Accepted:")
 			g.text_val_trial_number.setText(
 				'Trial ' + g.trial_number +
 				' of ' + trial.nTotal);
@@ -1898,6 +2006,8 @@ function trialRoutineBegin(trial) {
 	};
 }
 
+var mod_1_count = 0
+
 /**
  * Routine for Module 1
  * Rune the Module
@@ -1908,6 +2018,24 @@ function trialRoutineBegin(trial) {
  */
 function module_1(trial) {
 	return function () {
+
+		if (mod_1_count > 0) {
+			// ANIMATION LOGIC
+			// g.score_pop.setAutoDraw(true)
+			// g.score_pop.autoDraw = true
+			//g.score_pop.pos[1] -= 0.005
+			//g.score_pop.opacity -= 0.02
+			g.score_pop.refresh()
+            mod_1_count -= 1
+            if (mod_1_count <= 0) {
+                // ANIMATION LOGIC
+				//g.score_pop.setAutoDraw(false)
+				//g.score_pop.pos[1] = 0.55
+				g.score_pop.opacity = 1
+                mod_1_count = 0
+            }
+        }
+
 		// Make Selection
 		// Show Doors if path = 1
 		if (g.room_image.status == PsychoJS.Status.NOT_STARTED && g.trial_phase == g.TRIAL_BEGIN) {
@@ -1922,6 +2050,10 @@ function module_1(trial) {
 			if (g.current_move == trial.depth) {
 				// last room: Change Prompt and take them to the wait space key
 				g.prompt_text.setText('Press SPACE key to exit the building.');
+				g.score_top_text.setAutoDraw(true);
+				g.score_bottom_text.setAutoDraw(true);
+				g.score_bar.setAutoDraw(true);
+				g.score_slide.setAutoDraw(true);
 				g.trial_phase = g.WAITING_KEY;
 				mark_event(
 					trials_data,
@@ -1942,8 +2074,12 @@ function module_1(trial) {
 				// status stims
 				g.text_val_trial_number.setAutoDraw(true);
 				g.text_val_building.setAutoDraw(true);
-				g.text_invites.setAutoDraw(true);
-				g.text_val_invites.setAutoDraw(true);
+				//g.text_invites.setAutoDraw(true);
+				//g.text_val_invites.setAutoDraw(true);
+				g.score_top_text.setAutoDraw(true);
+				g.score_bottom_text.setAutoDraw(true);
+				g.score_bar.setAutoDraw(true);
+				g.score_slide.setAutoDraw(true);
 
 				// set forced choice if any
 				g.forced_choices = trial.forced_choice.split(',')
@@ -2005,8 +2141,13 @@ function module_1(trial) {
 		// Wait for Invite Key
 		if (g.trial_phase == g.WAITING_INVITE_KEY && g.current_path > 1){
 			let theseKeys = ready.getKeys({ keyList: ['space'], waitRelease: false });
-			if (theseKeys.length > 0 ){
+			if (theseKeys.length > 0) {
 				if (theseKeys[0].name == 'space') {
+					g.score_pop.setAutoDraw(false)
+					mod_1_count = 0
+					// ANIMATION LOGIC
+					//g.score_pop.pos[1] = 0.55
+					g.score_pop.opacity = 1
 					// prepare for next phase
 					// clearStims();
 					g.trial_phase = g.RESPONSE_ANIMATION;
@@ -2020,6 +2161,11 @@ function module_1(trial) {
 			let theseKeys = ready.getKeys({ keyList: ['space'], waitRelease: false });
 			if (theseKeys.length >0 ){
 				if (theseKeys[0].name == 'space') {
+					g.score_pop.setAutoDraw(false)
+					// ANIMATION LOGIC
+					//g.score_pop.pos[1] = 0.55
+					g.score_pop.opacity = 1
+					mod_1_count = 0
 					// total invites
 					g.total_invites = g.total_invites + g.trial_invites;
 					// prepare for next phase
@@ -2096,7 +2242,58 @@ function module_1(trial) {
 
 				// increment trial invites
 				// based ond current position and the building type
-				g.trial_invites = g.trial_invites + g.accepted_invites;
+				if (g.module_1_type == "accept") {
+					g.score_pop.setColor(new util.Color('#00FF00'))
+					g.score_pop.setText("+ " + g.accepted_invites)
+					mod_1_count = 120
+					// ANIMATION LOGIC
+					//g.score_pop.pos[1] = 0.55
+					g.score_pop.opacity = 1
+					g.score_pop.setAutoDraw(true)
+					g.score_pop.autoDraw = true
+					g.trial_invites = g.trial_invites + g.accepted_invites;
+					if (g.score_slide.height + (g.accepted_invites / 100) < 1.2) {
+						g.score_slide.height = g.score_slide.height + (g.accepted_invites / 300)
+						g.score_slide.pos[1] = g.original_slide_y + g.score_slide.height/2
+					}
+					else{
+						g.score_slide.height = 1.2
+						g.score_slide.pos[1] = 0
+					}
+				}
+				else {
+					g.score_pop.setColor(new util.Color('#FF0000'))
+					g.score_pop.setText("- " + g.rejected_invites)
+					mod_1_count = 120
+					// ANIMATION LOGIC
+					//g.score_pop.pos[1] = 0.55
+					g.score_pop.opacity = 1
+					g.score_pop.setAutoDraw(true)
+					g.score_pop.autoDraw = true
+					g.trial_invites = g.trial_invites + g.rejected_invites;
+					if (g.score_slide.height - (g.rejected_invites / 150) > 0) {
+						g.score_slide.height = g.score_slide.height - (g.rejected_invites / 750)
+						g.score_slide.pos[1] = g.original_slide_y + g.score_slide.height/2
+						// g.score_slide.pos[1] = g.score_slide.pos[1] + g.score_slide.height/2
+					}
+					else{
+						g.score_slide.height = 0.01
+						g.score_slide.pos[1] = -0.6
+					}
+				}
+
+				if (g.score_slide.height >= 0.8)
+				{
+					g.score_slide.setFillColor(new util.Color('#00FF00'))
+				}
+				else if (g.score_slide.height >= 0.4)
+				{
+					g.score_slide.setFillColor(new util.Color('#FCBA03'))
+				}
+				else
+				{
+					g.score_slide.setFillColor(new util.Color('#FF0000'))
+				}
 				console.log('invites accepted: ', g.trial_invites)
 
 				mark_event(
@@ -2130,7 +2327,7 @@ function module_break(trial){
 		if (g.prompt_text.status == PsychoJS.Status.NOT_STARTED) {
 			g.prompt_text.setText(
 				`\nGreat Job!\n
-				We will now switch to the other building.\n
+				We will now switch to the other building and go back to maximizing accepts.\n
 				As before, on the first trial we will tell you which doors to choose.\n
 				Then you will be free to choose on your own from that point on.`)
 			g.prompt_text.pos = [0, 0.3];
@@ -2152,6 +2349,43 @@ function module_break(trial){
 			return Scheduler.Event.NEXT;
 
 		}
+		return Scheduler.Event.FLIP_REPEAT;
+	 }
+}
+
+/**
+ * Module Break Switch
+ * - This routine is the break switch.
+ * @param {*} trial 
+ * @returns 
+ */
+function module_break_switch(trial){
+	return function () {
+		if (g.prompt_text.status == PsychoJS.Status.NOT_STARTED) {
+			g.prompt_text.setText(
+				`\nGreat Job!\n
+				We will now switch to minimizing rejections.`)
+			g.prompt_text.pos = [0, 0.3];
+			g.prompt_text.setAutoDraw(true);
+
+			g.outcome_text.setText(`Press SPACE key to continue`);
+			g.outcome_text.pos = [0, -0.8];
+			g.outcome_text.setAutoDraw(true);
+			mark_event(trials_data, globalClock, trial.trial_number, 'NA', event_types['BREAK_ONSET'],
+				'NA', 'NA', 'NA')
+		}
+
+		let theseKeys = ready.getKeys({ keyList: ['space'] , waitRelease: false });
+		if (theseKeys.length > 0) {
+			// increment trial invites
+			// based ond current position and the building type
+			mark_event(trials_data, globalClock, trial.trial_number, 'NA', event_types['BREAK_RESPONSE'],
+				'NA', 'NA', 'NA')
+			return Scheduler.Event.NEXT;
+
+		}
+
+		g.total_invites = 0;
 		return Scheduler.Event.FLIP_REPEAT;
 	 }
 }
@@ -2536,7 +2770,7 @@ function module_3(trial) {
 			g.time_left_text.setAutoDraw(true);
 
 			g.text_val_trial_number.setAutoDraw(true);
-			g.text_invites.setAutoDraw(true);
+			//g.text_invites.setAutoDraw(true);
 			g.text_val_invites.setText(g.total_invites);
 			g.text_val_invites.setAutoDraw(true);
 
@@ -2765,11 +2999,24 @@ function fixation(trial) {
  */
 function runModule(trial) {
 	switch (trial.module) {
-		case 1: return module_1(trial)
-		case 'break': return module_break(trial)
-		case '2a': return module_2a(trial)
-		case '2b': return module_2b(trial)
-		case 3: return module_3(trial)
+		case 1:
+			// console.log("heyo 1")
+			return module_1(trial)
+		case 'break':
+			// console.log("heyo break")
+			return module_break(trial)
+		case 'break_switch':
+			// console.log("heyo switch")
+			return module_break_switch(trial)
+		case '2a':
+			// console.log("heyo 2a")
+			return module_2a(trial)
+		case '2b':
+			// console.log("heyo 2b")
+			return module_2b(trial)
+		case 3:
+			// console.log("heyo 3")
+			return module_3(trial)
 	}
 }
 
