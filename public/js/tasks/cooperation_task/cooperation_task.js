@@ -175,6 +175,7 @@ window.onload = function () {
 		.then((values) => {
 
 			resources.push({ name: 'run_schedule.xls', path: values.schedule })
+			resources.push({ name: 'run_schedule2.xls', path: values.schedule2 })
 			resources.push({ name: 'instruct_schedule.csv', path: values.instruct_schedule })
 
 			// Add file paths to expInfo
@@ -384,7 +385,19 @@ var resources = [
 	{ name: 'PRACTICE_ready_audio.mp3', path: '/js/tasks/cooperation_task/media/instructions_audio/Slide20.mp3' },
 	{ name: 'MAIN_ready', path: '/js/tasks/cooperation_task/media/instructions/Slide21.jpeg' },
 	{ name: 'MAIN_ready_audio.mp3', path: '/js/tasks/cooperation_task/media/instructions_audio/Slide21.mp3' },
-	{ name: 'BEGIN_slide', path: '/js/tasks/cooperation_task/media/instructions/Slide22.jpeg' },
+	{ name: 'INSTR_POS_slide', path: '/js/tasks/cooperation_task/media/instructions/Slide22.jpeg' },
+	{ name: 'INSTR_NEG_slide', path: '/js/tasks/cooperation_task/media/instructions/Slide23.jpeg' },
+	{ name: 'instr_pos_cb.mp3', path: '/js/tasks/cooperation_task/media/instructions_audio/CooperationTaskInstructionsSlide_BeforeStart_positive.mp3' },
+	{ name: 'instr_neg_cb.mp3', path: '/js/tasks/cooperation_task/media/instructions_audio/CooperationTaskInstructionsSlide_BeforeStart_negative.mp3' },
+	{ name: 'BEGIN_slide', path: '/js/tasks/cooperation_task/media/instructions/Slide24.jpeg' },
+	{ name: 'BLOCK2_POS_slide', path: '/js/tasks/cooperation_task/media/instructions/Slide26.jpeg' },
+	{ name: 'BLOCK2_NEG_slide', path: '/js/tasks/cooperation_task/media/instructions/Slide25.jpeg' },
+	{ name: 'block2_pos_cb.mp3', path: '/js/tasks/cooperation_task/media/instructions_audio/CooperationTaskInstructionsSlide_BeforeBlock2_positive.mp3' },
+	{ name: 'block2_neg_cb.mp3', path: '/js/tasks/cooperation_task/media/instructions_audio/CooperationTaskInstructionsSlide_BeforeBlock2_negative.mp3' },
+	{ name: 'LAST_POS_slide', path: '/js/tasks/cooperation_task/media/instructions/Slide28.jpeg' },
+	{ name: 'LAST_NEG_slide', path: '/js/tasks/cooperation_task/media/instructions/Slide27.jpeg' },
+	{ name: 'last_pos_cb.mp3', path: '/js/tasks/cooperation_task/media/instructions_audio/CooperationTaskInstructionsSlide_BeforeLast_positive.mp3' },
+	{ name: 'last_neg_cb.mp3', path: '/js/tasks/cooperation_task/media/instructions_audio/CooperationTaskInstructionsSlide_BeforeLast_negative.mp3' },
 	{ name: 'positive_face', path: '/js/tasks/cooperation_task/media/smile.png' },
 	{ name: 'negative_face', path: '/js/tasks/cooperation_task/media/frown.png' },
 	{ name: 'neutral_face', path: '/js/tasks/cooperation_task/media/neutral_noface.png' },
@@ -453,6 +466,12 @@ if (!getQueryVariable('skip_practice') && !getQueryVariable('run').includes('R2'
 
 // MAIN BLOCK
 // Ready Routine
+
+flowScheduler.add(readyRoutineBegin('CB', 'INSTR_POS_slide', 'instr_pos_cb.mp3'));
+flowScheduler.add(readyRoutineEachFrame());
+flowScheduler.add(readyRoutineEnd());
+	
+
 flowScheduler.add(readyRoutineBegin('MAIN', 'BEGIN_slide', undefined));
 flowScheduler.add(readyRoutineEachFrame());
 flowScheduler.add(readyRoutineEnd());
@@ -460,6 +479,15 @@ flowScheduler.add(readyRoutineEnd());
 const trialsLoopScheduler = new Scheduler(psychoJS);
 flowScheduler.add(trialsLoopBegin, trialsLoopScheduler);
 flowScheduler.add(trialsLoopScheduler);
+flowScheduler.add(trialsLoopEnd);
+
+flowScheduler.add(readyRoutineBegin('CB2', 'INSTR_POS_slide', 'instr_pos_cb.mp3'));
+flowScheduler.add(readyRoutineEachFrame());
+flowScheduler.add(readyRoutineEnd());
+
+const trialsLoopScheduler2 = new Scheduler(psychoJS);
+flowScheduler.add(trialsLoopBegin2, trialsLoopScheduler2);
+flowScheduler.add(trialsLoopScheduler2);
 flowScheduler.add(trialsLoopEnd);
 
 flowScheduler.add(thanksRoutineBegin());
@@ -966,7 +994,7 @@ function readyRoutineBegin(block_type, image_stim, audio_stim) {
 		frameN = -1;
 
 		// Set readyStim based on block_type
-		console.log('block_type: ',block_type)
+		//console.log('block_type: ',block_type)
 		switch (block_type) {
 			case 'PRACTICE':
 				readyStim = new visual.ImageStim({
@@ -1008,6 +1036,226 @@ function readyRoutineBegin(block_type, image_stim, audio_stim) {
 					track.setVolume(1.0);
 				} else {
 					track = undefined;
+				}
+				break
+			case 'CB':
+				if (expInfo.run == "Pilot_R1.json")
+				{
+					readyStim = new visual.ImageStim({
+						win : psychoJS.window,
+						name : 'INSTR_POS_slide', units : 'height', 
+						image : 'INSTR_POS_slide', mask : undefined,
+						ori : 0, pos : [0, 0],
+						color : new util.Color([1, 1, 1]), opacity : 1,
+						flipHoriz : false, flipVert : false,
+						texRes : 128, interpolate : true, depth : 0
+					});
+	
+					// track = new Sound({
+					// 	win: psychoJS.window,
+					// 	value: 'MAIN_ready_audio.mp3'
+					// });
+					// track.setVolume(1.0);
+					if ('instr_pos_cb.mp3') {
+						track = new Sound({
+							win: psychoJS.window,
+							value: 'instr_pos_cb.mp3'
+						});
+						track.setVolume(1.0);
+					} else {
+						track = undefined;
+					}
+				}
+				if (expInfo.run == "Pilot_R2.json")
+				{
+					readyStim = new visual.ImageStim({
+						win : psychoJS.window,
+						name : 'LAST_POS_slide', units : 'height', 
+						image : 'LAST_POS_slide', mask : undefined,
+						ori : 0, pos : [0, 0],
+						color : new util.Color([1, 1, 1]), opacity : 1,
+						flipHoriz : false, flipVert : false,
+						texRes : 128, interpolate : true, depth : 0
+					});
+	
+					// track = new Sound({
+					// 	win: psychoJS.window,
+					// 	value: 'MAIN_ready_audio.mp3'
+					// });
+					// track.setVolume(1.0);
+					if ('last_pos_cb.mp3') {
+						track = new Sound({
+							win: psychoJS.window,
+							value: 'last_pos_cb.mp3'
+						});
+						track.setVolume(1.0);
+					} else {
+						track = undefined;
+					}
+				}
+				if (expInfo.run == "Pilot_R1_CB.json")
+				{
+					readyStim = new visual.ImageStim({
+						win : psychoJS.window,
+						name : 'INSTR_NEG_slide', units : 'height', 
+						image : 'INSTR_NEG_slide', mask : undefined,
+						ori : 0, pos : [0, 0],
+						color : new util.Color([1, 1, 1]), opacity : 1,
+						flipHoriz : false, flipVert : false,
+						texRes : 128, interpolate : true, depth : 0
+					});
+	
+					// track = new Sound({
+					// 	win: psychoJS.window,
+					// 	value: 'MAIN_ready_audio.mp3'
+					// });
+					// track.setVolume(1.0);
+					if ('instr_neg_cb.mp3') {
+						track = new Sound({
+							win: psychoJS.window,
+							value: 'instr_neg_cb.mp3'
+						});
+						track.setVolume(1.0);
+					} else {
+						track = undefined;
+					}
+				}
+				if (expInfo.run == "Pilot_R2_CB.json")
+				{
+					readyStim = new visual.ImageStim({
+						win : psychoJS.window,
+						name : 'LAST_NEG_slide', units : 'height', 
+						image : 'LAST_NEG_slide', mask : undefined,
+						ori : 0, pos : [0, 0],
+						color : new util.Color([1, 1, 1]), opacity : 1,
+						flipHoriz : false, flipVert : false,
+						texRes : 128, interpolate : true, depth : 0
+					});
+	
+					// track = new Sound({
+					// 	win: psychoJS.window,
+					// 	value: 'MAIN_ready_audio.mp3'
+					// });
+					// track.setVolume(1.0);
+					if ('last_pos_cb.mp3') {
+						track = new Sound({
+							win: psychoJS.window,
+							value: 'last_neg_cb.mp3'
+						});
+						track.setVolume(1.0);
+					} else {
+						track = undefined;
+					}
+				}
+				break
+			case 'CB2':
+				if (expInfo.run == "Pilot_R1.json")
+				{
+					readyStim = new visual.ImageStim({
+						win : psychoJS.window,
+						name : 'BLOCK2_NEG_slide', units : 'height', 
+						image : 'BLOCK2_NEG_slide', mask : undefined,
+						ori : 0, pos : [0, 0],
+						color : new util.Color([1, 1, 1]), opacity : 1,
+						flipHoriz : false, flipVert : false,
+						texRes : 128, interpolate : true, depth : 0
+					});
+	
+					// track = new Sound({
+					// 	win: psychoJS.window,
+					// 	value: 'MAIN_ready_audio.mp3'
+					// });
+					// track.setVolume(1.0);
+					if ('block2_neg_cb.mp3') {
+						track = new Sound({
+							win: psychoJS.window,
+							value: 'block2_neg_cb.mp3'
+						});
+						track.setVolume(1.0);
+					} else {
+						track = undefined;
+					}
+				}
+				if (expInfo.run == "Pilot_R2.json")
+				{
+					readyStim = new visual.ImageStim({
+						win : psychoJS.window,
+						name : 'LAST_NEG_slide', units : 'height', 
+						image : 'LAST_NEG_slide', mask : undefined,
+						ori : 0, pos : [0, 0],
+						color : new util.Color([1, 1, 1]), opacity : 1,
+						flipHoriz : false, flipVert : false,
+						texRes : 128, interpolate : true, depth : 0
+					});
+	
+					// track = new Sound({
+					// 	win: psychoJS.window,
+					// 	value: 'MAIN_ready_audio.mp3'
+					// });
+					// track.setVolume(1.0);
+					if ('last_neg_cb.mp3') {
+						track = new Sound({
+							win: psychoJS.window,
+							value: 'last_neg_cb.mp3'
+						});
+						track.setVolume(1.0);
+					} else {
+						track = undefined;
+					}
+				}
+				if (expInfo.run == "Pilot_R1_CB.json")
+				{
+					readyStim = new visual.ImageStim({
+						win : psychoJS.window,
+						name : 'BLOCK2_POS_slide', units : 'height', 
+						image : 'BLOCK2_POS_slide', mask : undefined,
+						ori : 0, pos : [0, 0],
+						color : new util.Color([1, 1, 1]), opacity : 1,
+						flipHoriz : false, flipVert : false,
+						texRes : 128, interpolate : true, depth : 0
+					});
+	
+					// track = new Sound({
+					// 	win: psychoJS.window,
+					// 	value: 'MAIN_ready_audio.mp3'
+					// });
+					// track.setVolume(1.0);
+					if ('block2_pos_cb.mp3') {
+						track = new Sound({
+							win: psychoJS.window,
+							value: 'block2_pos_cb.mp3'
+						});
+						track.setVolume(1.0);
+					} else {
+						track = undefined;
+					}
+				}
+				if (expInfo.run == "Pilot_R2_CB.json")
+				{
+					readyStim = new visual.ImageStim({
+						win : psychoJS.window,
+						name : 'LAST_POS_slide', units : 'height', 
+						image : 'LAST_POS_slide', mask : undefined,
+						ori : 0, pos : [0, 0],
+						color : new util.Color([1, 1, 1]), opacity : 1,
+						flipHoriz : false, flipVert : false,
+						texRes : 128, interpolate : true, depth : 0
+					});
+	
+					// track = new Sound({
+					// 	win: psychoJS.window,
+					// 	value: 'MAIN_ready_audio.mp3'
+					// });
+					// track.setVolume(1.0);
+					if ('last_pos_cb.mp3') {
+						track = new Sound({
+							win: psychoJS.window,
+							value: 'last_pos_cb.mp3'
+						});
+						track.setVolume(1.0);
+					} else {
+						track = undefined;
+					}
 				}
 				break
 			default:
@@ -1229,9 +1477,50 @@ function trialsLoopBegin(thisScheduler) {
 		thisScheduler.add(blockRoutineEnd(snapshot));		 // end block
 		thisScheduler.add(endLoopIteration(thisScheduler, snapshot));
 	}
-	trial_type = 'MAIN'
+	let type_of_block = blocks.trialList[0].game_type
+	trial_type = 'MAIN_START'
 	mark_event(trials_data, globalClock, 'NA', trial_type, event_types['BLOCK_ONSET'],
-				'NA', 'NA' , 'NA')
+				'NA', 'NA' , type_of_block)
+	return Scheduler.Event.NEXT;
+}
+
+function trialsLoopBegin2(thisScheduler) {
+	endClock.reset()
+
+	resp.stop()
+	resp.clearEvents()
+	resp.status = PsychoJS.Status.NOT_STARTED
+	//reset_choice_counter() // resetCounter
+
+	blocks = new TrialHandler({
+		psychoJS: psychoJS,
+		nReps: 1, method: TrialHandler.Method.SEQUENTIAL,
+		extraInfo: expInfo, originPath: undefined,
+		trialList: 'run_schedule2.xls',
+		seed: undefined, name: 'trials'
+	});
+
+	g.global_trial_number = 0;
+	g.game_number = 1;
+	//randomizePair(blocks) // randomize outcome
+
+	psychoJS.experiment.addLoop(blocks); // add the loop to the experiment
+
+	// Schedule all the blocks in the trialList:
+	for (const thisTrial of blocks) {
+		const snapshot = blocks.getSnapshot();
+		thisScheduler.add(importConditions(snapshot));
+		thisScheduler.add(initialFixation(snapshot));
+		thisScheduler.add(blockRoutineBegin(snapshot)); 	 // setup block
+		thisScheduler.add(blockRoutineTrials(snapshot));	 // do trials
+		thisScheduler.add(blockRoutineOutcome(snapshot)); 	 // show result
+		thisScheduler.add(blockRoutineEnd(snapshot));		 // end block
+		thisScheduler.add(endLoopIteration(thisScheduler, snapshot));
+	}
+	let type_of_block = blocks.trialList[0].game_type
+	trial_type = 'MAIN_SWITCH'
+	mark_event(trials_data, globalClock, 'NA', trial_type, event_types['BLOCK_ONSET'],
+				'NA', 'NA' , type_of_block)
 	return Scheduler.Event.NEXT;
 }
 
@@ -2145,6 +2434,9 @@ function blockRoutineTrials(trials) {
 			mark_event(trials_data, globalClock, g.trial_number, trial_type, event_types['OUTCOME_SOUND_ONSET'],
 				g.outcome_sound.getDuration(), 'NA', g.outcome_triple[1])
 			
+			g.trial_number++ // incremente trial number
+			g.global_trial_number++ // incremeante global trial number
+			
 			// if (g.outcomeTimer.getTime() <= (g.outcome_sound.getDuration())) {
 			// 	console.log('play sound')
 			// 	g.outcome_sound.play()
@@ -2308,8 +2600,8 @@ function blockRoutineTrials(trials) {
 				theseKeys[0].rt, theseKeys[0].name , outcome)
 
 				// presed key
-				g.trial_number++ // incremente trial number
-				g.global_trial_number++ // incremeante global trial number
+				// g.trial_number++ // incremente trial number
+				// g.global_trial_number++ // incremeante global trial number
 
 				// Start Timer
 				g.OUTCOME_TEXT_DURATION = 0.5; // the time duration for the text to display after selecting the person
@@ -2472,9 +2764,11 @@ function initialFixation(trials) {
  * Send Data over to the backend to save output data
  */
 function sendData() {
+	console.log(trials_data)
+	console.log(expInfo)
 	$.ajax({
         type: "POST",
-        url: '/save',
+        url: '/savecoop',
 		data: {
 			"trials_data": trials_data,
 			"expInfo": expInfo

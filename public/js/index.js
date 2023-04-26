@@ -163,6 +163,8 @@ $('#study-list').change(function () {
         'WBMTURK_Blind_Dating': 2,
         'WBMTURK_Emotional_Faces': 2,
         'WBMTURK_Cooperation_Task': 2,
+        'WBMTURK_Cooperation_TaskCB': 1,
+        'WBMTURK_Cooperation_TaskCB2': 1,
         'WBMTURK_Invitation_Task': 3
     }
 

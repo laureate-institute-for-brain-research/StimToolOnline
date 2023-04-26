@@ -1,0 +1,5 @@
+{
+    "schedule": "/js/tasks/cooperation_task/Pilot_R2_schedule-10blocked_counterbalanced1.csv",
+    "schedule2": "/js/tasks/cooperation_task/Pilot_R2_schedule-10blocked_counterbalanced2.csv",
+    "instruct_schedule": "/js/tasks/cooperation_task/media/Pilot_R2_instructions.csv"
+}

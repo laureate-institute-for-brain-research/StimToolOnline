@@ -201,6 +201,50 @@ module.exports = function (app){
         res.status(200).send('data saved')
     })
 
+    // send save info given link
+    app.post('/savecoop', (req, res)=>{
+        trials_data = req.body.trials_data
+
+        // console.log(trials_data)
+        req.body.expInfo.date = req.body.expInfo.date.split("/").join("_")
+        // Save to /data/folder based of study
+        jsonexport(trials_data, function(err, csv) {
+            if (err) return logger.error(err);
+
+            // File name is by taskname, participant id, session and date 
+            file_name = req.sanitize(req.body.expInfo.task) + '_' + req.sanitize(req.body.expInfo.participant) + '_' + req.sanitize(req.body.expInfo.session) + '_' + req.sanitize(req.body.expInfo.run_id.split(".")[0]) + '_' + req.sanitize(req.body.expInfo.date) + '.csv'
+            
+            // file_name = file_name.replaceAll("/", "_")
+
+            path_to_save = `${process.env.DATA_PATH}/${req.sanitize(req.body.expInfo.study)}/${file_name}` // save results directly the cephfs local path
+
+            //logger.info(`trying to save to ${path_to_save}`);
+            
+            fs.access(path.dirname(path_to_save), error => {
+                if (!error) {
+                    // The check succeeded
+                    fs.writeFile(path_to_save, csv, function(err) {
+                        if (err) return logger.error(err);
+                        logger.info(`${path_to_save} saved`);
+                        
+                    });
+                } else {
+                    // The check failed
+                    // meaning subject probably entered their own  study -_- or field is blank
+                    // Save to local
+                    path_to_save = `data/free/${file_name}`
+                    
+                    fs.writeFile(path_to_save, csv, function(err) {
+                        if (err) return logger.error(err);
+                        logger.info(`${path_to_save} saved`);
+                        
+                    });
+                }
+            });
+        });
+        res.status(200).send('data saved')
+    })
+
     app.post('/SaveHitCSV', (req, res)=>{
         csvpath = req.body.csvpath
         content = req.body.content

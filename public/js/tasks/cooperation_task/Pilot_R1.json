@@ -1,4 +1,5 @@
 {
-    "schedule": "/js/tasks/cooperation_task/Pilot_R1_schedule.csv",
+    "schedule": "/js/tasks/cooperation_task/Pilot_R1_schedule-10blocked1.csv",
+    "schedule2": "/js/tasks/cooperation_task/Pilot_R1_schedule-10blocked2.csv",
     "instruct_schedule": "/js/tasks/cooperation_task/media/Pilot_R1_instructions.csv"
 }

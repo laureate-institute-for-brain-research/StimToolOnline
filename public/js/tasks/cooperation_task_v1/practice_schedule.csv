@@ -1,0 +1,3 @@
+﻿trials_block,game_type,probability_1,probability_2,probability_3,face_group,face_1,face_2,face_3,ITI,game_room_number
+8,pleasant,0.6661,0.1447,0.7227,25,/js/tasks/cooperation_task/media/AMFD_CFD_Faces/Group_25/NF-1004.jpg,/js/tasks/cooperation_task/media/AMFD_CFD_Faces/Group_25/NF-1069.jpg,/js/tasks/cooperation_task/media/AMFD_CFD_Faces/Group_25/NF-1087.jpg,3.0,1
+8,unpleasant,0.4557,0.4873,0.6372,33,/js/tasks/cooperation_task/media/AMFD_CFD_Faces/Group_33/CFD-BM-009-002-N.jpg,/js/tasks/cooperation_task/media/AMFD_CFD_Faces/Group_33/CFD-BM-019-002-N.jpg,/js/tasks/cooperation_task/media/AMFD_CFD_Faces/Group_33/CFD-BM-030-003-N.jpg,1.0,2

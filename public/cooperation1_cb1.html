@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>LIBR | Tasks</title>
+    <link rel="shortcut icon" type="image/png" href="https://www.dropbox.com/s/adtwtls9yevcoda/LIBR_full_color_logo_highres_brain_only.png?raw=1" />
+    <meta name="description" content="particles.js is a lightweight JavaScript library for creating particles.">
+    <meta name="author" content="Vincent Garreau" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link rel="stylesheet" media="screen" href="/css/index.css">
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+  </head>
+  <body>
+      <!-- particles.js container -->
+  <div id="particles-js"></div>
+  <div class="container">
+      <div class="row">
+        <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
+          <div class="card card-signin my-5">
+              <br>
+              <a href=""><center><img class="logo" src="/images/logo.png"></center></a>
+              <div class="card-body">
+                  <center><p> <a href="/studies">Studies</a> </p></center>
+                  <h5 class="card-title text-center">Online StimTool</h5>
+                  <br>
+                  <form class="form-signin" id='adduser'>
+                      <div class="form-label-group">
+                          <select id='study-list' required class="form-control" name='study'>
+                              <option disabled selected>Choose Study</option>
+                              <option value="WBMTURK_Cooperation_TaskCB">WB MTURK Cooperation Task 1.0</option>
+                          </select>
+                      </div>
+                      <br>
+                      <div class="row" id="id_div" style="display: none;">
+                        <div class="col mx-auto">
+                          <input id='id_input' class="form-control" type="text" name='subject' required placeholder="Subject ID" data-toggle="tooltip" data-placement="top" title="i.e AAAAA " >
+                        </div>
+                      </div>
+                      <br>
+                      <div class="form-label-group" id="session_div" style="display: none;">
+                          <select id='session-list' required class="form-control" name='session'>
+                              <option selected disabled>Choose Session</option>
+                              <option value="T1">T1</option>
+                          </select>
+                      </div>
+                      <br>
+                      
+                      <div class="row" id="about_begin_div" style="display: none;">
+                        <div class="col mx-auto">
+                          <button id='about' class="btn btn-secondary" data-toggle="tooltip" data-placement="left" title="Click to learn more information about the study">About</button>
+                          <button id='begin' type="submit" class="btn btn-success float-right" data-toggle="tooltip" data-placement="right" title="Click to begin session">Begin</button>
+                        </div>
+                        <br>
+                        <p>By clicking <b>Begin</b> or <b>Skip</b> you agree to this statement:</p>
+                        <p>"I will do this task truthfully and to the best of my ability. Any information I provide may be used for research. I also hereby certify that I am over 18 years of age."</p>
+                      </div>
+                  </form>
+                </div>
+                
+          </div>
+          
+        </div>
+      </div>
+      
+      
+
+    </div>
+    
+  
+    <!-- Lower Right Bottom Men Section -->
+    <!-- Modal -->
+    <div class="modal fade" id="modalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle">Warning</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <p id='errorMessage' style="color: red"></p>
+            <p>Click "Proceed Anyways" to proceed regardless. Old files will not get overwritten.</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" id='procceed_anyways' class="btn btn-success">Proceed Anyways</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Skip Modal -->
+    <div class="modal fade" id="modalSkipCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle">Skip</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body" id='modalskip_body'>
+            Select the task run to skip to.
+            <br>
+            <form id='run_form'>
+              <select id='run-list' required class="form-control" name='run'>
+                <option selected disabled>Choose Run</option>
+              </select>
+            </form>
+            
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" value="Begin" id='skip_begn' class="btn btn-warning">Begin</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="modal fade" id="modalMobileWarning" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle">Non Mobile Browser Detected</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body" id='modalskip_body'>
+            This study must be done using your phone.
+            Please come back to this same link using your phone instead.
+            
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id='info-container' class="container" style="display: none; margin-top: 0px;">
+      <div class="row">
+        <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
+          <div class="card card-signin my-5">
+              <div class="card-body">
+                  <h5 id='info-title' class="card-title text-center">Online StimTool</h5>
+                  <p id='info-text' class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+              </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <footer>
+      <div style="text-align:center; font-size: small;  position: fixed; bottom: 0px; right: 0px; left: 0px; color: white;">
+        <p>&copy; 2022 <a href="http://www.laureateinstitute.org">laureateinstitute.org</a><br>All rights reserved.
+      </div>
+    </footer>
+
+    <a href="/dashboard" style="position: fixed; bottom: 10px; right: 14px; "> Dashboard </a>
+
+  </body>
+  <!-- scripts -->
+  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+  <script src="/js/StimToolLib.js"></script>
+  <script src="/js/particles.js"></script>
+  
+  <script src="/js/index_sm.js"></script>
+  
+
+</html>
