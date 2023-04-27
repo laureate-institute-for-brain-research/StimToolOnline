@@ -41,7 +41,6 @@ var practice = false;
 var LEFT_KEY = 'comma'
 var RIGHT_KEY = 'period'
 
-var last_selection = 'right'
 
 // init psychoJS:
 const psychoJS = new PsychoJS({
@@ -416,9 +415,6 @@ var profilePicPostStim;
 var profilePicRRStim;
 var profilePicRRPostStim;
 
-var post_outline_big;
-var post_outline_smol;
-
 var homeTextStim;
 var exploreTextStim;
 var notificationTextStim;
@@ -432,32 +428,6 @@ var points_fixation_stim;
 // Object for posts realted things
 var posts_height = 0.17
 var postStims = {
-	0: {},
-	1: {},
-	2: {},
-	3: {},
-	4: {},
-	5: {},
-	6: {},
-	7: {},
-	8: {},
-	9: {},
-}
-
-var postStims_l = {
-	0: {},
-	1: {},
-	2: {},
-	3: {},
-	4: {},
-	5: {},
-	6: {},
-	7: {},
-	8: {},
-	9: {},
-} 
-
-var postStims_r = {
 	0: {},
 	1: {},
 	2: {},
@@ -485,36 +455,6 @@ var post_stim_x_pos = {
 	}
 }
 
-var post_stim_l_x_pos = {
-	'left': {
-		'post_text': -0.475,
-		'like_icon': -0.05,
-		'like_posts': -0.05,
-		'profile_photo': -0.53
-	},
-	'right': {
-		'post_text': -0.46,
-		'like_icon': 0.05,
-		'like_posts': 0.05,
-		'profile_photo': -0.53
-	}
-}
-
-var post_stim_r_x_pos = {
-	'left': {
-		'post_text': 0.47,
-		'like_icon': -0.05,
-		'like_posts': -0.05,
-		'profile_photo': 0.52
-	},
-	'right': {
-		'post_text': 0.475,
-		'like_icon': 0.05,
-		'like_posts': 0.05,
-		'profile_photo': 0.53
-	}
-}
-
 // Create Y axis  points
 for (let i = 0; i <= 9; i++){
 	if (i == 0) {
@@ -527,32 +467,6 @@ for (let i = 0; i <= 9; i++){
 		postStims[i].postphoto_y = postStims[i - 1].postphoto_y - 0.17
 		postStims[i].postlike_y = postStims[i - 1].postlike_y - 0.17
 		postStims[i].postlikeIcon_y = postStims[i - 1].postlikeIcon_y - 0.17
-	}
-}
-for (let i = 0; i <= 9; i++){
-	if (i == 0) {
-		postStims_r[i].post_y = 0.54
-		postStims_r[i].postphoto_y = 0.54
-		postStims_r[i].postlike_y = 0.57
-		postStims_r[i].postlikeIcon_y = 0.49
-	} else {
-		postStims_r[i].post_y = postStims[i - 1].post_y - posts_height
-		postStims_r[i].postphoto_y = postStims[i - 1].postphoto_y - 0.17
-		postStims_r[i].postlike_y = postStims[i - 1].postlike_y - 0.17
-		postStims_r[i].postlikeIcon_y = postStims[i - 1].postlikeIcon_y - 0.17
-	}
-}
-for (let i = 0; i <= 9; i++){
-	if (i == 0) {
-		postStims_l[i].post_y = 0.54
-		postStims_l[i].postphoto_y = 0.54
-		postStims_l[i].postlike_y = 0.57
-		postStims_l[i].postlikeIcon_y = 0.49
-	} else {
-		postStims_l[i].post_y = postStims[i - 1].post_y - posts_height
-		postStims_l[i].postphoto_y = postStims[i - 1].postphoto_y - 0.17
-		postStims_l[i].postlike_y = postStims[i - 1].postlike_y - 0.17
-		postStims_l[i].postlikeIcon_y = postStims[i - 1].postlikeIcon_y - 0.17
 	}
 }
 
@@ -1115,276 +1029,10 @@ function experimentInit() {
 	});
 
 	
-	mouse = new core.Mouse({ win: psychoJS.window })
-	
-	post_outline_big = new visual.Rect({
-		win: psychoJS.window,
-		name: `post_outline_b`,
-		width: 1.19,
-		height: posts_height*9,
-		units: 'norm',
-		pos: [0.00, -0.14], ori: 0,
-		lineWidth: 3,
-		lineColor: new util.Color('#a3a3a3'), opacity: 1,
-		depth: 0.0
-	});
-
-	post_outline_smol = new visual.Rect({
-		win: psychoJS.window,
-		name: `post_outline_s`,
-		width: 1.19,
-		height: posts_height*5,
-		units: 'norm',
-		pos: [0.00, 0.2], ori: 0,
-		lineWidth: 3,
-		lineColor: new util.Color('#a3a3a3'), opacity: 1,
-		depth: 0.0
-	});
+	mouse = new core.Mouse({win: psychoJS.window})
 
 	// Craete the post stims
 	for (var i = 0; i <= 9; i++){
-
-		// Rectangle Box
-		postStims_l[i].rect = new visual.Rect({
-			win: psychoJS.window,
-			name: `post${i}`,
-			width: 0.595,
-			height: posts_height,
-			units: 'norm',
-			pos: [-(0.595/2), postStims[i].post_y ], ori: 0,
-			lineColor: new util.Color('#292d2f'), opacity: 0.5,
-			depth: 0.0
-		});
-
-		// Post Text
-		postStims_l[i].post_text = new visual.TextStim({
-			win: psychoJS.window,
-			name: `post_text_${i}`,
-			text: 'sample post goes here',
-			fontFamily: 'lucida grande',
-			multiline: true,
-			height: 0.037,
-			units: 'norm',
-			alignVert: 'left',
-			alignHoriz: 'left',
-			pos: [-0.6, postStims[i].post_y],
-			wrapWidth: 0.38, ori: 0,
-			color: new util.Color('white'), opacity: 1,
-			depth: 0.0
-		});
-
-		// Mini Profile Photo
-		postStims_l[i].profile_photo = new visual.ImageStim({
-			win : psychoJS.window,
-			name : `profile_pic_post_${i}`, units : 'norm', 
-			image : 'profile_pic.png', mask : undefined,
-			ori: 0,
-			pos: [ -0.473, postStims[i].postphoto_y ], 
-			size: [0.04, 0.09],
-			color: undefined, opacity: 1,
-			flipHoriz : false, flipVert : false,
-			texRes : 128, interpolate : true, depth : 0
-		});
-
-		// Mini Profile Photo for Reversa
-		postStims_l[i].profileRR_photo = new visual.ImageStim({
-			win : psychoJS.window,
-			name : `profile_picRR_post_${i}`, units : 'norm', 
-			image : 'profile_picRR.png', mask : undefined,
-			ori: 0,
-			pos: [ -0.473, postStims[i].postphoto_y ], 
-			size: [0.04, 0.09],
-			color: undefined, opacity: 1,
-			flipHoriz : false, flipVert : false,
-			texRes : 128, interpolate : true, depth : 0
-		});
-
-		// Like Icon
-		postStims_l[i].like_icon = new visual.ImageStim({
-			win : psychoJS.window,
-			name : `like_post_${i}`, units : 'pix', 
-			image : 'heart.png', mask : undefined,
-			ori: 0,
-			pos: [ 0.0, postStims[i].postlikeIcon_y ], 
-			size: [0.04, 0.05],
-			color: undefined, opacity: 1,
-			flipHoriz : false, flipVert : false,
-			texRes : 128, interpolate : true, depth : 0
-		});
-
-		// Like Icon Output
-		postStims_l[i].like_icon_outline = new visual.ImageStim({
-			win : psychoJS.window,
-			name : `like_post_${i}_outline`, units : 'pix', 
-			image : 'heart_outline.png', mask : undefined,
-			ori: 0,
-			pos: [ 0.0, postStims[i].postlikeIcon_y ], 
-			size: [0.04, 0.05],
-			color: undefined, opacity: 1,
-			flipHoriz : false, flipVert : false,
-			texRes : 128, interpolate : true, depth : 0
-		});
-
-		// DisLike Icon
-		postStims_l[i].dislike_icon = new visual.ImageStim({
-			win : psychoJS.window,
-			name : `dislike_post_${i}`, units : 'pix', 
-			image : 'dislike.png', mask : undefined,
-			ori: 0,
-			pos: [ 0.0, postStims[i].postlikeIcon_y ], 
-			size: [0.04, 0.05],
-			color: undefined, opacity: 1,
-			flipHoriz : false, flipVert : false,
-			texRes : 128, interpolate : true, depth : 0
-		});
-
-		postStims_l[i].dislike_icon_outline = new visual.ImageStim({
-			win : psychoJS.window,
-			name : `dislike_post_${i}_outline`, units : 'pix', 
-			image : 'dislike_outline.png', mask : undefined,
-			ori: 0,
-			pos: [ 0.0, postStims[i].postlikeIcon_y ], 
-			size: [0.04, 0.05],
-			color: undefined, opacity: 1,
-			flipHoriz : false, flipVert : false,
-			texRes : 128, interpolate : true, depth : 0
-		});
-
-		// Number of Likes on each post
-		postStims_l[i].like_posts = new visual.TextStim({
-			win: psychoJS.window,
-			name: `like_posts_${i}`,
-			text: '0',
-			bold: true,
-			fontFamily: 'lucida grande',
-			units: 'norm',
-			pos: [0.0, postStims[i].postlike_y],
-			height: 0.07, wrapWidth: undefined, ori: 0,
-			color: new util.Color('white'), opacity: 1,
-			depth: 0.0
-		});
-
-
-		// Rectangle Box
-		postStims_r[i].rect = new visual.Rect({
-			win: psychoJS.window,
-			name: `post${i}`,
-			width: 0.595,
-			height: posts_height,
-			units: 'norm',
-			pos: [(0.595/2), postStims[i].post_y ], ori: 0,
-			lineColor: new util.Color('#292d2f'), opacity: 0.5,
-			depth: 0.0
-		});
-
-		// Post Text
-		postStims_r[i].post_text = new visual.TextStim({
-			win: psychoJS.window,
-			name: `post_text_${i}`,
-			text: 'sample post goes here',
-			fontFamily: 'lucida grande',
-			multiline: true,
-			height: 0.037, //0.043,
-			units: 'norm',
-			alignVert: 'left',
-			alignHoriz: 'left',
-			pos: [-0.6, postStims[i].post_y],
-			wrapWidth: 0.38, ori: 0,
-			color: new util.Color('white'), opacity: 1,
-			depth: 0.0
-		});
-
-		// Mini Profile Photo
-		postStims_r[i].profile_photo = new visual.ImageStim({
-			win : psychoJS.window,
-			name : `profile_pic_post_${i}`, units : 'norm', 
-			image : 'profile_pic.png', mask : undefined,
-			ori: 0,
-			pos: [ -0.473, postStims[i].postphoto_y ], 
-			size: [0.04, 0.09],
-			color: undefined, opacity: 1,
-			flipHoriz : false, flipVert : false,
-			texRes : 128, interpolate : true, depth : 0
-		});
-
-		// Mini Profile Photo for Reversa
-		postStims_r[i].profileRR_photo = new visual.ImageStim({
-			win : psychoJS.window,
-			name : `profile_picRR_post_${i}`, units : 'norm', 
-			image : 'profile_picRR.png', mask : undefined,
-			ori: 0,
-			pos: [ -0.473, postStims[i].postphoto_y ], 
-			size: [0.04, 0.09],
-			color: undefined, opacity: 1,
-			flipHoriz : false, flipVert : false,
-			texRes : 128, interpolate : true, depth : 0
-		});
-
-		// Like Icon
-		postStims_r[i].like_icon = new visual.ImageStim({
-			win : psychoJS.window,
-			name : `like_post_${i}`, units : 'pix', 
-			image : 'heart.png', mask : undefined,
-			ori: 0,
-			pos: [ 0.0, postStims[i].postlikeIcon_y ], 
-			size: [0.04, 0.05],
-			color: undefined, opacity: 1,
-			flipHoriz : false, flipVert : false,
-			texRes : 128, interpolate : true, depth : 0
-		});
-
-		// Like Icon Output
-		postStims_r[i].like_icon_outline = new visual.ImageStim({
-			win : psychoJS.window,
-			name : `like_post_${i}_outline`, units : 'pix', 
-			image : 'heart_outline.png', mask : undefined,
-			ori: 0,
-			pos: [ 0.0, postStims[i].postlikeIcon_y ], 
-			size: [0.04, 0.05],
-			color: undefined, opacity: 1,
-			flipHoriz : false, flipVert : false,
-			texRes : 128, interpolate : true, depth : 0
-		});
-
-		// DisLike Icon
-		postStims_r[i].dislike_icon = new visual.ImageStim({
-			win : psychoJS.window,
-			name : `dislike_post_${i}`, units : 'pix', 
-			image : 'dislike.png', mask : undefined,
-			ori: 0,
-			pos: [ 0.0, postStims[i].postlikeIcon_y ], 
-			size: [0.04, 0.05],
-			color: undefined, opacity: 1,
-			flipHoriz : false, flipVert : false,
-			texRes : 128, interpolate : true, depth : 0
-		});
-
-		postStims_r[i].dislike_icon_outline = new visual.ImageStim({
-			win : psychoJS.window,
-			name : `dislike_post_${i}_outline`, units : 'pix', 
-			image : 'dislike_outline.png', mask : undefined,
-			ori: 0,
-			pos: [ 0.0, postStims[i].postlikeIcon_y ], 
-			size: [0.04, 0.05],
-			color: undefined, opacity: 1,
-			flipHoriz : false, flipVert : false,
-			texRes : 128, interpolate : true, depth : 0
-		});
-
-		// Number of Likes on each post
-		postStims_r[i].like_posts = new visual.TextStim({
-			win: psychoJS.window,
-			name: `like_posts_${i}`,
-			text: '0',
-			bold: true,
-			fontFamily: 'lucida grande',
-			units: 'norm',
-			pos: [0.0, postStims[i].postlike_y],
-			height: 0.07, wrapWidth: undefined, ori: 0,
-			color: new util.Color('white'), opacity: 1,
-			depth: 0.0
-		});
-
 
 		// Rectangle Box
 		postStims[i].rect = new visual.Rect({
@@ -1655,11 +1303,6 @@ function experimentInit() {
  * Clears all the stimulus objects & set's there status back to NOT_STARTED
  */
 function clear_All_stims() {
-
-	post_outline_big.setAutoDraw(false)
-
-	post_outline_smol.setAutoDraw(false)
-
 	headerRectStim.setAutoDraw(false)
 	headerRectStim.status = PsychoJS.Status.NOT_STARTED
 
@@ -2158,10 +1801,8 @@ function trialsLoopEnd() {
 function setupPosts(game_type) {
 	// Depending on the game_type, show the recangle Boxies
 	if (game_type == 'h6') {
-		post_outline_big.setAutoDraw(true)
 		var MAXPOST = 8
 	} else {
-		post_outline_smol.setAutoDraw(true)
 		var MAXPOST = 4
 	}
 
@@ -2170,21 +1811,17 @@ function setupPosts(game_type) {
 
 	// Show the Pre Filled Posts
 	for (var i = trial_num; i <= MAXPOST; i++){
+
 		// Over lapp grey and light gre
 		if (i % 2 == 0) {
-			postStims_r[i].rect.lineColor = new util.Color(greyColor1)
-			postStims_r[i].rect.fillColor = new util.Color(greyColor1)
-			postStims_l[i].rect.lineColor = new util.Color(greyColor1)
-			postStims_l[i].rect.fillColor = new util.Color(greyColor1)
+			postStims[i].rect.lineColor = new util.Color(greyColor1)
+			postStims[i].rect.fillColor = new util.Color(greyColor1)
 		} else {
-			postStims_r[i].rect.lineColor = new util.Color(greyColor2)
-			postStims_r[i].rect.fillColor = new util.Color(greyColor2)
-			postStims_l[i].rect.lineColor = new util.Color(greyColor2)
-			postStims_l[i].rect.fillColor = new util.Color(greyColor2)
+			postStims[i].rect.lineColor = new util.Color(greyColor2)
+			postStims[i].rect.fillColor = new util.Color(greyColor2)
 		}
 		
-		postStims_r[i].rect.setAutoDraw(true) // draw rect
-		postStims_l[i].rect.setAutoDraw(true) // draw rect
+		postStims[i].rect.setAutoDraw(true) // draw rect
 	}
 }
 
@@ -2483,15 +2120,6 @@ function trialRoutineBegin(trials) {
 		questionText.setAutoDraw(true)
 		profilePicPostStim.setAutoDraw(true)
 
-		if (game_type == 'h6') {
-			post_outline_big.setAutoDraw(true)
-			post_outline_big.refresh()
-		} else {
-			post_outline_smol.setAutoDraw(true)
-			post_outline_smol.refresh()
-		}
-	
-
 		lastTrialKeyPressed = false
 	
 		resp.keys = undefined;
@@ -2600,15 +2228,6 @@ function trialRoleReversalRoutineBegin(trials) {
 
 		profilePicPostStim.setAutoDraw(true)
 
-		if (game_type == 'h6') {
-			post_outline_big.setAutoDraw(true)
-			post_outline_big.refresh()
-		} else {
-			post_outline_smol.setAutoDraw(true)
-			post_outline_smol.refresh()
-		}
-	
-
 		// Prepare the posts
 		// Random Side
 		var choices = ['LEFT', 'RIGHT']
@@ -2620,36 +2239,35 @@ function trialRoleReversalRoutineBegin(trials) {
 		var like_icon_pos_y_offest = 0.04
 		
 		if (topic_side == 'LEFT') {
-
-			postStims_l[trial_num].profileRR_photo = new visual.ImageStim({
+			postStims[trial_num].profileRR_photo = new visual.ImageStim({
 				win : psychoJS.window,
 				name : `profile_pic_post_${trial_num}`, units : 'norm', 
 				image : 'profile_pic.png', mask : undefined,
 				ori: 0,
-				pos: [ post_stim_l_x_pos.left.profile_photo, postStims_l[trial_num].postphoto_y ], 
+				pos: [ post_stim_x_pos.left.profile_photo, postStims[trial_num].postphoto_y ], 
 				size: [0.07,0.09],
 				color: undefined, opacity: 1,
 				flipHoriz : false, flipVert : false,
 				texRes : 128, interpolate : true, depth : 0
 			});
-			postStims_l[trial_num].like_icon = new visual.ImageStim({
+			postStims[trial_num].like_icon = new visual.ImageStim({
 				win : psychoJS.window,
 				name : `like_post_${trial_num}`, units : 'norm', 
 				image : 'heart.png', mask : undefined,
 				ori: 0,
-				pos: [ post_stim_l_x_pos.left.like_icon, postStims_l[trial_num].postlikeIcon_y + like_icon_pos_y_offest ], 
+				pos: [ post_stim_x_pos.left.like_icon, postStims[trial_num].postlikeIcon_y + like_icon_pos_y_offest ], 
 				size: [0.07,0.08],
 				color: undefined, opacity: 1,
 				flipHoriz : false, flipVert : false,
 				texRes : 128, interpolate : true, depth : 0
 			});
 
-			postStims_l[trial_num].like_icon_outline = new visual.ImageStim({
+			postStims[trial_num].like_icon_outline = new visual.ImageStim({
 				win : psychoJS.window,
 				name : `like_post_${trial_num}_outline`, units : 'norm', 
 				image : 'heart_outline.png', mask : undefined,
 				ori: 0,
-				pos: [ post_stim_l_x_pos.left.like_icon, postStims_l[trial_num].postlikeIcon_y + like_icon_pos_y_offest ], 
+				pos: [ post_stim_x_pos.left.like_icon, postStims[trial_num].postlikeIcon_y + like_icon_pos_y_offest ], 
 				size: [0.07,0.08],
 				color: undefined, opacity: 1,
 				flipHoriz : false, flipVert : false,
@@ -2657,23 +2275,23 @@ function trialRoleReversalRoutineBegin(trials) {
 			});
 
 			// Dislike Icons
-			postStims_l[trial_num].dislike_icon = new visual.ImageStim({
+			postStims[trial_num].dislike_icon = new visual.ImageStim({
 				win : psychoJS.window,
 				name : `like_post_${trial_num}`, units : 'norm', 
 				image : 'dislike.png', mask : undefined,
 				ori: 0,
-				pos: [ post_stim_l_x_pos.left.like_icon, postStims_l[trial_num].postlikeIcon_y + like_icon_pos_y_offest ], 
+				pos: [ post_stim_x_pos.left.like_icon, postStims[trial_num].postlikeIcon_y + like_icon_pos_y_offest ], 
 				size: [0.07,0.08],
 				color: undefined, opacity: 1,
 				flipHoriz : false, flipVert : false,
 				texRes : 128, interpolate : true, depth : 0
 			});
-			postStims_l[trial_num].dislike_icon_outline = new visual.ImageStim({
+			postStims[trial_num].dislike_icon_outline = new visual.ImageStim({
 				win : psychoJS.window,
 				name : `like_post_${trial_num}_outline`, units : 'norm', 
 				image : 'dislike_outline.png', mask : undefined,
 				ori: 0,
-				pos: [ post_stim_l_x_pos.left.like_icon, postStims_l[trial_num].postlikeIcon_y + like_icon_pos_y_offest ], 
+				pos: [ post_stim_x_pos.left.like_icon, postStims[trial_num].postlikeIcon_y + like_icon_pos_y_offest ], 
 				size: [0.07,0.08],
 				color: undefined, opacity: 1,
 				flipHoriz : false, flipVert : false,
@@ -2683,94 +2301,86 @@ function trialRoleReversalRoutineBegin(trials) {
 			topic_text = leftTopic[leftTopicCounter]
 			topic_text_elements = normalize_elements(topic_text.split(' '))
 			leftTopicCounter++
-			postStims_l[trial_num].post_text.pos[0] = post_stim_l_x_pos.left.post_text
-			postStims_l[trial_num].post_text.alignVert = 'left'
-			postStims_l[trial_num].post_text.alignHoriz = 'left'
+			postStims[trial_num].post_text.pos[0] = post_stim_x_pos.left.post_text
+			postStims[trial_num].post_text.alignVert = 'right'
+			postStims[trial_num].post_text.alignHoriz = 'right'
 	
-			postStims_l[trial_num].rect.fillColor = new util.Color(leftColor)
-			postStims_l[trial_num].rect.lineColor = new util.Color(leftColor)
-
-			postStims_l[trial_num].post_text.setText('')
-
-			last_selection = 'left'
+			postStims[trial_num].rect.fillColor = new util.Color(leftColor)
+			postStims[trial_num].rect.lineColor = new util.Color(leftColor)
 			
 		} else {
-			
-			postStims_r[trial_num].profileRR_photo = new visual.ImageStim({
+			// Right Side
+			postStims[trial_num].profileRR_photo = new visual.ImageStim({
 				win : psychoJS.window,
 				name : `profile_pic_post_${trial_num}`, units : 'norm', 
 				image : 'profile_pic.png', mask : undefined,
 				ori: 0,
-				pos: [ post_stim_r_x_pos.right.profile_photo, postStims_r[trial_num].postphoto_y ], 
+				pos: [ post_stim_x_pos.right.profile_photo, postStims[trial_num].postphoto_y ], 
 				size: [0.07,0.09],
 				color: undefined, opacity: 1,
 				flipHoriz : false, flipVert : false,
 				texRes : 128, interpolate : true, depth : 0
 			});
-			postStims_r[trial_num].like_icon = new visual.ImageStim({
+			postStims[trial_num].like_icon = new visual.ImageStim({
 				win : psychoJS.window,
 				name : `like_post_${trial_num}`, units : 'norm', 
 				image : 'heart.png', mask : undefined,
 				ori: 0,
-				pos: [ post_stim_r_x_pos.right.like_icon, postStims_r[trial_num].postlikeIcon_y + like_icon_pos_y_offest ], 
+				pos: [ post_stim_x_pos.right.like_icon, postStims[trial_num].postlikeIcon_y + like_icon_pos_y_offest ], 
 				size: [0.07,0.08],
 				color: undefined, opacity: 1,
 				flipHoriz : false, flipVert : false,
 				texRes : 128, interpolate : true, depth : 0
 			});
-
-			postStims_r[trial_num].like_icon_outline = new visual.ImageStim({
+			postStims[trial_num].like_icon_outline = new visual.ImageStim({
 				win : psychoJS.window,
 				name : `like_post_${trial_num}_outline`, units : 'norm', 
 				image : 'heart_outline.png', mask : undefined,
 				ori: 0,
-				pos: [ post_stim_r_x_pos.right.like_icon, postStims_r[trial_num].postlikeIcon_y + like_icon_pos_y_offest ], 
+				pos: [ post_stim_x_pos.right.like_icon, postStims[trial_num].postlikeIcon_y + like_icon_pos_y_offest ], 
 				size: [0.07,0.08],
 				color: undefined, opacity: 1,
 				flipHoriz : false, flipVert : false,
 				texRes : 128, interpolate : true, depth : 0
 			});
-
-			// Dislike Icons
-			postStims_r[trial_num].dislike_icon = new visual.ImageStim({
+			postStims[trial_num].dislike_icon = new visual.ImageStim({
 				win : psychoJS.window,
 				name : `like_post_${trial_num}`, units : 'norm', 
 				image : 'dislike.png', mask : undefined,
 				ori: 0,
-				pos: [ post_stim_r_x_pos.right.like_icon, postStims_r[trial_num].postlikeIcon_y + like_icon_pos_y_offest ], 
+				pos: [ post_stim_x_pos.right.like_icon, postStims[trial_num].postlikeIcon_y + like_icon_pos_y_offest ], 
 				size: [0.07,0.08],
 				color: undefined, opacity: 1,
 				flipHoriz : false, flipVert : false,
 				texRes : 128, interpolate : true, depth : 0
 			});
-			postStims_r[trial_num].dislike_icon_outline = new visual.ImageStim({
+			postStims[trial_num].dislike_icon_outline = new visual.ImageStim({
 				win : psychoJS.window,
 				name : `like_post_${trial_num}_outline`, units : 'norm', 
 				image : 'dislike_outline.png', mask : undefined,
 				ori: 0,
-				pos: [ post_stim_r_x_pos.right.like_icon, postStims_r[trial_num].postlikeIcon_y + like_icon_pos_y_offest ], 
+				pos: [ post_stim_x_pos.right.like_icon, postStims[trial_num].postlikeIcon_y + like_icon_pos_y_offest ], 
 				size: [0.07,0.08],
 				color: undefined, opacity: 1,
 				flipHoriz : false, flipVert : false,
 				texRes : 128, interpolate : true, depth : 0
 			});
 
+
 			topic_text = rightTopic[rightTopicCounter]
 			topic_text_elements = normalize_elements(topic_text.split(' '))
 			rightTopicCounter++
-			postStims_r[trial_num].post_text.pos[0] = post_stim_r_x_pos.right.post_text
-			postStims_r[trial_num].post_text.alignVert = 'right'
-			postStims_r[trial_num].post_text.alignHoriz = 'right'
-	
-			postStims_r[trial_num].rect.fillColor = new util.Color(rightColor)
-			postStims_r[trial_num].rect.lineColor = new util.Color(rightColor)
-
-			postStims_r[trial_num].post_text.setText('')
-
-			last_selection = 'right'
+			postStims[trial_num].post_text.pos[0] = post_stim_x_pos.right.post_text
+			postStims[trial_num].post_text.alignVert = 'left'
+			postStims[trial_num].post_text.alignHoriz = 'left'
+			
+			// postStims[trial_num]['like_posts'].setText(right_reward)
+			trial_reward = right_reward
+			
+			postStims[trial_num].rect.fillColor = new util.Color(rightColor)
 		}
 
-		// postStims[trial_num].post_text.setText('')
+		postStims[trial_num].post_text.setText('')
 		lastTrialKeyPressed = false
 		
 		loadingCounter = 0
@@ -2814,43 +2424,32 @@ function reset_stims() {
 
 	for (var i = 0; i <= 9; i++) {
 		// Init Left textStims
-		postStims_r[i].rect.status = PsychoJS.Status.NOT_STARTED
-		postStims_r[i].rect.setAutoDraw(false) // draw rect
-		postStims_r[i].post_text.status = PsychoJS.Status.NOT_STARTED
-		postStims_r[i].post_text.setAutoDraw(false)
-		postStims_r[i].like_icon.status = PsychoJS.Status.NOT_STARTED
-		postStims_r[i].like_icon.setAutoDraw(false)
-		postStims_r[i].dislike_icon.status = PsychoJS.Status.NOT_STARTED
-		postStims_r[i].dislike_icon.setAutoDraw(false)
-		postStims_r[i].dislike_icon_outline.status = PsychoJS.Status.NOT_STARTED
-		postStims_r[i].dislike_icon_outline.setAutoDraw(false)
-		postStims_r[i].like_icon_outline.status = PsychoJS.Status.NOT_STARTED
-		postStims_r[i].like_icon_outline.setAutoDraw(false)
-		postStims_r[i].like_posts.status = PsychoJS.Status.NOT_STARTED
-		postStims_r[i].like_posts.setAutoDraw(false)
-		postStims_r[i].profile_photo.status = PsychoJS.Status.NOT_STARTED
-		postStims_r[i].profile_photo.setAutoDraw(false) // draw profile pic post
-		postStims_r[i].profileRR_photo.status = PsychoJS.Status.NOT_STARTED
-		postStims_r[i].profileRR_photo.setAutoDraw(false) // draw profile pic post
+		postStims[i].rect.status = PsychoJS.Status.NOT_STARTED
+		postStims[i].rect.setAutoDraw(false) // draw rect
 
-		postStims_l[i].rect.status = PsychoJS.Status.NOT_STARTED
-		postStims_l[i].rect.setAutoDraw(false) // draw rect
-		postStims_l[i].post_text.status = PsychoJS.Status.NOT_STARTED
-		postStims_l[i].post_text.setAutoDraw(false)
-		postStims_l[i].like_icon.status = PsychoJS.Status.NOT_STARTED
-		postStims_l[i].like_icon.setAutoDraw(false)
-		postStims_l[i].dislike_icon.status = PsychoJS.Status.NOT_STARTED
-		postStims_l[i].dislike_icon.setAutoDraw(false)
-		postStims_l[i].dislike_icon_outline.status = PsychoJS.Status.NOT_STARTED
-		postStims_l[i].dislike_icon_outline.setAutoDraw(false)
-		postStims_l[i].like_icon_outline.status = PsychoJS.Status.NOT_STARTED
-		postStims_l[i].like_icon_outline.setAutoDraw(false)
-		postStims_l[i].like_posts.status = PsychoJS.Status.NOT_STARTED
-		postStims_l[i].like_posts.setAutoDraw(false)
-		postStims_l[i].profile_photo.status = PsychoJS.Status.NOT_STARTED
-		postStims_l[i].profile_photo.setAutoDraw(false) // draw profile pic post
-		postStims_l[i].profileRR_photo.status = PsychoJS.Status.NOT_STARTED
-		postStims_l[i].profileRR_photo.setAutoDraw(false) // draw profile pic post
+		postStims[i].post_text.status = PsychoJS.Status.NOT_STARTED
+		postStims[i].post_text.setAutoDraw(false)
+
+		postStims[i].like_icon.status = PsychoJS.Status.NOT_STARTED
+		postStims[i].like_icon.setAutoDraw(false)
+
+		postStims[i].dislike_icon.status = PsychoJS.Status.NOT_STARTED
+		postStims[i].dislike_icon.setAutoDraw(false)
+
+		postStims[i].dislike_icon_outline.status = PsychoJS.Status.NOT_STARTED
+		postStims[i].dislike_icon_outline.setAutoDraw(false)
+
+		postStims[i].like_icon_outline.status = PsychoJS.Status.NOT_STARTED
+		postStims[i].like_icon_outline.setAutoDraw(false)
+
+		postStims[i].like_posts.status = PsychoJS.Status.NOT_STARTED
+		postStims[i].like_posts.setAutoDraw(false)
+
+		postStims[i].profile_photo.status = PsychoJS.Status.NOT_STARTED
+		postStims[i].profile_photo.setAutoDraw(false) // draw profile pic post
+
+		postStims[i].profileRR_photo.status = PsychoJS.Status.NOT_STARTED
+		postStims[i].profileRR_photo.setAutoDraw(false) // draw profile pic post
 
 	}
 }
@@ -2949,172 +2548,168 @@ function trialRoutineEachFrameWaitforInput(trials) {
 				
 				if (resp.keys == LEFT_KEY) {
 					
-					postStims_l[trial_num].profile_photo = new visual.ImageStim({
+					postStims[trial_num].profile_photo = new visual.ImageStim({
 						win : psychoJS.window,
 						name : `profile_pic_post_${trial_num}`, units : 'norm', 
 						image : 'profile_pic.png',
 						ori: 0,
-						pos: [ post_stim_l_x_pos.left.profile_photo, postStims_l[trial_num].postphoto_y ], 
+						pos: [ post_stim_x_pos.left.profile_photo, postStims[trial_num].postphoto_y ], 
 						size: [0.07,0.09],
 						color: undefined, opacity: 1,
 						flipHoriz : false, flipVert : false,
 						texRes : 128, interpolate : true, depth : 0
 					});
 
-					postStims_l[trial_num].like_icon = new visual.ImageStim({
+					postStims[trial_num].like_icon = new visual.ImageStim({
 						win : psychoJS.window,
 						name : `like_post_${trial_num}`, units : 'norm', 
 						image : 'heart.png', mask : undefined,
 						ori: 0,
-						pos: [ post_stim_l_x_pos.left.like_icon, postStims_l[trial_num].postlikeIcon_y ], 
+						pos: [ post_stim_x_pos.left.like_icon, postStims[trial_num].postlikeIcon_y ], 
 						size: [0.04,0.05],
 						color: undefined, opacity: 1,
 						flipHoriz : false, flipVert : false,
 						texRes : 128, interpolate : true, depth : 0
 					});
 
-					postStims_l[trial_num].dislike_icon = new visual.ImageStim({
+					postStims[trial_num].dislike_icon = new visual.ImageStim({
 						win : psychoJS.window,
 						name : `dislike_post_${trial_num}`, units : 'norm', 
 						image : 'dislike.png', mask : undefined,
 						ori: 0,
-						pos: [ post_stim_l_x_pos.left.like_icon, postStims_l[trial_num].postlikeIcon_y ], 
+						pos: [ post_stim_x_pos.left.like_icon, postStims[trial_num].postlikeIcon_y ], 
 						size: [0.04,0.05],
 						color: undefined, opacity: 1,
 						flipHoriz : false, flipVert : false,
 						texRes : 128, interpolate : true, depth : 0
 					});
 
-					postStims_l[trial_num].like_icon_outline = new visual.ImageStim({
+					postStims[trial_num].like_icon_outline = new visual.ImageStim({
 						win : psychoJS.window,
 						name : `like_post_${trial_num}_outline`, units : 'norm', 
 						image : 'heart_outline.png', mask : undefined,
 						ori: 0,
-						pos: [ post_stim_l_x_pos.left.like_icon, postStims_l[trial_num].postlikeIcon_y ], 
+						pos: [ post_stim_x_pos.left.like_icon, postStims[trial_num].postlikeIcon_y ], 
 						size: [0.04,0.05],
 						color: undefined, opacity: 1,
 						flipHoriz : false, flipVert : false,
 						texRes : 128, interpolate : true, depth : 0
 					});
 
-					postStims_l[trial_num].like_posts = new visual.TextStim({
+					postStims[trial_num].like_posts = new visual.TextStim({
 						win: psychoJS.window,
 						name: `like_posts_${trial_num}`,
 						text: left_reward,
 						bold: true,
 						fontFamily: 'lucida grande',
 						units: 'norm',
-						pos: [ post_stim_l_x_pos.left.like_posts, postStims_l[trial_num].postlike_y],
+						pos: [ post_stim_x_pos.left.like_posts, postStims[trial_num].postlike_y],
 						height: 0.07, wrapWidth: undefined, ori: 0,
 						color: new util.Color('white'), opacity: 1,
 						depth: 0.0
 					});
 
-					// postStims[trial_num]['profile_photo'].pos[0] = post_stim_l_x_pos.left.profile_photo
+
+					// postStims[trial_num]['profile_photo'].pos[0] = post_stim_x_pos.left.profile_photo
 					topic_text = leftTopic[leftTopicCounter]
 					topic_text_elements = normalize_elements(topic_text.split(' '))
-					postStims_l[trial_num].post_text.setText('')
+					postStims[trial_num].post_text.setText('')
 					leftTopicCounter++
 					
-					postStims_l[trial_num].post_text.pos[0] = post_stim_l_x_pos.left.post_text
-					postStims_l[trial_num].post_text.alignVert = 'left'
-					postStims_l[trial_num].post_text.alignHoriz = 'left'
+					postStims[trial_num].post_text.pos[0] = post_stim_x_pos.left.post_text
+					postStims[trial_num].post_text.alignVert = 'right'
+					postStims[trial_num].post_text.alignHoriz = 'right'
 			
-					// postStims[trial_num].like_posts.pos[0] = post_stim_l_x_pos.left.like_posts
+					// postStims[trial_num].like_posts.pos[0] = post_stim_x_pos.left.like_posts
 
 					
+
 					// postStims[trial_num]['like_posts'].setText(left_reward)
 					trial_reward = left_reward
 					
-					postStims_l[trial_num].rect.fillColor = new util.Color(leftColor)
-					postStims_l[trial_num].rect.lineColor = new util.Color(leftColor)
-
-					postStims_l[trial_num].like_posts.setText(trial_reward)
-					postStims_l[trial_num].post_text.setAutoDraw(true)
-					last_selection = 'left'
+					postStims[trial_num].rect.fillColor = new util.Color(leftColor)
+					postStims[trial_num].rect.lineColor = new util.Color(leftColor)
 					
 				} else {
 
-					postStims_r[trial_num].profile_photo = new visual.ImageStim({
+					postStims[trial_num].profile_photo = new visual.ImageStim({
 						win : psychoJS.window,
 						name : `profile_pic_post_${trial_num}`, units : 'norm', 
 						image : 'profile_pic.png',
 						ori: 0,
-						pos: [ post_stim_r_x_pos.right.profile_photo, postStims_r[trial_num].postphoto_y ], 
+						pos: [ post_stim_x_pos.right.profile_photo, postStims[trial_num].postphoto_y ], 
 						size: [0.07,0.09],
 						color: undefined, opacity: 1,
 						flipHoriz : false, flipVert : false,
 						texRes : 128, interpolate : true, depth : 0
 					});
 
-					postStims_r[trial_num].like_icon = new visual.ImageStim({
+					postStims[trial_num].like_icon = new visual.ImageStim({
 						win : psychoJS.window,
 						name : `like_post_${trial_num}`, units : 'norm', 
 						image : 'heart.png', mask : undefined,
 						ori: 0,
-						pos: [ post_stim_r_x_pos.right.like_icon, postStims_r[trial_num].postlikeIcon_y ], 
+						pos: [ post_stim_x_pos.right.like_icon, postStims[trial_num].postlikeIcon_y ], 
 						size: [0.04,0.05],
 						color: undefined, opacity: 1,
 						flipHoriz : false, flipVert : false,
 						texRes : 128, interpolate : true, depth : 0
 					});
 
-					postStims_r[trial_num].dislike_icon = new visual.ImageStim({
+					postStims[trial_num].dislike_icon = new visual.ImageStim({
 						win : psychoJS.window,
 						name : `dislike_post_${trial_num}`, units : 'norm', 
 						image : 'dislike.png', mask : undefined,
 						ori: 0,
-						pos: [ post_stim_r_x_pos.right.like_icon, postStims_r[trial_num].postlikeIcon_y ], 
+						pos: [ post_stim_x_pos.right.like_icon, postStims[trial_num].postlikeIcon_y ], 
 						size: [0.04,0.05],
 						color: undefined, opacity: 1,
 						flipHoriz : false, flipVert : false,
 						texRes : 128, interpolate : true, depth : 0
 					});
 
-					postStims_r[trial_num].like_icon_outline = new visual.ImageStim({
+					postStims[trial_num].like_icon_outline = new visual.ImageStim({
 						win : psychoJS.window,
 						name : `like_post_${trial_num}_outline`, units : 'norm', 
 						image : 'heart_outline.png', mask : undefined,
 						ori: 0,
-						pos: [ post_stim_r_x_pos.right.like_icon, postStims_r[trial_num].postlikeIcon_y ], 
+						pos: [ post_stim_x_pos.right.like_icon, postStims[trial_num].postlikeIcon_y ], 
 						size: [0.04,0.05],
 						color: undefined, opacity: 1,
 						flipHoriz : false, flipVert : false,
 						texRes : 128, interpolate : true, depth : 0
 					});
 
-					postStims_r[trial_num].like_posts = new visual.TextStim({
+					postStims[trial_num].like_posts = new visual.TextStim({
 						win: psychoJS.window,
 						name: `like_posts_${trial_num}`,
 						text: right_reward,
 						bold: true,
 						fontFamily: 'lucida grande',
 						units: 'norm',
-						pos: [ post_stim_r_x_pos.right.like_posts, postStims_r[trial_num].postlike_y],
+						pos: [ post_stim_x_pos.right.like_posts, postStims[trial_num].postlike_y],
 						height: 0.07, wrapWidth: undefined, ori: 0,
 						color: new util.Color('white'), opacity: 1,
 						depth: 0.0
 					});
+
+
+
 					
 					topic_text = rightTopic[rightTopicCounter]
 					topic_text_elements = normalize_elements(topic_text.split(' '))
-					postStims_r[trial_num].post_text.setText('')
+					postStims[trial_num].post_text.setText('')
 					rightTopicCounter++
-					postStims_r[trial_num].post_text.pos[0] = post_stim_r_x_pos.right.post_text
-					postStims_r[trial_num].post_text.alignVert = 'right'
-					postStims_r[trial_num].post_text.alignHoriz = 'right'
+					postStims[trial_num].post_text.pos[0] = post_stim_x_pos.right.post_text
+					postStims[trial_num].post_text.alignVert = 'left'
+					postStims[trial_num].post_text.alignHoriz = 'left'
 
-					// postStims[trial_num].like_posts.pos[0] = post_stim_r_x_pos.right.like_posts
+					// postStims[trial_num].like_posts.pos[0] = post_stim_x_pos.right.like_posts
 
 					// postStims[trial_num]['like_posts'].setText(right_reward)
 					trial_reward = right_reward
-					postStims_r[trial_num].rect.fillColor = new util.Color(rightColor)
+					postStims[trial_num].rect.fillColor = new util.Color(rightColor)
 					// bandits['left'][trial_num].setText('XX')
-
-					postStims_r[trial_num].like_posts.setText(trial_reward)
-					postStims_r[trial_num].post_text.setAutoDraw(true)
-
-					last_selection = 'right'
 
 				}
 				
@@ -3150,8 +2745,8 @@ function trialRoutineEachFrameWaitforInput(trials) {
 				// animationAttributes = getAnimationAttributes(trial_reward)
 				frameN = 1
 				loadingCounter = 0
-				// postStims[trial_num].like_posts.setText(trial_reward)
-				// postStims[trial_num].post_text.setAutoDraw(true)
+				postStims[trial_num].like_posts.setText(trial_reward)
+				postStims[trial_num].post_text.setAutoDraw(true)
 				return Scheduler.Event.NEXT; // Go to Next Routine after subject makes a selection
 			}
 		}
@@ -3178,31 +2773,15 @@ function trialRoutineEachFrameShowPost(trials) {
 
 		//postStims[trial_num].rect.opacity = 0.5
 
-		if (last_selection == 'left')
-		{
-
-			if (t > 0.1 && postStims_l[trial_num].post_text.status != PsychoJS.Status.FINISHED) {
-				//loadingAnimationText()
-				postStims_l[trial_num].post_text.setText(topic_text)
-			}
-			if (t > 0.1 && postStims_l[trial_num].profile_photo.status == PsychoJS.Status.NOT_STARTED) {
-				postStims_l[trial_num].profile_photo.setAutoDraw(true)
-				mark_event(trials_data, globalClock, trial_num, trial_type, event_types['ANIMATION_ONSET'], 'NA', 'NA', topic_text)
-			}
-			
+		if (t > 0.1 && postStims[trial_num].post_text.status != PsychoJS.Status.FINISHED) {
+			//loadingAnimationText()
+			postStims[trial_num].post_text.setText(topic_text)
 		}
-		else
-		{
-			console.log(t)
-			if (t > 0.1 && postStims_r[trial_num].post_text.status != PsychoJS.Status.FINISHED) {
-				//loadingAnimationText()
-				postStims_r[trial_num].post_text.setText(topic_text)
-			}
-			if (t > 0.1 && postStims_r[trial_num].profile_photo.status == PsychoJS.Status.NOT_STARTED) {
-				postStims_r[trial_num].profile_photo.setAutoDraw(true)
-				mark_event(trials_data, globalClock, trial_num, trial_type, event_types['ANIMATION_ONSET'], 'NA', 'NA', topic_text)
-			}
+		if (t > 0.1 && postStims[trial_num].profile_photo.status == PsychoJS.Status.NOT_STARTED) {
+			postStims[trial_num].profile_photo.setAutoDraw(true)
+			mark_event(trials_data, globalClock, trial_num, trial_type, event_types['ANIMATION_ONSET'], 'NA', 'NA', topic_text)
 		}
+		 
 
 		// if (postStims[trial_num].post_text.status != PsychoJS.Status.FINISHED ) {
 		// 	loadingAnimationText()
@@ -3214,34 +2793,17 @@ function trialRoutineEachFrameShowPost(trials) {
 
 		// After 3 seconds go to the next Trial (post) or next chat room
 		if ((t > animation_duration) && !do_not_draw) {
-			if (last_selection == 'left') {
-				if (dislike_room) {
-					postStims_l[trial_num].like_posts.setText(-(trial_reward))
-				}
-				postStims_l[trial_num].like_posts.setAutoDraw(true)
-				totalLikesTracker.setText(socialApprovalScore)
-
-				if (dislike_room) {
-					postStims_l[trial_num].like_posts.setText(-(trial_reward))
-					postStims_l[trial_num].dislike_icon.setAutoDraw(true) // show filled in heart
-				} else {
-					postStims_l[trial_num].like_icon.setAutoDraw(true) // show filled in heart
-				}
+			if (dislike_room) {
+				postStims[trial_num].like_posts.setText(-(trial_reward))
 			}
-			else
-			{
-				if (dislike_room) {
-					postStims_r[trial_num].like_posts.setText(-(trial_reward))
-				}
-				postStims_r[trial_num].like_posts.setAutoDraw(true)
-				totalLikesTracker.setText(socialApprovalScore)
+			postStims[trial_num].like_posts.setAutoDraw(true)
+			totalLikesTracker.setText(socialApprovalScore)
 
-				if (dislike_room) {
-					postStims_r[trial_num].like_posts.setText(-(trial_reward))
-					postStims_r[trial_num].dislike_icon.setAutoDraw(true) // show filled in heart
-				} else {
-					postStims_r[trial_num].like_icon.setAutoDraw(true) // show filled in heart
-				}
+			if (dislike_room) {
+				postStims[trial_num].like_posts.setText(-(trial_reward))
+				postStims[trial_num].dislike_icon.setAutoDraw(true) // show filled in heart
+			} else {
+				postStims[trial_num].like_icon.setAutoDraw(true) // show filled in heart
 			}
 			if (!lastTrial) {
 				// Go to the next routine if it's not the last trial
@@ -3358,107 +2920,52 @@ function trialRoleReversalRoutineEachFrameWaitforInput(trials) {
 			psychoJS.window.callOnFlip(function () { resp.start(); }); // start on screen flip
 			psychoJS.window.callOnFlip(function () { resp.clearEvents(); });
 
-			if (last_selection == 'left')
-			{
-				postStims_l[trial_num].post_text.setAutoDraw(true)
+			postStims[trial_num].post_text.setAutoDraw(true)
 
-				//loadingAnimationText()
-				postStims_l[trial_num].post_text.setText(topic_text)
+			//loadingAnimationText()
+			postStims[trial_num].post_text.setText(topic_text)
 
-				postStims_l[trial_num].profileRR_photo.setAutoDraw(true)
-			}
-			else
-			{
-				postStims_r[trial_num].post_text.setAutoDraw(true)
-
-				//loadingAnimationText()
-				postStims_r[trial_num].post_text.setText(topic_text)
-
-				postStims_r[trial_num].profileRR_photo.setAutoDraw(true)
-			}
+			postStims[trial_num].profileRR_photo.setAutoDraw(true)
 		}
 
 		if (t >= animation_duration) {
-			if (last_selection == 'left') {
-				// Turn the rewards to negative if it's a dislike_chartroom
-				if (dislike_room == 1) {
-					questionText.setText('\nPress ">" to add a dislike.\nPress "<" to not add a dislike.')
-					postStims_l[trial_num].dislike_icon_outline.setAutoDraw(true)
-					postStims_l[trial_num].dislike_icon.setAutoDraw(false) // filled dislike
-				} else {
-					questionText.setText('\nPress ">" to add a like.\nPress "<" to not add a like.')
-					postStims_l[trial_num].like_icon_outline.setAutoDraw(true)
-					postStims_l[trial_num].like_icon.setAutoDraw(false) // filed hard
-				}
-				questionText.setAutoDraw(true)
-
-
-				let theseKeys = resp.getKeys({ keyList: [LEFT_KEY, RIGHT_KEY], waitRelease: false });
-
-				// After key is pressed, go to next routine
-				if (theseKeys && theseKeys.length == 1) {  // one key was pressed
-					resp.keys = theseKeys[0].name;  // just the last key pressed
-					resp.rt = theseKeys[0].rt;
-
-					lastTrialKeyPressed = resp.keys;
-					if (resp.keys == RIGHT_KEY) {
-						// For Right Key, subject is adding a like
-
-						if (dislike_room == 1) {
-							postStims_l[trial_num].dislike_icon_outline.setAutoDraw(false)
-							postStims_l[trial_num].dislike_icon.setAutoDraw(true) // filed hard
-						} else {
-							postStims_l[trial_num].like_icon_outline.setAutoDraw(false)
-							postStims_l[trial_num].like_icon.setAutoDraw(true) // filed hard
-						}
-
-					}
-					mark_event(trials_data, globalClock, trial_num, trial_type, event_types['RESPONSE'], resp.rt,
-						resp.keys, trial_reward)
-
-					return Scheduler.Event.NEXT;
-				}
+			// Turn the rewards to negative if it's a dislike_chartroom
+			if (dislike_room == 1) {
+				questionText.setText('\nPress ">" to add a dislike.\nPress "<" to not add a dislike.')
+				postStims[trial_num].dislike_icon_outline.setAutoDraw(true)
+				postStims[trial_num].dislike_icon.setAutoDraw(false) // filled dislike
+			} else {
+				questionText.setText('\nPress ">" to add a like.\nPress "<" to not add a like.')
+				postStims[trial_num].like_icon_outline.setAutoDraw(true)
+				postStims[trial_num].like_icon.setAutoDraw(false) // filed hard
 			}
-			else
-			{
-				// Turn the rewards to negative if it's a dislike_chartroom
-				if (dislike_room == 1) {
-					questionText.setText('\nPress ">" to add a dislike.\nPress "<" to not add a dislike.')
-					postStims_r[trial_num].dislike_icon_outline.setAutoDraw(true)
-					postStims_r[trial_num].dislike_icon.setAutoDraw(false) // filled dislike
-				} else {
-					questionText.setText('\nPress ">" to add a like.\nPress "<" to not add a like.')
-					postStims_r[trial_num].like_icon_outline.setAutoDraw(true)
-					postStims_r[trial_num].like_icon.setAutoDraw(false) // filed hard
-				}
-				questionText.setAutoDraw(true)
+			questionText.setAutoDraw(true)
+			
+			
+			let theseKeys = resp.getKeys({ keyList: [LEFT_KEY, RIGHT_KEY], waitRelease: false });
 
+			// After key is pressed, go to next routine
+			if (theseKeys && theseKeys.length == 1) {  // one key was pressed
+				resp.keys = theseKeys[0].name;  // just the last key pressed
+				resp.rt = theseKeys[0].rt;
+				
+				lastTrialKeyPressed = resp.keys;
+				if (resp.keys == RIGHT_KEY) {
+					// For Right Key, subject is adding a like
 
-				let theseKeys = resp.getKeys({ keyList: [LEFT_KEY, RIGHT_KEY], waitRelease: false });
-
-				// After key is pressed, go to next routine
-				if (theseKeys && theseKeys.length == 1) {  // one key was pressed
-					resp.keys = theseKeys[0].name;  // just the last key pressed
-					resp.rt = theseKeys[0].rt;
-
-					lastTrialKeyPressed = resp.keys;
-					if (resp.keys == RIGHT_KEY) {
-						// For Right Key, subject is adding a like
-
-						if (dislike_room == 1) {
-							postStims_r[trial_num].dislike_icon_outline.setAutoDraw(false)
-							postStims_r[trial_num].dislike_icon.setAutoDraw(true) // filed hard
-						} else {
-							postStims_r[trial_num].like_icon_outline.setAutoDraw(false)
-							postStims_r[trial_num].like_icon.setAutoDraw(true) // filed hard
-						}
-
+					if (dislike_room == 1) {
+						postStims[trial_num].dislike_icon_outline.setAutoDraw(false)
+						postStims[trial_num].dislike_icon.setAutoDraw(true) // filed hard
+					} else {
+						postStims[trial_num].like_icon_outline.setAutoDraw(false)
+						postStims[trial_num].like_icon.setAutoDraw(true) // filed hard
 					}
-					mark_event(trials_data, globalClock, trial_num, trial_type, event_types['RESPONSE'], resp.rt,
-						resp.keys, trial_reward)
-
-					return Scheduler.Event.NEXT;
+					
 				}
+				mark_event(trials_data, globalClock, trial_num, trial_type, event_types['RESPONSE'], resp.rt,
+					resp.keys, trial_reward)
+				
+				return Scheduler.Event.NEXT;
 			}
 		}
 
