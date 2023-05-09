@@ -165,7 +165,9 @@ $('#study-list').change(function () {
         'WBMTURK_Cooperation_Task': 2,
         'WBMTURK_Cooperation_TaskCB': 1,
         'WBMTURK_Cooperation_TaskCB2': 1,
-        'WBMTURK_Invitation_Task': 3
+        'WBMTURK_Invitation_Task': 3,
+        'WBMTURK_Social_MediaCB1': 1,
+        'WBMTURK_Social_MediaCB2': 1,
     }
 
     // verify that the list of session list is the number of sessions

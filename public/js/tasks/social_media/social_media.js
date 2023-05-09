@@ -42,6 +42,7 @@ var LEFT_KEY = 'comma'
 var RIGHT_KEY = 'period'
 
 var last_selection = 'right'
+var start_like_dislike = "like";
 
 // init psychoJS:
 const psychoJS = new PsychoJS({
@@ -321,6 +322,10 @@ if (!getQueryVariable('skip_main')) {
 	flowScheduler.add(readyRoutineEachFrame());
 	flowScheduler.add(readyRoutineEnd());
 
+	flowScheduler.add(readyRoutineBegin2());
+	flowScheduler.add(readyRoutineEachFrame());
+	flowScheduler.add(readyRoutineEnd());
+
 	// MAIN BLOCK
 	const trialsLoopScheduler = new Scheduler(psychoJS);
 	flowScheduler.add(trialsLoopBegin, trialsLoopScheduler);
@@ -341,10 +346,11 @@ dialogCancelScheduler.add(quitPsychoJS, '', false);
 
 // Add Slides to resources
 var resources = [
-	{ name: 'example_play.xls', path: '/js/tasks/social_media/example_play.xls' },
+	// { name: 'example_play.xls', path: '/js/tasks/social_media/example_play.xls' },
+	{ name: 'example_play.xls', path: '/js/tasks/social_media/adjusted_practice.csv' },
 	{ name: 'role_reversal_shedule.xls', path:'/js/tasks/social_media/role_reversal_shedule.xls' },
-	{ name: 'ready.jpeg', path: '/js/tasks/social_media/media/instructions/Slide32.jpeg' },
-	{ name: 'ready.mp3', path: '/js/tasks/social_media/media/instructions_audio/Slide32.mp3'},
+	{ name: 'ready.jpeg', path: '/js/tasks/social_media/media/instructions/Slide33.jpeg' },
+	{ name: 'ready.mp3', path: '/js/tasks/social_media/media/instructions_audio/Slide33.mp3'},
 	{ name: 'role_reversal_instruct_schedule.csv', path: '/js/tasks/social_media/media/role_reversal_instruct_schedule.csv'},
 	{ name: 'logo.png', path: '/js/tasks/social_media/media/body-organ.png' },
 	{ name: 'home.png', path: '/js/tasks/social_media/media/home.png' },
@@ -362,7 +368,13 @@ var resources = [
 	{ name: 'dislike.png', path: '/js/tasks/social_media/media/heart_outline_x6.png' },
 	{ name: 'dislike_outline.png', path: '/js/tasks/social_media/media/heart_outline.png'},
 	{ name: 'heart.png', path: '/js/tasks/social_media/media/heart.png' },
-	{ name: 'heart_outline.png', path: '/js/tasks/social_media/media/heart_outline.png' }
+	{ name: 'heart_outline.png', path: '/js/tasks/social_media/media/heart_outline.png' },
+	{ name: 'maxlikes_begin.mp3', path: '/js/tasks/social_media/media/instructions_audio/maxlikes_begin.mp3' },
+	{ name: 'mindislikes_begin.mp3', path: '/js/tasks/social_media/media/instructions_audio/mindislikes_begin.mp3' },
+	{ name: 'maxlikes_begin.jpeg', path: '/js/tasks/social_media/media/instructions/Slide34.jpeg' },
+	{ name: 'mindislikes_begin.jpeg', path: '/js/tasks/social_media/media/instructions/Slide35.jpeg' },
+	{ name: 'maxlikes.jpeg', path: '/js/tasks/social_media/media/instructions/Slide36.jpeg' },
+	{ name: 'mindislikes.jpeg', path: '/js/tasks/social_media/media/instructions/Slide37.jpeg'}
 ]
 
 var frameDur;
@@ -631,6 +643,10 @@ var readyStim;
 var readyClock;
 var readyText;
 
+var switchStimLike;
+var switchStimLikeB;
+var switchStimDislike;
+var switchStimDislikeB;
 
 var track;
 
@@ -1047,6 +1063,44 @@ function experimentInit() {
 		win : psychoJS.window,
 		name : 'ready_stim', units : 'height', 
 		image : 'ready.jpeg', mask : undefined,
+		ori : 0, pos : [0, 0],
+		color : new util.Color([1, 1, 1]), opacity : 1,
+		flipHoriz : false, flipVert : false,
+		texRes : 128, interpolate : true, depth : 0
+	});
+
+	switchStimLikeB = new visual.ImageStim({
+		win : psychoJS.window,
+		name : 'switch_stim', units : 'height', 
+		image : 'maxlikes_begin.jpeg', mask : undefined,
+		ori : 0, pos : [0, 0],
+		color : new util.Color([1, 1, 1]), opacity : 1,
+		flipHoriz : false, flipVert : false,
+		texRes : 128, interpolate : true, depth : 0
+	});
+	switchStimDislikeB = new visual.ImageStim({
+		win : psychoJS.window,
+		name : 'switch_stim', units : 'height', 
+		image : 'mindislikes_begin.jpeg', mask : undefined,
+		ori : 0, pos : [0, 0],
+		color : new util.Color([1, 1, 1]), opacity : 1,
+		flipHoriz : false, flipVert : false,
+		texRes : 128, interpolate : true, depth : 0
+	});
+
+	switchStimLike = new visual.ImageStim({
+		win : psychoJS.window,
+		name : 'switch_stim', units : 'height', 
+		image : 'maxlikes.jpeg', mask : undefined,
+		ori : 0, pos : [0, 0],
+		color : new util.Color([1, 1, 1]), opacity : 1,
+		flipHoriz : false, flipVert : false,
+		texRes : 128, interpolate : true, depth : 0
+	});
+	switchStimDislike = new visual.ImageStim({
+		win : psychoJS.window,
+		name : 'switch_stim', units : 'height', 
+		image : 'mindislikes.jpeg', mask : undefined,
 		ori : 0, pos : [0, 0],
 		color : new util.Color([1, 1, 1]), opacity : 1,
 		flipHoriz : false, flipVert : false,
@@ -2108,6 +2162,15 @@ function trialsLoopBegin(thisScheduler) {
 		seed: undefined, name: 'trials'
 	});
 
+	if (expInfo.run == "Pilot_R1_CB1.json")
+	{
+		start_like_dislike = "like";
+	}
+	else if (expInfo.run == "Pilot_R1_CB2.json")
+	{
+		start_like_dislike = "dislike";
+	}
+
 	// console.log(trials)
 	
 	psychoJS.experiment.addLoop(trials); // add the loop to the experiment
@@ -2327,12 +2390,47 @@ var lastGameNumber;
 var lastTrial;
 var lastTrialPoints = 0;
 var trial_type;
+var do_not_show_switch = false;
 function trialRoutineBegin(trials) {
 	return function () {
 		//------Prepare to start Routine 'trial'-------
 		t = 0;
 		trialClock.reset(); // clock
 		frameN = -1;
+
+		if (((game_number) % 20 == 0) && game_number != 0 && do_not_show_switch == false)
+		{
+			if (start_like_dislike == "like")
+			{
+				// switchStim.setImage("mindislikes.jpeg")
+				switchStimDislike.setAutoDraw(true)
+			}
+			else
+			{
+				// switchStim.setImage("maxlikes.jpeg")
+				switchStimLike.setAutoDraw(true)
+			}
+
+			if (psychoJS.eventManager.getKeys({ keyList: ['right'] }).length > 0)
+			{
+				switchStimDislike.setAutoDraw(false)
+				switchStimLike.setAutoDraw(false)
+				if (start_like_dislike == "like")
+				{
+					start_like_dislike = "dislike"
+				}
+				else
+				{
+					start_like_dislike = "like"
+				}
+				do_not_show_switch = true
+			}
+			else
+			{
+				return Scheduler.Event.FLIP_REPEAT;
+			}
+		}
+
 		// update component parameters for each repeat
 		switch (force_pos) {
 			case 'R':
@@ -3258,6 +3356,8 @@ function trialRoutineEachFrameShowPost(trials) {
 				// wait for space key
 				let theseKeys = resp.getKeys({ keyList: ['space'], waitRelease: false });
 
+				do_not_show_switch = false
+
 				if (theseKeys.length > 0) {
 					trialClock.reset();
 					t = trialClock.getTime();
@@ -3599,6 +3699,48 @@ function trialRoutineEnd(trials) {
 	};
 }
 var readyComponents;
+function readyRoutineBegin2(trials) {
+	return function () {
+		//------Prepare to start Routine 'ready'-------
+		t = 0;
+		psychoJS.eventManager.clearEvents()
+		readyClock.reset(); // clock
+		frameN = -1;
+	
+		routineTimer.add(2.000000);
+		// update component parameters for each repeat
+		// keep track of which components have finished
+		console.log(expInfo.run)
+		if (expInfo.run == 'Pilot_R1_CB1.json')
+		{
+			console.log("hey 1?")
+			track = new Sound({
+				win: psychoJS.window,
+				value: 'maxlikes_begin.mp3'
+			  });
+			track.setVolume(1.0);
+			track.play();
+
+			readyComponents = [switchStimLikeB];
+			switchStimLikeB.setAutoDraw(true)
+		}
+		else if (expInfo.run == 'Pilot_R1_CB2.json')
+		{
+			console.log("hey 2?")
+			track = new Sound({
+				win: psychoJS.window,
+				value: 'mindislikes_begin.mp3'
+			  });
+			track.setVolume(1.0);
+			track.play();
+
+			readyComponents = [switchStimDislikeB];
+			switchStimDislikeB.setAutoDraw(true)
+		}
+		return Scheduler.Event.NEXT;
+	};
+}
+
 function readyRoutineBegin(trials) {
 	return function () {
 		//------Prepare to start Routine 'ready'-------
