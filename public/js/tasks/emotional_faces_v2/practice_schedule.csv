@@ -1,0 +1,5 @@
+﻿trial_number,tone,stim_paths,stim_type,noise,response_duration,intensity,ITI
+1,high,/js/tasks/emotional_faces_v2/media/faces/MC02_Ang_075_.jpg,angry,1,0.901,medium,0.5
+2,high,/js/tasks/emotional_faces_v2/media/faces/MC02_Sad_050_.jpg,sad,0,0.901,low,1.5
+3,low,/js/tasks/emotional_faces_v2/media/faces/MC03_Ang_050_.jpg,angry,0,0.901,low,0.5
+4,low,/js/tasks/emotional_faces_v2/media/faces/MC03_Sad_050_.jpg,sad,1,0.901,low,1.5

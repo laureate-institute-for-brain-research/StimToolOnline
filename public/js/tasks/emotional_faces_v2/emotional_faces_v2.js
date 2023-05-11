@@ -121,7 +121,7 @@ window.onload = function () {
 			return new Promise((resolve, reject) => {
 				$.ajax({
 					type: 'GET',
-					url: '/js/tasks/emotional_faces/' + getQueryVariable('run'),
+					url: '/js/tasks/emotional_faces_v2/' + getQueryVariable('run'),
 					dataType: 'json',
 					success: (data) => {
 						resolve(data)
@@ -190,7 +190,7 @@ window.onload = function () {
 			return new Promise((resolve, reject) => {
 				$.ajax({
 					type: 'GET',
-					url: '/js/tasks/emotional_faces/rate_faces_schedule_full.csv',
+					url: '/js/tasks/emotional_faces_v2/rate_faces_schedule_full.csv',
 					dataType: 'text',
 					async: false,
 					success: (data) => {
@@ -399,25 +399,25 @@ dialogCancelScheduler.add(quitPsychoJS, '', false);
 
 // Add Slides to resources
 var resources = [
-	{ name: 'practice_schedule.csv', path: '/js/tasks/emotional_faces/practice_schedule.csv' },
-	{ name: 'rate_faces_schedule.csv', path: '/js/tasks/emotional_faces/rate_faces_schedule.csv' }, // faces lists
-	{ name: 'user.png', path: '/js/tasks/emotional_faces/media/user.png' },
-	{ name: 'user_filled.png', path: '/js/tasks/emotional_faces/media/user_filled.png' },
-	{ name: 'PRACTICE_ready', path: '/js/tasks/emotional_faces/media/instructions/Slide14.jpeg'},
-	{ name: 'MAIN_ready', path: '/js/tasks/emotional_faces/media/instructions/Slide15.jpeg' },
-	{ name: 'PRACTICE_ready_audio.mp3', path: '/js/tasks/emotional_faces/media/instructions_audio/Slide14.mp3' },
-	{ name: 'MAIN_ready_audio.mp3', path: '/js/tasks/emotional_faces/media/instructions_audio/Slide15.mp3'},
-	{ name: 'male.png', path: '/js/tasks/emotional_faces/media/male.png' },
-	{ name: 'female.png', path: '/js/tasks/emotional_faces/media/female.png' },
-	{ name: 'high_tone.mp3', path: '/js/tasks/emotional_faces/media/tones/high_tone.mp3' },
-	{ name: 'low_tone.mp3', path: '/js/tasks/emotional_faces/media/tones/low_tone.mp3' },
-	{ name: 'rightangry.JPG', path: '/js/tasks/emotional_faces/media/rightangry.JPG' },
-	{ name: 'wrongangry.JPG', path: '/js/tasks/emotional_faces/media/wrongangry.JPG' },
-	{ name: 'slowangry.JPG', path: '/js/tasks/emotional_faces/media/slowangry.JPG' },
-	{ name: 'rightsad.JPG', path: '/js/tasks/emotional_faces/media/rightsad.JPG' },
-	{ name: 'wrongsad.JPG', path: '/js/tasks/emotional_faces/media/wrongsad.JPG' },
-	{ name: 'slowsad.JPG', path: '/js/tasks/emotional_faces/media/slowsad.JPG' },
-	{ name: 'BREAK.jpeg', path: '/js/tasks/emotional_faces/media/BREAK.jpeg' },
+	{ name: 'practice_schedule.csv', path: '/js/tasks/emotional_faces_v2/practice_schedule.csv' },
+	{ name: 'rate_faces_schedule.csv', path: '/js/tasks/emotional_faces_v2/rate_faces_schedule.csv' }, // faces lists
+	{ name: 'user.png', path: '/js/tasks/emotional_faces_v2/media/user.png' },
+	{ name: 'user_filled.png', path: '/js/tasks/emotional_faces_v2/media/user_filled.png' },
+	{ name: 'PRACTICE_ready', path: '/js/tasks/emotional_faces_v2/media/instructions/Slide14.jpeg'},
+	{ name: 'MAIN_ready', path: '/js/tasks/emotional_faces_v2/media/instructions/Slide15.jpeg' },
+	{ name: 'PRACTICE_ready_audio.mp3', path: '/js/tasks/emotional_faces_v2/media/instructions_audio/Slide14.mp3' },
+	{ name: 'MAIN_ready_audio.mp3', path: '/js/tasks/emotional_faces_v2/media/instructions_audio/Slide15.mp3'},
+	{ name: 'male.png', path: '/js/tasks/emotional_faces_v2/media/male.png' },
+	{ name: 'female.png', path: '/js/tasks/emotional_faces_v2/media/female.png' },
+	{ name: 'high_tone.mp3', path: '/js/tasks/emotional_faces_v2/media/tones/high_tone.mp3' },
+	{ name: 'low_tone.mp3', path: '/js/tasks/emotional_faces_v2/media/tones/low_tone.mp3' },
+	{ name: 'rightangry.JPG', path: '/js/tasks/emotional_faces_v2/media/rightangry.JPG' },
+	{ name: 'wrongangry.JPG', path: '/js/tasks/emotional_faces_v2/media/wrongangry.JPG' },
+	{ name: 'slowangry.JPG', path: '/js/tasks/emotional_faces_v2/media/slowangry.JPG' },
+	{ name: 'rightsad.JPG', path: '/js/tasks/emotional_faces_v2/media/rightsad.JPG' },
+	{ name: 'wrongsad.JPG', path: '/js/tasks/emotional_faces_v2/media/wrongsad.JPG' },
+	{ name: 'slowsad.JPG', path: '/js/tasks/emotional_faces_v2/media/slowsad.JPG' },
+	{ name: 'BREAK.jpeg', path: '/js/tasks/emotional_faces_v2/media/BREAK.jpeg' },
 ]
 
 
@@ -461,6 +461,8 @@ var stimClock;
 var respondClock;
 
 var stimImageStim;
+
+var prediction_text;
 
 var response_text
 var left_text;
@@ -925,6 +927,17 @@ function experimentInit() {
 		font: 'Arial',
 		units: 'norm',
 		pos: [-0.15, -0.165], height: 0.11, wrapWidth: undefined, ori: 0,
+		color: new util.Color('white'), opacity: 1,
+		depth: 0.0
+	});
+
+	prediction_text = new visual.TextStim({
+		win: psychoJS.window,
+		name: 'correct_text',
+		text: 'Angry or Sad?',
+		font: 'Arial',
+		units: 'norm',
+		pos: [0, 0], height: 0.25, wrapWidth: undefined, ori: 0,
 		color: new util.Color('white'), opacity: 1,
 		depth: 0.0
 	});
@@ -1541,6 +1554,8 @@ function practiceTrialsLoopBegin(thisScheduler) {
 		thisScheduler.add(initialFixation(snapshot));
 		thisScheduler.add(trialRoutineBegin(snapshot)); 	
 		thisScheduler.add(trialRoutinePlayTone(snapshot));
+		thisScheduler.add(trialRoutineShowPredictionStim(snapshot)); // show the result 
+		thisScheduler.add(trialRoutinePredictionRespond(snapshot));
 		thisScheduler.add(trialRoutineShowStim(snapshot)); 
 		thisScheduler.add(trialRoutineRespond(snapshot));
 		thisScheduler.add(trialRoutineEnd(snapshot));
@@ -1584,6 +1599,8 @@ function trialsLoopBegin(thisScheduler) {
 		thisScheduler.add(initialFixation(snapshot));
 		thisScheduler.add(trialRoutineBegin(snapshot));
 		thisScheduler.add(trialRoutinePlayTone(snapshot));
+		thisScheduler.add(trialRoutineShowPredictionStim(snapshot)); // show the result 
+		thisScheduler.add(trialRoutinePredictionRespond(snapshot));
 		thisScheduler.add(trialRoutineShowStim(snapshot)); // show the result 
 		thisScheduler.add(trialRoutineRespond(snapshot));
 		thisScheduler.add(trialRoutineEnd(snapshot));
@@ -1626,6 +1643,8 @@ function trialsLoopBegin2(thisScheduler) {
 		thisScheduler.add(initialFixation(snapshot));
 		thisScheduler.add(trialRoutineBegin(snapshot));
 		thisScheduler.add(trialRoutinePlayTone(snapshot));
+		thisScheduler.add(trialRoutineShowPredictionStim(snapshot)); // show the result 
+		thisScheduler.add(trialRoutinePredictionRespond(snapshot));
 		thisScheduler.add(trialRoutineShowStim(snapshot)); // show the result 
 		thisScheduler.add(trialRoutineRespond(snapshot));
 		thisScheduler.add(trialRoutineEnd(snapshot));
@@ -1668,6 +1687,8 @@ function trialsLoopBegin3(thisScheduler) {
 		thisScheduler.add(initialFixation(snapshot));
 		thisScheduler.add(trialRoutineBegin(snapshot));
 		thisScheduler.add(trialRoutinePlayTone(snapshot));
+		thisScheduler.add(trialRoutineShowPredictionStim(snapshot)); // show the result 
+		thisScheduler.add(trialRoutinePredictionRespond(snapshot));
 		thisScheduler.add(trialRoutineShowStim(snapshot)); // show the result 
 		thisScheduler.add(trialRoutineRespond(snapshot));
 		thisScheduler.add(trialRoutineEnd(snapshot));
@@ -2203,6 +2224,221 @@ function trialRoutinePlayTone(trials) {
 		}
 		else {
 			stimClock.reset(); // stimclock
+			return Scheduler.Event.NEXT;
+		}
+	};
+}
+
+function trialRoutineShowPredictionStim(trials) {
+	return function () {
+		//------Loop for each frame of Routine 'trial'-------
+		let continueRoutine = true; // until we're told otherwise
+
+		t = stimClock.getTime()
+		// Space for 200ms then show stim for 150ms
+		if (t >= 0.05 && stimImageStim.status == PsychoJS.Status.NOT_STARTED) {
+			prediction_text.setAutoDraw(true)
+		
+			mark_event(trials_data, globalClock, trials.thisIndex, trial_type, event_types['FACE_ONSET'],
+				'NA', 'NA' , stim_paths)
+		}
+
+		if (t >= 0.05 + STIM_DURATION) {
+			continueRoutine = false
+		}
+
+		// check for quit (typically the Esc key)
+		if (psychoJS.eventManager.getKeys({keyList:['escape']}).length > 0) {
+			return quitPsychoJS('The [Escape] key was pressed. Goodbye!', false);
+		}
+
+		// check if the Routine should terminate
+		if (continueRoutine) { 
+			return Scheduler.Event.FLIP_REPEAT;
+		}
+		else {
+			// Clear Stim
+			// prediction_text.setAutoDraw(false)
+			prediction_text.status = PsychoJS.Status.FINISHED;
+
+			respondClock.reset(); // response Clock
+			return Scheduler.Event.NEXT;
+		}
+	};
+}
+
+var go_to_delay = false;
+function trialRoutinePredictionRespond(trials) {
+	return function () {
+		//------Loop for each frame of Routine 'trial'-------
+		let continueRoutine = true; // until we're told otherwise	
+
+		
+	
+		// get current time
+		t = respondClock.getTime();
+		console.log(t)
+
+		// Draw the Texts
+		if (left_text.status == PsychoJS.Status.NOT_STARTED) {
+			// response_text.setAutoDraw(true)
+			left_text.setAutoDraw(true)
+			right_text.setAutoDraw(true)
+			prediction_text.setAutoDraw(true)
+
+			// TODO: Edit this mark event
+			mark_event(trials_data, globalClock, trials.thisIndex, trial_type, event_types['CHOICE_ONSET'],
+				'NA', 'NA' , 'NA')
+		}
+
+		// // animate the sliding bar
+		// if (old_t != 0 && !pressed) {
+		// 	// animate based on window refresh time, 
+		// 	// in such a way that it goes from the top of the bar to the bottom in response_duration seconds.
+		// 	score_slide.pos[1] -= (score_bar.height / (response_duration / (t - old_t)))
+		// 	score_slide.draw()
+		// 	score_slide.refresh()
+		// 	score_bar.refresh()
+		// 	score_bar_midline.refresh()
+		// 	score_bar_top_text.refresh()
+		// 	score_bar_bottom_text.refresh()
+		// 	score_bar_midtop_text.refresh()
+		// 	score_bar_midbottom_text.refresh()
+		// 	score_bar_mid_text.refresh()
+		// }
+
+		// old_t = t
+
+		// Get Resposne Keys
+		// Get User Input
+		if (resp.status === PsychoJS.Status.NOT_STARTED) {
+			// keep track of start time/frame for later
+			resp.tStart = t;  // (not accounting for frame time here)
+			resp.frameNStart = frameN;  // exact frame index
+
+			// keyboard checking is just starting
+			resp.clock.reset();  // t=0 on next screen flip
+			resp.start(); // start on screen flip
+			resp.clearEvents();
+		}
+		let theseKeys = resp.getKeys({ keyList: keyList, waitRelease: false });
+		if (!pressed && theseKeys.length > 0) {
+			resp.keys = theseKeys[0].name;  // just the last key pressed
+			resp.rt = theseKeys[0].rt;
+
+			pressed = true
+
+			if (resp.keys == LEFT_KEY) {
+				response_for_result = LEFT_KEY
+				//console.log('Pressed Left')
+				response = 'angry'
+				left_rect.setAutoDraw(true)
+				// left_rect.fillColor = new util.Color(selectColor)
+				left_rect.lineColor = new util.Color(selectColor)
+				left_rect.height += 0.02
+				left_rect.width += 0.02
+
+				right_rect.setAutoDraw(false)
+
+				//calculate possible score as function of time
+				// y = mx + b = ((y2 - y1)/(x2 - x1))x - b
+				// correct_score = Math.round(((((-50) - (50)) / (response_duration - 0)) * t) + 50)
+				
+			} else if (resp.keys == RIGHT_KEY) {
+				response_for_result = RIGHT_KEY
+				//console.log('Pressed Right')
+				response = 'sad'
+				right_rect.setAutoDraw(true)
+				// right_rect.fillColor = new util.Color(selectColor)
+				right_rect.lineColor = new util.Color(selectColor)
+				right_rect.height += 0.02
+				right_rect.width += 0.02
+
+				left_rect.setAutoDraw(false)
+
+				//calculate possible score as function of time
+				// y = mx + b = ((y2 - y1)/(x2 - x1))x - b
+				// correct_score = Math.round(((((-50) - (50)) / (response_duration - 0)) * t) + 50)
+			}
+
+			// Save Data on each Press
+			mark_event(trials_data, globalClock, trials.thisIndex, trial_type, event_types['RESPONSE'],
+					resp.rt, key_map[resp.keys] , getResult(key_map[resp.keys]))
+			resp.keys = undefined;
+			resp.rt = undefined;
+
+			// If there is response_duration is false, then just go to
+			// the next trial
+			if (response_duration == 'false') {
+				// continueRoutine = false
+				go_to_delay = true
+			}
+		}
+
+		// Go to Next Routine After the allowed duration
+		if (t >= 1.0) {
+
+			// Set too_slow flag to true if they never pressed the a key
+			// if (!pressed) too_slow = true
+			go_to_delay = true
+			if (t >= 1.5)
+			{
+				continueRoutine = false
+			}
+		}
+
+		if (go_to_delay)
+		{
+			left_text.setAutoDraw(false)
+			right_text.setAutoDraw(false)
+			left_rect.setAutoDraw(false)
+			right_rect.setAutoDraw(false)
+			prediction_text.setAutoDraw(false)
+		}
+
+		// check for quit (typically the Esc key)
+		if (psychoJS.eventManager.getKeys({keyList:['escape']}).length > 0) {
+			return quitPsychoJS('The [Escape] key was pressed. Goodbye!', false);
+		}
+
+		// check if the Routine should terminate
+		if (continueRoutine) { 
+			return Scheduler.Event.FLIP_REPEAT;
+		}
+		else {
+			// Clear Routine Stim
+			response_text.setAutoDraw(false)
+			response_text.status = PsychoJS.Status.NOT_STARTED
+			left_text.setAutoDraw(false)
+			left_text.status = PsychoJS.Status.NOT_STARTED
+			left_rect.setAutoDraw(false)
+			left_rect.status = PsychoJS.Status.NOT_STARTED
+
+			right_text.setAutoDraw(false)
+			right_text.status = PsychoJS.Status.NOT_STARTED
+			right_rect.setAutoDraw(false)
+			right_rect.status = PsychoJS.Status.NOT_STARTED
+
+			stimImageStim.setAutoDraw(false)
+			// score_bar.setAutoDraw(false)
+			// score_bar_midline.setAutoDraw(false)
+			// score_slide.setAutoDraw(false)
+			// score_bar_top_text.setAutoDraw(false)
+			// score_bar_bottom_text.setAutoDraw(false)
+			// score_bar_midtop_text.setAutoDraw(false)
+			// score_bar_midbottom_text.setAutoDraw(false)
+			// score_bar_mid_text.setAutoDraw(false)
+
+			// // reset score bar
+			// score_slide.pos[1] = 0.4
+			// score_slide.refresh()
+			// old_t = 0
+
+			// set_fixation_flag = true
+			go_to_delay = false
+			resp.status = PsychoJS.Status.NOT_STARTED
+			pressed = false
+			endClock.reset()
 			return Scheduler.Event.NEXT;
 		}
 	};
@@ -2812,21 +3048,21 @@ function trialRoutineEnd(trials) { //TODO: Change this so that there is a jitter
 				return Scheduler.Event.FLIP_REPEAT;
 			}
 			else if (t < ITI + 1.5 + 1.5) {
-				// if (trial_number + 1 == 56) {
-				// 	points_fixation_stim.setText('~ 25 minutes remaining')
-				// }
-				// else if (trial_number + 1 == 112) {
-				// 	points_fixation_stim.setText('~ 20 minutes remaining')
-				// }
-				// else if (trial_number + 1 == 168) {
-				// 	points_fixation_stim.setText('~ 15 minutes remaining')
-				// }
-				// else if (trial_number + 1 == 224) {
-				// 	points_fixation_stim.setText('~ 10 minutes remaining')
-				// }
-				// else if (trial_number + 1 == 280) {
-				// 	points_fixation_stim.setText('~ 5 minutes remaining')
-				// }
+				if (trial_number + 1 == 56) {
+					points_fixation_stim.setText('~ 25 minutes remaining')
+				}
+				else if (trial_number + 1 == 112) {
+					points_fixation_stim.setText('~ 20 minutes remaining')
+				}
+				else if (trial_number + 1 == 168) {
+					points_fixation_stim.setText('~ 15 minutes remaining')
+				}
+				else if (trial_number + 1 == 224) {
+					points_fixation_stim.setText('~ 10 minutes remaining')
+				}
+				else if (trial_number + 1 == 280) {
+					points_fixation_stim.setText('~ 5 minutes remaining')
+				}
 				return Scheduler.Event.FLIP_REPEAT;
 			} else {
 				resp.stop()
@@ -2848,21 +3084,21 @@ function trialRoutineEnd(trials) { //TODO: Change this so that there is a jitter
 				return Scheduler.Event.FLIP_REPEAT;
 			}
 			else if (t < ITI + 1.5 + 1.5) {
-				// if (trial_number + 1 == 56) {
-				// 	points_fixation_stim.setText('~ 25 minutes remaining')
-				// }
-				// else if (trial_number + 1 == 112) {
-				// 	points_fixation_stim.setText('~ 20 minutes remaining')
-				// }
-				// else if (trial_number + 1 == 168) {
-				// 	points_fixation_stim.setText('~ 15 minutes remaining')
-				// }
-				// else if (trial_number + 1 == 224) {
-				// 	points_fixation_stim.setText('~ 10 minutes remaining')
-				// }
-				// else if (trial_number + 1 == 280) {
-				// 	points_fixation_stim.setText('~ 5 minutes remaining')
-				// }
+				if (trial_number + 1 == 56) {
+					points_fixation_stim.setText('~ 25 minutes remaining')
+				}
+				else if (trial_number + 1 == 112) {
+					points_fixation_stim.setText('~ 20 minutes remaining')
+				}
+				else if (trial_number + 1 == 168) {
+					points_fixation_stim.setText('~ 15 minutes remaining')
+				}
+				else if (trial_number + 1 == 224) {
+					points_fixation_stim.setText('~ 10 minutes remaining')
+				}
+				else if (trial_number + 1 == 280) {
+					points_fixation_stim.setText('~ 5 minutes remaining')
+				}
 				return Scheduler.Event.FLIP_REPEAT;
 			} else {
 				resp.stop()

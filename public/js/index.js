@@ -162,6 +162,7 @@ $('#study-list').change(function () {
         'WBMTURK_Social_Media': 1,
         'WBMTURK_Blind_Dating': 2,
         'WBMTURK_Emotional_Faces': 2,
+        'WBMTURK_Emotional_Faces_v2': 1,
         'WBMTURK_Cooperation_Task': 2,
         'WBMTURK_Cooperation_TaskCB': 1,
         'WBMTURK_Cooperation_TaskCB2': 1,
