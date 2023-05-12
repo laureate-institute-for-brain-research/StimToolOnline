@@ -1539,7 +1539,8 @@ function practiceTrialsLoopBegin(thisScheduler) {
 	psychoJS.experiment.addLoop(trials); // add the loop to the experiment
 	total_trials = trials.trialList.length
 	total_trials = 300 // This is a good enough estimate
-	total_score = Math.round(total_trials/2) // initialize to 0 tick
+	//total_score = Math.round(total_trials/2) // initialize to 0 tick
+	total_score = 500/2
 	currentLoop = trials;  // we're now the current loop
 	endClock.reset()
 	resp.stop()
@@ -1587,7 +1588,8 @@ function trialsLoopBegin(thisScheduler) {
 	psychoJS.experiment.addLoop(trials); // add the loop to the experiment
 	currentLoop = trials;  // we're now the current loop
 	total_trials = trials.trialList.length
-	total_score = Math.round(total_trials/2) // init to 0 tick
+	//total_score = Math.round(total_trials / 2) // init to 0 tick
+	total_score = 500/2
 
 	init_fixation_flag = true
 
@@ -1631,7 +1633,8 @@ function trialsLoopBegin2(thisScheduler) {
 	psychoJS.experiment.addLoop(trials); // add the loop to the experiment
 	currentLoop = trials;  // we're now the current loop
 	total_trials = trials.trialList.length
-	total_score = Math.round(total_trials/2) // init to 0 tick
+	//total_score = Math.round(total_trials / 2) // init to 0 tick
+	//total_score = 500
 
 	init_fixation_flag = true
 
@@ -1674,8 +1677,8 @@ function trialsLoopBegin3(thisScheduler) {
 
 	psychoJS.experiment.addLoop(trials); // add the loop to the experiment
 	currentLoop = trials;  // we're now the current loop
-	total_trials = trials.trialList.length
-	total_score = Math.round(total_trials/2) // init to 0 tick
+	//total_score = Math.round(total_trials / 2) // init to 0 tick
+	//total_score = 500
 
 	init_fixation_flag = true
 
@@ -2202,6 +2205,7 @@ function trialRoutinePlayTone(trials) {
 
 		// get current time
 		t = toneClock.getTime();
+		console.log(t)
 
 		// // Play Tone
 		// if (tone_sound) {
@@ -2865,12 +2869,14 @@ function trialRoutineEnd(trials) { //TODO: Change this so that there is a jitter
 					{
 						total_score = 0
 					}
-					else if (total_score >= total_trials)
+					else if (total_score >= 500)
 					{
-						total_score = total_trials
+						// total_score = total_trials
+						total_score = 500
 					}
 
-					tot_score_slide.pos[0] = ((0.5 - (-0.5)) / ((total_trials * 50) / 50)) * (total_score) - 0.5
+					//tot_score_slide.pos[0] = ((0.5 - (-0.5)) / ((total_trials * 50) / 50)) * (total_score) - 0.5
+					tot_score_slide.pos[0] = ((0.5 - (-0.5)) / (500)) * (total_score) - 0.5
 					
 					if (tot_score_slide.pos[0] < -0.5)
 					{
@@ -2988,12 +2994,14 @@ function trialRoutineEnd(trials) { //TODO: Change this so that there is a jitter
 					{
 						total_score = 0
 					}
-					else if (total_score >= total_trials)
+					else if (total_score >= 500)
 					{
-						total_score = total_trials
+						// total_score = total_trials
+						total_score = 500
 					}
 
-					tot_score_slide.pos[0] = ((0.5 - (-0.5)) / ((total_trials * 50) / 50)) * (total_score) - 0.5
+					//tot_score_slide.pos[0] = ((0.5 - (-0.5)) / ((total_trials * 50) / 50)) * (total_score) - 0.5
+					tot_score_slide.pos[0] = ((0.5 - (-0.5)) / (500)) * (total_score) - 0.5
 
 					if (tot_score_slide.pos[0] < -0.5)
 					{
@@ -3048,21 +3056,21 @@ function trialRoutineEnd(trials) { //TODO: Change this so that there is a jitter
 				return Scheduler.Event.FLIP_REPEAT;
 			}
 			else if (t < ITI + 1.5 + 1.5) {
-				if (trial_number + 1 == 56) {
-					points_fixation_stim.setText('~ 25 minutes remaining')
-				}
-				else if (trial_number + 1 == 112) {
-					points_fixation_stim.setText('~ 20 minutes remaining')
-				}
-				else if (trial_number + 1 == 168) {
-					points_fixation_stim.setText('~ 15 minutes remaining')
-				}
-				else if (trial_number + 1 == 224) {
-					points_fixation_stim.setText('~ 10 minutes remaining')
-				}
-				else if (trial_number + 1 == 280) {
-					points_fixation_stim.setText('~ 5 minutes remaining')
-				}
+				// if (trial_number + 1 == 56) {
+				// 	points_fixation_stim.setText('~ 25 minutes remaining')
+				// }
+				// else if (trial_number + 1 == 112) {
+				// 	points_fixation_stim.setText('~ 20 minutes remaining')
+				// }
+				// else if (trial_number + 1 == 168) {
+				// 	points_fixation_stim.setText('~ 15 minutes remaining')
+				// }
+				// else if (trial_number + 1 == 224) {
+				// 	points_fixation_stim.setText('~ 10 minutes remaining')
+				// }
+				// else if (trial_number + 1 == 280) {
+				// 	points_fixation_stim.setText('~ 5 minutes remaining')
+				// }
 				return Scheduler.Event.FLIP_REPEAT;
 			} else {
 				resp.stop()
@@ -3084,21 +3092,21 @@ function trialRoutineEnd(trials) { //TODO: Change this so that there is a jitter
 				return Scheduler.Event.FLIP_REPEAT;
 			}
 			else if (t < ITI + 1.5 + 1.5) {
-				if (trial_number + 1 == 56) {
-					points_fixation_stim.setText('~ 25 minutes remaining')
-				}
-				else if (trial_number + 1 == 112) {
-					points_fixation_stim.setText('~ 20 minutes remaining')
-				}
-				else if (trial_number + 1 == 168) {
-					points_fixation_stim.setText('~ 15 minutes remaining')
-				}
-				else if (trial_number + 1 == 224) {
-					points_fixation_stim.setText('~ 10 minutes remaining')
-				}
-				else if (trial_number + 1 == 280) {
-					points_fixation_stim.setText('~ 5 minutes remaining')
-				}
+				// if (trial_number + 1 == 56) {
+				// 	points_fixation_stim.setText('~ 25 minutes remaining')
+				// }
+				// else if (trial_number + 1 == 112) {
+				// 	points_fixation_stim.setText('~ 20 minutes remaining')
+				// }
+				// else if (trial_number + 1 == 168) {
+				// 	points_fixation_stim.setText('~ 15 minutes remaining')
+				// }
+				// else if (trial_number + 1 == 224) {
+				// 	points_fixation_stim.setText('~ 10 minutes remaining')
+				// }
+				// else if (trial_number + 1 == 280) {
+				// 	points_fixation_stim.setText('~ 5 minutes remaining')
+				// }
 				return Scheduler.Event.FLIP_REPEAT;
 			} else {
 				resp.stop()
