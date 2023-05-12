@@ -687,7 +687,7 @@ function experimentInit() {
 		height: 0.01,
 		lineWidth: 3.5,
 		units: 'norm',
-		pos: [0.23, 0.0], ori: 0,
+		pos: [0.23, -0.18], ori: 0,
 		fillColor: new util.Color('#4d4d4d'),
 		lineColor: new util.Color('#4d4d4d'), opacity: 1,
 		depth: 0.0
@@ -709,7 +709,7 @@ function experimentInit() {
 	score_bar_top_text = new visual.TextStim({
 		win: psychoJS.window,
 		name: 'bar_top_text',
-		text: '+50',
+		text: '+75',
 		font: 'Arial',
 		units: 'norm',
 		pos: [ 0.29, 0.38], height: 0.05, wrapWidth: undefined, ori: 0,
@@ -720,7 +720,7 @@ function experimentInit() {
 	score_bar_midtop_text = new visual.TextStim({
 		win: psychoJS.window,
 		name: 'bar_top_text',
-		text: '+25',
+		text: '+50',
 		font: 'Arial',
 		units: 'norm',
 		pos: [ 0.29, 0.19], height: 0.05, wrapWidth: undefined, ori: 0,
@@ -731,7 +731,7 @@ function experimentInit() {
 	score_bar_bottom_text = new visual.TextStim({
 		win: psychoJS.window,
 		name: 'bar_bottom_text',
-		text: '-50',
+		text: '-25',
 		font: 'Arial',
 		units: 'norm',
 		pos: [ 0.29, -0.37], height: 0.05, wrapWidth: undefined, ori: 0,
@@ -742,7 +742,7 @@ function experimentInit() {
 	score_bar_midbottom_text = new visual.TextStim({
 		win: psychoJS.window,
 		name: 'bar_bottom_text',
-		text: '-25',
+		text: '0',
 		font: 'Arial',
 		units: 'norm',
 		pos: [ 0.29, -0.18], height: 0.05, wrapWidth: undefined, ori: 0,
@@ -753,7 +753,7 @@ function experimentInit() {
 	score_bar_mid_text = new visual.TextStim({
 		win: psychoJS.window,
 		name: 'bar_bottom_text',
-		text: '0',
+		text: '+25',
 		font: 'Arial',
 		units: 'norm',
 		pos: [ 0.29, 0], height: 0.05, wrapWidth: undefined, ori: 0,
@@ -1017,7 +1017,7 @@ function experimentInit() {
 	og_positions['right_text'] = [0.3, 0]
 	og_positions['right_rect'] = [0.3, 0]
 	og_positions['score_bar'] = [0.23, 0]
-	og_positions['score_bar_midline'] = [0.23, 0]
+	og_positions['score_bar_midline'] = [0.23, -0.18]
 	og_positions['score_slide'] = [0.23, 0.4]
 	og_positions['score_bar_top_text'] = [0.29, 0.38]
 	og_positions['score_bar_midtop_text'] = [0.29, 0.19]
@@ -2589,7 +2589,7 @@ function trialRoutineRespond(trials) {
 
 				//calculate possible score as function of time
 				// y = mx + b = ((y2 - y1)/(x2 - x1))x - b
-				correct_score = Math.round(((((-50) - (50)) / (response_duration - 0)) * t) + 50)
+				correct_score = Math.round(((((-25) - (75)) / (response_duration - 0)) * t) + 75)
 				
 			} else if (resp.keys == RIGHT_KEY) {
 				response_for_result = RIGHT_KEY
@@ -2605,7 +2605,7 @@ function trialRoutineRespond(trials) {
 
 				//calculate possible score as function of time
 				// y = mx + b = ((y2 - y1)/(x2 - x1))x - b
-				correct_score = Math.round(((((-50) - (50)) / (response_duration - 0)) * t) + 50)
+				correct_score = Math.round(((((-25) - (75)) / (response_duration - 0)) * t) + 75)
 			}
 
 			// Save Data on each Press
