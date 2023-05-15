@@ -73,6 +73,7 @@ g.path = {}; 				// place holder for path
 // - the correct door that should have been pressed.
 g.module_2b_schedule = [];
 g.module_2b_index = 0; // keep track of index
+g.module_2b_option_map = {'a': 1, 'b': 2, 'c':3, 'd':4,}
 
 g.module_1_trialnum = 0;
 g.module_1_type = 'accept'
@@ -921,7 +922,7 @@ function experimentInit() {
 	g.choice_a_text = new visual.TextStim({
 		win: psychoJS.window,
 		name: 'choice_a_text',
-		text: 'A.        ',
+		text: '1)        ',
 		alignHoriz: 'left',font: 'Arial',units: 'height',
 		pos: g.options_pos['choice_a_text'], height: 0.05, wrapWidth: undefined, ori: 0,
 		color: new util.Color('white'), opacity: 1,
@@ -948,7 +949,7 @@ function experimentInit() {
 	g.choice_b_text = new visual.TextStim({
 		win: psychoJS.window,
 		name: 'choice_b_text',
-		text: 'B.        ',
+		text: '2)        ',
 		alignHoriz: 'center',font: 'Arial',units: 'height',
 		pos: g.options_pos['choice_b_text'], height: 0.05, wrapWidth: undefined, ori: 0,
 		color: new util.Color('white'), opacity: 1,
@@ -975,7 +976,7 @@ function experimentInit() {
 	g.choice_c_text = new visual.TextStim({
 		win: psychoJS.window,
 		name: 'choice_c_text',
-		text: 'C.        ',
+		text: '3)        ',
 		alignHoriz: 'center',font: 'Arial',units: 'height',
 		pos: g.options_pos['choice_c_text'], height: 0.05, wrapWidth: undefined, ori: 0,
 		color: new util.Color('white'), opacity: 1,
@@ -1002,7 +1003,7 @@ function experimentInit() {
 	g.choice_d_text = new visual.TextStim({
 		win: psychoJS.window,
 		name: 'choice_d_text',
-		text: 'D.        ',
+		text: '4)        ',
 		alignHoriz: 'center',font: 'Arial',units: 'height',
 		pos: g.options_pos['choice_d_text'], height: 0.05, wrapWidth: undefined, ori: 0,
 		color: new util.Color('white'), opacity: 1,
@@ -2637,7 +2638,7 @@ function module_2b(trial) {
 		}
 
 		if (g.trial_phase == g.WAITING_SELECTION) {
-			let theseKeys = ready.getKeys({ keyList: [ 'a','b','c','d'], waitRelease: false });
+			let theseKeys = ready.getKeys({ keyList: [ '1','2','3','4'], waitRelease: false });
 			if (theseKeys.length > 0) {
 				// increment trial invites
 				// based ond current position and the building type
@@ -2669,7 +2670,7 @@ function module_2b(trial) {
 				// console.log(g.response, g.correct_yes, g.module_2b_schedule[g.module_2b_index][2])
 
 				// append the current tral to the schedule if they choose the wrong door
-				if (g.module_2b_schedule[g.module_2b_index][9] != g.response) {
+				if (g.module_2b_option_map[g.module_2b_schedule[g.module_2b_index][9]] != g.response) {
 					// incorrect choice
 					g.module_2b_schedule.push(g.module_2b_schedule[g.module_2b_index]);
 					g.result_outcome.setText('INCORRECT');
