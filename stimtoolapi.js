@@ -90,14 +90,19 @@ module.exports = function (app){
             .then(function (link) {
                 if (link == null) {
                     res.redirect('/');
+                    logger.info(`homepage redirect`);
                 } else {
                     // res.send(link)
                     index = 0
                     // If index  paramater is set, than use that, if not, default is 0
                     if (req.query.index){ index = parseInt(req.query.index)}
                     var json_link = './public/study/' + link.study + '_' + link.session + '.json'
+                    logger.info(`redirect jsonlink`);
+                    logger.info(`${json_link}`);
                     // console.log('study json: ', json_link)
                     let session_file = require(json_link);
+                    logger.info(`redirect linklink`);
+                    logger.info(`${link.link}`);
                     res.redirect(session_file.order[index] + '&id=' + link.link );
                 }
             },
@@ -180,7 +185,7 @@ module.exports = function (app){
                 if (!error) {
                     // The check succeeded
                     fs.writeFile(path_to_save, csv, function(err) {
-                        if (err) return logger.error(err);
+                        if (err) return logger.error(`${Date.now()} ` + `${path_to_save}: ` + err);
                         logger.info(`${path_to_save} saved`);
                         
                     });
@@ -191,7 +196,7 @@ module.exports = function (app){
                     path_to_save = `data/free/${file_name}`
                     
                     fs.writeFile(path_to_save, csv, function(err) {
-                        if (err) return logger.error(err);
+                        if (err) return logger.error(`${Date.now()} ` + `${path_to_save}: ` + err);
                         logger.info(`${path_to_save} saved`);
                         
                     });
@@ -209,7 +214,7 @@ module.exports = function (app){
         req.body.expInfo.date = req.body.expInfo.date.split("/").join("_")
         // Save to /data/folder based of study
         jsonexport(trials_data, function(err, csv) {
-            if (err) return logger.error(err);
+            if (err) return logger.error(`${Date.now()} ` + `${path_to_save}: ` + err);
 
             // File name is by taskname, participant id, session and date 
             file_name = req.sanitize(req.body.expInfo.task) + '_' + req.sanitize(req.body.expInfo.participant) + '_' + req.sanitize(req.body.expInfo.session) + '_' + req.sanitize(req.body.expInfo.run_id.split(".")[0]) + '_' + req.sanitize(req.body.expInfo.date) + '.csv'
@@ -224,7 +229,7 @@ module.exports = function (app){
                 if (!error) {
                     // The check succeeded
                     fs.writeFile(path_to_save, csv, function(err) {
-                        if (err) return logger.error(err);
+                        if (err) return logger.error(`${Date.now()} ` + `${path_to_save}: ` + err);
                         logger.info(`${path_to_save} saved`);
                         
                     });
@@ -235,7 +240,7 @@ module.exports = function (app){
                     path_to_save = `data/free/${file_name}`
                     
                     fs.writeFile(path_to_save, csv, function(err) {
-                        if (err) return logger.error(err);
+                        if (err) return logger.error(`${Date.now()} ` + `${path_to_save}: ` + err);
                         logger.info(`${path_to_save} saved`);
                         
                     });
