@@ -257,6 +257,20 @@ document.getElementById('begin').addEventListener('click', (event) => {
 // Skip Logic.
 // Create Ability to skip to Run
 document.getElementById('skip').addEventListener('click', (event) => {
+    $.ajax({
+        type: "POST",
+        url: '/logStuff',
+        data: {
+            "csvpath": "/media/stimtool_online/HIT_CODES/custom_log.csv",
+            "content": document.getElementById('id_input').value + ":  !!! skip pressed in index !!! - " + Date.now() + "," 
+        },
+        dataType: 'JSON',
+        statusCode: {
+            200: function() {
+                console.log('custom success')
+            }
+        }
+    })
     event.preventDefault();
     var values = {};
     $.each($('#adduser').serializeArray(), function (i, field) {

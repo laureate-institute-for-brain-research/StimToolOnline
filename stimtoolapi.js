@@ -256,6 +256,17 @@ module.exports = function (app){
         res.status(200).send('data saved')
     })
 
+    app.post('/logStuff', (req, res)=>{
+        csvpath = req.body.csvpath
+        content = req.body.content
+
+        fs.appendFile(csvpath, content, (err) => {
+            console.log(err)
+        })
+
+        res.status(200).send('data saved')
+    })
+
     app.post('/SaveDevInfo', (req, res)=>{
         csvpath = req.body.csvpath
         content = `user: ${req.body.username} ::: ${req.body.dimensions} ::: ${req.body.content}`
