@@ -856,6 +856,27 @@ function experimentInit() {
 		color: new util.Color('white'), opacity: 1,
 		depth: 0.0
 	});
+	g.rooms_left_text2 = new visual.TextStim({
+		win: psychoJS.window,
+		name: 'rooms_left',
+		text: 'You have X moves.',alignHoriz: 'center',
+		font: 'Arial',
+		units: 'norm',
+		pos: [0, -0.4], height: 0.13, wrapWidth: undefined, ori: 0,
+		color: new util.Color('black'), opacity: 1,
+		depth: 0.0
+	});
+	g.rooms_left_rectangle = new visual.Rect({
+		win: psychoJS.window,
+		name: 'right_choice_rectangle',
+		width: 0.65, height: 0.16,
+		lineWidth: 4.0,
+		units: 'norm',
+		pos: [0, -0.4], ori: 0,
+		fillColor: new util.Color('white'),
+		lineColor: new util.Color('black'), opacity: 1,
+		depth: 0
+	})
 
 	g.time_left_text = new visual.TextStim({
 		win: psychoJS.window,
@@ -1780,6 +1801,12 @@ function clearStims() {
 	g.rooms_left_text.setAutoDraw(false);
 	g.rooms_left_text.status = PsychoJS.Status.NOT_STARTED;
 
+	g.rooms_left_text2.setAutoDraw(false);
+	g.rooms_left_text2.status = PsychoJS.Status.NOT_STARTED;
+
+	g.rooms_left_rectangle.setAutoDraw(false);
+	g.rooms_left_rectangle.status = PsychoJS.Status.NOT_STARTED;
+
 	g.time_left_text.setAutoDraw(false);
 	g.time_left_text.status = PsychoJS.Status.NOT_STARTED;
 
@@ -1951,6 +1978,7 @@ function trialRoutineBegin(trial) {
 
 		g.prompt_text.setText('Where do you want to go next?');
 		g.rooms_left_text.setText(`You have ${g.depth} moves`)
+		g.rooms_left_text2.setText(`You have ${g.depth} moves`)
 		
 		g.outcome_text.color = 'white';
 		
@@ -2082,7 +2110,9 @@ function module_1(trial) {
 				)
 			} else {
 				g.rooms_left_text.setText(`You have ${g.depth} moves`)
+				//g.rooms_left_rectangle.setAutoDraw(true);
 				g.rooms_left_text.setAutoDraw(true);
+				// g.rooms_left_rectangle.setAutoDraw(true);
 				
 				g.prompt_text.setText('Where do you want to go next?');
 				
@@ -2825,8 +2855,10 @@ function module_3(trial) {
 			g.prompt_text.setAutoDraw(true);
 			g.prompt_text.setText('Please plan your moves now.');
 
-			g.rooms_left_text.setText(`You have ${g.depth} moves`)
-			g.rooms_left_text.setAutoDraw(true);
+			g.rooms_left_text2.setText(`You have ${g.depth} moves`)
+			g.rooms_left_rectangle.setAutoDraw(true);
+			g.rooms_left_text2.setAutoDraw(true);
+			//g.rooms_left_rectangle.setAutoDraw(true);
 
 			g.time_left_text.setText('9s');
 			g.time_left_text.setAutoDraw(true);
@@ -2874,9 +2906,9 @@ function module_3(trial) {
 		if (g.trial_phase == g.WAITING_SELECTION) {
 			g.prompt_text.setText(`Enter your moves (${Math.ceil(g.selectionTimer.getTime())})s`);
 			if (g.depth <= 0) {
-				g.rooms_left_text.setText(`no moves left.`)
+				g.rooms_left_text2.setText(`No moves left`)
 			} else {
-				g.rooms_left_text.setText(`You have ${g.depth} moves`)
+				g.rooms_left_text2.setText(`You have ${g.depth} moves`)
 			}
 
 			if (g.selectionTimer.getTime() <= 0) {
