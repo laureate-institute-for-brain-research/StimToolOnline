@@ -93,7 +93,7 @@ window.onload = function () {
 	})
 		// Read getINFO 
 		.then((values) => {
-			console.log(values)
+			// console.log(values)
 			if (values.subject && values.session && values.study) {
 				expInfo.participant = values.subject
 				expInfo.study = values.study
@@ -158,7 +158,7 @@ window.onload = function () {
 								resources.push({ name: obj.audio_path, path: obj.audio_path })
 							}
 						}
-						console.log(resources)
+						// console.log(resources)
 						resolve(data)
 					}
 				})
@@ -199,7 +199,7 @@ window.onload = function () {
 							}
 							
 						}
-						console.log(resources)
+						// console.log(resources)
 
 						resolve(data)
 					}
@@ -211,7 +211,7 @@ window.onload = function () {
 		// Get the Tweets from the json file
 		.then(() => {
 			return new Promise((resolve, reject) => {
-				console.log('getting tweets..')
+				// console.log('getting tweets..')
 				$.getJSON('/js/tasks/social_media/tweets/tweets.json', function (data) {
 					// console.log(data)
 					tweets = data
@@ -1918,7 +1918,7 @@ function instructSlideRoutineEachFrame(trials, slides) {
 		// New Slide Call, set it after pressing key
 		// console.log(track.status)
 		if (newSlide) {
-			console.log('setting new image', instruct_slide, 'index:',trials.thisIndex, 'Audio: ',audio_path)
+			// console.log('setting new image', instruct_slide, 'index:',trials.thisIndex, 'Audio: ',audio_path)
 			slideStim.setImage(instruct_slide)
 			newSlide = false
 
@@ -2263,7 +2263,7 @@ function getSocialApprovalScore() {
 
 	socialApprovalScore = ( totalPoints / totalPossible )
 
-	console.log('Left Reward: ',left_reward, ' Right Reward:',right_reward, 'TotalPoints: ',totalPoints, 'totalPossible: ', totalPossible, 'Score:',socialApprovalScore)
+	//console.log('Left Reward: ',left_reward, ' Right Reward:',right_reward, 'TotalPoints: ',totalPoints, 'totalPossible: ', totalPossible, 'Score:',socialApprovalScore)
 	// Put in percentage
 	socialApprovalScore = `${Math.round(socialApprovalScore * 100)}%`
 
@@ -2520,7 +2520,7 @@ function trialRoutineBegin(trials) {
 		}
 
 		// Set components from last trial
-		console.log(`Game: ${game_number}, trial #${trial_num}, game type ${game_type} starting`)
+		//console.log(`Game: ${game_number}, trial #${trial_num}, game type ${game_type} starting`)
 		trial_type = game_type + '_' + roomType.text
 
 		mark_event(trials_data, globalClock, trial_num, trial_type, event_types['CHATROOM_ONSET'],
@@ -2642,7 +2642,7 @@ function trialRoleReversalRoutineBegin(trials) {
 		}
 		// console.log(tweets[left_topic], tweets[right_topic])
 		// Set components from last trial
-		console.log(`Role Reversal ChatRoom: ${game_number}, trial #${trial_num}, game type ${game_type} starting`)
+		//console.log(`Role Reversal ChatRoom: ${game_number}, trial #${trial_num}, game type ${game_type} starting`)
 
 		setupPosts(game_type)
 
@@ -3291,7 +3291,7 @@ function trialRoutineEachFrameShowPost(trials) {
 		}
 		else
 		{
-			console.log(t)
+			//console.log(t)
 			if (t > 0.1 && postStims_r[trial_num].post_text.status != PsychoJS.Status.FINISHED) {
 				//loadingAnimationText()
 				postStims_r[trial_num].post_text.setText(topic_text)
@@ -3661,7 +3661,7 @@ function sendData() {
 		},
 		dataType: 'JSON',
 		success:function(data) {
-			console.log(data)
+			//console.log(data)
 		  }
     })
 }
@@ -3710,10 +3710,8 @@ function readyRoutineBegin2(trials) {
 		routineTimer.add(2.000000);
 		// update component parameters for each repeat
 		// keep track of which components have finished
-		console.log(expInfo.run)
 		if (expInfo.run == 'Pilot_R1_CB1.json')
 		{
-			console.log("hey 1?")
 			track = new Sound({
 				win: psychoJS.window,
 				value: 'maxlikes_begin.mp3'
@@ -3726,7 +3724,6 @@ function readyRoutineBegin2(trials) {
 		}
 		else if (expInfo.run == 'Pilot_R1_CB2.json')
 		{
-			console.log("hey 2?")
 			track = new Sound({
 				win: psychoJS.window,
 				value: 'mindislikes_begin.mp3'
@@ -3948,7 +3945,7 @@ function instructRoutineBegin(trials) {
 	
 		instructComponents.push(ready);
 
-		console.log("InstructionSlides Index: ", trials.thisIndex)
+		// console.log("InstructionSlides Index: ", trials.thisIndex)
 		instruct_prev_pressed = false
 
 		if (audio_path) {
@@ -3956,7 +3953,7 @@ function instructRoutineBegin(trials) {
 				win: psychoJS.window,
 				value: audio_path
 			  });
-			console.log(audio_path)
+			// console.log(audio_path)
 			time_audio_end = t + track.getDuration()
 			track.setVolume(1.0);
 			track.play();
