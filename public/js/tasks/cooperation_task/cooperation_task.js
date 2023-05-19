@@ -545,7 +545,7 @@ function experimentInit() {
 	// Check if there is an practice
 	if (getQueryVariable('practice') == 'true') {
 		practice = true;
-		console.log("PRACTICE SESSION!")
+		//console.log("PRACTICE SESSION!")
 	}
 	// Initialize components for Routine "instruct"
 	instructClock = new util.Clock();
@@ -790,7 +790,7 @@ function instructRoutineBegin(trials) {
 	
 		instructComponents.push(ready);
 
-		console.log("InstructionSlides Index: ", trials.thisIndex)
+		//console.log("InstructionSlides Index: ", trials.thisIndex)
 		instruct_prev_pressed = false
 		
 		if (audio_path) {
@@ -798,7 +798,7 @@ function instructRoutineBegin(trials) {
 				win: psychoJS.window,
 				value: audio_path
 			  });
-			console.log(audio_path)
+			//console.log(audio_path)
 			time_audio_end = t + track.getDuration()
 			track.setVolume(1.0);
 			track.play();
@@ -838,7 +838,7 @@ function instructSlideRoutineEachFrame(trials, slides) {
 		// New Slide Call, set it after pressing key
 		// console.log(track.status)
 		if (newSlide) {
-			console.log('setting new image', instruct_slide, 'index:',trials.thisIndex, 'Audio: ',audio_path)
+			//console.log('setting new image', instruct_slide, 'index:',trials.thisIndex, 'Audio: ',audio_path)
 			g.slideStim.setImage(instruct_slide)
 			newSlide = false
 
@@ -855,7 +855,7 @@ function instructSlideRoutineEachFrame(trials, slides) {
 					track.setVolume(1.0);
 					track.play();
 				} else {
-					console.log('setting new audio')
+					//console.log('setting new audio')
 					track = new Sound({
 						win: psychoJS.window,
 						value: audio_path
@@ -1303,7 +1303,7 @@ function readyRoutineEachFrame() {
 			resp.start()
 
 			if (track) {
-				console.log('ready track: ',track)
+				//console.log('ready track: ',track)
 				track.play()
 			}
 		}
@@ -1388,7 +1388,7 @@ function shuffle(array) {
 	shuffle( positive_outcome_media )
 	 
 	if ((g.outcome_media.negative.length <= g.total_trials) || (g.outcome_media.positive.length <= g.total_trials) ) {
-		console.log("add new trials. just shuffle")
+		//console.log("add new trials. just shuffle")
 		// If it got here, it means the number of trials is lower than the
 		// number of the outcome media.
 		// Multiple the array itself x number of times till it's greater than the total trials
@@ -2169,7 +2169,7 @@ g.choice_counter = {
  * @param {*} outcome_type either a positve or negative outcome type
  */
 function incrementCounters(outcome_type) {
-	console.log('increment (pre): ',outcome_type,g.choice_counter['positive'], g.choice_counter['negative']  )
+	//console.log('increment (pre): ',outcome_type,g.choice_counter['positive'], g.choice_counter['negative']  )
 	switch (outcome_type) {
 		case 'positive':
 			g.choice_counter['positive']++
@@ -2193,7 +2193,7 @@ function incrementCounters(outcome_type) {
 			}
 			break;
 	}
-	console.log('increment (post): ',outcome_type,g.choice_counter['positive'], g.choice_counter['negative'], g.choice_counter['neutral'])
+	//console.log('increment (post): ',outcome_type,g.choice_counter['positive'], g.choice_counter['negative'], g.choice_counter['neutral'])
 }
 
 /**
@@ -2202,7 +2202,7 @@ function incrementCounters(outcome_type) {
  */
 // TODO - Fix so that it works right for the negative games.
 function getRandomOutcome(probability, game_type) {
-	console.log('get random: ', game_type, probability )
+	//console.log('get random: ', game_type, probability )
 	if (game_type == 'pleasant') {
 		if (Math.random() < probability) {
 			// returns the game_type. Either 'plesant' or 'unpleasant'
@@ -2318,7 +2318,7 @@ function getOutcomePair(outcome, game_type, choice) {
 
 			break;
 	}
-	console.log('outcome: ', outcome, g.outcome_triple)
+	//console.log('outcome: ', outcome, g.outcome_triple)
 	g.outcome_sound.setVolume(1.0);
 }
 
@@ -2420,7 +2420,7 @@ function blockRoutineTrials(trials) {
 		if (g.outcome_sound && g.outcomeTimer.getTime() <= (g.outcome_sound.getDuration()/* + 0.3*/) && g.outcome_image && g.outcome_image.status == PsychoJS.Status.NOT_STARTED) {
 			let play_sound_delay = 0.5
 			play_sound = true;
-			console.log('show outcome image')
+			//console.log('show outcome image')
 
 			g.outcome_text_bubble.setAutoDraw(false)
 			g.black_rectangle.setAutoDraw(false)
@@ -2443,7 +2443,7 @@ function blockRoutineTrials(trials) {
 			// }
 		}
 		if (g.outcome_sound && (g.outcomeTimer.getTime() <= (g.outcome_sound.getDuration() - 0.3)) && play_sound == true) {
-			console.log('play sound')
+			//console.log('play sound')
 			g.outcome_sound.play()
 			play_sound = false;
 		}
@@ -2705,7 +2705,7 @@ function initialFixation(trials) {
 			points_fixation_stim.color = new util.Color('white')
 			points_fixation_stim.setText('+')
 			points_fixation_stim.setAutoDraw(true)
-			console.log('Initial Fixation')
+			//console.log('Initial Fixation')
 
 			mark_event(trials_data, globalClock, 'NA', trial_type, event_types['FIXATION_ONSET'],
 				'NA', 'NA' , 'NA')
@@ -2764,8 +2764,8 @@ function initialFixation(trials) {
  * Send Data over to the backend to save output data
  */
 function sendData() {
-	console.log(trials_data)
-	console.log(expInfo)
+	//console.log(trials_data)
+	//console.log(expInfo)
 	$.ajax({
         type: "POST",
         url: '/savecoop',

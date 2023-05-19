@@ -3660,8 +3660,9 @@ function sendData() {
 			"expInfo": expInfo
 		},
 		dataType: 'JSON',
-		success:function(data) {
-			//console.log(data)
+		success: function (data) {
+			console.log(Date.now())
+			console.log(data)
 		  }
     })
 }

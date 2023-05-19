@@ -186,8 +186,9 @@ module.exports = function (app){
                     // The check succeeded
                     fs.writeFile(path_to_save, csv, function(err) {
                         if (err) return logger.error(`${Date.now()} ` + `${path_to_save}: ` + err);
+                        logger.info(Date.now())
                         logger.info(`${path_to_save} saved`);
-                        
+                        logger.info(trials_data)
                     });
                 } else {
                     // The check failed
