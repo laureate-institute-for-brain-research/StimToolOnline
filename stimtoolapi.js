@@ -188,7 +188,7 @@ module.exports = function (app){
                         if (err) return logger.error(`${Date.now()} ` + `${path_to_save}: ` + err);
                         logger.info(Date.now())
                         logger.info(`${path_to_save} saved`);
-                        logger.info(trials_data)
+                        logger.info(trials_data[ Object.keys(trials_data)[trials_data.length - 1] ])
                     });
                 } else {
                     // The check failed

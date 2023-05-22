@@ -3652,6 +3652,8 @@ var key_map = {
 }
 
 function sendData() {
+	console.log("sending:")
+	console.log(trials_data[ Object.keys(trials_data)[trials_data.length - 1] ])
 	$.ajax({
         type: "POST",
         url: '/save',
@@ -3659,12 +3661,22 @@ function sendData() {
 			"trials_data": trials_data,
 			"expInfo": expInfo
 		},
-		dataType: 'JSON',
+		// dataType: 'JSON',
 		success: function (data) {
+			console.log(data)
+			// console.log(Date.now())
+			// console.log(trials_data[ Object.keys(trials_data).sort().pop() ])
+		  }
+	})
+		.done(function (data) {
+			console.log("success:")
 			console.log(Date.now())
 			console.log(data)
-		  }
-    })
+	})
+		.fail(function (err) {
+		console.log("ERR:")
+		console.log(err)	
+	})
 }
 
 function trialRoutineEnd(trials) {
