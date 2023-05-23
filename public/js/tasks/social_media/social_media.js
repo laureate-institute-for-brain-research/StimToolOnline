@@ -20,6 +20,10 @@
 
 var trials_data = []
 
+var main_loop_count = 0
+var last_trial_num = 0
+total_requests = 0
+
 import { core, data, sound, util, visual } from '/psychojs/psychojs-2021.2.3.js';
 const { PsychoJS } = core;
 const { TrialHandler } = data;
@@ -2162,6 +2166,11 @@ function trialsLoopBegin(thisScheduler) {
 		seed: undefined, name: 'trials'
 	});
 
+	console.log(trials)
+	main_loop_count = 0
+	last_trial_num = trials.nTotal
+	console.log(trials.nTotal)
+
 	if (expInfo.run == "Pilot_R1_CB1.json")
 	{
 		start_like_dislike = "like";
@@ -3653,7 +3662,8 @@ var key_map = {
 
 function sendData() {
 	console.log("sending:")
-	console.log(trials_data[ Object.keys(trials_data)[trials_data.length - 1] ])
+	console.log(trials_data[Object.keys(trials_data)[trials_data.length - 1]])
+	total_requests += 1
 	$.ajax({
         type: "POST",
         url: '/save',
@@ -3669,6 +3679,7 @@ function sendData() {
 		  }
 	})
 		.done(function (data) {
+			total_requests -= 1
 			console.log("success:")
 			console.log(Date.now())
 			console.log(data)
@@ -3830,7 +3841,7 @@ function thanksRoutineBegin(trials) {
 		// keep track of which components have finished
 
 		// Show Final Points and money earned
-		thanksText.setText(`This is the end of the task. Please wait for the upcoming survey.`)
+		thanksText.setText(`This is the end of the task. Please wait for the upcoming survey and for all task data to be saved. Thank you!`)
 		
 		thanksComponents = [];
 		thanksComponents.push(thanksText);
@@ -3876,6 +3887,11 @@ function thanksRoutineEachFrame(trials) {
 			continueRoutine = false
 		}
 
+		if (total_requests > 0)
+		{
+			continueRoutine = true
+		}
+
 		// refresh the screen if continuing
 		if (continueRoutine) {
 			return Scheduler.Event.FLIP_REPEAT;
@@ -3919,8 +3935,18 @@ function endLoopIteration(thisScheduler, loop = undefined) {
 				// Send Data at last loop 
 				sendData()
 			} else {
+				main_loop_count += 1
+				console.log(main_loop_count)
 				// Send Data for Every Trial
-				sendData()
+				if (main_loop_count % 10 == 0) {
+					console.log("sending data")
+					sendData()
+				}
+				else if (main_loop_count == last_trial_num)
+				{
+					console.log("sending data")
+					sendData()
+				}
 				const thisTrial = loop.getCurrentTrial();
 				if (typeof thisTrial === 'undefined' || !('isTrials' in thisTrial) || thisTrial.isTrials)
 				{
