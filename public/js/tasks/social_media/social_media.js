@@ -22,7 +22,7 @@ var trials_data = []
 
 var main_loop_count = 0
 var last_trial_num = 0
-total_requests = 0
+var total_requests = 0
 
 import { core, data, sound, util, visual } from '/psychojs/psychojs-2021.2.3.js';
 const { PsychoJS } = core;
