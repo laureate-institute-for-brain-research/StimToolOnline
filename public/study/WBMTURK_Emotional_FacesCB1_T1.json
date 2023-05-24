@@ -1,7 +1,7 @@
 {
     "name": "WBMTURK Emotional Faces T1",
     "order": [
-        "/?index=0&task=emotional_faces&run=Pilot_R1.json",
+        "/?index=0&task=emotional_faces_v2&run=Pilot_R1_CB1.json",
         "/?index=1&survey=post_task&session=1",
         "/?index=2&survey=feedback&session=1",
         "/completeMobile?"

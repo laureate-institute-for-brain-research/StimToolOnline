@@ -26,6 +26,10 @@ var event_types = {
 
 var trials_data = []
 
+var main_loop_count = 0
+var last_trial_num = 0
+var total_requests = 0
+
  import { core, data, sound, util, visual } from '/psychojs/psychojs-2021.2.3.js';
  const { PsychoJS } = core;
  const { TrialHandler } = data;
@@ -991,7 +995,7 @@ function experimentInit() {
 	thanksText = new visual.TextStim({
 		win: psychoJS.window,
 		name: 'thanksText',
-		text: 'This is the end of the task run.\n\nThanks!',
+		text: 'This is the end of the task run. Please wait for the upcoming survey and for all task data to be saved. Thank you!',
 		font: 'Arial',
 		units: 'height',
 		pos: [0, 0], height: 0.05, wrapWidth: undefined, ori: 0,
@@ -1569,6 +1573,9 @@ function trialsLoopBegin(thisScheduler) {
 		seed: undefined, name: 'trials'
 	});
 
+	main_loop_count = 0
+	last_trial_num = trials.nTotal
+
 	psychoJS.experiment.addLoop(trials); // add the loop to the experiment
 	currentLoop = trials;  // we're now the current loop
 	total_trials = trials.trialList.length
@@ -1611,6 +1618,9 @@ function trialsLoopBegin2(thisScheduler) {
 		seed: undefined, name: 'trials'
 	});
 
+	main_loop_count = 0
+	last_trial_num = trials.nTotal
+
 	psychoJS.experiment.addLoop(trials); // add the loop to the experiment
 	currentLoop = trials;  // we're now the current loop
 	total_trials = trials.trialList.length
@@ -1652,6 +1662,9 @@ function trialsLoopBegin3(thisScheduler) {
 		trialList: 'run_schedule3.xls',
 		seed: undefined, name: 'trials'
 	});
+
+	main_loop_count = 0
+	last_trial_num = trials.nTotal
 
 	psychoJS.experiment.addLoop(trials); // add the loop to the experiment
 	currentLoop = trials;  // we're now the current loop
@@ -2504,6 +2517,7 @@ var key_map = {
 }
 
 function sendData() {
+	total_requests += 1
 	$.ajax({
         type: "POST",
         url: '/save',
@@ -2515,7 +2529,17 @@ function sendData() {
 		success:function(data) {
 			console.log(data)
 		  }
-    })
+	})
+	.done(function (data) {
+		total_requests -= 1
+		console.log("success:")
+		console.log(Date.now())
+		console.log(data)
+	})
+		.fail(function (err) {
+		console.log("ERR:")
+		console.log(err)	
+	})
 }
 
 /**
@@ -2945,6 +2969,11 @@ function thanksRoutineEachFrame(trials) {
 				continueRoutine = true;
 				break;
 			}
+		
+		if (total_requests > 0)
+		{
+			continueRoutine = true
+		}
 
 		// refresh the screen if continuing
 		if (continueRoutine && routineTimer.getTime() > 0) {
@@ -2991,7 +3020,18 @@ function endLoopIteration(thisScheduler, loop = undefined) {
 			}
 		}
 
-		sendData()
+		main_loop_count += 1
+		if (main_loop_count % 10 == 0) {
+			console.log("sending data")
+			sendData()
+		}
+		else if (main_loop_count == last_trial_num)
+		{
+			console.log("sending data")
+			sendData()
+		}
+
+		// sendData()
 
 		return Scheduler.Event.NEXT;
 	};

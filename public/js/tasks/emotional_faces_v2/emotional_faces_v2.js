@@ -21,10 +21,16 @@ var event_types = {
 	'RESPONSE': 7,
 	'BLOCK_ONSET': 8,
 	'FEEDBACK': 9,
-	'AUDIO_ONSET': 10
+	'AUDIO_ONSET': 10,
+	'PREDICTION_ONSET': 11,
+	'PREDICTION': 12
 }
 
 var trials_data = []
+
+var main_loop_count = 0
+var last_trial_num = 0
+var total_requests = 0
 
  import { core, data, sound, util, visual } from '/psychojs/psychojs-2021.2.3.js';
  const { PsychoJS } = core;
@@ -136,7 +142,7 @@ window.onload = function () {
 
 			resources.push({ name: 'run_schedule.xls', path: values.schedule })
 			resources.push({ name: 'run_schedule2.xls', path: values.schedule2 })
-			resources.push({ name: 'run_schedule3.xls', path: values.schedule3 })
+			// resources.push({ name: 'run_schedule3.xls', path: values.schedule3 })
 			resources.push({ name: 'instruct_schedule.csv', path: values.instruct_schedule })
 
 			// Add file paths to expInfo
@@ -373,20 +379,20 @@ flowScheduler.add(readyRoutineEachFrame());
 flowScheduler.add(readyRoutineEnd());
 
 const trialsLoopScheduler2 = new Scheduler(psychoJS);
-flowScheduler.add(trialsLoopBegin2, trialsLoopScheduler);
-flowScheduler.add(trialsLoopScheduler);
+flowScheduler.add(trialsLoopBegin2, trialsLoopScheduler2);
+flowScheduler.add(trialsLoopScheduler2);
 flowScheduler.add(trialsLoopEnd);
 
 // MAIN BLOCK
 // Ready Routine
-flowScheduler.add(readyRoutineBegin('MAIN3'));
-flowScheduler.add(readyRoutineEachFrame());
-flowScheduler.add(readyRoutineEnd());
+// flowScheduler.add(readyRoutineBegin('MAIN3'));
+// flowScheduler.add(readyRoutineEachFrame());
+// flowScheduler.add(readyRoutineEnd());
 
-const trialsLoopScheduler3 = new Scheduler(psychoJS);
-flowScheduler.add(trialsLoopBegin3, trialsLoopScheduler);
-flowScheduler.add(trialsLoopScheduler);
-flowScheduler.add(trialsLoopEnd);
+// const trialsLoopScheduler3 = new Scheduler(psychoJS);
+// flowScheduler.add(trialsLoopBegin3, trialsLoopScheduler);
+// flowScheduler.add(trialsLoopScheduler);
+// flowScheduler.add(trialsLoopEnd);
 
 flowScheduler.add(thanksRoutineBegin());
 flowScheduler.add(thanksRoutineEachFrame());
@@ -403,10 +409,10 @@ var resources = [
 	{ name: 'rate_faces_schedule.csv', path: '/js/tasks/emotional_faces_v2/rate_faces_schedule.csv' }, // faces lists
 	{ name: 'user.png', path: '/js/tasks/emotional_faces_v2/media/user.png' },
 	{ name: 'user_filled.png', path: '/js/tasks/emotional_faces_v2/media/user_filled.png' },
-	{ name: 'PRACTICE_ready', path: '/js/tasks/emotional_faces_v2/media/instructions/Slide14.jpeg'},
-	{ name: 'MAIN_ready', path: '/js/tasks/emotional_faces_v2/media/instructions/Slide15.jpeg' },
-	{ name: 'PRACTICE_ready_audio.mp3', path: '/js/tasks/emotional_faces_v2/media/instructions_audio/Slide14.mp3' },
-	{ name: 'MAIN_ready_audio.mp3', path: '/js/tasks/emotional_faces_v2/media/instructions_audio/Slide15.mp3'},
+	{ name: 'PRACTICE_ready', path: '/js/tasks/emotional_faces_v2/media/instructions/Slide15.jpeg'},
+	{ name: 'MAIN_ready', path: '/js/tasks/emotional_faces_v2/media/instructions/Slide16.jpeg' },
+	{ name: 'PRACTICE_ready_audio.mp3', path: '/js/tasks/emotional_faces_v2/media/instructions_audio/Slide15.mp3' },
+	{ name: 'MAIN_ready_audio.mp3', path: '/js/tasks/emotional_faces_v2/media/instructions_audio/Slide16.mp3'},
 	{ name: 'male.png', path: '/js/tasks/emotional_faces_v2/media/male.png' },
 	{ name: 'female.png', path: '/js/tasks/emotional_faces_v2/media/female.png' },
 	{ name: 'high_tone.mp3', path: '/js/tasks/emotional_faces_v2/media/tones/high_tone.mp3' },
@@ -1004,7 +1010,7 @@ function experimentInit() {
 	thanksText = new visual.TextStim({
 		win: psychoJS.window,
 		name: 'thanksText',
-		text: 'This is the end of the task run.\n\nThanks!',
+		text: 'This is the end of the task run. Please wait for the upcoming survey and for all task data to be saved. Thank you!',
 		font: 'Arial',
 		units: 'height',
 		pos: [0, 0], height: 0.05, wrapWidth: undefined, ori: 0,
@@ -1585,6 +1591,9 @@ function trialsLoopBegin(thisScheduler) {
 		seed: undefined, name: 'trials'
 	});
 
+	main_loop_count = 0
+	last_trial_num = trials.nTotal
+
 	psychoJS.experiment.addLoop(trials); // add the loop to the experiment
 	currentLoop = trials;  // we're now the current loop
 	total_trials = trials.trialList.length
@@ -1630,6 +1639,9 @@ function trialsLoopBegin2(thisScheduler) {
 		seed: undefined, name: 'trials'
 	});
 
+	main_loop_count = 0
+	last_trial_num = trials.nTotal
+
 	psychoJS.experiment.addLoop(trials); // add the loop to the experiment
 	currentLoop = trials;  // we're now the current loop
 	total_trials = trials.trialList.length
@@ -1674,6 +1686,9 @@ function trialsLoopBegin3(thisScheduler) {
 		trialList: 'run_schedule3.xls',
 		seed: undefined, name: 'trials'
 	});
+
+	main_loop_count = 0
+	last_trial_num = trials.nTotal
 
 	psychoJS.experiment.addLoop(trials); // add the loop to the experiment
 	currentLoop = trials;  // we're now the current loop
@@ -2205,7 +2220,7 @@ function trialRoutinePlayTone(trials) {
 
 		// get current time
 		t = toneClock.getTime();
-		console.log(t)
+		// console.log(t)
 
 		// // Play Tone
 		// if (tone_sound) {
@@ -2242,9 +2257,6 @@ function trialRoutineShowPredictionStim(trials) {
 		// Space for 200ms then show stim for 150ms
 		if (t >= 0.05 && stimImageStim.status == PsychoJS.Status.NOT_STARTED) {
 			prediction_text.setAutoDraw(true)
-		
-			mark_event(trials_data, globalClock, trials.thisIndex, trial_type, event_types['FACE_ONSET'],
-				'NA', 'NA' , stim_paths)
 		}
 
 		if (t >= 0.05 + STIM_DURATION) {
@@ -2281,18 +2293,20 @@ function trialRoutinePredictionRespond(trials) {
 	
 		// get current time
 		t = respondClock.getTime();
-		console.log(t)
+		// console.log(t)
 
 		// Draw the Texts
 		if (left_text.status == PsychoJS.Status.NOT_STARTED) {
+			mark_event(trials_data, globalClock, trials.thisIndex, trial_type, event_types['PREDICTION_ONSET'],
+				'NA', 'NA' , 'NA')
 			// response_text.setAutoDraw(true)
 			left_text.setAutoDraw(true)
 			right_text.setAutoDraw(true)
 			prediction_text.setAutoDraw(true)
 
 			// TODO: Edit this mark event
-			mark_event(trials_data, globalClock, trials.thisIndex, trial_type, event_types['CHOICE_ONSET'],
-				'NA', 'NA' , 'NA')
+			// mark_event(trials_data, globalClock, trials.thisIndex, trial_type, event_types['PREDICTION'],
+			// 	'NA', 'NA' , 'NA')
 		}
 
 		// // animate the sliding bar
@@ -2366,7 +2380,7 @@ function trialRoutinePredictionRespond(trials) {
 			}
 
 			// Save Data on each Press
-			mark_event(trials_data, globalClock, trials.thisIndex, trial_type, event_types['RESPONSE'],
+			mark_event(trials_data, globalClock, trials.thisIndex, trial_type, event_types['PREDICTION'],
 					resp.rt, key_map[resp.keys] , getResult(key_map[resp.keys]))
 			resp.keys = undefined;
 			resp.rt = undefined;
@@ -2744,6 +2758,7 @@ var key_map = {
 }
 
 function sendData() {
+	total_requests += 1
 	$.ajax({
         type: "POST",
         url: '/save',
@@ -2751,11 +2766,21 @@ function sendData() {
 			"trials_data": trials_data,
 			"expInfo": expInfo
 		},
-		dataType: 'JSON',
+		// dataType: 'JSON',
 		success:function(data) {
 			console.log(data)
 		  }
-    })
+	})
+	.done(function (data) {
+		total_requests -= 1
+		console.log("success:")
+		console.log(Date.now())
+		console.log(data)
+	})
+		.fail(function (err) {
+		console.log("ERR:")
+		console.log(err)	
+	})
 }
 
 /**
@@ -3075,7 +3100,7 @@ function trialRoutineEnd(trials) { //TODO: Change this so that there is a jitter
 			} else {
 				resp.stop()
 				resp.status = PsychoJS.Status.NOT_STARTED
-				sendData()
+				//sendData()
 
 				// Clear Fixation
 				points_fixation_stim.setAutoDraw(false)
@@ -3111,7 +3136,7 @@ function trialRoutineEnd(trials) { //TODO: Change this so that there is a jitter
 			} else {
 				resp.stop()
 				resp.status = PsychoJS.Status.NOT_STARTED
-				sendData()
+				//sendData()
 
 				// Clear Fixation
 				points_fixation_stim.setAutoDraw(false)
@@ -3189,6 +3214,12 @@ function thanksRoutineEachFrame(trials) {
 				continueRoutine = true;
 				break;
 			}
+		
+		// reverts to true if we are still waiting for http requests to finish
+		if (total_requests > 0)
+		{
+			continueRoutine = true
+		}
 
 		// refresh the screen if continuing
 		if (continueRoutine && routineTimer.getTime() > 0) {
@@ -3235,7 +3266,18 @@ function endLoopIteration(thisScheduler, loop = undefined) {
 			}
 		}
 
-		sendData()
+		main_loop_count += 1
+		if (main_loop_count % 10 == 0) {
+			console.log("sending data")
+			sendData()
+		}
+		else if (main_loop_count == last_trial_num)
+		{
+			console.log("sending data")
+			sendData()
+		}
+
+		//sendData()
 
 		return Scheduler.Event.NEXT;
 	};

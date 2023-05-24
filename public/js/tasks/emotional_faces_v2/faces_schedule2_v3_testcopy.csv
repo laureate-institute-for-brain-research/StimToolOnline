@@ -1,0 +1,3 @@
+﻿trial_number,stim_type,tone,intensity,ITI,prob_hightone_sad,block_length,expectation,gender,ID,stim_paths,response_duration
+101,sad,low,low,1,0.2,10,0,M,M8,/js/tasks/emotional_faces_v2/media/faces/MC08_Sad_050_.jpg,0.8
+102,sad,low,high,1.5,0.2,10,0,M,M9,/js/tasks/emotional_faces_v2/media/faces/MC09_Sad_075_.jpg,0.8
