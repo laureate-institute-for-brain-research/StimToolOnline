@@ -1,10 +1,14 @@
 {
     "name": "WBMTURK Cooperation Task T1",
     "order": [
-        "/?index=0&task=cooperation_task&run=Pilot_R1.json",
-        "/?index=1&task=cooperation_task&run=Pilot_R2.json",
-        "/?index=2&survey=post_task_cooperation&session=1",
-        "/?index=3&survey=feedback&session=1",
+        "/?index=0&survey=culture&session=1",
+        "/?index=1&survey=demo&session=1",
+        "/?index=2&survey=well_being&session=1",
+        "/?index=3&survey=panasx&session=1",
+        "/?index=4&task=cooperation_task&run=Pilot_R1.json",
+        "/?index=5&task=cooperation_task&run=Pilot_R2.json",
+        "/?index=6&survey=post_task_cooperation&session=1",
+        "/?index=7&survey=feedback&session=1",
         "/completeMobile?"
     ],
     "fullscreen": true,
