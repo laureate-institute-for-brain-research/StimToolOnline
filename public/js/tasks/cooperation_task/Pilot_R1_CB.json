@@ -1,5 +1,5 @@
 {
-    "schedule": "/js/tasks/cooperation_task/Pilot_R1_schedule-10blocked_counterbalanced1.csv",
-    "schedule2": "/js/tasks/cooperation_task/Pilot_R1_schedule-10blocked_counterbalanced2.csv",
+    "schedule": "/js/tasks/cooperation_task/Pilot_R1_schedule-10blocked_CB1.csv",
+    "schedule2": "/js/tasks/cooperation_task/Pilot_R1_schedule-10blocked_CB2.csv",
     "instruct_schedule": "/js/tasks/cooperation_task/media/Pilot_R1_instructions.csv"
 }
