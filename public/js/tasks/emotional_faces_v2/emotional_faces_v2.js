@@ -2385,6 +2385,8 @@ function trialRoutinePredictionRespond(trials) {
 			resp.keys = undefined;
 			resp.rt = undefined;
 
+			t = respondClock.reset();
+
 			// If there is response_duration is false, then just go to
 			// the next trial
 			if (response_duration == 'false') {
@@ -2394,14 +2396,16 @@ function trialRoutinePredictionRespond(trials) {
 		}
 
 		// Go to Next Routine After the allowed duration
-		if (t >= 1.0) {
+		// if (t >= 1.0) {
+		if (pressed) {
 
 			// Set too_slow flag to true if they never pressed the a key
 			// if (!pressed) too_slow = true
-			go_to_delay = true
-			if (t >= 1.5)
-			{
-				continueRoutine = false
+			if (t >= 0.5) {
+				go_to_delay = true
+				if (t >= 1.0) {
+					continueRoutine = false
+				}
 			}
 		}
 
