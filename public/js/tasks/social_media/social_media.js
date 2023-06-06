@@ -285,6 +285,22 @@ psychoJS.scheduleCondition(function () { return (psychoJS.gui.dialogComponent.bu
 flowScheduler.add(updateInfo); // add timeStamp
 flowScheduler.add(experimentInit);
 
+// ROLE REVERSAL BLOCK
+
+if (!getQueryVariable('skip_roleReversal')) {
+	// Instruction for the Role Traversal Slide(s)
+	const instruct_pagesLoopScheduler = new Scheduler(psychoJS);
+	flowScheduler.add(instruct_pages_roleReversal_LoopBegin, instruct_pagesLoopScheduler);
+	flowScheduler.add(instruct_pagesLoopScheduler);
+	flowScheduler.add(instruct_pagesLoopEnd);
+
+	// ROLE REVERSAL TRIAL BLOCK
+	const roleReversalScheduler = new Scheduler(psychoJS);
+	flowScheduler.add(trials_role_reversalBegin, roleReversalScheduler);
+	flowScheduler.add(roleReversalScheduler);
+	flowScheduler.add(trialsLoopEnd);
+}
+
 // instruction slide
 
 // INSTRUCTION BLOCK
@@ -304,21 +320,21 @@ if (getQueryVariable('run').includes('R1') && !getQueryVariable('skip_examplepla
 	flowScheduler.add(trialsLoopEnd);
 }
 
-// ROLE REVERSAL BLOCK
+// // ROLE REVERSAL BLOCK
 
-if (!getQueryVariable('skip_roleReversal')) {
-	// Instruction for the Role Traversal Slide(s)
-	const instruct_pagesLoopScheduler = new Scheduler(psychoJS);
-	flowScheduler.add(instruct_pages_roleReversal_LoopBegin, instruct_pagesLoopScheduler);
-	flowScheduler.add(instruct_pagesLoopScheduler);
-	flowScheduler.add(instruct_pagesLoopEnd);
+// if (!getQueryVariable('skip_roleReversal')) {
+// 	// Instruction for the Role Traversal Slide(s)
+// 	const instruct_pagesLoopScheduler = new Scheduler(psychoJS);
+// 	flowScheduler.add(instruct_pages_roleReversal_LoopBegin, instruct_pagesLoopScheduler);
+// 	flowScheduler.add(instruct_pagesLoopScheduler);
+// 	flowScheduler.add(instruct_pagesLoopEnd);
 
-	// ROLE REVERSAL TRIAL BLOCK
-	const roleReversalScheduler = new Scheduler(psychoJS);
-	flowScheduler.add(trials_role_reversalBegin, roleReversalScheduler);
-	flowScheduler.add(roleReversalScheduler);
-	flowScheduler.add(trialsLoopEnd);
-}
+// 	// ROLE REVERSAL TRIAL BLOCK
+// 	const roleReversalScheduler = new Scheduler(psychoJS);
+// 	flowScheduler.add(trials_role_reversalBegin, roleReversalScheduler);
+// 	flowScheduler.add(roleReversalScheduler);
+// 	flowScheduler.add(trialsLoopEnd);
+// }
 
 if (!getQueryVariable('skip_main')) {
 	// MAIN BLOCK - Instrcutions
