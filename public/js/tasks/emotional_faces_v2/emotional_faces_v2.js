@@ -2195,7 +2195,7 @@ function trialRoutineBegin(trials) {
 		left_rect.refresh()
 		right_rect.refresh()
 
-		trial_type = stim_type + '_' + intensity
+		trial_type = stim_type + '_' + tone
 		mark_event(trials_data, globalClock, trials.thisIndex, trial_type, event_types['TONE_ONSET'],
 			'NA', 'NA', tone)
 		// Play Tone
