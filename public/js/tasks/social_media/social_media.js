@@ -645,6 +645,7 @@ var instructClock;
 var instrBelow;
 var ready;
 var trialClock;
+var swapSlideClock;
 var word;
 
 var currentTrialNumber;
@@ -755,6 +756,7 @@ function experimentInit() {
 
 	// Initialize components for Routine "trial"
 	trialClock = new util.Clock();
+	swapSlideClock = new util.Clock();
 
 	logoStim = new visual.ImageStim({
 		win : psychoJS.window,
@@ -812,7 +814,7 @@ function experimentInit() {
 		text: 'Home',
 		font: 'lucida grande',
 		units: 'norm',
-		pos: [-0.505, 0.84], height: 0.05,
+		pos: [-0.53, 0.92], height: 0.05,
 		wrapWidth: undefined, ori: 0,
 		bold:true,
 		color: new util.Color('white'), opacity: 1,
@@ -827,7 +829,7 @@ function experimentInit() {
 		alignHoriz: 'center',
 		alignVert: 'center',
 		units: 'norm',
-		pos: [0.065, 0.74], height: 0.05,
+		pos: [0, 0.8], height: 0.05,
 		wrapWidth: undefined, ori: 0,
 		bold:false,
 		color: new util.Color('white'), opacity: 1,
@@ -1050,7 +1052,7 @@ function experimentInit() {
 		name : 'profile_pic_post', units : 'norm', 
 		image : 'profile_pic.png', mask : undefined,
 		ori: 0,
-		pos: [ -0.503, 0.74 ], 
+		pos: [ -0.53, 0.83 ], 
 		size: [0.09,0.11],
 		color: undefined, opacity: 1,
 		flipHoriz : false, flipVert : false,
@@ -1132,14 +1134,14 @@ function experimentInit() {
 		win : psychoJS.window,
 		name : 'choice_1_button', units : 'norm', 
 		text: 'Post Topic 1', 
-		size: [0.55, 1],
+		size: [0.6, 1.2],
 		anchor: 'center',
 		alignHoriz: 'center',
 		fillColor: new util.Color(leftColor),
 		// opacity: .5,
 		letterHeight: 0.055,
 		font: 'lucida grande',
-		ori : 0, pos : [-.22, 0.72],
+		ori : 0, pos : [-.26, 0.8],
 	});
 
 	choice1Button.setAlignment('center')
@@ -1148,14 +1150,14 @@ function experimentInit() {
 		win : psychoJS.window,
 		name : 'choice_2_button', units : 'norm', 
 		text: 'Post Topic 2', 
-		size: [0.55, 1],
+		size: [0.6, 1.2],
 		alignVert: 'center',
 		alignHoriz: 'center',
 		fillColor: new util.Color(rightColor),
 		// opacity: .5,
 		letterHeight: 0.055,
 		font: 'lucida grande',
-		ori : 0, pos : [0.36, 0.72],
+		ori : 0, pos : [0.26, 0.8],
 	});
 
 	choice2Button.setAlignment('center')
@@ -1910,6 +1912,7 @@ function instruct_pages_roleReversal_LoopBegin(thisScheduler) {
 }
 
 var t;
+var swap_slide_t
 var frameN;
 var instructComponents;
 
@@ -2281,10 +2284,20 @@ function setupPosts(game_type) {
 // of how much total likes ther user has accumalted
 //  / 
 // the maximum number of likes they could have recieved through out the chatrooms
-function getSocialApprovalScore() {
+function getSocialApprovalScore(max_score, min_score) {
 	// total possible is based on either h1 or h6
-	if (game_type == 'h1') totalPossible = 100
-	if (game_type == 'h6') totalPossible = 500
+	if (game_type == 'h1') {
+		totalPossible = max_score + (min_score/4)
+	}
+
+	if (game_type == 'h6') {
+		totalPossible = max_score + (min_score/4)
+	}
+
+	if (dislike_room == 1)
+	{
+		totalPossible = totalPossible * 2
+	}
 
 	socialApprovalScore = ( totalPoints / totalPossible )
 
@@ -2416,18 +2429,22 @@ var lastTrial;
 var lastTrialPoints = 0;
 var trial_type;
 var do_not_show_switch = false;
+var move_on = false;
 function trialRoutineBegin(trials) {
 	return function () {
 		//------Prepare to start Routine 'trial'-------
 		t = 0;
 		trialClock.reset(); // clock
 		frameN = -1;
+		swap_slide_t = swapSlideClock.getTime()
 
 		if (((game_number) % 20 == 0) && game_number != 0 && do_not_show_switch == false)
 		{
+			console.log("in switch")
 			if (start_like_dislike == "like")
 			{
 				// switchStim.setImage("mindislikes.jpeg")
+				console.log("this is right")
 				switchStimDislike.setAutoDraw(true)
 			}
 			else
@@ -2436,7 +2453,7 @@ function trialRoutineBegin(trials) {
 				switchStimLike.setAutoDraw(true)
 			}
 
-			if (psychoJS.eventManager.getKeys({ keyList: ['right'] }).length > 0)
+			if (psychoJS.eventManager.getKeys({ keyList: ['right'] }).length > 0 && swap_slide_t > 1.5)
 			{
 				switchStimDislike.setAutoDraw(false)
 				switchStimLike.setAutoDraw(false)
@@ -2449,11 +2466,16 @@ function trialRoutineBegin(trials) {
 					start_like_dislike = "like"
 				}
 				do_not_show_switch = true
+				move_on = true
 			}
 			else
 			{
 				return Scheduler.Event.FLIP_REPEAT;
 			}
+		}
+		else
+		{
+			move_on = true
 		}
 
 		// update component parameters for each repeat
@@ -2514,20 +2536,26 @@ function trialRoutineBegin(trials) {
 			chatRoomNumber.setText(`${game_number + 1}/${total_games}`)
 
 			
-			if (dislike_room == 1) {
-				// Set TotalPoints since for dislikes they start with 100% score
-				if (game_type == 'h1') totalPoints = 100
-				if (game_type == 'h6') totalPoints = 500
+			//OLD PERCENTAGE SCORING
+			// if (dislike_room == 1) {
+			// 	// Set TotalPoints since for dislikes they start with 100% score
+			// 	if (game_type == 'h1') {
+			// 		totalPoints = (max_score + (min_score/4))*2
+			// 	}
+			
+			// 	if (game_type == 'h6') {
+			// 		totalPoints = (max_score + (min_score/4))*2
+			// 	}
 
-				totalPossible = totalPossible
-			} else {
-				// Like Room Start at 0
-				totalPoints = 0
+			// 	totalPossible = totalPossible
+			// } else {
+			// 	// Like Room Start at 0
+			// 	totalPoints = 0
 
-				totalPossible = 0
-			}
+			// 	totalPossible = 0
+			// }
 
-			getSocialApprovalScore()
+			// getSocialApprovalScore(max_score, min_score)
 
 			
 			// Set the tweets
@@ -2551,69 +2579,72 @@ function trialRoutineBegin(trials) {
 		mark_event(trials_data, globalClock, trial_num, trial_type, event_types['CHATROOM_ONSET'],
 				'NA', 'NA', left_topic + ' | ' + right_topic)
 		
-		setupPosts(game_type)
+		// setupPosts(game_type)
 
 		currentTrialNumber.setText(`${trial_num + 1}`)
 		
 
 		totalLikesTracker.setText(socialApprovalScore)
 		
-		headerRectStim.setAutoDraw(true)
-		dividerStim.setAutoDraw(true)
+		if (move_on) {
+			setupPosts(game_type)
+			headerRectStim.setAutoDraw(true)
+			dividerStim.setAutoDraw(true)
 
-		// searchStim.setAutoDraw(true)
-		homeStim.setAutoDraw(true)
-		homeTextStim.setAutoDraw(true)
-		hashtagStim.setAutoDraw(true)
-		exploreTextStim.setAutoDraw(true)
-		notificationStim.setAutoDraw(true)
-		notificationTextStim.setAutoDraw(true)
-		messageStim.setAutoDraw(true)
-		messageTextStim.setAutoDraw(true)
-		bookmarkStim.setAutoDraw(true)
-		bookmarkTextStim.setAutoDraw(true)
-		listStim.setAutoDraw(true)
-		listTextStim.setAutoDraw(true)
-		profileStim.setAutoDraw(true)
-		profileTextStim.setAutoDraw(true)
-		profilePicStim.setAutoDraw(true)
-		moreStim.setAutoDraw(true)
-		moreTextStim.setAutoDraw(true)
+			// searchStim.setAutoDraw(true)
+			homeStim.setAutoDraw(true)
+			homeTextStim.setAutoDraw(true)
+			hashtagStim.setAutoDraw(true)
+			exploreTextStim.setAutoDraw(true)
+			notificationStim.setAutoDraw(true)
+			notificationTextStim.setAutoDraw(true)
+			messageStim.setAutoDraw(true)
+			messageTextStim.setAutoDraw(true)
+			bookmarkStim.setAutoDraw(true)
+			bookmarkTextStim.setAutoDraw(true)
+			listStim.setAutoDraw(true)
+			listTextStim.setAutoDraw(true)
+			profileStim.setAutoDraw(true)
+			profileTextStim.setAutoDraw(true)
+			profilePicStim.setAutoDraw(true)
+			moreStim.setAutoDraw(true)
+			moreTextStim.setAutoDraw(true)
 
-		currentTrialText.setAutoDraw(true)
-		currentTrialNumber.setAutoDraw(true)
-		// Draw the Tracker and Points Counter
-		chatRoomNumberText.setAutoDraw(true)
-		chatRoomNumber.setAutoDraw(true)
-		totalLikesText.setAutoDraw(true)
-		totalLikesTracker.setAutoDraw(true)
-		roomType.setAutoDraw(true)
-		roomTypeText.setAutoDraw(true)
+			currentTrialText.setAutoDraw(true)
+			currentTrialNumber.setAutoDraw(true)
+			// Draw the Tracker and Points Counter
+			chatRoomNumberText.setAutoDraw(true)
+			chatRoomNumber.setAutoDraw(true)
+			//totalLikesText.setAutoDraw(true)
+			//totalLikesTracker.setAutoDraw(true)
+			roomType.setAutoDraw(true)
+			roomTypeText.setAutoDraw(true)
 
-		choice1Button.setAutoDraw(true)
-		choice2Button.setAutoDraw(true)
+			choice1Button.setAutoDraw(true)
+			choice2Button.setAutoDraw(true)
 
 
-		// newLoadingAnimation()
+			// newLoadingAnimation()
 
 		
-		logoStim.setAutoDraw(true)
-		usernameStim.setAutoDraw(true)
-		fullNameStim.setAutoDraw(true)
+			logoStim.setAutoDraw(true)
+			usernameStim.setAutoDraw(true)
+			fullNameStim.setAutoDraw(true)
 
-		pageName.setAutoDraw(true)
-		questionText.setText('Choose a topic')
-		questionText.setAutoDraw(true)
-		profilePicPostStim.setAutoDraw(true)
+			pageName.setAutoDraw(true)
+			questionText.setText('Choose a topic')
+			questionText.setAutoDraw(true)
+			profilePicPostStim.setAutoDraw(true)
 
-		if (game_type == 'h6') {
-			post_outline_big.setAutoDraw(true)
-			post_outline_big.refresh()
-		} else {
-			post_outline_smol.setAutoDraw(true)
-			post_outline_smol.refresh()
+			if (game_type == 'h6') {
+				post_outline_big.setAutoDraw(true)
+				post_outline_big.refresh()
+			} else {
+				post_outline_smol.setAutoDraw(true)
+				post_outline_smol.refresh()
+			}
+			move_on = false
 		}
-	
 
 		lastTrialKeyPressed = false
 	
@@ -2812,6 +2843,8 @@ function trialRoleReversalRoutineBegin(trials) {
 	
 			postStims_l[trial_num].rect.fillColor = new util.Color(leftColor)
 			postStims_l[trial_num].rect.lineColor = new util.Color(leftColor)
+			postStims_r[trial_num].rect.fillColor = new util.Color(rightColor)
+			postStims_r[trial_num].rect.lineColor = new util.Color(rightColor)
 
 			postStims_l[trial_num].post_text.setText('')
 
@@ -2887,6 +2920,8 @@ function trialRoleReversalRoutineBegin(trials) {
 	
 			postStims_r[trial_num].rect.fillColor = new util.Color(rightColor)
 			postStims_r[trial_num].rect.lineColor = new util.Color(rightColor)
+			postStims_l[trial_num].rect.fillColor = new util.Color(leftColor)
+			postStims_l[trial_num].rect.lineColor = new util.Color(leftColor)
 
 			postStims_r[trial_num].post_text.setText('')
 
@@ -3151,6 +3186,8 @@ function trialRoutineEachFrameWaitforInput(trials) {
 					
 					postStims_l[trial_num].rect.fillColor = new util.Color(leftColor)
 					postStims_l[trial_num].rect.lineColor = new util.Color(leftColor)
+					postStims_r[trial_num].rect.fillColor = new util.Color(rightColor)
+					postStims_r[trial_num].rect.lineColor = new util.Color(rightColor)
 
 					postStims_l[trial_num].like_posts.setText(trial_reward)
 					postStims_l[trial_num].post_text.setAutoDraw(true)
@@ -3232,6 +3269,8 @@ function trialRoutineEachFrameWaitforInput(trials) {
 					// postStims[trial_num]['like_posts'].setText(right_reward)
 					trial_reward = right_reward
 					postStims_r[trial_num].rect.fillColor = new util.Color(rightColor)
+					postStims_l[trial_num].rect.fillColor = new util.Color(leftColor)
+					postStims_l[trial_num].rect.lineColor = new util.Color(leftColor)
 					// bandits['left'][trial_num].setText('XX')
 
 					postStims_r[trial_num].like_posts.setText(trial_reward)
@@ -3241,19 +3280,20 @@ function trialRoutineEachFrameWaitforInput(trials) {
 
 				}
 				
+				// OLD PERCENTAGE SCORING
 				// Calculate the score as soon as you press
 				// But don't actually set the text/show the text until after animation
-				if (force_pos == 'X') {
-					if (dislike_room == 0) {
-						// Like Room // sum points
-						totalPoints = totalPoints + trial_reward
-					} else {
-						// Dislike Room
-						totalPoints = totalPoints - trial_reward
-					}
+				// if (force_pos == 'X') {
+				// 	if (dislike_room == 0) {
+				// 		// Like Room // sum points
+				// 		totalPoints = totalPoints + trial_reward
+				// 	} else {
+				// 		// Dislike Room
+				// 		totalPoints = totalPoints - trial_reward
+				// 	}
 					
-					getSocialApprovalScore() // calculates the approval score
-				}
+				// 	getSocialApprovalScore(max_score, min_score) // calculates the approval score
+				// }
 
 				mark_event(trials_data, globalClock, trial_num, trial_type,
 					event_types['RESPONSE'], resp.rt,
@@ -3952,7 +3992,7 @@ function endLoopIteration(thisScheduler, loop = undefined) {
 				sendData()
 			} else {
 				main_loop_count += 1
-				console.log(main_loop_count)
+				//console.log(main_loop_count)
 				// Send Data for Every Trial
 				if (main_loop_count % 10 == 0) {
 					console.log("sending data")
@@ -3977,6 +4017,8 @@ function endLoopIteration(thisScheduler, loop = undefined) {
 
 function importConditions(trials) {
 	return function () {
+		swapSlideClock.reset()
+		swap_slide_t = 0
 		psychoJS.importAttributes(trials.getCurrentTrial());
 		// console.log(window)
 		return Scheduler.Event.NEXT;
