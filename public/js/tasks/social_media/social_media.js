@@ -657,7 +657,14 @@ var roomTypeText;
 var totalPoints = 0;
 var totalPossible = null;
 var socialApprovalScore = 0;
+var tenroomscore = 0;
+var tenroomscoretext = "You Have Won:";
+var overallscore = 0;
 var totalLikesTracker;
+var tenRoomTracker;
+var tenRoomTrackerText;
+var overallTotalTracker;
+var overallTotalTrackerText;
 var totalLikesText;
 
 var readyStim;
@@ -1621,6 +1628,57 @@ function experimentInit() {
 		depth: 0.0
 	});
 
+	tenRoomTrackerText = new visual.TextStim({
+		win: psychoJS.window,
+		name: 'pointsTracker',
+		text: 'Last 10 Rooms:',
+		font: 'lucida grande',
+		alignHoriz: 'center',
+		alignVert: 'center',
+		units: 'norm',
+		pos: [ 0, 0.3], height: 0.12, wrapWidth: undefined, ori: 0,
+		color: new util.Color('white'), opacity: 1,
+		depth: 0.0
+	});
+
+	tenRoomTracker = new visual.TextStim({
+		win: psychoJS.window,
+		name: 'pointsTracker',
+		text: '0',
+		font: 'lucida grande',
+		alignHoriz: 'center',
+		alignVert: 'center',
+		units: 'norm',
+		pos: [ 0, 0.15], height: 0.12, wrapWidth: undefined, ori: 0,
+		color: new util.Color('white'), opacity: 1,
+		depth: 0.0
+	});
+
+	overallTotalTrackerText = new visual.TextStim({
+		win: psychoJS.window,
+		name: 'pointsTracker',
+		text: 'SOCIAL APPROVAL SCORE:',
+		font: 'lucida grande',
+		alignHoriz: 'center',
+		alignVert: 'center',
+		units: 'norm',
+		pos: [ 0, -0.2], height: 0.12, wrapWidth: undefined, ori: 0,
+		color: new util.Color('#00FFFF'), opacity: 1,
+		depth: 0.0
+	});
+	overallTotalTracker = new visual.TextStim({
+		win: psychoJS.window,
+		name: 'pointsTracker',
+		text: '0',
+		font: 'lucida grande',
+		alignHoriz: 'center',
+		alignVert: 'center',
+		units: 'norm',
+		pos: [ 0, -0.35], height: 0.12, wrapWidth: undefined, ori: 0,
+		color: new util.Color('white'), opacity: 1,
+		depth: 0.0
+	});
+
 	chatRoomNumberText = new visual.TextStim({
 		win: psychoJS.window,
 		name: 'gameTrackerText',
@@ -1956,7 +2014,9 @@ function instructSlideRoutineEachFrame(trials, slides) {
 						win: psychoJS.window,
 						value: audio_path
 					});
-					time_audio_end = t + track.getDuration()
+					//time_audio_end = t + track.getDuration()
+					time_audio_end = t + 2.0
+
 					// console.log(audio_path)
 					track.setVolume(1.0);
 					track.play();
@@ -1965,7 +2025,8 @@ function instructSlideRoutineEachFrame(trials, slides) {
 						win: psychoJS.window,
 						value: audio_path
 					});
-					time_audio_end = t + track.getDuration()
+					// time_audio_end = t + track.getDuration()
+					time_audio_end = t + 2.0
 					// console.log(audio_path)
 					track.setVolume(1.0);
 					track.play();
@@ -2429,7 +2490,9 @@ var lastTrial;
 var lastTrialPoints = 0;
 var trial_type;
 var do_not_show_switch = false;
+var do_not_show_score = false;
 var move_on = false;
+var swap_slide_duration = 4.5
 function trialRoutineBegin(trials) {
 	return function () {
 		//------Prepare to start Routine 'trial'-------
@@ -2438,6 +2501,29 @@ function trialRoutineBegin(trials) {
 		frameN = -1;
 		swap_slide_t = swapSlideClock.getTime()
 
+		if (((game_number) % 10 == 0) && game_number != 0 && do_not_show_score == false)
+		{
+
+			overallTotalTrackerText.setAutoDraw(true)
+			tenRoomTrackerText.setAutoDraw(true)
+			
+			tenRoomTracker.setText(`${Math.round(tenroomscore / 4)}`)
+			overallTotalTracker.setText(`${Math.round(overallscore/4)}`)
+			tenRoomTracker.setAutoDraw(true)
+			overallTotalTracker.setAutoDraw(true)
+			if (swap_slide_t < 3.0) {
+				return Scheduler.Event.FLIP_REPEAT;
+			}
+			else {
+				overallTotalTrackerText.setAutoDraw(false)
+				tenRoomTrackerText.setAutoDraw(false)
+				tenRoomTracker.setAutoDraw(false)
+				overallTotalTracker.setAutoDraw(false)
+				tenroomscore = 0
+				do_not_show_score = true
+			}
+		}
+		
 		if (((game_number) % 20 == 0) && game_number != 0 && do_not_show_switch == false)
 		{
 			console.log("in switch")
@@ -2453,7 +2539,7 @@ function trialRoutineBegin(trials) {
 				switchStimLike.setAutoDraw(true)
 			}
 
-			if (psychoJS.eventManager.getKeys({ keyList: ['right'] }).length > 0 && swap_slide_t > 1.5)
+			if (psychoJS.eventManager.getKeys({ keyList: ['right'] }).length > 0 && swap_slide_t > swap_slide_duration)
 			{
 				switchStimDislike.setAutoDraw(false)
 				switchStimLike.setAutoDraw(false)
@@ -3279,6 +3365,20 @@ function trialRoutineEachFrameWaitforInput(trials) {
 					last_selection = 'right'
 
 				}
+
+				if (dislike_room == 0) {
+					// Like Room // sum points
+					tenroomscore = tenroomscore + (trial_reward*1.9)
+					overallscore = overallscore + (trial_reward * 1.9)
+					tenroomscoretext = "You Have Won:"
+					tenRoomTracker.setColor('#00ff04')
+				} else {
+					// Dislike Room
+					tenroomscore = tenroomscore - trial_reward
+					overallscore = overallscore - trial_reward
+					tenroomscoretext = "You Have Lost:"
+					tenRoomTracker.setColor('#ff0000')
+				}
 				
 				// OLD PERCENTAGE SCORING
 				// Calculate the score as soon as you press
@@ -3422,6 +3522,7 @@ function trialRoutineEachFrameShowPost(trials) {
 				let theseKeys = resp.getKeys({ keyList: ['space'], waitRelease: false });
 
 				do_not_show_switch = false
+				do_not_show_score = false
 
 				if (theseKeys.length > 0) {
 					trialClock.reset();
@@ -4051,7 +4152,8 @@ function instructRoutineBegin(trials) {
 				value: audio_path
 			  });
 			// console.log(audio_path)
-			time_audio_end = t + track.getDuration()
+			//time_audio_end = t + track.getDuration()
+			time_audio_end = t + 2.0
 			track.setVolume(1.0);
 			track.play();
 		}
