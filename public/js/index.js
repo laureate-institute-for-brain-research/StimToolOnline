@@ -167,6 +167,8 @@ $('#study-list').change(function () {
         'WBMTURK_Cooperation_TaskCB': 1,
         'WBMTURK_Cooperation_TaskCB2': 1,
         'WBMTURK_Invitation_Task': 3,
+        'WBMTURK_Invitation_TaskCB1': 1,
+        'WBMTURK_Invitation_TaskCB2': 1,
         'WBMTURK_Social_MediaCB1': 1,
         'WBMTURK_Social_MediaCB2': 1,
     }

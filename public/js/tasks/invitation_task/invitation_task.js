@@ -22,7 +22,8 @@ var event_types = {
 	'BREAK_RESPONSE': 14,
 	'ANIMATION_ONSET': 15,
 	'TIME_UP': 16,
-	'PLANNING_ONSET': 17
+	'PLANNING_ONSET': 17,
+	'CB': 18
 }
 
 /*jshint -W069 */
@@ -407,9 +408,9 @@ var resources = [
 	{ name: 'practice_schedule.csv', path: '/js/tasks/invitation_task/practice_schedule.csv' },
 	{ name: 'PRACTICE_ready', path: '/js/tasks/invitation_task/media/instructions/Slide4.jpeg' },
 	{ name: 'PRACTICE_ready_audio.mp3', path: '/js/tasks/cooperation_task/media/instructions_audio/Slide15.mp3'},
-	{ name: 'MAIN_ready', path: '/js/tasks/invitation_task/media/instructions/Slide4.jpeg' },
-	{ name: 'MAIN_ready_audio.mp3', path: '/js/tasks/cooperation_task/media/instructions_audio/Slide16.mp3'},
-	{ name: 'BEGIN_slide', path: '/js/tasks/invitation_task/media/instructions/Slide4.jpeg' },
+	{ name: 'MAIN_ready', path: '/js/tasks/invitation_task/media/instructions/Slide15.jpeg' },
+	{ name: 'MAIN_ready_audio.mp3', path: '/js/tasks/cooperation_task/media/instructions_audio/Slide15.mp3'},
+	{ name: 'BEGIN_slide', path: '/js/tasks/invitation_task/media/instructions/Slide20.jpeg' },
 	{ name: 'library_1', path: '/js/tasks/invitation_task/media/game_slides/lib_1.jpeg' },
 	{ name: 'library_2', path: '/js/tasks/invitation_task/media/game_slides/lib_2.jpeg' },
 	{ name: 'library_3', path: '/js/tasks/invitation_task/media/game_slides/lib_3.jpeg' },
@@ -474,6 +475,14 @@ var resources = [
 	{ name: 'prompt_2b_textr', path: '/js/tasks/invitation_task/media/2b_prompt_Rej.png' },
 	{ name: 'correct', path: '/js/tasks/invitation_task/media/correct.png' },
 	{ name: 'incorrect', path: 'js/tasks/invitation_task/media/incorrect.png' },
+	{ name: 'win1', path: '/js/tasks/invitation_task/media/instructions/Slide17.jpeg' },
+	{ name: 'win1audio.mp3', path: '/js/tasks/invitation_task/media/instructions_audio/Slide17.mp3' },
+	{ name: 'win2', path: 'js/tasks/invitation_task/media/instructions/Slide19.jpeg' },
+	{ name: 'win2audio.mp3', path: 'js/tasks/invitation_task/media/instructions_audio/Slide19.mp3' },
+	{ name: 'loss1', path: '/js/tasks/invitation_task/media/instructions/Slide16.jpeg' },
+	{ name: 'loss1audio.mp3', path: '/js/tasks/invitation_task/media/instructions_audio/Slide16.mp3' },
+	{ name: 'loss2', path: 'js/tasks/invitation_task/media/instructions/Slide18.jpeg' },
+	{ name: 'loss2audio.mp3', path: 'js/tasks/invitation_task/media/instructions_audio/Slide18.mp3' },
 ]
 
 // schedule the experiment:
@@ -1920,37 +1929,37 @@ function trialRoutineBegin(trial) {
 		// Status Stims
 		// g.text_trial_number.setAutoDraw(true);
 		if (trial.module == "1") {
-			if (g.trial_number <= ((trial.nTotal - 3) / 4))
+			if (g.trial_number <= ((trial.nTotal - 4) / 4))
 			{
 				g.module_1_trialnum = g.trial_number
-				g.module_1_type = 'accept'
+				//g.module_1_type = 'accept'
 				// g.total_invites = 0; // variable for overal total invites
 				// g.total_rejects = 0;
 				//g.text_invites.setText("Total Invites Accepted:")
 				//g.text_val_invites.setColor(new util.Color('#90EE90'))
 			}
-			else if (g.trial_number > (((trial.nTotal - 3) / 2) + ((trial.nTotal - 3) / 4)))
+			else if (g.trial_number > (((trial.nTotal - 4) / 2) + ((trial.nTotal - 4) / 4)))
 			{
-				g.module_1_trialnum = g.trial_number - (((trial.nTotal - 3) / 2) + ((trial.nTotal - 3) / 4))
-				g.module_1_type = 'reject'
+				g.module_1_trialnum = g.trial_number - (((trial.nTotal - 4) / 2) + ((trial.nTotal - 4) / 4))
+				//g.module_1_type = 'reject'
 				// g.total_invites = 0; // variable for overal total invites
 				// g.total_rejects = 0;
 				//g.text_invites.setText("Total Invites Rejected:")
 				//g.text_val_invites.setColor(new util.Color('#ff0000'))
 			}
-			else if (g.trial_number > ((trial.nTotal - 3) / 2))
+			else if (g.trial_number > ((trial.nTotal - 4) / 2))
 			{
-				g.module_1_trialnum = g.trial_number - ((trial.nTotal - 3) / 2)
-				g.module_1_type = 'accept'
+				g.module_1_trialnum = g.trial_number - ((trial.nTotal - 4) / 2)
+				//g.module_1_type = 'accept'
 				// g.total_invites = 0; // variable for overal total invites
 				// g.total_rejects = 0;
 				//g.text_invites.setText("Total Invites Accepted:")
 				//g.text_val_invites.setColor(new util.Color('#90EE90'))
 			}
-			else if (g.trial_number > ((trial.nTotal - 3) / 4))
+			else if (g.trial_number > ((trial.nTotal - 4) / 4))
 			{
-				g.module_1_trialnum = g.trial_number - ((trial.nTotal - 3) / 4)
-				g.module_1_type = 'reject'
+				g.module_1_trialnum = g.trial_number - ((trial.nTotal - 4) / 4)
+				//g.module_1_type = 'reject'
 				// g.total_invites = 0; // variable for overal total invites
 				// g.total_rejects = 0;
 				//g.text_invites.setText("Total Invites Rejected:")
@@ -1958,7 +1967,7 @@ function trialRoutineBegin(trial) {
 			}
 			g.text_val_trial_number.setText(
 				'Trial ' + g.module_1_trialnum +
-				' of ' + ((trial.nTotal-3)/4));
+				' of ' + ((trial.nTotal-4)/4));
 		}
 		else {
 			//g.text_invites.setText("Total Invites Accepted:")
@@ -2361,6 +2370,178 @@ function module_1(trial) {
 	}
 }
 
+var cb_shown = false
+/**
+ * CB
+ * - This routine is the counterbalance slide handler.
+ * @param {*} trial 
+ * @returns 
+ */
+function module_cb(trial) {
+	return function () {
+
+		if (!cb_shown) {
+			t = 0;
+			psychoJS.eventManager.clearEvents()
+			readyClock.reset(); // clock
+			frameN = -1;
+
+			// Set readyStim based on block_type
+			console.log('forced_choice: ', forced_choice)
+			switch (forced_choice) {
+				case 'win1':
+					g.score_slide.height = 0.01
+					g.score_slide.pos[1] = -0.6
+					g.score_slide.setFillColor(new util.Color('#FF0000'))
+					g.module_1_type = 'accept'
+					readyStim = new visual.ImageStim({
+						win: psychoJS.window,
+						name: 'ready_stim', units: 'height',
+						image: 'win1', mask: undefined,
+						ori: 0, pos: [0, 0],
+						color: new util.Color([1, 1, 1]), opacity: 1,
+						flipHoriz: false, flipVert: false,
+						texRes: 128, interpolate: true, depth: 0
+					});
+					track = new Sound({
+						win: psychoJS.window,
+						value: 'win1audio.mp3'
+					});
+					track.setVolume(1.0);
+					break
+				case 'loss1':
+					g.score_slide.height = 1.2
+					g.score_slide.pos[1] = 0
+					g.score_slide.setFillColor(new util.Color('#00FF00'))
+					g.module_1_type = 'reject'
+					readyStim = new visual.ImageStim({
+						win: psychoJS.window,
+						name: 'loss1', units: 'height',
+						image: 'loss1', mask: undefined,
+						ori: 0, pos: [0, 0],
+						color: new util.Color([1, 1, 1]), opacity: 1,
+						flipHoriz: false, flipVert: false,
+						texRes: 128, interpolate: true, depth: 0
+					});
+					track = new Sound({
+						win: psychoJS.window,
+						value: 'loss1audio.mp3'
+					});
+					track.setVolume(1.0);
+					break
+				case 'win2':
+					g.score_slide.height = 0.01
+					g.score_slide.pos[1] = -0.6
+					g.score_slide.setFillColor(new util.Color('#FF0000'))
+					g.module_1_type = 'accept'
+					readyStim = new visual.ImageStim({
+						win: psychoJS.window,
+						name: 'ready_stim', units: 'height',
+						image: 'win2', mask: undefined,
+						ori: 0, pos: [0, 0],
+						color: new util.Color([1, 1, 1]), opacity: 1,
+						flipHoriz: false, flipVert: false,
+						texRes: 128, interpolate: true, depth: 0
+					});
+					track = new Sound({
+						win: psychoJS.window,
+						value: 'win2audio.mp3'
+					});
+					track.setVolume(1.0);
+					break
+				case 'loss2':
+					g.score_slide.height = 1.2
+					g.score_slide.pos[1] = 0
+					g.score_slide.setFillColor(new util.Color('#00FF00'))
+					g.module_1_type = 'reject'
+					readyStim = new visual.ImageStim({
+						win: psychoJS.window,
+						name: 'ready_stim', units: 'height',
+						image: 'loss2', mask: undefined,
+						ori: 0, pos: [0, 0],
+						color: new util.Color([1, 1, 1]), opacity: 1,
+						flipHoriz: false, flipVert: false,
+						texRes: 128, interpolate: true, depth: 0
+					});
+					track = new Sound({
+						win: psychoJS.window,
+						value: 'loss2audio.mp3'
+					});
+					track.setVolume(1.0);
+					break
+				default:
+					g.score_slide.height = 0.01
+					g.score_slide.pos[1] = -0.6
+					g.score_slide.setFillColor(new util.Color('#FF0000'))
+					g.module_1_type = 'accept'
+					readyStim = new visual.ImageStim({
+						win: psychoJS.window,
+						name: 'ready_stim', units: 'height',
+						image: 'win1', mask: undefined,
+						ori: 0, pos: [0, 0],
+						color: new util.Color([1, 1, 1]), opacity: 1,
+						flipHoriz: false, flipVert: false,
+						texRes: 128, interpolate: true, depth: 0
+					});
+					track = undefined;
+			}
+		
+			mark_event(
+				trials_data,
+				globalClock,
+				0,
+				forced_choice,
+				event_types['CB'],
+				'NA',
+				'NA',
+				'NA'
+			)
+	
+			//routineTimer.add(2.000000);
+			// update component parameters for each repeat
+			// keep track of which components have finished
+			//readyComponents = [readyStim];
+			readyStim.setAutoDraw(true)
+			cb_shown = true
+		}
+
+		let continueRoutine = true; // until we're told otherwise
+		// get current time
+		t = readyClock.getTime();
+		if (resp.status == PsychoJS.Status.NOT_STARTED) {
+			resp.start()
+
+			if (track) {
+				console.log('ready track: ', track)
+				track.play()
+			}
+		}
+	
+		// update/draw components on each frame
+		let theseKeys = resp.getKeys({ keyList: ['right'], waitRelease: false });
+		if (theseKeys.length > 0) {
+			if (track) track.stop();
+			continueRoutine = false
+		}
+		// check for quit (typically the Esc key)
+		if (psychoJS.experiment.experimentEnded || psychoJS.eventManager.getKeys({ keyList: ['escape'] }).length > 0) {
+			return quitPsychoJS('The [Escape] key was pressed. Goodbye!', false);
+		}
+		// refresh the screen if continuing
+		if (continueRoutine) {
+			return Scheduler.Event.FLIP_REPEAT;
+		}
+		else {
+			console.log('stopped')
+			resp.stop();
+			resp.status = PsychoJS.Status.NOT_STARTED;
+			readyStim.setAutoDraw(false);
+			cb_shown = false
+			return Scheduler.Event.NEXT;
+		}
+	}
+}
+
 /**
  * Module Break
  * - This routine is the break.
@@ -2407,9 +2588,18 @@ function module_break(trial){
 function module_break_switch(trial){
 	return function () {
 		if (g.prompt_text.status == PsychoJS.Status.NOT_STARTED) {
-			g.prompt_text.setText(
-				`\nGreat Job!\n
+			if (g.module_1_type == 'accept') {
+				g.prompt_text.setText(
+					`\nGreat Job!\n
 				We will now switch to minimizing rejections.`)
+				g.module_1_type = 'reject'
+			}
+			else {
+				g.prompt_text.setText(
+					`\nGreat Job!\n
+				We will now switch to maximizing invites.`)
+				g.module_1_type = 'accept'
+			}
 			g.prompt_text.pos = [0, 0.3];
 			g.prompt_text.setAutoDraw(true);
 
@@ -2417,7 +2607,7 @@ function module_break_switch(trial){
 			g.outcome_text.pos = [0, -0.8];
 			g.outcome_text.setAutoDraw(true);
 			mark_event(trials_data, globalClock, trial.trial_number, 'NA', event_types['BREAK_ONSET'],
-				'NA', 'NA', 'NA')
+				'NA', 'NA', g.module_1_type)
 		}
 
 		let theseKeys = ready.getKeys({ keyList: ['space'] , waitRelease: false });
@@ -2662,7 +2852,7 @@ function module_2b(trial) {
 				'MODULE=2b',
 				event_types['TRIAL_ONSET'],
 				'NA',
-				'NA',
+				g.module_1_type,
 				g.forced_choice 
 			)
 		}
@@ -2877,7 +3067,7 @@ function module_3(trial) {
 				event_types['PLANNING_ONSET'],
 				'NA',
 				'NA',
-				'NA'
+				g.module_1_type
 			)
 		}
 
@@ -3147,6 +3337,40 @@ function module_3(trial) {
 		if (g.trial_phase == g.INVALID_TRIAL) {
 			if (g.outcome_text.status == PsychoJS.Status.NOT_STARTED) {
 				console.log('Invalid trial', g.ANIMATION_DURATION)
+
+				if (g.module_1_type == "reject")
+				{
+					g.score_pop.setColor(new util.Color('#FF0000'))
+					g.score_pop.setText("-50")
+					mod_1_count = 120
+					// ANIMATION LOGIC
+					g.score_pop.opacity = 1
+					g.score_pop.setAutoDraw(true)
+					g.score_pop.autoDraw = true
+					g.trial_invites = g.trial_invites - 50;
+					if (g.score_slide.height - (50 / 150) > 0) {
+						g.score_slide.height = g.score_slide.height - (50 / 400)
+						g.score_slide.pos[1] = g.original_slide_y + g.score_slide.height/2
+					}
+					else{
+						g.score_slide.height = 0.01
+						g.score_slide.pos[1] = -0.6
+					}
+				}
+
+				if (g.score_slide.height >= 0.8)
+				{
+					g.score_slide.setFillColor(new util.Color('#00FF00'))
+				}
+				else if (g.score_slide.height >= 0.4)
+				{
+					g.score_slide.setFillColor(new util.Color('#FCBA03'))
+				}
+				else
+				{
+					g.score_slide.setFillColor(new util.Color('#FF0000'))
+				}
+
 				g.outcome_text.setAutoDraw(true);
 				g.animationTimer.reset(g.ANIMATION_DURATION)
 				g.trial_invites = 0; // no points for the trial
@@ -3216,6 +3440,8 @@ function runModule(trial) {
 	switch (trial.module) {
 		case 1:
 			return module_1(trial)
+		case 'cb':
+			return module_cb(trial)
 		case 'break':
 			return module_break(trial)
 		case 'break_switch':
@@ -3249,6 +3475,12 @@ function runModule(trial) {
 			return module_3(trial)
 		case '3d':
 			g.module_1_type = 'reject'
+			return module_3(trial)
+		case '3bPr':
+			g.module_1_type = 'reject'
+			return module_3(trial)
+		case '3cPr':
+			g.module_1_type = 'accept'
 			return module_3(trial)
 	}
 }
