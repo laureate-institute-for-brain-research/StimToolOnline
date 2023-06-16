@@ -2136,7 +2136,7 @@ function module_1(trial) {
 				g.score_slide.setAutoDraw(true);
 
 				// set forced choice if any
-				g.forced_choices = trial.forced_choice.split(',')
+				g.forced_choices = trial.forced_choice.split('-')
 				g.forced_choice_idx = trial.depth - g.depth;
 				if (g.forced_choices.length == 1) {
 					// only 1 so either ALL 'L' or 'R' or 'X'
