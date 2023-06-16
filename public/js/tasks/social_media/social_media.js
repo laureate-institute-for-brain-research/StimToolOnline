@@ -2251,11 +2251,11 @@ function trialsLoopBegin(thisScheduler) {
 	last_trial_num = trials.nTotal
 	console.log(trials.nTotal)
 
-	if (expInfo.run == "Pilot_R1_CB1.json")
+	if (expInfo.run == "Pilot_R1_CB1.json" || expInfo.run == "Pilot_R2_CB1.json")
 	{
 		start_like_dislike = "like";
 	}
-	else if (expInfo.run == "Pilot_R1_CB2.json")
+	else if (expInfo.run == "Pilot_R1_CB2.json" || expInfo.run == "Pilot_R2_CB2.json")
 	{
 		start_like_dislike = "dislike";
 	}
@@ -3892,7 +3892,7 @@ function readyRoutineBegin2(trials) {
 		routineTimer.add(2.000000);
 		// update component parameters for each repeat
 		// keep track of which components have finished
-		if (expInfo.run == 'Pilot_R1_CB1.json')
+		if (expInfo.run == 'Pilot_R1_CB1.json' || expInfo.run == "Pilot_R2_CB1.json")
 		{
 			track = new Sound({
 				win: psychoJS.window,
@@ -3904,7 +3904,7 @@ function readyRoutineBegin2(trials) {
 			readyComponents = [switchStimLikeB];
 			switchStimLikeB.setAutoDraw(true)
 		}
-		else if (expInfo.run == 'Pilot_R1_CB2.json')
+		else if (expInfo.run == 'Pilot_R1_CB2.json' || expInfo.run == "Pilot_R2_CB2.json")
 		{
 			track = new Sound({
 				win: psychoJS.window,

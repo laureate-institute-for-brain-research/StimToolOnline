@@ -21,36 +21,13 @@
               <br>
               <a href=""><center><img class="logo" src="/images/logo.png"></center></a>
               <div class="card-body">
-                  <center><p> <a href="/studies">Studies</a> </p></center>
                   <h5 class="card-title text-center">Online StimTool</h5>
                   <br>
                   <form class="form-signin" id='adduser'>
                       <div class="form-label-group">
                           <select id='study-list' required class="form-control" name='study'>
                               <option disabled selected>Choose Study</option>
-                              <option value="AAC-BET">AAC-BET</option>
-                              <option value="BK_Pilot">BK_Pilot</option>
-                              <option value="METH_Pilot">METH_Pilot</option>
-                              <option value="CognitiveControl">Cognitive Control</option>
-                              <option value="NCAIR">NCAIR</option>
-                              <option value="NCAIR-Arousal">NCAIR-Arousal</option>
-                              <option value="Driving2">Driving2</option>
-                              <option value="WB_Pilot">WB_Pilot</option>
-                              <option value="WBMTURK_Social_Media">WB MTURK Social Media</option>
-                              <option value="WBMTURK_Social_Media_v1">WB MTURK Social Media v1.0</option>
-                              <option value="WBMTURK_Social_MediaCB1">WB MTURK Social Media 2.0</option>
-                              <option value="WBMTURK_Social_MediaCB2">WB MTURK Social Media 2.1</option>
-                              <option value="WBMTURK_Social_Media2CB1">WB MTURK Social Media 2.2</option>
                               <option value="WBMTURK_Social_Media2CB2">WB MTURK Social Media 2.3</option>
-                              <option value="WBMTURK_Blind_Dating">WB MTURK Blind Dating</option>
-                              <option value="WBMTURK_Emotional_Faces">WB MTURK Emotional Faces</option>
-                              <option value="WBMTURK_Emotional_Faces_v2">WB MTURK Emotional Faces 2.0</option>
-                              <option value="WBMTURK_Cooperation_Task">WB MTURK Cooperation Task</option>
-                              <option value="WBMTURK_Cooperation_TaskCB">WB MTURK Cooperation Task 1.0</option>
-                              <option value="WBMTURK_Cooperation_TaskCB2">WB MTURK Cooperation Task 1.1</option>
-                              <option value="WBMTURK_Invitation_Task">WB MTURK Invitation Task</option>
-                              <option value="WBMTURK_Invitation_TaskCB1">WB MTURK Invitation Task 1.1</option>
-                              <option value="WBMTURK_Invitation_TaskCB2">WB MTURK Invitation Task 1.2</option>
                           </select>
                       </div>
                       <br>
@@ -63,7 +40,8 @@
                       <div class="form-label-group" id="session_div" style="display: none;">
                           <select id='session-list' required class="form-control" name='session'>
                               <option selected disabled>Choose Session</option>
-                              <!-- <option value="T1">T1</option> -->
+                              <option value="T1">T1</option>
+                              <option value="T2">T2</option>
                           </select>
                       </div>
                       <br>
@@ -71,7 +49,6 @@
                       <div class="row" id="about_begin_div" style="display: none;">
                         <div class="col mx-auto">
                           <button id='about' class="btn btn-secondary" data-toggle="tooltip" data-placement="left" title="Click to learn more information about the study">About</button>
-                          <button id='skip' class="btn btn-warning" data-toggle="tooltip" data-placement="right" title="Click to skip to a task run">Skip</button>
                           <button id='begin' type="submit" class="btn btn-success float-right" data-toggle="tooltip" data-placement="right" title="Click to begin session">Begin</button>
                         </div>
                         <br>
@@ -192,7 +169,7 @@
   <script src="/js/StimToolLib.js"></script>
   <script src="/js/particles.js"></script>
   
-  <script src="/js/index.js"></script>
+  <script src="/js/index_sm.js"></script>
   
 
 </html>
