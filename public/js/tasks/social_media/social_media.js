@@ -2340,7 +2340,7 @@ function setupPosts(game_type) {
 	}
 }
 
-
+/*
 // Social Approval Score is the percentage
 // of how much total likes ther user has accumalted
 //  / 
@@ -2483,6 +2483,7 @@ function getSocialApprovalScore(max_score, min_score) {
 	// 	totalLikesTracker.color = new util.Color('#ff0000')
 	// }
 }
+*/
 
 var trialComponents;
 var lastGameNumber;
