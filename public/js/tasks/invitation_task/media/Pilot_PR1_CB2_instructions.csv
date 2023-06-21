@@ -1,7 +1,5 @@
 ﻿instruct_slide,audio_path
 /js/tasks/invitation_task/media/instructions/Slide1.jpeg,
-/js/tasks/invitation_task/media/instructions/Slide2.jpeg,
-/js/tasks/invitation_task/media/instructions/Slide3.jpeg,
 /js/tasks/invitation_task/media/instructions/Slide4.jpeg,/js/tasks/invitation_task/media/instructions_audio/Slide4.mp3
 /js/tasks/invitation_task/media/instructions/Slide5.jpeg,/js/tasks/invitation_task/media/instructions_audio/Slide5.mp3
 /js/tasks/invitation_task/media/instructions/Slide6.jpeg,/js/tasks/invitation_task/media/instructions_audio/Slide6.mp3
@@ -13,3 +11,5 @@
 /js/tasks/invitation_task/media/instructions/Slide12.jpeg,/js/tasks/invitation_task/media/instructions_audio/Slide12.mp3
 /js/tasks/invitation_task/media/instructions/Slide13.jpeg,/js/tasks/invitation_task/media/instructions_audio/Slide13.mp3
 /js/tasks/invitation_task/media/instructions/Slide14.jpeg,/js/tasks/invitation_task/media/instructions_audio/Slide14.mp3
+/js/tasks/invitation_task/media/instructions/Slide15.jpeg,/js/tasks/invitation_task/media/instructions_audio/Slide15.mp3
+/js/tasks/invitation_task/media/instructions/Slide17.jpeg,/js/tasks/invitation_task/media/instructions_audio/Slide17.mp3

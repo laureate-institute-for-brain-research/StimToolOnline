@@ -171,6 +171,10 @@ $('#study-list').change(function () {
         'WBMTURK_Invitation_TaskCB2': 1,
         'WBMTURK_Social_MediaCB1': 1,
         'WBMTURK_Social_MediaCB2': 1,
+        'WBMTURK_Emotional_FacesCB1': 1,
+        'WBMTURK_Emotional_Faces2CB1': 1,
+        'WBMTURK_Emotional_FacesCB2': 1,
+        'WBMTURK_Emotional_Faces2CB2': 1,
     }
 
     // verify that the list of session list is the number of sessions

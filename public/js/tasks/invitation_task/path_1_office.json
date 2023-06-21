@@ -6,86 +6,86 @@
 		"right": 3
 	},
 	"2": {
-		"accepted": 5,
-		"rejected": 20,
+		"accepted": 0,
+		"rejected": 5,
 		"left": 4,
 		"right": 5
 	},
 	"3": {
-		"accepted": 0,
-		"rejected": 5,
+		"accepted": 10,
+		"rejected": 20,
 		"left": 6,
 		"right": 7
 	},
 	"4": {
-		"accepted": 5,
-		"rejected": 5,
+		"accepted": 10,
+		"rejected": 10,
 		"left": 8,
 		"right": 9
 	},
     "5": {
-		"accepted": 0,
-		"rejected": 0,
+		"accepted": 20,
+		"rejected": 20,
 		"left": 10,
 		"right": 11
 	},
     "6": {
-		"accepted": 20,
-		"rejected": 20,
+		"accepted": 0,
+		"rejected": 0,
 		"left": 12,
 		"right": 13
 	},
     "7": {
-		"accepted": 5,
+		"accepted": 10,
 		"rejected": 10,
 		"left": 14,
 		"right": 15
 	},
     "8": {
 		"accepted": 5,
-		"rejected": 10,
+		"rejected": 15,
 		"left": 0,
 		"right": 0
 	},
     "9": {
-		"accepted": 10,
-		"rejected": 5,
-		"left": 0,
-		"right": 0
-	},
-	"10": {
-		"accepted": 20,
-		"rejected": 0,
-		"left": 0,
-		"right": 0
-	},
-	"11": {
 		"accepted": 5,
-		"rejected": 10,
-		"left": 0,
-		"right": 0
-	},
-	"12": {
-		"accepted": 10,
 		"rejected": 20,
 		"left": 0,
 		"right": 0
 	},
-	"13": {
+	"10": {
 		"accepted": 0,
 		"rejected": 0,
 		"left": 0,
 		"right": 0
 	},
-	"14": {
+	"11": {
+		"accepted": 0,
+		"rejected": 10,
+		"left": 0,
+		"right": 0
+	},
+	"12": {
 		"accepted": 5,
 		"rejected": 20,
 		"left": 0,
 		"right": 0
 	},
+	"13": {
+		"accepted": 20,
+		"rejected": 20,
+		"left": 0,
+		"right": 0
+	},
+	"14": {
+		"accepted": 0,
+		"rejected": 15,
+		"left": 0,
+		"right": 0
+	},
 	"15": {
-		"accepted": 10,
-		"rejected": 25,
+		"accepted": 5,
+		"rejected": 15,
 		"left": 0,
 		"right": 0
 	}

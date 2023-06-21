@@ -1,9 +1,13 @@
 {
     "name": "WBMTURK Emotional Faces T1",
     "order": [
-        "/?index=0&task=emotional_faces_v2&run=Pilot_R1_CB2.json",
-        "/?index=1&survey=post_task&session=1",
-        "/?index=2&survey=feedback&session=1",
+        "/?index=0&survey=culture&session=1",
+        "/?index=1&survey=demo&session=1",
+        "/?index=2&survey=well_being&session=1",
+        "/?index=3&survey=panasx&session=1",
+        "/?index=4&task=emotional_faces_v2&run=Pilot_R1_CB2.json",
+        "/?index=5&survey=post_task&session=1",
+        "/?index=6&survey=feedback&session=1",
         "/completeMobile?"
     ],
     "fullscreen": true,

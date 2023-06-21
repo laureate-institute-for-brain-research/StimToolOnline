@@ -736,10 +736,20 @@ function experimentInit() {
 		text: '1',alignHoriz: 'right',
 		font: 'Arial',
 		units: 'norm',
-		pos: [0.87, 0.88], height: 0.05, wrapWidth: undefined, ori: 0,
+		pos: [0.87, 0.88], height: 0.08, wrapWidth: undefined, ori: 0,
 		color: new util.Color('white'), opacity: 1,
 		depth: 0.0
 	});
+	g.trial_num_rect = new visual.Rect({
+		win: psychoJS.window,
+		name: 'trial_rectangle',
+		width: 0.3, height: 0.11,
+		lineWidth: 2.0,
+		units: 'norm',
+		pos: [0.755, 0.88], ori: 0,
+		lineColor: new util.Color('white'), opacity: 1,
+		depth: 0
+	})
 
 	g.choice_number = 0;
 	g.text_depth  = new visual.TextStim({
@@ -1094,7 +1104,7 @@ function experimentInit() {
 	g.points_fixation_stim = new visual.TextStim({
 		win: psychoJS.window,
 		name: 'pointsTracker',
-		text: 'X',
+		text: '+',
 		font: 'Arial',
 		units: 'norm',
 		pos: [0, 0], height: 0.12, wrapWidth: undefined, ori: 0,
@@ -1663,7 +1673,7 @@ function practiceTrialsLoopBegin(thisScheduler) {
 	for (const thisBlock of trials) {
 		const snapshot = trials.getSnapshot();
 		thisScheduler.add(importConditions(snapshot));
-		thisScheduler.add(initialFixation(snapshot));
+		// thisScheduler.add(initialFixation(snapshot));
 		thisScheduler.add(trialRoutineBegin(snapshot)); 	// setup block
 		thisScheduler.add(fixation(snapshot));				// fixation
 		thisScheduler.add(runModule(snapshot));				// run MOdule
@@ -1740,7 +1750,7 @@ function trialsLoopBegin(thisScheduler) {
 		}
 		const snapshot = trials.getSnapshot();
 		thisScheduler.add(importConditions(snapshot));
-		thisScheduler.add(initialFixation(snapshot));
+		// thisScheduler.add(initialFixation(snapshot));
 		thisScheduler.add(trialRoutineBegin(snapshot)); 	// setup block
 		thisScheduler.add(fixation(snapshot));				// fixation
 		thisScheduler.add(runModule(snapshot));				// run MOdule
@@ -1752,7 +1762,7 @@ function trialsLoopBegin(thisScheduler) {
 		for (const thisBlock of trials) {
 			const snapshot = trials.getSnapshot();
 			thisScheduler.add(importConditions(snapshot));
-			thisScheduler.add(initialFixation(snapshot));
+			// thisScheduler.add(initialFixation(snapshot));
 			thisScheduler.add(trialRoutineBegin(snapshot)); 	// setup block
 			thisScheduler.add(fixation(snapshot));				// fixation
 			thisScheduler.add(runModule(snapshot));				// run MOdule
@@ -1865,6 +1875,9 @@ function clearStatuStims() {
 
 	g.text_val_trial_number.setAutoDraw(false);
 	g.text_val_trial_number.status = PsychoJS.Status.NOT_STARTED;
+
+	g.trial_num_rect.setAutoDraw(false)
+	g.trial_num_rect.status = PsychoJS.Status.NOT_STARTED
 
 	g.text_depth.setAutoDraw(false);
 	g.text_depth.status = PsychoJS.Status.NOT_STARTED;
@@ -2127,6 +2140,7 @@ function module_1(trial) {
 				
 				// status stims
 				g.text_val_trial_number.setAutoDraw(true);
+				g.trial_num_rect.setAutoDraw(true)
 				g.text_val_building.setAutoDraw(true);
 				//g.text_invites.setAutoDraw(true);
 				//g.text_val_invites.setAutoDraw(true);
@@ -2371,6 +2385,7 @@ function module_1(trial) {
 }
 
 var cb_shown = false
+var win1_or_loss1 = false
 /**
  * CB
  * - This routine is the counterbalance slide handler.
@@ -2394,40 +2409,44 @@ function module_cb(trial) {
 					g.score_slide.pos[1] = -0.6
 					g.score_slide.setFillColor(new util.Color('#FF0000'))
 					g.module_1_type = 'accept'
-					readyStim = new visual.ImageStim({
-						win: psychoJS.window,
-						name: 'ready_stim', units: 'height',
-						image: 'win1', mask: undefined,
-						ori: 0, pos: [0, 0],
-						color: new util.Color([1, 1, 1]), opacity: 1,
-						flipHoriz: false, flipVert: false,
-						texRes: 128, interpolate: true, depth: 0
-					});
-					track = new Sound({
-						win: psychoJS.window,
-						value: 'win1audio.mp3'
-					});
-					track.setVolume(1.0);
+					// readyStim = new visual.ImageStim({
+					// 	win: psychoJS.window,
+					// 	name: 'ready_stim', units: 'height',
+					// 	image: 'win1', mask: undefined,
+					// 	ori: 0, pos: [0, 0],
+					// 	color: new util.Color([1, 1, 1]), opacity: 1,
+					// 	flipHoriz: false, flipVert: false,
+					// 	texRes: 128, interpolate: true, depth: 0
+					// });
+					// track = new Sound({
+					// 	win: psychoJS.window,
+					// 	value: 'win1audio.mp3'
+					// });
+					// track.setVolume(1.0);
+					win1_or_loss1 = true
+					track = undefined;
 					break
 				case 'loss1':
 					g.score_slide.height = 1.2
 					g.score_slide.pos[1] = 0
 					g.score_slide.setFillColor(new util.Color('#00FF00'))
 					g.module_1_type = 'reject'
-					readyStim = new visual.ImageStim({
-						win: psychoJS.window,
-						name: 'loss1', units: 'height',
-						image: 'loss1', mask: undefined,
-						ori: 0, pos: [0, 0],
-						color: new util.Color([1, 1, 1]), opacity: 1,
-						flipHoriz: false, flipVert: false,
-						texRes: 128, interpolate: true, depth: 0
-					});
-					track = new Sound({
-						win: psychoJS.window,
-						value: 'loss1audio.mp3'
-					});
-					track.setVolume(1.0);
+					// readyStim = new visual.ImageStim({
+					// 	win: psychoJS.window,
+					// 	name: 'loss1', units: 'height',
+					// 	image: 'loss1', mask: undefined,
+					// 	ori: 0, pos: [0, 0],
+					// 	color: new util.Color([1, 1, 1]), opacity: 1,
+					// 	flipHoriz: false, flipVert: false,
+					// 	texRes: 128, interpolate: true, depth: 0
+					// });
+					// track = new Sound({
+					// 	win: psychoJS.window,
+					// 	value: 'loss1audio.mp3'
+					// });
+					// track.setVolume(1.0);
+					track = undefined;
+					win1_or_loss1 = true
 					break
 				case 'win2':
 					g.score_slide.height = 0.01
@@ -2443,11 +2462,13 @@ function module_cb(trial) {
 						flipHoriz: false, flipVert: false,
 						texRes: 128, interpolate: true, depth: 0
 					});
-					track = new Sound({
-						win: psychoJS.window,
-						value: 'win2audio.mp3'
-					});
-					track.setVolume(1.0);
+					track = undefined;
+					// track = new Sound({
+					// 	win: psychoJS.window,
+					// 	value: 'win2audio.mp3'
+					// });
+					// track.setVolume(1.0);
+					win1_or_loss1 = false
 					break
 				case 'loss2':
 					g.score_slide.height = 1.2
@@ -2463,11 +2484,13 @@ function module_cb(trial) {
 						flipHoriz: false, flipVert: false,
 						texRes: 128, interpolate: true, depth: 0
 					});
-					track = new Sound({
-						win: psychoJS.window,
-						value: 'loss2audio.mp3'
-					});
-					track.setVolume(1.0);
+					track = undefined;
+					// track = new Sound({
+					// 	win: psychoJS.window,
+					// 	value: 'loss2audio.mp3'
+					// });
+					// track.setVolume(1.0);
+					win1_or_loss1 = false
 					break
 				default:
 					g.score_slide.height = 0.01
@@ -2483,6 +2506,7 @@ function module_cb(trial) {
 						flipHoriz: false, flipVert: false,
 						texRes: 128, interpolate: true, depth: 0
 					});
+					win1_or_loss1 = false
 					track = undefined;
 			}
 		
@@ -2501,11 +2525,19 @@ function module_cb(trial) {
 			// update component parameters for each repeat
 			// keep track of which components have finished
 			//readyComponents = [readyStim];
-			readyStim.setAutoDraw(true)
+			if (forced_choice == 'win2' || forced_choice == 'loss2') {
+				readyStim.setAutoDraw(true)
+			}
 			cb_shown = true
 		}
 
 		let continueRoutine = true; // until we're told otherwise
+
+		if (win1_or_loss1)
+		{
+			continueRoutine = false
+		}
+
 		// get current time
 		t = readyClock.getTime();
 		if (resp.status == PsychoJS.Status.NOT_STARTED) {
@@ -2591,13 +2623,17 @@ function module_break_switch(trial){
 			if (g.module_1_type == 'accept') {
 				g.prompt_text.setText(
 					`\nGreat Job!\n
-				We will now switch to minimizing rejections.`)
+				We will now switch to minimizing rejections.\n\n
+				As before, for the first two trials we will tell you which doors to choose.\n
+				Then you will be free to choose on your own from that point on.`)
 				g.module_1_type = 'reject'
 			}
 			else {
 				g.prompt_text.setText(
 					`\nGreat Job!\n
-				We will now switch to maximizing invites.`)
+				We will now switch to maximizing invites.\n\n
+				As before, for the first two trials we will tell you which doors to choose.\n
+				Then you will be free to choose on your own from that point on.`)
 				g.module_1_type = 'accept'
 			}
 			g.prompt_text.pos = [0, 0.3];
