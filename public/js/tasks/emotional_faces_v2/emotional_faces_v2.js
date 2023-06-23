@@ -1010,7 +1010,7 @@ function experimentInit() {
 	thanksText = new visual.TextStim({
 		win: psychoJS.window,
 		name: 'thanksText',
-		text: 'This is the end of the task run. Please wait for the upcoming survey and for all task data to be saved. Thank you!',
+		text: 'This is the end of the task run. Please wait for the upcoming survey and for all task data to be saved.\n This may take a while, so please be patient.\n There will be no payment if you do not progress to the follow-up page containg the submission code.\n Thank you!',
 		font: 'Arial',
 		units: 'height',
 		pos: [0, 0], height: 0.05, wrapWidth: undefined, ori: 0,

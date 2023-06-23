@@ -3999,7 +3999,7 @@ function thanksRoutineBegin(trials) {
 		// keep track of which components have finished
 
 		// Show Final Points and money earned
-		thanksText.setText(`This is the end of the task. Please wait for the upcoming survey and for all task data to be saved. Thank you!`)
+		thanksText.setText(`This is the end of the task run. Please wait for the upcoming survey and for all task data to be saved.\n This may take a while, so please be patient.\n There will be no payment if you do not progress to the follow-up page containg the submission code.\n Thank you!`)
 		
 		thanksComponents = [];
 		thanksComponents.push(thanksText);
