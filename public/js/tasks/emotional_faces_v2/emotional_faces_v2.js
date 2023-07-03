@@ -196,7 +196,7 @@ window.onload = function () {
 			return new Promise((resolve, reject) => {
 				$.ajax({
 					type: 'GET',
-					url: '/js/tasks/emotional_faces_v2/rate_faces_schedule_full.csv',
+					url: '/js/tasks/emotional_faces_v2/rate_faces_schedule.csv',
 					dataType: 'text',
 					async: false,
 					success: (data) => {
