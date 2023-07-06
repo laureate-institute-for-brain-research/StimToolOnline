@@ -359,6 +359,65 @@ window.onload = function () {
 			})
 		})
 		
+		.then((values) => {
+			return new Promise((resolve, reject) => {
+				$.ajax({
+					type: 'GET',
+					url: '/js/tasks/invitation_task/path_1_library2.json',
+					dataType: 'text',
+					async: false,
+					success: (data) => {
+						g.path_1_library2 = JSON.parse(data);
+						resolve(data)
+					}
+				})
+			})
+		})
+
+		.then((values) => {
+			return new Promise((resolve, reject) => {
+				$.ajax({
+					type: 'GET',
+					url: '/js/tasks/invitation_task/path_1_office2.json',
+					dataType: 'text',
+					async: false,
+					success: (data) => {
+						g.path_1_office2 = JSON.parse(data);
+						resolve(data)
+					}
+				})
+			})
+		})
+
+		.then((values) => {
+			return new Promise((resolve, reject) => {
+				$.ajax({
+					type: 'GET',
+					url: '/js/tasks/invitation_task/path_2_library2.json',
+					dataType: 'text',
+					async: false,
+					success: (data) => {
+						g.path_2_library2 = JSON.parse(data);
+						resolve(data)
+					}
+				})
+			})
+		})
+
+		.then((values) => {
+			return new Promise((resolve, reject) => {
+				$.ajax({
+					type: 'GET',
+					url: '/js/tasks/invitation_task/path_2_office2.json',
+					dataType: 'text',
+					async: false,
+					success: (data) => {
+						g.path_2_office2 = JSON.parse(data);
+						resolve(data)
+					}
+				})
+			})
+		})
 		
 		.then((values) => {
 			// Query Preceeds /getInfo
@@ -440,6 +499,34 @@ var resources = [
 	{ name: 'library_invite_13', path: '/js/tasks/invitation_task/media/game_slides/lib_13_invite.jpeg' },
 	{ name: 'library_invite_14', path: '/js/tasks/invitation_task/media/game_slides/lib_14_invite.jpeg' },
 	{ name: 'library_invite_15', path: '/js/tasks/invitation_task/media/game_slides/lib_15_invite.jpeg' },
+	{ name: 'library_accept_2', path: '/js/tasks/invitation_task/media/game_slides/lib_2_accept.jpeg' },
+	{ name: 'library_accept_3', path: '/js/tasks/invitation_task/media/game_slides/lib_3_accept.jpeg' },
+	{ name: 'library_accept_4', path: '/js/tasks/invitation_task/media/game_slides/lib_4_accept.jpeg' },
+	{ name: 'library_accept_5', path: '/js/tasks/invitation_task/media/game_slides/lib_5_accept.jpeg' },
+	{ name: 'library_accept_6', path: '/js/tasks/invitation_task/media/game_slides/lib_6_accept.jpeg' },
+	{ name: 'library_accept_7', path: '/js/tasks/invitation_task/media/game_slides/lib_7_accept.jpeg' },
+	{ name: 'library_accept_8', path: '/js/tasks/invitation_task/media/game_slides/lib_8_accept.jpeg' },
+	{ name: 'library_accept_9', path: '/js/tasks/invitation_task/media/game_slides/lib_9_accept.jpeg' },
+	{ name: 'library_accept_10', path: '/js/tasks/invitation_task/media/game_slides/lib_10_accept.jpeg' },
+	{ name: 'library_accept_11', path: '/js/tasks/invitation_task/media/game_slides/lib_11_accept.jpeg' },
+	{ name: 'library_accept_12', path: '/js/tasks/invitation_task/media/game_slides/lib_12_accept.jpeg' },
+	{ name: 'library_accept_13', path: '/js/tasks/invitation_task/media/game_slides/lib_13_accept.jpeg' },
+	{ name: 'library_accept_14', path: '/js/tasks/invitation_task/media/game_slides/lib_14_accept.jpeg' },
+	{ name: 'library_accept_15', path: '/js/tasks/invitation_task/media/game_slides/lib_15_accept.jpeg' },
+	{ name: 'library_reject_2', path: '/js/tasks/invitation_task/media/game_slides/lib_2_reject.jpeg' },
+	{ name: 'library_reject_3', path: '/js/tasks/invitation_task/media/game_slides/lib_3_reject.jpeg' },
+	{ name: 'library_reject_4', path: '/js/tasks/invitation_task/media/game_slides/lib_4_reject.jpeg' },
+	{ name: 'library_reject_5', path: '/js/tasks/invitation_task/media/game_slides/lib_5_reject.jpeg' },
+	{ name: 'library_reject_6', path: '/js/tasks/invitation_task/media/game_slides/lib_6_reject.jpeg' },
+	{ name: 'library_reject_7', path: '/js/tasks/invitation_task/media/game_slides/lib_7_reject.jpeg' },
+	{ name: 'library_reject_8', path: '/js/tasks/invitation_task/media/game_slides/lib_8_reject.jpeg' },
+	{ name: 'library_reject_9', path: '/js/tasks/invitation_task/media/game_slides/lib_9_reject.jpeg' },
+	{ name: 'library_reject_10', path: '/js/tasks/invitation_task/media/game_slides/lib_10_reject.jpeg' },
+	{ name: 'library_reject_11', path: '/js/tasks/invitation_task/media/game_slides/lib_11_reject.jpeg' },
+	{ name: 'library_reject_12', path: '/js/tasks/invitation_task/media/game_slides/lib_12_reject.jpeg' },
+	{ name: 'library_reject_13', path: '/js/tasks/invitation_task/media/game_slides/lib_13_reject.jpeg' },
+	{ name: 'library_reject_14', path: '/js/tasks/invitation_task/media/game_slides/lib_14_reject.jpeg' },
+	{ name: 'library_reject_15', path: '/js/tasks/invitation_task/media/game_slides/lib_15_reject.jpeg' },
 	{ name: 'office_1', path: '/js/tasks/invitation_task/media/game_slides/office_1.jpeg' },
 	{ name: 'office_2', path: '/js/tasks/invitation_task/media/game_slides/office_2.jpeg' },
 	{ name: 'office_3', path: '/js/tasks/invitation_task/media/game_slides/office_3.jpeg' },
@@ -469,20 +556,49 @@ var resources = [
 	{ name: 'office_invite_13', path: '/js/tasks/invitation_task/media/game_slides/office_13_invite.jpeg' },
 	{ name: 'office_invite_14', path: '/js/tasks/invitation_task/media/game_slides/office_14_invite.jpeg' },
 	{ name: 'office_invite_15', path: '/js/tasks/invitation_task/media/game_slides/office_15_invite.jpeg' },
+	{ name: 'office_accept_2', path: '/js/tasks/invitation_task/media/game_slides/office_2_accept.jpeg' },
+	{ name: 'office_accept_3', path: '/js/tasks/invitation_task/media/game_slides/office_3_accept.jpeg' },
+	{ name: 'office_accept_4', path: '/js/tasks/invitation_task/media/game_slides/office_4_accept.jpeg' },
+	{ name: 'office_accept_5', path: '/js/tasks/invitation_task/media/game_slides/office_5_accept.jpeg' },
+	{ name: 'office_accept_6', path: '/js/tasks/invitation_task/media/game_slides/office_6_accept.jpeg' },
+	{ name: 'office_accept_7', path: '/js/tasks/invitation_task/media/game_slides/office_7_accept.jpeg' },
+	{ name: 'office_accept_8', path: '/js/tasks/invitation_task/media/game_slides/office_8_accept.jpeg' },
+	{ name: 'office_accept_9', path: '/js/tasks/invitation_task/media/game_slides/office_9_accept.jpeg' },
+	{ name: 'office_accept_10', path: '/js/tasks/invitation_task/media/game_slides/office_10_accept.jpeg' },
+	{ name: 'office_accept_11', path: '/js/tasks/invitation_task/media/game_slides/office_11_accept.jpeg' },
+	{ name: 'office_accept_12', path: '/js/tasks/invitation_task/media/game_slides/office_12_accept.jpeg' },
+	{ name: 'office_accept_13', path: '/js/tasks/invitation_task/media/game_slides/office_13_accept.jpeg' },
+	{ name: 'office_accept_14', path: '/js/tasks/invitation_task/media/game_slides/office_14_accept.jpeg' },
+	{ name: 'office_accept_15', path: '/js/tasks/invitation_task/media/game_slides/office_15_accept.jpeg' },
+	{ name: 'office_reject_2', path: '/js/tasks/invitation_task/media/game_slides/office_2_reject.jpeg' },
+	{ name: 'office_reject_3', path: '/js/tasks/invitation_task/media/game_slides/office_3_reject.jpeg' },
+	{ name: 'office_reject_4', path: '/js/tasks/invitation_task/media/game_slides/office_4_reject.jpeg' },
+	{ name: 'office_reject_5', path: '/js/tasks/invitation_task/media/game_slides/office_5_reject.jpeg' },
+	{ name: 'office_reject_6', path: '/js/tasks/invitation_task/media/game_slides/office_6_reject.jpeg' },
+	{ name: 'office_reject_7', path: '/js/tasks/invitation_task/media/game_slides/office_7_reject.jpeg' },
+	{ name: 'office_reject_8', path: '/js/tasks/invitation_task/media/game_slides/office_8_reject.jpeg' },
+	{ name: 'office_reject_9', path: '/js/tasks/invitation_task/media/game_slides/office_9_reject.jpeg' },
+	{ name: 'office_reject_10', path: '/js/tasks/invitation_task/media/game_slides/office_10_reject.jpeg' },
+	{ name: 'office_reject_11', path: '/js/tasks/invitation_task/media/game_slides/office_11_reject.jpeg' },
+	{ name: 'office_reject_12', path: '/js/tasks/invitation_task/media/game_slides/office_12_reject.jpeg' },
+	{ name: 'office_reject_13', path: '/js/tasks/invitation_task/media/game_slides/office_13_reject.jpeg' },
+	{ name: 'office_reject_14', path: '/js/tasks/invitation_task/media/game_slides/office_14_reject.jpeg' },
+	{ name: 'office_reject_15', path: '/js/tasks/invitation_task/media/game_slides/office_15_reject.jpeg' },
 	{ name: 'orange_door', path: '/js/tasks/invitation_task/media/images/orange_door.png' },
 	{ name: 'blue_door', path: '/js/tasks/invitation_task/media/images/blue_door.png' },
 	{ name: 'prompt_2b_texta', path: '/js/tasks/invitation_task/media/2b_prompt_Acc.png' },
 	{ name: 'prompt_2b_textr', path: '/js/tasks/invitation_task/media/2b_prompt_Rej.png' },
 	{ name: 'correct', path: '/js/tasks/invitation_task/media/correct.png' },
 	{ name: 'incorrect', path: 'js/tasks/invitation_task/media/incorrect.png' },
-	{ name: 'win1', path: '/js/tasks/invitation_task/media/instructions/Slide17.jpeg' },
-	{ name: 'win1audio.mp3', path: '/js/tasks/invitation_task/media/instructions_audio/Slide17.mp3' },
-	{ name: 'win2', path: 'js/tasks/invitation_task/media/instructions/Slide19.jpeg' },
-	{ name: 'win2audio.mp3', path: 'js/tasks/invitation_task/media/instructions_audio/Slide19.mp3' },
-	{ name: 'loss1', path: '/js/tasks/invitation_task/media/instructions/Slide16.jpeg' },
-	{ name: 'loss1audio.mp3', path: '/js/tasks/invitation_task/media/instructions_audio/Slide16.mp3' },
-	{ name: 'loss2', path: 'js/tasks/invitation_task/media/instructions/Slide18.jpeg' },
-	{ name: 'loss2audio.mp3', path: 'js/tasks/invitation_task/media/instructions_audio/Slide18.mp3' },
+	{ name: 'win1', path: '/js/tasks/invitation_task/media/instructions/Slide15.jpeg' },
+	{ name: 'win1audio.mp3', path: '/js/tasks/invitation_task/media/instructions_audio/Slide15.mp3' },
+	{ name: 'win2', path: 'js/tasks/invitation_task/media/instructions/Slide17.jpeg' },
+	{ name: 'win2audio.mp3', path: 'js/tasks/invitation_task/media/instructions_audio/Slide17.mp3' },
+	{ name: 'loss1', path: '/js/tasks/invitation_task/media/instructions/Slide14.jpeg' },
+	{ name: 'loss1audio.mp3', path: '/js/tasks/invitation_task/media/instructions_audio/Slide14.mp3' },
+	{ name: 'loss2', path: 'js/tasks/invitation_task/media/instructions/Slide16.jpeg' },
+	{ name: 'loss2audio.mp3', path: 'js/tasks/invitation_task/media/instructions_audio/Slide16.mp3' },
+	{ name: 'second_set', path: 'js/tasks/invitation_task/media/instructions/Slide18.jpeg' },
 ]
 
 // schedule the experiment:
@@ -1922,6 +2038,9 @@ function clearStatuStims() {
 	g.text_val_building.status = PsychoJS.Status.NOT_STARTED;
 }
 
+
+var building_type_name = ""
+
 /**
  * Routine for the routine before block starts
  * Userse for intialize and setting the stims
@@ -1942,7 +2061,7 @@ function trialRoutineBegin(trial) {
 		// Status Stims
 		// g.text_trial_number.setAutoDraw(true);
 		if (trial.module == "1") {
-			if (g.trial_number <= ((trial.nTotal - 4) / 4))
+			if (g.trial_number <= ((trial.nTotal - 9) / 8))
 			{
 				g.module_1_trialnum = g.trial_number
 				//g.module_1_type = 'accept'
@@ -1951,27 +2070,63 @@ function trialRoutineBegin(trial) {
 				//g.text_invites.setText("Total Invites Accepted:")
 				//g.text_val_invites.setColor(new util.Color('#90EE90'))
 			}
-			else if (g.trial_number > (((trial.nTotal - 4) / 2) + ((trial.nTotal - 4) / 4)))
+			else if (g.trial_number > ((3*(trial.nTotal - 9) / 4) + ((trial.nTotal - 9) / 8)))
 			{
-				g.module_1_trialnum = g.trial_number - (((trial.nTotal - 4) / 2) + ((trial.nTotal - 4) / 4))
-				//g.module_1_type = 'reject'
-				// g.total_invites = 0; // variable for overal total invites
-				// g.total_rejects = 0;
-				//g.text_invites.setText("Total Invites Rejected:")
-				//g.text_val_invites.setColor(new util.Color('#ff0000'))
-			}
-			else if (g.trial_number > ((trial.nTotal - 4) / 2))
-			{
-				g.module_1_trialnum = g.trial_number - ((trial.nTotal - 4) / 2)
+				g.module_1_trialnum = g.trial_number - ((3*(trial.nTotal - 9) / 4) + ((trial.nTotal - 9) / 8))
 				//g.module_1_type = 'accept'
 				// g.total_invites = 0; // variable for overal total invites
 				// g.total_rejects = 0;
 				//g.text_invites.setText("Total Invites Accepted:")
 				//g.text_val_invites.setColor(new util.Color('#90EE90'))
 			}
-			else if (g.trial_number > ((trial.nTotal - 4) / 4))
+			else if (g.trial_number > (3*(trial.nTotal - 9) / 4))
 			{
-				g.module_1_trialnum = g.trial_number - ((trial.nTotal - 4) / 4)
+				g.module_1_trialnum = g.trial_number - (3*(trial.nTotal - 9) / 4)
+				//g.module_1_type = 'accept'
+				// g.total_invites = 0; // variable for overal total invites
+				// g.total_rejects = 0;
+				//g.text_invites.setText("Total Invites Accepted:")
+				//g.text_val_invites.setColor(new util.Color('#90EE90'))
+			}
+			else if (g.trial_number > (((trial.nTotal - 9) / 2) + ((trial.nTotal - 9) / 8)))
+			{
+				g.module_1_trialnum = g.trial_number - (((trial.nTotal - 9) / 2) + ((trial.nTotal - 9) / 8))
+				//g.module_1_type = 'accept'
+				// g.total_invites = 0; // variable for overal total invites
+				// g.total_rejects = 0;
+				//g.text_invites.setText("Total Invites Accepted:")
+				//g.text_val_invites.setColor(new util.Color('#90EE90'))
+			}
+			else if (g.trial_number > ((trial.nTotal - 9) / 2))
+			{
+				g.module_1_trialnum = g.trial_number - ((trial.nTotal - 9) / 2)
+				//g.module_1_type = 'accept'
+				// g.total_invites = 0; // variable for overal total invites
+				// g.total_rejects = 0;
+				//g.text_invites.setText("Total Invites Accepted:")
+				//g.text_val_invites.setColor(new util.Color('#90EE90'))
+			}
+			else if (g.trial_number > (((trial.nTotal - 9) / 4) + ((trial.nTotal - 9) / 8)))
+			{
+				g.module_1_trialnum = g.trial_number - (((trial.nTotal - 9) / 4) + ((trial.nTotal - 9) / 8))
+				//g.module_1_type = 'reject'
+				// g.total_invites = 0; // variable for overal total invites
+				// g.total_rejects = 0;
+				//g.text_invites.setText("Total Invites Rejected:")
+				//g.text_val_invites.setColor(new util.Color('#ff0000'))
+			}
+			else if (g.trial_number > ((trial.nTotal - 9) / 4))
+			{
+				g.module_1_trialnum = g.trial_number - ((trial.nTotal - 9) / 4)
+				//g.module_1_type = 'accept'
+				// g.total_invites = 0; // variable for overal total invites
+				// g.total_rejects = 0;
+				//g.text_invites.setText("Total Invites Accepted:")
+				//g.text_val_invites.setColor(new util.Color('#90EE90'))
+			}
+			else if (g.trial_number > ((trial.nTotal - 9) / 8))
+			{
+				g.module_1_trialnum = g.trial_number - ((trial.nTotal - 9) / 8)
 				//g.module_1_type = 'reject'
 				// g.total_invites = 0; // variable for overal total invites
 				// g.total_rejects = 0;
@@ -1980,7 +2135,7 @@ function trialRoutineBegin(trial) {
 			}
 			g.text_val_trial_number.setText(
 				'Trial ' + g.module_1_trialnum +
-				' of ' + ((trial.nTotal-4)/4));
+				' of ' + ((trial.nTotal-9)/8));
 		}
 		else {
 			//g.text_invites.setText("Total Invites Accepted:")
@@ -2003,8 +2158,11 @@ function trialRoutineBegin(trial) {
 		g.rooms_left_text2.setText(`You have ${g.depth} moves`)
 		
 		g.outcome_text.color = 'white';
+
+		building_type_name = trial.building_type.replace("1", "")
+		building_type_name = building_type_name.replace("2", "")
 		
-		g.room_image.setImage(trial.building_type + '_' + g.current_path)
+		g.room_image.setImage(building_type_name + '_' + g.current_path)
 
 		g.keyList = ['1', '2'];
 		g.response = undefined;
@@ -2024,25 +2182,39 @@ function trialRoutineBegin(trial) {
 		
 		// Set Paths
 		// Version 1
-		if (trial.building_type == 'office' && trial.path_version == 1) {
+		if (trial.building_type == 'office1' && trial.path_version == 1) {
 			g.path = g.path_1_office;
 		}
-		if (trial.building_type == 'library' && trial.path_version == 1) {
+		if (trial.building_type == 'library1' && trial.path_version == 1) {
 			g.path = g.path_1_library;
 		}
 		// Version 2
-		if (trial.building_type == 'office' && trial.path_version == 2) {
+		if (trial.building_type == 'office1' && trial.path_version == 2) {
 			g.path = g.path_2_office;
 		}
-		if (trial.building_type == 'library' && trial.path_version == 2) {
+		if (trial.building_type == 'library1' && trial.path_version == 2) {
 			g.path = g.path_2_library;
 		}
 		// Version 3
-		if (trial.building_type == 'office' && trial.path_version == 3) {
+		if (trial.building_type == 'office1' && trial.path_version == 3) {
 			g.path = g.path_3_office;
 		}
-		if (trial.building_type == 'library' && trial.path_version == 3) {
+		if (trial.building_type == 'library1' && trial.path_version == 3) {
 			g.path = g.path_3_library;
+		}
+
+		if (trial.building_type == 'office2' && trial.path_version == 1) {
+			g.path = g.path_1_office2;
+		}
+		if (trial.building_type == 'library2' && trial.path_version == 1) {
+			g.path = g.path_1_library2;
+		}
+		// Version 2
+		if (trial.building_type == 'office2' && trial.path_version == 2) {
+			g.path = g.path_2_office2;
+		}
+		if (trial.building_type == 'library2' && trial.path_version == 2) {
+			g.path = g.path_2_library2;
 		}
 
 		if (g.module_1_type == "reject")
@@ -2104,11 +2276,16 @@ function module_1(trial) {
 		// Make Selection
 		// Show Doors if path = 1
 		if (g.room_image.status == PsychoJS.Status.NOT_STARTED && g.trial_phase == g.TRIAL_BEGIN) {
+				building_type_name = trial.building_type.replace("1", "")
+				building_type_name = building_type_name.replace("2", "")
 			if (g.current_move == 0) {
-				g.room_image.setImage(trial.building_type + '_' + g.current_path);
+				g.room_image.setImage(building_type_name + '_' + g.current_path);
 				g.room_image.setAutoDraw(true);
+			} else if (g.module_1_type == "reject") {
+				g.room_image_invite.setImage(building_type_name + '_reject_' + g.current_path)
+				g.room_image_invite.setAutoDraw(true);
 			} else {
-				g.room_image_invite.setImage(trial.building_type + '_invite_' + g.current_path)
+				g.room_image_invite.setImage(building_type_name + '_accept_' + g.current_path)
 				g.room_image_invite.setAutoDraw(true);
 			}
 			
@@ -2141,7 +2318,7 @@ function module_1(trial) {
 				// status stims
 				g.text_val_trial_number.setAutoDraw(true);
 				g.trial_num_rect.setAutoDraw(true)
-				g.text_val_building.setAutoDraw(true);
+				// g.text_val_building.setAutoDraw(true);
 				//g.text_invites.setAutoDraw(true);
 				//g.text_val_invites.setAutoDraw(true);
 				g.score_top_text.setAutoDraw(true);
@@ -2313,6 +2490,12 @@ function module_1(trial) {
 				if (g.module_1_type == "accept") {
 					g.score_pop.setColor(new util.Color('#00FF00'))
 					g.score_pop.setText("+ " + g.accepted_invites)
+					g.score_pop.bold = false
+					if (g.accepted_invites == 0)
+					{
+						g.score_pop.setColor('grey')
+					}
+					g.score_pop.refresh()
 					mod_1_count = 120
 					// ANIMATION LOGIC
 					//g.score_pop.pos[1] = 0.55
@@ -2320,8 +2503,20 @@ function module_1(trial) {
 					g.score_pop.setAutoDraw(true)
 					g.score_pop.autoDraw = true
 					g.trial_invites = g.trial_invites + g.accepted_invites;
-					if (g.score_slide.height + (g.accepted_invites / 100) < 1.2) {
-						g.score_slide.height = g.score_slide.height + (g.accepted_invites / 300)
+					if (g.score_slide.height + (g.accepted_invites / 400) < 1.2) {
+						// g.score_slide.height = g.score_slide.height + (g.accepted_invites / 750)
+						if (g.score_slide.height <= 0.4)
+						{
+							g.score_slide.height = g.score_slide.height + (g.accepted_invites / 950)
+						}
+						else if (g.score_slide.height <= 0.8)
+						{
+							g.score_slide.height = g.score_slide.height + (g.accepted_invites / 1400)
+						}
+						else
+						{
+							g.score_slide.height = g.score_slide.height + (g.accepted_invites / 400)
+						}
 						g.score_slide.pos[1] = g.original_slide_y + g.score_slide.height/2
 					}
 					else{
@@ -2332,6 +2527,19 @@ function module_1(trial) {
 				else {
 					g.score_pop.setColor(new util.Color('#FF0000'))
 					g.score_pop.setText("- " + g.rejected_invites)
+					if (g.rejected_invites == 50)
+					{
+						g.score_pop.bold = true
+					}
+					else
+					{
+						g.score_pop.bold = false
+					}
+					if (g.rejected_invites == 0)
+					{
+						g.score_pop.setColor('grey')
+					}
+					g.score_pop.refresh()
 					mod_1_count = 120
 					// ANIMATION LOGIC
 					//g.score_pop.pos[1] = 0.55
@@ -2339,8 +2547,15 @@ function module_1(trial) {
 					g.score_pop.setAutoDraw(true)
 					g.score_pop.autoDraw = true
 					g.trial_invites = g.trial_invites + g.rejected_invites;
-					if (g.score_slide.height - (g.rejected_invites / 150) > 0) {
-						g.score_slide.height = g.score_slide.height - (g.rejected_invites / 750)
+					if (g.score_slide.height - (g.rejected_invites / 400) > 0) {
+						if (g.score_slide.height >= 0.4)
+						{
+							g.score_slide.height = g.score_slide.height - (g.rejected_invites / 950)
+						}
+						else
+						{
+							g.score_slide.height = g.score_slide.height - (g.rejected_invites / 400)
+						}
 						g.score_slide.pos[1] = g.original_slide_y + g.score_slide.height/2
 						// g.score_slide.pos[1] = g.score_slide.pos[1] + g.score_slide.height/2
 					}
@@ -2409,6 +2624,16 @@ function module_cb(trial) {
 					g.score_slide.pos[1] = -0.6
 					g.score_slide.setFillColor(new util.Color('#FF0000'))
 					g.module_1_type = 'accept'
+					mark_event(
+						trials_data,
+						globalClock,
+						'NA',
+						trial_type,
+						event_types['BLOCK_ONSET'],
+						'NA',
+						g.module_1_type,
+						trial.building_type
+					)
 					// readyStim = new visual.ImageStim({
 					// 	win: psychoJS.window,
 					// 	name: 'ready_stim', units: 'height',
@@ -2431,6 +2656,16 @@ function module_cb(trial) {
 					g.score_slide.pos[1] = 0
 					g.score_slide.setFillColor(new util.Color('#00FF00'))
 					g.module_1_type = 'reject'
+					mark_event(
+						trials_data,
+						globalClock,
+						'NA',
+						trial_type,
+						event_types['BLOCK_ONSET'],
+						'NA',
+						g.module_1_type,
+						trial.building_type
+					)
 					// readyStim = new visual.ImageStim({
 					// 	win: psychoJS.window,
 					// 	name: 'loss1', units: 'height',
@@ -2453,6 +2688,16 @@ function module_cb(trial) {
 					g.score_slide.pos[1] = -0.6
 					g.score_slide.setFillColor(new util.Color('#FF0000'))
 					g.module_1_type = 'accept'
+					mark_event(
+						trials_data,
+						globalClock,
+						'NA',
+						trial_type,
+						event_types['BLOCK_ONSET'],
+						'NA',
+						g.module_1_type,
+						trial.building_type
+					)
 					readyStim = new visual.ImageStim({
 						win: psychoJS.window,
 						name: 'ready_stim', units: 'height',
@@ -2475,10 +2720,116 @@ function module_cb(trial) {
 					g.score_slide.pos[1] = 0
 					g.score_slide.setFillColor(new util.Color('#00FF00'))
 					g.module_1_type = 'reject'
+					mark_event(
+						trials_data,
+						globalClock,
+						'NA',
+						trial_type,
+						event_types['BLOCK_ONSET'],
+						'NA',
+						g.module_1_type,
+						trial.building_type
+					)
 					readyStim = new visual.ImageStim({
 						win: psychoJS.window,
 						name: 'ready_stim', units: 'height',
 						image: 'loss2', mask: undefined,
+						ori: 0, pos: [0, 0],
+						color: new util.Color([1, 1, 1]), opacity: 1,
+						flipHoriz: false, flipVert: false,
+						texRes: 128, interpolate: true, depth: 0
+					});
+					track = undefined;
+					// track = new Sound({
+					// 	win: psychoJS.window,
+					// 	value: 'loss2audio.mp3'
+					// });
+					// track.setVolume(1.0);
+					win1_or_loss1 = false
+					break
+				case 'win2_blank':
+					g.score_slide.height = 0.01
+					g.score_slide.pos[1] = -0.6
+					g.score_slide.setFillColor(new util.Color('#FF0000'))
+					g.module_1_type = 'accept'
+					mark_event(
+						trials_data,
+						globalClock,
+						'NA',
+						trial_type,
+						event_types['BLOCK_ONSET'],
+						'NA',
+						g.module_1_type,
+						trial.building_type
+					)
+					readyStim = new visual.ImageStim({
+						win: psychoJS.window,
+						name: 'ready_stim', units: 'height',
+						image: 'win2', mask: undefined,
+						ori: 0, pos: [0, 0],
+						color: new util.Color([1, 1, 1]), opacity: 1,
+						flipHoriz: false, flipVert: false,
+						texRes: 128, interpolate: true, depth: 0
+					});
+					track = undefined;
+					// track = new Sound({
+					// 	win: psychoJS.window,
+					// 	value: 'win2audio.mp3'
+					// });
+					// track.setVolume(1.0);
+					win1_or_loss1 = true
+					break
+				case 'loss2_blank':
+					g.score_slide.height = 1.2
+					g.score_slide.pos[1] = 0
+					g.score_slide.setFillColor(new util.Color('#00FF00'))
+					g.module_1_type = 'reject'
+					mark_event(
+						trials_data,
+						globalClock,
+						'NA',
+						trial_type,
+						event_types['BLOCK_ONSET'],
+						'NA',
+						g.module_1_type,
+						trial.building_type
+					)
+					readyStim = new visual.ImageStim({
+						win: psychoJS.window,
+						name: 'ready_stim', units: 'height',
+						image: 'loss2', mask: undefined,
+						ori: 0, pos: [0, 0],
+						color: new util.Color([1, 1, 1]), opacity: 1,
+						flipHoriz: false, flipVert: false,
+						texRes: 128, interpolate: true, depth: 0
+					});
+					track = undefined;
+					// track = new Sound({
+					// 	win: psychoJS.window,
+					// 	value: 'loss2audio.mp3'
+					// });
+					// track.setVolume(1.0);
+					win1_or_loss1 = true
+					break
+				case 'second_set':
+					g.score_slide.height = 1.2
+					g.score_slide.pos[1] = 0
+					g.score_slide.setFillColor(new util.Color('#00FF00'))
+					g.module_1_type = 'reject'
+					mark_event(
+						trials_data,
+						globalClock,
+						'NA',
+						trial_type,
+						event_types['BLOCK_ONSET'],
+						'NA',
+						"Part 2",
+						trial.building_type
+					)
+					readyStim = new visual.ImageStim({
+						win: psychoJS.window,
+						name: 'ready_stim', units: 'height',
+						image: 'second_set', mask: undefined,
 						ori: 0, pos: [0, 0],
 						color: new util.Color([1, 1, 1]), opacity: 1,
 						flipHoriz: false, flipVert: false,
@@ -2497,6 +2848,16 @@ function module_cb(trial) {
 					g.score_slide.pos[1] = -0.6
 					g.score_slide.setFillColor(new util.Color('#FF0000'))
 					g.module_1_type = 'accept'
+					mark_event(
+						trials_data,
+						globalClock,
+						'NA',
+						trial_type,
+						event_types['BLOCK_ONSET'],
+						'NA',
+						g.module_1_type,
+						trial.building_type
+					)
 					readyStim = new visual.ImageStim({
 						win: psychoJS.window,
 						name: 'ready_stim', units: 'height',
@@ -2525,7 +2886,7 @@ function module_cb(trial) {
 			// update component parameters for each repeat
 			// keep track of which components have finished
 			//readyComponents = [readyStim];
-			if (forced_choice == 'win2' || forced_choice == 'loss2') {
+			if (forced_choice == 'win2' || forced_choice == 'loss2' || forced_choice == 'second_set') {
 				readyStim.setAutoDraw(true)
 			}
 			cb_shown = true
@@ -2652,6 +3013,16 @@ function module_break_switch(trial){
 			// based ond current position and the building type
 			mark_event(trials_data, globalClock, trial.trial_number, 'NA', event_types['BREAK_RESPONSE'],
 				'NA', 'NA', 'NA')
+			mark_event(
+				trials_data,
+				globalClock,
+				'NA',
+				trial_type,
+				event_types['BLOCK_ONSET'],
+				'NA',
+				g.module_1_type,
+				trial.building_type
+			)
 			return Scheduler.Event.NEXT;
 
 		}
@@ -2701,7 +3072,7 @@ function module_2a(trial) {
 			}
 			g.prompt_text.pos = [0, 0.75];
 			g.prompt_text.setAutoDraw(true);
-			g.text_val_building.setAutoDraw(true);
+			// g.text_val_building.setAutoDraw(true);
 			ready.clearEvents();
 			g.trial_phase = g.WAITING_SELECTION;
 			mark_event(
@@ -2757,7 +3128,7 @@ function module_2a(trial) {
 			g.room_image_invite.setAutoDraw(true);
 			g.prompt_text.setText('Press SPACE key to exit the building.');
 			g.prompt_text.setAutoDraw(true);
-			g.text_val_building.setAutoDraw(true);
+			// g.text_val_building.setAutoDraw(true);
 			g.trial_phase = g.WAITING_KEY;
 			mark_event(
 				trials_data,
@@ -2877,7 +3248,7 @@ function module_2b(trial) {
 			g.prompt_2b_text.setAutoDraw(true);
 
 			g.text_val_building.setText(g.building_type);
-			g.text_val_building.setAutoDraw(true);
+			// g.text_val_building.setAutoDraw(true);
 			ready.clearEvents();
 			g.trial_phase = g.WAITING_SELECTION;
 

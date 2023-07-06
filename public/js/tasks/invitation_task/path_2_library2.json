@@ -1,0 +1,92 @@
+{
+	"1": {
+		"accepted": 0,
+		"rejected": 0,
+		"left": 2,
+		"right": 3
+	},
+	"2": {
+		"accepted": 0,
+		"rejected": 10,
+		"left": 4,
+		"right": 5
+	},
+	"3": {
+		"accepted": 40,
+		"rejected": 50,
+		"left": 6,
+		"right": 7
+	},
+	"4": {
+		"accepted": 45,
+		"rejected": 30,
+		"left": 9,
+		"right": 8
+	},
+    "5": {
+		"accepted": 40,
+		"rejected": 25,
+		"left": 11,
+		"right": 10
+	},
+    "6": {
+		"accepted": 25,
+		"rejected": 10,
+		"left": 13,
+		"right": 12
+	},
+    "7": {
+		"accepted": 20,
+		"rejected": 5,
+		"left": 15,
+		"right": 14
+	},
+    "8": {
+		"accepted": 30,
+		"rejected": 30,
+		"left": 0,
+		"right": 0
+	},
+    "9": {
+		"accepted": 35,
+		"rejected": 25,
+		"left": 0,
+		"right": 0
+	},
+	"10": {
+		"accepted": 50,
+		"rejected": 40,
+		"left": 0,
+		"right": 0
+	},
+	"11": {
+		"accepted": 40,
+		"rejected": 35,
+		"left": 0,
+		"right": 0
+	},
+	"12": {
+		"accepted": 15,
+		"rejected": 10,
+		"left": 0,
+		"right": 0
+	},
+	"13": {
+		"accepted": 10,
+		"rejected": 0,
+		"left": 0,
+		"right": 0
+	},
+	"14": {
+		"accepted": 25,
+		"rejected": 15,
+		"left": 0,
+		"right": 0
+	},
+	"15": {
+		"accepted": 20,
+		"rejected": 20,
+		"left": 0,
+		"right": 0
+	}
+}
