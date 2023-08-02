@@ -1,0 +1,4 @@
+{
+    "schedule": "/js/tasks/active_trust/active_trust_schedule.csv",
+    "instruct_schedule": "/js/tasks/active_trust/media/Pilot_R1_instructions.csv"
+}
