@@ -27,6 +27,7 @@ var event_types = {
 }
 
 var trials_data = []
+var config_values = {}
 
 var main_loop_count = 0
 var last_trial_num = 0
@@ -135,10 +136,12 @@ window.onload = function () {
 
 			resources.push({ name: 'run_schedule.xls', path: values.schedule })
 			resources.push({ name: 'instruct_schedule.csv', path: values.instruct_schedule })
+			resources.push({ name: 'config.csv', path: values.config})
 
 			// Add file paths to expInfo
 			if (values.schedule) expInfo.task_schedule = values.schedule
 			if (values.instruct_schedule) expInfo.instruct_schedule = values.instruct_schedule
+			if (values.instruct_schedule) expInfo.task_config = values.config
 			
 			// Import the instruction slides
 			return new Promise((resolve, reject) => {
@@ -159,7 +162,7 @@ window.onload = function () {
 							for (var j = 0; j < headerRows.length; j++){
 
 								// if (headerRows[j] == " ") {
-								// 	console.log('empyt string')
+								// 	console.log('empty string')
 								// }
 								obj[headerRows[j]] = currentLine[j]
 							}
@@ -221,6 +224,40 @@ window.onload = function () {
 				
 			})
 		})
+		// Add config values resources
+		.then((values) => {			
+			// Add instrcution Images
+			return new Promise((resolve, reject) => {
+				$.ajax({
+					type: 'GET',
+					url: expInfo.task_config,
+					dataType: 'text',
+					async: false,
+					success: (data) => {
+						var out = [];
+						var allRows = data.split('\n'); // split rows at new line
+						
+						var headerRows = allRows[0].split(',');
+						
+						for (var i=1; i<2; i++) {
+							var obj = {};
+							var currentLine = allRows[i].split(',');
+							for (var j = 0; j < headerRows.length; j++){
+								console.log(headerRows[j])
+								console.log(currentLine[j])
+								obj[headerRows[j]] = currentLine[j];	
+							}
+						}
+						console.log(obj)
+
+						config_values = obj
+
+						resolve(data)
+					}
+				})
+				
+			})
+		})
 	
 		
 		.then((values) => {
@@ -255,7 +292,7 @@ psychoJS.openWindow({
 });
 
 // store info about the experiment session:
-let expName = 'Emotional Faces';  // from the Builder filename that created this script
+let expName = 'Active Trust';  // from the Builder filename that created this script
 var expInfo = { 'participant': '' ,'session': '',  'run_id': '', 'date' : formatDate(), 'study': '', };
 
 // schedule the experiment:
@@ -1037,6 +1074,8 @@ function trialsLoopBegin(thisScheduler) {
 		trialList: 'run_schedule.xls',
 		seed: undefined, name: 'trials'
 	});
+
+	console.log(config_values)
 
 	main_loop_count = 0
 	last_trial_num = trials.nTotal
