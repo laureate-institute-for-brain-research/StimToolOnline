@@ -1,5 +1,5 @@
 ﻿trial_number,correct_score_full,correct_score_helped,wrong_score,left_prob,right_prob,help_prob,face_stim_path,left_stim_path,right_stim_path,ITI
-1,40,20,100,0.8,0.2,0.9,/js/tasks/active_trust/media/face1_test.png,/js/tasks/active_trust/media/left_stim_test.png,/js/tasks/active_trust/media/right_stim_test.png,1.0
-2,40,20,100,0.8,0.2,0.9,/js/tasks/active_trust/media/face1_test.png,/js/tasks/active_trust/media/left_stim_test.png,/js/tasks/active_trust/media/right_stim_test.png,1.0
-3,40,20,100,0.8,0.2,0.9,/js/tasks/active_trust/media/face1_test.png,/js/tasks/active_trust/media/left_stim_test.png,/js/tasks/active_trust/media/right_stim_test.png,1.0
-4,40,20,100,0.8,0.2,0.9,/js/tasks/active_trust/media/face1_test.png,/js/tasks/active_trust/media/left_stim_test.png,/js/tasks/active_trust/media/right_stim_test.png,1.0
+1,40,20,100,0.8,0.2,0.9,/js/tasks/active_trust/media/face_1.png,/js/tasks/active_trust/media/medium_1.png,/js/tasks/active_trust/media/medium_2.png,1.0
+2,40,20,100,0.8,0.2,0.9,/js/tasks/active_trust/media/face_1.png,/js/tasks/active_trust/media/large_1.png,/js/tasks/active_trust/media/large_2.png,1.0
+3,40,20,100,0.8,0.2,0.9,/js/tasks/active_trust/media/face_1.png,/js/tasks/active_trust/media/small_1.png,/js/tasks/active_trust/media/small_2.png,1.0
+4,40,20,100,0.8,0.2,0.9,/js/tasks/active_trust/media/face_1.png,/js/tasks/active_trust/media/medium_1.png,/js/tasks/active_trust/media/medium_2.png,1.0
