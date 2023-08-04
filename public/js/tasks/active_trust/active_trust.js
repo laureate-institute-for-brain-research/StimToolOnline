@@ -215,6 +215,18 @@ window.onload = function () {
 							if (obj.right_stim_path != 'None' && obj.right_stim_path != undefined) {
 								resources.push({ name: obj.right_stim_path , path: obj.right_stim_path  })
 							}
+							if (obj.left_stima_path != 'None' && obj.lefta_stim_path != undefined) {
+								resources.push({ name: obj.lefta_stim_path , path: obj.lefta_stim_path  })
+							}
+							if (obj.righta_stim_path != 'None' && obj.righta_stim_path != undefined) {
+								resources.push({ name: obj.righta_stim_path , path: obj.righta_stim_path  })
+							}
+							if (obj.leftr_stim_path != 'None' && obj.leftr_stim_path != undefined) {
+								resources.push({ name: obj.leftr_stim_path , path: obj.leftr_stim_path  })
+							}
+							if (obj.rightr_stim_path != 'None' && obj.rightr_stim_path != undefined) {
+								resources.push({ name: obj.rightr_stim_path , path: obj.rightr_stim_path  })
+							}
 							
 						}
 
@@ -367,6 +379,8 @@ var resources = [
 	{ name: 'MAIN_ready', path: '/js/tasks/active_trust/media/instructions/Slide16.jpeg' },
 	{ name: 'PRACTICE_ready_audio.mp3', path: '/js/tasks/active_trust/media/instructions_audio/Slide15.mp3' },
 	{ name: 'MAIN_ready_audio.mp3', path: '/js/tasks/active_trust/media/instructions_audio/Slide16.mp3' },
+	{ name: 'try_left.png', path: '/js/tasks/active_trust/media/try_left.png' },
+	{ name: 'try_right.png', path: '/js/tasks/active_trust/media/try_right.png' },
 	{ name: 'press_l.png', path: '/js/tasks/active_trust/media/press_l.png' },
 	{ name: 'press_r.png', path: '/js/tasks/active_trust/media/press_r.png' },
 	{ name: 'press_u.png', path: '/js/tasks/active_trust/media/press_u.png' },
@@ -402,12 +416,21 @@ var kb;
 var trialClock;
 var toneClock;
 var stimClock;
+var adviceClock;
 var respondClock;
 
 // Stim from schedule
 var faceStim;
 var leftStim;
 var rightStim;
+var leftaStim;
+var rightaStim;
+var leftrStim;
+var rightrStim;
+
+// feedback stim
+var try_left;
+var try_right
 
 // static stim
 //// controls
@@ -477,6 +500,7 @@ function experimentInit() {
 	trialClock = new util.Clock();
 	toneClock = new util.Clock();
 	stimClock = new util.Clock();
+	adviceClock = new util.Clock();
 	respondClock = new util.Clock();
 
 	// Press Arrows Text
@@ -1120,8 +1144,35 @@ function trialsLoopEnd() {
 	return Scheduler.Event.NEXT;
 }
 
+function get_correct_side(left_p, right_p) {
+	if (Math.random() <= left_p)
+	{
+		return true
+	}
+	else
+	{
+		return false
+	}
+}
+
+function get_advice_outcome(correct_side, help_p) {
+	if (Math.random() <= help_p)
+	{
+		return correct_side
+	}
+	else
+	{
+		return !correct_side
+	}
+}
+
 // var theseKeys;
 var pressed;
+var asked_for_advice;
+var got_advice;
+var post_advice_choice_allowed;
+var correct_side; // true for left, false for right
+var advice_outcome; // true for left, false for right
 
 function trialRoutineBegin(trials) {
 	return function () {
@@ -1142,6 +1193,30 @@ function trialRoutineBegin(trials) {
 			texRes : 128, interpolate : true, depth : 0
 		});
 		faceStim.status = PsychoJS.Status.NOT_STARTED // set image Status
+		try_left = new visual.ImageStim({
+			win : psychoJS.window,
+			name : 'tryleft', units : 'height', 
+			image : 'try_left.png', mask : undefined,
+			// ori: 0, pos: [faceStim.getBoundingBox().left - (window_ratio * 0.075),0.28], opacity: 1,
+			ori: 0, pos: [0,0.31], opacity: 1,
+			size: [window_ratio*0.1,0.1],
+			flipHoriz : false, flipVert : false,
+			texRes : 128, interpolate : true, depth : 0
+		})
+		try_left.pos[0] = (-(try_left.size[0])/2)
+		try_right = new visual.ImageStim({
+			win : psychoJS.window,
+			name : 'tryright', units : 'height', 
+			image : 'try_right.png', mask : undefined,
+			// ori: 0, pos: [faceStim.getBoundingBox().right + (window_ratio * 0.075), 0.28], opacity: 1,
+			ori: 0, pos: [faceStim.getBoundingBox().right, 0.31], opacity: 1,
+			size: [window_ratio * 0.1, 0.1],
+			// size: [0.15,0.15],
+			flipHoriz : false, flipVert : false,
+			texRes : 128, interpolate : true, depth : 0
+		})
+		try_right.pos[0] = ((try_left.size[0])/2)
+
 		leftStim = new visual.ImageStim({
 			win : psychoJS.window,
 			name : 'stimPath', units : 'height', 
@@ -1164,15 +1239,66 @@ function trialRoutineBegin(trials) {
 			texRes : 128, interpolate : true, depth : 0
 		});
 		rightStim.status = PsychoJS.Status.NOT_STARTED // set image Status
+		leftaStim = new visual.ImageStim({
+			win : psychoJS.window,
+			name : 'stimPath', units : 'height', 
+			image : lefta_stim_path, mask : undefined,
+			ori: 0, pos: [-window_ratio * 0.3, 0], opacity: 1,
+			size: [window_ratio*0.25, 0.25],
+			// size: 0.25,
+			flipHoriz : false, flipVert : false,
+			texRes : 128, interpolate : true, depth : 0
+		});
+		leftaStim.status = PsychoJS.Status.NOT_STARTED // set image Status
+		rightaStim = new visual.ImageStim({
+			win : psychoJS.window,
+			name : 'stimPath', units : 'height', 
+			image : righta_stim_path, mask : undefined,
+			ori: 0, pos: [window_ratio * 0.3, 0], opacity: 1,
+			size: [window_ratio*0.25, 0.25],
+			//size: 0.25,
+			flipHoriz : false, flipVert : false,
+			texRes : 128, interpolate : true, depth : 0
+		});
+		rightaStim.status = PsychoJS.Status.NOT_STARTED // set image Status
+		leftrStim = new visual.ImageStim({
+			win : psychoJS.window,
+			name : 'stimPath', units : 'height', 
+			image : leftr_stim_path, mask : undefined,
+			ori: 0, pos: [-window_ratio * 0.3, 0], opacity: 1,
+			size: [window_ratio*0.25, 0.25],
+			// size: 0.25,
+			flipHoriz : false, flipVert : false,
+			texRes : 128, interpolate : true, depth : 0
+		});
+		leftrStim.status = PsychoJS.Status.NOT_STARTED // set image Status
+		rightrStim = new visual.ImageStim({
+			win : psychoJS.window,
+			name : 'stimPath', units : 'height', 
+			image : rightr_stim_path, mask : undefined,
+			ori: 0, pos: [window_ratio * 0.3, 0], opacity: 1,
+			size: [window_ratio*0.25, 0.25],
+			//size: 0.25,
+			flipHoriz : false, flipVert : false,
+			texRes : 128, interpolate : true, depth : 0
+		});
+		rightrStim.status = PsychoJS.Status.NOT_STARTED // set image Status
 	
 		currentTrialNumber.setText(`${trial_number} / ${last_trial_num}`)
 		console.log("Trial Number: ", trial_number)
 
+		asked_for_advice = false
+		got_advice = false
+		post_advice_choice_allowed = false
+		pressed = false
+
 		endClock.reset()
+		// adviceClock.reset()
+
+		correct_side = get_correct_side(left_prob, right_prob)
 	
 		resp.keys = undefined;
 		resp.rt = undefined;
-		pressed = false;
 
 		trial_type = ""
 		mark_event(trials_data, globalClock, trials.thisIndex, trial_type, event_types['TONE_ONSET'],
@@ -1181,24 +1307,6 @@ function trialRoutineBegin(trials) {
 	};
 }
 
-/**
- * Returns Either correct or incorrect depending on response
- * @param {*} response 
- */
-function getResult(response) {
-	// stim_type is a global variable
-	if ((response == LEFT_KEY || response == 'left') && stim_type == 'angry') {
-		return 'correct'
-	} else if ((response == RIGHT_KEY || response == 'right') && stim_type == 'sad') {
-		return 'correct'
-	}
-	return 'incorrect'
-}
-
-var old_t = 0
-var correct_score = 0
-
-var response;
 /**
  * Respond Routine
  * @param {*} trials 
@@ -1247,8 +1355,29 @@ function trialRoutineRespond(trials) {
 			resp.start(); // start on screen flip
 			resp.clearEvents();
 		}
+
 		let theseKeys = resp.getKeys({ keyList: keyList, waitRelease: false });
-		if (!pressed && theseKeys.length > 0) {
+		if (!asked_for_advice && theseKeys.length > 0) {
+			resp.keys = theseKeys[0].name;  // just the last key pressed
+			resp.rt = theseKeys[0].rt;
+
+			if (resp.keys == UP_KEY)
+			{
+				asked_for_advice = true
+				advice_outcome = get_advice_outcome(correct_side, help_prob) 
+				adviceClock.reset()
+			}
+
+			// Save Data on each Press
+			mark_event(trials_data, globalClock, trials.thisIndex, trial_type, event_types['RESPONSE'],
+					resp.rt, key_map[resp.keys] , 'NA')
+			resp.keys = undefined;
+			resp.rt = undefined;
+
+			// continueRoutine = false
+		}
+
+		if (!pressed && post_advice_choice_allowed && theseKeys.length > 0) {
 			resp.keys = theseKeys[0].name;  // just the last key pressed
 			resp.rt = theseKeys[0].rt;
 
@@ -1262,6 +1391,28 @@ function trialRoutineRespond(trials) {
 
 			continueRoutine = false
 		}
+
+		if (asked_for_advice && !got_advice && (adviceClock.getTime() >= config_values.advice_request_duration))
+		{
+			if (advice_outcome)
+			{
+				try_left.setAutoDraw(true)
+			}
+			else
+			{
+				try_right.setAutoDraw(true)
+			}
+			got_advice = true
+		}
+
+		if (got_advice && (adviceClock.getTime() >= parseFloat(config_values.advice_request_duration) + parseFloat(config_values.post_advice_duration)))
+		{
+			try_left.setAutoDraw(false)
+			try_right.setAutoDraw(false)
+			post_advice_choice_allowed = true
+		}
+
+
 
 		// check for quit (typically the Esc key)
 		if (psychoJS.eventManager.getKeys({keyList:['escape']}).length > 0) {
