@@ -227,7 +227,6 @@ window.onload = function () {
 							if (obj.rightr_stim_path != 'None' && obj.rightr_stim_path != undefined) {
 								resources.push({ name: obj.rightr_stim_path , path: obj.rightr_stim_path  })
 							}
-							
 						}
 
 						resolve(data)
@@ -254,7 +253,7 @@ window.onload = function () {
 						for (var i=1; i<2; i++) {
 							var obj = {};
 							var currentLine = allRows[i].split(',');
-							for (var j = 0; j < headerRows.length; j++){
+							for (var j = 0; j < headerRows.length; j++) {
 								console.log(headerRows[j])
 								console.log(currentLine[j])
 								obj[headerRows[j]] = currentLine[j];	
@@ -417,6 +416,7 @@ var trialClock;
 var toneClock;
 var stimClock;
 var adviceClock;
+var feedbackClock;
 var respondClock;
 
 // Stim from schedule
@@ -501,6 +501,7 @@ function experimentInit() {
 	toneClock = new util.Clock();
 	stimClock = new util.Clock();
 	adviceClock = new util.Clock();
+	feedbackClock = new util.Clock();
 	respondClock = new util.Clock();
 
 	// Press Arrows Text
@@ -508,7 +509,7 @@ function experimentInit() {
 		win : psychoJS.window,
 		name : 'stimPath', units : 'height', 
 		image : 'press_r.png', mask : undefined,
-		ori: 0, pos: [window_ratio * 0.3, -0.17], opacity: 1,
+		ori: 0, pos: [window_ratio * 0.3, -0.21], opacity: 1,
 		size: [window_ratio*.1, 0.1],
 		flipHoriz : false, flipVert : false,
 		texRes : 128, interpolate : true, depth : 0
@@ -517,7 +518,7 @@ function experimentInit() {
 		win : psychoJS.window,
 		name : 'stimPath', units : 'height', 
 		image : 'press_l.png', mask : undefined,
-		ori: 0, pos: [-window_ratio * 0.3, -0.17], opacity: 1,
+		ori: 0, pos: [-window_ratio * 0.3, -0.21], opacity: 1,
 		size: [window_ratio*.1, 0.1],
 		flipHoriz : false, flipVert : false,
 		texRes : 128, interpolate : true, depth : 0
@@ -975,9 +976,6 @@ function readyRoutineBegin(block_type) {
 					texRes: 128, interpolate: true, depth: 0
 				});
 				track = undefined;
-
-				
-				
 		}
 		
 		mark_event(trials_data, globalClock, 0, block_type, event_types['BLOCK_ONSET'],
@@ -1099,8 +1097,6 @@ function trialsLoopBegin(thisScheduler) {
 		seed: undefined, name: 'trials'
 	});
 
-	console.log(config_values)
-
 	main_loop_count = 0
 	last_trial_num = trials.nTotal
 
@@ -1144,24 +1140,20 @@ function trialsLoopEnd() {
 	return Scheduler.Event.NEXT;
 }
 
-function get_correct_side(left_p, right_p) {
-	if (Math.random() <= left_p)
-	{
+function get_correct_side(left_p/*, right_p*/) {
+	if (Math.random() <= left_p) {
 		return true
 	}
-	else
-	{
+	else {
 		return false
 	}
 }
 
 function get_advice_outcome(correct_side, help_p) {
-	if (Math.random() <= help_p)
-	{
+	if (Math.random() <= help_p) {
 		return correct_side
 	}
-	else
-	{
+	else {
 		return !correct_side
 	}
 }
@@ -1173,6 +1165,8 @@ var got_advice;
 var post_advice_choice_allowed;
 var correct_side; // true for left, false for right
 var advice_outcome; // true for left, false for right
+var picked_side; // true for left, false for right
+var feedback_active;
 
 function trialRoutineBegin(trials) {
 	return function () {
@@ -1222,7 +1216,7 @@ function trialRoutineBegin(trials) {
 			name : 'stimPath', units : 'height', 
 			image : left_stim_path, mask : undefined,
 			ori: 0, pos: [-window_ratio * 0.3, 0], opacity: 1,
-			size: [window_ratio*0.25, 0.25],
+			size: [window_ratio*0.30, 0.30],
 			// size: 0.25,
 			flipHoriz : false, flipVert : false,
 			texRes : 128, interpolate : true, depth : 0
@@ -1233,7 +1227,7 @@ function trialRoutineBegin(trials) {
 			name : 'stimPath', units : 'height', 
 			image : right_stim_path, mask : undefined,
 			ori: 0, pos: [window_ratio * 0.3, 0], opacity: 1,
-			size: [window_ratio*0.25, 0.25],
+			size: [window_ratio*0.30, 0.30],
 			//size: 0.25,
 			flipHoriz : false, flipVert : false,
 			texRes : 128, interpolate : true, depth : 0
@@ -1244,7 +1238,7 @@ function trialRoutineBegin(trials) {
 			name : 'stimPath', units : 'height', 
 			image : lefta_stim_path, mask : undefined,
 			ori: 0, pos: [-window_ratio * 0.3, 0], opacity: 1,
-			size: [window_ratio*0.25, 0.25],
+			size: [window_ratio*0.30, 0.325],
 			// size: 0.25,
 			flipHoriz : false, flipVert : false,
 			texRes : 128, interpolate : true, depth : 0
@@ -1255,7 +1249,7 @@ function trialRoutineBegin(trials) {
 			name : 'stimPath', units : 'height', 
 			image : righta_stim_path, mask : undefined,
 			ori: 0, pos: [window_ratio * 0.3, 0], opacity: 1,
-			size: [window_ratio*0.25, 0.25],
+			size: [window_ratio*0.30, 0.325],
 			//size: 0.25,
 			flipHoriz : false, flipVert : false,
 			texRes : 128, interpolate : true, depth : 0
@@ -1266,7 +1260,7 @@ function trialRoutineBegin(trials) {
 			name : 'stimPath', units : 'height', 
 			image : leftr_stim_path, mask : undefined,
 			ori: 0, pos: [-window_ratio * 0.3, 0], opacity: 1,
-			size: [window_ratio*0.25, 0.25],
+			size: [window_ratio*0.30, 0.325],
 			// size: 0.25,
 			flipHoriz : false, flipVert : false,
 			texRes : 128, interpolate : true, depth : 0
@@ -1277,7 +1271,7 @@ function trialRoutineBegin(trials) {
 			name : 'stimPath', units : 'height', 
 			image : rightr_stim_path, mask : undefined,
 			ori: 0, pos: [window_ratio * 0.3, 0], opacity: 1,
-			size: [window_ratio*0.25, 0.25],
+			size: [window_ratio*0.30, 0.325],
 			//size: 0.25,
 			flipHoriz : false, flipVert : false,
 			texRes : 128, interpolate : true, depth : 0
@@ -1291,6 +1285,7 @@ function trialRoutineBegin(trials) {
 		got_advice = false
 		post_advice_choice_allowed = false
 		pressed = false
+		feedback_active = false
 
 		endClock.reset()
 		// adviceClock.reset()
@@ -1356,13 +1351,13 @@ function trialRoutineRespond(trials) {
 			resp.clearEvents();
 		}
 
+		// Advice Path Start
 		let theseKeys = resp.getKeys({ keyList: keyList, waitRelease: false });
 		if (!asked_for_advice && theseKeys.length > 0) {
 			resp.keys = theseKeys[0].name;  // just the last key pressed
 			resp.rt = theseKeys[0].rt;
 
-			if (resp.keys == UP_KEY)
-			{
+			if (resp.keys == UP_KEY) {
 				asked_for_advice = true
 				advice_outcome = get_advice_outcome(correct_side, help_prob) 
 				adviceClock.reset()
@@ -1373,44 +1368,77 @@ function trialRoutineRespond(trials) {
 					resp.rt, key_map[resp.keys] , 'NA')
 			resp.keys = undefined;
 			resp.rt = undefined;
-
-			// continueRoutine = false
 		}
-
+		//// Advice Path Continued
+		if (asked_for_advice && !got_advice && (adviceClock.getTime() >= config_values.advice_request_duration)) {
+			if (advice_outcome) {
+				try_left.setAutoDraw(true)
+			}
+			else {
+				try_right.setAutoDraw(true)
+			}
+			got_advice = true
+		}
+		//// Advice Path Continued
+		if (got_advice && (adviceClock.getTime() >= parseFloat(config_values.advice_request_duration) + parseFloat(config_values.post_advice_duration))) {
+			try_left.setAutoDraw(false)
+			try_right.setAutoDraw(false)
+			post_advice_choice_allowed = true
+		}
+		//// Advice Path Continued
 		if (!pressed && post_advice_choice_allowed && theseKeys.length > 0) {
 			resp.keys = theseKeys[0].name;  // just the last key pressed
 			resp.rt = theseKeys[0].rt;
 
-			pressed = true
+			if (resp.keys == LEFT_KEY) {
+				picked_side = true
+				pressed = true
+				feedbackClock.reset()
+			}
+			if (resp.keys == RIGHT_KEY) {
+				picked_side = false
+				pressed = true
+				feedbackClock.reset()
+			}
 
 			// Save Data on each Press
 			mark_event(trials_data, globalClock, trials.thisIndex, trial_type, event_types['RESPONSE'],
 					resp.rt, key_map[resp.keys] , 'NA')
 			resp.keys = undefined;
 			resp.rt = undefined;
-
-			continueRoutine = false
 		}
-
-		if (asked_for_advice && !got_advice && (adviceClock.getTime() >= config_values.advice_request_duration))
-		{
-			if (advice_outcome)
-			{
-				try_left.setAutoDraw(true)
+		//// Advice Path Continued
+		if (pressed && (feedbackClock.getTime() >= parseFloat(config_values.post_choice_duration))) {
+			if (!feedback_active) {
+				if (picked_side) {
+					leftStim.setAutoDraw(false)
+					if (picked_side == correct_side) {
+						leftaStim.setAutoDraw(true)
+					}
+					else {
+						leftrStim.setAutoDraw(true)
+					}
+				}
+				else {
+					rightStim.setAutoDraw(false)
+					if (picked_side == correct_side) {
+						rightaStim.setAutoDraw(true)
+					}
+					else {
+						rightrStim.setAutoDraw(true)
+					}
+				}
+				feedback_active = true
 			}
-			else
-			{
-				try_right.setAutoDraw(true)
+			if ((feedbackClock.getTime() >= parseFloat(config_values.post_choice_duration) + parseFloat(config_values.feedback_duration))) {
+				leftaStim.setAutoDraw(false)
+				leftrStim.setAutoDraw(false)
+				rightaStim.setAutoDraw(false)
+				rightrStim.setAutoDraw(false)
+				continueRoutine = false
 			}
-			got_advice = true
 		}
-
-		if (got_advice && (adviceClock.getTime() >= parseFloat(config_values.advice_request_duration) + parseFloat(config_values.post_advice_duration)))
-		{
-			try_left.setAutoDraw(false)
-			try_right.setAutoDraw(false)
-			post_advice_choice_allowed = true
-		}
+		// Advice Path End
 
 
 
@@ -1546,8 +1574,7 @@ function trialRoutineEnd(trials) {
 		//------Ending Routine 'trial'-------
 		t = endClock.getTime()
 
-		if (points_fixation_stim.status == PsychoJS.Status.NOT_STARTED)
-		{
+		if (points_fixation_stim.status == PsychoJS.Status.NOT_STARTED) {
 					points_fixation_stim.setText('+')
 					mark_event(trials_data, globalClock, trials.thisIndex, trial_type, event_types['FIXATION_ONSET'],
 						'NA', 'NA', 'NA')
@@ -1637,8 +1664,7 @@ function thanksRoutineEachFrame(trials) {
 			}
 		
 		// reverts to true if we are still waiting for http requests to finish
-		if (total_requests > 0)
-		{
+		if (total_requests > 0) {
 			continueRoutine = true
 		}
 
@@ -1667,10 +1693,9 @@ function thanksRoutineEnd(trials) {
 function endLoopIteration(thisScheduler, loop = undefined) {
 	// ------Prepare for next entry------
 	return function () {
-		if (typeof loop !== 'undefined')
-		{
+		if (typeof loop !== 'undefined') {
 			// ------Check if user ended loop early------
-			if (loop.finished){
+			if (loop.finished) {
 				// Check for and save orphaned data
 				if (psychoJS.experiment.isEntryEmpty())
 				{
