@@ -1,8 +1,6 @@
 ﻿/**
- * Emotional Faces
- * A modifieid task from House/Faces
- * https://www.sciencedirect.com/science/article/pii/S0960982220315864
- * @author James Touthang <james@touthang.info>
+ * Active Trust
+ * @author Aardron Robinson
  */
 
 /*jshint -W069 */
@@ -435,6 +433,14 @@ var rightnegStim;
 var try_left;
 var try_right
 
+// middle scores
+var zero_score;
+var twenty_score;
+var fourty_score;
+var sixty_score;
+var eighty_score;
+var hundred_score;
+
 // static stim
 //// controls
 var press_left;
@@ -448,13 +454,10 @@ var currentGameNumber;
 var currentGameText;
 var currentScoreNumber;
 var currentScoreText;
+var dinnerSizeTopText;
+var dinnerSizeBottomText;
+var dinnerSizeUnderline;
 
-var zero_score;
-var twenty_score;
-var fourty_score;
-var sixty_score;
-var eighty_score;
-var hundred_score;
 //// Fixation
 var points_fixation_stim;
 
@@ -618,12 +621,43 @@ function experimentInit() {
 		depth: 0.0
 	});
 
+	// Dinner Size
+	dinnerSizeTopText  = new visual.TextStim({
+		win: psychoJS.window,
+		name: 'trialTracker',
+		text: 'Dinner Size',
+		font: 'Arial', units: 'height',
+		pos: [window_ratio * 0.38, 0.47], height: 0.03, wrapWidth: undefined, ori: 0,
+		color: new util.Color('white'), opacity: 1,
+		depth: 0.0
+	});
+	dinnerSizeBottomText  = new visual.TextStim({
+		win: psychoJS.window,
+		name: 'trialTracker',
+		text: 'LARGE',
+		font: 'Arial', units: 'height',
+		pos: [window_ratio * 0.38, dinnerSizeTopText.getBoundingBox().bottom - 0.06], height: 0.027, wrapWidth: undefined, ori: 0,
+		color: new util.Color('white'), opacity: 1,
+		depth: 0.0
+	});
+	dinnerSizeUnderline = new visual.Rect({
+		win: psychoJS.window,
+		name: 'underline',
+		width: window_ratio*0.1,
+		height: 0.001,
+		units: 'height',
+		pos: [window_ratio * 0.38, 0.45], ori: 0,
+		fillColor: new util.Color('white'),
+		lineColor: new util.Color('white'), opacity: 1,
+		depth: 0
+	})
+
+	// Middle Scores
 	zero_score = new visual.ImageStim({
 		win : psychoJS.window,
 		name : 'stimPath', units : 'height', 
 		image : 'zero.png', mask : undefined,
 		ori: 0, pos: [0.027, 0], opacity: 1,
-		// size: [window_ratio*.1, 0.1],
 		flipHoriz : false, flipVert : false,
 		texRes : 128, interpolate : true, depth : 0
 	});
@@ -1343,12 +1377,15 @@ function trialRoutineBegin(trials) {
 		reward_stim = fourty_score // default choice score
 		if (wrong_score == '100') {
 			penalty_stim = hundred_score
+			dinnerSizeBottomText.text = 'LARGE'
 		}
 		else if (wrong_score == '80') {
 			penalty_stim = eighty_score
+			dinnerSizeBottomText.text = 'MEDIUM'
 		}
-		else if (wrong_Score == '60') {
+		else if (wrong_score == '60') {
 			penalty_stim = sixty_score
+			dinnerSizeBottomText.text = 'SMALL'
 		}
 	
 		currentTrialNumber.setText(`${trial_number} / ${last_trial_num}`)
@@ -1404,6 +1441,9 @@ function trialRoutineRespond(trials) {
 			currentGameNumber.setAutoDraw(true)
 			currentScoreText.setAutoDraw(true)
 			currentScoreNumber.setAutoDraw(true)
+			dinnerSizeTopText.setAutoDraw(true)
+			dinnerSizeBottomText.setAutoDraw(true)
+			dinnerSizeUnderline.setAutoDraw(true)
 			faceStim.status = PsychoJS.Status.FINISHED;
 
 			mark_event(trials_data, globalClock, trials.thisIndex, trial_type, event_types['CHOICE_ONSET'],
@@ -1580,6 +1620,9 @@ function trialRoutineRespond(trials) {
 			currentGameNumber.setAutoDraw(false)
 			currentScoreText.setAutoDraw(false)
 			currentScoreNumber.setAutoDraw(false)
+			dinnerSizeTopText.setAutoDraw(false)
+			dinnerSizeBottomText.setAutoDraw(false)
+			dinnerSizeUnderline.setAutoDraw(false)
 
 			set_fixation_flag = true
 			endClock.reset()
