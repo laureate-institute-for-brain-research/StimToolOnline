@@ -379,11 +379,11 @@ var resources = [
 	{ name: 'try_left.png', path: '/js/tasks/active_trust/media/try_left.png' },
 	{ name: 'try_right.png', path: '/js/tasks/active_trust/media/try_right.png' },
 	{ name: 'zero.png', path: '/js/tasks/active_trust/media/points_zero.png' },
-	{ name: 'twenty.png', path: '/js/tasks/active_trust/media/points_zero.png' },
-	{ name: 'fourty.png', path: '/js/tasks/active_trust/media/points_20.png' },
-	{ name: 'sixty.png', path: '/js/tasks/active_trust/media/points_40.png' },
-	{ name: 'eighty.png', path: '/js/tasks/active_trust/media/points_60.png' },
-	{ name: 'hundred.png', path: '/js/tasks/active_trust/media/points_80.png' },
+	{ name: 'twenty.png', path: '/js/tasks/active_trust/media/points_20.png' },
+	{ name: 'fourty.png', path: '/js/tasks/active_trust/media/points_40.png' },
+	{ name: 'sixty.png', path: '/js/tasks/active_trust/media/points_60.png' },
+	{ name: 'eighty.png', path: '/js/tasks/active_trust/media/points_80.png' },
+	{ name: 'hundred.png', path: '/js/tasks/active_trust/media/points_100.png' },
 	{ name: 'press_l.png', path: '/js/tasks/active_trust/media/press_l.png' },
 	{ name: 'press_r.png', path: '/js/tasks/active_trust/media/press_r.png' },
 	{ name: 'press_u.png', path: '/js/tasks/active_trust/media/press_u.png' },
@@ -622,19 +622,19 @@ function experimentInit() {
 		win : psychoJS.window,
 		name : 'stimPath', units : 'height', 
 		image : 'zero.png', mask : undefined,
-		ori: 0, pos: [0.03, 0], opacity: 1,
+		ori: 0, pos: [0.027, 0], opacity: 1,
 		// size: [window_ratio*.1, 0.1],
 		flipHoriz : false, flipVert : false,
 		texRes : 128, interpolate : true, depth : 0
 	});
 	image_ratio = zero_score._image.width / zero_score._image.height
-	zero_score.size = [image_ratio*0.08, 0.08]
+	zero_score.size = [image_ratio*0.07, 0.07]
 	twenty_score = new visual.ImageStim({
 		win : psychoJS.window,
 		name : 'stimPath', units : 'height', 
 		image : 'twenty.png', mask : undefined,
-		ori: 0, pos: [0.03, 0], opacity: 1,
-		size: [image_ratio*0.08, 0.08],
+		ori: 0, pos: [0.015, 0], opacity: 1,
+		size: [image_ratio*0.07, 0.07],
 		flipHoriz : false, flipVert : false,
 		texRes : 128, interpolate : true, depth : 0
 	});
@@ -642,8 +642,8 @@ function experimentInit() {
 		win : psychoJS.window,
 		name : 'stimPath', units : 'height', 
 		image : 'fourty.png', mask : undefined,
-		ori: 0, pos: [0.03, 0], opacity: 1,
-		size: [image_ratio*0.08, 0.08],
+		ori: 0, pos: [0.015, 0], opacity: 1,
+		size: [image_ratio*0.07, 0.07],
 		flipHoriz : false, flipVert : false,
 		texRes : 128, interpolate : true, depth : 0
 	});
@@ -651,8 +651,8 @@ function experimentInit() {
 		win : psychoJS.window,
 		name : 'stimPath', units : 'height', 
 		image : 'sixty.png', mask : undefined,
-		ori: 0, pos: [0.03, 0], opacity: 1,
-		size: [image_ratio*0.08, 0.08],
+		ori: 0, pos: [0.015, 0], opacity: 1,
+		size: [image_ratio*0.07, 0.07],
 		flipHoriz : false, flipVert : false,
 		texRes : 128, interpolate : true, depth : 0
 	});
@@ -660,8 +660,8 @@ function experimentInit() {
 		win : psychoJS.window,
 		name : 'stimPath', units : 'height', 
 		image : 'eighty.png', mask : undefined,
-		ori: 0, pos: [0.03, 0], opacity: 1,
-		size: [image_ratio*0.08, 0.08],
+		ori: 0, pos: [0.015, 0], opacity: 1,
+		size: [image_ratio*0.07, 0.07],
 		flipHoriz : false, flipVert : false,
 		texRes : 128, interpolate : true, depth : 0
 	});
@@ -669,8 +669,8 @@ function experimentInit() {
 		win : psychoJS.window,
 		name : 'stimPath', units : 'height', 
 		image : 'hundred.png', mask : undefined,
-		ori: 0, pos: [0.03, 0], opacity: 1,
-		size: [image_ratio*0.08, 0.08],
+		ori: 0, pos: [0.012, 0], opacity: 1,
+		size: [image_ratio*0.07, 0.07],
 		flipHoriz : false, flipVert : false,
 		texRes : 128, interpolate : true, depth : 0
 	});
@@ -1236,6 +1236,8 @@ var advice_outcome; // true for left, false for right
 var picked_side; // true for left, false for right
 var feedback_active;
 var no_choice;
+var reward_stim;
+var penalty_stim;
 
 function trialRoutineBegin(trials) {
 	return function () {
@@ -1337,6 +1339,17 @@ function trialRoutineBegin(trials) {
 			texRes : 128, interpolate : true, depth : 0
 		});
 		rightnegStim.status = PsychoJS.Status.NOT_STARTED // set image Status
+
+		reward_stim = fourty_score // default choice score
+		if (wrong_score == '100') {
+			penalty_stim = hundred_score
+		}
+		else if (wrong_score == '80') {
+			penalty_stim = eighty_score
+		}
+		else if (wrong_Score == '60') {
+			penalty_stim = sixty_score
+		}
 	
 		currentTrialNumber.setText(`${trial_number} / ${last_trial_num}`)
 		console.log("Trial Number: ", trial_number)
@@ -1418,6 +1431,7 @@ function trialRoutineRespond(trials) {
 			if (resp.keys == UP_KEY) {
 				asked_for_advice = true
 				advice_outcome = get_advice_outcome(correct_side, help_prob) 
+				reward_stim = twenty_score // reduce score cause advice was picked
 				adviceClock.reset()
 			}
 
@@ -1437,6 +1451,7 @@ function trialRoutineRespond(trials) {
 			if (resp.keys == DOWN_KEY) {
 				no_choice = true
 				pressed = true
+				reward_stim = zero_score // remove score cause no choice was picked
 				feedbackClock.reset()
 			}
 
@@ -1497,18 +1512,22 @@ function trialRoutineRespond(trials) {
 					noneStim.setAutoDraw(false)
 					if (picked_side == correct_side) {
 						leftposStim.setAutoDraw(true)
+						reward_stim.setAutoDraw(true)
 					}
 					else {
 						leftnegStim.setAutoDraw(true)
+						penalty_stim.setAutoDraw(true)
 					}
 				}
 				else {
 					noneStim.setAutoDraw(false)
 					if (picked_side == correct_side) {
 						rightposStim.setAutoDraw(true)
+						reward_stim.setAutoDraw(true)
 					}
 					else {
 						rightnegStim.setAutoDraw(true)
+						penalty_stim.setAutoDraw(true)
 					}
 				}
 				feedback_active = true
@@ -1518,6 +1537,8 @@ function trialRoutineRespond(trials) {
 				leftnegStim.setAutoDraw(false)
 				rightposStim.setAutoDraw(false)
 				rightnegStim.setAutoDraw(false)
+				reward_stim.setAutoDraw(false)
+				penalty_stim.setAutoDraw(false)
 				continueRoutine = false
 			}
 		}
@@ -1525,11 +1546,11 @@ function trialRoutineRespond(trials) {
 		// \/\/\/ Advice Path or No Choice Path Continued \/\/\/
 		if (pressed && no_choice && (feedbackClock.getTime() >= parseFloat(config_values.post_choice_duration))) {
 			if (!feedback_active) {
-				zero_score.setAutoDraw(true)
+				reward_stim.setAutoDraw(true)
 				feedback_active = true
 			}
 			if ((feedbackClock.getTime() >= parseFloat(config_values.post_choice_duration) + parseFloat(config_values.feedback_duration))) {
-				zero_score.setAutoDraw(false)
+				reward_stim.setAutoDraw(false)
 				continueRoutine = false
 			}
 		}
