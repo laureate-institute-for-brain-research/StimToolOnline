@@ -50,7 +50,8 @@ var UP_KEY = 'up'
 var DOWN_KEY = 'down'
 var keyList = [LEFT_KEY, RIGHT_KEY, UP_KEY, DOWN_KEY]
 
-var window_ratio = 4 / 3;
+var window_ratio = 4 / 3; // used for general stimuli sizing
+var image_ratio = 4 / 3; // used for setting image sizes (this gets set to different image specific values throughout the code)
 
 // global flags
 var set_fixation_flag = true
@@ -209,23 +210,20 @@ window.onload = function () {
 							if (obj.face_stim_path != 'None' && obj.face_stim_path != undefined) {
 								resources.push({ name: obj.face_stim_path , path: obj.face_stim_path  })
 							}
-							if (obj.left_stim_path != 'None' && obj.left_stim_path != undefined) {
-								resources.push({ name: obj.left_stim_path , path: obj.left_stim_path  })
+							if (obj.none_stim_path != 'None' && obj.none_stim_path != undefined) {
+								resources.push({ name: obj.none_stim_path , path: obj.none_stim_path  })
 							}
-							if (obj.right_stim_path != 'None' && obj.right_stim_path != undefined) {
-								resources.push({ name: obj.right_stim_path , path: obj.right_stim_path  })
+							if (obj.rightpos_stim_path != 'None' && obj.rightpos_stim_path != undefined) {
+								resources.push({ name: obj.rightpos_stim_path , path: obj.rightpos_stim_path  })
 							}
-							if (obj.left_stima_path != 'None' && obj.lefta_stim_path != undefined) {
-								resources.push({ name: obj.lefta_stim_path , path: obj.lefta_stim_path  })
+							if (obj.leftpos_stim_path != 'None' && obj.leftpos_stim_path != undefined) {
+								resources.push({ name: obj.leftpos_stim_path , path: obj.leftpos_stim_path  })
 							}
-							if (obj.righta_stim_path != 'None' && obj.righta_stim_path != undefined) {
-								resources.push({ name: obj.righta_stim_path , path: obj.righta_stim_path  })
+							if (obj.rightneg_stim_path != 'None' && obj.rightneg_stim_path != undefined) {
+								resources.push({ name: obj.rightneg_stim_path , path: obj.rightneg_stim_path  })
 							}
-							if (obj.leftr_stim_path != 'None' && obj.leftr_stim_path != undefined) {
-								resources.push({ name: obj.leftr_stim_path , path: obj.leftr_stim_path  })
-							}
-							if (obj.rightr_stim_path != 'None' && obj.rightr_stim_path != undefined) {
-								resources.push({ name: obj.rightr_stim_path , path: obj.rightr_stim_path  })
+							if (obj.leftneg_stim_path != 'None' && obj.leftneg_stim_path != undefined) {
+								resources.push({ name: obj.leftneg_stim_path , path: obj.leftneg_stim_path  })
 							}
 						}
 
@@ -380,6 +378,12 @@ var resources = [
 	{ name: 'MAIN_ready_audio.mp3', path: '/js/tasks/active_trust/media/instructions_audio/Slide16.mp3' },
 	{ name: 'try_left.png', path: '/js/tasks/active_trust/media/try_left.png' },
 	{ name: 'try_right.png', path: '/js/tasks/active_trust/media/try_right.png' },
+	{ name: 'zero.png', path: '/js/tasks/active_trust/media/points_zero.png' },
+	{ name: 'twenty.png', path: '/js/tasks/active_trust/media/points_zero.png' },
+	{ name: 'fourty.png', path: '/js/tasks/active_trust/media/points_20.png' },
+	{ name: 'sixty.png', path: '/js/tasks/active_trust/media/points_40.png' },
+	{ name: 'eighty.png', path: '/js/tasks/active_trust/media/points_60.png' },
+	{ name: 'hundred.png', path: '/js/tasks/active_trust/media/points_80.png' },
 	{ name: 'press_l.png', path: '/js/tasks/active_trust/media/press_l.png' },
 	{ name: 'press_r.png', path: '/js/tasks/active_trust/media/press_r.png' },
 	{ name: 'press_u.png', path: '/js/tasks/active_trust/media/press_u.png' },
@@ -421,12 +425,11 @@ var respondClock;
 
 // Stim from schedule
 var faceStim;
-var leftStim;
-var rightStim;
-var leftaStim;
-var rightaStim;
-var leftrStim;
-var rightrStim;
+var noneStim;
+var leftposStim;
+var rightposStim;
+var leftnegStim;
+var rightnegStim;
 
 // feedback stim
 var try_left;
@@ -445,6 +448,13 @@ var currentGameNumber;
 var currentGameText;
 var currentScoreNumber;
 var currentScoreText;
+
+var zero_score;
+var twenty_score;
+var fourty_score;
+var sixty_score;
+var eighty_score;
+var hundred_score;
 //// Fixation
 var points_fixation_stim;
 
@@ -509,7 +519,7 @@ function experimentInit() {
 		win : psychoJS.window,
 		name : 'stimPath', units : 'height', 
 		image : 'press_r.png', mask : undefined,
-		ori: 0, pos: [window_ratio * 0.3, -0.21], opacity: 1,
+		ori: 0, pos: [window_ratio * 0.25, -0.25], opacity: 1,
 		size: [window_ratio*.1, 0.1],
 		flipHoriz : false, flipVert : false,
 		texRes : 128, interpolate : true, depth : 0
@@ -518,7 +528,7 @@ function experimentInit() {
 		win : psychoJS.window,
 		name : 'stimPath', units : 'height', 
 		image : 'press_l.png', mask : undefined,
-		ori: 0, pos: [-window_ratio * 0.3, -0.21], opacity: 1,
+		ori: 0, pos: [-window_ratio * 0.25, -0.25], opacity: 1,
 		size: [window_ratio*.1, 0.1],
 		flipHoriz : false, flipVert : false,
 		texRes : 128, interpolate : true, depth : 0
@@ -606,6 +616,63 @@ function experimentInit() {
 		alignHoriz: 'left',
 		color: new util.Color('white'), opacity: 1,
 		depth: 0.0
+	});
+
+	zero_score = new visual.ImageStim({
+		win : psychoJS.window,
+		name : 'stimPath', units : 'height', 
+		image : 'zero.png', mask : undefined,
+		ori: 0, pos: [0.03, 0], opacity: 1,
+		// size: [window_ratio*.1, 0.1],
+		flipHoriz : false, flipVert : false,
+		texRes : 128, interpolate : true, depth : 0
+	});
+	image_ratio = zero_score._image.width / zero_score._image.height
+	zero_score.size = [image_ratio*0.08, 0.08]
+	twenty_score = new visual.ImageStim({
+		win : psychoJS.window,
+		name : 'stimPath', units : 'height', 
+		image : 'twenty.png', mask : undefined,
+		ori: 0, pos: [0.03, 0], opacity: 1,
+		size: [image_ratio*0.08, 0.08],
+		flipHoriz : false, flipVert : false,
+		texRes : 128, interpolate : true, depth : 0
+	});
+	fourty_score = new visual.ImageStim({
+		win : psychoJS.window,
+		name : 'stimPath', units : 'height', 
+		image : 'fourty.png', mask : undefined,
+		ori: 0, pos: [0.03, 0], opacity: 1,
+		size: [image_ratio*0.08, 0.08],
+		flipHoriz : false, flipVert : false,
+		texRes : 128, interpolate : true, depth : 0
+	});
+	sixty_score = new visual.ImageStim({
+		win : psychoJS.window,
+		name : 'stimPath', units : 'height', 
+		image : 'sixty.png', mask : undefined,
+		ori: 0, pos: [0.03, 0], opacity: 1,
+		size: [image_ratio*0.08, 0.08],
+		flipHoriz : false, flipVert : false,
+		texRes : 128, interpolate : true, depth : 0
+	});
+	eighty_score = new visual.ImageStim({
+		win : psychoJS.window,
+		name : 'stimPath', units : 'height', 
+		image : 'eighty.png', mask : undefined,
+		ori: 0, pos: [0.03, 0], opacity: 1,
+		size: [image_ratio*0.08, 0.08],
+		flipHoriz : false, flipVert : false,
+		texRes : 128, interpolate : true, depth : 0
+	});
+	hundred_score = new visual.ImageStim({
+		win : psychoJS.window,
+		name : 'stimPath', units : 'height', 
+		image : 'hundred.png', mask : undefined,
+		ori: 0, pos: [0.03, 0], opacity: 1,
+		size: [image_ratio*0.08, 0.08],
+		flipHoriz : false, flipVert : false,
+		texRes : 128, interpolate : true, depth : 0
 	});
 
 	// Fixation
@@ -1159,6 +1226,7 @@ function get_advice_outcome(correct_side, help_p) {
 }
 
 // var theseKeys;
+// var image_ratio;
 var pressed;
 var asked_for_advice;
 var got_advice;
@@ -1167,6 +1235,7 @@ var correct_side; // true for left, false for right
 var advice_outcome; // true for left, false for right
 var picked_side; // true for left, false for right
 var feedback_active;
+var no_choice;
 
 function trialRoutineBegin(trials) {
 	return function () {
@@ -1211,72 +1280,63 @@ function trialRoutineBegin(trials) {
 		})
 		try_right.pos[0] = ((try_left.size[0])/2)
 
-		leftStim = new visual.ImageStim({
+		noneStim = new visual.ImageStim({
 			win : psychoJS.window,
 			name : 'stimPath', units : 'height', 
-			image : left_stim_path, mask : undefined,
-			ori: 0, pos: [-window_ratio * 0.3, 0], opacity: 1,
-			size: [window_ratio*0.30, 0.30],
+			image : none_stim_path, mask : undefined,
+			ori: 0, pos: [0, 0], opacity: 1,
+			// size: [window_ratio*0.30, 0.30],
 			// size: 0.25,
 			flipHoriz : false, flipVert : false,
 			texRes : 128, interpolate : true, depth : 0
 		});
-		leftStim.status = PsychoJS.Status.NOT_STARTED // set image Status
-		rightStim = new visual.ImageStim({
+		image_ratio = noneStim._image.width / noneStim._image.height // set image_ratio based on actual image width and height
+		noneStim.size = [image_ratio* 0.4, 0.4] // set size to be image ratio and smaller than window size ([image_ratio * y, y]; y < 1)
+		noneStim.status = PsychoJS.Status.NOT_STARTED // set image Status
+		leftposStim = new visual.ImageStim({
 			win : psychoJS.window,
 			name : 'stimPath', units : 'height', 
-			image : right_stim_path, mask : undefined,
-			ori: 0, pos: [window_ratio * 0.3, 0], opacity: 1,
-			size: [window_ratio*0.30, 0.30],
-			//size: 0.25,
-			flipHoriz : false, flipVert : false,
-			texRes : 128, interpolate : true, depth : 0
-		});
-		rightStim.status = PsychoJS.Status.NOT_STARTED // set image Status
-		leftaStim = new visual.ImageStim({
-			win : psychoJS.window,
-			name : 'stimPath', units : 'height', 
-			image : lefta_stim_path, mask : undefined,
-			ori: 0, pos: [-window_ratio * 0.3, 0], opacity: 1,
-			size: [window_ratio*0.30, 0.325],
+			image : leftpos_stim_path, mask : undefined,
+			ori: 0, pos: [0, 0], opacity: 1,
+			size: [image_ratio*0.4, 0.4],
 			// size: 0.25,
 			flipHoriz : false, flipVert : false,
 			texRes : 128, interpolate : true, depth : 0
 		});
-		leftaStim.status = PsychoJS.Status.NOT_STARTED // set image Status
-		rightaStim = new visual.ImageStim({
+		leftposStim.status = PsychoJS.Status.NOT_STARTED // set image Status
+		rightposStim = new visual.ImageStim({
 			win : psychoJS.window,
 			name : 'stimPath', units : 'height', 
-			image : righta_stim_path, mask : undefined,
-			ori: 0, pos: [window_ratio * 0.3, 0], opacity: 1,
-			size: [window_ratio*0.30, 0.325],
+			image : rightpos_stim_path, mask : undefined,
+			ori: 0, pos: [0, 0], opacity: 1,
+			size: [image_ratio*0.4, 0.4],
 			//size: 0.25,
 			flipHoriz : false, flipVert : false,
 			texRes : 128, interpolate : true, depth : 0
 		});
-		rightaStim.status = PsychoJS.Status.NOT_STARTED // set image Status
-		leftrStim = new visual.ImageStim({
+		rightposStim.status = PsychoJS.Status.NOT_STARTED // set image Status
+		leftnegStim = new visual.ImageStim({
 			win : psychoJS.window,
 			name : 'stimPath', units : 'height', 
-			image : leftr_stim_path, mask : undefined,
-			ori: 0, pos: [-window_ratio * 0.3, 0], opacity: 1,
-			size: [window_ratio*0.30, 0.325],
+			image : leftneg_stim_path, mask : undefined,
+			ori: 0, pos: [0, 0], opacity: 1,
+			size: [image_ratio*0.4, 0.4],
 			// size: 0.25,
 			flipHoriz : false, flipVert : false,
 			texRes : 128, interpolate : true, depth : 0
 		});
-		leftrStim.status = PsychoJS.Status.NOT_STARTED // set image Status
-		rightrStim = new visual.ImageStim({
+		leftnegStim.status = PsychoJS.Status.NOT_STARTED // set image Status
+		rightnegStim = new visual.ImageStim({
 			win : psychoJS.window,
 			name : 'stimPath', units : 'height', 
-			image : rightr_stim_path, mask : undefined,
-			ori: 0, pos: [window_ratio * 0.3, 0], opacity: 1,
-			size: [window_ratio*0.30, 0.325],
+			image : rightneg_stim_path, mask : undefined,
+			ori: 0, pos: [0, 0], opacity: 1,
+			size: [image_ratio*0.4, 0.4],
 			//size: 0.25,
 			flipHoriz : false, flipVert : false,
 			texRes : 128, interpolate : true, depth : 0
 		});
-		rightrStim.status = PsychoJS.Status.NOT_STARTED // set image Status
+		rightnegStim.status = PsychoJS.Status.NOT_STARTED // set image Status
 	
 		currentTrialNumber.setText(`${trial_number} / ${last_trial_num}`)
 		console.log("Trial Number: ", trial_number)
@@ -1286,6 +1346,7 @@ function trialRoutineBegin(trials) {
 		post_advice_choice_allowed = false
 		pressed = false
 		feedback_active = false
+		no_choice = false
 
 		endClock.reset()
 		// adviceClock.reset()
@@ -1311,7 +1372,6 @@ function trialRoutineRespond(trials) {
 	return function () {
 		//------Loop for each frame of Routine 'trial'-------
 		let continueRoutine = true; // until we're told otherwise	
-		
 	
 		// get current time
 		t = respondClock.getTime();
@@ -1320,8 +1380,7 @@ function trialRoutineRespond(trials) {
 		if (faceStim.status == PsychoJS.Status.NOT_STARTED) {
 			// response_text.setAutoDraw(true)
 			faceStim.setAutoDraw(true)
-			leftStim.setAutoDraw(true)
-			rightStim.setAutoDraw(true)
+			noneStim.setAutoDraw(true)
 			press_up.setAutoDraw(true)
 			press_left.setAutoDraw(true)
 			press_right.setAutoDraw(true)
@@ -1338,8 +1397,6 @@ function trialRoutineRespond(trials) {
 				'NA', 'NA' , 'NA')
 		}
 
-		// Get Resposne Keys
-		// Get User Input
 		if (resp.status === PsychoJS.Status.NOT_STARTED) {
 			// keep track of start time/frame for later
 			resp.tStart = t;  // (not accounting for frame time here)
@@ -1351,16 +1408,36 @@ function trialRoutineRespond(trials) {
 			resp.clearEvents();
 		}
 
-		// Advice Path Start
+		// \/\/\/ Advice Path Start or Advice-less Choice Start or No Choice Start \/\/\/
 		let theseKeys = resp.getKeys({ keyList: keyList, waitRelease: false });
 		if (!asked_for_advice && theseKeys.length > 0) {
 			resp.keys = theseKeys[0].name;  // just the last key pressed
 			resp.rt = theseKeys[0].rt;
 
+			// Advice
 			if (resp.keys == UP_KEY) {
 				asked_for_advice = true
 				advice_outcome = get_advice_outcome(correct_side, help_prob) 
 				adviceClock.reset()
+			}
+
+			// Advice-less Choice
+			if (resp.keys == LEFT_KEY) {
+				picked_side = true
+				pressed = true
+				feedbackClock.reset()
+			}
+			if (resp.keys == RIGHT_KEY) {
+				picked_side = false
+				pressed = true
+				feedbackClock.reset()
+			}
+
+			// No Choice
+			if (resp.keys == DOWN_KEY) {
+				no_choice = true
+				pressed = true
+				feedbackClock.reset()
 			}
 
 			// Save Data on each Press
@@ -1400,6 +1477,12 @@ function trialRoutineRespond(trials) {
 				pressed = true
 				feedbackClock.reset()
 			}
+			if (resp.keys == DOWN_KEY) {
+				no_choice = true
+				pressed = true
+				feedbackClock.reset()
+			}
+
 
 			// Save Data on each Press
 			mark_event(trials_data, globalClock, trials.thisIndex, trial_type, event_types['RESPONSE'],
@@ -1407,38 +1490,50 @@ function trialRoutineRespond(trials) {
 			resp.keys = undefined;
 			resp.rt = undefined;
 		}
-		//// Advice Path Continued
-		if (pressed && (feedbackClock.getTime() >= parseFloat(config_values.post_choice_duration))) {
+		//// Advice Path Continued or Advice-less Choice Path Continued
+		if (pressed && !no_choice && (feedbackClock.getTime() >= parseFloat(config_values.post_choice_duration))) {
 			if (!feedback_active) {
 				if (picked_side) {
-					leftStim.setAutoDraw(false)
+					noneStim.setAutoDraw(false)
 					if (picked_side == correct_side) {
-						leftaStim.setAutoDraw(true)
+						leftposStim.setAutoDraw(true)
 					}
 					else {
-						leftrStim.setAutoDraw(true)
+						leftnegStim.setAutoDraw(true)
 					}
 				}
 				else {
-					rightStim.setAutoDraw(false)
+					noneStim.setAutoDraw(false)
 					if (picked_side == correct_side) {
-						rightaStim.setAutoDraw(true)
+						rightposStim.setAutoDraw(true)
 					}
 					else {
-						rightrStim.setAutoDraw(true)
+						rightnegStim.setAutoDraw(true)
 					}
 				}
 				feedback_active = true
 			}
 			if ((feedbackClock.getTime() >= parseFloat(config_values.post_choice_duration) + parseFloat(config_values.feedback_duration))) {
-				leftaStim.setAutoDraw(false)
-				leftrStim.setAutoDraw(false)
-				rightaStim.setAutoDraw(false)
-				rightrStim.setAutoDraw(false)
+				leftposStim.setAutoDraw(false)
+				leftnegStim.setAutoDraw(false)
+				rightposStim.setAutoDraw(false)
+				rightnegStim.setAutoDraw(false)
 				continueRoutine = false
 			}
 		}
-		// Advice Path End
+		// /\/\/\ Advice Path or Advice-less Choice Path End /\/\/\
+		// \/\/\/ Advice Path or No Choice Path Continued \/\/\/
+		if (pressed && no_choice && (feedbackClock.getTime() >= parseFloat(config_values.post_choice_duration))) {
+			if (!feedback_active) {
+				zero_score.setAutoDraw(true)
+				feedback_active = true
+			}
+			if ((feedbackClock.getTime() >= parseFloat(config_values.post_choice_duration) + parseFloat(config_values.feedback_duration))) {
+				zero_score.setAutoDraw(false)
+				continueRoutine = false
+			}
+		}
+		// /\/\/\ Advice Path or No Choice Choice Path End /\/\/\
 
 
 
@@ -1453,8 +1548,7 @@ function trialRoutineRespond(trials) {
 		}
 		else {
 			faceStim.setAutoDraw(false)
-			leftStim.setAutoDraw(false)
-			rightStim.setAutoDraw(false)
+			noneStim.setAutoDraw(false)
 			press_up.setAutoDraw(false)
 			press_left.setAutoDraw(false)
 			press_right.setAutoDraw(false)
