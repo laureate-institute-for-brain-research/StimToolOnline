@@ -673,7 +673,7 @@ function experimentInit() {
 		font: 'Arial', units: 'height',
 		pos: [possibleWinText.getBoundingBox().right + (window_ratio * 0.005), 0.47], height: 0.027, wrapWidth: undefined, ori: 0,
 		alignHoriz: 'left',
-		color: new util.Color('white'), opacity: 1,
+		color: new util.Color('green'), opacity: 1,
 		depth: 0.0
 	});
 	possibleLossText = new visual.TextStim({
@@ -692,7 +692,7 @@ function experimentInit() {
 		font: 'Arial', units: 'height',
 		pos: [possibleLossText.getBoundingBox().right + (window_ratio * 0.005), 0.44], height: 0.027, wrapWidth: undefined, ori: 0,
 		alignHoriz: 'left',
-		color: new util.Color('white'), opacity: 1,
+		color: new util.Color('red'), opacity: 1,
 		depth: 0.0
 	});
 
@@ -1202,8 +1202,9 @@ function practiceTrialsLoopBegin(thisScheduler) {
 	last_trial_num = trials.nTotal
 
 	psychoJS.experiment.addLoop(trials); // add the loop to the experiment
-	total_score = 500/2
 	currentLoop = trials;  // we're now the current loop
+	total_score = 0
+	
 	endClock.reset()
 	resp.stop()
 	resp.clearEvents()
@@ -1247,7 +1248,7 @@ function trialsLoopBegin(thisScheduler) {
 
 	psychoJS.experiment.addLoop(trials); // add the loop to the experiment
 	currentLoop = trials;  // we're now the current loop
-	total_score = 500/2
+	total_score = 0
 
 	init_fixation_flag = true
 
@@ -1605,10 +1606,12 @@ function trialRoutineRespond(trials) {
 					if (picked_side == correct_side) {
 						leftposStim.setAutoDraw(true)
 						reward_stim.setAutoDraw(true)
+						total_score += parseInt(possibleWinNumber.text)
 					}
 					else {
 						leftnegStim.setAutoDraw(true)
 						penalty_stim.setAutoDraw(true)
+						total_score -= parseInt(possibleLossNumber.text)
 					}
 				}
 				else {
@@ -1616,13 +1619,16 @@ function trialRoutineRespond(trials) {
 					if (picked_side == correct_side) {
 						rightposStim.setAutoDraw(true)
 						reward_stim.setAutoDraw(true)
+						total_score += parseInt(possibleWinNumber.text)
 					}
 					else {
 						rightnegStim.setAutoDraw(true)
 						penalty_stim.setAutoDraw(true)
+						total_score -= parseInt(possibleLossNumber.text)
 					}
 				}
 				feedback_active = true
+				currentScoreNumber.setText(`${total_score}`)
 			}
 			if ((feedbackClock.getTime() >= parseFloat(config_values.post_choice_duration) + parseFloat(config_values.feedback_duration))) {
 				leftposStim.setAutoDraw(false)
