@@ -457,6 +457,10 @@ var currentScoreText;
 var dinnerSizeTopText;
 var dinnerSizeBottomText;
 var dinnerSizeUnderline;
+var possibleWinText;
+var possibleWinNumber;
+var possibleLossText;
+var possibleLossNumber;
 
 //// Fixation
 var points_fixation_stim;
@@ -556,7 +560,7 @@ function experimentInit() {
 	});
 
 	// Trial/Choice counter
-	currentTrialText  = new visual.TextStim({
+	currentTrialText = new visual.TextStim({
 		win: psychoJS.window,
 		name: 'trialTracker',
 		text: 'Choice Number: ',
@@ -566,7 +570,7 @@ function experimentInit() {
 		color: new util.Color('white'), opacity: 1,
 		depth: 0.0
 	});
-	currentTrialNumber  = new visual.TextStim({
+	currentTrialNumber = new visual.TextStim({
 		win: psychoJS.window,
 		name: 'trialTracker',
 		text: '1',
@@ -578,7 +582,7 @@ function experimentInit() {
 	});
 
 	// Block/Room Counter 
-	currentGameText  = new visual.TextStim({
+	currentGameText = new visual.TextStim({
 		win: psychoJS.window,
 		name: 'trialTracker',
 		text: 'Room Number: ',
@@ -588,7 +592,7 @@ function experimentInit() {
 		color: new util.Color('white'), opacity: 1,
 		depth: 0.0
 	});
-	currentGameNumber  = new visual.TextStim({
+	currentGameNumber = new visual.TextStim({
 		win: psychoJS.window,
 		name: 'trialTracker',
 		text: '0 / 0',
@@ -600,7 +604,7 @@ function experimentInit() {
 	});
 
 	// Score/Points Counter
-	currentScoreText  = new visual.TextStim({
+	currentScoreText = new visual.TextStim({
 		win: psychoJS.window,
 		name: 'trialTracker',
 		text: 'Invite Points: ',
@@ -610,7 +614,7 @@ function experimentInit() {
 		color: new util.Color('white'), opacity: 1,
 		depth: 0.0
 	});
-	currentScoreNumber  = new visual.TextStim({
+	currentScoreNumber = new visual.TextStim({
 		win: psychoJS.window,
 		name: 'trialTracker',
 		text: '0',
@@ -622,7 +626,7 @@ function experimentInit() {
 	});
 
 	// Dinner Size
-	dinnerSizeTopText  = new visual.TextStim({
+	dinnerSizeTopText = new visual.TextStim({
 		win: psychoJS.window,
 		name: 'trialTracker',
 		text: 'Dinner Size',
@@ -631,7 +635,7 @@ function experimentInit() {
 		color: new util.Color('white'), opacity: 1,
 		depth: 0.0
 	});
-	dinnerSizeBottomText  = new visual.TextStim({
+	dinnerSizeBottomText = new visual.TextStim({
 		win: psychoJS.window,
 		name: 'trialTracker',
 		text: 'LARGE',
@@ -651,6 +655,46 @@ function experimentInit() {
 		lineColor: new util.Color('white'), opacity: 1,
 		depth: 0
 	})
+
+	// Possible Score Tracker
+	possibleWinText = new visual.TextStim({
+		win: psychoJS.window,
+		name: 'trialTracker',
+		text: 'Possible Invite Points Gain: ',
+		font: 'Arial', units: 'height',
+		pos: [0, 0.47], height: 0.027, wrapWidth: undefined, ori: 0,
+		color: new util.Color('white'), opacity: 1,
+		depth: 0.0
+	});
+	possibleWinNumber = new visual.TextStim({
+		win: psychoJS.window,
+		name: 'trialTracker',
+		text: '0',
+		font: 'Arial', units: 'height',
+		pos: [possibleWinText.getBoundingBox().right + (window_ratio * 0.005), 0.47], height: 0.027, wrapWidth: undefined, ori: 0,
+		alignHoriz: 'left',
+		color: new util.Color('white'), opacity: 1,
+		depth: 0.0
+	});
+	possibleLossText = new visual.TextStim({
+		win: psychoJS.window,
+		name: 'trialTracker',
+		text: 'Possible Invite Points Loss: ',
+		font: 'Arial', units: 'height',
+		pos: [0, 0.44], height: 0.027, wrapWidth: undefined, ori: 0,
+		color: new util.Color('white'), opacity: 1,
+		depth: 0.0
+	});
+	possibleLossNumber = new visual.TextStim({
+		win: psychoJS.window,
+		name: 'trialTracker',
+		text: '0',
+		font: 'Arial', units: 'height',
+		pos: [possibleLossText.getBoundingBox().right + (window_ratio * 0.005), 0.44], height: 0.027, wrapWidth: undefined, ori: 0,
+		alignHoriz: 'left',
+		color: new util.Color('white'), opacity: 1,
+		depth: 0.0
+	});
 
 	// Middle Scores
 	zero_score = new visual.ImageStim({
@@ -1389,6 +1433,8 @@ function trialRoutineBegin(trials) {
 		}
 	
 		currentTrialNumber.setText(`${trial_number} / ${last_trial_num}`)
+		possibleWinNumber.setText(`${correct_score_full}`)
+		possibleLossNumber.setText(`${wrong_score}`)
 		console.log("Trial Number: ", trial_number)
 
 		asked_for_advice = false
@@ -1444,6 +1490,10 @@ function trialRoutineRespond(trials) {
 			dinnerSizeTopText.setAutoDraw(true)
 			dinnerSizeBottomText.setAutoDraw(true)
 			dinnerSizeUnderline.setAutoDraw(true)
+			possibleWinText.setAutoDraw(true)
+			possibleWinNumber.setAutoDraw(true)
+			possibleLossText.setAutoDraw(true)
+			possibleLossNumber.setAutoDraw(true)
 			faceStim.status = PsychoJS.Status.FINISHED;
 
 			mark_event(trials_data, globalClock, trials.thisIndex, trial_type, event_types['CHOICE_ONSET'],
@@ -1470,6 +1520,7 @@ function trialRoutineRespond(trials) {
 			// Advice
 			if (resp.keys == UP_KEY) {
 				asked_for_advice = true
+				possibleWinNumber.setText(`${correct_score_helped}`)
 				advice_outcome = get_advice_outcome(correct_side, help_prob) 
 				reward_stim = twenty_score // reduce score cause advice was picked
 				adviceClock.reset()
@@ -1535,6 +1586,7 @@ function trialRoutineRespond(trials) {
 			if (resp.keys == DOWN_KEY) {
 				no_choice = true
 				pressed = true
+				reward_stim = zero_score // remove score cause no choice was picked
 				feedbackClock.reset()
 			}
 
@@ -1623,6 +1675,10 @@ function trialRoutineRespond(trials) {
 			dinnerSizeTopText.setAutoDraw(false)
 			dinnerSizeBottomText.setAutoDraw(false)
 			dinnerSizeUnderline.setAutoDraw(false)
+			possibleWinText.setAutoDraw(false)
+			possibleWinNumber.setAutoDraw(false)
+			possibleLossText.setAutoDraw(false)
+			possibleLossNumber.setAutoDraw(false)
 
 			set_fixation_flag = true
 			endClock.reset()
