@@ -555,7 +555,7 @@ function experimentInit() {
 		win : psychoJS.window,
 		name : 'stimPath', units : 'height', 
 		image : 'press_d.png', mask : undefined,
-		ori: 0, pos: [window_ratio * 0.01, -0.3], opacity: 1,
+		ori: 0, pos: [window_ratio * 0.005, -0.3], opacity: 1,
 		size: [window_ratio*.18, 0.17],
 		flipHoriz : false, flipVert : false,
 		texRes : 128, interpolate : true, depth : 0
@@ -703,18 +703,19 @@ function experimentInit() {
 		win : psychoJS.window,
 		name : 'stimPath', units : 'height', 
 		image : 'zero.png', mask : undefined,
-		ori: 0, pos: [0.027, 0], opacity: 1,
+		ori: 0, pos: [0, -0.05], opacity: 1,
+		size: [0.151, 0.151],
 		flipHoriz : false, flipVert : false,
 		texRes : 128, interpolate : true, depth : 0
 	});
-	image_ratio = zero_score._image.width / zero_score._image.height
-	zero_score.size = [image_ratio*0.07, 0.07]
+	// image_ratio = zero_score._image.width / zero_score._image.height
+	// zero_score.size = [image_ratio*0.07, 0.07]
 	twenty_score = new visual.ImageStim({
 		win : psychoJS.window,
 		name : 'stimPath', units : 'height', 
 		image : 'twenty.png', mask : undefined,
-		ori: 0, pos: [0.015, 0], opacity: 1,
-		size: [image_ratio*0.07, 0.07],
+		ori: 0, pos: [0, -0.05], opacity: 1,
+		size: [0.151, 0.151],
 		flipHoriz : false, flipVert : false,
 		texRes : 128, interpolate : true, depth : 0
 	});
@@ -722,8 +723,8 @@ function experimentInit() {
 		win : psychoJS.window,
 		name : 'stimPath', units : 'height', 
 		image : 'fourty.png', mask : undefined,
-		ori: 0, pos: [0.015, 0], opacity: 1,
-		size: [image_ratio*0.07, 0.07],
+		ori: 0, pos: [0, -0.05], opacity: 1,
+		size: [0.151, 0.151],
 		flipHoriz : false, flipVert : false,
 		texRes : 128, interpolate : true, depth : 0
 	});
@@ -731,8 +732,8 @@ function experimentInit() {
 		win : psychoJS.window,
 		name : 'stimPath', units : 'height', 
 		image : 'sixty.png', mask : undefined,
-		ori: 0, pos: [0.015, 0], opacity: 1,
-		size: [image_ratio*0.07, 0.07],
+		ori: 0, pos: [0, -0.05], opacity: 1,
+		size: [0.151, 0.151],
 		flipHoriz : false, flipVert : false,
 		texRes : 128, interpolate : true, depth : 0
 	});
@@ -740,8 +741,8 @@ function experimentInit() {
 		win : psychoJS.window,
 		name : 'stimPath', units : 'height', 
 		image : 'eighty.png', mask : undefined,
-		ori: 0, pos: [0.015, 0], opacity: 1,
-		size: [image_ratio*0.07, 0.07],
+		ori: 0, pos: [0, -0.05], opacity: 1,
+		size: [0.151, 0.151],
 		flipHoriz : false, flipVert : false,
 		texRes : 128, interpolate : true, depth : 0
 	});
@@ -749,8 +750,8 @@ function experimentInit() {
 		win : psychoJS.window,
 		name : 'stimPath', units : 'height', 
 		image : 'hundred.png', mask : undefined,
-		ori: 0, pos: [0.012, 0], opacity: 1,
-		size: [image_ratio*0.07, 0.07],
+		ori: 0, pos: [0, -0.05], opacity: 1,
+		size: [0.151, 0.151],
 		flipHoriz : false, flipVert : false,
 		texRes : 128, interpolate : true, depth : 0
 	});
@@ -1300,11 +1301,33 @@ function get_correct_side(left_p/*, right_p*/) {
 }
 
 function get_advice_outcome(correct_side, help_p) {
-	if (Math.random() <= help_p) {
+	if (advice_requests >= 2 || forced_advice_type == 'none') {
+		console.log('normal help')
+		if (Math.random() <= help_p) {
+			return correct_side
+		}
+		else {
+			return !correct_side
+		}
+	}
+	else if (forced_advice_type == 'right') {
+		console.log('forced right')
 		return correct_side
 	}
-	else {
+	else if (forced_advice_type == 'wrong') {
+		console.log('forced wrong')
 		return !correct_side
+	}
+	else if (forced_advice_type == 'mix') {
+		console.log('forced mix')
+		if (advice_requests == 0) {
+			console.log('----- return wrong side')
+			return !correct_side
+		}
+		else {
+			console.log('----- return right side')
+			return correct_side
+		}
 	}
 }
 
@@ -1335,6 +1358,8 @@ var no_choice;
 var reward_stim;
 var penalty_stim;
 var last_trial_num = 0;
+var advice_requests = 0;
+var last_prob;
 
 function trialRoutineBegin(trials) {
 	return function () {
@@ -1344,9 +1369,14 @@ function trialRoutineBegin(trials) {
 		toneClock.reset(); // toneclock
 		frameN = -1;
 
-		if (trial_number > completed_blocks * parseFloat(config_values.block_size))
-		{
+		// next block
+		if (trial_number > completed_blocks * parseFloat(config_values.block_size)) {
 			completed_blocks += 1
+		}
+
+		// help prob change or next block
+		if ((help_prob != last_prob) || (trial_number > completed_blocks * parseFloat(config_values.block_size))) {
+			advice_requests = 0
 		}
 
 		// Initialize the image
@@ -1469,6 +1499,7 @@ function trialRoutineBegin(trials) {
 		}
 		currentGameNumber.setText(`${completed_blocks} / ${total_block_count}`)
 		possibleWinNumber.setText(`${correct_score_full}`)
+		possibleWinNumber.setColor(new util.Color('#66ff99'))
 		possibleLossNumber.setText(`${wrong_score}`)
 		console.log("Trial Number: ", trial_number)
 
@@ -1483,6 +1514,7 @@ function trialRoutineBegin(trials) {
 		// adviceClock.reset()
 
 		correct_side = get_correct_side(left_prob, right_prob)
+		last_prob = help_prob
 	
 		resp.keys = undefined;
 		resp.rt = undefined;
@@ -1558,6 +1590,7 @@ function trialRoutineRespond(trials) {
 				possibleWinNumber.setText(`${correct_score_helped}`)
 				possibleWinNumber.setColor(new util.Color('green'))
 				advice_outcome = get_advice_outcome(correct_side, help_prob) 
+				advice_requests += 1
 				reward_stim = twenty_score // reduce score cause advice was picked
 				adviceClock.reset()
 			}
