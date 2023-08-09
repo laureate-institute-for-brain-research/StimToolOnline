@@ -673,7 +673,7 @@ function experimentInit() {
 		font: 'Arial', units: 'height',
 		pos: [possibleWinText.getBoundingBox().right + (window_ratio * 0.005), 0.47], height: 0.027, wrapWidth: undefined, ori: 0,
 		alignHoriz: 'left',
-		color: new util.Color('green'), opacity: 1,
+		color: new util.Color('#66ff99'), opacity: 1,
 		depth: 0.0
 	});
 	possibleLossText = new visual.TextStim({
@@ -1304,6 +1304,19 @@ function get_advice_outcome(correct_side, help_p) {
 	}
 }
 
+// Recursively set multiplier to find one that both keeps the images ratio and keeps it in the window
+function resize_image(image, image_ratio, multiplier) {
+	// check if it is not in window ratio (with a 10% tolerance)
+	if ((image_ratio * multiplier) > (window_ratio - (window_ratio * 0.1))) {
+		// decrease multiplier to try and get it in tolerance
+		resize_image(image, image_ratio, multiplier - 0.015)
+	}
+	else {
+		//set size of image
+		image.size = [parseFloat((image_ratio * multiplier).toPrecision(4)), parseFloat(multiplier)]
+	}
+}
+
 // var theseKeys;
 // var image_ratio;
 var pressed;
@@ -1372,7 +1385,8 @@ function trialRoutineBegin(trials) {
 			texRes : 128, interpolate : true, depth : 0
 		});
 		image_ratio = noneStim._image.width / noneStim._image.height // set image_ratio based on actual image width and height
-		noneStim.size = [image_ratio* 0.4, 0.4] // set size to be image ratio and smaller than window size ([image_ratio * y, y]; y < 1)
+		noneStim.size = [image_ratio * 0.4, 0.4] // set size to be image ratio and smaller than window size ([image_ratio * y, y]; y < 1)
+		resize_image(noneStim, image_ratio, 0.4)
 		noneStim.status = PsychoJS.Status.NOT_STARTED // set image Status
 		leftposStim = new visual.ImageStim({
 			win : psychoJS.window,
@@ -1384,6 +1398,7 @@ function trialRoutineBegin(trials) {
 			flipHoriz : false, flipVert : false,
 			texRes : 128, interpolate : true, depth : 0
 		});
+		resize_image(leftposStim, image_ratio, 0.4)
 		leftposStim.status = PsychoJS.Status.NOT_STARTED // set image Status
 		rightposStim = new visual.ImageStim({
 			win : psychoJS.window,
@@ -1395,6 +1410,7 @@ function trialRoutineBegin(trials) {
 			flipHoriz : false, flipVert : false,
 			texRes : 128, interpolate : true, depth : 0
 		});
+		resize_image(rightposStim, image_ratio, 0.4)
 		rightposStim.status = PsychoJS.Status.NOT_STARTED // set image Status
 		leftnegStim = new visual.ImageStim({
 			win : psychoJS.window,
@@ -1406,6 +1422,7 @@ function trialRoutineBegin(trials) {
 			flipHoriz : false, flipVert : false,
 			texRes : 128, interpolate : true, depth : 0
 		});
+		resize_image(leftnegStim, image_ratio, 0.4)
 		leftnegStim.status = PsychoJS.Status.NOT_STARTED // set image Status
 		rightnegStim = new visual.ImageStim({
 			win : psychoJS.window,
@@ -1417,6 +1434,7 @@ function trialRoutineBegin(trials) {
 			flipHoriz : false, flipVert : false,
 			texRes : 128, interpolate : true, depth : 0
 		});
+		resize_image(rightnegStim, image_ratio, 0.4)
 		rightnegStim.status = PsychoJS.Status.NOT_STARTED // set image Status
 
 		reward_stim = fourty_score // default choice score
@@ -1522,6 +1540,7 @@ function trialRoutineRespond(trials) {
 			if (resp.keys == UP_KEY) {
 				asked_for_advice = true
 				possibleWinNumber.setText(`${correct_score_helped}`)
+				possibleWinNumber.setColor(new util.Color('green'))
 				advice_outcome = get_advice_outcome(correct_side, help_prob) 
 				reward_stim = twenty_score // reduce score cause advice was picked
 				adviceClock.reset()
