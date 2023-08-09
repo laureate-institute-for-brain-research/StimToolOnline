@@ -30,6 +30,8 @@ var config_values = {}
 var main_loop_count = 0
 var last_trial_num = 0
 var total_requests = 0
+var total_block_count = 0;
+var completed_blocks = 1;
 
  import { core, data, sound, util, visual } from '/psychojs/psychojs-2021.2.3.js';
  const { PsychoJS } = core;
@@ -1200,6 +1202,7 @@ function practiceTrialsLoopBegin(thisScheduler) {
 	});
 
 	last_trial_num = trials.nTotal
+	total_block_count = trials.nTotal / parseInt(config_values.block_size)
 
 	psychoJS.experiment.addLoop(trials); // add the loop to the experiment
 	currentLoop = trials;  // we're now the current loop
@@ -1245,6 +1248,7 @@ function trialsLoopBegin(thisScheduler) {
 
 	main_loop_count = 0
 	last_trial_num = trials.nTotal
+	total_block_count = trials.nTotal / parseInt(config_values.block_size)
 
 	psychoJS.experiment.addLoop(trials); // add the loop to the experiment
 	currentLoop = trials;  // we're now the current loop
@@ -1330,6 +1334,7 @@ var feedback_active;
 var no_choice;
 var reward_stim;
 var penalty_stim;
+var last_trial_num = 0;
 
 function trialRoutineBegin(trials) {
 	return function () {
@@ -1338,6 +1343,11 @@ function trialRoutineBegin(trials) {
 		trialClock.reset(); // clock
 		toneClock.reset(); // toneclock
 		frameN = -1;
+
+		if (trial_number > completed_blocks * parseFloat(config_values.block_size))
+		{
+			completed_blocks += 1
+		}
 
 		// Initialize the image
 		faceStim = new visual.ImageStim({
@@ -1451,7 +1461,13 @@ function trialRoutineBegin(trials) {
 			dinnerSizeBottomText.text = 'SMALL'
 		}
 	
-		currentTrialNumber.setText(`${trial_number} / ${last_trial_num}`)
+		if ((trial_number % parseInt(config_values.block_size)) == 0) {
+			currentTrialNumber.setText(`${trial_number / completed_blocks} / ${config_values.block_size}`)
+		}
+		else {
+			currentTrialNumber.setText(`${trial_number % parseInt(config_values.block_size)} / ${config_values.block_size}`)
+		}
+		currentGameNumber.setText(`${completed_blocks} / ${total_block_count}`)
 		possibleWinNumber.setText(`${correct_score_full}`)
 		possibleLossNumber.setText(`${wrong_score}`)
 		console.log("Trial Number: ", trial_number)
@@ -1822,7 +1838,7 @@ function trialRoutineEnd(trials) {
 		}
 		
 			// hold the fixation for jitter time
-		if (t <= ITI + 1.5) {
+		if (t <= ITI) {
 			return Scheduler.Event.FLIP_REPEAT;
 		} else {
 			resp.stop()
