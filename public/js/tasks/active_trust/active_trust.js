@@ -1699,6 +1699,15 @@ function trialRoutineRespond(trials) {
 				}
 				feedback_active = true
 				currentScoreNumber.setText(`${total_score}`)
+				if (total_score > 0) {
+					currentScoreNumber.setColor(new util.Color('green'))
+				}
+				else if (total_score < 0) {
+					currentScoreNumber.setColor(new util.Color('red'))
+				}
+				else {
+					currentScoreNumber.setColor(new util.Color('white'))
+				}
 			}
 			if ((feedbackClock.getTime() >= parseFloat(config_values.post_choice_duration) + parseFloat(config_values.feedback_duration))) {
 				leftposStim.setAutoDraw(false)
