@@ -1633,8 +1633,8 @@ function trialRoutineRespond(trials) {
 		}
 		//// Advice Path Continued
 		if (got_advice && (adviceClock.getTime() >= parseFloat(config_values.advice_request_duration) + parseFloat(config_values.post_advice_duration))) {
-			try_left.setAutoDraw(false)
-			try_right.setAutoDraw(false)
+			// try_left.setAutoDraw(false)
+			// try_right.setAutoDraw(false)
 			post_advice_choice_allowed = true
 		}
 		//// Advice Path Continued
@@ -1669,6 +1669,8 @@ function trialRoutineRespond(trials) {
 		//// Advice Path Continued or Advice-less Choice Path Continued
 		if (pressed && !no_choice && (feedbackClock.getTime() >= parseFloat(config_values.post_choice_duration))) {
 			if (!feedback_active) {
+				try_left.setAutoDraw(false)
+				try_right.setAutoDraw(false)
 				if (picked_side) {
 					noneStim.setAutoDraw(false)
 					if (picked_side == correct_side) {
@@ -1712,6 +1714,8 @@ function trialRoutineRespond(trials) {
 		// \/\/\/ Advice Path or No Choice Path Continued \/\/\/
 		if (pressed && no_choice && (feedbackClock.getTime() >= parseFloat(config_values.post_choice_duration))) {
 			if (!feedback_active) {
+				try_left.setAutoDraw(false)
+				try_right.setAutoDraw(false)
 				reward_stim.setAutoDraw(true)
 				feedback_active = true
 			}
