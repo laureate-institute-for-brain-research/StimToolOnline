@@ -12,16 +12,15 @@
 var event_types = {
 	'INSTRUCT_ONSET': 1,
 	'TASK_ONSET': 2,
-	'FIXATION_ONSET': 3,
-	'FACE_ONSET': 4,
-	'TONE_ONSET': 5,
-	'CHOICE_ONSET': 6,
-	'RESPONSE': 7,
-	'BLOCK_ONSET': 8,
-	'FEEDBACK': 9,
-	'AUDIO_ONSET': 10,
-	'PREDICTION_ONSET': 11,
-	'PREDICTION': 12
+	'BLOCK_ONSET': 3,
+	'TRIAL_ONSET': 4,
+	'CHOICE_ONSET': 5,
+	'ADVICE_ONSET': 6,
+	'ADVICE_TYPE': 7,
+	'CHOICE': 8,
+	'FEEDBACK_ONSET': 9,
+	'FIXATION_ONSET': 10,
+	'AUDIO_ONSET': 11
 }
 
 var trials_data = []
@@ -1300,9 +1299,11 @@ function get_correct_side(left_p/*, right_p*/) {
 	}
 }
 
-function get_advice_outcome(correct_side, help_p) {
-	if (advice_requests >= 2 || forced_advice_type == 'none') {
+function get_advice_outcome(correct_side, help_p, trial_index) {
+	if (advice_requests > 2 || forced_advice_type == 'none') {
 		console.log('normal help')
+		mark_event(trials_data, globalClock, trial_index, trial_type, event_types['ADVICE_ONSET'],
+				'NA', 'NA' , 'probability')
 		if (Math.random() <= help_p) {
 			return correct_side
 		}
@@ -1312,20 +1313,28 @@ function get_advice_outcome(correct_side, help_p) {
 	}
 	else if (forced_advice_type == 'right') {
 		console.log('forced right')
+		mark_event(trials_data, globalClock, trial_index, trial_type, event_types['ADVICE_ONSET'],
+				'NA', 'NA' , 'forced correct')
 		return correct_side
 	}
 	else if (forced_advice_type == 'wrong') {
 		console.log('forced wrong')
+		mark_event(trials_data, globalClock, trial_index, trial_type, event_types['ADVICE_ONSET'],
+				'NA', 'NA' , 'forced incorrect')
 		return !correct_side
 	}
 	else if (forced_advice_type == 'mix') {
 		console.log('forced mix')
-		if (advice_requests == 0) {
+		if (advice_requests == 1) {
 			console.log('----- return wrong side')
+			mark_event(trials_data, globalClock, trial_index, trial_type, event_types['ADVICE_ONSET'],
+				'NA', 'NA' , 'forced incorrect')
 			return !correct_side
 		}
 		else {
 			console.log('----- return right side')
+			mark_event(trials_data, globalClock, trial_index, trial_type, event_types['ADVICE_ONSET'],
+				'NA', 'NA' , 'forced correct')
 			return correct_side
 		}
 	}
@@ -1372,6 +1381,8 @@ function trialRoutineBegin(trials) {
 		// next block
 		if (trial_number > completed_blocks * parseFloat(config_values.block_size)) {
 			completed_blocks += 1
+			mark_event(trials_data, globalClock, 'NA', trial_type, event_types['BLOCK_ONSET'],
+				'NA', 'NA' , 'NA')
 		}
 
 		// help prob change or next block
@@ -1519,9 +1530,7 @@ function trialRoutineBegin(trials) {
 		resp.keys = undefined;
 		resp.rt = undefined;
 
-		trial_type = ""
-		mark_event(trials_data, globalClock, trials.thisIndex, trial_type, event_types['TONE_ONSET'],
-			'NA', 'NA', 'NA')
+		trial_type = `${left_prob}_${right_prob}_${help_prob}_${wrong_score}`
 		return Scheduler.Event.NEXT;
 	};
 }
@@ -1563,8 +1572,10 @@ function trialRoutineRespond(trials) {
 			possibleLossNumber.setAutoDraw(true)
 			faceStim.status = PsychoJS.Status.FINISHED;
 
-			mark_event(trials_data, globalClock, trials.thisIndex, trial_type, event_types['CHOICE_ONSET'],
+			mark_event(trials_data, globalClock, trials.thisIndex, trial_type, event_types['TRIAL_ONSET'],
 				'NA', 'NA' , 'NA')
+			mark_event(trials_data, globalClock, trials.thisIndex, trial_type, event_types['CHOICE_ONSET'],
+				'NA', 'initial' , 'NA')
 		}
 
 		if (resp.status === PsychoJS.Status.NOT_STARTED) {
@@ -1580,17 +1591,19 @@ function trialRoutineRespond(trials) {
 
 		// \/\/\/ Advice Path Start or Advice-less Choice Start or No Choice Start \/\/\/
 		let theseKeys = resp.getKeys({ keyList: keyList, waitRelease: false });
-		if (!asked_for_advice && theseKeys.length > 0) {
+		if (!asked_for_advice && !pressed && theseKeys.length > 0) {
 			resp.keys = theseKeys[0].name;  // just the last key pressed
 			resp.rt = theseKeys[0].rt;
 
 			// Advice
 			if (resp.keys == UP_KEY) {
+				mark_event(trials_data, globalClock, trials.thisIndex, trial_type, event_types['ADVICE_ONSET'],
+				'NA', 'NA' , 'NA')
 				asked_for_advice = true
 				possibleWinNumber.setText(`${correct_score_helped}`)
 				possibleWinNumber.setColor(new util.Color('green'))
-				advice_outcome = get_advice_outcome(correct_side, help_prob) 
 				advice_requests += 1
+				advice_outcome = get_advice_outcome(correct_side, help_prob, trials.thisIndex) 
 				reward_stim = twenty_score // reduce score cause advice was picked
 				adviceClock.reset()
 			}
@@ -1599,11 +1612,15 @@ function trialRoutineRespond(trials) {
 			if (resp.keys == LEFT_KEY) {
 				picked_side = true
 				pressed = true
+				mark_event(trials_data, globalClock, trials.thisIndex, trial_type, event_types['CHOICE'],
+				'NA', 'left' , 'NA')
 				feedbackClock.reset()
 			}
 			if (resp.keys == RIGHT_KEY) {
 				picked_side = false
 				pressed = true
+				mark_event(trials_data, globalClock, trials.thisIndex, trial_type, event_types['CHOICE'],
+				'NA', 'right' , 'NA')
 				feedbackClock.reset()
 			}
 
@@ -1612,12 +1629,14 @@ function trialRoutineRespond(trials) {
 				no_choice = true
 				pressed = true
 				reward_stim = zero_score // remove score cause no choice was picked
+				mark_event(trials_data, globalClock, trials.thisIndex, trial_type, event_types['CHOICE'],
+				'NA', 'none' , 'NA')
 				feedbackClock.reset()
 			}
 
-			// Save Data on each Press
-			mark_event(trials_data, globalClock, trials.thisIndex, trial_type, event_types['RESPONSE'],
-					resp.rt, key_map[resp.keys] , 'NA')
+			// // Save Data on each Press
+			// mark_event(trials_data, globalClock, trials.thisIndex, trial_type, event_types['RESPONSE'],
+			// 		resp.rt, key_map[resp.keys] , 'NA')
 			resp.keys = undefined;
 			resp.rt = undefined;
 		}
@@ -1625,16 +1644,22 @@ function trialRoutineRespond(trials) {
 		if (asked_for_advice && !got_advice && (adviceClock.getTime() >= config_values.advice_request_duration)) {
 			if (advice_outcome) {
 				try_left.setAutoDraw(true)
+				mark_event(trials_data, globalClock, trials.thisIndex, trial_type, event_types['FEEDBACK_ONSET'],
+				'NA', 'NA' , 'try left')
 			}
 			else {
 				try_right.setAutoDraw(true)
+				mark_event(trials_data, globalClock, trials.thisIndex, trial_type, event_types['FEEDBACK_ONSET'],
+				'NA', 'NA' , 'try right')
 			}
 			got_advice = true
 		}
 		//// Advice Path Continued
-		if (got_advice && (adviceClock.getTime() >= parseFloat(config_values.advice_request_duration) + parseFloat(config_values.post_advice_duration))) {
+		if (got_advice && !post_advice_choice_allowed && (adviceClock.getTime() >= parseFloat(config_values.advice_request_duration) + parseFloat(config_values.post_advice_duration))) {
 			// try_left.setAutoDraw(false)
 			// try_right.setAutoDraw(false)
+			mark_event(trials_data, globalClock, trials.thisIndex, trial_type, event_types['CHOICE_ONSET'],
+				'NA', 'post advice' , 'NA')
 			post_advice_choice_allowed = true
 		}
 		//// Advice Path Continued
@@ -1645,24 +1670,30 @@ function trialRoutineRespond(trials) {
 			if (resp.keys == LEFT_KEY) {
 				picked_side = true
 				pressed = true
+				mark_event(trials_data, globalClock, trials.thisIndex, trial_type, event_types['CHOICE'],
+				'NA', 'left' , 'NA')
 				feedbackClock.reset()
 			}
 			if (resp.keys == RIGHT_KEY) {
 				picked_side = false
 				pressed = true
+				mark_event(trials_data, globalClock, trials.thisIndex, trial_type, event_types['CHOICE'],
+				'NA', 'right' , 'NA')
 				feedbackClock.reset()
 			}
 			if (resp.keys == DOWN_KEY) {
 				no_choice = true
 				pressed = true
 				reward_stim = zero_score // remove score cause no choice was picked
+				mark_event(trials_data, globalClock, trials.thisIndex, trial_type, event_types['CHOICE'],
+				'NA', 'none' , 'NA')
 				feedbackClock.reset()
 			}
 
 
-			// Save Data on each Press
-			mark_event(trials_data, globalClock, trials.thisIndex, trial_type, event_types['RESPONSE'],
-					resp.rt, key_map[resp.keys] , 'NA')
+			// // Save Data on each Press
+			// mark_event(trials_data, globalClock, trials.thisIndex, trial_type, event_types['RESPONSE'],
+			// 		resp.rt, key_map[resp.keys] , 'NA')
 			resp.keys = undefined;
 			resp.rt = undefined;
 		}
@@ -1677,11 +1708,15 @@ function trialRoutineRespond(trials) {
 						leftposStim.setAutoDraw(true)
 						reward_stim.setAutoDraw(true)
 						total_score += parseInt(possibleWinNumber.text)
+						mark_event(trials_data, globalClock, trials.thisIndex, trial_type, event_types['FEEDBACK_ONSET'],
+						'NA', 'NA' , possibleWinNumber.text)
 					}
 					else {
 						leftnegStim.setAutoDraw(true)
 						penalty_stim.setAutoDraw(true)
 						total_score -= parseInt(possibleLossNumber.text)
+						mark_event(trials_data, globalClock, trials.thisIndex, trial_type, event_types['FEEDBACK_ONSET'],
+						'NA', 'NA' , `-${possibleLossNumber.text}`)
 					}
 				}
 				else {
@@ -1690,11 +1725,15 @@ function trialRoutineRespond(trials) {
 						rightposStim.setAutoDraw(true)
 						reward_stim.setAutoDraw(true)
 						total_score += parseInt(possibleWinNumber.text)
+						mark_event(trials_data, globalClock, trials.thisIndex, trial_type, event_types['FEEDBACK_ONSET'],
+						'NA', 'NA' , possibleWinNumber.text)
 					}
 					else {
 						rightnegStim.setAutoDraw(true)
 						penalty_stim.setAutoDraw(true)
 						total_score -= parseInt(possibleLossNumber.text)
+						mark_event(trials_data, globalClock, trials.thisIndex, trial_type, event_types['FEEDBACK_ONSET'],
+						'NA', 'NA' , `-${possibleLossNumber.text}`)
 					}
 				}
 				feedback_active = true
@@ -1726,6 +1765,8 @@ function trialRoutineRespond(trials) {
 				try_left.setAutoDraw(false)
 				try_right.setAutoDraw(false)
 				reward_stim.setAutoDraw(true)
+				mark_event(trials_data, globalClock, trials.thisIndex, trial_type, event_types['FEEDBACK_ONSET'],
+						'NA', 'NA' , '0')
 				feedback_active = true
 			}
 			if ((feedbackClock.getTime() >= parseFloat(config_values.post_choice_duration) + parseFloat(config_values.feedback_duration))) {
