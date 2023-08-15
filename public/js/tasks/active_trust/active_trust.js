@@ -371,10 +371,9 @@ dialogCancelScheduler.add(quitPsychoJS, '', false);
 // Add Slides to resources
 var resources = [
 	{ name: 'practice_schedule.csv', path: '/js/tasks/active_trust/practice_schedule.csv' },
-	{ name: 'PRACTICE_ready', path: '/js/tasks/active_trust/media/instructions/Slide15.jpeg'},
-	{ name: 'MAIN_ready', path: '/js/tasks/active_trust/media/instructions/Slide16.jpeg' },
-	{ name: 'PRACTICE_ready_audio.mp3', path: '/js/tasks/active_trust/media/instructions_audio/Slide15.mp3' },
-	{ name: 'MAIN_ready_audio.mp3', path: '/js/tasks/active_trust/media/instructions_audio/Slide16.mp3' },
+	{ name: 'PRACTICE_ready', path: '/js/tasks/active_trust/media/instructions/Slide10.JPG'},
+	{ name: 'MAIN_ready', path: '/js/tasks/active_trust/media/instructions/Slide11.JPG' },
+	{ name: 'PRACTICE_ready_audio.mp3', path: '/js/tasks/active_trust/media/instructions_audio/Slide10.mp3' },
 	{ name: 'try_left.png', path: '/js/tasks/active_trust/media/try_left.png' },
 	{ name: 'try_right.png', path: '/js/tasks/active_trust/media/try_right.png' },
 	{ name: 'zero.png', path: '/js/tasks/active_trust/media/points_zero.png' },
@@ -1084,11 +1083,11 @@ function readyRoutineBegin(block_type) {
 					flipHoriz : false, flipVert : false,
 					texRes : 128, interpolate : true, depth : 0
 				});
-				track = new Sound({
-					win: psychoJS.window,
-					value: 'MAIN_ready_audio.mp3'
-				});
-				track.setVolume(1.0);
+				// track = new Sound({
+				// 	win: psychoJS.window,
+				// 	value: 'MAIN_ready_audio.mp3'
+				// });
+				// track.setVolume(1.0);
 				break
 			case 'MAIN2':
 				readyStim = new visual.ImageStim({
@@ -1191,6 +1190,7 @@ function readyRoutineEnd(trials) {
 var trials;
 var currentLoop;
 var trial_type;
+var current_block_size;
 function practiceTrialsLoopBegin(thisScheduler) {
 
 	trials = new TrialHandler({
@@ -1202,11 +1202,13 @@ function practiceTrialsLoopBegin(thisScheduler) {
 	});
 
 	last_trial_num = trials.nTotal
-	total_block_count = trials.nTotal / parseInt(config_values.block_size)
+	current_block_size = config_values.practice_block_size
+	total_block_count = trials.nTotal / parseInt(config_values.practice_block_size)
 
 	psychoJS.experiment.addLoop(trials); // add the loop to the experiment
 	currentLoop = trials;  // we're now the current loop
 	total_score = 0
+	completed_blocks = 1
 	
 	endClock.reset()
 	resp.stop()
@@ -1248,11 +1250,13 @@ function trialsLoopBegin(thisScheduler) {
 
 	main_loop_count = 0
 	last_trial_num = trials.nTotal
+	current_block_size = config_values.block_size
 	total_block_count = trials.nTotal / parseInt(config_values.block_size)
 
 	psychoJS.experiment.addLoop(trials); // add the loop to the experiment
 	currentLoop = trials;  // we're now the current loop
 	total_score = 0
+	completed_blocks = 1
 
 	init_fixation_flag = true
 
@@ -1379,14 +1383,14 @@ function trialRoutineBegin(trials) {
 		frameN = -1;
 
 		// next block
-		if (trial_number > completed_blocks * parseFloat(config_values.block_size)) {
+		if (trial_number > completed_blocks * parseFloat(current_block_size)) {
 			completed_blocks += 1
 			mark_event(trials_data, globalClock, 'NA', trial_type, event_types['BLOCK_ONSET'],
 				'NA', 'NA' , 'NA')
 		}
 
 		// help prob change or next block
-		if ((help_prob != last_prob) || (trial_number > completed_blocks * parseFloat(config_values.block_size))) {
+		if ((help_prob != last_prob) || (trial_number > completed_blocks * parseFloat(current_block_size))) {
 			advice_requests = 0
 		}
 
@@ -1502,11 +1506,11 @@ function trialRoutineBegin(trials) {
 			dinnerSizeBottomText.text = 'SMALL'
 		}
 	
-		if ((trial_number % parseInt(config_values.block_size)) == 0) {
-			currentTrialNumber.setText(`${trial_number / completed_blocks} / ${config_values.block_size}`)
+		if ((trial_number % parseInt(current_block_size)) == 0) {
+			currentTrialNumber.setText(`${trial_number / completed_blocks} / ${current_block_size}`)
 		}
 		else {
-			currentTrialNumber.setText(`${trial_number % parseInt(config_values.block_size)} / ${config_values.block_size}`)
+			currentTrialNumber.setText(`${trial_number % parseInt(current_block_size)} / ${current_block_size}`)
 		}
 		currentGameNumber.setText(`${completed_blocks} / ${total_block_count}`)
 		possibleWinNumber.setText(`${correct_score_full}`)
