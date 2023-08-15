@@ -385,7 +385,8 @@ var resources = [
 	{ name: 'press_l.png', path: '/js/tasks/active_trust/media/press_l.png' },
 	{ name: 'press_r.png', path: '/js/tasks/active_trust/media/press_r.png' },
 	{ name: 'press_u.png', path: '/js/tasks/active_trust/media/press_u.png' },
-	{ name: 'press_d.png', path: '/js/tasks/active_trust/media/press_d.png' }
+	{ name: 'press_d.png', path: '/js/tasks/active_trust/media/press_d.png' },
+	{ name: 'block_screen.png', path: '/js/tasks/active_trust/media/block_screen.png' }
 ]
 
 
@@ -420,6 +421,7 @@ var stimClock;
 var adviceClock;
 var feedbackClock;
 var respondClock;
+var blockClock;
 
 // Stim from schedule
 var faceStim;
@@ -471,6 +473,9 @@ var readyClock;
 var endClock;
 var track;
 
+// block screen
+var block_screen
+
 var resp;
 var thanksClock;
 var thanksText;
@@ -520,6 +525,7 @@ function experimentInit() {
 	adviceClock = new util.Clock();
 	feedbackClock = new util.Clock();
 	respondClock = new util.Clock();
+	blockClock = new util.Clock();
 
 	// Press Arrows Text
 	press_right = new visual.ImageStim({
@@ -764,6 +770,17 @@ function experimentInit() {
 		pos: [0, 0], height: 0.12, wrapWidth: undefined, ori: 0,
 		color: new util.Color('white'), opacity: 1,
 		depth: 0.0
+	});
+
+	// Block Screen
+	block_screen = new visual.ImageStim({
+		win : psychoJS.window,
+		name : 'stimPath', units : 'height', 
+		image : 'block_screen.png', mask : undefined,
+		ori: 0, pos: [0, 0], opacity: 1,
+		size: [window_ratio, 1],
+		flipHoriz : false, flipVert : false,
+		texRes : 128, interpolate : true, depth : 0
 	});
 
 	endClock = new util.Clock();
@@ -1377,6 +1394,8 @@ var penalty_stim;
 var last_trial_num = 0;
 var advice_requests = 0;
 var last_prob;
+var show_block_screen = false;
+var start_block_screen = false;
 
 function trialRoutineBegin(trials) {
 	return function () {
@@ -1386,11 +1405,14 @@ function trialRoutineBegin(trials) {
 		toneClock.reset(); // toneclock
 		frameN = -1;
 
-		// next block
+		// next block check
 		if (trial_number > completed_blocks * parseFloat(current_block_size)) {
 			completed_blocks += 1
 			mark_event(trials_data, globalClock, 'NA', trial_type, event_types['BLOCK_ONSET'],
-				'NA', 'NA' , 'NA')
+				'NA', 'NA', 'NA')
+			if (trial_number != 1) {
+				start_block_screen = true
+			}
 		}
 
 		// help prob change or next block
@@ -1584,6 +1606,23 @@ function trialRoutineRespond(trials) {
 				'NA', 'NA' , 'NA')
 			mark_event(trials_data, globalClock, trials.thisIndex, trial_type, event_types['CHOICE_ONSET'],
 				'NA', 'initial' , 'NA')
+		}
+
+		if (start_block_screen && !show_block_screen) {
+			block_screen.setAutoDraw(true)
+			show_block_screen = true
+			start_block_screen = false
+			blockClock.reset()
+		}
+		else if (show_block_screen && (blockClock.getTime() < config_values.block_screen_duration)) {
+			if (psychoJS.eventManager.getKeys({keyList:['escape']}).length > 0) { // allow quitting from here
+				return quitPsychoJS('The [Escape] key was pressed. Goodbye!', false);
+			}
+			return Scheduler.Event.FLIP_REPEAT; // stay here and don't mess with anything else until duration is over
+		}
+		else if (show_block_screen && (blockClock.getTime() >= config_values.block_screen_duration)) {
+			show_block_screen = false
+			block_screen.setAutoDraw(false)
 		}
 
 		if (resp.status === PsychoJS.Status.NOT_STARTED) {
