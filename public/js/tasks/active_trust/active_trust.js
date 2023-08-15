@@ -1209,6 +1209,8 @@ function practiceTrialsLoopBegin(thisScheduler) {
 	currentLoop = trials;  // we're now the current loop
 	total_score = 0
 	completed_blocks = 1
+	currentScoreNumber.setText(`0`)
+	currentScoreNumber.setColor(new util.Color('#66ff99'))
 	
 	endClock.reset()
 	resp.stop()
@@ -1257,6 +1259,8 @@ function trialsLoopBegin(thisScheduler) {
 	currentLoop = trials;  // we're now the current loop
 	total_score = 0
 	completed_blocks = 1
+	currentScoreNumber.setText(`0`)
+	currentScoreNumber.setColor(new util.Color('#66ff99'))
 
 	init_fixation_flag = true
 
@@ -1605,7 +1609,7 @@ function trialRoutineRespond(trials) {
 				'NA', 'NA' , 'NA')
 				asked_for_advice = true
 				possibleWinNumber.setText(`${correct_score_helped}`)
-				possibleWinNumber.setColor(new util.Color('green'))
+				possibleWinNumber.setColor(new util.Color('#66ff99'))
 				advice_requests += 1
 				advice_outcome = get_advice_outcome(correct_side, help_prob, trials.thisIndex) 
 				reward_stim = twenty_score // reduce score cause advice was picked
@@ -1743,7 +1747,7 @@ function trialRoutineRespond(trials) {
 				feedback_active = true
 				currentScoreNumber.setText(`${total_score}`)
 				if (total_score > 0) {
-					currentScoreNumber.setColor(new util.Color('green'))
+					currentScoreNumber.setColor(new util.Color('#66ff99'))
 				}
 				else if (total_score < 0) {
 					currentScoreNumber.setColor(new util.Color('red'))
