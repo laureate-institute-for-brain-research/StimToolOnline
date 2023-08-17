@@ -226,6 +226,42 @@ window.onload = function () {
 				
 			})
 		})
+		// Add Media to Resrouces
+		.then((values) => {			
+			// Add instrcution Images
+			return new Promise((resolve, reject) => {
+				$.ajax({
+					type: 'GET',
+					url: '/js/tasks/emotional_faces_v2/rate_faces_schedule_full.csv',
+					dataType: 'text',
+					async: false,
+					success: (data) => {
+						var out = [];
+						var allRows = data.split('\n'); // split rows at new line
+						
+						var headerRows = allRows[0].split(',');
+						
+						// console.log('faces:',allRows)
+
+						for (var i=1; i<allRows.length; i++) {
+							var obj = {};
+							var currentLine = allRows[i].split(',');
+							for (var j = 0; j < headerRows.length; j++){
+								obj[headerRows[j]] = currentLine[j];	
+							}
+							// If there's media add to resources
+							if (obj.stim_paths && obj.stim_paths != undefined) {
+								resources.push({ name: obj.stim_paths , path: obj.stim_paths  })
+							}
+							
+						}
+
+						resolve(data)
+					}
+				})
+				
+			})
+		})
 
 		// Add Main Schedule stim_path to resources
 		.then((values) => {			

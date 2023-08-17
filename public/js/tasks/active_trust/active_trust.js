@@ -23,6 +23,8 @@ var event_types = {
 	'AUDIO_ONSET': 11
 }
 
+var DEBUG_FLAG = false
+
 var trials_data = []
 var config_values = {}
 
@@ -136,12 +138,14 @@ window.onload = function () {
 
 			resources.push({ name: 'run_schedule.xls', path: values.schedule })
 			resources.push({ name: 'instruct_schedule.csv', path: values.instruct_schedule })
+			resources.push({ name: 'practice_schedule.csv', path: values.practice_schedule })
 			resources.push({ name: 'config.csv', path: values.config})
 
 			// Add file paths to expInfo
 			if (values.schedule) expInfo.task_schedule = values.schedule
 			if (values.instruct_schedule) expInfo.instruct_schedule = values.instruct_schedule
-			if (values.instruct_schedule) expInfo.task_config = values.config
+			if (values.practice_schedule) expInfo.practice_schedule = values.practice_schedule
+			if (values.config) expInfo.task_config = values.config
 			
 			// Import the instruction slides
 			return new Promise((resolve, reject) => {
@@ -186,7 +190,6 @@ window.onload = function () {
 		})
 		// Add Main Schedule stim_path to resources
 		.then((values) => {			
-			// Add instrcution Images
 			return new Promise((resolve, reject) => {
 				$.ajax({
 					type: 'GET',
@@ -259,6 +262,53 @@ window.onload = function () {
 						console.log(obj)
 
 						config_values = obj
+
+						resolve(data)
+					}
+				})
+				
+			})
+		})
+		.then((values) => {			
+			// Add practice Images
+			return new Promise((resolve, reject) => {
+				$.ajax({
+					type: 'GET',
+					url: expInfo.practice_schedule,
+					dataType: 'text',
+					async: false,
+					success: (data) => {
+						var out = [];
+						var allRows = data.split('\n'); // split rows at new line
+						
+						var headerRows = allRows[0].split(',');
+						
+						for (var i=1; i<allRows.length; i++) {
+							var obj = {};
+							var currentLine = allRows[i].split(',');
+							for (var j = 0; j < headerRows.length; j++){
+								obj[headerRows[j]] = currentLine[j];	
+							}
+							// If there's media add to resources
+							if (obj.face_stim_path != 'None' && obj.face_stim_path != undefined) {
+								resources.push({ name: obj.face_stim_path , path: obj.face_stim_path  })
+							}
+							if (obj.none_stim_path != 'None' && obj.none_stim_path != undefined) {
+								resources.push({ name: obj.none_stim_path , path: obj.none_stim_path  })
+							}
+							if (obj.rightpos_stim_path != 'None' && obj.rightpos_stim_path != undefined) {
+								resources.push({ name: obj.rightpos_stim_path , path: obj.rightpos_stim_path  })
+							}
+							if (obj.leftpos_stim_path != 'None' && obj.leftpos_stim_path != undefined) {
+								resources.push({ name: obj.leftpos_stim_path , path: obj.leftpos_stim_path  })
+							}
+							if (obj.rightneg_stim_path != 'None' && obj.rightneg_stim_path != undefined) {
+								resources.push({ name: obj.rightneg_stim_path , path: obj.rightneg_stim_path  })
+							}
+							if (obj.leftneg_stim_path != 'None' && obj.leftneg_stim_path != undefined) {
+								resources.push({ name: obj.leftneg_stim_path , path: obj.leftneg_stim_path  })
+							}
+						}
 
 						resolve(data)
 					}
@@ -374,6 +424,7 @@ var resources = [
 	{ name: 'PRACTICE_ready', path: '/js/tasks/active_trust/media/instructions/Slide10.JPG'},
 	{ name: 'MAIN_ready', path: '/js/tasks/active_trust/media/instructions/Slide11.JPG' },
 	{ name: 'PRACTICE_ready_audio.mp3', path: '/js/tasks/active_trust/media/instructions_audio/Slide10.mp3' },
+	{ name: 'MAIN_ready_audio.mp3', path: '/js/tasks/active_trust/media/instructions_audio/Slide11.mp3' },
 	{ name: 'try_left.png', path: '/js/tasks/active_trust/media/try_left.png' },
 	{ name: 'try_right.png', path: '/js/tasks/active_trust/media/try_right.png' },
 	{ name: 'zero.png', path: '/js/tasks/active_trust/media/points_zero.png' },
@@ -475,12 +526,15 @@ var track;
 
 // block screen
 var block_screen
+var block_dinner_size
 
 var resp;
 var thanksClock;
 var thanksText;
 var globalClock;
 var routineTimer;
+
+var debugClock;
 
 
 function experimentInit() {
@@ -526,6 +580,7 @@ function experimentInit() {
 	feedbackClock = new util.Clock();
 	respondClock = new util.Clock();
 	blockClock = new util.Clock();
+	debugClock = new util.Clock();
 
 	// Press Arrows Text
 	press_right = new visual.ImageStim({
@@ -781,6 +836,15 @@ function experimentInit() {
 		size: [window_ratio, 1],
 		flipHoriz : false, flipVert : false,
 		texRes : 128, interpolate : true, depth : 0
+	});
+	block_dinner_size = new visual.TextStim({
+		win: psychoJS.window,
+		name: 'trialTracker',
+		text: 'Dinner Party Size: LARGE',
+		font: 'Arial', units: 'height',
+		pos: [0, -0.2], height: 0.04, wrapWidth: undefined, ori: 0,
+		color: new util.Color('white'), opacity: 1,
+		depth: 0.0
 	});
 
 	endClock = new util.Clock();
@@ -1100,11 +1164,11 @@ function readyRoutineBegin(block_type) {
 					flipHoriz : false, flipVert : false,
 					texRes : 128, interpolate : true, depth : 0
 				});
-				// track = new Sound({
-				// 	win: psychoJS.window,
-				// 	value: 'MAIN_ready_audio.mp3'
-				// });
-				// track.setVolume(1.0);
+				track = new Sound({
+					win: psychoJS.window,
+					value: 'MAIN_ready_audio.mp3'
+				});
+				track.setVolume(1.0);
 				break
 			case 'MAIN2':
 				readyStim = new visual.ImageStim({
@@ -1412,6 +1476,9 @@ function trialRoutineBegin(trials) {
 				'NA', 'NA', 'NA')
 			if (trial_number != 1) {
 				start_block_screen = true
+				total_score = 0
+				currentScoreNumber.setText(`0`)
+				currentScoreNumber.setColor(new util.Color('#66ff99'))
 			}
 		}
 
@@ -1522,14 +1589,17 @@ function trialRoutineBegin(trials) {
 		if (wrong_score == '100') {
 			penalty_stim = hundred_score
 			dinnerSizeBottomText.text = 'LARGE'
+			block_dinner_size.text = 'Dinner Party Size: LARGE'
 		}
 		else if (wrong_score == '80') {
 			penalty_stim = eighty_score
 			dinnerSizeBottomText.text = 'MEDIUM'
+			block_dinner_size.text = 'Dinner Party Size: MEDIUM'
 		}
 		else if (wrong_score == '60') {
 			penalty_stim = sixty_score
 			dinnerSizeBottomText.text = 'SMALL'
+			block_dinner_size.text = 'Dinner Party Size: SMALL'
 		}
 	
 		if ((trial_number % parseInt(current_block_size)) == 0) {
@@ -1537,6 +1607,20 @@ function trialRoutineBegin(trials) {
 		}
 		else {
 			currentTrialNumber.setText(`${trial_number % parseInt(current_block_size)} / ${current_block_size}`)
+		}
+		if (DEBUG_FLAG) {
+			console.log("------------------------")
+			console.log(trial_number)
+			console.log(trial_number / completed_blocks)
+			console.log(current_block_size)
+			console.log(currentTrialNumber.text)
+			console.log(trial_number)
+			console.log(trial_number % parseInt(current_block_size))
+			console.log(current_block_size)
+			console.log(currentTrialNumber.text)
+			console.log("------------------------")
+
+			debugClock.reset()
 		}
 		currentGameNumber.setText(`${completed_blocks} / ${total_block_count}`)
 		possibleWinNumber.setText(`${correct_score_full}`)
@@ -1608,11 +1692,42 @@ function trialRoutineRespond(trials) {
 				'NA', 'initial' , 'NA')
 		}
 
+		if (DEBUG_FLAG) {
+			if (debugClock.getTime() < 0.5) {
+				return Scheduler.Event.FLIP_REPEAT;
+			}
+			else {
+				faceStim.setAutoDraw(false)
+				noneStim.setAutoDraw(false)
+				press_up.setAutoDraw(false)
+				press_left.setAutoDraw(false)
+				press_right.setAutoDraw(false)
+				press_down.setAutoDraw(false)
+				currentTrialText.setAutoDraw(false)
+				currentTrialNumber.setAutoDraw(false)
+				currentGameText.setAutoDraw(false)
+				currentGameNumber.setAutoDraw(false)
+				currentScoreText.setAutoDraw(false)
+				currentScoreNumber.setAutoDraw(false)
+				dinnerSizeTopText.setAutoDraw(false)
+				dinnerSizeBottomText.setAutoDraw(false)
+				dinnerSizeUnderline.setAutoDraw(false)
+				possibleWinText.setAutoDraw(false)
+				possibleWinNumber.setAutoDraw(false)
+				possibleLossText.setAutoDraw(false)
+				possibleLossNumber.setAutoDraw(false)
+
+				return Scheduler.Event.NEXT;
+			}
+		}
+
 		if (start_block_screen && !show_block_screen) {
 			block_screen.setAutoDraw(true)
+			block_dinner_size.setAutoDraw(true)
 			show_block_screen = true
 			start_block_screen = false
 			blockClock.reset()
+			return Scheduler.Event.FLIP_REPEAT; // go for a repeat here so we don't catch any single iteration events
 		}
 		else if (show_block_screen && (blockClock.getTime() < config_values.block_screen_duration)) {
 			if (psychoJS.eventManager.getKeys({keyList:['escape']}).length > 0) { // allow quitting from here
@@ -1623,6 +1738,7 @@ function trialRoutineRespond(trials) {
 		else if (show_block_screen && (blockClock.getTime() >= config_values.block_screen_duration)) {
 			show_block_screen = false
 			block_screen.setAutoDraw(false)
+			block_dinner_size.setAutoDraw(false)
 		}
 
 		if (resp.status === PsychoJS.Status.NOT_STARTED) {
