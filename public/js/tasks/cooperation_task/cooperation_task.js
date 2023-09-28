@@ -408,9 +408,9 @@ var resources = [
 	{ name: 'speech', path: '/js/tasks/cooperation_task/media/speech.png' },
 	{ name: 'speech_good', path: '/js/tasks/cooperation_task/media/speech_good.png' },
 	{ name: 'speech_bad', path: '/js/tasks/cooperation_task/media/speech_bad.png' },
-	{ name: 'coop_neut_sound.mp3', path: '/js/tasks/cooperation_task/media/coop_neut_sound.mp3' },
-	{ name: 'coop_pos_sound.mp3', path: '/js/tasks/cooperation_task/media/coop_pos_sound.mp3' },
-	{ name: 'scream.wav', path: '/js/tasks/cooperation_task/media/FearConditioning_media_Scream2sx3B.wav' },
+	{ name: 'coop_neut_sound.mp3', path: '/js/tasks/cooperation_task/media/neut.mp3' },
+	{ name: 'coop_pos_sound.mp3', path: '/js/tasks/cooperation_task/media/pos.mp3' },
+	{ name: 'scream.wav', path: '/js/tasks/cooperation_task/media/neg.mp3' },
 	{ name: 'pleasant_bottom_text', path: '/js/tasks/cooperation_task/media/pleasant_text_bottom.png' },
 	{ name: 'unpleasant_bottom_text', path: '/js/tasks/cooperation_task/media/unpleasant_text_bottom.png'},
 ]
@@ -2426,7 +2426,7 @@ function blockRoutineTrials(trials) {
 			g.new_trial_marked = true;
 		}
 
-		if (g.outcome_sound && g.outcomeTimer.getTime() <= (g.outcome_sound.getDuration()/* + 0.3*/) && g.outcome_image && g.outcome_image.status == PsychoJS.Status.NOT_STARTED) {
+		if (g.outcome_sound && g.outcomeTimer.getTime() <= (g.outcome_sound.getDuration() + 0.5/* + 0.3*/) && g.outcome_image && g.outcome_image.status == PsychoJS.Status.NOT_STARTED) {
 			let play_sound_delay = 0.5
 			play_sound = true;
 			//console.log('show outcome image')
@@ -2451,7 +2451,7 @@ function blockRoutineTrials(trials) {
 			// 	g.outcome_sound.play()
 			// }
 		}
-		if (g.outcome_sound && (g.outcomeTimer.getTime() <= (g.outcome_sound.getDuration() - 0.3)) && play_sound == true) {
+		if (g.outcome_sound && (g.outcomeTimer.getTime() <= (g.outcome_sound.getDuration() + 0.5)) && play_sound == true) {
 			//console.log('play sound')
 			g.outcome_sound.play()
 			play_sound = false;
