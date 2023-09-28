@@ -430,6 +430,7 @@ var resources = [
 	{ name: 'zero.png', path: '/js/tasks/active_trust/media/points_zero.png' },
 	{ name: 'twenty.png', path: '/js/tasks/active_trust/media/points_20.png' },
 	{ name: 'fourty.png', path: '/js/tasks/active_trust/media/points_40.png' },
+	{ name: 'nfourty.png', path: '/js/tasks/active_trust/media/points_n40.png' },
 	{ name: 'sixty.png', path: '/js/tasks/active_trust/media/points_60.png' },
 	{ name: 'eighty.png', path: '/js/tasks/active_trust/media/points_80.png' },
 	{ name: 'hundred.png', path: '/js/tasks/active_trust/media/points_100.png' },
@@ -490,6 +491,7 @@ var try_right
 var zero_score;
 var twenty_score;
 var fourty_score;
+var nfourty_score;
 var sixty_score;
 var eighty_score;
 var hundred_score;
@@ -782,6 +784,15 @@ function experimentInit() {
 		win : psychoJS.window,
 		name : 'stimPath', units : 'height', 
 		image : 'fourty.png', mask : undefined,
+		ori: 0, pos: [0, -0.05], opacity: 1,
+		size: [0.151, 0.151],
+		flipHoriz : false, flipVert : false,
+		texRes : 128, interpolate : true, depth : 0
+	});
+	nfourty_score = new visual.ImageStim({
+		win : psychoJS.window,
+		name : 'stimPath', units : 'height', 
+		image : 'nfourty.png', mask : undefined,
 		ori: 0, pos: [0, -0.05], opacity: 1,
 		size: [0.151, 0.151],
 		flipHoriz : false, flipVert : false,
@@ -1493,7 +1504,7 @@ function trialRoutineBegin(trials) {
 			name : 'faceStim', units : 'height', 
 			image : face_stim_path, mask : undefined,
 			ori: 0, pos: [0,0.25], opacity: 1,
-			size: [0.2,0.2],
+			size: [0.25,0.2],
 			flipHoriz : false, flipVert : false,
 			texRes : 128, interpolate : true, depth : 0
 		});
@@ -1503,24 +1514,24 @@ function trialRoutineBegin(trials) {
 			name : 'tryleft', units : 'height', 
 			image : 'try_left.png', mask : undefined,
 			// ori: 0, pos: [faceStim.getBoundingBox().left - (window_ratio * 0.075),0.28], opacity: 1,
-			ori: 0, pos: [0,0.31], opacity: 1,
+			ori: 0, pos: [0,0.27], opacity: 1,
 			size: [window_ratio*0.1,0.1],
 			flipHoriz : false, flipVert : false,
 			texRes : 128, interpolate : true, depth : 0
 		})
-		try_left.pos[0] = (-(try_left.size[0])/2)
+		try_left.pos[0] = (-(try_left.size[0])/2) - 0.05
 		try_right = new visual.ImageStim({
 			win : psychoJS.window,
 			name : 'tryright', units : 'height', 
 			image : 'try_right.png', mask : undefined,
 			// ori: 0, pos: [faceStim.getBoundingBox().right + (window_ratio * 0.075), 0.28], opacity: 1,
-			ori: 0, pos: [faceStim.getBoundingBox().right, 0.31], opacity: 1,
+			ori: 0, pos: [faceStim.getBoundingBox().right, 0.27], opacity: 1,
 			size: [window_ratio * 0.1, 0.1],
 			// size: [0.15,0.15],
 			flipHoriz : false, flipVert : false,
 			texRes : 128, interpolate : true, depth : 0
 		})
-		try_right.pos[0] = ((try_left.size[0])/2)
+		try_right.pos[0] = ((try_left.size[0])/2) + 0.05
 
 		noneStim = new visual.ImageStim({
 			win : psychoJS.window,
@@ -1598,6 +1609,11 @@ function trialRoutineBegin(trials) {
 		}
 		else if (wrong_score == '60') {
 			penalty_stim = sixty_score
+			dinnerSizeBottomText.text = 'SMALL'
+			block_dinner_size.text = 'Dinner Party Size: SMALL'
+		}
+		else if (wrong_score == '40') {
+			penalty_stim = nfourty_score
 			dinnerSizeBottomText.text = 'SMALL'
 			block_dinner_size.text = 'Dinner Party Size: SMALL'
 		}
@@ -2218,13 +2234,15 @@ function endLoopIteration(thisScheduler, loop = undefined) {
 		}
 
 		main_loop_count += 1
+		console.log("should we send data???\n")
+		console.log(`${main_loop_count} / ${last_trial_num}`)
 		if (main_loop_count % 10 == 0) {
 			console.log("sending data")
 			sendData()
 		}
 		else if (main_loop_count == last_trial_num)
 		{
-			console.log("sending data")
+			console.log("sending data last trial num")
 			sendData()
 		}
 
