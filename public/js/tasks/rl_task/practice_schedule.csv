@@ -1,0 +1,2 @@
+﻿L1_img,M1_img,H1_img,L2_img,M2_img,H2_img,L_mean,M_mean,H_mean,L_variance,M_variance,H_variance,mix_contexts,trials_per_option
+/js/tasks/rl_task/media/1.gif,/js/tasks/rl_task/media/3.gif,/js/tasks/rl_task/media/5.gif,/js/tasks/rl_task/media/2.gif,/js/tasks/rl_task/media/4.gif,/js/tasks/rl_task/media/6.gif,14,50,86,4,4,4,false,1
