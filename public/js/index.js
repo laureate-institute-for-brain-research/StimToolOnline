@@ -158,6 +158,7 @@ $('#study-list').change(function () {
         'NCAIR': 1,
         'NCAIR-Arousal': 1,
         'Driving2': 2,
+        'RL_Task': 1,
         'WB_Pilot': 1,
         'WBMTURK_Active_Trust': 1,
         'WBMTURK_Social_Media': 1,

@@ -139,7 +139,7 @@ window.onload = function () {
 
 			resources.push({ name: 'run_schedule.xls', path: values.schedule })
 			resources.push({ name: 'instruct_schedule.csv', path: values.instruct_schedule })
-			// resources.push({ name: 'practice_schedule.csv', path: values.practice_schedule })
+			resources.push({ name: 'practice_schedule.csv', path: values.practice_schedule })
 			resources.push({ name: 'config.csv', path: values.config})
 
 			// Add file paths to expInfo
@@ -245,25 +245,27 @@ window.onload = function () {
 						console.log(obj)
 
 						if (obj.L1_img != 'None' && obj.L1_img != undefined) {
-							resources.push({ name: obj.L1_img , path: obj.L1_img  })
+							console.log("HEYYYOOO")
+							resources.push({ name: 'L1_img' , path: obj.L1_img  })
 						}
 						if (obj.M1_img != 'None' && obj.M1_img != undefined) {
-							resources.push({ name: obj.M1_img , path: obj.M1_img  })
+							resources.push({ name: 'M1_img' , path: obj.M1_img  })
 						}
 						if (obj.H1_img != 'None' && obj.H1_img != undefined) {
-							resources.push({ name: obj.H1_img , path: obj.H1_img  })
+							resources.push({ name: 'H1_img' , path: obj.H1_img  })
 						}
 						if (obj.L2_img != 'None' && obj.L2_img != undefined) {
-							resources.push({ name: obj.L2_img , path: obj.L2_img  })
+							resources.push({ name: 'L2_img' , path: obj.L2_img  })
 						}
 						if (obj.M2_img != 'None' && obj.M2_img != undefined) {
-							resources.push({ name: obj.M2_img , path: obj.M2_img  })
+							resources.push({ name: 'M2_img' , path: obj.M2_img  })
 						}
 						if (obj.H2_img != 'None' && obj.H2_img != undefined) {
-							resources.push({ name: obj.H2_img , path: obj.H2_img  })
+							resources.push({ name: 'H2_img' , path: obj.H2_img  })
 						}
 
 						config_values = obj
+						console.log(resources)
 
 						resolve(data)
 					}
@@ -611,72 +613,16 @@ function experimentInit() {
 	blockClock = new util.Clock();
 	debugClock = new util.Clock();
 
-	// Stimuli
-	low1 = new visual.ImageStim({
-		win : psychoJS.window,
-		name : 'stimPath', units : 'height', 
-		image : L1_img, mask : undefined,
-		ori: 0, pos: [window_ratio * -0.25, 0], opacity: 1,
-		size: [window_ratio*.2, 0.2],
-		flipHoriz : false, flipVert : false,
-		texRes : 128, interpolate : true, depth : 0
-	});
-	mid1 = new visual.ImageStim({
-		win : psychoJS.window,
-		name : 'stimPath', units : 'height', 
-		image : M1_img, mask : undefined,
-		ori: 0, pos: [window_ratio * 0, 0], opacity: 1,
-		size: [window_ratio*.2, 0.2],
-		flipHoriz : false, flipVert : false,
-		texRes : 128, interpolate : true, depth : 0
-	});
-	high1 = new visual.ImageStim({
-		win : psychoJS.window,
-		name : 'stimPath', units : 'height', 
-		image : H1_img, mask : undefined,
-		ori: 0, pos: [window_ratio * .25, 0], opacity: 1,
-		size: [window_ratio*.2, 0.2],
-		flipHoriz : false, flipVert : false,
-		texRes : 128, interpolate : true, depth : 0
-	});
-	low2 = new visual.ImageStim({
-		win : psychoJS.window,
-		name : 'stimPath', units : 'height', 
-		image : L2_img, mask : undefined,
-		ori: 0, pos: [window_ratio * -0.25, 0], opacity: 1,
-		size: [window_ratio*.2, 0.2],
-		flipHoriz : false, flipVert : false,
-		texRes : 128, interpolate : true, depth : 0
-	});
-	mid2 = new visual.ImageStim({
-		win : psychoJS.window,
-		name : 'stimPath', units : 'height', 
-		image : M2_img, mask : undefined,
-		ori: 0, pos: [window_ratio * 0, 0], opacity: 1,
-		size: [window_ratio*.2, 0.2],
-		flipHoriz : false, flipVert : false,
-		texRes : 128, interpolate : true, depth : 0
-	});
-	high2 = new visual.ImageStim({
-		win : psychoJS.window,
-		name : 'stimPath', units : 'height', 
-		image : H2_img, mask : undefined,
-		ori: 0, pos: [window_ratio * 0.25, 0], opacity: 1,
-		size: [window_ratio*.2, 0.2],
-		flipHoriz : false, flipVert : false,
-		texRes : 128, interpolate : true, depth : 0
-	});
-
-	// Press Arrows Text
-	press_right = new visual.ImageStim({
-		win : psychoJS.window,
-		name : 'stimPath', units : 'height', 
-		image : 'press_r.png', mask : undefined,
-		ori: 0, pos: [window_ratio * 0.25, -0.25], opacity: 1,
-		size: [window_ratio*.1, 0.1],
-		flipHoriz : false, flipVert : false,
-		texRes : 128, interpolate : true, depth : 0
-	});
+	// // Press Arrows Text
+	// press_right = new visual.ImageStim({
+	// 	win : psychoJS.window,
+	// 	name : 'stimPath', units : 'height', 
+	// 	image : 'press_r.png', mask : undefined,
+	// 	ori: 0, pos: [window_ratio * 0.25, -0.25], opacity: 1,
+	// 	size: [window_ratio*.1, 0.1],
+	// 	flipHoriz : false, flipVert : false,
+	// 	texRes : 128, interpolate : true, depth : 0
+	// });
 
 	// Trial/Choice counter
 	currentTrialText = new visual.TextStim({
@@ -1171,6 +1117,66 @@ function practiceTrialsLoopBegin(thisScheduler) {
 	return Scheduler.Event.NEXT;
 }
 
+function shuffle(array) {
+	let counter = array.length;
+
+	/* While there are elements in the array */
+	while (counter > 0) {
+		/* Pick a random index */
+		let index = Math.floor(Math.random() * counter);
+
+		/* Decrease counter by 1 */
+		counter--;
+
+		/* And swap the last element with it */
+		let temp = array[counter];
+		array[counter] = array[index];
+		array[index] = temp;
+	}
+
+	return array;
+}; /* function shuffle(array) */
+
+function randomGaussian(mean, standardDeviation) {
+
+	/*mean = defaultTo(mean, 0.0);
+	standardDeviation = defaultTo(standardDeviation, 1.0);*/
+
+	var continuous_reward;
+
+	if (randomGaussian.nextGaussian !== undefined) {
+		var nextGaussian = randomGaussian.nextGaussian;
+		delete randomGaussian.nextGaussian;
+		continuous_reward = Math.round((nextGaussian * standardDeviation) + mean);
+	} else {
+		var v1, v2, s, multiplier;
+		do {
+			v1 = 2 * Math.random() - 1; // between -1 and 1
+			v2 = 2 * Math.random() - 1; // between -1 and 1
+			s = v1 * v1 + v2 * v2;
+		} while (s >= 1 || s == 0);
+		multiplier = Math.sqrt(-2 * Math.log(s) / s);
+		randomGaussian.nextGaussian = v2 * multiplier;
+		continuous_reward = Math.round((v1 * multiplier * standardDeviation) + mean);	        
+	}
+	if (continuous_reward > 99){
+		continuous_reward = 99;
+	} else if (continuous_reward < 1) {
+		continuous_reward = 1;
+	}
+	return continuous_reward;
+}; /* function randomGaussian(mean, standardDeviation) */
+
+function generate_trial_order(trials) {
+	for (const t of trials) {
+		// console.log(t)
+		let trial_temp = []
+		trial_temp.append(shuffle(['L', 'M', 'H']))
+		// ...
+		
+	}
+}
+
 function trialsLoopBegin(thisScheduler) {
 
 	endClock.reset()
@@ -1192,12 +1198,12 @@ function trialsLoopBegin(thisScheduler) {
 	current_block_size = config_values.block_size
 	total_block_count = trials.nTotal / parseInt(config_values.block_size)
 
+	// generate_trial_order(trials)
+
 	psychoJS.experiment.addLoop(trials); // add the loop to the experiment
 	currentLoop = trials;  // we're now the current loop
 	total_score = 0
 	completed_blocks = 1
-	currentScoreNumber.setText(`0`)
-	currentScoreNumber.setColor(new util.Color('#66ff99'))
 
 	init_fixation_flag = true
 
@@ -1225,7 +1231,7 @@ function instruct_pagesLoopEnd() {
 
 // SHow the points in the trial 
 function trialsLoopEnd() {
-	currentTrialNumber.setAutoDraw(false)
+	// currentTrialNumber.setAutoDraw(false)
 	slideStim.setAutoDraw(false)
 
 	psychoJS.experiment.removeLoop(trials);
@@ -1274,7 +1280,148 @@ function trialRoutineBegin(trials) {
 		trialClock.reset(); // clock
 		toneClock.reset(); // toneclock
 		frameN = -1;
+
+		var low_pos = 0
+		var mid_pos = 0
+		var hi_pos = 0
+
+		let mean_dict = { "L1": L_mean, "M1": M_mean, "H1": H_mean, "L2": L_mean, "M2": M_mean, "H2": H_mean }
+		let variance_dict = { "L1": L_variance, "M1": M_variance, "H1": H_variance, "L2": L_variance, "M2": M_variance, "H2": H_variance }
+
+		let options_array = options.split("_")
+		if (options_array.length == 3) {
+			var pos_score_array = shuffle([[options_array[0], randomGaussian(mean_dict[options_array[0]], variance_dict[options_array[0]])], [options_array[1], randomGaussian(mean_dict[options_array[1]], variance_dict[options_array[1]])], [options_array[2], randomGaussian(mean_dict[options_array[2]], variance_dict[options_array[2]])]])
+		} else {
+			var pos_score_array = shuffle([[options_array[0], randomGaussian(mean_dict[options_array[0]], variance_dict[options_array[0]])], [options_array[1], randomGaussian(mean_dict[options_array[1]], variance_dict[options_array[1]])], ""])
+		}
+
+		if (pos_score_array[0] != "") {
+			if (pos_score_array[0][0].includes("L")) {
+				console.log("1")
+				low_pos = [window_ratio * -0.25, 0]
+			} else if (pos_score_array[0][0].includes("M")) {
+				console.log("2")
+				mid_pos = [window_ratio * -0.25, 0]
+			} else {
+				console.log("3")
+				hi_pos = [window_ratio * -0.25, 0]
+			}
+		}
+
+		if (pos_score_array[1] != "") {
+			if (pos_score_array[1][0].includes("L")) {
+				console.log("4")
+				low_pos = [window_ratio * 0, 0]
+			} else if (pos_score_array[1][0].includes("M")) {
+				console.log("5")
+				mid_pos = [window_ratio * 0, 0]
+			} else {
+				console.log("6")
+				hi_pos = [window_ratio * 0, 0]
+			}
+		}
+
+		if (pos_score_array[2] != "") {
+			// if (options_array.length == 3) {
+			if (pos_score_array[2][0].includes("L")) {
+				console.log("7")
+				low_pos = [window_ratio * 0.25, 0]
+			} else if (pos_score_array[2][0].includes("M")) {
+				console.log("8")
+				mid_pos = [window_ratio * 0.25, 0]
+			} else {
+				console.log("9")
+				hi_pos = [window_ratio * 0.25, 0]
+			}
+			// }
+		}
+
+		console.log(pos_score_array)
+		console.log(options.includes("1"))
 		
+		// Stimuli
+		if (options.includes('1')) {
+			console.log(options)
+			console.log("OPTIONS INCLUDES 1")
+			if (options.includes("L")) {
+				low1 = new visual.ImageStim({
+					win: psychoJS.window,
+					name: 'stimPath', units: 'height',
+					image: 'L1_img', mask: undefined,
+					ori: 0, pos: low_pos, opacity: 1,
+					size: [window_ratio * .2, 0.2],
+					flipHoriz: false, flipVert: false,
+					texRes: 128, interpolate: true, depth: 0
+				});
+				low1.setAutoDraw(true)
+				console.log("a")
+			}
+			if (options.includes("M")) {
+				mid1 = new visual.ImageStim({
+					win: psychoJS.window,
+					name: 'stimPath', units: 'height',
+					image: 'M1_img', mask: undefined,
+					ori: 0, pos: mid_pos, opacity: 1,
+					size: [window_ratio * .2, 0.2],
+					flipHoriz: false, flipVert: false,
+					texRes: 128, interpolate: true, depth: 0
+				});
+				mid1.setAutoDraw(true)
+				console.log("b")
+			}
+			if (options.includes("H")) {
+				high1 = new visual.ImageStim({
+					win: psychoJS.window,
+					name: 'stimPath', units: 'height',
+					image: 'H1_img', mask: undefined,
+					ori: 0, pos: hi_pos, opacity: 1,
+					size: [window_ratio * .2, 0.2],
+					flipHoriz: false, flipVert: false,
+					texRes: 128, interpolate: true, depth: 0
+				});
+				high1.setAutoDraw(true)
+				console.log("c")
+			}
+		}
+		else {
+			console.log(options)
+			if (options.includes("L")) {
+				low2 = new visual.ImageStim({
+					win: psychoJS.window,
+					name: 'stimPath', units: 'height',
+					image: 'L2_img', mask: undefined,
+					ori: 0, pos: low_pos, opacity: 1,
+					size: [window_ratio * .2, 0.2],
+					flipHoriz: false, flipVert: false,
+					texRes: 128, interpolate: true, depth: 0
+				});
+				low2.setAutoDraw(true)
+			}
+			if (options.includes("M")) {
+				mid2 = new visual.ImageStim({
+					win: psychoJS.window,
+					name: 'stimPath', units: 'height',
+					image: 'M2_img', mask: undefined,
+					ori: 0, pos: mid_pos, opacity: 1,
+					size: [window_ratio * .2, 0.2],
+					flipHoriz: false, flipVert: false,
+					texRes: 128, interpolate: true, depth: 0
+				});
+				mid2.setAutoDraw(true)
+			}
+			if (options.includes("H")) {
+				high2 = new visual.ImageStim({
+					win: psychoJS.window,
+					name: 'stimPath', units: 'height',
+					image: 'H2_img', mask: undefined,
+					ori: 0, pos: hi_pos, opacity: 1,
+					size: [window_ratio * .2, 0.2],
+					flipHoriz: false, flipVert: false,
+					texRes: 128, interpolate: true, depth: 0
+				});
+				high2.setAutoDraw(true)
+			}
+		}
 		// resize_image(leftposStim, image_ratio, 0.4)
 		
 		return Scheduler.Event.NEXT;
@@ -1294,11 +1441,49 @@ function trialRoutineRespond(trials) {
 		// get current time
 		t = respondClock.getTime();
 
+		if (resp.status === PsychoJS.Status.NOT_STARTED) {
+			// keep track of start time/frame for later
+			resp.tStart = t;  // (not accounting for frame time here)
+			resp.frameNStart = frameN;  // exact frame index
+
+			// keyboard checking is just starting
+			resp.clock.reset();  // t=0 on next screen flip
+			resp.start(); // start on screen flip
+			resp.clearEvents();
+		}
+
+		let theseKeys = resp.getKeys({ keyList: keyList, waitRelease: false });
+		if (theseKeys.length > 0) {
+			console.log("key press")
+			resp.keys = theseKeys[0].name;  // just the last key pressed
+			resp.rt = theseKeys[0].rt;
+
+			// Advice-less Choice
+			if (resp.keys == LEFT_KEY) {
+				console.log("???")
+				mark_event(trials_data, globalClock, trials.thisIndex, trial_type, event_types['CHOICE'],
+					'NA', 'left', 'NA')
+				feedbackClock.reset()
+				continueRoutine = false
+			}
+		}
+
 		// check if the Routine should terminate
-		if (continueRoutine) { 
+		if (continueRoutine) {
 			return Scheduler.Event.FLIP_REPEAT;
 		}
 		else {
+			if (options.includes('1')) {
+				low1.setAutoDraw(false)
+				mid1.setAutoDraw(false)
+				high1.setAutoDraw(false)
+			}
+			else {
+				low2.setAutoDraw(false)
+				mid2.setAutoDraw(false)
+				high2.setAutoDraw(false)
+			}
+
 			// set_fixation_flag = true
 			endClock.reset()
 			return Scheduler.Event.NEXT;
@@ -1322,21 +1507,21 @@ function initialFixation(trials) {
 		// get current time
 		t_end = endClock.getTime();
 		
-		if (points_fixation_stim.status == PsychoJS.Status.NOT_STARTED) {
-			points_fixation_stim.color = new util.Color('white')
-			points_fixation_stim.setText('+')
-			points_fixation_stim.setAutoDraw(true)
-			//console.log('Initial Fixation')
+		// if (points_fixation_stim.status == PsychoJS.Status.NOT_STARTED) {
+		// 	points_fixation_stim.color = new util.Color('white')
+		// 	points_fixation_stim.setText('+')
+		// 	points_fixation_stim.setAutoDraw(true)
+		// 	//console.log('Initial Fixation')
 
-			mark_event(trials_data, globalClock, 'NA', trial_type, event_types['FIXATION_ONSET'],
-				'NA', 'NA' , 'NA')
+		// 	mark_event(trials_data, globalClock, 'NA', trial_type, event_types['FIXATION_ONSET'],
+		// 		'NA', 'NA' , 'NA')
 
-		}
+		// }
 
 		if (t_end >= 3) {
 			continueRoutine = false
-			points_fixation_stim.setAutoDraw(false)
-			points_fixation_stim.status = PsychoJS.Status.NOT_STARTED
+			// points_fixation_stim.setAutoDraw(false)
+			// points_fixation_stim.status = PsychoJS.Status.NOT_STARTED
 		}
 		
 		// check for quit (typically the Esc key)
@@ -1349,8 +1534,8 @@ function initialFixation(trials) {
 			return Scheduler.Event.FLIP_REPEAT;
 		}
 		else {
-			points_fixation_stim.setAutoDraw(false)
-			points_fixation_stim.status = PsychoJS.Status.NOT_STARTED
+			// points_fixation_stim.setAutoDraw(false)
+			// points_fixation_stim.status = PsychoJS.Status.NOT_STARTED
 
 			init_fixation_flag = false
 			
@@ -1407,24 +1592,24 @@ function trialRoutineEnd(trials) {
 		//------Ending Routine 'trial'-------
 		t = endClock.getTime()
 
-		if (points_fixation_stim.status == PsychoJS.Status.NOT_STARTED) {
-					points_fixation_stim.setText('+')
-					mark_event(trials_data, globalClock, trials.thisIndex, trial_type, event_types['FIXATION_ONSET'],
-						'NA', 'NA', 'NA')
+		// if (points_fixation_stim.status == PsychoJS.Status.NOT_STARTED) {
+		// 			points_fixation_stim.setText('+')
+		// 			mark_event(trials_data, globalClock, trials.thisIndex, trial_type, event_types['FIXATION_ONSET'],
+		// 				'NA', 'NA', 'NA')
 					
-					points_fixation_stim.setAutoDraw(true)
-		}
+		// 			points_fixation_stim.setAutoDraw(true)
+		// }
 		
 			// hold the fixation for jitter time
-		if (t <= ITI) {
+		if (t <= 0.1) {
 			return Scheduler.Event.FLIP_REPEAT;
 		} else {
 			resp.stop()
 			resp.status = PsychoJS.Status.NOT_STARTED
 			//sendData()
 			// Clear Fixation
-			points_fixation_stim.setAutoDraw(false)
-			points_fixation_stim.status = PsychoJS.Status.NOT_STARTED
+			// points_fixation_stim.setAutoDraw(false)
+			// points_fixation_stim.status = PsychoJS.Status.NOT_STARTED
 			return Scheduler.Event.NEXT;
 		}
 	};
