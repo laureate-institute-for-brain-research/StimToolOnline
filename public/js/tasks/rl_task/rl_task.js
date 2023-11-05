@@ -1205,6 +1205,9 @@ var show_block_screen = false;
 var start_block_screen = false;
 var pos_score_array = [];
 var box_arr = []
+var left_score_txt = 0
+var center_score_txt = 0
+var right_score_txt = 0
 
 function trialRoutineBegin(trials) {
 	return function () {
@@ -1220,9 +1223,6 @@ function trialRoutineBegin(trials) {
 		var low_score_txt = 0
 		var mid_score_txt = 0
 		var high_score_txt = 0
-		var left_score_txt = 0
-		var center_score_txt = 0
-		var right_score_txt = 0
 
 		let mean_dict = { "L1": L_mean, "M1": M_mean, "H1": H_mean, "L2": L_mean, "M2": M_mean, "H2": H_mean }
 		let variance_dict = { "L1": L_variance, "M1": M_variance, "H1": H_variance, "L2": L_variance, "M2": M_variance, "H2": H_variance }
@@ -1325,7 +1325,7 @@ function trialRoutineBegin(trials) {
 			name: 'stimPath', units: 'height',
 			image: 'box', mask: undefined,
 			ori: 0, pos: [window_ratio * -0.25, 0], opacity: 1,
-			size: [window_ratio * .2, 0.2],
+			size: [0.3,0.3],
 			flipHoriz: false, flipVert: false,
 			texRes: 128, interpolate: true, depth: 0
 		});
@@ -1334,7 +1334,7 @@ function trialRoutineBegin(trials) {
 			name: 'stimPath', units: 'height',
 			image: 'box', mask: undefined,
 			ori: 0, pos: [window_ratio * 0, 0], opacity: 1,
-			size: [window_ratio * .2, 0.2],
+			size: [0.3,0.3],
 			flipHoriz: false, flipVert: false,
 			texRes: 128, interpolate: true, depth: 0
 		});
@@ -1343,7 +1343,7 @@ function trialRoutineBegin(trials) {
 			name: 'stimPath', units: 'height',
 			image: 'box', mask: undefined,
 			ori: 0, pos: [window_ratio * 0.25, 0], opacity: 1,
-			size: [window_ratio * .2, 0.2],
+			size: [0.3,0.3],
 			flipHoriz: false, flipVert: false,
 			texRes: 128, interpolate: true, depth: 0
 		});
@@ -1353,7 +1353,7 @@ function trialRoutineBegin(trials) {
 			name: 'stimPath', units: 'height',
 			image: 'outline', mask: undefined,
 			ori: 0, pos: [window_ratio * -0.25, 0], opacity: 1,
-			size: [window_ratio * .2, 0.2],
+			size: [0.3,0.3],
 			flipHoriz: false, flipVert: false,
 			texRes: 128, interpolate: true, depth: 0
 		});
@@ -1362,7 +1362,7 @@ function trialRoutineBegin(trials) {
 			name: 'stimPath', units: 'height',
 			image: 'outline', mask: undefined,
 			ori: 0, pos: [window_ratio * 0, 0], opacity: 1,
-			size: [window_ratio * .2, 0.2],
+			size: [0.3,0.3],
 			flipHoriz: false, flipVert: false,
 			texRes: 128, interpolate: true, depth: 0
 		});
@@ -1371,7 +1371,7 @@ function trialRoutineBegin(trials) {
 			name: 'stimPath', units: 'height',
 			image: 'outline', mask: undefined,
 			ori: 0, pos: [window_ratio * 0.25, 0], opacity: 1,
-			size: [window_ratio * .2, 0.2],
+			size: [0.3,0.3],
 			flipHoriz: false, flipVert: false,
 			texRes: 128, interpolate: true, depth: 0
 		});
@@ -1387,7 +1387,7 @@ function trialRoutineBegin(trials) {
 					name: 'stimPath', units: 'height',
 					image: 'L1_img', mask: undefined,
 					ori: 0, pos: low_pos, opacity: 1,
-					size: [window_ratio * .2, 0.2],
+					size: [0.3,0.3],
 					flipHoriz: false, flipVert: false,
 					texRes: 128, interpolate: true, depth: 0
 				});
@@ -1400,7 +1400,7 @@ function trialRoutineBegin(trials) {
 					name: 'stimPath', units: 'height',
 					image: 'M1_img', mask: undefined,
 					ori: 0, pos: mid_pos, opacity: 1,
-					size: [window_ratio * .2, 0.2],
+					size: [0.3,0.3],
 					flipHoriz: false, flipVert: false,
 					texRes: 128, interpolate: true, depth: 0
 				});
@@ -1413,7 +1413,7 @@ function trialRoutineBegin(trials) {
 					name: 'stimPath', units: 'height',
 					image: 'H1_img', mask: undefined,
 					ori: 0, pos: hi_pos, opacity: 1,
-					size: [window_ratio * .2, 0.2],
+					size: [0.3,0.3],
 					flipHoriz: false, flipVert: false,
 					texRes: 128, interpolate: true, depth: 0
 				});
@@ -1429,7 +1429,7 @@ function trialRoutineBegin(trials) {
 					name: 'stimPath', units: 'height',
 					image: 'L2_img', mask: undefined,
 					ori: 0, pos: low_pos, opacity: 1,
-					size: [window_ratio * .2, 0.2],
+					size: [0.3,0.3],
 					flipHoriz: false, flipVert: false,
 					texRes: 128, interpolate: true, depth: 0
 				});
@@ -1441,7 +1441,7 @@ function trialRoutineBegin(trials) {
 					name: 'stimPath', units: 'height',
 					image: 'M2_img', mask: undefined,
 					ori: 0, pos: mid_pos, opacity: 1,
-					size: [window_ratio * .2, 0.2],
+					size: [0.3,0.3],
 					flipHoriz: false, flipVert: false,
 					texRes: 128, interpolate: true, depth: 0
 				});
@@ -1453,7 +1453,7 @@ function trialRoutineBegin(trials) {
 					name: 'stimPath', units: 'height',
 					image: 'H2_img', mask: undefined,
 					ori: 0, pos: hi_pos, opacity: 1,
-					size: [window_ratio * .2, 0.2],
+					size: [0.3,0.3],
 					flipHoriz: false, flipVert: false,
 					texRes: 128, interpolate: true, depth: 0
 				});
@@ -1518,6 +1518,11 @@ function trialRoutineRespond(trials) {
 				low_score.setAutoDraw(true)
 				mid_score.setAutoDraw(true)
 				high_score.setAutoDraw(true)
+
+				if (parseFloat(left_score_txt) > parseFloat(center_score_txt) && parseFloat(left_score_txt) > parseFloat(right_score_txt)) {
+					total_score += parseFloat(left_score_txt)
+				}
+
 				//continueRoutine = false
 			} else if (resp.keys == UP_KEY && pos_score_array[1] != "") {
 				pressed = true
@@ -1539,6 +1544,11 @@ function trialRoutineRespond(trials) {
 				low_score.setAutoDraw(true)
 				mid_score.setAutoDraw(true)
 				high_score.setAutoDraw(true)
+
+				if (parseFloat(center_score_txt) > parseFloat(left_score_txt) && parseFloat(center_score_txt) > parseFloat(right_score_txt)) {
+					total_score += parseFloat(center_score_txt)
+				}
+
 				//continueRoutine = false
 			} else if (resp.keys == RIGHT_KEY && pos_score_array[2] != "") {
 				pressed = true
@@ -1560,6 +1570,11 @@ function trialRoutineRespond(trials) {
 				low_score.setAutoDraw(true)
 				mid_score.setAutoDraw(true)
 				high_score.setAutoDraw(true)
+
+				if (parseFloat(right_score_txt) > parseFloat(center_score_txt) && parseFloat(right_score_txt) > parseFloat(left_score_txt)) {
+					total_score += parseFloat(right_score_txt)
+				}
+
 				//continueRoutine = false
 			}
 			// low_score.setAutoDraw(true)
@@ -1737,11 +1752,13 @@ function thanksRoutineBegin(trials) {
 		t = 0;
 		thanksClock.reset(); // clock
 		frameN = -1;
-		routineTimer.add(20.000000);
+		routineTimer.reset()
+		routineTimer.add(10.000000);
 
 		// Show Final Points and money earned
 		// 100 points = 10 cents
-		thanksText.setText(`This is the end of the task run.`)
+		thanksText.setText(`You finished the first phase of the cognitive experiment.
+									 So far, you have earned ${total_score} points = $${total_score/100}`)
 		// update component parameters for each repeat
 		// keep track of which components have finished
 		thanksComponents = [];
@@ -1773,10 +1790,10 @@ function thanksRoutineEachFrame(trials) {
 			thanksText.setAutoDraw(true);
 		}
 
-		frameRemains = 0.0 + 2.0 - psychoJS.window.monitorFramePeriod * 0.75;  // most of one frame period left
-		if (thanksText.status === PsychoJS.Status.STARTED && t >= frameRemains) {
-			thanksText.setAutoDraw(false);
-		}
+		// frameRemains = 0.0 + 2.0 - psychoJS.window.monitorFramePeriod * 0.75;  // most of one frame period left
+		// if (thanksText.status === PsychoJS.Status.STARTED && t >= frameRemains) {
+		// 	thanksText.setAutoDraw(false);
+		// }
 		// check for quit (typically the Esc key)
 		if (psychoJS.experiment.experimentEnded || psychoJS.eventManager.getKeys({ keyList: ['escape'] }).length > 0) {
 			return quitPsychoJS('The [Escape] key was pressed. Goodbye!', false);
@@ -1799,11 +1816,16 @@ function thanksRoutineEachFrame(trials) {
 			continueRoutine = true
 		}
 
+		if (routineTimer.getTime() > 0) {
+			continueRoutine = true
+		}
+
 		// refresh the screen if continuing
 		if (continueRoutine && routineTimer.getTime() > 0) {
 			return Scheduler.Event.FLIP_REPEAT;
 		}
 		else {
+			thanksText.setAutoDraw(false);
 			return Scheduler.Event.NEXT;
 		}
 	};
