@@ -50,7 +50,8 @@ var LEFT_KEY = 'left'
 var RIGHT_KEY = 'right'
 var UP_KEY = 'up'
 var DOWN_KEY = 'down'
-var keyList = [LEFT_KEY, RIGHT_KEY, UP_KEY, DOWN_KEY]
+var keyList = [LEFT_KEY, RIGHT_KEY, UP_KEY]
+var total_score = 0
 
 var window_ratio = 4 / 3; // used for general stimuli sizing
 var image_ratio = 4 / 3; // used for setting image sizes (this gets set to different image specific values throughout the code)
@@ -460,7 +461,9 @@ var resources = [
 	{ name: 'PRACTICE_ready', path: '/js/tasks/rl_task/media/instructions/Slide10.JPG'},
 	{ name: 'MAIN_ready', path: '/js/tasks/rl_task/media/instructions/Slide11.JPG' },
 	{ name: 'PRACTICE_ready_audio.mp3', path: '/js/tasks/rl_task/media/instructions_audio/Slide10.mp3' },
-	{ name: 'MAIN_ready_audio.mp3', path: '/js/tasks/rl_task/media/instructions_audio/Slide11.mp3' }
+	{ name: 'MAIN_ready_audio.mp3', path: '/js/tasks/rl_task/media/instructions_audio/Slide11.mp3' },
+	{ name: 'box', path: '/js/tasks/rl_task/media/box.gif' },
+	{ name: 'outline', path: '/js/tasks/rl_task/media/outline.gif' }
 ]
 
 
@@ -504,60 +507,24 @@ var high1
 var low2
 var mid2
 var high2
-
-var faceStim;
-var noneStim;
-var leftposStim;
-var rightposStim;
-var leftnegStim;
-var rightnegStim;
-
-// feedback stim
-var try_left;
-var try_right
-
-// middle scores
-var zero_score;
-var twenty_score;
-var fourty_score;
-var nfourty_score;
-var sixty_score;
-var eighty_score;
-var hundred_score;
-
-// static stim
-//// controls
-var press_left;
-var press_right;
-var press_up;
-var press_down;
-//// UI Trackers
-var currentTrialNumber;
-var currentTrialText;
-var currentGameNumber;
-var currentGameText;
-var currentScoreNumber;
-var currentScoreText;
-var dinnerSizeTopText;
-var dinnerSizeBottomText;
-var dinnerSizeUnderline;
-var possibleWinText;
-var possibleWinNumber;
-var possibleLossText;
-var possibleLossNumber;
-
-//// Fixation
-var points_fixation_stim;
+var low_score
+var mid_score
+var high_score
+var left_score
+var center_score
+var right_score
+var box1
+var box2
+var box3
+var out1
+var out2
+var out3
 
 // timers
 var t_end;
 var readyClock;
 var endClock;
 var track;
-
-// block screen
-var block_screen
-var block_dinner_size
 
 var resp;
 var thanksClock;
@@ -612,42 +579,6 @@ function experimentInit() {
 	respondClock = new util.Clock();
 	blockClock = new util.Clock();
 	debugClock = new util.Clock();
-
-	// // Press Arrows Text
-	// press_right = new visual.ImageStim({
-	// 	win : psychoJS.window,
-	// 	name : 'stimPath', units : 'height', 
-	// 	image : 'press_r.png', mask : undefined,
-	// 	ori: 0, pos: [window_ratio * 0.25, -0.25], opacity: 1,
-	// 	size: [window_ratio*.1, 0.1],
-	// 	flipHoriz : false, flipVert : false,
-	// 	texRes : 128, interpolate : true, depth : 0
-	// });
-
-	// Trial/Choice counter
-	currentTrialText = new visual.TextStim({
-		win: psychoJS.window,
-		name: 'trialTracker',
-		text: 'Choice Number: ',
-		font: 'Arial', units: 'height',
-		pos: [-window_ratio * 0.46, 0.47], height: 0.027, wrapWidth: undefined, ori: 0,
-		alignHoriz: 'left',
-		color: new util.Color('white'), opacity: 1,
-		depth: 0.0
-	});
-
-	// Score/Points Counter
-	dinnerSizeUnderline = new visual.Rect({
-		win: psychoJS.window,
-		name: 'underline',
-		width: window_ratio*0.1,
-		height: 0.001,
-		units: 'height',
-		pos: [window_ratio * 0.38, 0.45], ori: 0,
-		fillColor: new util.Color('white'),
-		lineColor: new util.Color('white'), opacity: 1,
-		depth: 0
-	})
 
 	endClock = new util.Clock();
 
@@ -1272,6 +1203,8 @@ var advice_requests = 0;
 var last_prob;
 var show_block_screen = false;
 var start_block_screen = false;
+var pos_score_array = [];
+var box_arr = []
 
 function trialRoutineBegin(trials) {
 	return function () {
@@ -1284,41 +1217,55 @@ function trialRoutineBegin(trials) {
 		var low_pos = 0
 		var mid_pos = 0
 		var hi_pos = 0
+		var low_score_txt = 0
+		var mid_score_txt = 0
+		var high_score_txt = 0
+		var left_score_txt = 0
+		var center_score_txt = 0
+		var right_score_txt = 0
 
 		let mean_dict = { "L1": L_mean, "M1": M_mean, "H1": H_mean, "L2": L_mean, "M2": M_mean, "H2": H_mean }
 		let variance_dict = { "L1": L_variance, "M1": M_variance, "H1": H_variance, "L2": L_variance, "M2": M_variance, "H2": H_variance }
 
 		let options_array = options.split("_")
 		if (options_array.length == 3) {
-			var pos_score_array = shuffle([[options_array[0], randomGaussian(mean_dict[options_array[0]], variance_dict[options_array[0]])], [options_array[1], randomGaussian(mean_dict[options_array[1]], variance_dict[options_array[1]])], [options_array[2], randomGaussian(mean_dict[options_array[2]], variance_dict[options_array[2]])]])
+			pos_score_array = shuffle([[options_array[0], randomGaussian(mean_dict[options_array[0]], variance_dict[options_array[0]])], [options_array[1], randomGaussian(mean_dict[options_array[1]], variance_dict[options_array[1]])], [options_array[2], randomGaussian(mean_dict[options_array[2]], variance_dict[options_array[2]])]])
 		} else {
-			var pos_score_array = shuffle([[options_array[0], randomGaussian(mean_dict[options_array[0]], variance_dict[options_array[0]])], [options_array[1], randomGaussian(mean_dict[options_array[1]], variance_dict[options_array[1]])], ""])
+			pos_score_array = shuffle([[options_array[0], randomGaussian(mean_dict[options_array[0]], variance_dict[options_array[0]])], [options_array[1], randomGaussian(mean_dict[options_array[1]], variance_dict[options_array[1]])], ""])
 		}
 
 		if (pos_score_array[0] != "") {
 			if (pos_score_array[0][0].includes("L")) {
 				console.log("1")
 				low_pos = [window_ratio * -0.25, 0]
+				low_score_txt = pos_score_array[0][1]
 			} else if (pos_score_array[0][0].includes("M")) {
 				console.log("2")
 				mid_pos = [window_ratio * -0.25, 0]
+				mid_score_txt = pos_score_array[0][1]
 			} else {
 				console.log("3")
 				hi_pos = [window_ratio * -0.25, 0]
+				high_score_txt = pos_score_array[0][1]
 			}
+			left_score_txt = pos_score_array[0][1]
 		}
 
 		if (pos_score_array[1] != "") {
 			if (pos_score_array[1][0].includes("L")) {
 				console.log("4")
 				low_pos = [window_ratio * 0, 0]
+				low_score_txt = pos_score_array[1][1]
 			} else if (pos_score_array[1][0].includes("M")) {
 				console.log("5")
 				mid_pos = [window_ratio * 0, 0]
+				mid_score_txt = pos_score_array[1][1]
 			} else {
 				console.log("6")
 				hi_pos = [window_ratio * 0, 0]
+				high_score_txt = pos_score_array[1][1]
 			}
+			center_score_txt = pos_score_array[1][1]
 		}
 
 		if (pos_score_array[2] != "") {
@@ -1326,18 +1273,109 @@ function trialRoutineBegin(trials) {
 			if (pos_score_array[2][0].includes("L")) {
 				console.log("7")
 				low_pos = [window_ratio * 0.25, 0]
+				low_score_txt = pos_score_array[2][1]
 			} else if (pos_score_array[2][0].includes("M")) {
 				console.log("8")
 				mid_pos = [window_ratio * 0.25, 0]
+				mid_score_txt = pos_score_array[2][1]
 			} else {
 				console.log("9")
 				hi_pos = [window_ratio * 0.25, 0]
+				high_score_txt = pos_score_array[2][1]
 			}
+			right_score_txt = pos_score_array[2][1]
 			// }
 		}
 
 		console.log(pos_score_array)
 		console.log(options.includes("1"))
+
+		low_score = new visual.TextStim({
+			win: psychoJS.window,
+			name: 'thanksText',
+			text: low_score_txt,
+			font: 'Arial',
+			units: 'height',
+			pos: low_pos, height: 0.05, wrapWidth: undefined, ori: 0,
+			color: new util.Color('black'), opacity: 1,
+			depth: 0.0
+		});
+		mid_score = new visual.TextStim({
+			win: psychoJS.window,
+			name: 'thanksText',
+			text: mid_score_txt,
+			font: 'Arial',
+			units: 'height',
+			pos: mid_pos, height: 0.05, wrapWidth: undefined, ori: 0,
+			color: new util.Color('black'), opacity: 1,
+			depth: 0.0
+		});
+		high_score = new visual.TextStim({
+			win: psychoJS.window,
+			name: 'thanksText',
+			text: high_score_txt,
+			font: 'Arial',
+			units: 'height',
+			pos: hi_pos, height: 0.05, wrapWidth: undefined, ori: 0,
+			color: new util.Color('black'), opacity: 1,
+			depth: 0.0
+		});
+		box1 = new visual.ImageStim({
+			win: psychoJS.window,
+			name: 'stimPath', units: 'height',
+			image: 'box', mask: undefined,
+			ori: 0, pos: [window_ratio * -0.25, 0], opacity: 1,
+			size: [window_ratio * .2, 0.2],
+			flipHoriz: false, flipVert: false,
+			texRes: 128, interpolate: true, depth: 0
+		});
+		box2 = new visual.ImageStim({
+			win: psychoJS.window,
+			name: 'stimPath', units: 'height',
+			image: 'box', mask: undefined,
+			ori: 0, pos: [window_ratio * 0, 0], opacity: 1,
+			size: [window_ratio * .2, 0.2],
+			flipHoriz: false, flipVert: false,
+			texRes: 128, interpolate: true, depth: 0
+		});
+		box3 = new visual.ImageStim({
+			win: psychoJS.window,
+			name: 'stimPath', units: 'height',
+			image: 'box', mask: undefined,
+			ori: 0, pos: [window_ratio * 0.25, 0], opacity: 1,
+			size: [window_ratio * .2, 0.2],
+			flipHoriz: false, flipVert: false,
+			texRes: 128, interpolate: true, depth: 0
+		});
+		box_arr = [box1, box2, box3]
+		out1 = new visual.ImageStim({
+			win: psychoJS.window,
+			name: 'stimPath', units: 'height',
+			image: 'outline', mask: undefined,
+			ori: 0, pos: [window_ratio * -0.25, 0], opacity: 1,
+			size: [window_ratio * .2, 0.2],
+			flipHoriz: false, flipVert: false,
+			texRes: 128, interpolate: true, depth: 0
+		});
+		out2 = new visual.ImageStim({
+			win: psychoJS.window,
+			name: 'stimPath', units: 'height',
+			image: 'outline', mask: undefined,
+			ori: 0, pos: [window_ratio * 0, 0], opacity: 1,
+			size: [window_ratio * .2, 0.2],
+			flipHoriz: false, flipVert: false,
+			texRes: 128, interpolate: true, depth: 0
+		});
+		out3 = new visual.ImageStim({
+			win: psychoJS.window,
+			name: 'stimPath', units: 'height',
+			image: 'outline', mask: undefined,
+			ori: 0, pos: [window_ratio * 0.25, 0], opacity: 1,
+			size: [window_ratio * .2, 0.2],
+			flipHoriz: false, flipVert: false,
+			texRes: 128, interpolate: true, depth: 0
+		});
+		
 		
 		// Stimuli
 		if (options.includes('1')) {
@@ -1423,7 +1461,9 @@ function trialRoutineBegin(trials) {
 			}
 		}
 		// resize_image(leftposStim, image_ratio, 0.4)
-		
+
+		pressed = false
+
 		return Scheduler.Event.NEXT;
 	};
 }
@@ -1453,19 +1493,82 @@ function trialRoutineRespond(trials) {
 		}
 
 		let theseKeys = resp.getKeys({ keyList: keyList, waitRelease: false });
-		if (theseKeys.length > 0) {
+		if (theseKeys.length > 0 && !pressed) {
 			console.log("key press")
 			resp.keys = theseKeys[0].name;  // just the last key pressed
 			resp.rt = theseKeys[0].rt;
 
-			// Advice-less Choice
-			if (resp.keys == LEFT_KEY) {
-				console.log("???")
+			if (resp.keys == LEFT_KEY && pos_score_array[0] != "") {
+				pressed = true
 				mark_event(trials_data, globalClock, trials.thisIndex, trial_type, event_types['CHOICE'],
 					'NA', 'left', 'NA')
 				feedbackClock.reset()
-				continueRoutine = false
+				// box1.setAutoDraw(true)
+				let ix = 0
+				pos_score_array.forEach((arr) => {
+					if (arr != "") {
+						box_arr[ix].setAutoDraw(true)
+					}
+					ix ++
+				})
+				// box1.setAutoDraw(true)
+				// box2.setAutoDraw(true)
+				// box3.setAutoDraw(true)
+				out1.setAutoDraw(true)
+				low_score.setAutoDraw(true)
+				mid_score.setAutoDraw(true)
+				high_score.setAutoDraw(true)
+				//continueRoutine = false
+			} else if (resp.keys == UP_KEY && pos_score_array[1] != "") {
+				pressed = true
+				mark_event(trials_data, globalClock, trials.thisIndex, trial_type, event_types['CHOICE'],
+					'NA', 'middle', 'NA')
+				feedbackClock.reset()
+				// box2.setAutoDraw(true)
+				let ix = 0
+				pos_score_array.forEach((arr) => {
+					if (arr != "") {
+						box_arr[ix].setAutoDraw(true)
+					}
+					ix ++
+				})
+				// box1.setAutoDraw(true)
+				// box2.setAutoDraw(true)
+				// box3.setAutoDraw(true)
+				out2.setAutoDraw(true)
+				low_score.setAutoDraw(true)
+				mid_score.setAutoDraw(true)
+				high_score.setAutoDraw(true)
+				//continueRoutine = false
+			} else if (resp.keys == RIGHT_KEY && pos_score_array[2] != "") {
+				pressed = true
+				mark_event(trials_data, globalClock, trials.thisIndex, trial_type, event_types['CHOICE'],
+					'NA', 'right', 'NA')
+				feedbackClock.reset()
+				// box3.setAutoDraw(true)
+				let ix = 0
+				pos_score_array.forEach((arr) => {
+					if (arr != "") {
+						box_arr[ix].setAutoDraw(true)
+					}
+					ix ++
+				})
+				// box1.setAutoDraw(true)
+				// box2.setAutoDraw(true)
+				// box3.setAutoDraw(true)
+				out3.setAutoDraw(true)
+				low_score.setAutoDraw(true)
+				mid_score.setAutoDraw(true)
+				high_score.setAutoDraw(true)
+				//continueRoutine = false
 			}
+			// low_score.setAutoDraw(true)
+			// mid_score.setAutoDraw(true)
+			// high_score.setAutoDraw(true)
+		}
+
+		if (pressed && feedbackClock.getTime() >= 0.3) {
+			continueRoutine = false
 		}
 
 		// check if the Routine should terminate
@@ -1483,6 +1586,16 @@ function trialRoutineRespond(trials) {
 				mid2.setAutoDraw(false)
 				high2.setAutoDraw(false)
 			}
+
+			box1.setAutoDraw(false)
+			box2.setAutoDraw(false)
+			box3.setAutoDraw(false)
+			out1.setAutoDraw(false)
+			out2.setAutoDraw(false)
+			out3.setAutoDraw(false)
+			low_score.setAutoDraw(false)
+			mid_score.setAutoDraw(false)
+			high_score.setAutoDraw(false)
 
 			// set_fixation_flag = true
 			endClock.reset()
