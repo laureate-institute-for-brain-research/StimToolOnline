@@ -2066,7 +2066,6 @@ function trialRoutineRespondTesting(trials) {
 
 		let theseKeys = resp.getKeys({ keyList: keyList, waitRelease: false });
 		if (theseKeys.length > 0 && !pressed) {
-			//console.log("key press")
 			resp.keys = theseKeys[0].name;  // just the last key pressed
 			resp.rt = theseKeys[0].rt;
 
@@ -2075,85 +2074,30 @@ function trialRoutineRespondTesting(trials) {
 				mark_event(trials_data, globalClock, trials.thisIndex, trial_type, event_types['CHOICE'],
 					'NA', 'left', 'NA')
 				feedbackClock.reset()
-				// box1.setAutoDraw(true)
-				// let ix = 0
-				// pos_score_array.forEach((arr) => {
-				// 	if (arr != "") {
-				// 		box_arr[ix].setAutoDraw(true)
-				// 	}
-				// 	ix ++
-				// })
-				// box1.setAutoDraw(true)
-				// box2.setAutoDraw(true)
-				// box3.setAutoDraw(true)
 				out1.setAutoDraw(true)
-				// low_score.setAutoDraw(true)
-				// mid_score.setAutoDraw(true)
-				// high_score.setAutoDraw(true)
 
 				if (parseFloat(left_score_txt) > parseFloat(center_score_txt) && parseFloat(left_score_txt) > parseFloat(right_score_txt)) {
-					total_score += parseFloat(left_score_txt)
+					console.log(pos_score_array)
+					if (pos_score_array[0][0].charAt(0) != pos_score_array[2][0].charAt(0)) {
+						console.log(`adding ${left_score_txt}`)
+						total_score += parseFloat(left_score_txt)
+					}
 				}
-
-				//continueRoutine = false
-			} else if (resp.keys == UP_KEY && pos_score_array[1] != "") {
-				pressed = true
-				mark_event(trials_data, globalClock, trials.thisIndex, trial_type, event_types['CHOICE'],
-					'NA', 'middle', 'NA')
-				feedbackClock.reset()
-				// box2.setAutoDraw(true)
-				// let ix = 0
-				// pos_score_array.forEach((arr) => {
-				// 	if (arr != "") {
-				// 		box_arr[ix].setAutoDraw(true)
-				// 	}
-				// 	ix ++
-				// })
-				// box1.setAutoDraw(true)
-				// box2.setAutoDraw(true)
-				// box3.setAutoDraw(true)
-				out2.setAutoDraw(true)
-				// low_score.setAutoDraw(true)
-				// mid_score.setAutoDraw(true)
-				// high_score.setAutoDraw(true)
-
-				if (parseFloat(center_score_txt) > parseFloat(left_score_txt) && parseFloat(center_score_txt) > parseFloat(right_score_txt)) {
-					total_score += parseFloat(center_score_txt)
-				}
-
-				//continueRoutine = false
 			} else if (resp.keys == RIGHT_KEY && pos_score_array[2] != "") {
 				pressed = true
 				mark_event(trials_data, globalClock, trials.thisIndex, trial_type, event_types['CHOICE'],
 					'NA', 'right', 'NA')
 				feedbackClock.reset()
-				// box3.setAutoDraw(true)
-				// let ix = 0
-				// pos_score_array.forEach((arr) => {
-				// 	if (arr != "") {
-				// 		box_arr[ix].setAutoDraw(true)
-				// 	}
-				// 	ix ++
-				// })
-				// box1.setAutoDraw(true)
-				// box2.setAutoDraw(true)
-				// box3.setAutoDraw(true)
 				out3.setAutoDraw(true)
-				// low_score.setAutoDraw(true)
-				// mid_score.setAutoDraw(true)
-				// high_score.setAutoDraw(true)
-				//console.log("HELLLOOOO????")
 
 				if (parseFloat(right_score_txt) > parseFloat(center_score_txt) && parseFloat(right_score_txt) > parseFloat(left_score_txt)) {
-					total_score += parseFloat(right_score_txt)
+					console.log(pos_score_array)
+					if (pos_score_array[2][0].charAt(0) != pos_score_array[0][0].charAt(0)) {
+						console.log(`adding ${right_score_txt}`)
+						total_score += parseFloat(right_score_txt)
+					}
 				}
-
-				//continueRoutine = false
 			}
-			// low_score.setAutoDraw(true)
-			// mid_score.setAutoDraw(true)
-			// high_score.setAutoDraw(true)
-			//console.log(parseFloat(config_values.testing_duration))
 		}
 
 		if (pressed && feedbackClock.getTime() >= parseFloat(config_values.testing_duration)) {
@@ -2165,20 +2109,15 @@ function trialRoutineRespondTesting(trials) {
 			return Scheduler.Event.FLIP_REPEAT;
 		}
 		else {
-
 			to_undraw.forEach((stim) => {
 				stim.setAutoDraw(false)
 			})
-
 			box1.setAutoDraw(false)
 			box2.setAutoDraw(false)
 			box3.setAutoDraw(false)
 			out1.setAutoDraw(false)
 			out2.setAutoDraw(false)
 			out3.setAutoDraw(false)
-			// low_score.setAutoDraw(false)
-			// mid_score.setAutoDraw(false)
-			// high_score.setAutoDraw(false)
 
 			// set_fixation_flag = true
 			endClock.reset()
@@ -2368,7 +2307,8 @@ function thanksRoutineBegin(trials) {
 									 So far, you have earned ${total_score} points = $${Math.ceil((total_score/1000)*10)/10}`)
 		// update component parameters for each repeat
 		// keep track of which components have finished
-		thanksComponents = [];
+		thanksText.status = PsychoJS.Status.NOT_STARTED;
+		thanksComponents = []
 		// thanksComponents.push(thanksText);
 
 		for (const thisComponent of thanksComponents)
@@ -2395,6 +2335,7 @@ function thanksRoutineEachFrame(trials) {
 			thanksText.tStart = t;  // (not accounting for frame time here)
 			thanksText.frameNStart = frameN;  // exact frame index
 			thanksText.setAutoDraw(true);
+			console.log("drawing thanks score screen")
 		}
 
 		// frameRemains = 0.0 + 2.0 - psychoJS.window.monitorFramePeriod * 0.75;  // most of one frame period left
@@ -2433,6 +2374,7 @@ function thanksRoutineEachFrame(trials) {
 		}
 		else {
 			thanksText.setAutoDraw(false);
+			console.log("ending thanks score screen")
 			return Scheduler.Event.NEXT;
 		}
 	};
