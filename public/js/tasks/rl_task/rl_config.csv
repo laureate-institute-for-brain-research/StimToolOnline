@@ -1,2 +1,2 @@
-﻿L1_img,M1_img,H1_img,L2_img,M2_img,H2_img,advice_request_duration,post_advice_duration,post_choice_duration,feedback_duration,block_screen_duration,block_size,practice_block_size,
-/js/tasks/rl_task/media/1.gif,/js/tasks/rl_task/media/3.gif,/js/tasks/rl_task/media/5.gif,/js/tasks/rl_task/media/2.gif,/js/tasks/rl_task/media/4.gif,/js/tasks/rl_task/media/6.gif,0.0,0.0,0.0,1.25,3.0,30,3,
+﻿L1_img,M1_img,H1_img,L2_img,M2_img,H2_img,advice_request_duration,post_advice_duration,post_choice_duration,feedback_duration,block_screen_duration,block_size,practice_block_size,learning_fb_duration,testing_duration,
+/js/tasks/rl_task/media/1.gif,/js/tasks/rl_task/media/3.gif,/js/tasks/rl_task/media/5.gif,/js/tasks/rl_task/media/2.gif,/js/tasks/rl_task/media/4.gif,/js/tasks/rl_task/media/6.gif,0.0,0.0,0.0,1.25,3.0,30,3,0.5,0.5,

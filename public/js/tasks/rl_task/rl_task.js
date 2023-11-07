@@ -139,12 +139,14 @@ window.onload = function () {
 		.then((values) => {
 
 			resources.push({ name: 'run_schedule.xls', path: values.schedule })
+			resources.push({ name: 'run_schedule_test.xls', path: values.schedule_test })
 			resources.push({ name: 'instruct_schedule.csv', path: values.instruct_schedule })
 			resources.push({ name: 'practice_schedule.csv', path: values.practice_schedule })
 			resources.push({ name: 'config.csv', path: values.config})
 
 			// Add file paths to expInfo
 			if (values.schedule) expInfo.task_schedule = values.schedule
+			if (values.schedule_test) expInfo.task_schedule_test = values.schedule_test
 			if (values.instruct_schedule) expInfo.instruct_schedule = values.instruct_schedule
 			if (values.practice_schedule) expInfo.practice_schedule = values.practice_schedule
 			if (values.config) expInfo.task_config = values.config
@@ -219,6 +221,35 @@ window.onload = function () {
 				
 			})
 		})
+		// Add Main Schedule Test stim_path to resources
+		.then((values) => {			
+			return new Promise((resolve, reject) => {
+				$.ajax({
+					type: 'GET',
+					url: expInfo.task_schedule_test,
+					dataType: 'text',
+					async: false,
+					success: (data) => {
+						var out = [];
+						var allRows = data.split('\n'); // split rows at new line
+						
+						var headerRows = allRows[0].split(',');
+						
+						for (var i=1; i<allRows.length; i++) {
+							var obj = {};
+							var currentLine = allRows[i].split(',');
+							for (var j = 0; j < headerRows.length; j++){
+								obj[headerRows[j]] = currentLine[j];	
+							}
+							// If there's media add to resources
+						}
+
+						resolve(data)
+					}
+				})
+				
+			})
+		})
 		// Add config values resources
 		.then((values) => {			
 			// Add instrcution Images
@@ -246,7 +277,7 @@ window.onload = function () {
 						console.log(obj)
 
 						if (obj.L1_img != 'None' && obj.L1_img != undefined) {
-							console.log("HEYYYOOO")
+							//console.log("HEYYYOOO")
 							resources.push({ name: 'L1_img' , path: obj.L1_img  })
 						}
 						if (obj.M1_img != 'None' && obj.M1_img != undefined) {
@@ -417,23 +448,22 @@ flowScheduler.add(trialsLoopEnd);
 flowScheduler.add(thanksRoutineBegin());
 flowScheduler.add(thanksRoutineEachFrame());
 flowScheduler.add(thanksRoutineEnd());
+
+// Testing BLOCK
+// Ready Routine
+flowScheduler.add(readyRoutineBegin('TEST'));
+flowScheduler.add(readyRoutineEachFrame());
+flowScheduler.add(readyRoutineEnd());
+
+const trialsLoopScheduler_testing = new Scheduler(psychoJS);
+flowScheduler.add(trialsLoopBeginTesting, trialsLoopScheduler_testing);
+flowScheduler.add(trialsLoopScheduler_testing);
+flowScheduler.add(trialsLoopEnd);
+
+flowScheduler.add(thanksRoutineBegin());
+flowScheduler.add(thanksRoutineEachFrame());
+flowScheduler.add(thanksRoutineEnd());
 flowScheduler.add(quitPsychoJS, '', true);
-
-// // Testing BLOCK
-// // Ready Routine
-// flowScheduler.add(readyRoutineBegin('TEST'));
-// flowScheduler.add(readyRoutineEachFrame());
-// flowScheduler.add(readyRoutineEnd());
-
-// const trialsLoopScheduler_testing = new Scheduler(psychoJS);
-// flowScheduler.add(trialsLoopBegin, trialsLoopScheduler_testing);
-// flowScheduler.add(trialsLoopScheduler_testing);
-// flowScheduler.add(trialsLoopEnd);
-
-// flowScheduler.add(thanksRoutineBegin());
-// flowScheduler.add(thanksRoutineEachFrame());
-// flowScheduler.add(thanksRoutineEnd());
-// flowScheduler.add(quitPsychoJS, '', true);
 
 // // Explicit BLOCK
 // // Ready Routine
@@ -510,6 +540,9 @@ var high2
 var low_score
 var mid_score
 var high_score
+var low_score2
+var mid_score2
+var high_score2
 var left_score
 var center_score
 var right_score
@@ -1102,7 +1135,7 @@ function generate_trial_order(trials) {
 	for (const t of trials) {
 		// console.log(t)
 		let trial_temp = []
-		trial_temp.append(shuffle(['L', 'M', 'H']))
+		trial_temp.push(shuffle(['L', 'M', 'H']))
 		// ...
 		
 	}
@@ -1147,6 +1180,53 @@ function trialsLoopBegin(thisScheduler) {
 		thisScheduler.add(trialRoutineBegin(snapshot));
 		thisScheduler.add(trialRoutineRespond(snapshot));
 		thisScheduler.add(trialRoutineEnd(snapshot));
+		thisScheduler.add(endLoopIteration(thisScheduler, snapshot));
+	}
+	trial_type = 'MAIN'
+	mark_event(trials_data, globalClock, 'NA', trial_type, event_types['BLOCK_ONSET'],
+				'NA', 'NA' , 'NA')
+	return Scheduler.Event.NEXT;
+}
+
+function trialsLoopBeginTesting(thisScheduler) {
+
+	endClock.reset()
+
+	resp.stop()
+	resp.clearEvents()
+	resp.status = PsychoJS.Status.NOT_STARTED
+
+	trials = new TrialHandler({
+		psychoJS: psychoJS,
+		nReps: 1, method: TrialHandler.Method.SEQUENTIAL,
+		extraInfo: expInfo, originPath: undefined,
+		trialList: 'run_schedule_test.xls',
+		seed: undefined, name: 'trials'
+	});
+
+	main_loop_count = 0
+	last_trial_num = trials.nTotal
+	current_block_size = config_values.block_size
+	total_block_count = trials.nTotal / parseInt(config_values.block_size)
+
+	// generate_trial_order(trials)
+
+	psychoJS.experiment.addLoop(trials); // add the loop to the experiment
+	currentLoop = trials;  // we're now the current loop
+	total_score = 0
+	completed_blocks = 1
+
+	init_fixation_flag = true
+
+	// Schedule all the trials in the trialList:
+	for (const thisTrial of trials) {
+		const snapshot = trials.getSnapshot();
+
+		thisScheduler.add(importConditions(snapshot));
+		thisScheduler.add(initialFixation(snapshot));
+		thisScheduler.add(trialRoutineBeginTesting(snapshot));
+		thisScheduler.add(trialRoutineRespondTesting(snapshot));
+		thisScheduler.add(trialRoutineEndTesting(snapshot));
 		thisScheduler.add(endLoopIteration(thisScheduler, snapshot));
 	}
 	trial_type = 'MAIN'
@@ -1208,6 +1288,7 @@ var box_arr = []
 var left_score_txt = 0
 var center_score_txt = 0
 var right_score_txt = 0
+var to_undraw = []
 
 function trialRoutineBegin(trials) {
 	return function () {
@@ -1223,6 +1304,7 @@ function trialRoutineBegin(trials) {
 		var low_score_txt = 0
 		var mid_score_txt = 0
 		var high_score_txt = 0
+		to_undraw = []
 
 		let mean_dict = { "L1": L_mean, "M1": M_mean, "H1": H_mean, "L2": L_mean, "M2": M_mean, "H2": H_mean }
 		let variance_dict = { "L1": L_variance, "M1": M_variance, "H1": H_variance, "L2": L_variance, "M2": M_variance, "H2": H_variance }
@@ -1236,15 +1318,15 @@ function trialRoutineBegin(trials) {
 
 		if (pos_score_array[0] != "") {
 			if (pos_score_array[0][0].includes("L")) {
-				console.log("1")
+				//console.log("1")
 				low_pos = [window_ratio * -0.25, 0]
 				low_score_txt = pos_score_array[0][1]
 			} else if (pos_score_array[0][0].includes("M")) {
-				console.log("2")
+				//console.log("2")
 				mid_pos = [window_ratio * -0.25, 0]
 				mid_score_txt = pos_score_array[0][1]
 			} else {
-				console.log("3")
+				//console.log("3")
 				hi_pos = [window_ratio * -0.25, 0]
 				high_score_txt = pos_score_array[0][1]
 			}
@@ -1253,15 +1335,15 @@ function trialRoutineBegin(trials) {
 
 		if (pos_score_array[1] != "") {
 			if (pos_score_array[1][0].includes("L")) {
-				console.log("4")
+				//console.log("4")
 				low_pos = [window_ratio * 0, 0]
 				low_score_txt = pos_score_array[1][1]
 			} else if (pos_score_array[1][0].includes("M")) {
-				console.log("5")
+				//console.log("5")
 				mid_pos = [window_ratio * 0, 0]
 				mid_score_txt = pos_score_array[1][1]
 			} else {
-				console.log("6")
+				//console.log("6")
 				hi_pos = [window_ratio * 0, 0]
 				high_score_txt = pos_score_array[1][1]
 			}
@@ -1271,15 +1353,15 @@ function trialRoutineBegin(trials) {
 		if (pos_score_array[2] != "") {
 			// if (options_array.length == 3) {
 			if (pos_score_array[2][0].includes("L")) {
-				console.log("7")
+				//console.log("7")
 				low_pos = [window_ratio * 0.25, 0]
 				low_score_txt = pos_score_array[2][1]
 			} else if (pos_score_array[2][0].includes("M")) {
-				console.log("8")
+				//console.log("8")
 				mid_pos = [window_ratio * 0.25, 0]
 				mid_score_txt = pos_score_array[2][1]
 			} else {
-				console.log("9")
+				//console.log("9")
 				hi_pos = [window_ratio * 0.25, 0]
 				high_score_txt = pos_score_array[2][1]
 			}
@@ -1287,8 +1369,8 @@ function trialRoutineBegin(trials) {
 			// }
 		}
 
-		console.log(pos_score_array)
-		console.log(options.includes("1"))
+		//console.log(pos_score_array)
+		//console.log(options.includes("1"))
 
 		low_score = new visual.TextStim({
 			win: psychoJS.window,
@@ -1379,8 +1461,8 @@ function trialRoutineBegin(trials) {
 		
 		// Stimuli
 		if (options.includes('1')) {
-			console.log(options)
-			console.log("OPTIONS INCLUDES 1")
+			//console.log(options)
+			//console.log("OPTIONS INCLUDES 1")
 			if (options.includes("L")) {
 				low1 = new visual.ImageStim({
 					win: psychoJS.window,
@@ -1392,7 +1474,8 @@ function trialRoutineBegin(trials) {
 					texRes: 128, interpolate: true, depth: 0
 				});
 				low1.setAutoDraw(true)
-				console.log("a")
+				to_undraw.push(low1)
+				//console.log("a")
 			}
 			if (options.includes("M")) {
 				mid1 = new visual.ImageStim({
@@ -1405,7 +1488,8 @@ function trialRoutineBegin(trials) {
 					texRes: 128, interpolate: true, depth: 0
 				});
 				mid1.setAutoDraw(true)
-				console.log("b")
+				to_undraw.push(mid1)
+				//console.log("b")
 			}
 			if (options.includes("H")) {
 				high1 = new visual.ImageStim({
@@ -1418,11 +1502,12 @@ function trialRoutineBegin(trials) {
 					texRes: 128, interpolate: true, depth: 0
 				});
 				high1.setAutoDraw(true)
-				console.log("c")
+				to_undraw.push(high1)
+				//console.log("c")
 			}
 		}
 		else {
-			console.log(options)
+			//console.log(options)
 			if (options.includes("L")) {
 				low2 = new visual.ImageStim({
 					win: psychoJS.window,
@@ -1434,6 +1519,7 @@ function trialRoutineBegin(trials) {
 					texRes: 128, interpolate: true, depth: 0
 				});
 				low2.setAutoDraw(true)
+				to_undraw.push(low2)
 			}
 			if (options.includes("M")) {
 				mid2 = new visual.ImageStim({
@@ -1446,6 +1532,7 @@ function trialRoutineBegin(trials) {
 					texRes: 128, interpolate: true, depth: 0
 				});
 				mid2.setAutoDraw(true)
+				to_undraw.push(mid2)
 			}
 			if (options.includes("H")) {
 				high2 = new visual.ImageStim({
@@ -1458,6 +1545,7 @@ function trialRoutineBegin(trials) {
 					texRes: 128, interpolate: true, depth: 0
 				});
 				high2.setAutoDraw(true)
+				to_undraw.push(high2)
 			}
 		}
 		// resize_image(leftposStim, image_ratio, 0.4)
@@ -1494,7 +1582,7 @@ function trialRoutineRespond(trials) {
 
 		let theseKeys = resp.getKeys({ keyList: keyList, waitRelease: false });
 		if (theseKeys.length > 0 && !pressed) {
-			console.log("key press")
+			//console.log("key press")
 			resp.keys = theseKeys[0].name;  // just the last key pressed
 			resp.rt = theseKeys[0].rt;
 
@@ -1582,7 +1670,7 @@ function trialRoutineRespond(trials) {
 			// high_score.setAutoDraw(true)
 		}
 
-		if (pressed && feedbackClock.getTime() >= 0.3) {
+		if (pressed && feedbackClock.getTime() >= parseFloat(config_values.learning_fb_duration)) {
 			continueRoutine = false
 		}
 
@@ -1591,16 +1679,9 @@ function trialRoutineRespond(trials) {
 			return Scheduler.Event.FLIP_REPEAT;
 		}
 		else {
-			if (options.includes('1')) {
-				low1.setAutoDraw(false)
-				mid1.setAutoDraw(false)
-				high1.setAutoDraw(false)
-			}
-			else {
-				low2.setAutoDraw(false)
-				mid2.setAutoDraw(false)
-				high2.setAutoDraw(false)
-			}
+			to_undraw.forEach((stim) => {
+				stim.setAutoDraw(false)
+			})
 
 			box1.setAutoDraw(false)
 			box2.setAutoDraw(false)
@@ -1611,6 +1692,493 @@ function trialRoutineRespond(trials) {
 			low_score.setAutoDraw(false)
 			mid_score.setAutoDraw(false)
 			high_score.setAutoDraw(false)
+
+			// set_fixation_flag = true
+			endClock.reset()
+			return Scheduler.Event.NEXT;
+		}
+	};
+}
+
+function trialRoutineBeginTesting(trials) {
+	return function () {
+		//------Prepare to start Routine 'trial'-------
+		t = 0;
+		trialClock.reset(); // clock
+		toneClock.reset(); // toneclock
+		frameN = -1;
+
+		var low_pos = 0
+		var mid_pos = 0
+		var hi_pos = 0
+		var low_pos2 = 0
+		var mid_pos2 = 0
+		var hi_pos2 = 0
+		var low_score_txt = 0
+		var mid_score_txt = 0
+		var high_score_txt = 0
+		var low_score_txt2 = 0
+		var mid_score_txt2 = 0
+		var high_score_txt2 = 0
+		to_undraw = []
+
+		let mean_dict = { "L1": L_mean, "M1": M_mean, "H1": H_mean, "L2": L_mean, "M2": M_mean, "H2": H_mean }
+		let variance_dict = { "L1": L_variance, "M1": M_variance, "H1": H_variance, "L2": L_variance, "M2": M_variance, "H2": H_variance }
+
+		let options_array = options.split("_")
+		if (options_array.length == 3) {
+			// switch lines to shuffle positions
+			// pos_score_array = shuffle([[options_array[0], randomGaussian(mean_dict[options_array[0]], variance_dict[options_array[0]])], [options_array[1], randomGaussian(mean_dict[options_array[1]], variance_dict[options_array[1]])], [options_array[2], randomGaussian(mean_dict[options_array[2]], variance_dict[options_array[2]])]])
+			pos_score_array = [[options_array[0], randomGaussian(mean_dict[options_array[0]], variance_dict[options_array[0]])], [options_array[1], randomGaussian(mean_dict[options_array[1]], variance_dict[options_array[1]])], [options_array[2], randomGaussian(mean_dict[options_array[2]], variance_dict[options_array[2]])]]
+		} else {
+			// switch lines to shuffle positions
+			// pos_score_array = shuffle([[options_array[0], randomGaussian(mean_dict[options_array[0]], variance_dict[options_array[0]])], [options_array[1], randomGaussian(mean_dict[options_array[1]], variance_dict[options_array[1]])], ""])
+			pos_score_array = [[options_array[0], randomGaussian(mean_dict[options_array[0]], variance_dict[options_array[0]])], "", [options_array[1], randomGaussian(mean_dict[options_array[1]], variance_dict[options_array[1]])]]
+		}
+
+		if (pos_score_array[0] != "") {
+			if (pos_score_array[0][0].includes("L1")) {
+				//console.log("l1")
+				low_pos = [window_ratio * -0.15, 0]
+				low_score_txt = pos_score_array[0][1]
+			} else if (pos_score_array[0][0].includes("L2")) {
+				//console.log("l2")
+				low_pos2 = [window_ratio * -0.15, 0]
+				low_score_txt2 = pos_score_array[0][1]
+			} else if (pos_score_array[0][0].includes("M1")) {
+				//console.log("m1")
+				mid_pos = [window_ratio * -0.15, 0]
+				mid_score_txt = pos_score_array[0][1]
+			} else if (pos_score_array[0][0].includes("M2")) {
+				//console.log("m2")
+				mid_pos2 = [window_ratio * -0.15, 0]
+				mid_score_txt2 = pos_score_array[0][1]
+			} else if (pos_score_array[0][0].includes("H1")) {
+				//console.log("h1")
+				hi_pos = [window_ratio * -0.15, 0]
+				high_score_txt = pos_score_array[0][1]
+			} else {
+				//console.log("h2")
+				hi_pos2 = [window_ratio * -0.15, 0]
+				high_score_txt2 = pos_score_array[0][1]
+			}
+			left_score_txt = pos_score_array[0][1]
+		}
+
+		if (pos_score_array[1] != "") {
+			if (pos_score_array[1][0].includes("L1")) {
+				//console.log("1")
+				low_pos = [window_ratio * 0, 0]
+				low_score_txt = pos_score_array[1][1]
+			} else if (pos_score_array[1][0].includes("L2")) {
+				//console.log("1")
+				low_pos2 = [window_ratio * 0, 0]
+				low_score_txt2 = pos_score_array[1][1]
+			} else if (pos_score_array[1][0].includes("M1")) {
+				//console.log("2")
+				mid_pos = [window_ratio * 0, 0]
+				mid_score_txt = pos_score_array[1][1]
+			} else if (pos_score_array[1][0].includes("M2")) {
+				//console.log("2")
+				mid_pos2 = [window_ratio * 0, 0]
+				mid_score_txt2 = pos_score_array[1][1]
+			} else if (pos_score_array[1][0].includes("H1")) {
+				//console.log("2")
+				hi_pos = [window_ratio * 0, 0]
+				high_score_txt = pos_score_array[1][1]
+			} else {
+				//console.log("3")
+				hi_pos2 = [window_ratio * 0, 0]
+				high_score_txt2 = pos_score_array[1][1]
+			}
+			center_score_txt = pos_score_array[1][1]
+		}
+
+		if (pos_score_array[2] != "") {
+			if (pos_score_array[2][0].includes("L1")) {
+				//console.log("l1")
+				low_pos = [window_ratio * 0.15, 0]
+				low_score_txt = pos_score_array[2][1]
+			} else if (pos_score_array[2][0].includes("L2")) {
+				//console.log("l2")
+				low_pos2 = [window_ratio * 0.15, 0]
+				low_score_txt2 = pos_score_array[2][1]
+			} else if (pos_score_array[2][0].includes("M1")) {
+				//console.log("m1")
+				mid_pos = [window_ratio * 0.15, 0]
+				mid_score_txt = pos_score_array[2][1]
+			} else if (pos_score_array[2][0].includes("M2")) {
+				//console.log("m2")
+				mid_pos2 = [window_ratio * 0.15, 0]
+				mid_score_txt2 = pos_score_array[2][1]
+			} else if (pos_score_array[2][0].includes("H1")) {
+				//console.log("h1")
+				hi_pos = [window_ratio * 0.15, 0]
+				high_score_txt = pos_score_array[2][1]
+			} else {
+				//console.log("h2")
+				hi_pos2 = [window_ratio * 0.15, 0]
+				high_score_txt2 = pos_score_array[2][1]
+			}
+			right_score_txt = pos_score_array[2][1]
+		}
+
+		low_score = new visual.TextStim({
+			win: psychoJS.window,
+			name: 'thanksText',
+			text: low_score_txt,
+			font: 'Arial',
+			units: 'height',
+			pos: low_pos, height: 0.05, wrapWidth: undefined, ori: 0,
+			color: new util.Color('black'), opacity: 1,
+			depth: 0.0
+		});
+		mid_score = new visual.TextStim({
+			win: psychoJS.window,
+			name: 'thanksText',
+			text: mid_score_txt,
+			font: 'Arial',
+			units: 'height',
+			pos: mid_pos, height: 0.05, wrapWidth: undefined, ori: 0,
+			color: new util.Color('black'), opacity: 1,
+			depth: 0.0
+		});
+		high_score = new visual.TextStim({
+			win: psychoJS.window,
+			name: 'thanksText',
+			text: high_score_txt,
+			font: 'Arial',
+			units: 'height',
+			pos: hi_pos, height: 0.05, wrapWidth: undefined, ori: 0,
+			color: new util.Color('black'), opacity: 1,
+			depth: 0.0
+		});
+		low_score2 = new visual.TextStim({
+			win: psychoJS.window,
+			name: 'thanksText',
+			text: low_score_txt2,
+			font: 'Arial',
+			units: 'height',
+			pos: low_pos2, height: 0.05, wrapWidth: undefined, ori: 0,
+			color: new util.Color('black'), opacity: 1,
+			depth: 0.0
+		});
+		mid_score2 = new visual.TextStim({
+			win: psychoJS.window,
+			name: 'thanksText',
+			text: mid_score_txt2,
+			font: 'Arial',
+			units: 'height',
+			pos: mid_pos2, height: 0.05, wrapWidth: undefined, ori: 0,
+			color: new util.Color('black'), opacity: 1,
+			depth: 0.0
+		});
+		high_score2 = new visual.TextStim({
+			win: psychoJS.window,
+			name: 'thanksText',
+			text: high_score_txt2,
+			font: 'Arial',
+			units: 'height',
+			pos: hi_pos2, height: 0.05, wrapWidth: undefined, ori: 0,
+			color: new util.Color('black'), opacity: 1,
+			depth: 0.0
+		});
+		box1 = new visual.ImageStim({
+			win: psychoJS.window,
+			name: 'stimPath', units: 'height',
+			image: 'box', mask: undefined,
+			ori: 0, pos: [window_ratio * -0.25, 0], opacity: 1,
+			size: [0.3,0.3],
+			flipHoriz: false, flipVert: false,
+			texRes: 128, interpolate: true, depth: 0
+		});
+		box2 = new visual.ImageStim({
+			win: psychoJS.window,
+			name: 'stimPath', units: 'height',
+			image: 'box', mask: undefined,
+			ori: 0, pos: [window_ratio * 0, 0], opacity: 1,
+			size: [0.3,0.3],
+			flipHoriz: false, flipVert: false,
+			texRes: 128, interpolate: true, depth: 0
+		});
+		box3 = new visual.ImageStim({
+			win: psychoJS.window,
+			name: 'stimPath', units: 'height',
+			image: 'box', mask: undefined,
+			ori: 0, pos: [window_ratio * 0.25, 0], opacity: 1,
+			size: [0.3,0.3],
+			flipHoriz: false, flipVert: false,
+			texRes: 128, interpolate: true, depth: 0
+		});
+		box_arr = [box1, box2, box3]
+		out1 = new visual.ImageStim({
+			win: psychoJS.window,
+			name: 'stimPath', units: 'height',
+			image: 'outline', mask: undefined,
+			ori: 0, pos: [window_ratio * -0.15, 0], opacity: 1,
+			size: [0.3,0.3],
+			flipHoriz: false, flipVert: false,
+			texRes: 128, interpolate: true, depth: 0
+		});
+		out2 = new visual.ImageStim({
+			win: psychoJS.window,
+			name: 'stimPath', units: 'height',
+			image: 'outline', mask: undefined,
+			ori: 0, pos: [window_ratio * 0, 0], opacity: 1,
+			size: [0.3,0.3],
+			flipHoriz: false, flipVert: false,
+			texRes: 128, interpolate: true, depth: 0
+		});
+		out3 = new visual.ImageStim({
+			win: psychoJS.window,
+			name: 'stimPath', units: 'height',
+			image: 'outline', mask: undefined,
+			ori: 0, pos: [window_ratio * 0.15, 0], opacity: 1,
+			size: [0.3,0.3],
+			flipHoriz: false, flipVert: false,
+			texRes: 128, interpolate: true, depth: 0
+		});
+		
+		
+		// Stimuli
+		if (options.includes('1')) {
+			//console.log(options)
+			//console.log("OPTIONS INCLUDES 1")
+			if (options.includes("L1")) {
+				low1 = new visual.ImageStim({
+					win: psychoJS.window,
+					name: 'stimPath', units: 'height',
+					image: 'L1_img', mask: undefined,
+					ori: 0, pos: low_pos, opacity: 1,
+					size: [0.3,0.3],
+					flipHoriz: false, flipVert: false,
+					texRes: 128, interpolate: true, depth: 0
+				});
+				low1.setAutoDraw(true)
+				to_undraw.push(low1)
+				//console.log("a")
+			}
+			if (options.includes("M1")) {
+				mid1 = new visual.ImageStim({
+					win: psychoJS.window,
+					name: 'stimPath', units: 'height',
+					image: 'M1_img', mask: undefined,
+					ori: 0, pos: mid_pos, opacity: 1,
+					size: [0.3,0.3],
+					flipHoriz: false, flipVert: false,
+					texRes: 128, interpolate: true, depth: 0
+				});
+				mid1.setAutoDraw(true)
+				to_undraw.push(mid1)
+				//console.log("b")
+			}
+			if (options.includes("H1")) {
+				high1 = new visual.ImageStim({
+					win: psychoJS.window,
+					name: 'stimPath', units: 'height',
+					image: 'H1_img', mask: undefined,
+					ori: 0, pos: hi_pos, opacity: 1,
+					size: [0.3,0.3],
+					flipHoriz: false, flipVert: false,
+					texRes: 128, interpolate: true, depth: 0
+				});
+				high1.setAutoDraw(true)
+				to_undraw.push(high1)
+				//console.log("c")
+			}
+		}
+		if (options.includes('2')) {
+			//console.log(options)
+			if (options.includes("L2")) {
+				low2 = new visual.ImageStim({
+					win: psychoJS.window,
+					name: 'stimPath', units: 'height',
+					image: 'L2_img', mask: undefined,
+					ori: 0, pos: low_pos2, opacity: 1,
+					size: [0.3,0.3],
+					flipHoriz: false, flipVert: false,
+					texRes: 128, interpolate: true, depth: 0
+				});
+				low2.setAutoDraw(true)
+				to_undraw.push(low2)
+				//console.log("a2")
+			}
+			if (options.includes("M2")) {
+				mid2 = new visual.ImageStim({
+					win: psychoJS.window,
+					name: 'stimPath', units: 'height',
+					image: 'M2_img', mask: undefined,
+					ori: 0, pos: mid_pos2, opacity: 1,
+					size: [0.3,0.3],
+					flipHoriz: false, flipVert: false,
+					texRes: 128, interpolate: true, depth: 0
+				});
+				mid2.setAutoDraw(true)
+				to_undraw.push(mid2)
+				//console.log("b2")
+			}
+			if (options.includes("H2")) {
+				high2 = new visual.ImageStim({
+					win: psychoJS.window,
+					name: 'stimPath', units: 'height',
+					image: 'H2_img', mask: undefined,
+					ori: 0, pos: hi_pos2, opacity: 1,
+					size: [0.3,0.3],
+					flipHoriz: false, flipVert: false,
+					texRes: 128, interpolate: true, depth: 0
+				});
+				high2.setAutoDraw(true)
+				to_undraw.push(high2)
+				//console.log("c2")
+			}
+		}
+		// resize_image(leftposStim, image_ratio, 0.4)
+
+		pressed = false
+
+		return Scheduler.Event.NEXT;
+	};
+}
+
+/**
+ * Respond Routine
+ * @param {*} trials 
+ * @returns 
+ */
+function trialRoutineRespondTesting(trials) {
+	return function () {
+		//------Loop for each frame of Routine 'trial'-------
+		let continueRoutine = true; // until we're told otherwise	
+	
+		// get current time
+		t = respondClock.getTime();
+
+		if (resp.status === PsychoJS.Status.NOT_STARTED) {
+			// keep track of start time/frame for later
+			resp.tStart = t;  // (not accounting for frame time here)
+			resp.frameNStart = frameN;  // exact frame index
+
+			// keyboard checking is just starting
+			resp.clock.reset();  // t=0 on next screen flip
+			resp.start(); // start on screen flip
+			resp.clearEvents();
+		}
+
+		let theseKeys = resp.getKeys({ keyList: keyList, waitRelease: false });
+		if (theseKeys.length > 0 && !pressed) {
+			//console.log("key press")
+			resp.keys = theseKeys[0].name;  // just the last key pressed
+			resp.rt = theseKeys[0].rt;
+
+			if (resp.keys == LEFT_KEY && pos_score_array[0] != "") {
+				pressed = true
+				mark_event(trials_data, globalClock, trials.thisIndex, trial_type, event_types['CHOICE'],
+					'NA', 'left', 'NA')
+				feedbackClock.reset()
+				// box1.setAutoDraw(true)
+				// let ix = 0
+				// pos_score_array.forEach((arr) => {
+				// 	if (arr != "") {
+				// 		box_arr[ix].setAutoDraw(true)
+				// 	}
+				// 	ix ++
+				// })
+				// box1.setAutoDraw(true)
+				// box2.setAutoDraw(true)
+				// box3.setAutoDraw(true)
+				out1.setAutoDraw(true)
+				// low_score.setAutoDraw(true)
+				// mid_score.setAutoDraw(true)
+				// high_score.setAutoDraw(true)
+
+				if (parseFloat(left_score_txt) > parseFloat(center_score_txt) && parseFloat(left_score_txt) > parseFloat(right_score_txt)) {
+					total_score += parseFloat(left_score_txt)
+				}
+
+				//continueRoutine = false
+			} else if (resp.keys == UP_KEY && pos_score_array[1] != "") {
+				pressed = true
+				mark_event(trials_data, globalClock, trials.thisIndex, trial_type, event_types['CHOICE'],
+					'NA', 'middle', 'NA')
+				feedbackClock.reset()
+				// box2.setAutoDraw(true)
+				// let ix = 0
+				// pos_score_array.forEach((arr) => {
+				// 	if (arr != "") {
+				// 		box_arr[ix].setAutoDraw(true)
+				// 	}
+				// 	ix ++
+				// })
+				// box1.setAutoDraw(true)
+				// box2.setAutoDraw(true)
+				// box3.setAutoDraw(true)
+				out2.setAutoDraw(true)
+				// low_score.setAutoDraw(true)
+				// mid_score.setAutoDraw(true)
+				// high_score.setAutoDraw(true)
+
+				if (parseFloat(center_score_txt) > parseFloat(left_score_txt) && parseFloat(center_score_txt) > parseFloat(right_score_txt)) {
+					total_score += parseFloat(center_score_txt)
+				}
+
+				//continueRoutine = false
+			} else if (resp.keys == RIGHT_KEY && pos_score_array[2] != "") {
+				pressed = true
+				mark_event(trials_data, globalClock, trials.thisIndex, trial_type, event_types['CHOICE'],
+					'NA', 'right', 'NA')
+				feedbackClock.reset()
+				// box3.setAutoDraw(true)
+				// let ix = 0
+				// pos_score_array.forEach((arr) => {
+				// 	if (arr != "") {
+				// 		box_arr[ix].setAutoDraw(true)
+				// 	}
+				// 	ix ++
+				// })
+				// box1.setAutoDraw(true)
+				// box2.setAutoDraw(true)
+				// box3.setAutoDraw(true)
+				out3.setAutoDraw(true)
+				// low_score.setAutoDraw(true)
+				// mid_score.setAutoDraw(true)
+				// high_score.setAutoDraw(true)
+				//console.log("HELLLOOOO????")
+
+				if (parseFloat(right_score_txt) > parseFloat(center_score_txt) && parseFloat(right_score_txt) > parseFloat(left_score_txt)) {
+					total_score += parseFloat(right_score_txt)
+				}
+
+				//continueRoutine = false
+			}
+			// low_score.setAutoDraw(true)
+			// mid_score.setAutoDraw(true)
+			// high_score.setAutoDraw(true)
+			//console.log(parseFloat(config_values.testing_duration))
+		}
+
+		if (pressed && feedbackClock.getTime() >= parseFloat(config_values.testing_duration)) {
+			continueRoutine = false
+		}
+
+		// check if the Routine should terminate
+		if (continueRoutine) {
+			return Scheduler.Event.FLIP_REPEAT;
+		}
+		else {
+
+			to_undraw.forEach((stim) => {
+				stim.setAutoDraw(false)
+			})
+
+			box1.setAutoDraw(false)
+			box2.setAutoDraw(false)
+			box3.setAutoDraw(false)
+			out1.setAutoDraw(false)
+			out2.setAutoDraw(false)
+			out3.setAutoDraw(false)
+			// low_score.setAutoDraw(false)
+			// mid_score.setAutoDraw(false)
+			// high_score.setAutoDraw(false)
 
 			// set_fixation_flag = true
 			endClock.reset()
@@ -1743,6 +2311,34 @@ function trialRoutineEnd(trials) {
 	};
 }
 
+function trialRoutineEndTesting(trials) { 
+	return function () {
+		//------Ending Routine 'trial'-------
+		t = endClock.getTime()
+
+		// if (points_fixation_stim.status == PsychoJS.Status.NOT_STARTED) {
+		// 			points_fixation_stim.setText('+')
+		// 			mark_event(trials_data, globalClock, trials.thisIndex, trial_type, event_types['FIXATION_ONSET'],
+		// 				'NA', 'NA', 'NA')
+					
+		// 			points_fixation_stim.setAutoDraw(true)
+		// }
+		
+			// hold the fixation for jitter time
+		if (t <= 0.1) {
+			return Scheduler.Event.FLIP_REPEAT;
+		} else {
+			resp.stop()
+			resp.status = PsychoJS.Status.NOT_STARTED
+			//sendData()
+			// Clear Fixation
+			// points_fixation_stim.setAutoDraw(false)
+			// points_fixation_stim.status = PsychoJS.Status.NOT_STARTED
+			return Scheduler.Event.NEXT;
+		}
+	};
+}
+
 var readyComponents;
 var thanksComponents;
 function thanksRoutineBegin(trials) {
@@ -1754,11 +2350,22 @@ function thanksRoutineBegin(trials) {
 		frameN = -1;
 		routineTimer.reset()
 		routineTimer.add(10.000000);
+		let temp_total = 0
 
 		// Show Final Points and money earned
-		// 100 points = 10 cents
+		// if (total_score.toString().length == 4) {
+		// 	temp_total = total_score.toString().slice(0, 1) + Math.ceil(parseFloat(total_score.toString().slice(1))).toString()
+		// 	temp_total = parseFloat(temp_total)
+		// 	console.log(temp_total)
+		// }
+		// else if (total_score.toString().length == 3) {
+		// 	temp_total = Math.ceil(parseFloat(total_score.toString().slice(1))).toString()
+		// 	temp_total = parseFloat(temp_total)
+		// }
+		// 1000 points =  $1
+		console.log(Math.ceil((total_score/1000)*10)/10)
 		thanksText.setText(`You finished the first phase of the cognitive experiment.
-									 So far, you have earned ${total_score} points = $${total_score/100}`)
+									 So far, you have earned ${total_score} points = $${Math.ceil((total_score/1000)*10)/10}`)
 		// update component parameters for each repeat
 		// keep track of which components have finished
 		thanksComponents = [];
