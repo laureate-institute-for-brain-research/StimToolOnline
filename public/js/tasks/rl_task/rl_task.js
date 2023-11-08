@@ -326,6 +326,25 @@ window.onload = function () {
 						if (obj.H2_img != 'None' && obj.H2_img != undefined) {
 							resources.push({ name: 'H2_img' , path: obj.H2_img  })
 						}
+						if (obj.L3_img != 'None' && obj.L3_img != undefined) {
+							resources.push({ name: 'L3_img' , path: obj.L3_img  })
+						}
+						if (obj.M3_img != 'None' && obj.M3_img != undefined) {
+							resources.push({ name: 'M3_img' , path: obj.M3_img  })
+						}
+						if (obj.H3_img != 'None' && obj.H3_img != undefined) {
+							resources.push({ name: 'H3_img' , path: obj.H3_img  })
+						}
+						if (obj.L4_img != 'None' && obj.L4_img != undefined) {
+							resources.push({ name: 'L4_img' , path: obj.L4_img  })
+						}
+						if (obj.M3_img != 'None' && obj.M3_img != undefined) {
+							resources.push({ name: 'M4_img' , path: obj.M4_img  })
+						}
+						if (obj.H4_img != 'None' && obj.H4_img != undefined) {
+							resources.push({ name: 'H4_img' , path: obj.H4_img  })
+						}
+
 
 						config_values = obj
 						console.log(resources)
@@ -503,6 +522,12 @@ var high1
 var low2
 var mid2
 var high2
+var low3
+var mid3
+var high3
+var low4
+var mid4
+var high4
 var low_score
 var mid_score
 var high_score
@@ -1393,8 +1418,8 @@ function trialRoutineBegin(trials) {
 		var high_score_txt = 0
 		to_undraw = []
 
-		let mean_dict = { "L1": L_mean, "M1": M_mean, "H1": H_mean, "L2": L_mean, "M2": M_mean, "H2": H_mean }
-		let variance_dict = { "L1": L_variance, "M1": M_variance, "H1": H_variance, "L2": L_variance, "M2": M_variance, "H2": H_variance }
+		let mean_dict = { "L1": L_mean, "M1": M_mean, "H1": H_mean, "L2": L_mean, "M2": M_mean, "H2": H_mean, "L3": L_mean, "M3": M_mean, "H3": H_mean, "L4": L_mean, "M4": M_mean, "H4": H_mean}
+		let variance_dict = { "L1": L_variance, "M1": M_variance, "H1": H_variance, "L2": L_variance, "M2": M_variance, "H2": H_variance, "L3": L_variance, "M3": M_variance, "H3": H_variance, "L4": L_variance, "M4": M_variance, "H4": H_variance}
 
 		let options_array = options.split("_")
 		if (options_array.length == 3) {
@@ -1592,8 +1617,97 @@ function trialRoutineBegin(trials) {
 				to_undraw.push(high1)
 				//console.log("c")
 			}
-		}
-		else {
+		} else if (options.includes('3')) {
+			//console.log(options)
+			//console.log("OPTIONS INCLUDES 1")
+			if (options.includes("L")) {
+				low3 = new visual.ImageStim({
+					win: psychoJS.window,
+					name: 'stimPath', units: 'height',
+					image: 'L3_img', mask: undefined,
+					ori: 0, pos: low_pos, opacity: 1,
+					size: [0.3,0.3],
+					flipHoriz: false, flipVert: false,
+					texRes: 128, interpolate: true, depth: 0
+				});
+				low3.setAutoDraw(true)
+				to_undraw.push(low3)
+				//console.log("a")
+			}
+			if (options.includes("M")) {
+				mid3 = new visual.ImageStim({
+					win: psychoJS.window,
+					name: 'stimPath', units: 'height',
+					image: 'M3_img', mask: undefined,
+					ori: 0, pos: mid_pos, opacity: 1,
+					size: [0.3,0.3],
+					flipHoriz: false, flipVert: false,
+					texRes: 128, interpolate: true, depth: 0
+				});
+				mid3.setAutoDraw(true)
+				to_undraw.push(mid3)
+				//console.log("b")
+			}
+			if (options.includes("H")) {
+				high3 = new visual.ImageStim({
+					win: psychoJS.window,
+					name: 'stimPath', units: 'height',
+					image: 'H3_img', mask: undefined,
+					ori: 0, pos: hi_pos, opacity: 1,
+					size: [0.3,0.3],
+					flipHoriz: false, flipVert: false,
+					texRes: 128, interpolate: true, depth: 0
+				});
+				high3.setAutoDraw(true)
+				to_undraw.push(high3)
+				//console.log("c")
+			}
+		} else if (options.includes('4')) {
+			//console.log(options)
+			//console.log("OPTIONS INCLUDES 1")
+			if (options.includes("L")) {
+				low4 = new visual.ImageStim({
+					win: psychoJS.window,
+					name: 'stimPath', units: 'height',
+					image: 'L4_img', mask: undefined,
+					ori: 0, pos: low_pos, opacity: 1,
+					size: [0.3,0.3],
+					flipHoriz: false, flipVert: false,
+					texRes: 128, interpolate: true, depth: 0
+				});
+				low4.setAutoDraw(true)
+				to_undraw.push(low4)
+				//console.log("a")
+			}
+			if (options.includes("M")) {
+				mid4 = new visual.ImageStim({
+					win: psychoJS.window,
+					name: 'stimPath', units: 'height',
+					image: 'M4_img', mask: undefined,
+					ori: 0, pos: mid_pos, opacity: 1,
+					size: [0.3,0.3],
+					flipHoriz: false, flipVert: false,
+					texRes: 128, interpolate: true, depth: 0
+				});
+				mid4.setAutoDraw(true)
+				to_undraw.push(mid4)
+				//console.log("b")
+			}
+			if (options.includes("H")) {
+				high4 = new visual.ImageStim({
+					win: psychoJS.window,
+					name: 'stimPath', units: 'height',
+					image: 'H4_img', mask: undefined,
+					ori: 0, pos: hi_pos, opacity: 1,
+					size: [0.3,0.3],
+					flipHoriz: false, flipVert: false,
+					texRes: 128, interpolate: true, depth: 0
+				});
+				high4.setAutoDraw(true)
+				to_undraw.push(high4)
+				//console.log("c")
+			}
+		} else {
 			//console.log(options)
 			if (options.includes("L")) {
 				low2 = new visual.ImageStim({
