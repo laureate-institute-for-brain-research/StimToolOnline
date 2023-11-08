@@ -336,53 +336,35 @@ window.onload = function () {
 				
 			})
 		})
-		// .then((values) => {			
-		// 	// Add practice Images
-		// 	return new Promise((resolve, reject) => {
-		// 		$.ajax({
-		// 			type: 'GET',
-		// 			url: expInfo.practice_schedule,
-		// 			dataType: 'text',
-		// 			async: false,
-		// 			success: (data) => {
-		// 				var out = [];
-		// 				var allRows = data.split('\n'); // split rows at new line
+		.then((values) => {			
+			// Add practice Images
+			return new Promise((resolve, reject) => {
+				$.ajax({
+					type: 'GET',
+					url: expInfo.practice_schedule,
+					dataType: 'text',
+					async: false,
+					success: (data) => {
+						var out = [];
+						var allRows = data.split('\n'); // split rows at new line
 						
-		// 				var headerRows = allRows[0].split(',');
+						var headerRows = allRows[0].split(',');
 						
-		// 				for (var i=1; i<allRows.length; i++) {
-		// 					var obj = {};
-		// 					var currentLine = allRows[i].split(',');
-		// 					for (var j = 0; j < headerRows.length; j++){
-		// 						obj[headerRows[j]] = currentLine[j];	
-		// 					}
-		// 					// If there's media add to resources
-		// 					if (obj.face_stim_path != 'None' && obj.face_stim_path != undefined) {
-		// 						resources.push({ name: obj.face_stim_path , path: obj.face_stim_path  })
-		// 					}
-		// 					if (obj.none_stim_path != 'None' && obj.none_stim_path != undefined) {
-		// 						resources.push({ name: obj.none_stim_path , path: obj.none_stim_path  })
-		// 					}
-		// 					if (obj.rightpos_stim_path != 'None' && obj.rightpos_stim_path != undefined) {
-		// 						resources.push({ name: obj.rightpos_stim_path , path: obj.rightpos_stim_path  })
-		// 					}
-		// 					if (obj.leftpos_stim_path != 'None' && obj.leftpos_stim_path != undefined) {
-		// 						resources.push({ name: obj.leftpos_stim_path , path: obj.leftpos_stim_path  })
-		// 					}
-		// 					if (obj.rightneg_stim_path != 'None' && obj.rightneg_stim_path != undefined) {
-		// 						resources.push({ name: obj.rightneg_stim_path , path: obj.rightneg_stim_path  })
-		// 					}
-		// 					if (obj.leftneg_stim_path != 'None' && obj.leftneg_stim_path != undefined) {
-		// 						resources.push({ name: obj.leftneg_stim_path , path: obj.leftneg_stim_path  })
-		// 					}
-		// 				}
+						for (var i=1; i<allRows.length; i++) {
+							var obj = {};
+							var currentLine = allRows[i].split(',');
+							for (var j = 0; j < headerRows.length; j++){
+								obj[headerRows[j]] = currentLine[j];	
+							}
+							// If there's media add to resources
+						}
 
-		// 				resolve(data)
-		// 			}
-		// 		})
+						resolve(data)
+					}
+				})
 				
-		// 	})
-		// })
+			})
+		})
 	
 		
 		.then((values) => {
@@ -455,61 +437,15 @@ if (!getQueryVariable('skip_instructions')) {
 // PRACTICE BLOCK
 if (!getQueryVariable('skip_practice')) {
 	// Single Slide
-	// flowScheduler.add(readyRoutineBegin('PRACTICE'));
-	// flowScheduler.add(readyRoutineEachFrame());
-	// flowScheduler.add(readyRoutineEnd());
+	flowScheduler.add(readyRoutineBegin('PRACTICE'));
+	flowScheduler.add(readyRoutineEachFrame());
+	flowScheduler.add(readyRoutineEnd());
 
-	// const practiceTrialsLoopScheduler = new Scheduler(psychoJS);
-	// flowScheduler.add(practiceTrialsLoopBegin, practiceTrialsLoopScheduler);
-	// flowScheduler.add(practiceTrialsLoopScheduler);
-	// flowScheduler.add(trialsLoopEnd);
+	const practiceTrialsLoopScheduler = new Scheduler(psychoJS);
+	flowScheduler.add(practiceTrialsLoopBegin, practiceTrialsLoopScheduler);
+	flowScheduler.add(practiceTrialsLoopScheduler);
+	flowScheduler.add(trialsLoopEndPractice);
 }
-
-// Learning BLOCK
-// Ready Routine
-flowScheduler.add(readyRoutineBegin('LEARN'));
-flowScheduler.add(readyRoutineEachFrame());
-flowScheduler.add(readyRoutineEnd());
-
-const trialsLoopScheduler_learning = new Scheduler(psychoJS);
-flowScheduler.add(trialsLoopBegin, trialsLoopScheduler_learning);
-flowScheduler.add(trialsLoopScheduler_learning);
-flowScheduler.add(trialsLoopEnd);
-
-flowScheduler.add(thanksRoutineBegin());
-flowScheduler.add(thanksRoutineEachFrame());
-flowScheduler.add(thanksRoutineEnd());
-
-// Testing BLOCK
-// Ready Routine
-flowScheduler.add(readyRoutineBegin('TEST'));
-flowScheduler.add(readyRoutineEachFrame());
-flowScheduler.add(readyRoutineEnd());
-
-const trialsLoopScheduler_testing = new Scheduler(psychoJS);
-flowScheduler.add(trialsLoopBeginTesting, trialsLoopScheduler_testing);
-flowScheduler.add(trialsLoopScheduler_testing);
-flowScheduler.add(trialsLoopEnd);
-
-flowScheduler.add(thanksRoutineBegin());
-flowScheduler.add(thanksRoutineEachFrame());
-flowScheduler.add(thanksRoutineEnd());
-
-// Explicit BLOCK
-// Ready Routine
-flowScheduler.add(readyRoutineBegin('EXPL'));
-flowScheduler.add(readyRoutineEachFrame());
-flowScheduler.add(readyRoutineEnd());
-// 
-const trialsLoopScheduler_explicit = new Scheduler(psychoJS);
-flowScheduler.add(trialsLoopBeginExplicit, trialsLoopScheduler_explicit);
-flowScheduler.add(trialsLoopScheduler_explicit);
-flowScheduler.add(trialsLoopEnd);
-
-flowScheduler.add(thanksRoutineBegin());
-flowScheduler.add(thanksRoutineEachFrame());
-flowScheduler.add(thanksRoutineEnd());
-flowScheduler.add(quitPsychoJS, '', true);
 
 // quit if user presses Cancel in dialog box:
 dialogCancelScheduler.add(quitPsychoJS, '', false);
@@ -1076,6 +1012,7 @@ var trials;
 var currentLoop;
 var trial_type;
 var current_block_size;
+var correct_count_practice = 0;
 function practiceTrialsLoopBegin(thisScheduler) {
 
 	trials = new TrialHandler({
@@ -1094,8 +1031,6 @@ function practiceTrialsLoopBegin(thisScheduler) {
 	currentLoop = trials;  // we're now the current loop
 	total_score = 0
 	completed_blocks = 1
-	currentScoreNumber.setText(`0`)
-	currentScoreNumber.setColor(new util.Color('#66ff99'))
 	
 	endClock.reset()
 	resp.stop()
@@ -1110,10 +1045,11 @@ function practiceTrialsLoopBegin(thisScheduler) {
 		thisScheduler.add(initialFixation(snapshot));
 		thisScheduler.add(trialRoutineBegin(snapshot));
 		thisScheduler.add(trialRoutineRespond(snapshot));
-		thisScheduler.add(trialRoutineEnd(snapshot));
-		thisScheduler.add(endLoopIteration(thisScheduler, snapshot));
+		thisScheduler.add(trialRoutineEndPractice(snapshot));
+		thisScheduler.add(endLoopIterationPractice(thisScheduler, snapshot));
 	}
 	trial_type = 'PRACTICE'
+	correct_count_practice = 0
 	mark_event(trials_data, globalClock, 'NA', trial_type, event_types['BLOCK_ONSET'],
 				'NA', 'NA' , 'NA')
 	return Scheduler.Event.NEXT;
@@ -1333,6 +1269,72 @@ function trialsLoopEnd() {
 	psychoJS.experiment.removeLoop(trials);
 
 	psychoJS.experiment.addData('globalClock', globalClock.getTime());
+
+	return Scheduler.Event.NEXT;
+}
+// SHow the points in the trial 
+function trialsLoopEndPractice() {
+	// currentTrialNumber.setAutoDraw(false)
+	slideStim.setAutoDraw(false)
+
+	psychoJS.experiment.removeLoop(trials);
+
+	psychoJS.experiment.addData('globalClock', globalClock.getTime());
+	console.log(correct_count_practice)
+	console.log(flowScheduler)
+	if (correct_count_practice >= 7) {
+		console.log('progress to main task')
+		// Learning BLOCK
+		// Ready Routine
+		flowScheduler.add(readyRoutineBegin('LEARN'));
+		flowScheduler.add(readyRoutineEachFrame());
+		flowScheduler.add(readyRoutineEnd());
+		const trialsLoopScheduler_learning = new Scheduler(psychoJS);
+		flowScheduler.add(trialsLoopBegin, trialsLoopScheduler_learning);
+		flowScheduler.add(trialsLoopScheduler_learning);
+		flowScheduler.add(trialsLoopEnd);
+		flowScheduler.add(thanksRoutineBegin());
+		flowScheduler.add(thanksRoutineEachFrame());
+		flowScheduler.add(thanksRoutineEnd());
+			// Testing BLOCK
+			// Ready Routine
+		flowScheduler.add(readyRoutineBegin('TEST'));
+		flowScheduler.add(readyRoutineEachFrame());
+		flowScheduler.add(readyRoutineEnd());
+		const trialsLoopScheduler_testing = new Scheduler(psychoJS);
+		flowScheduler.add(trialsLoopBeginTesting, trialsLoopScheduler_testing);
+		flowScheduler.add(trialsLoopScheduler_testing);
+		flowScheduler.add(trialsLoopEnd);
+		flowScheduler.add(thanksRoutineBegin());
+		flowScheduler.add(thanksRoutineEachFrame());
+		flowScheduler.add(thanksRoutineEnd());
+			// Explicit BLOCK
+			// Ready Routine
+		flowScheduler.add(readyRoutineBegin('EXPL'));
+		flowScheduler.add(readyRoutineEachFrame());
+		flowScheduler.add(readyRoutineEnd());
+			// 
+		const trialsLoopScheduler_explicit = new Scheduler(psychoJS);
+		flowScheduler.add(trialsLoopBeginExplicit, trialsLoopScheduler_explicit);
+		flowScheduler.add(trialsLoopScheduler_explicit);
+		flowScheduler.add(trialsLoopEnd);
+		flowScheduler.add(thanksRoutineBegin());
+		flowScheduler.add(thanksRoutineEachFrame());
+		flowScheduler.add(thanksRoutineEnd());
+		flowScheduler.add(quitPsychoJS, '', true);
+		// return Scheduler.Event.NEXT;
+	} else {
+		console.log('restart practice')
+		// Single Slide
+		flowScheduler.add(readyRoutineBegin('PRACTICE'));
+		flowScheduler.add(readyRoutineEachFrame());
+		flowScheduler.add(readyRoutineEnd());
+		const practiceTrialsLoopScheduler = new Scheduler(psychoJS);
+		flowScheduler.add(practiceTrialsLoopBegin, practiceTrialsLoopScheduler);
+		flowScheduler.add(practiceTrialsLoopScheduler);
+		flowScheduler.add(trialsLoopEnd);
+		// return Scheduler.Event.NEXT;
+	}
 
 	return Scheduler.Event.NEXT;
 }
@@ -1694,6 +1696,8 @@ function trialRoutineRespond(trials) {
 
 				if (parseFloat(left_score_txt) > parseFloat(center_score_txt) && parseFloat(left_score_txt) > parseFloat(right_score_txt)) {
 					total_score += parseFloat(left_score_txt)
+					correct_count_practice += 1
+					console.log(correct_count_practice)
 				}
 
 				//continueRoutine = false
@@ -1720,6 +1724,8 @@ function trialRoutineRespond(trials) {
 
 				if (parseFloat(center_score_txt) > parseFloat(left_score_txt) && parseFloat(center_score_txt) > parseFloat(right_score_txt)) {
 					total_score += parseFloat(center_score_txt)
+					correct_count_practice += 1
+					console.log(correct_count_practice)
 				}
 
 				//continueRoutine = false
@@ -1746,6 +1752,8 @@ function trialRoutineRespond(trials) {
 
 				if (parseFloat(right_score_txt) > parseFloat(center_score_txt) && parseFloat(right_score_txt) > parseFloat(left_score_txt)) {
 					total_score += parseFloat(right_score_txt)
+					correct_count_practice += 1
+					console.log(correct_count_practice)
 				}
 
 				//continueRoutine = false
@@ -2642,6 +2650,39 @@ function trialRoutineEnd(trials) {
 	};
 }
 
+/**
+ * Trial Routine End
+ * @param {*} trials 
+ * @returns 
+ */
+function trialRoutineEndPractice(trials) { 
+	return function () {
+		//------Ending Routine 'trial'-------
+		t = endClock.getTime()
+
+		// if (points_fixation_stim.status == PsychoJS.Status.NOT_STARTED) {
+		// 			points_fixation_stim.setText('+')
+		// 			mark_event(trials_data, globalClock, trials.thisIndex, trial_type, event_types['FIXATION_ONSET'],
+		// 				'NA', 'NA', 'NA')
+					
+		// 			points_fixation_stim.setAutoDraw(true)
+		// }
+		
+			// hold the fixation for jitter time
+		if (t <= 0.1) {
+			return Scheduler.Event.FLIP_REPEAT;
+		} else {
+			resp.stop()
+			resp.status = PsychoJS.Status.NOT_STARTED
+			//sendData()
+			// Clear Fixation
+			// points_fixation_stim.setAutoDraw(false)
+			// points_fixation_stim.status = PsychoJS.Status.NOT_STARTED
+			return Scheduler.Event.NEXT;
+		}
+	};
+}
+
 function trialRoutineEndTesting(trials) { 
 	return function () {
 		//------Ending Routine 'trial'-------
@@ -2813,6 +2854,47 @@ function thanksRoutineEnd(trials) {
 }
 
 function endLoopIteration(thisScheduler, loop = undefined) {
+	// ------Prepare for next entry------
+	return function () {
+		if (typeof loop !== 'undefined') {
+			// ------Check if user ended loop early------
+			if (loop.finished) {
+				// Check for and save orphaned data
+				if (psychoJS.experiment.isEntryEmpty())
+				{
+					psychoJS.experiment.nextEntry(loop);
+				}
+				thisScheduler.stop();
+				
+			} else {
+				const thisTrial = loop.getCurrentTrial();
+				if (typeof thisTrial === 'undefined' || !('isTrials' in thisTrial) || thisTrial.isTrials)
+				{
+					psychoJS.experiment.nextEntry(loop);
+				}
+			}
+		}
+
+		main_loop_count += 1
+		console.log("should we send data???\n")
+		console.log(`${main_loop_count} / ${last_trial_num}`)
+		if (main_loop_count % 10 == 0) {
+			console.log("sending data")
+			sendData()
+		}
+		else if (main_loop_count == last_trial_num)
+		{
+			console.log("sending data last trial num")
+			sendData()
+		}
+
+		//sendData()
+
+		return Scheduler.Event.NEXT;
+	};
+}
+
+function endLoopIterationPractice(thisScheduler, loop = undefined) {
 	// ------Prepare for next entry------
 	return function () {
 		if (typeof loop !== 'undefined') {
