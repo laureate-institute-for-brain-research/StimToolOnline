@@ -141,7 +141,10 @@ window.onload = function () {
 			resources.push({ name: 'run_schedule.xls', path: values.schedule })
 			resources.push({ name: 'run_schedule_test.xls', path: values.schedule_test })
 			resources.push({ name: 'run_schedule_explicit.xls', path: values.schedule_exp })
-			resources.push({ name: 'instruct_schedule.csv', path: values.instruct_schedule })
+			resources.push({ name: 'instruct_schedule_p.csv', path: values.instruct_schedule_p })
+			resources.push({ name: 'instruct_schedule_1.csv', path: values.instruct_schedule_1 })
+			resources.push({ name: 'instruct_schedule_2.csv', path: values.instruct_schedule_2 })
+			resources.push({ name: 'instruct_schedule_3.csv', path: values.instruct_schedule_3 })
 			resources.push({ name: 'practice_schedule.csv', path: values.practice_schedule })
 			resources.push({ name: 'config.csv', path: values.config})
 
@@ -149,7 +152,10 @@ window.onload = function () {
 			if (values.schedule) expInfo.task_schedule = values.schedule
 			if (values.schedule_test) expInfo.task_schedule_test = values.schedule_test
 			if (values.schedule_exp) expInfo.task_schedule_exp = values.schedule_exp
-			if (values.instruct_schedule) expInfo.instruct_schedule = values.instruct_schedule
+			if (values.instruct_schedule_p) expInfo.instruct_schedule_p = values.instruct_schedule_p
+			if (values.instruct_schedule_1) expInfo.instruct_schedule_1 = values.instruct_schedule_1
+			if (values.instruct_schedule_2) expInfo.instruct_schedule_2 = values.instruct_schedule_2
+			if (values.instruct_schedule_3) expInfo.instruct_schedule_3 = values.instruct_schedule_3
 			if (values.practice_schedule) expInfo.practice_schedule = values.practice_schedule
 			if (values.config) expInfo.task_config = values.config
 			
@@ -157,7 +163,7 @@ window.onload = function () {
 			return new Promise((resolve, reject) => {
 				$.ajax({
 					type: 'GET',
-					url: values.instruct_schedule,
+					url: values.instruct_schedule_p,
 					dataType: 'text',
 					async: false,
 					success: (data) => {
@@ -177,6 +183,8 @@ window.onload = function () {
 								obj[headerRows[j]] = currentLine[j]
 							}
 							out.push(obj);
+							console.log("uhhh a")
+							console.log(obj)
 
 							if (obj.instruct_slide && obj.instruct_slide != '\n'){
 								resources.push({ name: obj.instruct_slide, path: obj.instruct_slide })
@@ -187,7 +195,134 @@ window.onload = function () {
 							}
 						}
 						// console.log(out)
-						// console.log(resources)
+						console.log(resources)
+						resolve(data)
+					}
+				})
+				
+			})
+		})
+		.then((values) => {
+			return new Promise((resolve, reject) => {
+				$.ajax({
+					type: 'GET',
+					url: expInfo.instruct_schedule_1,
+					dataType: 'text',
+					async: false,
+					success: (data) => {
+						var out = [];
+						var allRows = data.split('\n'); // split rows at new line
+						
+						var headerRows = allRows[0].split(',');
+
+						for (var i=1; i<allRows.length; i++) {
+							var obj = {};
+							var currentLine = allRows[i].split(',');
+							for (var j = 0; j < headerRows.length; j++){
+
+								// if (headerRows[j] == " ") {
+								// 	console.log('empty string')
+								// }
+								obj[headerRows[j]] = currentLine[j]
+							}
+							console.log(obj)
+							console.log("uhhh b")
+							out.push(obj);
+
+							if (obj.instruct_slide && obj.instruct_slide != '\n'){
+								resources.push({ name: obj.instruct_slide, path: obj.instruct_slide })
+							}
+
+							if (obj.audio_path && obj.audio_path != '\n'){
+								resources.push({ name: obj.audio_path, path: obj.audio_path })
+							}
+						}
+						// console.log(out)
+						console.log(resources)
+						resolve(data)
+					}
+				})
+				
+			})
+		})
+		.then((values) => {
+			return new Promise((resolve, reject) => {
+				$.ajax({
+					type: 'GET',
+					url: expInfo.instruct_schedule_2,
+					dataType: 'text',
+					async: false,
+					success: (data) => {
+						var out = [];
+						var allRows = data.split('\n'); // split rows at new line
+						
+						var headerRows = allRows[0].split(',');
+
+						for (var i=1; i<allRows.length; i++) {
+							var obj = {};
+							var currentLine = allRows[i].split(',');
+							for (var j = 0; j < headerRows.length; j++){
+
+								// if (headerRows[j] == " ") {
+								// 	console.log('empty string')
+								// }
+								obj[headerRows[j]] = currentLine[j]
+							}
+							out.push(obj);
+							console.log(obj)
+
+							if (obj.instruct_slide && obj.instruct_slide != '\n'){
+								resources.push({ name: obj.instruct_slide, path: obj.instruct_slide })
+							}
+
+							if (obj.audio_path && obj.audio_path != '\n'){
+								resources.push({ name: obj.audio_path, path: obj.audio_path })
+							}
+						}
+						// console.log(out)
+						console.log(resources)
+						resolve(data)
+					}
+				})
+				
+			})
+		})
+		.then((values) => {
+			return new Promise((resolve, reject) => {
+				$.ajax({
+					type: 'GET',
+					url: expInfo.instruct_schedule_3,
+					dataType: 'text',
+					async: false,
+					success: (data) => {
+						var out = [];
+						var allRows = data.split('\n'); // split rows at new line
+						
+						var headerRows = allRows[0].split(',');
+
+						for (var i=1; i<allRows.length; i++) {
+							var obj = {};
+							var currentLine = allRows[i].split(',');
+							for (var j = 0; j < headerRows.length; j++){
+
+								// if (headerRows[j] == " ") {
+								// 	console.log('empty string')
+								// }
+								obj[headerRows[j]] = currentLine[j]
+							}
+							out.push(obj);
+							console.log(obj)
+
+							if (obj.instruct_slide && obj.instruct_slide != '\n'){
+								resources.push({ name: obj.instruct_slide, path: obj.instruct_slide })
+							}
+
+							if (obj.audio_path && obj.audio_path != '\n'){
+								resources.push({ name: obj.audio_path, path: obj.audio_path })
+							}
+						}
+						// console.log(out)
+						console.log(resources)
 						resolve(data)
 					}
 				})
@@ -474,9 +609,11 @@ dialogCancelScheduler.add(quitPsychoJS, '', false);
 var resources = [
 	{ name: 'practice_schedule.csv', path: '/js/tasks/rl_task/practice_schedule.csv' },
 	{ name: 'PRACTICE_ready', path: '/js/tasks/rl_task/media/instructions/Slide10.JPG'},
-	{ name: 'MAIN_ready', path: '/js/tasks/rl_task/media/instructions/Slide11.JPG' },
-	{ name: 'PRACTICE_ready_audio.mp3', path: '/js/tasks/rl_task/media/instructions_audio/Slide10.mp3' },
-	{ name: 'MAIN_ready_audio.mp3', path: '/js/tasks/rl_task/media/instructions_audio/Slide11.mp3' },
+	{ name: 'MAIN_ready1', path: '/js/tasks/rl_task/media/instructions/Slide11.JPG' },
+	{ name: 'MAIN_ready2', path: '/js/tasks/rl_task/media/instructions/Slide12.JPG' },
+	{ name: 'MAIN_ready3', path: '/js/tasks/rl_task/media/instructions/Slide13.JPG' },
+	// { name: 'PRACTICE_ready_audio.mp3', path: '/js/tasks/rl_task/media/instructions_audio/Slide10.mp3' },
+	// { name: 'MAIN_ready_audio.mp3', path: '/js/tasks/rl_task/media/instructions_audio/Slide11.mp3' },
 	{ name: 'box', path: '/js/tasks/rl_task/media/box.gif' },
 	{ name: 'outline', path: '/js/tasks/rl_task/media/outline.gif' }
 ]
@@ -653,7 +790,103 @@ function instruct_pagesLoopBegin(thisScheduler) {
 		psychoJS: psychoJS,
 		nReps: 1, method: TrialHandler.Method.SEQUENTIAL,
 		extraInfo: expInfo, originPath: undefined,
-		trialList: 'instruct_schedule.csv',
+		trialList: 'instruct_schedule_p.csv',
+		seed: undefined, name: 'slides'
+	});
+	
+	psychoJS.experiment.addLoop(slides); // add the loop to the experiment
+	currentLoop = slides;  // we're now the current loop
+
+	var currentInstructIndex = 0
+	var maxInstructions = slides.nTotal
+
+	const snapshot = slides.getSnapshot();
+	thisScheduler.add(importConditions(snapshot));
+	thisScheduler.add(instructRoutineBegin(snapshot));
+	thisScheduler.add(instructSlideRoutineEachFrame(snapshot, slides));
+	thisScheduler.add(instructRoutineEnd(snapshot));
+	thisScheduler.add(endLoopIteration(thisScheduler, snapshot));
+
+	// console.log(thisScheduler)
+	block_type = 'INSTRUCTIONS'
+	mark_event(trials_data, globalClock, 0, block_type, event_types['BLOCK_ONSET'],
+				'NA', 'NA', 'NA')
+
+	return Scheduler.Event.NEXT;
+}
+function instruct_pagesLoopBegin1(thisScheduler) {
+	// set up handler to look up the conditions
+
+	
+	slides = new TrialHandler({
+		psychoJS: psychoJS,
+		nReps: 1, method: TrialHandler.Method.SEQUENTIAL,
+		extraInfo: expInfo, originPath: undefined,
+		trialList: 'instruct_schedule_1.csv',
+		seed: undefined, name: 'slides'
+	});
+	
+	psychoJS.experiment.addLoop(slides); // add the loop to the experiment
+	currentLoop = slides;  // we're now the current loop
+
+	var currentInstructIndex = 0
+	var maxInstructions = slides.nTotal
+
+	const snapshot = slides.getSnapshot();
+	thisScheduler.add(importConditions(snapshot));
+	thisScheduler.add(instructRoutineBegin(snapshot));
+	thisScheduler.add(instructSlideRoutineEachFrame(snapshot, slides));
+	thisScheduler.add(instructRoutineEnd(snapshot));
+	thisScheduler.add(endLoopIteration(thisScheduler, snapshot));
+
+	// console.log(thisScheduler)
+	block_type = 'INSTRUCTIONS'
+	mark_event(trials_data, globalClock, 0, block_type, event_types['BLOCK_ONSET'],
+				'NA', 'NA', 'NA')
+
+	return Scheduler.Event.NEXT;
+}
+function instruct_pagesLoopBegin2(thisScheduler) {
+	// set up handler to look up the conditions
+
+	
+	slides = new TrialHandler({
+		psychoJS: psychoJS,
+		nReps: 1, method: TrialHandler.Method.SEQUENTIAL,
+		extraInfo: expInfo, originPath: undefined,
+		trialList: 'instruct_schedule_2.csv',
+		seed: undefined, name: 'slides'
+	});
+	
+	psychoJS.experiment.addLoop(slides); // add the loop to the experiment
+	currentLoop = slides;  // we're now the current loop
+
+	var currentInstructIndex = 0
+	var maxInstructions = slides.nTotal
+
+	const snapshot = slides.getSnapshot();
+	thisScheduler.add(importConditions(snapshot));
+	thisScheduler.add(instructRoutineBegin(snapshot));
+	thisScheduler.add(instructSlideRoutineEachFrame(snapshot, slides));
+	thisScheduler.add(instructRoutineEnd(snapshot));
+	thisScheduler.add(endLoopIteration(thisScheduler, snapshot));
+
+	// console.log(thisScheduler)
+	block_type = 'INSTRUCTIONS'
+	mark_event(trials_data, globalClock, 0, block_type, event_types['BLOCK_ONSET'],
+				'NA', 'NA', 'NA')
+
+	return Scheduler.Event.NEXT;
+}
+function instruct_pagesLoopBegin3(thisScheduler) {
+	// set up handler to look up the conditions
+
+	
+	slides = new TrialHandler({
+		psychoJS: psychoJS,
+		nReps: 1, method: TrialHandler.Method.SEQUENTIAL,
+		extraInfo: expInfo, originPath: undefined,
+		trialList: 'instruct_schedule_3.csv',
 		seed: undefined, name: 'slides'
 	});
 	
@@ -913,44 +1146,44 @@ function readyRoutineBegin(block_type) {
 					flipHoriz : false, flipVert : false,
 					texRes : 128, interpolate : true, depth : 0
 				});
-				track = new Sound({
-					win: psychoJS.window,
-					value: 'PRACTICE_ready_audio.mp3'
-				});
-				track.setVolume(1.0);
+				// track = new Sound({
+				// 	win: psychoJS.window,
+				// 	value: 'PRACTICE_ready_audio.mp3'
+				// });
+				// track.setVolume(1.0);
 				break
 			case 'LEARN':
 				readyStim = new visual.ImageStim({
 					win : psychoJS.window,
 					name : 'ready_stim', units : 'height', 
-					image : 'MAIN_ready', mask : undefined,
+					image : 'MAIN_ready1', mask : undefined,
 					ori : 0, pos : [0, 0],
 					color : new util.Color([1, 1, 1]), opacity : 1,
 					flipHoriz : false, flipVert : false,
 					texRes : 128, interpolate : true, depth : 0
 				});
-				track = new Sound({
-					win: psychoJS.window,
-					value: 'MAIN_ready_audio.mp3'
-				});
-				track.setVolume(1.0);
+				// track = new Sound({
+				// 	win: psychoJS.window,
+				// 	value: 'MAIN_ready_audio.mp3'
+				// });
+				// track.setVolume(1.0);
 				break
-			case 'MAIN2':
+			case 'TEST':
 				readyStim = new visual.ImageStim({
 					win : psychoJS.window,
 					name : 'break_stim', units : 'height', 
-					image : 'BREAK.jpeg', mask : undefined,
+					image : 'MAIN_ready2', mask : undefined,
 					ori : 0, pos : [0, 0],
 					color : new util.Color([1, 1, 1]), opacity : 1,
 					flipHoriz : false, flipVert : false,
 					texRes : 128, interpolate : true, depth : 0
 				});
 				break
-			case 'MAIN3':
+			case 'EXPL':
 				readyStim = new visual.ImageStim({
 					win : psychoJS.window,
 					name : 'break_stim', units : 'height', 
-					image : 'BREAK.jpeg', mask : undefined,
+					image : 'MAIN_ready3', mask : undefined,
 					ori : 0, pos : [0, 0],
 					color : new util.Color([1, 1, 1]), opacity : 1,
 					flipHoriz : false, flipVert : false,
@@ -961,7 +1194,7 @@ function readyRoutineBegin(block_type) {
 				readyStim = new visual.ImageStim({
 					win: psychoJS.window,
 					name: 'ready_stim', units: 'height',
-					image: 'MAIN_ready', mask: undefined,
+					image: 'MAIN_ready1', mask: undefined,
 					ori: 0, pos: [0, 0],
 					color: new util.Color([1, 1, 1]), opacity: 1,
 					flipHoriz: false, flipVert: false,
@@ -1311,6 +1544,10 @@ function trialsLoopEndPractice() {
 		console.log('progress to main task')
 		// Learning BLOCK
 		// Ready Routine
+		const instruct_pagesLoopScheduler1 = new Scheduler(psychoJS);
+		flowScheduler.add(instruct_pagesLoopBegin1, instruct_pagesLoopScheduler1);
+		flowScheduler.add(instruct_pagesLoopScheduler1);
+		flowScheduler.add(instruct_pagesLoopEnd);
 		flowScheduler.add(readyRoutineBegin('LEARN'));
 		flowScheduler.add(readyRoutineEachFrame());
 		flowScheduler.add(readyRoutineEnd());
@@ -1322,7 +1559,11 @@ function trialsLoopEndPractice() {
 		flowScheduler.add(thanksRoutineEachFrame());
 		flowScheduler.add(thanksRoutineEnd());
 			// Testing BLOCK
-			// Ready Routine
+		// Ready Routine
+		const instruct_pagesLoopScheduler2 = new Scheduler(psychoJS);
+		flowScheduler.add(instruct_pagesLoopBegin2, instruct_pagesLoopScheduler2);
+		flowScheduler.add(instruct_pagesLoopScheduler2);
+		flowScheduler.add(instruct_pagesLoopEnd);
 		flowScheduler.add(readyRoutineBegin('TEST'));
 		flowScheduler.add(readyRoutineEachFrame());
 		flowScheduler.add(readyRoutineEnd());
@@ -1334,7 +1575,11 @@ function trialsLoopEndPractice() {
 		flowScheduler.add(thanksRoutineEachFrame());
 		flowScheduler.add(thanksRoutineEnd());
 			// Explicit BLOCK
-			// Ready Routine
+		// Ready Routine
+		const instruct_pagesLoopScheduler3 = new Scheduler(psychoJS);
+		flowScheduler.add(instruct_pagesLoopBegin3, instruct_pagesLoopScheduler3);
+		flowScheduler.add(instruct_pagesLoopScheduler3);
+		flowScheduler.add(instruct_pagesLoopEnd);
 		flowScheduler.add(readyRoutineBegin('EXPL'));
 		flowScheduler.add(readyRoutineEachFrame());
 		flowScheduler.add(readyRoutineEnd());
