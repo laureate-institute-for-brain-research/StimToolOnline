@@ -1602,7 +1602,7 @@ function trialsLoopEndPractice() {
 		const practiceTrialsLoopScheduler = new Scheduler(psychoJS);
 		flowScheduler.add(practiceTrialsLoopBegin, practiceTrialsLoopScheduler);
 		flowScheduler.add(practiceTrialsLoopScheduler);
-		flowScheduler.add(trialsLoopEnd);
+		flowScheduler.add(trialsLoopEndPractice);
 		// return Scheduler.Event.NEXT;
 	}
 
@@ -3187,7 +3187,6 @@ function thanksRoutineEachFrame(trials) {
 			}
 		
 		let theseKeys = resp.getKeys({ keyList: ['right'], waitRelease: false });
-		console.log(theseKeys)
 		if (theseKeys.length > 0) {
 			console.log('right pressed now')
 			continueRoutine = false
