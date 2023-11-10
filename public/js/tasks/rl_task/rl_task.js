@@ -1558,7 +1558,7 @@ function trialsLoopEndPractice() {
 		flowScheduler.add(thanksRoutineBegin());
 		flowScheduler.add(thanksRoutineEachFrame());
 		flowScheduler.add(thanksRoutineEnd());
-			// Testing BLOCK
+		// Testing BLOCK
 		// Ready Routine
 		const instruct_pagesLoopScheduler2 = new Scheduler(psychoJS);
 		flowScheduler.add(instruct_pagesLoopBegin2, instruct_pagesLoopScheduler2);
@@ -1574,7 +1574,7 @@ function trialsLoopEndPractice() {
 		flowScheduler.add(thanksRoutineBegin());
 		flowScheduler.add(thanksRoutineEachFrame());
 		flowScheduler.add(thanksRoutineEnd());
-			// Explicit BLOCK
+		// Explicit BLOCK
 		// Ready Routine
 		const instruct_pagesLoopScheduler3 = new Scheduler(psychoJS);
 		flowScheduler.add(instruct_pagesLoopBegin3, instruct_pagesLoopScheduler3);
@@ -1583,7 +1583,7 @@ function trialsLoopEndPractice() {
 		flowScheduler.add(readyRoutineBegin('EXPL'));
 		flowScheduler.add(readyRoutineEachFrame());
 		flowScheduler.add(readyRoutineEnd());
-			// 
+		// 
 		const trialsLoopScheduler_explicit = new Scheduler(psychoJS);
 		flowScheduler.add(trialsLoopBeginExplicit, trialsLoopScheduler_explicit);
 		flowScheduler.add(trialsLoopScheduler_explicit);
@@ -2837,7 +2837,7 @@ function trialRoutineRespondExplicit(trials) {
 				let current_val = exp_slider.markerPos
 				console.log(current_val)
 				if (current_val === undefined) {
-					current_val = 50
+					current_val = Math.random() * 100
 				}
 				exp_slider.markerPos = current_val - 0.5
 				exp_slider.rating = current_val - 0.5
@@ -2848,7 +2848,7 @@ function trialRoutineRespondExplicit(trials) {
 			if (theseKeys[theseKeys.length - 1].name == 'right' && theseKeys[theseKeys.length - 1].duration === undefined) {
 				let current_val = exp_slider.markerPos
 				if (current_val === undefined) {
-					current_val = 50
+					current_val = Math.random() * 100
 				}
 				exp_slider.markerPos = current_val + 0.5
 				exp_slider.rating = current_val + 0.5
@@ -3100,7 +3100,8 @@ function trialRoutineEndExplicit(trials) {
 
 var readyComponents;
 var thanksComponents;
-function thanksRoutineBegin(trials) {
+var right_pressed = false;
+function thanksRoutineBegin(phase_flag) {
 	return function () {
 		//------Prepare to start Routine 'thanks'-------
 		// Clear Trial Components
@@ -3110,26 +3111,30 @@ function thanksRoutineBegin(trials) {
 		routineTimer.reset()
 		routineTimer.add(5.000000);
 		let temp_total = 0
+		right_pressed = false;
 
-		// Show Final Points and money earned
-		// if (total_score.toString().length == 4) {
-		// 	temp_total = total_score.toString().slice(0, 1) + Math.ceil(parseFloat(total_score.toString().slice(1))).toString()
-		// 	temp_total = parseFloat(temp_total)
-		// 	console.log(temp_total)
-		// }
-		// else if (total_score.toString().length == 3) {
-		// 	temp_total = Math.ceil(parseFloat(total_score.toString().slice(1))).toString()
-		// 	temp_total = parseFloat(temp_total)
-		// }
 		// 1000 points =  $1
 		console.log(Math.ceil((total_score/1000)*10)/10)
-		thanksText.setText(`You finished the first phase of the cognitive experiment.
-									 So far, you have earned ${total_score} points = $${Math.ceil((total_score/1000)*10)/10}`)
+		if (phase_flag == 1) {
+			thanksText.setText(`You finished the first phase of the cognitive experiment.
+									 So far, you have earned ${total_score} points = $${Math.ceil((total_score / 1000) * 10) / 10}
+									 \n\n\nPress the right button to continue`)
+		}
+		else if (phase_flag == 2) {
+			thanksText.setText(`You finished the second phase of the cognitive experiment.
+									 So far, you have earned ${total_score} points = $${Math.ceil((total_score / 1000) * 10) / 10}
+									 \n\n\nPress the right button to continue`)
+		}
+		else {
+			thanksText.setText(`You finished the third and final phase of the cognitive experiment.
+									 You have earned ${total_score} points = $${Math.ceil((total_score / 1000) * 10) / 10}
+									 \n\n\nPress the right button to continue`)
+		}
+
 		// update component parameters for each repeat
 		// keep track of which components have finished
 		thanksText.status = PsychoJS.Status.NOT_STARTED;
 		thanksComponents = []
-		// thanksComponents.push(thanksText);
 
 		for (const thisComponent of thanksComponents)
 			if ('status' in thisComponent)
@@ -3158,18 +3163,20 @@ function thanksRoutineEachFrame(trials) {
 			console.log("drawing thanks score screen")
 		}
 
-		// frameRemains = 0.0 + 2.0 - psychoJS.window.monitorFramePeriod * 0.75;  // most of one frame period left
-		// if (thanksText.status === PsychoJS.Status.STARTED && t >= frameRemains) {
-		// 	thanksText.setAutoDraw(false);
-		// }
+		if (resp.status === PsychoJS.Status.NOT_STARTED) {
+			// keep track of start time/frame for later
+			resp.tStart = t;  // (not accounting for frame time here)
+			resp.frameNStart = frameN;  // exact frame index
+
+			// keyboard checking is just starting
+			resp.clock.reset();  // t=0 on next screen flip
+			resp.start(); // start on screen flip
+			resp.clearEvents();
+		}
+
 		// check for quit (typically the Esc key)
 		if (psychoJS.experiment.experimentEnded || psychoJS.eventManager.getKeys({ keyList: ['escape'] }).length > 0) {
 			return quitPsychoJS('The [Escape] key was pressed. Goodbye!', false);
-		}
-
-		// check if the Routine should terminate
-		if (!continueRoutine) {  // a component has requested a forced-end of Routine
-			return Scheduler.Event.NEXT;
 		}
 
 		continueRoutine = false;  // reverts to True if at least one component still running
@@ -3179,17 +3186,28 @@ function thanksRoutineEachFrame(trials) {
 				break;
 			}
 		
+		let theseKeys = resp.getKeys({ keyList: ['right'], waitRelease: false });
+		console.log(theseKeys)
+		if (theseKeys.length > 0) {
+			console.log('right pressed now')
+			continueRoutine = false
+			right_pressed = true
+		}
+
+		if (right_pressed) {
+			console.log('right pressed earlier')
+			continueRoutine = false
+		} else {
+			continueRoutine = true
+		}
+		
 		// reverts to true if we are still waiting for http requests to finish
 		if (total_requests > 0) {
 			continueRoutine = true
 		}
 
-		if (routineTimer.getTime() > 0) {
-			continueRoutine = true
-		}
-
 		// refresh the screen if continuing
-		if (continueRoutine && routineTimer.getTime() > 0) {
+		if (continueRoutine) {
 			return Scheduler.Event.FLIP_REPEAT;
 		}
 		else {
