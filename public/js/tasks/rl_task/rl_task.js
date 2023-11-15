@@ -712,6 +712,7 @@ var form_submit
 var form_elements = [form_q1_txt, form_q2_txt, form_q3_txt, form_submit]
 
 var instr_repeat_notice
+var practice_repeat_notice
 
 // timers
 var t_end;
@@ -739,6 +740,17 @@ function experimentInit() {
 	// Initialize components for Routine "instruct"
 	instructClock = new util.Clock();
 	instructClock.reset()
+	
+	practice_repeat_notice = new visual.TextStim({
+		win: psychoJS.window,
+		name: 'sbmt',
+		text: 'You will need to restart the practice since you did not get enough correct answers.\n\nPlease press ENTER to continue.',
+		font: 'Arial',
+		units: 'height',
+		pos: [0, 0], height: 0.03, wrapWidth: undefined, ori: 0,
+		color: new util.Color('white'), opacity: 1,
+		depth: 0.0
+	});
 
 	instr_repeat_notice = new visual.TextStim({
 		win: psychoJS.window,
@@ -746,7 +758,7 @@ function experimentInit() {
 		text: 'That was incorrect. You will need to go through the instructions again.\n\nPlease press ENTER to continue.',
 		font: 'Arial',
 		units: 'height',
-		pos: [0, 0], height: 0.02, wrapWidth: undefined, ori: 0,
+		pos: [0, 0], height: 0.03, wrapWidth: undefined, ori: 0,
 		color: new util.Color('white'), opacity: 1,
 		depth: 0.0
 	});
@@ -1927,18 +1939,27 @@ function trialsLoopEnd() {
 
 	return Scheduler.Event.NEXT;
 }
+var first_end_practice_entry = true
 // SHow the points in the trial 
 function trialsLoopEndPractice() {
 	// currentTrialNumber.setAutoDraw(false)
-	slideStim.setAutoDraw(false)
+	if (first_end_practice_entry) {
+		slideStim.setAutoDraw(false)
 
-	psychoJS.experiment.removeLoop(trials);
+		psychoJS.experiment.removeLoop(trials);
 
-	psychoJS.experiment.addData('globalClock', globalClock.getTime());
-	console.log(correct_count_practice)
-	console.log(flowScheduler)
+		psychoJS.experiment.addData('globalClock', globalClock.getTime());
+		if (correct_count_practice < 7) {
+			practice_repeat_notice.setAutoDraw(true)
+		}
+		first_end_practice_entry = false
+		resp.start()
+		resp.clearEvents()
+	}
+	// console.log(correct_count_practice)
+	// console.log(flowScheduler)
 	if (correct_count_practice >= 7) {
-		console.log('progress to main task')
+		// console.log('progress to main task')
 		// Learning BLOCK
 		// Ready Routine
 		const instruct_pagesLoopScheduler1 = new Scheduler(psychoJS);
@@ -1991,7 +2012,12 @@ function trialsLoopEndPractice() {
 		flowScheduler.add(quitPsychoJS, '', true);
 		// return Scheduler.Event.NEXT;
 	} else {
-		console.log('restart practice')
+		let theseKeys = resp.getKeys({ keyList: ['return'], waitRelease: false});
+		if (theseKeys.length > 0) {
+			practice_repeat_notice.setAutoDraw(false)
+		} else {
+			return Scheduler.Event.FLIP_REPEAT;
+		}
 		// Single Slide
 		flowScheduler.add(readyRoutineBegin('PRACTICE'));
 		flowScheduler.add(readyRoutineEachFrame());
@@ -2003,6 +2029,7 @@ function trialsLoopEndPractice() {
 		// return Scheduler.Event.NEXT;
 	}
 
+	first_end_practice_entry = true
 	return Scheduler.Event.NEXT;
 }
 
