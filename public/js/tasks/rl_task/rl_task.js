@@ -585,21 +585,21 @@ if (!getQueryVariable('skip_instructions')) {
 	const instruct_pagesLoopScheduler = new Scheduler(psychoJS);
 	flowScheduler.add(instruct_pagesLoopBegin, instruct_pagesLoopScheduler);
 	flowScheduler.add(instruct_pagesLoopScheduler);
-	flowScheduler.add(instruct_pagesLoopEnd);
+	flowScheduler.add(instruct_pagesLoopEndFirst);
 }
 
 // PRACTICE BLOCK
-if (!getQueryVariable('skip_practice')) {
-	// Single Slide
-	flowScheduler.add(readyRoutineBegin('PRACTICE'));
-	flowScheduler.add(readyRoutineEachFrame());
-	flowScheduler.add(readyRoutineEnd());
+// if (!getQueryVariable('skip_practice')) {
+// 	// Single Slide
+// 	flowScheduler.add(readyRoutineBegin('PRACTICE'));
+// 	flowScheduler.add(readyRoutineEachFrame());
+// 	flowScheduler.add(readyRoutineEnd());
 
-	const practiceTrialsLoopScheduler = new Scheduler(psychoJS);
-	flowScheduler.add(practiceTrialsLoopBegin, practiceTrialsLoopScheduler);
-	flowScheduler.add(practiceTrialsLoopScheduler);
-	flowScheduler.add(trialsLoopEndPractice);
-}
+// 	const practiceTrialsLoopScheduler = new Scheduler(psychoJS);
+// 	flowScheduler.add(practiceTrialsLoopBegin, practiceTrialsLoopScheduler);
+// 	flowScheduler.add(practiceTrialsLoopScheduler);
+// 	flowScheduler.add(trialsLoopEndPractice);
+// }
 
 // quit if user presses Cancel in dialog box:
 dialogCancelScheduler.add(quitPsychoJS, '', false);
@@ -612,8 +612,11 @@ var resources = [
 	{ name: 'MAIN_ready1', path: '/js/tasks/rl_task/media/instructions/Slide11.JPG' },
 	{ name: 'MAIN_ready2', path: '/js/tasks/rl_task/media/instructions/Slide12.JPG' },
 	{ name: 'MAIN_ready3', path: '/js/tasks/rl_task/media/instructions/Slide13.JPG' },
-	// { name: 'PRACTICE_ready_audio.mp3', path: '/js/tasks/rl_task/media/instructions_audio/Slide10.mp3' },
-	// { name: 'MAIN_ready_audio.mp3', path: '/js/tasks/rl_task/media/instructions_audio/Slide11.mp3' },
+	{ name: 'instr_check_items.csv', path: '/js/tasks/rl_task/media/instr_check.csv' },
+	{ name: 'true_0', path: '/js/tasks/rl_task/media/true_opt_0.png' },
+	{ name: 'true_1', path: '/js/tasks/rl_task/media/true_opt_1.png' },
+	{ name: 'false_0', path: '/js/tasks/rl_task/media/false_opt_0.png' },
+	{ name: 'false_1', path: '/js/tasks/rl_task/media/false_opt_1.png' },
 	{ name: 'box', path: '/js/tasks/rl_task/media/box.gif' },
 	{ name: 'outline', path: '/js/tasks/rl_task/media/outline.gif' }
 ]
@@ -651,6 +654,7 @@ var adviceClock;
 var feedbackClock;
 var respondClock;
 var blockClock;
+var instrNoticeClock;
 
 // Stim from schedule
 var low1
@@ -689,6 +693,26 @@ var exp_slider_txt
 var exp_button
 var exp_button_txt
 
+var form_q1_txt
+var form_q1_opt1
+var form_q1_opt2
+var form_q1_opf1
+var form_q1_opf2
+var form_q2_txt
+var form_q2_opt1
+var form_q2_opt2
+var form_q2_opf1
+var form_q2_opf2
+var form_q3_txt
+var form_q3_opt1
+var form_q3_opt2
+var form_q3_opf1
+var form_q3_opf2
+var form_submit
+var form_elements = [form_q1_txt, form_q2_txt, form_q3_txt, form_submit]
+
+var instr_repeat_notice
+
 // timers
 var t_end;
 var readyClock;
@@ -715,6 +739,181 @@ function experimentInit() {
 	// Initialize components for Routine "instruct"
 	instructClock = new util.Clock();
 	instructClock.reset()
+
+	instr_repeat_notice = new visual.TextStim({
+		win: psychoJS.window,
+		name: 'sbmt',
+		text: 'That was incorrect. You will need to go through the instructions again.\n\nPlease press ENTER to continue.',
+		font: 'Arial',
+		units: 'height',
+		pos: [0, 0], height: 0.02, wrapWidth: undefined, ori: 0,
+		color: new util.Color('white'), opacity: 1,
+		depth: 0.0
+	});
+
+	form_submit = new visual.TextStim({
+		win: psychoJS.window,
+		name: 'sbmt',
+		text: 'Press ENTER to confirm answers',
+		font: 'Arial',
+		units: 'height',
+		pos: [0, -0.1], height: 0.02, wrapWidth: undefined, ori: 0,
+		color: new util.Color('white'), opacity: 1,
+		depth: 0.0
+	});
+		
+	form_q1_txt = new visual.TextStim({
+		win: psychoJS.window,
+		name: 'q1',
+		text: 'Your final payoff will depend on your choices during the task:',
+		font: 'Arial',
+		units: 'height',
+		pos: [-0.8, 0.3], height: 0.02, wrapWidth: undefined, ori: 0,
+		color: new util.Color('white'), opacity: 1,
+		depth: 0.0, alignHoriz: 'left'
+	});
+
+	form_q2_txt = new visual.TextStim({
+		win: psychoJS.window,
+		name: 'q2',
+		text: 'In the second and third phases of the task, you will know the results of your choices on each trial:',
+		font: 'Arial',
+		units: 'height',
+		pos: [-0.8, 0.2], height: 0.02, wrapWidth: undefined, ori: 0,
+		color: new util.Color('white'), opacity: 1,
+		depth: 0.0, alignHoriz: 'left'
+	});
+
+	form_q3_txt = new visual.TextStim({
+		win: psychoJS.window,
+		name: 'q3',
+		text: 'The position where a picture appears determines its value:',
+		font: 'Arial',
+		units: 'height',
+		pos: [-0.8, 0.1], height: 0.02, wrapWidth: undefined, ori: 0,
+		color: new util.Color('white'), opacity: 1,
+		depth: 0.0, alignHoriz: 'left'
+	});
+
+	form_q1_opt1 = new visual.ImageStim({
+		win : psychoJS.window,
+		name : 'true_0', units : 'height', 
+		image : 'true_0', mask : undefined,
+		ori : 0, pos : [0.25, 0.3], size: [0.0975,0.039],
+		color : new util.Color([1, 1, 1]), opacity : 1,
+		flipHoriz : false, flipVert : false,
+		texRes : 128, interpolate : true, depth : 0
+	});
+
+	form_q1_opt2 = new visual.ImageStim({
+		win : psychoJS.window,
+		name : 'true_1', units : 'height', 
+		image : 'true_1', mask : undefined,
+		ori : 0, pos : [0.25, 0.3], size: [0.0975,0.039],
+		color : new util.Color([1, 1, 1]), opacity : 1,
+		flipHoriz : false, flipVert : false,
+		texRes : 128, interpolate : true, depth : 0
+	});
+
+	form_q1_opf1 = new visual.ImageStim({
+		win : psychoJS.window,
+		name : 'false_0', units : 'height', 
+		image : 'false_0', mask : undefined,
+		ori : 0, pos : [0.5, 0.3], size: [0.0975,0.039],
+		color : new util.Color([1, 1, 1]), opacity : 1,
+		flipHoriz : false, flipVert : false,
+		texRes : 128, interpolate : true, depth : 0
+	});
+
+	form_q1_opf2 = new visual.ImageStim({
+		win : psychoJS.window,
+		name : 'false_1', units : 'height', 
+		image : 'false_1', mask : undefined,
+		ori : 0, pos : [0.5, 0.3], size: [0.0975,0.039],
+		color : new util.Color([1, 1, 1]), opacity : 1,
+		flipHoriz : false, flipVert : false,
+		texRes : 128, interpolate : true, depth : 0
+	});
+
+	form_q2_opt1 = new visual.ImageStim({
+		win : psychoJS.window,
+		name : 'true_0', units : 'height', 
+		image : 'true_0', mask : undefined,
+		ori : 0, pos : [0.25, 0.2], size: [0.0975,0.039],
+		color : new util.Color([1, 1, 1]), opacity : 1,
+		flipHoriz : false, flipVert : false,
+		texRes : 128, interpolate : true, depth : 0
+	});
+
+	form_q2_opt2 = new visual.ImageStim({
+		win : psychoJS.window,
+		name : 'true_1', units : 'height', 
+		image : 'true_1', mask : undefined,
+		ori : 0, pos : [0.25, 0.2], size: [0.0975,0.039],
+		color : new util.Color([1, 1, 1]), opacity : 1,
+		flipHoriz : false, flipVert : false,
+		texRes : 128, interpolate : true, depth : 0
+	});
+
+	form_q2_opf1 = new visual.ImageStim({
+		win : psychoJS.window,
+		name : 'false_0', units : 'height', 
+		image : 'false_0', mask : undefined,
+		ori : 0, pos : [0.5, 0.2], size: [0.0975,0.039],
+		color : new util.Color([1, 1, 1]), opacity : 1,
+		flipHoriz : false, flipVert : false,
+		texRes : 128, interpolate : true, depth : 0
+	});
+
+	form_q2_opf2 = new visual.ImageStim({
+		win : psychoJS.window,
+		name : 'false_1', units : 'height', 
+		image : 'false_1', mask : undefined,
+		ori : 0, pos : [0.5, 0.2], size: [0.0975,0.039],
+		color : new util.Color([1, 1, 1]), opacity : 1,
+		flipHoriz : false, flipVert : false,
+		texRes : 128, interpolate : true, depth : 0
+	});
+
+	form_q3_opt1 = new visual.ImageStim({
+		win : psychoJS.window,
+		name : 'true_0', units : 'height', 
+		image : 'true_0', mask : undefined,
+		ori : 0, pos : [0.25, 0.1], size: [0.0975,0.039],
+		color : new util.Color([1, 1, 1]), opacity : 1,
+		flipHoriz : false, flipVert : false,
+		texRes : 128, interpolate : true, depth : 0
+	});
+
+	form_q3_opt2 = new visual.ImageStim({
+		win : psychoJS.window,
+		name : 'true_1', units : 'height', 
+		image : 'true_1', mask : undefined,
+		ori : 0, pos : [0.25, 0.1], size: [0.0975,0.039],
+		color : new util.Color([1, 1, 1]), opacity : 1,
+		flipHoriz : false, flipVert : false,
+		texRes : 128, interpolate : true, depth : 0
+	});
+
+	form_q3_opf1 = new visual.ImageStim({
+		win : psychoJS.window,
+		name : 'false_0', units : 'height', 
+		image : 'false_0', mask : undefined,
+		ori : 0, pos : [0.5, 0.1], size: [0.0975,0.039],
+		color : new util.Color([1, 1, 1]), opacity : 1,
+		flipHoriz : false, flipVert : false,
+		texRes : 128, interpolate : true, depth : 0
+	});
+
+	form_q3_opf2 = new visual.ImageStim({
+		win : psychoJS.window,
+		name : 'false_1', units : 'height', 
+		image : 'false_1', mask : undefined,
+		ori : 0, pos : [0.5, 0.1], size: [0.0975,0.039],
+		color : new util.Color([1, 1, 1]), opacity : 1,
+		flipHoriz : false, flipVert : false,
+		texRes : 128, interpolate : true, depth : 0
+	});
 
 	slideStim = new visual.ImageStim({
 		win : psychoJS.window,
@@ -748,6 +947,7 @@ function experimentInit() {
 	respondClock = new util.Clock();
 	blockClock = new util.Clock();
 	debugClock = new util.Clock();
+	instrNoticeClock = new util.Clock();
 
 	endClock = new util.Clock();
 
@@ -1519,6 +1719,203 @@ function instruct_pagesLoopEnd() {
 	return Scheduler.Event.NEXT;
 }
 
+var not_drawn = true;
+var form_enter_pressed = false;
+var doitonce = true;
+var not_drawn = true
+var first_sel_made = false
+var second_sel_made = false
+var third_sel_made = false
+var answer1 = 0
+var answer2 = 0
+var answer3 = 0
+var notice_given = false
+var form_off = false
+var events_not_cleared = true
+var mouseHandleInstr = new core.Mouse({ win: psychoJS.window, name: 'stimPath' })
+function instruct_pagesLoopEndFirst() {
+	psychoJS.experiment.removeLoop(slides);
+
+	if (resp.status === PsychoJS.Status.NOT_STARTED) {
+		// keep track of start time/frame for later
+		resp.tStart = t;  // (not accounting for frame time here)
+		resp.frameNStart = frameN;  // exact frame index
+
+		// keyboard checking is just starting
+		resp.clock.reset();  // t=0 on next screen flip
+		resp.start(); // start on screen flip
+		resp.clearEvents();
+	}
+
+	// check for quit (typically the Esc key)
+	if (psychoJS.experiment.experimentEnded || psychoJS.eventManager.getKeys({ keyList: ['escape'] }).length > 0) {
+		return quitPsychoJS('The [Escape] key was pressed. Goodbye!', false);
+	}
+
+	if (not_drawn) {
+		form_q1_txt.setAutoDraw(true)
+		form_q1_opt1.setAutoDraw(true)
+		form_q1_opf1.setAutoDraw(true)
+		form_q2_txt.setAutoDraw(true)
+		form_q2_opt1.setAutoDraw(true)
+		form_q2_opf1.setAutoDraw(true)
+		form_q3_txt.setAutoDraw(true)
+		form_q3_opt1.setAutoDraw(true)
+		form_q3_opf1.setAutoDraw(true)
+		form_submit.setAutoDraw(true)
+		not_drawn = false
+	}
+
+	if (first_sel_made && second_sel_made && third_sel_made && events_not_cleared) {
+		resp.clearEvents()
+		events_not_cleared = false
+	}
+
+	if (first_sel_made && second_sel_made && third_sel_made && !form_enter_pressed) {
+		let theseKeys = resp.getKeys({ keyList: ['return'], waitRelease: false, clearEvents: true });
+		if (theseKeys.length > 0) {
+			form_enter_pressed = true
+		}
+	}
+
+	if (form_q1_opt1.contains(mouseHandleInstr) && !form_enter_pressed) {
+		if (mouseHandleInstr.getPressed()[0] == 1) {
+			form_q1_opt2.setAutoDraw(true)
+			form_q1_opf2.setAutoDraw(false)
+			first_sel_made = true
+			answer1 = 1
+		}
+	}
+	if (form_q1_opf1.contains(mouseHandleInstr) && !form_enter_pressed) {
+		if (mouseHandleInstr.getPressed()[0] == 1) {
+			form_q1_opt2.setAutoDraw(false)
+			form_q1_opf2.setAutoDraw(true)
+			first_sel_made = true
+			answer1 = 2
+		}
+	}
+
+	if (form_q2_opt1.contains(mouseHandleInstr) && !form_enter_pressed) {
+		if (mouseHandleInstr.getPressed()[0] == 1) {
+			form_q2_opt2.setAutoDraw(true)
+			form_q2_opf2.setAutoDraw(false)
+			second_sel_made = true
+			answer2 = 1
+		}
+	}
+	if (form_q2_opf1.contains(mouseHandleInstr) && !form_enter_pressed) {
+		if (mouseHandleInstr.getPressed()[0] == 1) {
+			form_q2_opt2.setAutoDraw(false)
+			form_q2_opf2.setAutoDraw(true)
+			second_sel_made = true
+			answer2 = 2
+		}
+	}
+
+	if (form_q3_opt1.contains(mouseHandleInstr) && !form_enter_pressed) {
+		if (mouseHandleInstr.getPressed()[0] == 1) {
+			form_q3_opt2.setAutoDraw(true)
+			form_q3_opf2.setAutoDraw(false)
+			third_sel_made = true
+			answer3 = 1
+		}
+	}
+	if (form_q3_opf1.contains(mouseHandleInstr) && !form_enter_pressed) {
+		if (mouseHandleInstr.getPressed()[0] == 1) {
+			form_q3_opt2.setAutoDraw(false)
+			form_q3_opf2.setAutoDraw(true)
+			third_sel_made = true
+			answer3 = 2
+		}
+	}
+
+	if (answer1 == 1 && answer2 == 2 && answer3 == 2 && form_enter_pressed) {
+		form_q1_txt.setAutoDraw(false)
+		form_q1_opt1.setAutoDraw(false)
+		form_q1_opt2.setAutoDraw(false)
+		form_q1_opf1.setAutoDraw(false)
+		form_q1_opf2.setAutoDraw(false)
+		form_q2_txt.setAutoDraw(false)
+		form_q2_opt1.setAutoDraw(false)
+		form_q2_opt2.setAutoDraw(false)
+		form_q2_opf1.setAutoDraw(false)
+		form_q2_opf2.setAutoDraw(false)
+		form_q3_txt.setAutoDraw(false)
+		form_q3_opt1.setAutoDraw(false)
+		form_q3_opt2.setAutoDraw(false)
+		form_q3_opf1.setAutoDraw(false)
+		form_q3_opf2.setAutoDraw(false)
+		form_submit.setAutoDraw(false)
+		notice_given = true // true cause no need for notice
+	} else if (!(answer1 == 1 && answer2 == 2 && answer3 == 2) && !form_off && form_enter_pressed) {
+		form_q1_txt.setAutoDraw(false)
+		form_q1_opt1.setAutoDraw(false)
+		form_q1_opt2.setAutoDraw(false)
+		form_q1_opf1.setAutoDraw(false)
+		form_q1_opf2.setAutoDraw(false)
+		form_q2_txt.setAutoDraw(false)
+		form_q2_opt1.setAutoDraw(false)
+		form_q2_opt2.setAutoDraw(false)
+		form_q2_opf1.setAutoDraw(false)
+		form_q2_opf2.setAutoDraw(false)
+		form_q3_txt.setAutoDraw(false)
+		form_q3_opt1.setAutoDraw(false)
+		form_q3_opt2.setAutoDraw(false)
+		form_q3_opf1.setAutoDraw(false)
+		form_q3_opf2.setAutoDraw(false)
+		form_submit.setAutoDraw(false)
+		instr_repeat_notice.setAutoDraw(true)
+		form_off = true
+	}
+
+	if (form_off && form_enter_pressed) {
+		let theseKeys = resp.getKeys({ keyList: ['return'], waitRelease: false, clearEvents: true });
+		console.log(theseKeys)
+		if (theseKeys.length > 0) {
+			instr_repeat_notice.setAutoDraw(false)
+			notice_given = true
+		}
+	}
+
+	if (!notice_given) {
+		return Scheduler.Event.FLIP_REPEAT;
+	} else {
+		not_drawn = true
+
+		if (answer1 == 1 && answer2 == 2 && answer3 == 2) {
+			// Single Slide
+			flowScheduler.add(readyRoutineBegin('PRACTICE'));
+			flowScheduler.add(readyRoutineEachFrame());
+			flowScheduler.add(readyRoutineEnd());
+		
+			const practiceTrialsLoopScheduler = new Scheduler(psychoJS);
+			flowScheduler.add(practiceTrialsLoopBegin, practiceTrialsLoopScheduler);
+			flowScheduler.add(practiceTrialsLoopScheduler);
+			flowScheduler.add(trialsLoopEndPractice);
+		} else {
+			not_drawn = true;
+			form_enter_pressed = false;
+			doitonce = true;
+			not_drawn = true
+			first_sel_made = false
+			second_sel_made = false
+			third_sel_made = false
+			answer1 = 0
+			answer2 = 0
+			answer3 = 0
+			notice_given = false
+			form_off = false
+			events_not_cleared = true
+			const instruct_pagesLoopScheduler = new Scheduler(psychoJS);
+			flowScheduler.add(instruct_pagesLoopBegin, instruct_pagesLoopScheduler);
+			flowScheduler.add(instruct_pagesLoopScheduler);
+			flowScheduler.add(instruct_pagesLoopEndFirst);
+		}
+
+		return Scheduler.Event.NEXT;
+	}
+}
+
 // SHow the points in the trial 
 function trialsLoopEnd() {
 	// currentTrialNumber.setAutoDraw(false)
@@ -1555,7 +1952,7 @@ function trialsLoopEndPractice() {
 		flowScheduler.add(trialsLoopBegin, trialsLoopScheduler_learning);
 		flowScheduler.add(trialsLoopScheduler_learning);
 		flowScheduler.add(trialsLoopEnd);
-		flowScheduler.add(thanksRoutineBegin());
+		flowScheduler.add(thanksRoutineBegin(1));
 		flowScheduler.add(thanksRoutineEachFrame());
 		flowScheduler.add(thanksRoutineEnd());
 		// Testing BLOCK
@@ -1571,7 +1968,7 @@ function trialsLoopEndPractice() {
 		flowScheduler.add(trialsLoopBeginTesting, trialsLoopScheduler_testing);
 		flowScheduler.add(trialsLoopScheduler_testing);
 		flowScheduler.add(trialsLoopEnd);
-		flowScheduler.add(thanksRoutineBegin());
+		flowScheduler.add(thanksRoutineBegin(2));
 		flowScheduler.add(thanksRoutineEachFrame());
 		flowScheduler.add(thanksRoutineEnd());
 		// Explicit BLOCK
@@ -1588,7 +1985,7 @@ function trialsLoopEndPractice() {
 		flowScheduler.add(trialsLoopBeginExplicit, trialsLoopScheduler_explicit);
 		flowScheduler.add(trialsLoopScheduler_explicit);
 		flowScheduler.add(trialsLoopEnd);
-		flowScheduler.add(thanksRoutineBegin());
+		flowScheduler.add(thanksRoutineBegin(3));
 		flowScheduler.add(thanksRoutineEachFrame());
 		flowScheduler.add(thanksRoutineEnd());
 		flowScheduler.add(quitPsychoJS, '', true);

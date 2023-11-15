@@ -1,0 +1,4 @@
+﻿itemText,type,options,tickLabels,itemWidth,itemColor,responseWidth,responseColor,layout,index
+TESTING QUESTIONS 1,RADIO,"Yes,No","True,False",0.7,"white",0.3,"white","horiz",0
+TESTING QUESTIONS 2,RADIO,"Yes,No","True,False",0.7,"white",0.3,"white","horiz",1
+TESTING QUESTIONS 3,RADIO,"Yes,No","True,False",0.7,"white",0.3,"white","horiz",2
