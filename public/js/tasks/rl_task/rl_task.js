@@ -608,10 +608,10 @@ dialogCancelScheduler.add(quitPsychoJS, '', false);
 // Add Slides to resources
 var resources = [
 	{ name: 'practice_schedule.csv', path: '/js/tasks/rl_task/practice_schedule.csv' },
-	{ name: 'PRACTICE_ready', path: '/js/tasks/rl_task/media/instructions/Slide10.JPG'},
-	{ name: 'MAIN_ready1', path: '/js/tasks/rl_task/media/instructions/Slide11.JPG' },
-	{ name: 'MAIN_ready2', path: '/js/tasks/rl_task/media/instructions/Slide12.JPG' },
-	{ name: 'MAIN_ready3', path: '/js/tasks/rl_task/media/instructions/Slide13.JPG' },
+	{ name: 'PRACTICE_ready', path: '/js/tasks/rl_task/media/instructions/Slide16.JPG'},
+	{ name: 'MAIN_ready1', path: '/js/tasks/rl_task/media/instructions/Slide17.JPG' },
+	{ name: 'MAIN_ready2', path: '/js/tasks/rl_task/media/instructions/Slide18.JPG' },
+	{ name: 'MAIN_ready3', path: '/js/tasks/rl_task/media/instructions/Slide19.JPG' },
 	{ name: 'instr_check_items.csv', path: '/js/tasks/rl_task/media/instr_check.csv' },
 	{ name: 'true_0', path: '/js/tasks/rl_task/media/true_opt_0.png' },
 	{ name: 'true_1', path: '/js/tasks/rl_task/media/true_opt_1.png' },
