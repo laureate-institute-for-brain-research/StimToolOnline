@@ -14,13 +14,10 @@ var event_types = {
 	'TASK_ONSET': 2,
 	'BLOCK_ONSET': 3,
 	'TRIAL_ONSET': 4,
-	'CHOICE_ONSET': 5,
-	'ADVICE_ONSET': 6,
-	'ADVICE_TYPE': 7,
-	'CHOICE': 8,
-	'FEEDBACK_ONSET': 9,
-	'FIXATION_ONSET': 10,
-	'AUDIO_ONSET': 11
+	'CHOICE': 5,
+	'FEEDBACK': 6,
+	'FIXATION_ONSET': 7,
+	'AUDIO_ONSET': 8
 }
 
 var DEBUG_FLAG = false
@@ -59,8 +56,6 @@ var image_ratio = 4 / 3; // used for setting image sizes (this gets set to diffe
 // global flags
 var set_fixation_flag = true
 var init_fixation_flag = true
-
-var total_score = 0
 
 // init psychoJS:
 const psychoJS = new PsychoJS({
@@ -1423,6 +1418,7 @@ function readyRoutineBegin(block_type) {
 		// keep track of which components have finished
 		readyComponents = [readyStim];
 		readyStim.setAutoDraw(true)
+		resp.clearEvents()
 		return Scheduler.Event.NEXT;
 	};
 }
@@ -1628,7 +1624,7 @@ function trialsLoopBegin(thisScheduler) {
 	}
 	trial_type = 'MAIN'
 	mark_event(trials_data, globalClock, 'NA', trial_type, event_types['BLOCK_ONSET'],
-				'NA', 'NA' , 'NA')
+				'LEARNING', 'NA' , 'NA')
 	return Scheduler.Event.NEXT;
 }
 
@@ -1657,7 +1653,7 @@ function trialsLoopBeginTesting(thisScheduler) {
 
 	psychoJS.experiment.addLoop(trials); // add the loop to the experiment
 	currentLoop = trials;  // we're now the current loop
-	total_score = 0
+	// total_score = 0
 	completed_blocks = 1
 
 	init_fixation_flag = true
@@ -1675,7 +1671,7 @@ function trialsLoopBeginTesting(thisScheduler) {
 	}
 	trial_type = 'MAIN'
 	mark_event(trials_data, globalClock, 'NA', trial_type, event_types['BLOCK_ONSET'],
-				'NA', 'NA' , 'NA')
+				'TESTING', 'NA' , 'NA')
 	return Scheduler.Event.NEXT;
 }
 
@@ -1704,7 +1700,7 @@ function trialsLoopBeginExplicit(thisScheduler) {
 
 	psychoJS.experiment.addLoop(trials); // add the loop to the experiment
 	currentLoop = trials;  // we're now the current loop
-	total_score = 0
+	// total_score = 0
 	completed_blocks = 1
 
 	init_fixation_flag = true
@@ -1722,7 +1718,7 @@ function trialsLoopBeginExplicit(thisScheduler) {
 	}
 	trial_type = 'MAIN'
 	mark_event(trials_data, globalClock, 'NA', trial_type, event_types['BLOCK_ONSET'],
-				'NA', 'NA' , 'NA')
+				'EXPLICIT', 'NA' , 'NA')
 	return Scheduler.Event.NEXT;
 }
 
@@ -2418,6 +2414,18 @@ function trialRoutineBegin(trials) {
 				to_undraw.push(high2)
 			}
 		}
+		let pos_to_mark = []
+		console.log(pos_score_array)
+		pos_score_array.forEach((item) => {
+			if (item === "") {
+				pos_to_mark.push("NA")
+			} else {
+				pos_to_mark.push(item)
+			}
+		})
+		console.log(pos_to_mark)
+		mark_event(trials_data, globalClock, 'NA', 'NA', event_types['TRIAL_ONSET'],
+				'NA', 'NA', pos_to_mark[0] + "_" + pos_to_mark[1] + "_" + pos_to_mark[2])
 		// resize_image(leftposStim, image_ratio, 0.4)
 
 		pressed = false
@@ -2435,6 +2443,7 @@ function trialRoutineRespond(trials) {
 	return function () {
 		//------Loop for each frame of Routine 'trial'-------
 		let continueRoutine = true; // until we're told otherwise	
+		let score_to_mark = 0
 	
 		// get current time
 		t = respondClock.getTime();
@@ -2459,7 +2468,7 @@ function trialRoutineRespond(trials) {
 			if (resp.keys == LEFT_KEY && pos_score_array[0] != "") {
 				pressed = true
 				mark_event(trials_data, globalClock, trials.thisIndex, trial_type, event_types['CHOICE'],
-					'NA', 'left', 'NA')
+				resp.rt, 'left', 'NA')
 				feedbackClock.reset()
 				// box1.setAutoDraw(true)
 				let ix = 0
@@ -2479,6 +2488,7 @@ function trialRoutineRespond(trials) {
 
 				if (parseFloat(left_score_txt) > parseFloat(center_score_txt) && parseFloat(left_score_txt) > parseFloat(right_score_txt)) {
 					total_score += parseFloat(left_score_txt)
+					score_to_mark = left_score_txt
 					correct_count_practice += 1
 					console.log(correct_count_practice)
 				}
@@ -2487,7 +2497,7 @@ function trialRoutineRespond(trials) {
 			} else if (resp.keys == UP_KEY && pos_score_array[1] != "") {
 				pressed = true
 				mark_event(trials_data, globalClock, trials.thisIndex, trial_type, event_types['CHOICE'],
-					'NA', 'middle', 'NA')
+				resp.rt, 'middle', 'NA')
 				feedbackClock.reset()
 				// box2.setAutoDraw(true)
 				let ix = 0
@@ -2507,6 +2517,7 @@ function trialRoutineRespond(trials) {
 
 				if (parseFloat(center_score_txt) > parseFloat(left_score_txt) && parseFloat(center_score_txt) > parseFloat(right_score_txt)) {
 					total_score += parseFloat(center_score_txt)
+					score_to_mark = center_score_txt
 					correct_count_practice += 1
 					console.log(correct_count_practice)
 				}
@@ -2515,7 +2526,7 @@ function trialRoutineRespond(trials) {
 			} else if (resp.keys == RIGHT_KEY && pos_score_array[2] != "") {
 				pressed = true
 				mark_event(trials_data, globalClock, trials.thisIndex, trial_type, event_types['CHOICE'],
-					'NA', 'right', 'NA')
+				resp.rt, 'right', 'NA')
 				feedbackClock.reset()
 				// box3.setAutoDraw(true)
 				let ix = 0
@@ -2535,6 +2546,7 @@ function trialRoutineRespond(trials) {
 
 				if (parseFloat(right_score_txt) > parseFloat(center_score_txt) && parseFloat(right_score_txt) > parseFloat(left_score_txt)) {
 					total_score += parseFloat(right_score_txt)
+					score_to_mark = right_score_txt
 					correct_count_practice += 1
 					console.log(correct_count_practice)
 				}
@@ -2544,6 +2556,8 @@ function trialRoutineRespond(trials) {
 			// low_score.setAutoDraw(true)
 			// mid_score.setAutoDraw(true)
 			// high_score.setAutoDraw(true)
+			mark_event(trials_data, globalClock, trials.thisIndex, trial_type, event_types['FEEDBACK'],
+					'NA', total_score, score_to_mark)
 		}
 
 		if (pressed && feedbackClock.getTime() >= parseFloat(config_values.learning_fb_duration)) {
@@ -2908,6 +2922,16 @@ function trialRoutineBeginTesting(trials) {
 				//console.log("c2")
 			}
 		}
+		let pos_to_mark = []
+		pos_score_array.forEach((item) => {
+			if (item == "") {
+				pos_to_mark.push("NA")
+			} else {
+				pos_to_mark.push(item)
+			}
+		})
+		mark_event(trials_data, globalClock, 'NA', 'NA', event_types['TRIAL_ONSET'],
+				'NA', 'NA', pos_to_mark[0] + "_" + pos_to_mark[1] + "_" + pos_to_mark[2])
 		// resize_image(leftposStim, image_ratio, 0.4)
 
 		pressed = false
@@ -2925,6 +2949,7 @@ function trialRoutineRespondTesting(trials) {
 	return function () {
 		//------Loop for each frame of Routine 'trial'-------
 		let continueRoutine = true; // until we're told otherwise	
+		let score_to_mark = 0
 	
 		// get current time
 		t = respondClock.getTime();
@@ -2948,7 +2973,7 @@ function trialRoutineRespondTesting(trials) {
 			if (resp.keys == LEFT_KEY && pos_score_array[0] != "") {
 				pressed = true
 				mark_event(trials_data, globalClock, trials.thisIndex, trial_type, event_types['CHOICE'],
-					'NA', 'left', 'NA')
+				resp.rt, 'left', 'NA')
 				feedbackClock.reset()
 				out1.setAutoDraw(true)
 
@@ -2957,12 +2982,13 @@ function trialRoutineRespondTesting(trials) {
 					if (pos_score_array[0][0].charAt(0) != pos_score_array[2][0].charAt(0)) {
 						console.log(`adding ${left_score_txt}`)
 						total_score += parseFloat(left_score_txt)
+						score_to_mark = left_score_txt
 					}
 				}
 			} else if (resp.keys == RIGHT_KEY && pos_score_array[2] != "") {
 				pressed = true
 				mark_event(trials_data, globalClock, trials.thisIndex, trial_type, event_types['CHOICE'],
-					'NA', 'right', 'NA')
+				resp.rt, 'right', 'NA')
 				feedbackClock.reset()
 				out3.setAutoDraw(true)
 
@@ -2971,9 +2997,12 @@ function trialRoutineRespondTesting(trials) {
 					if (pos_score_array[2][0].charAt(0) != pos_score_array[0][0].charAt(0)) {
 						console.log(`adding ${right_score_txt}`)
 						total_score += parseFloat(right_score_txt)
+						score_to_mark = right_score_txt
 					}
 				}
 			}
+			mark_event(trials_data, globalClock, trials.thisIndex, trial_type, event_types['FEEDBACK'],
+					'NA', total_score, score_to_mark)
 		}
 
 		if (pressed && feedbackClock.getTime() >= parseFloat(config_values.testing_duration)) {
@@ -3209,6 +3238,9 @@ function trialRoutineBeginExplicit(trials) {
 		key_list_explicit = ['left', 'right']
 
 		pressed = false
+		// respondClock.reset()
+		mark_event(trials_data, globalClock, 'NA', 'NA', event_types['TRIAL_ONSET'],
+				options, 'NA' , 'NA')
 
 		return Scheduler.Event.NEXT;
 	};
@@ -3233,6 +3265,7 @@ function trialRoutineRespondExplicit(trials) {
 		t = respondClock.getTime();
 
 		if (resp.status === PsychoJS.Status.NOT_STARTED) {
+			respondClock.reset()
 			// keep track of start time/frame for later
 			resp.tStart = t;  // (not accounting for frame time here)
 			resp.frameNStart = frameN;  // exact frame index
@@ -3290,6 +3323,8 @@ function trialRoutineRespondExplicit(trials) {
 		}
 
 		if (numClicks >= 1 || enter_pressed) {
+			mark_event(trials_data, globalClock, trials.thisIndex, trial_type, event_types['CHOICE'],
+				respondClock.getTime(), exp_slider.markerPos, 'NA')
 			continueRoutine = false
 		}
 
