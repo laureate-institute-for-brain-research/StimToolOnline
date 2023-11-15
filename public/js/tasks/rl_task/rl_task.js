@@ -2424,7 +2424,7 @@ function trialRoutineBegin(trials) {
 			}
 		})
 		console.log(pos_to_mark)
-		mark_event(trials_data, globalClock, 'NA', 'NA', event_types['TRIAL_ONSET'],
+		mark_event(trials_data, globalClock, trials.thisIndex, 'NA', event_types['TRIAL_ONSET'],
 				'NA', 'NA', pos_to_mark[0] + "_" + pos_to_mark[1] + "_" + pos_to_mark[2])
 		// resize_image(leftposStim, image_ratio, 0.4)
 
@@ -2930,7 +2930,7 @@ function trialRoutineBeginTesting(trials) {
 				pos_to_mark.push(item)
 			}
 		})
-		mark_event(trials_data, globalClock, 'NA', 'NA', event_types['TRIAL_ONSET'],
+		mark_event(trials_data, globalClock, trials.thisIndex, 'NA', event_types['TRIAL_ONSET'],
 				'NA', 'NA', pos_to_mark[0] + "_" + pos_to_mark[1] + "_" + pos_to_mark[2])
 		// resize_image(leftposStim, image_ratio, 0.4)
 
@@ -3239,7 +3239,7 @@ function trialRoutineBeginExplicit(trials) {
 
 		pressed = false
 		// respondClock.reset()
-		mark_event(trials_data, globalClock, 'NA', 'NA', event_types['TRIAL_ONSET'],
+		mark_event(trials_data, globalClock, trials.thisIndex, 'NA', event_types['TRIAL_ONSET'],
 				options, 'NA' , 'NA')
 
 		return Scheduler.Event.NEXT;
