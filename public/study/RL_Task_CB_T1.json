@@ -1,0 +1,9 @@
+{
+    "name": "RL_Task_CB",
+    "order": [
+        "/?index=0&task=rl_task&run=Pilot_RL_CB.json",
+        "/completed?"
+    ],
+    "fullscreen": true,
+    "text_html": "<p>This study includes the following tasks: <ul><li>Reinforcment Learning - Run 1</li></ul></p>"
+} 
