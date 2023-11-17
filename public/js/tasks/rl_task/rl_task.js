@@ -48,6 +48,7 @@ var RIGHT_KEY = 'right'
 var UP_KEY = 'up'
 var DOWN_KEY = 'down'
 var keyList = [LEFT_KEY, RIGHT_KEY, UP_KEY]
+var keyListTest = [LEFT_KEY, RIGHT_KEY]
 var total_score = 0
 
 var window_ratio = 4 / 3; // used for general stimuli sizing
@@ -3189,7 +3190,7 @@ function trialRoutineRespondTesting(trials) {
 			resp.clearEvents();
 		}
 
-		let theseKeys = resp.getKeys({ keyList: keyList, waitRelease: false });
+		let theseKeys = resp.getKeys({ keyList: keyListTest, waitRelease: false });
 		if (theseKeys.length > 0 && !pressed) {
 			resp.keys = theseKeys[0].name;  // just the last key pressed
 			resp.rt = theseKeys[0].rt;
@@ -3558,7 +3559,7 @@ function trialRoutineBeginExplicit(trials) {
 		pressed = false
 		// respondClock.reset()
 		mark_event(trials_data, globalClock, trials.thisIndex, 'NA', event_types['TRIAL_ONSET'],
-				options, 'NA' , 'NA')
+				'NA', 'NA' , options)
 
 		return Scheduler.Event.NEXT;
 	};
