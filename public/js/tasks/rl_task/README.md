@@ -34,31 +34,39 @@ This task consists of instructions, a practice, and three phases.<br/>
 <ins>Phase 3 (EXPLICIT):</ins>For this phase, each identicon is presented individually 4 times. A slider and value display are given to allow participants to select a
         value estimate. The goal is to make an estimate of the average value that the displayed identicon provided. There is no score calculated during this phase.<br/>
 <br/>
+
 # TRIAL STRUCTURE (Practice)
+
 ```
                                                  (Free Response Time)            (2.0s)
-[instructions]---------- -> [Practice]----- -> ([Stimuli Presented]---------- -> [feedback shown])x(12) ->
+[instructions]---------- -> [Practice]----- -> ([Stimuli Presented]---------- -> [feedback shown])x(12)
 ^                           ^                   ^                   ^            ^
 TASK_ONSET                  BLOCK_ONSET         TRIAL_ONSET         CHOICE     FEEDBACK
 INSTRUCTIONS|BLOCK_ONSET
 ```
+
 # TRIAL STRUCTURE (Phase 1)
+
 ```
                              (Free Response Time)            (2.0s)
-[instructions]---------- ->([Stimuli Presented]---------- -> [feedback shown])x(120) ->
+[instructions]---------- ->([Stimuli Presented]---------- -> [feedback shown])x(120)
 ^                           ^                   ^            ^
 TASK_ONSET                  TRIAL_ONSET         CHOICE     FEEDBACK
 INSTRUCTIONS|BLOCK_ONSET
 ```
+
 # TRIAL STRUCTURE (Phase 2)
+
 ```
                              (Free Response Time)            (0.5s)
-[instructions]---------- ->([Stimuli Presented]---------- -> [feedback shown])x(120) ->
+[instructions]---------- ->([Stimuli Presented]---------- -> [feedback shown])x(120)
 ^                           ^                   ^            ^
 TASK_ONSET                  TRIAL_ONSET         CHOICE     FEEDBACK
 INSTRUCTIONS|BLOCK_ONSET
 ```
+
 # TRIAL STRUCTURE (Phase 3)
+
 ```
                             (Free Response Time)            
 [instructions]---------- ->([Stimuli Presented])x(24)
