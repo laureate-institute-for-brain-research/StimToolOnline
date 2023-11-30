@@ -76,7 +76,7 @@ INSTRUCTIONS|BLOCK_ONSET
 ```
 
 # INPUT DETAILS
-
+```
 EACH LINE CODES: one trial
 trial_number - Trial index
 L_mean - Gaussian Distribution mean to use for low point generation
@@ -90,7 +90,7 @@ trials_per_option - NOT USED
 options - Stimuli used in trial (Order and positions is shuffled in code for phase 1 schedule. Order is kept for phase 2 schedule.)
 
 TRIAL ORDER IS: fixed
-
+```
 # CONFIG DETAILS
 
 Image paths for stimuli.
