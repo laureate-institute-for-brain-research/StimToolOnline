@@ -1797,6 +1797,69 @@ function instruct_pagesLoopEndFirst() {
 		form_q3_opf1.setAutoDraw(true)
 		form_submit.setAutoDraw(true)
 		not_drawn = false
+		if (config_values.practice == 'false') {
+			form_q1_txt.setAutoDraw(false)
+			form_q1_opt1.setAutoDraw(false)
+			form_q1_opf1.setAutoDraw(false)
+			form_q2_txt.setAutoDraw(false)
+			form_q2_opt1.setAutoDraw(false)
+			form_q2_opf1.setAutoDraw(false)
+			form_q3_txt.setAutoDraw(false)
+			form_q3_opt1.setAutoDraw(false)
+			form_q3_opf1.setAutoDraw(false)
+			form_submit.setAutoDraw(false)
+			// Learning BLOCK
+			// Ready Routine
+			const instruct_pagesLoopScheduler1 = new Scheduler(psychoJS);
+			flowScheduler.add(instruct_pagesLoopBegin1, instruct_pagesLoopScheduler1);
+			flowScheduler.add(instruct_pagesLoopScheduler1);
+			flowScheduler.add(instruct_pagesLoopEnd);
+			flowScheduler.add(readyRoutineBegin('LEARN'));
+			flowScheduler.add(readyRoutineEachFrame());
+			flowScheduler.add(readyRoutineEnd());
+			const trialsLoopScheduler_learning = new Scheduler(psychoJS);
+			flowScheduler.add(trialsLoopBegin, trialsLoopScheduler_learning);
+			flowScheduler.add(trialsLoopScheduler_learning);
+			flowScheduler.add(trialsLoopEnd);
+			flowScheduler.add(thanksRoutineBegin(1));
+			flowScheduler.add(thanksRoutineEachFrame());
+			flowScheduler.add(thanksRoutineEnd());
+			// Testing BLOCK
+			// Ready Routine
+			const instruct_pagesLoopScheduler2 = new Scheduler(psychoJS);
+			flowScheduler.add(instruct_pagesLoopBegin2, instruct_pagesLoopScheduler2);
+			flowScheduler.add(instruct_pagesLoopScheduler2);
+			flowScheduler.add(instruct_pagesLoopEnd);
+			flowScheduler.add(readyRoutineBegin('TEST'));
+			flowScheduler.add(readyRoutineEachFrame());
+			flowScheduler.add(readyRoutineEnd());
+			const trialsLoopScheduler_testing = new Scheduler(psychoJS);
+			flowScheduler.add(trialsLoopBeginTesting, trialsLoopScheduler_testing);
+			flowScheduler.add(trialsLoopScheduler_testing);
+			flowScheduler.add(trialsLoopEnd);
+			flowScheduler.add(thanksRoutineBegin(2));
+			flowScheduler.add(thanksRoutineEachFrame());
+			flowScheduler.add(thanksRoutineEnd());
+			// Explicit BLOCK
+			// Ready Routine
+			const instruct_pagesLoopScheduler3 = new Scheduler(psychoJS);
+			flowScheduler.add(instruct_pagesLoopBegin3, instruct_pagesLoopScheduler3);
+			flowScheduler.add(instruct_pagesLoopScheduler3);
+			flowScheduler.add(instruct_pagesLoopEnd);
+			flowScheduler.add(readyRoutineBegin('EXPL'));
+			flowScheduler.add(readyRoutineEachFrame());
+			flowScheduler.add(readyRoutineEnd());
+			// 
+			const trialsLoopScheduler_explicit = new Scheduler(psychoJS);
+			flowScheduler.add(trialsLoopBeginExplicit, trialsLoopScheduler_explicit);
+			flowScheduler.add(trialsLoopScheduler_explicit);
+			flowScheduler.add(trialsLoopEnd);
+			flowScheduler.add(thanksRoutineBegin(3));
+			flowScheduler.add(thanksRoutineEachFrame());
+			flowScheduler.add(thanksRoutineEnd());
+			flowScheduler.add(quitPsychoJS, '', true);
+			return Scheduler.Event.NEXT;
+		}
 	}
 
 	if (first_sel_made && second_sel_made && third_sel_made && events_not_cleared) {

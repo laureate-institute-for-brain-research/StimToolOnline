@@ -2,6 +2,7 @@
     "name": "RL_Task",
     "order": [
         "/?index=0&task=rl_task&run=Pilot_RL.json",
+        "/?index=0&task=rl_task&run=Pilot_RL_CB.json",
         "/completed?"
     ],
     "fullscreen": true,
