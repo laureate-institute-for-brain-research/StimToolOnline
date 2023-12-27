@@ -910,13 +910,8 @@ function experimentInit() {
 	// Initialize components for Routine "trial"
 	trialClock = new util.Clock();
 	toneClock = new util.Clock();
-	stimClock = new util.Clock();
-	adviceClock = new util.Clock();
 	feedbackClock = new util.Clock();
 	respondClock = new util.Clock();
-	blockClock = new util.Clock();
-	debugClock = new util.Clock();
-	instrNoticeClock = new util.Clock();
 
 	endClock = new util.Clock();
 
@@ -1409,12 +1404,10 @@ function practiceTrialsLoopBegin(thisScheduler) {
 
 	last_trial_num = trials.nTotal
 	current_block_size = config_values.practice_block_size
-	total_block_count = trials.nTotal / parseInt(config_values.practice_block_size)
 
 	psychoJS.experiment.addLoop(trials); // add the loop to the experiment
 	currentLoop = trials;  // we're now the current loop
 	total_score = 0
-	completed_blocks = 1
 	
 	endClock.reset()
 	resp.stop()
@@ -1505,12 +1498,10 @@ function trialsLoopBegin(thisScheduler) {
 	main_loop_count = 0
 	last_trial_num = trials.nTotal
 	current_block_size = config_values.block_size
-	total_block_count = trials.nTotal / parseInt(config_values.block_size)
 
 	psychoJS.experiment.addLoop(trials); // add the loop to the experiment
 	currentLoop = trials;  // we're now the current loop
 	total_score = 0
-	completed_blocks = 1
 
 	init_fixation_flag = true
 
@@ -1550,12 +1541,10 @@ function trialsLoopBeginTesting(thisScheduler) {
 	main_loop_count = 0
 	last_trial_num = trials.nTotal
 	current_block_size = config_values.block_size
-	total_block_count = trials.nTotal / parseInt(config_values.block_size)
 
 	psychoJS.experiment.addLoop(trials); // add the loop to the experiment
 	currentLoop = trials;  // we're now the current loop
 	// total_score = 0
-	completed_blocks = 1
 
 	init_fixation_flag = true
 
@@ -1595,12 +1584,10 @@ function trialsLoopBeginExplicit(thisScheduler) {
 	main_loop_count = 0
 	last_trial_num = trials.nTotal
 	current_block_size = config_values.block_size
-	total_block_count = trials.nTotal / parseInt(config_values.block_size)
 
 	psychoJS.experiment.addLoop(trials); // add the loop to the experiment
 	currentLoop = trials;  // we're now the current loop
 	// total_score = 0
-	completed_blocks = 1
 
 	init_fixation_flag = true
 
@@ -2699,36 +2686,6 @@ function trialRoutineBeginTesting(trials) {
 			font: 'Arial',
 			units: 'height',
 			pos: hi_pos, height: 0.05, wrapWidth: undefined, ori: 0,
-			color: new util.Color('black'), opacity: 1,
-			depth: 0.0
-		});
-		low_score2 = new visual.TextStim({
-			win: psychoJS.window,
-			name: 'thanksText',
-			text: low_score_txt2,
-			font: 'Arial',
-			units: 'height',
-			pos: low_pos2, height: 0.05, wrapWidth: undefined, ori: 0,
-			color: new util.Color('black'), opacity: 1,
-			depth: 0.0
-		});
-		mid_score2 = new visual.TextStim({
-			win: psychoJS.window,
-			name: 'thanksText',
-			text: mid_score_txt2,
-			font: 'Arial',
-			units: 'height',
-			pos: mid_pos2, height: 0.05, wrapWidth: undefined, ori: 0,
-			color: new util.Color('black'), opacity: 1,
-			depth: 0.0
-		});
-		high_score2 = new visual.TextStim({
-			win: psychoJS.window,
-			name: 'thanksText',
-			text: high_score_txt2,
-			font: 'Arial',
-			units: 'height',
-			pos: hi_pos2, height: 0.05, wrapWidth: undefined, ori: 0,
 			color: new util.Color('black'), opacity: 1,
 			depth: 0.0
 		});
