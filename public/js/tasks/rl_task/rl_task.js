@@ -29,8 +29,6 @@ var real_trial_order = []
 var main_loop_count = 0
 var last_trial_num = 0
 var total_requests = 0
-var total_block_count = 0;
-var completed_blocks = 1;
 
  import { core, data, sound, util, visual } from '/psychojs/psychojs-2021.2.3.js';
  const { PsychoJS } = core;
@@ -46,7 +44,6 @@ import { Sound } from '/lib/sound-2020.1.js';
 var LEFT_KEY = 'left'
 var RIGHT_KEY = 'right'
 var UP_KEY = 'up'
-var DOWN_KEY = 'down'
 var keyList = [LEFT_KEY, RIGHT_KEY, UP_KEY]
 var keyListTest = [LEFT_KEY, RIGHT_KEY]
 var total_score = 0
@@ -173,14 +170,9 @@ window.onload = function () {
 							var currentLine = allRows[i].split(',');
 							for (var j = 0; j < headerRows.length; j++){
 
-								// if (headerRows[j] == " ") {
-								// 	console.log('empty string')
-								// }
 								obj[headerRows[j]] = currentLine[j]
 							}
 							out.push(obj);
-							console.log("uhhh a")
-							console.log(obj)
 
 							if (obj.instruct_slide && obj.instruct_slide != '\n'){
 								resources.push({ name: obj.instruct_slide, path: obj.instruct_slide })
@@ -190,8 +182,6 @@ window.onload = function () {
 								resources.push({ name: obj.audio_path, path: obj.audio_path })
 							}
 						}
-						// console.log(out)
-						console.log(resources)
 						resolve(data)
 					}
 				})
@@ -215,14 +205,8 @@ window.onload = function () {
 							var obj = {};
 							var currentLine = allRows[i].split(',');
 							for (var j = 0; j < headerRows.length; j++){
-
-								// if (headerRows[j] == " ") {
-								// 	console.log('empty string')
-								// }
 								obj[headerRows[j]] = currentLine[j]
 							}
-							console.log(obj)
-							console.log("uhhh b")
 							out.push(obj);
 
 							if (obj.instruct_slide && obj.instruct_slide != '\n'){
@@ -233,8 +217,6 @@ window.onload = function () {
 								resources.push({ name: obj.audio_path, path: obj.audio_path })
 							}
 						}
-						// console.log(out)
-						console.log(resources)
 						resolve(data)
 					}
 				})
@@ -258,10 +240,6 @@ window.onload = function () {
 							var obj = {};
 							var currentLine = allRows[i].split(',');
 							for (var j = 0; j < headerRows.length; j++){
-
-								// if (headerRows[j] == " ") {
-								// 	console.log('empty string')
-								// }
 								obj[headerRows[j]] = currentLine[j]
 							}
 							out.push(obj);
@@ -275,8 +253,6 @@ window.onload = function () {
 								resources.push({ name: obj.audio_path, path: obj.audio_path })
 							}
 						}
-						// console.log(out)
-						console.log(resources)
 						resolve(data)
 					}
 				})
@@ -300,14 +276,9 @@ window.onload = function () {
 							var obj = {};
 							var currentLine = allRows[i].split(',');
 							for (var j = 0; j < headerRows.length; j++){
-
-								// if (headerRows[j] == " ") {
-								// 	console.log('empty string')
-								// }
 								obj[headerRows[j]] = currentLine[j]
 							}
 							out.push(obj);
-							console.log(obj)
 
 							if (obj.instruct_slide && obj.instruct_slide != '\n'){
 								resources.push({ name: obj.instruct_slide, path: obj.instruct_slide })
@@ -317,8 +288,6 @@ window.onload = function () {
 								resources.push({ name: obj.audio_path, path: obj.audio_path })
 							}
 						}
-						// console.log(out)
-						console.log(resources)
 						resolve(data)
 					}
 				})
@@ -436,10 +405,8 @@ window.onload = function () {
 								obj[headerRows[j]] = currentLine[j];	
 							}
 						}
-						console.log(obj)
 
 						if (obj.L1_img != 'None' && obj.L1_img != undefined) {
-							//console.log("HEYYYOOO")
 							resources.push({ name: 'L1_img' , path: obj.L1_img  })
 						}
 						if (obj.M1_img != 'None' && obj.M1_img != undefined) {
@@ -494,9 +461,7 @@ window.onload = function () {
 							resources.push({ name: 'H6_img' , path: obj.H6_img  })
 						}
 
-
 						config_values = obj
-						console.log(resources)
 
 						resolve(data)
 					}
@@ -602,22 +567,8 @@ if (!getQueryVariable('skip_instructions')) {
 	flowScheduler.add(instruct_pagesLoopEndFirst);
 }
 
-// PRACTICE BLOCK
-// if (!getQueryVariable('skip_practice')) {
-// 	// Single Slide
-// 	flowScheduler.add(readyRoutineBegin('PRACTICE'));
-// 	flowScheduler.add(readyRoutineEachFrame());
-// 	flowScheduler.add(readyRoutineEnd());
-
-// 	const practiceTrialsLoopScheduler = new Scheduler(psychoJS);
-// 	flowScheduler.add(practiceTrialsLoopBegin, practiceTrialsLoopScheduler);
-// 	flowScheduler.add(practiceTrialsLoopScheduler);
-// 	flowScheduler.add(trialsLoopEndPractice);
-// }
-
 // quit if user presses Cancel in dialog box:
 dialogCancelScheduler.add(quitPsychoJS, '', false);
-
 
 // Add Slides to resources
 var resources = [
@@ -663,12 +614,8 @@ var instructClock;
 var kb;
 var trialClock;
 var toneClock;
-var stimClock;
-var adviceClock;
 var feedbackClock;
 var respondClock;
-var blockClock;
-var instrNoticeClock;
 
 // Stim from schedule
 var low1
@@ -692,12 +639,6 @@ var high6
 var low_score
 var mid_score
 var high_score
-var low_score2
-var mid_score2
-var high_score2
-var left_score
-var center_score
-var right_score
 var box1
 var box2
 var box3
@@ -706,7 +647,6 @@ var out2
 var out3
 var exp_slider
 var exp_slider_box
-var exp_slider_line
 var exp_slider_txt_left
 var exp_slider_txt_right
 var exp_slider_txt
@@ -729,7 +669,6 @@ var form_q3_opt2
 var form_q3_opf1
 var form_q3_opf2
 var form_submit
-var form_elements = [form_q1_txt, form_q2_txt, form_q3_txt, form_submit]
 
 var instr_repeat_notice
 var practice_repeat_notice
@@ -745,8 +684,6 @@ var thanksClock;
 var thanksText;
 var globalClock;
 var routineTimer;
-
-var debugClock;
 
 
 function experimentInit() {
@@ -1029,9 +966,6 @@ function instruct_pagesLoopBegin(thisScheduler) {
 	psychoJS.experiment.addLoop(slides); // add the loop to the experiment
 	currentLoop = slides;  // we're now the current loop
 
-	var currentInstructIndex = 0
-	var maxInstructions = slides.nTotal
-
 	const snapshot = slides.getSnapshot();
 	thisScheduler.add(importConditions(snapshot));
 	thisScheduler.add(instructRoutineBegin(snapshot));
@@ -1039,7 +973,6 @@ function instruct_pagesLoopBegin(thisScheduler) {
 	thisScheduler.add(instructRoutineEnd(snapshot));
 	thisScheduler.add(endLoopIteration(thisScheduler, snapshot));
 
-	// console.log(thisScheduler)
 	block_type = 'INSTRUCTIONS'
 	mark_event(trials_data, globalClock, 0, block_type, event_types['BLOCK_ONSET'],
 				'NA', 'NA', 'NA')
@@ -1048,7 +981,6 @@ function instruct_pagesLoopBegin(thisScheduler) {
 }
 function instruct_pagesLoopBegin1(thisScheduler) {
 	// set up handler to look up the conditions
-
 	
 	slides = new TrialHandler({
 		psychoJS: psychoJS,
@@ -1061,9 +993,6 @@ function instruct_pagesLoopBegin1(thisScheduler) {
 	psychoJS.experiment.addLoop(slides); // add the loop to the experiment
 	currentLoop = slides;  // we're now the current loop
 
-	var currentInstructIndex = 0
-	var maxInstructions = slides.nTotal
-
 	const snapshot = slides.getSnapshot();
 	thisScheduler.add(importConditions(snapshot));
 	thisScheduler.add(instructRoutineBegin(snapshot));
@@ -1071,7 +1000,6 @@ function instruct_pagesLoopBegin1(thisScheduler) {
 	thisScheduler.add(instructRoutineEnd(snapshot));
 	thisScheduler.add(endLoopIteration(thisScheduler, snapshot));
 
-	// console.log(thisScheduler)
 	block_type = 'INSTRUCTIONS'
 	mark_event(trials_data, globalClock, 0, block_type, event_types['BLOCK_ONSET'],
 				'NA', 'NA', 'NA')
@@ -1080,7 +1008,6 @@ function instruct_pagesLoopBegin1(thisScheduler) {
 }
 function instruct_pagesLoopBegin2(thisScheduler) {
 	// set up handler to look up the conditions
-
 	
 	slides = new TrialHandler({
 		psychoJS: psychoJS,
@@ -1093,9 +1020,6 @@ function instruct_pagesLoopBegin2(thisScheduler) {
 	psychoJS.experiment.addLoop(slides); // add the loop to the experiment
 	currentLoop = slides;  // we're now the current loop
 
-	var currentInstructIndex = 0
-	var maxInstructions = slides.nTotal
-
 	const snapshot = slides.getSnapshot();
 	thisScheduler.add(importConditions(snapshot));
 	thisScheduler.add(instructRoutineBegin(snapshot));
@@ -1103,7 +1027,6 @@ function instruct_pagesLoopBegin2(thisScheduler) {
 	thisScheduler.add(instructRoutineEnd(snapshot));
 	thisScheduler.add(endLoopIteration(thisScheduler, snapshot));
 
-	// console.log(thisScheduler)
 	block_type = 'INSTRUCTIONS'
 	mark_event(trials_data, globalClock, 0, block_type, event_types['BLOCK_ONSET'],
 				'NA', 'NA', 'NA')
@@ -1112,7 +1035,6 @@ function instruct_pagesLoopBegin2(thisScheduler) {
 }
 function instruct_pagesLoopBegin3(thisScheduler) {
 	// set up handler to look up the conditions
-
 	
 	slides = new TrialHandler({
 		psychoJS: psychoJS,
@@ -1125,9 +1047,6 @@ function instruct_pagesLoopBegin3(thisScheduler) {
 	psychoJS.experiment.addLoop(slides); // add the loop to the experiment
 	currentLoop = slides;  // we're now the current loop
 
-	var currentInstructIndex = 0
-	var maxInstructions = slides.nTotal
-
 	const snapshot = slides.getSnapshot();
 	thisScheduler.add(importConditions(snapshot));
 	thisScheduler.add(instructRoutineBegin(snapshot));
@@ -1135,14 +1054,12 @@ function instruct_pagesLoopBegin3(thisScheduler) {
 	thisScheduler.add(instructRoutineEnd(snapshot));
 	thisScheduler.add(endLoopIteration(thisScheduler, snapshot));
 
-	// console.log(thisScheduler)
 	block_type = 'INSTRUCTIONS'
 	mark_event(trials_data, globalClock, 0, block_type, event_types['BLOCK_ONSET'],
 				'NA', 'NA', 'NA')
 
 	return Scheduler.Event.NEXT;
 }
-
 
 
 var block_type;
@@ -1156,7 +1073,6 @@ function instructRoutineBegin(trials) {
 		t = 0;
 		instructClock.reset(); // clock
 		frameN = -1;
-		// console.log(instruct_slide)
 		slideStim.setImage(instruct_slide)
 		// update component parameters for each repeat
 		kb.keys = undefined;
@@ -1166,7 +1082,6 @@ function instructRoutineBegin(trials) {
 	
 		instructComponents.push(kb);
 
-		console.log("InstructionSlides Index: ", trials.thisIndex)
 		instruct_prev_pressed = false
 		
 		if (audio_path) {
@@ -1174,7 +1089,6 @@ function instructRoutineBegin(trials) {
 				win: psychoJS.window,
 				value: audio_path
 			  });
-			console.log(audio_path)
 			time_audio_end = t + track.getDuration()
 			track.setVolume(1.0);
 			track.play();
@@ -1190,8 +1104,6 @@ function instructRoutineBegin(trials) {
 	};
 }
 
-
-var continueRoutine;
 var newSlide;
 var instruct_prev_pressed = false
 function instructSlideRoutineEachFrame(trials, slides) {
@@ -1209,11 +1121,9 @@ function instructSlideRoutineEachFrame(trials, slides) {
 			slideStim.tStart = t;  // (not accounting for frame time here)
 			slideStim.frameNStart = frameN;  // exact frame index
 			slideStim.setAutoDraw(true);
-			// instrText1.setAutoDraw(true);
 		}
 
 		// New Slide Call, set it after pressing key
-		// console.log(track.status)
 		if (newSlide) {
 			console.log('setting new image', instruct_slide, 'index:',trials.thisIndex, 'Audio: ',audio_path)
 			slideStim.setImage(instruct_slide)
@@ -1228,7 +1138,6 @@ function instructSlideRoutineEachFrame(trials, slides) {
 						value: audio_path
 					});
 					time_audio_end = t + track.getDuration()
-					// console.log(audio_path)
 					track.setVolume(1.0);
 					track.play();
 				} else {
@@ -1237,7 +1146,6 @@ function instructSlideRoutineEachFrame(trials, slides) {
 						value: audio_path
 					});
 					time_audio_end = t + track.getDuration()
-					// console.log(audio_path)
 					track.setVolume(1.0);
 					track.play();
 				}
@@ -1271,7 +1179,6 @@ function instructSlideRoutineEachFrame(trials, slides) {
 				}
 				trials = slides.getSnapshot() // get new snapshot after incrementing index
 				psychoJS.importAttributes(trials.getCurrentTrial()); // import the attributes to main class
-				//console.log(trials)
 				newSlide = true
 			}
 
@@ -1289,7 +1196,6 @@ function instructSlideRoutineEachFrame(trials, slides) {
 				}
 				trials = slides.getSnapshot() // get new snapshot after incrementing index
 				psychoJS.importAttributes(trials.getCurrentTrial()); // import the attributes to main class
-				//console.log(trials)
 				newSlide = true
 			}
 			if (theseKeys.length > 0 && theseKeys[0].name == 'left') {
@@ -1306,7 +1212,6 @@ function instructSlideRoutineEachFrame(trials, slides) {
 				} else {
 					trials = slides.getSnapshot() 
 					psychoJS.importAttributes(trials.getCurrentTrial());
-					//console.log(trials)
 					newSlide = true
 				}
 			}
@@ -1354,8 +1259,6 @@ function instructRoutineEnd(trials) {
 	};
 }
 
-var frameRemains;
-
 var readyComponents;
 var readyStim;
 function readyRoutineBegin(block_type) {
@@ -1378,11 +1281,6 @@ function readyRoutineBegin(block_type) {
 					flipHoriz : false, flipVert : false,
 					texRes : 128, interpolate : true, depth : 0
 				});
-				// track = new Sound({
-				// 	win: psychoJS.window,
-				// 	value: 'PRACTICE_ready_audio.mp3'
-				// });
-				// track.setVolume(1.0);
 				break
 			case 'LEARN':
 				readyStim = new visual.ImageStim({
@@ -1394,11 +1292,6 @@ function readyRoutineBegin(block_type) {
 					flipHoriz : false, flipVert : false,
 					texRes : 128, interpolate : true, depth : 0
 				});
-				// track = new Sound({
-				// 	win: psychoJS.window,
-				// 	value: 'MAIN_ready_audio.mp3'
-				// });
-				// track.setVolume(1.0);
 				break
 			case 'TEST':
 				readyStim = new visual.ImageStim({
@@ -1568,9 +1461,6 @@ function shuffle(array) {
 
 function randomGaussian(mean, standardDeviation) {
 
-	/*mean = defaultTo(mean, 0.0);
-	standardDeviation = defaultTo(standardDeviation, 1.0);*/
-
 	var continuous_reward;
 
 	if (randomGaussian.nextGaussian !== undefined) {
@@ -1596,16 +1486,6 @@ function randomGaussian(mean, standardDeviation) {
 	return continuous_reward;
 }; /* function randomGaussian(mean, standardDeviation) */
 
-function generate_trial_order(trials) {
-	for (const t of trials) {
-		// console.log(t)
-		let trial_temp = []
-		trial_temp.push(shuffle(['L', 'M', 'H']))
-		// ...
-		
-	}
-}
-
 function trialsLoopBegin(thisScheduler) {
 
 	endClock.reset()
@@ -1626,8 +1506,6 @@ function trialsLoopBegin(thisScheduler) {
 	last_trial_num = trials.nTotal
 	current_block_size = config_values.block_size
 	total_block_count = trials.nTotal / parseInt(config_values.block_size)
-
-	// generate_trial_order(trials)
 
 	psychoJS.experiment.addLoop(trials); // add the loop to the experiment
 	currentLoop = trials;  // we're now the current loop
@@ -1674,8 +1552,6 @@ function trialsLoopBeginTesting(thisScheduler) {
 	current_block_size = config_values.block_size
 	total_block_count = trials.nTotal / parseInt(config_values.block_size)
 
-	// generate_trial_order(trials)
-
 	psychoJS.experiment.addLoop(trials); // add the loop to the experiment
 	currentLoop = trials;  // we're now the current loop
 	// total_score = 0
@@ -1721,8 +1597,6 @@ function trialsLoopBeginExplicit(thisScheduler) {
 	current_block_size = config_values.block_size
 	total_block_count = trials.nTotal / parseInt(config_values.block_size)
 
-	// generate_trial_order(trials)
-
 	psychoJS.experiment.addLoop(trials); // add the loop to the experiment
 	currentLoop = trials;  // we're now the current loop
 	// total_score = 0
@@ -1754,7 +1628,6 @@ function instruct_pagesLoopEnd() {
 
 var not_drawn = true;
 var form_enter_pressed = false;
-var doitonce = true;
 var not_drawn = true
 var first_sel_made = false
 var second_sel_made = false
@@ -2014,7 +1887,6 @@ function instruct_pagesLoopEndFirst() {
 
 // SHow the points in the trial 
 function trialsLoopEnd() {
-	// currentTrialNumber.setAutoDraw(false)
 	slideStim.setAutoDraw(false)
 
 	psychoJS.experiment.removeLoop(trials);
@@ -2026,7 +1898,6 @@ function trialsLoopEnd() {
 var first_end_practice_entry = true
 // SHow the points in the trial 
 function trialsLoopEndPractice() {
-	// currentTrialNumber.setAutoDraw(false)
 	if (first_end_practice_entry) {
 		slideStim.setAutoDraw(false)
 
@@ -2040,10 +1911,7 @@ function trialsLoopEndPractice() {
 		resp.start()
 		resp.clearEvents()
 	}
-	// console.log(correct_count_practice)
-	// console.log(flowScheduler)
 	if (correct_count_practice >= 7) {
-		// console.log('progress to main task')
 		// Learning BLOCK
 		// Ready Routine
 		const instruct_pagesLoopScheduler1 = new Scheduler(psychoJS);
@@ -2110,7 +1978,6 @@ function trialsLoopEndPractice() {
 		flowScheduler.add(practiceTrialsLoopBegin, practiceTrialsLoopScheduler);
 		flowScheduler.add(practiceTrialsLoopScheduler);
 		flowScheduler.add(trialsLoopEndPractice);
-		// return Scheduler.Event.NEXT;
 	}
 
 	first_end_practice_entry = true
@@ -2130,24 +1997,8 @@ function resize_image(image, image_ratio, multiplier) {
 	}
 }
 
-// var theseKeys;
-// var image_ratio;
 var pressed;
-var asked_for_advice;
-var got_advice;
-var post_advice_choice_allowed;
-var correct_side; // true for left, false for right
-var advice_outcome; // true for left, false for right
-var picked_side; // true for left, false for right
-var feedback_active;
-var no_choice;
-var reward_stim;
-var penalty_stim;
 var last_trial_num = 0;
-var advice_requests = 0;
-var last_prob;
-var show_block_screen = false;
-var start_block_screen = false;
 var pos_score_array = [];
 var box_arr = []
 var left_score_txt = 0
@@ -2191,15 +2042,12 @@ function trialRoutineBegin(trials) {
 
 		if (pos_score_array[0] != "") {
 			if (pos_score_array[0][0].includes("L")) {
-				//console.log("1")
 				low_pos = [window_ratio * -0.25, 0]
 				low_score_txt = pos_score_array[0][1]
 			} else if (pos_score_array[0][0].includes("M")) {
-				//console.log("2")
 				mid_pos = [window_ratio * -0.25, 0]
 				mid_score_txt = pos_score_array[0][1]
 			} else {
-				//console.log("3")
 				hi_pos = [window_ratio * -0.25, 0]
 				high_score_txt = pos_score_array[0][1]
 			}
@@ -2208,15 +2056,12 @@ function trialRoutineBegin(trials) {
 
 		if (pos_score_array[1] != "") {
 			if (pos_score_array[1][0].includes("L")) {
-				//console.log("4")
 				low_pos = [window_ratio * 0, 0]
 				low_score_txt = pos_score_array[1][1]
 			} else if (pos_score_array[1][0].includes("M")) {
-				//console.log("5")
 				mid_pos = [window_ratio * 0, 0]
 				mid_score_txt = pos_score_array[1][1]
 			} else {
-				//console.log("6")
 				hi_pos = [window_ratio * 0, 0]
 				high_score_txt = pos_score_array[1][1]
 			}
@@ -2224,26 +2069,18 @@ function trialRoutineBegin(trials) {
 		}
 
 		if (pos_score_array[2] != "") {
-			// if (options_array.length == 3) {
 			if (pos_score_array[2][0].includes("L")) {
-				//console.log("7")
 				low_pos = [window_ratio * 0.25, 0]
 				low_score_txt = pos_score_array[2][1]
 			} else if (pos_score_array[2][0].includes("M")) {
-				//console.log("8")
 				mid_pos = [window_ratio * 0.25, 0]
 				mid_score_txt = pos_score_array[2][1]
 			} else {
-				//console.log("9")
 				hi_pos = [window_ratio * 0.25, 0]
 				high_score_txt = pos_score_array[2][1]
 			}
 			right_score_txt = pos_score_array[2][1]
-			// }
 		}
-
-		//console.log(pos_score_array)
-		//console.log(options.includes("1"))
 
 		low_score = new visual.TextStim({
 			win: psychoJS.window,
@@ -2334,8 +2171,6 @@ function trialRoutineBegin(trials) {
 		
 		// Stimuli
 		if (options.includes('1')) {
-			//console.log(options)
-			//console.log("OPTIONS INCLUDES 1")
 			if (options.includes("L")) {
 				low1 = new visual.ImageStim({
 					win: psychoJS.window,
@@ -2348,7 +2183,6 @@ function trialRoutineBegin(trials) {
 				});
 				low1.setAutoDraw(true)
 				to_undraw.push(low1)
-				//console.log("a")
 			}
 			if (options.includes("M")) {
 				mid1 = new visual.ImageStim({
@@ -2362,7 +2196,6 @@ function trialRoutineBegin(trials) {
 				});
 				mid1.setAutoDraw(true)
 				to_undraw.push(mid1)
-				//console.log("b")
 			}
 			if (options.includes("H")) {
 				high1 = new visual.ImageStim({
@@ -2376,11 +2209,8 @@ function trialRoutineBegin(trials) {
 				});
 				high1.setAutoDraw(true)
 				to_undraw.push(high1)
-				//console.log("c")
 			}
 		} else if (options.includes('3')) {
-			//console.log(options)
-			//console.log("OPTIONS INCLUDES 1")
 			if (options.includes("L")) {
 				low3 = new visual.ImageStim({
 					win: psychoJS.window,
@@ -2393,7 +2223,6 @@ function trialRoutineBegin(trials) {
 				});
 				low3.setAutoDraw(true)
 				to_undraw.push(low3)
-				//console.log("a")
 			}
 			if (options.includes("M")) {
 				mid3 = new visual.ImageStim({
@@ -2407,7 +2236,6 @@ function trialRoutineBegin(trials) {
 				});
 				mid3.setAutoDraw(true)
 				to_undraw.push(mid3)
-				//console.log("b")
 			}
 			if (options.includes("H")) {
 				high3 = new visual.ImageStim({
@@ -2421,11 +2249,8 @@ function trialRoutineBegin(trials) {
 				});
 				high3.setAutoDraw(true)
 				to_undraw.push(high3)
-				//console.log("c")
 			}
 		} else if (options.includes('4')) {
-			//console.log(options)
-			//console.log("OPTIONS INCLUDES 1")
 			if (options.includes("L")) {
 				low4 = new visual.ImageStim({
 					win: psychoJS.window,
@@ -2438,7 +2263,6 @@ function trialRoutineBegin(trials) {
 				});
 				low4.setAutoDraw(true)
 				to_undraw.push(low4)
-				//console.log("a")
 			}
 			if (options.includes("M")) {
 				mid4 = new visual.ImageStim({
@@ -2452,7 +2276,6 @@ function trialRoutineBegin(trials) {
 				});
 				mid4.setAutoDraw(true)
 				to_undraw.push(mid4)
-				//console.log("b")
 			}
 			if (options.includes("H")) {
 				high4 = new visual.ImageStim({
@@ -2466,11 +2289,8 @@ function trialRoutineBegin(trials) {
 				});
 				high4.setAutoDraw(true)
 				to_undraw.push(high4)
-				//console.log("c")
 			}
 		} else if (options.includes('5')) {
-			//console.log(options)
-			//console.log("OPTIONS INCLUDES 1")
 			if (options.includes("L")) {
 				low5 = new visual.ImageStim({
 					win: psychoJS.window,
@@ -2483,7 +2303,6 @@ function trialRoutineBegin(trials) {
 				});
 				low5.setAutoDraw(true)
 				to_undraw.push(low5)
-				//console.log("a")
 			}
 			if (options.includes("M")) {
 				mid5 = new visual.ImageStim({
@@ -2497,7 +2316,6 @@ function trialRoutineBegin(trials) {
 				});
 				mid5.setAutoDraw(true)
 				to_undraw.push(mid5)
-				//console.log("b")
 			}
 			if (options.includes("H")) {
 				high5 = new visual.ImageStim({
@@ -2511,11 +2329,8 @@ function trialRoutineBegin(trials) {
 				});
 				high5.setAutoDraw(true)
 				to_undraw.push(high5)
-				//console.log("c")
 			}
 		} else if (options.includes('6')) {
-			//console.log(options)
-			//console.log("OPTIONS INCLUDES 1")
 			if (options.includes("L")) {
 				low6 = new visual.ImageStim({
 					win: psychoJS.window,
@@ -2528,7 +2343,6 @@ function trialRoutineBegin(trials) {
 				});
 				low6.setAutoDraw(true)
 				to_undraw.push(low6)
-				//console.log("a")
 			}
 			if (options.includes("M")) {
 				mid6 = new visual.ImageStim({
@@ -2542,7 +2356,6 @@ function trialRoutineBegin(trials) {
 				});
 				mid6.setAutoDraw(true)
 				to_undraw.push(mid6)
-				//console.log("b")
 			}
 			if (options.includes("H")) {
 				high6 = new visual.ImageStim({
@@ -2556,10 +2369,8 @@ function trialRoutineBegin(trials) {
 				});
 				high6.setAutoDraw(true)
 				to_undraw.push(high6)
-				//console.log("c")
 			}
 		} else {
-			//console.log(options)
 			if (options.includes("L")) {
 				low2 = new visual.ImageStim({
 					win: psychoJS.window,
@@ -2612,7 +2423,6 @@ function trialRoutineBegin(trials) {
 		console.log(pos_to_mark)
 		mark_event(trials_data, globalClock, trials.thisIndex, 'NA', event_types['TRIAL_ONSET'],
 				'NA', 'NA', pos_to_mark[0] + "_" + pos_to_mark[1] + "_" + pos_to_mark[2])
-		// resize_image(leftposStim, image_ratio, 0.4)
 
 		pressed = false
 
@@ -2656,7 +2466,6 @@ function trialRoutineRespond(trials) {
 				mark_event(trials_data, globalClock, trials.thisIndex, trial_type, event_types['CHOICE'],
 				resp.rt, 'left', 'NA')
 				feedbackClock.reset()
-				// box1.setAutoDraw(true)
 				let ix = 0
 				pos_score_array.forEach((arr) => {
 					if (arr != "") {
@@ -2664,28 +2473,21 @@ function trialRoutineRespond(trials) {
 					}
 					ix ++
 				})
-				// box1.setAutoDraw(true)
-				// box2.setAutoDraw(true)
-				// box3.setAutoDraw(true)
 				out1.setAutoDraw(true)
 				low_score.setAutoDraw(true)
 				mid_score.setAutoDraw(true)
 				high_score.setAutoDraw(true)
 
-				// if (parseFloat(left_score_txt) > parseFloat(center_score_txt) && parseFloat(left_score_txt) > parseFloat(right_score_txt)) {
-					total_score += parseFloat(left_score_txt)
-					score_to_mark = left_score_txt
-					correct_count_practice += 1
-					console.log(correct_count_practice)
-				// }
+				total_score += parseFloat(left_score_txt)
+				score_to_mark = left_score_txt
+				correct_count_practice += 1
+				console.log(correct_count_practice)
 
-				//continueRoutine = false
 			} else if (resp.keys == UP_KEY && pos_score_array[1] != "") {
 				pressed = true
 				mark_event(trials_data, globalClock, trials.thisIndex, trial_type, event_types['CHOICE'],
 				resp.rt, 'middle', 'NA')
 				feedbackClock.reset()
-				// box2.setAutoDraw(true)
 				let ix = 0
 				pos_score_array.forEach((arr) => {
 					if (arr != "") {
@@ -2693,28 +2495,21 @@ function trialRoutineRespond(trials) {
 					}
 					ix ++
 				})
-				// box1.setAutoDraw(true)
-				// box2.setAutoDraw(true)
-				// box3.setAutoDraw(true)
 				out2.setAutoDraw(true)
 				low_score.setAutoDraw(true)
 				mid_score.setAutoDraw(true)
 				high_score.setAutoDraw(true)
 
-				// if (parseFloat(center_score_txt) > parseFloat(left_score_txt) && parseFloat(center_score_txt) > parseFloat(right_score_txt)) {
-					total_score += parseFloat(center_score_txt)
-					score_to_mark = center_score_txt
-					correct_count_practice += 1
-					console.log(correct_count_practice)
-				// }
+				total_score += parseFloat(center_score_txt)
+				score_to_mark = center_score_txt
+				correct_count_practice += 1
+				console.log(correct_count_practice)
 
-				//continueRoutine = false
 			} else if (resp.keys == RIGHT_KEY && pos_score_array[2] != "") {
 				pressed = true
 				mark_event(trials_data, globalClock, trials.thisIndex, trial_type, event_types['CHOICE'],
 				resp.rt, 'right', 'NA')
 				feedbackClock.reset()
-				// box3.setAutoDraw(true)
 				let ix = 0
 				pos_score_array.forEach((arr) => {
 					if (arr != "") {
@@ -2722,26 +2517,17 @@ function trialRoutineRespond(trials) {
 					}
 					ix ++
 				})
-				// box1.setAutoDraw(true)
-				// box2.setAutoDraw(true)
-				// box3.setAutoDraw(true)
 				out3.setAutoDraw(true)
 				low_score.setAutoDraw(true)
 				mid_score.setAutoDraw(true)
 				high_score.setAutoDraw(true)
 
-				// if (parseFloat(right_score_txt) > parseFloat(center_score_txt) && parseFloat(right_score_txt) > parseFloat(left_score_txt)) {
-					total_score += parseFloat(right_score_txt)
-					score_to_mark = right_score_txt
-					correct_count_practice += 1
-					console.log(correct_count_practice)
-				// }
+				total_score += parseFloat(right_score_txt)
+				score_to_mark = right_score_txt
+				correct_count_practice += 1
+				console.log(correct_count_practice)
 
-				//continueRoutine = false
 			}
-			// low_score.setAutoDraw(true)
-			// mid_score.setAutoDraw(true)
-			// high_score.setAutoDraw(true)
 			mark_event(trials_data, globalClock, trials.thisIndex, trial_type, event_types['FEEDBACK'],
 					'NA', total_score, score_to_mark)
 		}
@@ -2769,7 +2555,6 @@ function trialRoutineRespond(trials) {
 			mid_score.setAutoDraw(false)
 			high_score.setAutoDraw(false)
 
-			// set_fixation_flag = true
 			endClock.reset()
 			return Scheduler.Event.NEXT;
 		}
@@ -2819,30 +2604,22 @@ function trialRoutineBeginTesting(trials) {
 		}
 
 		if (pos_score_array[0] != "") {
-			console.log('hey1')
-			console.log(pos_score_array[0])
 			if (pos_score_array[0][0].includes("L1") || pos_score_array[0][0].includes("L5")) {
-				console.log("l1")
 				low_pos = [window_ratio * -0.15, 0]
 				low_score_txt = pos_score_array[0][1]
 			} else if (pos_score_array[0][0].includes("L2") || pos_score_array[0][0].includes("L6")) {
-				console.log("l2")
 				low_pos2 = [window_ratio * -0.15, 0]
 				low_score_txt2 = pos_score_array[0][1]
 			} else if (pos_score_array[0][0].includes("M1") || pos_score_array[0][0].includes("M5")) {
-				console.log("m1")
 				mid_pos = [window_ratio * -0.15, 0]
 				mid_score_txt = pos_score_array[0][1]
 			} else if (pos_score_array[0][0].includes("M2") || pos_score_array[0][0].includes("M6")) {
-				console.log("m2")
 				mid_pos2 = [window_ratio * -0.15, 0]
 				mid_score_txt2 = pos_score_array[0][1]
 			} else if (pos_score_array[0][0].includes("H1") || pos_score_array[0][0].includes("H5")) {
-				console.log("h1")
 				hi_pos = [window_ratio * -0.15, 0]
 				high_score_txt = pos_score_array[0][1]
 			} else {
-				console.log("h2 or h6")
 				hi_pos2 = [window_ratio * -0.15, 0]
 				high_score_txt2 = pos_score_array[0][1]
 			}
@@ -2851,27 +2628,21 @@ function trialRoutineBeginTesting(trials) {
 
 		if (pos_score_array[1] != "") {
 			if (pos_score_array[1][0].includes("L1") || pos_score_array[0][0].includes("L5")) {
-				//console.log("1")
 				low_pos = [window_ratio * 0, 0]
 				low_score_txt = pos_score_array[1][1]
 			} else if (pos_score_array[1][0].includes("L2") || pos_score_array[0][0].includes("L6")) {
-				//console.log("1")
 				low_pos2 = [window_ratio * 0, 0]
 				low_score_txt2 = pos_score_array[1][1]
 			} else if (pos_score_array[1][0].includes("M1") || pos_score_array[0][0].includes("M5")) {
-				//console.log("2")
 				mid_pos = [window_ratio * 0, 0]
 				mid_score_txt = pos_score_array[1][1]
 			} else if (pos_score_array[1][0].includes("M2") || pos_score_array[0][0].includes("M6")) {
-				//console.log("2")
 				mid_pos2 = [window_ratio * 0, 0]
 				mid_score_txt2 = pos_score_array[1][1]
 			} else if (pos_score_array[1][0].includes("H1") || pos_score_array[0][0].includes("H5")) {
-				//console.log("2")
 				hi_pos = [window_ratio * 0, 0]
 				high_score_txt = pos_score_array[1][1]
 			} else {
-				//console.log("3")
 				hi_pos2 = [window_ratio * 0, 0]
 				high_score_txt2 = pos_score_array[1][1]
 			}
@@ -2879,30 +2650,22 @@ function trialRoutineBeginTesting(trials) {
 		}
 
 		if (pos_score_array[2] != "") {
-			console.log('hey1')
-			console.log(pos_score_array[2])
 			if (pos_score_array[2][0].includes("L1") || pos_score_array[2][0].includes("L5")) {
-				console.log("l1")
 				low_pos = [window_ratio * 0.15, 0]
 				low_score_txt = pos_score_array[2][1]
 			} else if (pos_score_array[2][0].includes("L2") || pos_score_array[2][0].includes("L6")) {
-				console.log("l2")
 				low_pos2 = [window_ratio * 0.15, 0]
 				low_score_txt2 = pos_score_array[2][1]
 			} else if (pos_score_array[2][0].includes("M1") || pos_score_array[2][0].includes("M5")) {
-				console.log("m1")
 				mid_pos = [window_ratio * 0.15, 0]
 				mid_score_txt = pos_score_array[2][1]
 			} else if (pos_score_array[2][0].includes("M2") || pos_score_array[2][0].includes("M6")) {
-				console.log("m2")
 				mid_pos2 = [window_ratio * 0.15, 0]
 				mid_score_txt2 = pos_score_array[2][1]
 			} else if (pos_score_array[2][0].includes("H1") || pos_score_array[2][0].includes("H5")) {
-				console.log("h1")
 				hi_pos = [window_ratio * 0.15, 0]
 				high_score_txt = pos_score_array[2][1]
 			} else {
-				console.log("h2")
 				hi_pos2 = [window_ratio * 0.15, 0]
 				high_score_txt2 = pos_score_array[2][1]
 			}
@@ -3028,8 +2791,6 @@ function trialRoutineBeginTesting(trials) {
 		
 		// Stimuli
 		if (options.includes('1')) {
-			//console.log(options)
-			//console.log("OPTIONS INCLUDES 1")
 			if (options.includes("L1")) {
 				low1 = new visual.ImageStim({
 					win: psychoJS.window,
@@ -3042,7 +2803,6 @@ function trialRoutineBeginTesting(trials) {
 				});
 				low1.setAutoDraw(true)
 				to_undraw.push(low1)
-				//console.log("a")
 			}
 			if (options.includes("M1")) {
 				mid1 = new visual.ImageStim({
@@ -3056,7 +2816,6 @@ function trialRoutineBeginTesting(trials) {
 				});
 				mid1.setAutoDraw(true)
 				to_undraw.push(mid1)
-				//console.log("b")
 			}
 			if (options.includes("H1")) {
 				high1 = new visual.ImageStim({
@@ -3070,11 +2829,9 @@ function trialRoutineBeginTesting(trials) {
 				});
 				high1.setAutoDraw(true)
 				to_undraw.push(high1)
-				//console.log("c")
 			}
 		}
 		if (options.includes('2')) {
-			//console.log(options)
 			if (options.includes("L2")) {
 				low2 = new visual.ImageStim({
 					win: psychoJS.window,
@@ -3087,7 +2844,6 @@ function trialRoutineBeginTesting(trials) {
 				});
 				low2.setAutoDraw(true)
 				to_undraw.push(low2)
-				//console.log("a2")
 			}
 			if (options.includes("M2")) {
 				mid2 = new visual.ImageStim({
@@ -3101,7 +2857,6 @@ function trialRoutineBeginTesting(trials) {
 				});
 				mid2.setAutoDraw(true)
 				to_undraw.push(mid2)
-				//console.log("b2")
 			}
 			if (options.includes("H2")) {
 				high2 = new visual.ImageStim({
@@ -3115,12 +2870,9 @@ function trialRoutineBeginTesting(trials) {
 				});
 				high2.setAutoDraw(true)
 				to_undraw.push(high2)
-				//console.log("c2")
 			}
 		}
 		if (options.includes('5')) {
-			//console.log(options)
-			//console.log("OPTIONS INCLUDES 1")
 			if (options.includes("L5")) {
 				low5 = new visual.ImageStim({
 					win: psychoJS.window,
@@ -3133,7 +2885,6 @@ function trialRoutineBeginTesting(trials) {
 				});
 				low5.setAutoDraw(true)
 				to_undraw.push(low5)
-				//console.log("a")
 			}
 			if (options.includes("M5")) {
 				mid5 = new visual.ImageStim({
@@ -3147,7 +2898,6 @@ function trialRoutineBeginTesting(trials) {
 				});
 				mid5.setAutoDraw(true)
 				to_undraw.push(mid5)
-				//console.log("b")
 			}
 			if (options.includes("H5")) {
 				high5 = new visual.ImageStim({
@@ -3161,12 +2911,9 @@ function trialRoutineBeginTesting(trials) {
 				});
 				high5.setAutoDraw(true)
 				to_undraw.push(high5)
-				//console.log("c")
 			}
 		}
 		if (options.includes('6')) {
-			//console.log(options)
-			//console.log("OPTIONS INCLUDES 1")
 			if (options.includes("L6")) {
 				low6 = new visual.ImageStim({
 					win: psychoJS.window,
@@ -3179,7 +2926,6 @@ function trialRoutineBeginTesting(trials) {
 				});
 				low6.setAutoDraw(true)
 				to_undraw.push(low6)
-				//console.log("a")
 			}
 			if (options.includes("M6")) {
 				mid6 = new visual.ImageStim({
@@ -3193,7 +2939,6 @@ function trialRoutineBeginTesting(trials) {
 				});
 				mid6.setAutoDraw(true)
 				to_undraw.push(mid6)
-				//console.log("b")
 			}
 			if (options.includes("H6")) {
 				high6 = new visual.ImageStim({
@@ -3207,7 +2952,6 @@ function trialRoutineBeginTesting(trials) {
 				});
 				high6.setAutoDraw(true)
 				to_undraw.push(high6)
-				//console.log("c")
 			}
 		}
 		let pos_to_mark = []
@@ -3220,7 +2964,6 @@ function trialRoutineBeginTesting(trials) {
 		})
 		mark_event(trials_data, globalClock, trials.thisIndex, 'NA', event_types['TRIAL_ONSET'],
 				'NA', 'NA', pos_to_mark[0] + "_" + pos_to_mark[1] + "_" + pos_to_mark[2])
-		// resize_image(leftposStim, image_ratio, 0.4)
 
 		pressed = false
 
@@ -3265,15 +3008,12 @@ function trialRoutineRespondTesting(trials) {
 				feedbackClock.reset()
 				out1.setAutoDraw(true)
 
-				// if (parseFloat(left_score_txt) > parseFloat(center_score_txt) && parseFloat(left_score_txt) > parseFloat(right_score_txt)) {
-					// console.log(pos_score_array)
 				if (pos_score_array[0][0].charAt(0) != pos_score_array[2][0].charAt(0)) {
 					console.log(pos_score_array)
 					console.log(`adding ${left_score_txt}`)
 					total_score += parseFloat(left_score_txt)
 					score_to_mark = left_score_txt
 				}
-				// }
 			} else if (resp.keys == RIGHT_KEY && pos_score_array[2] != "") {
 				pressed = true
 				mark_event(trials_data, globalClock, trials.thisIndex, trial_type, event_types['CHOICE'],
@@ -3281,15 +3021,12 @@ function trialRoutineRespondTesting(trials) {
 				feedbackClock.reset()
 				out3.setAutoDraw(true)
 
-				// if (parseFloat(right_score_txt) > parseFloat(center_score_txt) && parseFloat(right_score_txt) > parseFloat(left_score_txt)) {
-					// console.log(pos_score_array)
 				if (pos_score_array[2][0].charAt(0) != pos_score_array[0][0].charAt(0)) {
 					console.log(pos_score_array)
 					console.log(`adding ${right_score_txt}`)
 					total_score += parseFloat(right_score_txt)
 					score_to_mark = right_score_txt
 				}
-				// }
 			}
 			mark_event(trials_data, globalClock, trials.thisIndex, trial_type, event_types['FEEDBACK'],
 					'NA', total_score, score_to_mark)
@@ -3314,7 +3051,6 @@ function trialRoutineRespondTesting(trials) {
 			out2.setAutoDraw(false)
 			out3.setAutoDraw(false)
 
-			// set_fixation_flag = true
 			endClock.reset()
 			return Scheduler.Event.NEXT;
 		}
@@ -3378,7 +3114,6 @@ function trialRoutineBeginExplicit(trials) {
 			}
 		}
 		if (options.includes('2')) {
-			//console.log(options)
 			if (options.includes("L2")) {
 				low2 = new visual.ImageStim({
 					win: psychoJS.window,
@@ -3420,8 +3155,6 @@ function trialRoutineBeginExplicit(trials) {
 			}
 		}
 		if (options.includes('5')) {
-			//console.log(options)
-			//console.log("OPTIONS INCLUDES 1")
 			if (options.includes("L")) {
 				low5 = new visual.ImageStim({
 					win: psychoJS.window,
@@ -3434,7 +3167,6 @@ function trialRoutineBeginExplicit(trials) {
 				});
 				low5.setAutoDraw(true)
 				to_undraw.push(low5)
-				//console.log("a")
 			}
 			if (options.includes("M")) {
 				mid5 = new visual.ImageStim({
@@ -3448,7 +3180,6 @@ function trialRoutineBeginExplicit(trials) {
 				});
 				mid5.setAutoDraw(true)
 				to_undraw.push(mid5)
-				//console.log("b")
 			}
 			if (options.includes("H")) {
 				high5 = new visual.ImageStim({
@@ -3462,12 +3193,9 @@ function trialRoutineBeginExplicit(trials) {
 				});
 				high5.setAutoDraw(true)
 				to_undraw.push(high5)
-				//console.log("c")
 			}
 		}
 		if (options.includes('6')) {
-			//console.log(options)
-			//console.log("OPTIONS INCLUDES 1")
 			if (options.includes("L")) {
 				low6 = new visual.ImageStim({
 					win: psychoJS.window,
@@ -3480,7 +3208,6 @@ function trialRoutineBeginExplicit(trials) {
 				});
 				low6.setAutoDraw(true)
 				to_undraw.push(low6)
-				//console.log("a")
 			}
 			if (options.includes("M")) {
 				mid6 = new visual.ImageStim({
@@ -3494,7 +3221,6 @@ function trialRoutineBeginExplicit(trials) {
 				});
 				mid6.setAutoDraw(true)
 				to_undraw.push(mid6)
-				//console.log("b")
 			}
 			if (options.includes("H")) {
 				high6 = new visual.ImageStim({
@@ -3508,12 +3234,10 @@ function trialRoutineBeginExplicit(trials) {
 				});
 				high6.setAutoDraw(true)
 				to_undraw.push(high6)
-				//console.log("c")
 			}
 		}
 
 		let ticks_arr = [...Array(101).keys()] // [0~100]
-		// ticks_arr.shift() // [1~100]
 		exp_slider = new visual.Slider({
 			win: psychoJS.window,
 			name: 'stimPath', units: 'height',
@@ -3562,36 +3286,17 @@ function trialRoutineBeginExplicit(trials) {
 			opacity: 1, flipHoriz: false, flipVert: false,
 			texRes: 128, interpolate: true, depth: 0
 		});
-		// exp_slider_line= new visual.Rect({
-		// 	win: psychoJS.window,
-		// 	name: 'stimPath', units: 'height',
-		// 	mask: undefined, ori: 0, pos: [0, -0.25],
-		// 	size: [2.0,0.02], fillColor: 'grey', lineColor: 'grey',
-		// 	opacity: 1, flipHoriz: false, flipVert: false,
-		// 	texRes: 128, interpolate: true, depth: 0
-		// });
 		exp_slider.setAutoDraw(true)
 		exp_slider_txt.setAutoDraw(true)
 		exp_slider_box.setAutoDraw(true)
-		// exp_slider_line.setAutoDraw(true)
 		exp_slider_txt_left.setAutoDraw(true)
 		exp_slider_txt_right.setAutoDraw(true)
 		to_undraw.push(exp_slider)
 		to_undraw.push(exp_slider_txt)
 		to_undraw.push(exp_slider_box)
-		// to_undraw.push(exp_slider_line)
 		to_undraw.push(exp_slider_txt_left)
 		to_undraw.push(exp_slider_txt_right)
 
-		// exp_button = new visual.TextBox({
-		// 	win: psychoJS.window,
-		// 	name: 'stimPath', units: 'height',
-		// 	mask: undefined, ori: 0, pos: [0, -0.3],
-		// 	text: 'SUBMIT', letterHeight: 0.02,
-		// 	fitToContent: true,
-		// 	opacity: 1, flipHoriz: false, flipVert: false,
-		// 	texRes: 128, interpolate: true, depth: 0
-		// });
 		exp_button= new visual.Rect({
 			win: psychoJS.window,
 			name: 'stimPath', units: 'height',
@@ -3620,7 +3325,6 @@ function trialRoutineBeginExplicit(trials) {
 		key_list_explicit = ['left', 'right']
 
 		pressed = false
-		// respondClock.reset()
 		mark_event(trials_data, globalClock, trials.thisIndex, 'NA', event_types['TRIAL_ONSET'],
 				'NA', 'NA' , options)
 
@@ -3639,8 +3343,6 @@ function trialRoutineRespondExplicit(trials) {
 	return function () {
 		//------Loop for each frame of Routine 'trial'-------
 		let continueRoutine = true; // until we're told otherwise
-		// resp.clearEvents();
-		// resp.keys = ''
 		enter_pressed = false
 	
 		// get current time
@@ -3719,7 +3421,6 @@ function trialRoutineRespondExplicit(trials) {
 				stim.setAutoDraw(false)
 			})
 
-			// set_fixation_flag = true
 			endClock.reset()
 			return Scheduler.Event.NEXT;
 		}
@@ -3742,21 +3443,8 @@ function initialFixation(trials) {
 		// get current time
 		t_end = endClock.getTime();
 		
-		// if (points_fixation_stim.status == PsychoJS.Status.NOT_STARTED) {
-		// 	points_fixation_stim.color = new util.Color('white')
-		// 	points_fixation_stim.setText('+')
-		// 	points_fixation_stim.setAutoDraw(true)
-		// 	//console.log('Initial Fixation')
-
-		// 	mark_event(trials_data, globalClock, 'NA', trial_type, event_types['FIXATION_ONSET'],
-		// 		'NA', 'NA' , 'NA')
-
-		// }
-
 		if (t_end >= 3) {
 			continueRoutine = false
-			// points_fixation_stim.setAutoDraw(false)
-			// points_fixation_stim.status = PsychoJS.Status.NOT_STARTED
 		}
 		
 		// check for quit (typically the Esc key)
@@ -3769,9 +3457,6 @@ function initialFixation(trials) {
 			return Scheduler.Event.FLIP_REPEAT;
 		}
 		else {
-			// points_fixation_stim.setAutoDraw(false)
-			// points_fixation_stim.status = PsychoJS.Status.NOT_STARTED
-
 			init_fixation_flag = false
 			
 			endClock.reset()
@@ -3800,7 +3485,6 @@ function sendData() {
 			"trials_data": trials_data,
 			"expInfo": expInfo
 		},
-		// dataType: 'JSON',
 		success:function(data) {
 			console.log(data)
 		  }
@@ -3826,25 +3510,13 @@ function trialRoutineEnd(trials) {
 	return function () {
 		//------Ending Routine 'trial'-------
 		t = endClock.getTime()
-
-		// if (points_fixation_stim.status == PsychoJS.Status.NOT_STARTED) {
-		// 			points_fixation_stim.setText('+')
-		// 			mark_event(trials_data, globalClock, trials.thisIndex, trial_type, event_types['FIXATION_ONSET'],
-		// 				'NA', 'NA', 'NA')
-					
-		// 			points_fixation_stim.setAutoDraw(true)
-		// }
 		
-			// hold the fixation for jitter time
+		// hold the fixation for jitter time
 		if (t <= 0.1) {
 			return Scheduler.Event.FLIP_REPEAT;
 		} else {
 			resp.stop()
 			resp.status = PsychoJS.Status.NOT_STARTED
-			//sendData()
-			// Clear Fixation
-			// points_fixation_stim.setAutoDraw(false)
-			// points_fixation_stim.status = PsychoJS.Status.NOT_STARTED
 			return Scheduler.Event.NEXT;
 		}
 	};
@@ -3860,24 +3532,12 @@ function trialRoutineEndPractice(trials) {
 		//------Ending Routine 'trial'-------
 		t = endClock.getTime()
 
-		// if (points_fixation_stim.status == PsychoJS.Status.NOT_STARTED) {
-		// 			points_fixation_stim.setText('+')
-		// 			mark_event(trials_data, globalClock, trials.thisIndex, trial_type, event_types['FIXATION_ONSET'],
-		// 				'NA', 'NA', 'NA')
-					
-		// 			points_fixation_stim.setAutoDraw(true)
-		// }
-		
-			// hold the fixation for jitter time
+		// hold the fixation for jitter time
 		if (t <= 0.1) {
 			return Scheduler.Event.FLIP_REPEAT;
 		} else {
 			resp.stop()
 			resp.status = PsychoJS.Status.NOT_STARTED
-			//sendData()
-			// Clear Fixation
-			// points_fixation_stim.setAutoDraw(false)
-			// points_fixation_stim.status = PsychoJS.Status.NOT_STARTED
 			return Scheduler.Event.NEXT;
 		}
 	};
@@ -3887,25 +3547,13 @@ function trialRoutineEndTesting(trials) {
 	return function () {
 		//------Ending Routine 'trial'-------
 		t = endClock.getTime()
-
-		// if (points_fixation_stim.status == PsychoJS.Status.NOT_STARTED) {
-		// 			points_fixation_stim.setText('+')
-		// 			mark_event(trials_data, globalClock, trials.thisIndex, trial_type, event_types['FIXATION_ONSET'],
-		// 				'NA', 'NA', 'NA')
-					
-		// 			points_fixation_stim.setAutoDraw(true)
-		// }
 		
-			// hold the fixation for jitter time
+		// hold the fixation for jitter time
 		if (t <= 0.1) {
 			return Scheduler.Event.FLIP_REPEAT;
 		} else {
 			resp.stop()
 			resp.status = PsychoJS.Status.NOT_STARTED
-			//sendData()
-			// Clear Fixation
-			// points_fixation_stim.setAutoDraw(false)
-			// points_fixation_stim.status = PsychoJS.Status.NOT_STARTED
 			return Scheduler.Event.NEXT;
 		}
 	};
@@ -3915,25 +3563,13 @@ function trialRoutineEndExplicit(trials) {
 	return function () {
 		//------Ending Routine 'trial'-------
 		t = endClock.getTime()
-
-		// if (points_fixation_stim.status == PsychoJS.Status.NOT_STARTED) {
-		// 			points_fixation_stim.setText('+')
-		// 			mark_event(trials_data, globalClock, trials.thisIndex, trial_type, event_types['FIXATION_ONSET'],
-		// 				'NA', 'NA', 'NA')
-					
-		// 			points_fixation_stim.setAutoDraw(true)
-		// }
 		
-			// hold the fixation for jitter time
+		// hold the fixation for jitter time
 		if (t <= 0.1) {
 			return Scheduler.Event.FLIP_REPEAT;
 		} else {
 			resp.stop()
 			resp.status = PsychoJS.Status.NOT_STARTED
-			//sendData()
-			// Clear Fixation
-			// points_fixation_stim.setAutoDraw(false)
-			// points_fixation_stim.status = PsychoJS.Status.NOT_STARTED
 			return Scheduler.Event.NEXT;
 		}
 	};
@@ -4104,8 +3740,6 @@ function endLoopIteration(thisScheduler, loop = undefined) {
 			console.log("sending data last trial num")
 			sendData()
 		}
-
-		//sendData()
 
 		return Scheduler.Event.NEXT;
 	};
