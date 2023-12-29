@@ -207,24 +207,32 @@ window.onload = function () {
 							}
 							// If there's media add to resources
 							if (obj.images != 'None' && obj.images != undefined) {
-								for (let x in obj.images.split(' ')) {
+								console.log(obj.images)
+								obj.images.split(" ").forEach((x) => {
+									console.log(x)
 									resources.push({ name: x , path: x })
-								}
+								})
 							}
 							if (obj.videos != 'None' && obj.videos != undefined) {
-								for (let x in obj.videos.split(' ')) {
+								console.log(obj.videos)
+								obj.videos.split(" ").forEach((x) => {
+									console.log(x)
 									resources.push({ name: x , path: x })
-								}
+								})
 							}
 							if (obj.sounds != 'None' && obj.sounds != undefined) {
-								for (let x in obj.sounds.split(' ')) {
+								console.log(obj.sounds)
+								obj.sounds.split(" ").forEach((x) => {
+									console.log(x)
 									resources.push({ name: x , path: x })
-								}
+								})
 							}
 							if (obj.others != 'None' && obj.others != undefined) {
-								for (let x in obj.others.split(' ')) {
+								console.log(obj.others)
+								obj.others.split(" ").forEach((x) => {
+									console.log(x)
 									resources.push({ name: x , path: x })
-								}
+								})
 							}
 						}
 
@@ -290,24 +298,32 @@ window.onload = function () {
 							}
 							// If there's media add to resources
 							if (obj.images != 'None' && obj.images != undefined) {
-								for (let x in obj.images.split(' ')) {
+								console.log(obj.images)
+								obj.images.split(" ").forEach((x) => {
+									console.log(x)
 									resources.push({ name: x , path: x })
-								}
+								})
 							}
 							if (obj.videos != 'None' && obj.videos != undefined) {
-								for (let x in obj.videos.split(' ')) {
+								console.log(obj.videos)
+								obj.videos.split(" ").forEach((x) => {
+									console.log(x)
 									resources.push({ name: x , path: x })
-								}
+								})
 							}
 							if (obj.sounds != 'None' && obj.sounds != undefined) {
-								for (let x in obj.sounds.split(' ')) {
+								console.log(obj.sounds)
+								obj.sounds.split(" ").forEach((x) => {
+									console.log(x)
 									resources.push({ name: x , path: x })
-								}
+								})
 							}
 							if (obj.others != 'None' && obj.others != undefined) {
-								for (let x in obj.others.split(' ')) {
+								console.log(obj.others)
+								obj.others.split(" ").forEach((x) => {
+									console.log(x)
 									resources.push({ name: x , path: x })
-								}
+								})
 							}
 						}
 
@@ -463,6 +479,7 @@ var respondClock;
 var blockClock;
 
 // static stim
+var questionText;
 //// UI Trackers
 var currentTrialNumber;
 var currentTrialText;
@@ -535,10 +552,10 @@ function experimentInit() {
 	currentTrialText = new visual.TextStim({
 		win: psychoJS.window,
 		name: 'trialTracker',
-		text: 'Choice Number: ',
+		text: 'Trial Number: ',
 		font: 'Arial', units: 'height',
-		pos: [-window_ratio * 0.46, 0.47], height: 0.027, wrapWidth: undefined, ori: 0,
-		alignHoriz: 'left',
+		pos: [window_ratio * 0.35, 0.46], height: 0.027, wrapWidth: undefined, ori: 0,
+		alignHoriz: 'right',
 		color: new util.Color('white'), opacity: 1,
 		depth: 0.0
 	});
@@ -547,8 +564,19 @@ function experimentInit() {
 		name: 'trialTracker',
 		text: '1',
 		font: 'Arial', units: 'height',
-		pos: [currentTrialText.getBoundingBox().right + (window_ratio * 0.005), 0.47], height: 0.027, wrapWidth: undefined, ori: 0,
+		pos: [currentTrialText.getBoundingBox().right + (window_ratio * 0.005), 0.46], height: 0.027, wrapWidth: undefined, ori: 0,
 		alignHoriz: 'left',
+		color: new util.Color('white'), opacity: 1,
+		depth: 0.0
+	});
+
+	questionText = new visual.TextStim({
+		win: psychoJS.window,
+		name: 'trialTracker',
+		text: '',
+		font: 'Arial', units: 'height',
+		pos: [0, 0.4], height: 0.027, wrapWidth: undefined, ori: 0,
+		alignHoriz: 'center',
 		color: new util.Color('white'), opacity: 1,
 		depth: 0.0
 	});
@@ -1107,10 +1135,119 @@ function resize_image(image, image_ratio, multiplier) {
 	}
 }
 
-// var theseKeys;
-// var image_ratio;
+var option_list = []
+var options_text_list = []
+var option_list_list = []
+var option_count = 0;
+var list_count = 0;
+var row_center_index = 0
+var button_pos = [0, -0.2] // center position
+var button_spacing = 0.02
+var signage = -1 // screen side 
+var anchor_type = 'right'
+
+function generate_option_list() {
+	// RESET THESE FOR OPTION PLACEMENT
+	option_list = []
+	option_list_list = []
+	option_count = 0;
+	list_count = 0;
+	button_pos = [0, -0.2] // center position
+	signage = -1 // screen side 
+	anchor_type = 'right'
+
+	// Generate a list for each row of options
+	options_text_list = options.split(" ")
+	for (let i = 0; i < options_text_list.length; i += parseInt(config_values.buttons_per_row)) {
+		const row = options_text_list.slice(i, i + parseInt(config_values.buttons_per_row));
+		option_list_list.push(row)
+	}
+
+	// Loop through the list of rows
+	option_list_list.forEach((opts) => {
+		// RESET for new list/row
+		list_count++
+		option_count = 0;
+		button_pos = [0, -0.2 - (0.08 * (list_count-1))] // center position
+		signage = -1 // screen side 
+		anchor_type = 'right'
+		if (list_count > 1) {
+			row_center_index = parseInt(config_values.buttons_per_row) * (list_count - 1)
+		}
+		// Handle proper option button placement one row at a time
+		opts.forEach((opt) => {
+			option_count++
+			// positioning logic: 
+			// If only one, then center.
+			// Else, bounce between left and right screen placement. 
+			if (opts.length == 1) {
+				anchor_type = 'center'
+			}
+			else if (opts.length % 2 != 0) {
+				if (option_count == 1) { // special case for first one
+					// Either anchor positioning on left or right depending on side placement
+					anchor_type = 'center'
+					button_pos[0] = button_pos[0]
+					signage = signage * -1
+				}
+				else if (option_count == 2 || option_count == 3) { // special case for second and third
+					// Either anchor positioning on left or right depending on side placement
+					anchor_type = (signage > 0) ? 'left' : 'right'
+					button_pos[0] = (option_list[row_center_index].pos[0] // start at position of furthest button position on correct side
+						+ (signage * option_list[row_center_index].size[0]/2) // Add half of size of center button in correct direction
+						+ (signage * button_spacing)) // add button spacing in correct direction
+					signage = signage * -1
+				}
+				else {
+					// Either anchor positioning on left or right depending on side placement
+					anchor_type = (signage > 0) ? 'left' : 'right'
+					button_pos[0] = (option_list[option_count - 3].pos[0] // start at position of furthest button position on correct side
+						+ (signage * option_list[option_count - 3].size[0]) // Add size of button in the correct direction
+						+ (signage * button_spacing)) // add button spacing in correct direction
+					signage = signage * -1
+				}
+			}
+			else {
+				if (option_count == 1 || option_count == 2) { // special case for first two
+					// Either anchor positioning on left or right depending on side placement
+					anchor_type = (signage > 0) ? 'left' : 'right'
+					button_pos[0] = button_pos[0] + (button_spacing * option_count * signage)
+					signage = signage * -1
+				}
+				else {
+					// Either anchor positioning on left or right depending on side placement
+					anchor_type = (signage > 0) ? 'left' : 'right'
+					button_pos[0] = (option_list[option_count - 3].pos[0] // start at position of furthest button position on correct side
+						+ (signage * option_list[option_count - 3].size[0]) // Add size of button in the correct direction
+						+ (signage * button_spacing)) // add button spacing in correct direction
+					signage = signage * -1
+				}
+			}
+			// Create the button and add to list
+			let temp_button = new visual.ButtonStim({
+				win: psychoJS.window,
+				name: `button${option_count}`, units: 'height',
+				text: opt, mask: undefined,
+				ori: 0, pos: button_pos,
+				anchor: anchor_type,
+				letterHeight: 0.03,
+				fillColor: new util.Color("darkgrey"),
+				borderColor: new util.Color("blue"),
+				borderWidth: 0.005,
+				color: new util.Color("white"), opacity: 1,
+				flipHoriz: false, flipVert: false,
+				texRes: 128, interpolate: true, depth: 0
+			});
+			temp_button.setSize([0.2, 0.06])
+			option_list.push(temp_button)
+		})
+	})
+}
+
 var pressed;
 var last_trial_num = 0;
+var images_list = []
+var image_count = 0;
 
 function trialRoutineBegin(trials) {
 	return function () {
@@ -1120,12 +1257,34 @@ function trialRoutineBegin(trials) {
 		toneClock.reset(); // toneclock
 		frameN = -1;
 	
-		if ((trial_number % parseInt(current_block_size)) == 0) {
-			currentTrialNumber.setText(`${trial_number / completed_blocks} / ${current_block_size}`)
-		}
-		else {
-			currentTrialNumber.setText(`${trial_number % parseInt(current_block_size)} / ${current_block_size}`)
-		}
+		currentTrialText.status = PsychoJS.Status.NOT_STARTED;
+		currentTrialNumber.setText(`${trial_number} / ${last_trial_num}`)
+
+		// RESET THESE FOR STIM PLACEMENT
+		images_list = []
+		image_count = 0;
+
+		// Stim for Rating
+		// TODO: Figure out how to properly position arbitrary number of stimuli
+		image_count = 0
+		images.split(" ").forEach((img) => {
+			image_count++
+			let temp_image = new visual.ImageStim({
+				win: psychoJS.window,
+				name: `stim${image_count}`, units: 'height',
+				image: img, mask: undefined,
+				ori: 0, pos: [0, 0],
+				size:[0.2,0.2],
+				color: new util.Color([1, 1, 1]), opacity: 1,
+				flipHoriz: false, flipVert: false,
+				texRes: 128, interpolate: true, depth: 0
+			});
+			images_list.push(temp_image)
+		})
+
+		generate_option_list()
+
+		questionText.setText(question)
 
 		if (DEBUG_FLAG) {
 			console.log("------------------------")
@@ -1165,6 +1324,13 @@ function trialRoutineRespond(trials) {
 		if (currentTrialText.status == PsychoJS.Status.NOT_STARTED) {
 			currentTrialText.setAutoDraw(true)
 			currentTrialNumber.setAutoDraw(true)
+			questionText.setAutoDraw(true)
+			images_list.forEach((img) => {
+				img.setAutoDraw(true)
+			})
+			option_list.forEach((opt) => {
+				opt.setAutoDraw(true)
+			})
 			currentTrialText.status = PsychoJS.Status.FINISHED;
 
 			mark_event(trials_data, globalClock, trials.thisIndex, trial_type, event_types['TRIAL_ONSET'],
@@ -1178,8 +1344,15 @@ function trialRoutineRespond(trials) {
 				return Scheduler.Event.FLIP_REPEAT;
 			}
 			else {
+				images_list.forEach((img) => {
+					img.setAutoDraw(false)
+				})
+				option_list.forEach((opt) => {
+					opt.setAutoDraw(false)
+				})
 				currentTrialText.setAutoDraw(false)
 				currentTrialNumber.setAutoDraw(false)
+				questionText.setAutoDraw(false)
 				return Scheduler.Event.NEXT;
 			}
 		}
@@ -1234,6 +1407,13 @@ function trialRoutineRespond(trials) {
 		else {
 			currentTrialText.setAutoDraw(false)
 			currentTrialNumber.setAutoDraw(false)
+			questionText.setAutoDraw(false)
+			images_list.forEach((img) => {
+				img.setAutoDraw(false)
+			})
+			option_list.forEach((opt) => {
+				opt.setAutoDraw(false)
+			})
 
 			set_fixation_flag = true
 			endClock.reset()

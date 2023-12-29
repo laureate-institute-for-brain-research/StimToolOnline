@@ -1,2 +1,12 @@
 ﻿trial_number,ITI,images,sounds,videos,texts,others,options,question
-1,0.25,/js/tasks/stim_rating/media/test.jpg,None,None,None,None,"REAL SYNTHETIC","Is the face REAL or SYNTHETIC"
+1,0.25,/js/tasks/stim_rating/media/test.jpg,None,None,None,None,"REAL","Is the face REAL or SYNTHETIC?"
+2,0.25,/js/tasks/stim_rating/media/test.jpg,None,None,None,None,"REAL SYNTHETIC","Is the face REAL or SYNTHETIC?"
+3,0.25,/js/tasks/stim_rating/media/test.jpg,None,None,None,None,"REAL SYNTHETIC TEST1","Is the face REAL or SYNTHETIC?"
+4,0.25,/js/tasks/stim_rating/media/test.jpg,None,None,None,None,"REAL SYNTHETIC TEST1 TEST2","Is the face REAL or SYNTHETIC?"
+5,0.25,/js/tasks/stim_rating/media/test.jpg,None,None,None,None,"REAL IRRATIONAL TEST1 TEST2 TEST3","Is the face REAL or SYNTHETIC?"
+6,0.25,/js/tasks/stim_rating/media/test.jpg,None,None,None,None,"REAL SYNTHETIC TEST1 TEST2 TEST3 TEST4","Is the face REAL or SYNTHETIC?"
+7,0.25,/js/tasks/stim_rating/media/test.jpg,None,None,None,None,"REAL SYNTHETIC TEST1 TEST2 TEST3 TEST4 REAL","Is the face REAL or SYNTHETIC?"
+8,0.25,/js/tasks/stim_rating/media/test.jpg,None,None,None,None,"REAL SYNTHETIC TEST1 TEST2 TEST3 TEST4 REAL SYNTHETIC","Is the face REAL or SYNTHETIC?"
+9,0.25,/js/tasks/stim_rating/media/test.jpg,None,None,None,None,"REAL SYNTHETIC TEST1 TEST2 TEST3 TEST4 REAL SYNTHETIC TEST1","Is the face REAL or SYNTHETIC?"
+10,0.25,/js/tasks/stim_rating/media/test.jpg,None,None,None,None,"REAL SYNTHETIC TEST1 TEST2 TEST3 TEST4 REAL SYNTHETIC TEST1 TEST2","Is the face REAL or SYNTHETIC?"
+11,0.25,/js/tasks/stim_rating/media/test.jpg,None,None,None,None,"REAL SYNTHETIC TEST1 TEST2 TEST3 TEST4 REAL SYNTHETIC TEST1 TEST2 TEST3","Is the face REAL or SYNTHETIC?"
