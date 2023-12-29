@@ -1,5 +1,5 @@
 ﻿/**
- * Active Trust
+ * Stim Rating
  * @author Aardron Robinson
  */
 
@@ -462,47 +462,10 @@ var feedbackClock;
 var respondClock;
 var blockClock;
 
-// Stim from schedule
-var faceStim;
-var noneStim;
-var leftposStim;
-var rightposStim;
-var leftnegStim;
-var rightnegStim;
-
-// feedback stim
-var try_left;
-var try_right
-
-// middle scores
-var zero_score;
-var twenty_score;
-var fourty_score;
-var nfourty_score;
-var sixty_score;
-var eighty_score;
-var hundred_score;
-
 // static stim
-//// controls
-var press_left;
-var press_right;
-var press_up;
-var press_down;
 //// UI Trackers
 var currentTrialNumber;
 var currentTrialText;
-var currentGameNumber;
-var currentGameText;
-var currentScoreNumber;
-var currentScoreText;
-var dinnerSizeTopText;
-var dinnerSizeBottomText;
-var dinnerSizeUnderline;
-var possibleWinText;
-var possibleWinNumber;
-var possibleLossText;
-var possibleLossNumber;
 
 //// Fixation
 var points_fixation_stim;
@@ -512,10 +475,6 @@ var t_end;
 var readyClock;
 var endClock;
 var track;
-
-// block screen
-var block_screen
-var block_dinner_size
 
 var resp;
 var thanksClock;
@@ -594,121 +553,6 @@ function experimentInit() {
 		depth: 0.0
 	});
 
-	// Block/Room Counter 
-	currentGameText = new visual.TextStim({
-		win: psychoJS.window,
-		name: 'trialTracker',
-		text: 'Room Number: ',
-		font: 'Arial', units: 'height',
-		pos: [-window_ratio * 0.46, 0.44], height: 0.027, wrapWidth: undefined, ori: 0,
-		alignHoriz: 'left',
-		color: new util.Color('white'), opacity: 1,
-		depth: 0.0
-	});
-	currentGameNumber = new visual.TextStim({
-		win: psychoJS.window,
-		name: 'trialTracker',
-		text: '0 / 0',
-		font: 'Arial', units: 'height',
-		pos: [currentGameText.getBoundingBox().right + (window_ratio * 0.005), 0.44], height: 0.027, wrapWidth: undefined, ori: 0,
-		alignHoriz: 'left',
-		color: new util.Color('white'), opacity: 1,
-		depth: 0.0
-	});
-
-	// Score/Points Counter
-	currentScoreText = new visual.TextStim({
-		win: psychoJS.window,
-		name: 'trialTracker',
-		text: 'Invite Points: ',
-		font: 'Arial', units: 'height',
-		pos: [-window_ratio * 0.46, 0.41], height: 0.027, wrapWidth: undefined, ori: 0,
-		alignHoriz: 'left',
-		color: new util.Color('white'), opacity: 1,
-		depth: 0.0
-	});
-	currentScoreNumber = new visual.TextStim({
-		win: psychoJS.window,
-		name: 'trialTracker',
-		text: '0',
-		font: 'Arial', units: 'height',
-		pos: [currentScoreText.getBoundingBox().right + (window_ratio * 0.005), 0.41], height: 0.027, wrapWidth: undefined, ori: 0,
-		alignHoriz: 'left',
-		color: new util.Color('white'), opacity: 1,
-		depth: 0.0
-	});
-
-	// Dinner Size
-	dinnerSizeTopText = new visual.TextStim({
-		win: psychoJS.window,
-		name: 'trialTracker',
-		text: 'Dinner Size',
-		font: 'Arial', units: 'height',
-		pos: [window_ratio * 0.38, 0.47], height: 0.03, wrapWidth: undefined, ori: 0,
-		color: new util.Color('white'), opacity: 1,
-		depth: 0.0
-	});
-	dinnerSizeBottomText = new visual.TextStim({
-		win: psychoJS.window,
-		name: 'trialTracker',
-		text: 'LARGE',
-		font: 'Arial', units: 'height',
-		pos: [window_ratio * 0.38, dinnerSizeTopText.getBoundingBox().bottom - 0.06], height: 0.027, wrapWidth: undefined, ori: 0,
-		color: new util.Color('white'), opacity: 1,
-		depth: 0.0
-	});
-	dinnerSizeUnderline = new visual.Rect({
-		win: psychoJS.window,
-		name: 'underline',
-		width: window_ratio*0.1,
-		height: 0.001,
-		units: 'height',
-		pos: [window_ratio * 0.38, 0.45], ori: 0,
-		fillColor: new util.Color('white'),
-		lineColor: new util.Color('white'), opacity: 1,
-		depth: 0
-	})
-
-	// Possible Score Tracker
-	possibleWinText = new visual.TextStim({
-		win: psychoJS.window,
-		name: 'trialTracker',
-		text: 'Possible Invite Points Gain: ',
-		font: 'Arial', units: 'height',
-		pos: [0, 0.47], height: 0.027, wrapWidth: undefined, ori: 0,
-		color: new util.Color('white'), opacity: 1,
-		depth: 0.0
-	});
-	possibleWinNumber = new visual.TextStim({
-		win: psychoJS.window,
-		name: 'trialTracker',
-		text: '0',
-		font: 'Arial', units: 'height',
-		pos: [possibleWinText.getBoundingBox().right + (window_ratio * 0.005), 0.47], height: 0.027, wrapWidth: undefined, ori: 0,
-		alignHoriz: 'left',
-		color: new util.Color('#66ff99'), opacity: 1,
-		depth: 0.0
-	});
-	possibleLossText = new visual.TextStim({
-		win: psychoJS.window,
-		name: 'trialTracker',
-		text: 'Possible Invite Points Loss: ',
-		font: 'Arial', units: 'height',
-		pos: [0, 0.44], height: 0.027, wrapWidth: undefined, ori: 0,
-		color: new util.Color('white'), opacity: 1,
-		depth: 0.0
-	});
-	possibleLossNumber = new visual.TextStim({
-		win: psychoJS.window,
-		name: 'trialTracker',
-		text: '0',
-		font: 'Arial', units: 'height',
-		pos: [possibleLossText.getBoundingBox().right + (window_ratio * 0.005), 0.44], height: 0.027, wrapWidth: undefined, ori: 0,
-		alignHoriz: 'left',
-		color: new util.Color('red'), opacity: 1,
-		depth: 0.0
-	});
-
 	// Fixation
 	points_fixation_stim = new visual.TextStim({
 		win: psychoJS.window,
@@ -717,17 +561,6 @@ function experimentInit() {
 		font: 'Arial',
 		units: 'norm',
 		pos: [0, 0], height: 0.12, wrapWidth: undefined, ori: 0,
-		color: new util.Color('white'), opacity: 1,
-		depth: 0.0
-	});
-
-	// Block Screen
-	block_dinner_size = new visual.TextStim({
-		win: psychoJS.window,
-		name: 'trialTracker',
-		text: 'Dinner Party Size: LARGE',
-		font: 'Arial', units: 'height',
-		pos: [0, -0.2], height: 0.04, wrapWidth: undefined, ori: 0,
 		color: new util.Color('white'), opacity: 1,
 		depth: 0.0
 	});
@@ -1168,15 +1001,9 @@ function practiceTrialsLoopBegin(thisScheduler) {
 	});
 
 	last_trial_num = trials.nTotal
-	current_block_size = config_values.practice_block_size
-	total_block_count = trials.nTotal / parseInt(config_values.practice_block_size)
 
 	psychoJS.experiment.addLoop(trials); // add the loop to the experiment
 	currentLoop = trials;  // we're now the current loop
-	total_score = 0
-	completed_blocks = 1
-	currentScoreNumber.setText(`0`)
-	currentScoreNumber.setColor(new util.Color('#66ff99'))
 	
 	endClock.reset()
 	resp.stop()
@@ -1218,15 +1045,9 @@ function trialsLoopBegin(thisScheduler) {
 
 	main_loop_count = 0
 	last_trial_num = trials.nTotal
-	current_block_size = config_values.block_size
-	total_block_count = trials.nTotal / parseInt(config_values.block_size)
 
 	psychoJS.experiment.addLoop(trials); // add the loop to the experiment
 	currentLoop = trials;  // we're now the current loop
-	total_score = 0
-	completed_blocks = 1
-	currentScoreNumber.setText(`0`)
-	currentScoreNumber.setColor(new util.Color('#66ff99'))
 
 	init_fixation_flag = true
 
@@ -1273,47 +1094,6 @@ function get_correct_side(left_p/*, right_p*/) {
 	}
 }
 
-function get_advice_outcome(correct_side, help_p, trial_index) {
-	if (advice_requests > 2 || forced_advice_type == 'none') {
-		console.log('normal help')
-		mark_event(trials_data, globalClock, trial_index, trial_type, event_types['ADVICE_ONSET'],
-				'NA', 'NA' , 'probability')
-		if (Math.random() <= help_p) {
-			return correct_side
-		}
-		else {
-			return !correct_side
-		}
-	}
-	else if (forced_advice_type == 'right') {
-		console.log('forced right')
-		mark_event(trials_data, globalClock, trial_index, trial_type, event_types['ADVICE_ONSET'],
-				'NA', 'NA' , 'forced correct')
-		return correct_side
-	}
-	else if (forced_advice_type == 'wrong') {
-		console.log('forced wrong')
-		mark_event(trials_data, globalClock, trial_index, trial_type, event_types['ADVICE_ONSET'],
-				'NA', 'NA' , 'forced incorrect')
-		return !correct_side
-	}
-	else if (forced_advice_type == 'mix') {
-		console.log('forced mix')
-		if (advice_requests == 1) {
-			console.log('----- return wrong side')
-			mark_event(trials_data, globalClock, trial_index, trial_type, event_types['ADVICE_ONSET'],
-				'NA', 'NA' , 'forced incorrect')
-			return !correct_side
-		}
-		else {
-			console.log('----- return right side')
-			mark_event(trials_data, globalClock, trial_index, trial_type, event_types['ADVICE_ONSET'],
-				'NA', 'NA' , 'forced correct')
-			return correct_side
-		}
-	}
-}
-
 // Recursively set multiplier to find one that both keeps the images ratio and keeps it in the window
 function resize_image(image, image_ratio, multiplier) {
 	// check if it is not in window ratio (with a 10% tolerance)
@@ -1330,21 +1110,7 @@ function resize_image(image, image_ratio, multiplier) {
 // var theseKeys;
 // var image_ratio;
 var pressed;
-var asked_for_advice;
-var got_advice;
-var post_advice_choice_allowed;
-var correct_side; // true for left, false for right
-var advice_outcome; // true for left, false for right
-var picked_side; // true for left, false for right
-var feedback_active;
-var no_choice;
-var reward_stim;
-// var penalty_stim;
 var last_trial_num = 0;
-var advice_requests = 0;
-var last_prob;
-var show_block_screen = false;
-var start_block_screen = false;
 
 function trialRoutineBegin(trials) {
 	return function () {
@@ -1353,46 +1119,6 @@ function trialRoutineBegin(trials) {
 		trialClock.reset(); // clock
 		toneClock.reset(); // toneclock
 		frameN = -1;
-
-		// next block check
-		if (trial_number > completed_blocks * parseFloat(current_block_size)) {
-			completed_blocks += 1
-			mark_event(trials_data, globalClock, 'NA', trial_type, event_types['BLOCK_ONSET'],
-				'NA', 'NA', 'NA')
-			if (trial_number != 1) {
-				start_block_screen = true
-				total_score = 0
-				currentScoreNumber.setText(`0`)
-				currentScoreNumber.setColor(new util.Color('#66ff99'))
-			}
-		}
-
-		// help prob change or next block
-		if ((help_prob != last_prob) || (trial_number > completed_blocks * parseFloat(current_block_size))) {
-			advice_requests = 0
-		}
-
-		// reward_stim = fourty_score // default choice score
-		if (wrong_score == '100') {
-			// penalty_stim = hundred_score
-			dinnerSizeBottomText.text = 'LARGE'
-			block_dinner_size.text = 'Dinner Party Size: LARGE'
-		}
-		else if (wrong_score == '80') {
-			// penalty_stim = eighty_score
-			dinnerSizeBottomText.text = 'MEDIUM'
-			block_dinner_size.text = 'Dinner Party Size: MEDIUM'
-		}
-		else if (wrong_score == '60') {
-			// penalty_stim = sixty_score
-			dinnerSizeBottomText.text = 'SMALL'
-			block_dinner_size.text = 'Dinner Party Size: SMALL'
-		}
-		else if (wrong_score == '40') {
-			// penalty_stim = nfourty_score
-			dinnerSizeBottomText.text = 'SMALL'
-			block_dinner_size.text = 'Dinner Party Size: SMALL'
-		}
 	
 		if ((trial_number % parseInt(current_block_size)) == 0) {
 			currentTrialNumber.setText(`${trial_number / completed_blocks} / ${current_block_size}`)
@@ -1400,43 +1126,24 @@ function trialRoutineBegin(trials) {
 		else {
 			currentTrialNumber.setText(`${trial_number % parseInt(current_block_size)} / ${current_block_size}`)
 		}
+
 		if (DEBUG_FLAG) {
 			console.log("------------------------")
 			console.log(trial_number)
-			console.log(trial_number / completed_blocks)
-			console.log(current_block_size)
-			console.log(currentTrialNumber.text)
-			console.log(trial_number)
-			console.log(trial_number % parseInt(current_block_size))
-			console.log(current_block_size)
-			console.log(currentTrialNumber.text)
 			console.log("------------------------")
 
 			debugClock.reset()
 		}
-		currentGameNumber.setText(`${completed_blocks} / ${total_block_count}`)
-		possibleWinNumber.setText(`${correct_score_full}`)
-		possibleWinNumber.setColor(new util.Color('#66ff99'))
-		possibleLossNumber.setText(`${wrong_score}`)
 		console.log("Trial Number: ", trial_number)
 
-		asked_for_advice = false
-		got_advice = false
-		post_advice_choice_allowed = false
 		pressed = false
-		feedback_active = false
-		no_choice = false
 
 		endClock.reset()
 		// adviceClock.reset()
-
-		correct_side = get_correct_side(left_prob, right_prob)
-		last_prob = help_prob
 	
 		resp.keys = undefined;
 		resp.rt = undefined;
 
-		trial_type = `${left_prob}_${right_prob}_${help_prob}_${wrong_score}`
 		return Scheduler.Event.NEXT;
 	};
 }
@@ -1455,28 +1162,10 @@ function trialRoutineRespond(trials) {
 		t = respondClock.getTime();
 
 		// Draw the Texts
-		if (faceStim.status == PsychoJS.Status.NOT_STARTED) {
-			// response_text.setAutoDraw(true)
-			// faceStim.setAutoDraw(true)
-			// noneStim.setAutoDraw(true)
-			// press_up.setAutoDraw(true)
-			// press_left.setAutoDraw(true)
-			// press_right.setAutoDraw(true)
-			// press_down.setAutoDraw(true)
+		if (currentTrialText.status == PsychoJS.Status.NOT_STARTED) {
 			currentTrialText.setAutoDraw(true)
 			currentTrialNumber.setAutoDraw(true)
-			currentGameText.setAutoDraw(true)
-			currentGameNumber.setAutoDraw(true)
-			currentScoreText.setAutoDraw(true)
-			currentScoreNumber.setAutoDraw(true)
-			dinnerSizeTopText.setAutoDraw(true)
-			dinnerSizeBottomText.setAutoDraw(true)
-			dinnerSizeUnderline.setAutoDraw(true)
-			possibleWinText.setAutoDraw(true)
-			possibleWinNumber.setAutoDraw(true)
-			possibleLossText.setAutoDraw(true)
-			possibleLossNumber.setAutoDraw(true)
-			// faceStim.status = PsychoJS.Status.FINISHED;
+			currentTrialText.status = PsychoJS.Status.FINISHED;
 
 			mark_event(trials_data, globalClock, trials.thisIndex, trial_type, event_types['TRIAL_ONSET'],
 				'NA', 'NA' , 'NA')
@@ -1489,48 +1178,10 @@ function trialRoutineRespond(trials) {
 				return Scheduler.Event.FLIP_REPEAT;
 			}
 			else {
-				// faceStim.setAutoDraw(false)
-				// noneStim.setAutoDraw(false)
-				// press_up.setAutoDraw(false)
-				// press_left.setAutoDraw(false)
-				// press_right.setAutoDraw(false)
-				// press_down.setAutoDraw(false)
 				currentTrialText.setAutoDraw(false)
 				currentTrialNumber.setAutoDraw(false)
-				currentGameText.setAutoDraw(false)
-				currentGameNumber.setAutoDraw(false)
-				currentScoreText.setAutoDraw(false)
-				currentScoreNumber.setAutoDraw(false)
-				dinnerSizeTopText.setAutoDraw(false)
-				dinnerSizeBottomText.setAutoDraw(false)
-				dinnerSizeUnderline.setAutoDraw(false)
-				possibleWinText.setAutoDraw(false)
-				possibleWinNumber.setAutoDraw(false)
-				possibleLossText.setAutoDraw(false)
-				possibleLossNumber.setAutoDraw(false)
-
 				return Scheduler.Event.NEXT;
 			}
-		}
-
-		if (start_block_screen && !show_block_screen) {
-			// block_screen.setAutoDraw(true)
-			block_dinner_size.setAutoDraw(true)
-			show_block_screen = true
-			start_block_screen = false
-			blockClock.reset()
-			return Scheduler.Event.FLIP_REPEAT; // go for a repeat here so we don't catch any single iteration events
-		}
-		else if (show_block_screen && (blockClock.getTime() < config_values.block_screen_duration)) {
-			if (psychoJS.eventManager.getKeys({keyList:['escape']}).length > 0) { // allow quitting from here
-				return quitPsychoJS('The [Escape] key was pressed. Goodbye!', false);
-			}
-			return Scheduler.Event.FLIP_REPEAT; // stay here and don't mess with anything else until duration is over
-		}
-		else if (show_block_screen && (blockClock.getTime() >= config_values.block_screen_duration)) {
-			show_block_screen = false
-			// block_screen.setAutoDraw(false)
-			block_dinner_size.setAutoDraw(false)
 		}
 
 		if (resp.status === PsychoJS.Status.NOT_STARTED) {
@@ -1544,192 +1195,30 @@ function trialRoutineRespond(trials) {
 			resp.clearEvents();
 		}
 
-		// \/\/\/ Advice Path Start or Advice-less Choice Start or No Choice Start \/\/\/
 		let theseKeys = resp.getKeys({ keyList: keyList, waitRelease: false });
-		if (!asked_for_advice && !pressed && theseKeys.length > 0) {
+		if (!pressed && theseKeys.length > 0) {
 			resp.keys = theseKeys[0].name;  // just the last key pressed
 			resp.rt = theseKeys[0].rt;
 
-			// Advice
-			if (resp.keys == UP_KEY) {
-				mark_event(trials_data, globalClock, trials.thisIndex, trial_type, event_types['ADVICE_ONSET'],
-				'NA', 'NA' , 'NA')
-				asked_for_advice = true
-				possibleWinNumber.setText(`${correct_score_helped}`)
-				possibleWinNumber.setColor(new util.Color('#66ff99'))
-				advice_requests += 1
-				advice_outcome = get_advice_outcome(correct_side, help_prob, trials.thisIndex) 
-				// reward_stim = twenty_score // reduce score cause advice was picked
-				adviceClock.reset()
-			}
-
-			// Advice-less Choice
+			// choice
 			if (resp.keys == LEFT_KEY) {
-				picked_side = true
 				pressed = true
 				mark_event(trials_data, globalClock, trials.thisIndex, trial_type, event_types['CHOICE'],
 				'NA', 'left' , 'NA')
 				feedbackClock.reset()
 			}
 			if (resp.keys == RIGHT_KEY) {
-				picked_side = false
 				pressed = true
 				mark_event(trials_data, globalClock, trials.thisIndex, trial_type, event_types['CHOICE'],
 				'NA', 'right' , 'NA')
 				feedbackClock.reset()
 			}
 
-			// No Choice
-			if (resp.keys == DOWN_KEY) {
-				no_choice = true
-				pressed = true
-				// reward_stim = zero_score // remove score cause no choice was picked
-				mark_event(trials_data, globalClock, trials.thisIndex, trial_type, event_types['CHOICE'],
-				'NA', 'none' , 'NA')
-				feedbackClock.reset()
-			}
+			continueRoutine = false
 
-			// // Save Data on each Press
-			// mark_event(trials_data, globalClock, trials.thisIndex, trial_type, event_types['RESPONSE'],
-			// 		resp.rt, key_map[resp.keys] , 'NA')
 			resp.keys = undefined;
 			resp.rt = undefined;
 		}
-		//// Advice Path Continued
-		if (asked_for_advice && !got_advice && (adviceClock.getTime() >= config_values.advice_request_duration)) {
-			if (advice_outcome) {
-				// try_left.setAutoDraw(true)
-				mark_event(trials_data, globalClock, trials.thisIndex, trial_type, event_types['FEEDBACK_ONSET'],
-				'NA', 'NA' , 'try left')
-			}
-			else {
-				// try_right.setAutoDraw(true)
-				mark_event(trials_data, globalClock, trials.thisIndex, trial_type, event_types['FEEDBACK_ONSET'],
-				'NA', 'NA' , 'try right')
-			}
-			got_advice = true
-		}
-		//// Advice Path Continued
-		if (got_advice && !post_advice_choice_allowed && (adviceClock.getTime() >= parseFloat(config_values.advice_request_duration) + parseFloat(config_values.post_advice_duration))) {
-			// try_left.setAutoDraw(false)
-			// try_right.setAutoDraw(false)
-			mark_event(trials_data, globalClock, trials.thisIndex, trial_type, event_types['CHOICE_ONSET'],
-				'NA', 'post advice' , 'NA')
-			post_advice_choice_allowed = true
-		}
-		//// Advice Path Continued
-		if (!pressed && post_advice_choice_allowed && theseKeys.length > 0) {
-			resp.keys = theseKeys[0].name;  // just the last key pressed
-			resp.rt = theseKeys[0].rt;
-
-			if (resp.keys == LEFT_KEY) {
-				picked_side = true
-				pressed = true
-				mark_event(trials_data, globalClock, trials.thisIndex, trial_type, event_types['CHOICE'],
-				'NA', 'left' , 'NA')
-				feedbackClock.reset()
-			}
-			if (resp.keys == RIGHT_KEY) {
-				picked_side = false
-				pressed = true
-				mark_event(trials_data, globalClock, trials.thisIndex, trial_type, event_types['CHOICE'],
-				'NA', 'right' , 'NA')
-				feedbackClock.reset()
-			}
-			if (resp.keys == DOWN_KEY) {
-				no_choice = true
-				pressed = true
-				// reward_stim = zero_score // remove score cause no choice was picked
-				mark_event(trials_data, globalClock, trials.thisIndex, trial_type, event_types['CHOICE'],
-				'NA', 'none' , 'NA')
-				feedbackClock.reset()
-			}
-
-
-			// // Save Data on each Press
-			// mark_event(trials_data, globalClock, trials.thisIndex, trial_type, event_types['RESPONSE'],
-			// 		resp.rt, key_map[resp.keys] , 'NA')
-			resp.keys = undefined;
-			resp.rt = undefined;
-		}
-		//// Advice Path Continued or Advice-less Choice Path Continued
-		if (pressed && !no_choice && (feedbackClock.getTime() >= parseFloat(config_values.post_choice_duration))) {
-			if (!feedback_active) {
-				// try_left.setAutoDraw(false)
-				// try_right.setAutoDraw(false)
-				if (picked_side) {
-					// noneStim.setAutoDraw(false)
-					if (picked_side == correct_side) {
-						// leftposStim.setAutoDraw(true)
-						// reward_stim.setAutoDraw(true)
-						total_score += parseInt(possibleWinNumber.text)
-						mark_event(trials_data, globalClock, trials.thisIndex, trial_type, event_types['FEEDBACK_ONSET'],
-						'NA', 'NA' , possibleWinNumber.text)
-					}
-					else {
-						// leftnegStim.setAutoDraw(true)
-						// penalty_stim.setAutoDraw(true)
-						total_score -= parseInt(possibleLossNumber.text)
-						mark_event(trials_data, globalClock, trials.thisIndex, trial_type, event_types['FEEDBACK_ONSET'],
-						'NA', 'NA' , `-${possibleLossNumber.text}`)
-					}
-				}
-				else {
-					noneStim.setAutoDraw(false)
-					if (picked_side == correct_side) {
-						// rightposStim.setAutoDraw(true)
-						// reward_stim.setAutoDraw(true)
-						total_score += parseInt(possibleWinNumber.text)
-						mark_event(trials_data, globalClock, trials.thisIndex, trial_type, event_types['FEEDBACK_ONSET'],
-						'NA', 'NA' , possibleWinNumber.text)
-					}
-					else {
-						// rightnegStim.setAutoDraw(true)
-						// penalty_stim.setAutoDraw(true)
-						total_score -= parseInt(possibleLossNumber.text)
-						mark_event(trials_data, globalClock, trials.thisIndex, trial_type, event_types['FEEDBACK_ONSET'],
-						'NA', 'NA' , `-${possibleLossNumber.text}`)
-					}
-				}
-				feedback_active = true
-				currentScoreNumber.setText(`${total_score}`)
-				if (total_score > 0) {
-					currentScoreNumber.setColor(new util.Color('#66ff99'))
-				}
-				else if (total_score < 0) {
-					currentScoreNumber.setColor(new util.Color('red'))
-				}
-				else {
-					currentScoreNumber.setColor(new util.Color('white'))
-				}
-			}
-			if ((feedbackClock.getTime() >= parseFloat(config_values.post_choice_duration) + parseFloat(config_values.feedback_duration))) {
-				// leftposStim.setAutoDraw(false)
-				// leftnegStim.setAutoDraw(false)
-				// rightposStim.setAutoDraw(false)
-				// rightnegStim.setAutoDraw(false)
-				// reward_stim.setAutoDraw(false)
-				// penalty_stim.setAutoDraw(false)
-				continueRoutine = false
-			}
-		}
-		// /\/\/\ Advice Path or Advice-less Choice Path End /\/\/\
-		// \/\/\/ Advice Path or No Choice Path Continued \/\/\/
-		if (pressed && no_choice && (feedbackClock.getTime() >= parseFloat(config_values.post_choice_duration))) {
-			if (!feedback_active) {
-				// try_left.setAutoDraw(false)
-				// try_right.setAutoDraw(false)
-				// reward_stim.setAutoDraw(true)
-				mark_event(trials_data, globalClock, trials.thisIndex, trial_type, event_types['FEEDBACK_ONSET'],
-						'NA', 'NA' , '0')
-				feedback_active = true
-			}
-			if ((feedbackClock.getTime() >= parseFloat(config_values.post_choice_duration) + parseFloat(config_values.feedback_duration))) {
-				// reward_stim.setAutoDraw(false)
-				continueRoutine = false
-			}
-		}
-		// /\/\/\ Advice Path or No Choice Choice Path End /\/\/\
 
 
 
@@ -1743,25 +1232,8 @@ function trialRoutineRespond(trials) {
 			return Scheduler.Event.FLIP_REPEAT;
 		}
 		else {
-			// faceStim.setAutoDraw(false)
-			// noneStim.setAutoDraw(false)
-			// press_up.setAutoDraw(false)
-			// press_left.setAutoDraw(false)
-			// press_right.setAutoDraw(false)
-			// press_down.setAutoDraw(false)
 			currentTrialText.setAutoDraw(false)
 			currentTrialNumber.setAutoDraw(false)
-			currentGameText.setAutoDraw(false)
-			currentGameNumber.setAutoDraw(false)
-			currentScoreText.setAutoDraw(false)
-			currentScoreNumber.setAutoDraw(false)
-			dinnerSizeTopText.setAutoDraw(false)
-			dinnerSizeBottomText.setAutoDraw(false)
-			dinnerSizeUnderline.setAutoDraw(false)
-			possibleWinText.setAutoDraw(false)
-			possibleWinNumber.setAutoDraw(false)
-			possibleLossText.setAutoDraw(false)
-			possibleLossNumber.setAutoDraw(false)
 
 			set_fixation_flag = true
 			endClock.reset()
