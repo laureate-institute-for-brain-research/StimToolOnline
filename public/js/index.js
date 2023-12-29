@@ -160,6 +160,7 @@ $('#study-list').change(function () {
         'Driving2': 2,
         'RL_Task': 1,
         'RL_Task_CB': 1,
+        'Stim_Rating': 1,
         'WB_Pilot': 1,
         'WBMTURK_Active_Trust': 1,
         'WBMTURK_Social_Media': 1,

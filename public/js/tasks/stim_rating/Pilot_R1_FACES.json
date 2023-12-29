@@ -1,0 +1,6 @@
+{
+    "schedule": "/js/tasks/stim_rating/artificial_faces_schedule.csv",
+    "instruct_schedule": "/js/tasks/stim_rating/media/Pilot_R1_instructions.csv",
+    "practice_schedule": "/js/tasks/stim_rating/practice_schedule.csv",
+    "config": "/js/tasks/stim_rating/artificial_faces_config.csv"
+}
