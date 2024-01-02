@@ -1138,6 +1138,7 @@ function resize_image(image, image_ratio, multiplier) {
 var option_list = []
 var options_text_list = []
 var option_list_list = []
+var option_list_for_input = []
 var option_count = 0;
 var list_count = 0;
 var row_center_index = 0
@@ -1145,11 +1146,15 @@ var button_pos = [0, -0.2] // center position
 var button_spacing = 0.02
 var signage = -1 // screen side 
 var anchor_type = 'right'
+var possible_keys = ['1','2','3','4','5','6','7','8','9','0','q','w','e','r','t','y','u','i','o','p'] // 20 button max for input keys
+var input_key_list = []
 
 function generate_option_list() {
 	// RESET THESE FOR OPTION PLACEMENT
 	option_list = []
 	option_list_list = []
+	option_list_for_input = []
+	input_key_list = []
 	option_count = 0;
 	list_count = 0;
 	button_pos = [0, -0.2] // center position
@@ -1163,6 +1168,14 @@ function generate_option_list() {
 		option_list_list.push(row)
 	}
 
+	// Generate usable key inputs list
+	let ix = 0
+	options_text_list.forEach((opt) => {
+		input_key_list.push(possible_keys[ix])
+		ix++
+	})
+
+	// Generate properly positioned option buttons
 	// Loop through the list of rows
 	option_list_list.forEach((opts) => {
 		// RESET for new list/row
@@ -1230,7 +1243,7 @@ function generate_option_list() {
 				text: opt, mask: undefined,
 				ori: 0, pos: button_pos,
 				anchor: anchor_type,
-				letterHeight: 0.03,
+				letterHeight: 0.023,
 				fillColor: new util.Color("darkgrey"),
 				borderColor: new util.Color("blue"),
 				borderWidth: 0.005,
@@ -1242,12 +1255,45 @@ function generate_option_list() {
 			option_list.push(temp_button)
 		})
 	})
+
+	// generate option list that is index aligned with input key list 
+	// (farthest left is lowest index and farthest right is highest index)
+	// farthest left -> o o o o
+	//                  o o o o 
+	//                  o o o o <- farthest right 
+	let first_in = true
+	option_list.forEach((opt) => { // loop through original option list
+		option_list_for_input.forEach((optin) => { // loop through input option list
+			if (first_in) { // just push the first one
+				option_list_for_input.push(opt)
+				first_in = false
+			}
+			// button name is unique, so used to skip duplicates
+			else if (opt.pos[0] < optin.pos[0] && opt.pos[1] >= optin.pos[1] && !option_list_for_input.includes(opt)) {
+				// if position is 'farther left' than an existing entry, then add it before
+				option_list_for_input.splice(option_list_for_input.indexOf(optin), 0, opt)
+			}
+		})
+		// if position is not 'farther left' than existing, then add to end (farthest right)
+		if (!option_list_for_input.includes(opt)) { 
+			option_list_for_input.push(opt)
+		}
+	})
+
+	// rename the buttons to include input key when keys are the input type
+	if (config_values.input_type == 'keys') {
+		option_list_for_input.forEach((opt) => {
+			opt.setText(`${input_key_list[option_list_for_input.indexOf(opt)]}. ${opt.text}`)
+		})
+	}
 }
 
 var pressed;
 var last_trial_num = 0;
 var images_list = []
 var image_count = 0;
+var clicked_option = ['', 0]; // [option name, times clicked]
+var clicked_count = 0
 
 function trialRoutineBegin(trials) {
 	return function () {
@@ -1259,6 +1305,9 @@ function trialRoutineBegin(trials) {
 	
 		currentTrialText.status = PsychoJS.Status.NOT_STARTED;
 		currentTrialNumber.setText(`${trial_number} / ${last_trial_num}`)
+
+		clicked_count = 0
+		clicked_option = ['', 0]
 
 		// RESET THESE FOR STIM PLACEMENT
 		images_list = []
@@ -1286,19 +1335,11 @@ function trialRoutineBegin(trials) {
 
 		questionText.setText(question)
 
-		if (DEBUG_FLAG) {
-			console.log("------------------------")
-			console.log(trial_number)
-			console.log("------------------------")
-
-			debugClock.reset()
-		}
 		console.log("Trial Number: ", trial_number)
 
 		pressed = false
 
 		endClock.reset()
-		// adviceClock.reset()
 	
 		resp.keys = undefined;
 		resp.rt = undefined;
@@ -1339,61 +1380,65 @@ function trialRoutineRespond(trials) {
 				'NA', 'initial' , 'NA')
 		}
 
-		if (DEBUG_FLAG) {
-			if (debugClock.getTime() < 0.5) {
-				return Scheduler.Event.FLIP_REPEAT;
+		if (config_values.input_type == 'keys') {
+			if (resp.status === PsychoJS.Status.NOT_STARTED) {
+				// keep track of start time/frame for later
+				resp.tStart = t;  // (not accounting for frame time here)
+				resp.frameNStart = frameN;  // exact frame index
+
+				// keyboard checking is just starting
+				resp.clock.reset();  // t=0 on next screen flip
+				resp.start(); // start on screen flip
+				resp.clearEvents();
 			}
-			else {
-				images_list.forEach((img) => {
-					img.setAutoDraw(false)
-				})
+
+			let theseKeys = resp.getKeys({ keyList: input_key_list, waitRelease: false });
+			if (!pressed && theseKeys.length > 0) {
+				resp.keys = theseKeys[0].name;  // just the last key pressed
+				resp.rt = theseKeys[0].rt;
+
+				// choice
+				if (input_key_list.includes(resp.keys)) {
+					pressed = true
+					option_list_for_input.forEach((opt) => {
+						if (input_key_list.indexOf(resp.keys) == option_list_for_input.indexOf(opt)) {
+							opt.setColor(new util.Color('yellow'))
+							clicked_option = [opt.text, clicked_count++]
+							pressed = true
+							feedbackClock.reset()
+						}
+					})
+					mark_event(trials_data, globalClock, trials.thisIndex, trial_type, event_types['CHOICE'],
+						'NA', 'left', 'NA')
+					feedbackClock.reset()
+				}
+
+				resp.keys = undefined;
+				resp.rt = undefined;
+			}
+			if (pressed == true && (feedbackClock.getTime() > parseFloat(config_values.feedback_duration))) {
+				continueRoutine = false
+			}
+		}
+
+		if (config_values.input_type == 'mouse') {
+			if (pressed == false) {
 				option_list.forEach((opt) => {
-					opt.setAutoDraw(false)
+					if (opt.isClicked) {
+						opt.setColor(new util.Color('yellow'))
+						clicked_option = [opt.text, clicked_count++]
+					}
+					if (clicked_option[1] >= 1) {
+						pressed = true
+						feedbackClock.reset()
+					}
 				})
-				currentTrialText.setAutoDraw(false)
-				currentTrialNumber.setAutoDraw(false)
-				questionText.setAutoDraw(false)
-				return Scheduler.Event.NEXT;
-			}
-		}
-
-		if (resp.status === PsychoJS.Status.NOT_STARTED) {
-			// keep track of start time/frame for later
-			resp.tStart = t;  // (not accounting for frame time here)
-			resp.frameNStart = frameN;  // exact frame index
-
-			// keyboard checking is just starting
-			resp.clock.reset();  // t=0 on next screen flip
-			resp.start(); // start on screen flip
-			resp.clearEvents();
-		}
-
-		let theseKeys = resp.getKeys({ keyList: keyList, waitRelease: false });
-		if (!pressed && theseKeys.length > 0) {
-			resp.keys = theseKeys[0].name;  // just the last key pressed
-			resp.rt = theseKeys[0].rt;
-
-			// choice
-			if (resp.keys == LEFT_KEY) {
-				pressed = true
-				mark_event(trials_data, globalClock, trials.thisIndex, trial_type, event_types['CHOICE'],
-				'NA', 'left' , 'NA')
-				feedbackClock.reset()
-			}
-			if (resp.keys == RIGHT_KEY) {
-				pressed = true
-				mark_event(trials_data, globalClock, trials.thisIndex, trial_type, event_types['CHOICE'],
-				'NA', 'right' , 'NA')
-				feedbackClock.reset()
 			}
 
-			continueRoutine = false
-
-			resp.keys = undefined;
-			resp.rt = undefined;
+			if (pressed == true && (feedbackClock.getTime() > parseFloat(config_values.feedback_duration))) {
+				continueRoutine = false
+			}
 		}
-
-
 
 		// check for quit (typically the Esc key)
 		if (psychoJS.eventManager.getKeys({keyList:['escape']}).length > 0) {
