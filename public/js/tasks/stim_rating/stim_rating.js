@@ -1140,6 +1140,7 @@ var options_text_list = []
 var option_list_list = []
 var option_list_for_input = []
 var option_count = 0;
+var option_row_count = 0;
 var list_count = 0;
 var row_center_index = 0
 var button_pos = [0, -0.2] // center position
@@ -1155,6 +1156,8 @@ function generate_option_list() {
 	option_list_list = []
 	option_list_for_input = []
 	input_key_list = []
+	row_center_index = 0
+	option_row_count = 0
 	option_count = 0;
 	list_count = 0;
 	button_pos = [0, -0.2] // center position
@@ -1180,7 +1183,7 @@ function generate_option_list() {
 	option_list_list.forEach((opts) => {
 		// RESET for new list/row
 		list_count++
-		option_count = 0;
+		option_row_count = 0
 		button_pos = [0, -0.2 - (0.08 * (list_count-1))] // center position
 		signage = -1 // screen side 
 		anchor_type = 'right'
@@ -1190,6 +1193,7 @@ function generate_option_list() {
 		// Handle proper option button placement one row at a time
 		opts.forEach((opt) => {
 			option_count++
+			option_row_count++
 			// positioning logic: 
 			// If only one, then center.
 			// Else, bounce between left and right screen placement. 
@@ -1197,13 +1201,13 @@ function generate_option_list() {
 				anchor_type = 'center'
 			}
 			else if (opts.length % 2 != 0) {
-				if (option_count == 1) { // special case for first one
+				if (option_row_count == 1) { // special case for first one
 					// Either anchor positioning on left or right depending on side placement
 					anchor_type = 'center'
 					button_pos[0] = button_pos[0]
 					signage = signage * -1
 				}
-				else if (option_count == 2 || option_count == 3) { // special case for second and third
+				else if (option_row_count == 2 || option_row_count == 3) { // special case for second and third
 					// Either anchor positioning on left or right depending on side placement
 					anchor_type = (signage > 0) ? 'left' : 'right'
 					button_pos[0] = (option_list[row_center_index].pos[0] // start at position of furthest button position on correct side
@@ -1221,10 +1225,10 @@ function generate_option_list() {
 				}
 			}
 			else {
-				if (option_count == 1 || option_count == 2) { // special case for first two
+				if (option_row_count == 1 || option_row_count == 2) { // special case for first two
 					// Either anchor positioning on left or right depending on side placement
 					anchor_type = (signage > 0) ? 'left' : 'right'
-					button_pos[0] = button_pos[0] + (button_spacing * option_count * signage)
+					button_pos[0] = button_pos[0] + (button_spacing * option_row_count * signage)
 					signage = signage * -1
 				}
 				else {
@@ -1286,12 +1290,115 @@ function generate_option_list() {
 			opt.setText(`${input_key_list[option_list_for_input.indexOf(opt)]}. ${opt.text}`)
 		})
 	}
+
+	//TODO: Order based on position and reassign the images so that they are in order
+}
+
+var images_list = []
+var images_text_list = []
+var images_count = 0;
+var images_row_count = 0;
+var images_list_list = []
+var images_list_count = []
+var img_row_center_index = 0
+var img_pos = [0, 0] // center position
+var img_spacing = 0.01
+var img_signage = -1 // screen side 
+
+function generate_image_list() {
+	// RESET THESE FOR IMAGE PLACEMENT
+	images_list = []
+	images_list_list = []
+	images_list_count = 0
+	img_row_center_index = 0
+	images_count = 0;
+	images_row_count = 0
+	img_pos = [0, -0.21] // center position
+	img_signage = -1 // screen side
+
+	// Generate a list for each row of options
+	images_text_list = images.split(" ")
+	for (let i = 0; i < images_text_list.length; i += parseInt(config_values.images_per_row)) {
+		const row = images_text_list.slice(i, i + parseInt(config_values.images_per_row));
+		images_list_list.push(row)
+	}
+
+	// Generate properly positioned images
+	// Loop through the list of rows
+	images_list_list.forEach((imgs) => {
+		// RESET for new list/row
+		images_list_count++
+		// images_count = 0;
+		images_row_count = 0
+		img_pos = [0, 0.0 + ((parseFloat(config_values.image_size) + img_spacing) * (images_list_count-1))] // center position
+		img_signage = -1 // screen side 
+		if (images_list_count > 1) {
+			img_row_center_index = parseInt(config_values.images_per_row) * (images_list_count - 1)
+		} else {
+			img_pos = [0,0]
+		}
+		// Handle proper option image placement one row at a time
+		imgs.forEach((img) => {
+			images_count++
+			images_row_count++
+			// positioning logic: 
+			// If only one, then center.
+			// Else, bounce between left and right screen placement. 
+			if (imgs.length % 2 != 0) {
+				if (images_row_count == 1) { // special case for first one
+					// Either anchor positioning on left or right depending on side placement
+					img_pos[0] = img_pos[0]
+					img_signage = img_signage * -1
+				}
+				else if (images_row_count == 2 || images_row_count == 3) { // special case for second and third
+					// Either anchor positioning on left or right depending on side placement
+					img_pos[0] = (images_list[img_row_center_index].pos[0] // start at position of furthest image position on correct side
+						+ (img_signage * images_list[img_row_center_index].size[0]) // Add half of size of center image in correct direction
+						+ (img_signage * img_spacing)) // add image spacing in correct direction
+						img_signage = img_signage * -1
+				}
+				else {
+					// Either anchor positioning on left or right depending on side placement
+					img_pos[0] = (images_list[images_count - 3].pos[0] // start at position of furthest image position on correct side
+						+ (img_signage * images_list[images_count - 3].size[0]) // Add size of image in the correct direction
+						+ (img_signage * img_spacing)) // add image spacing in correct direction
+						img_signage = img_signage * -1
+				}
+			}
+			else {
+				if (images_row_count == 1 || images_row_count == 2) { // special case for first two
+					// Either anchor positioning on left or right depending on side placement
+					img_pos[0] = (parseFloat(config_values.image_size)/2 + img_spacing/2)  * img_signage
+					img_signage = img_signage * -1
+				}
+				else {
+					// Either anchor positioning on left or right depending on side placement
+					img_pos[0] = (images_list[images_count - 3].pos[0] // start at position of furthest image position on correct side
+						+ (img_signage * images_list[images_count - 3].size[0]) // Add size of image in the correct direction
+						+ (img_signage * img_spacing)) // add image spacing in correct direction
+						img_signage = img_signage * -1
+				}
+			}
+			// Create the image and add to list
+			let temp_image = new visual.ImageStim({
+				win: psychoJS.window,
+				name: `stim${images_count}`, units: 'height',
+				image: img, mask: undefined,
+				ori: 0, pos: img_pos,
+				size:[parseFloat(config_values.image_size),parseFloat(config_values.image_size)],
+				color: new util.Color([1, 1, 1]), opacity: 1,
+				flipHoriz: false, flipVert: false,
+				texRes: 128, interpolate: true, depth: 0
+			});
+			images_list.push(temp_image)
+		})
+	})
+
+	//TODO: Order based on position and reassign the images so that they are in order
 }
 
 var pressed;
 var last_trial_num = 0;
-var images_list = []
-var image_count = 0;
 var clicked_option = ['', 0]; // [option name, times clicked]
 var clicked_count = 0
 
@@ -1309,29 +1416,8 @@ function trialRoutineBegin(trials) {
 		clicked_count = 0
 		clicked_option = ['', 0]
 
-		// RESET THESE FOR STIM PLACEMENT
-		images_list = []
-		image_count = 0;
-
-		// Stim for Rating
-		// TODO: Figure out how to properly position arbitrary number of stimuli
-		image_count = 0
-		images.split(" ").forEach((img) => {
-			image_count++
-			let temp_image = new visual.ImageStim({
-				win: psychoJS.window,
-				name: `stim${image_count}`, units: 'height',
-				image: img, mask: undefined,
-				ori: 0, pos: [0, 0],
-				size:[0.2,0.2],
-				color: new util.Color([1, 1, 1]), opacity: 1,
-				flipHoriz: false, flipVert: false,
-				texRes: 128, interpolate: true, depth: 0
-			});
-			images_list.push(temp_image)
-		})
-
 		generate_option_list()
+		generate_image_list()
 
 		questionText.setText(question)
 

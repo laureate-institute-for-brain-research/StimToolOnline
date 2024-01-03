@@ -1,2 +1,2 @@
-﻿input_type,buttons_per_row,feedback_duration,
-mouse,4,0.5,
+﻿input_type,buttons_per_row,images_per_row,image_size,feedback_duration,
+mouse,6,4,0.2,0.5,
