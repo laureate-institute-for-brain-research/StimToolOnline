@@ -1,2 +1,2 @@
-﻿input_type,buttons_per_row,button_width,button_spacing,images_per_row,image_size,image_spacing,feedback_duration,
-mouse,3,0.05,0.01,3,0.18,0.01,0.5,
+﻿input_type,question_size,buttons_per_row,button_width,button_spacing,images_per_row,image_size,image_spacing,feedback_duration,
+mouse,0.06,5,0.2,0.01,5,0.25,0.01,0.5,

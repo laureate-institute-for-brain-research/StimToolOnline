@@ -12,15 +12,13 @@
 var event_types = {
 	'INSTRUCT_ONSET': 1,
 	'TASK_ONSET': 2,
-	'BLOCK_ONSET': 3,
-	'TRIAL_ONSET': 4,
+	'TRIAL_ONSET': 3,
+	'CHOICE_ONSET': 4,
 	'CHOICE': 5,
 	'FEEDBACK_ONSET': 6,
 	'FIXATION_ONSET': 7,
 	'AUDIO_ONSET': 8
 }
-
-var DEBUG_FLAG = false
 
 var trials_data = []
 var config_values = {}
@@ -28,8 +26,6 @@ var config_values = {}
 var main_loop_count = 0
 var last_trial_num = 0
 var total_requests = 0
-var total_block_count = 0;
-var completed_blocks = 1;
 
  import { core, data, sound, util, visual } from '/psychojs/psychojs-2021.2.3.js';
  const { PsychoJS } = core;
@@ -54,8 +50,6 @@ var image_ratio = 4 / 3; // used for setting image sizes (this gets set to diffe
 // global flags
 var set_fixation_flag = true
 var init_fixation_flag = true
-
-var total_score = 0
 
 // init psychoJS:
 const psychoJS = new PsychoJS({
@@ -1091,8 +1085,6 @@ function trialsLoopBegin(thisScheduler) {
 		thisScheduler.add(endLoopIteration(thisScheduler, snapshot));
 	}
 	trial_type = 'MAIN'
-	mark_event(trials_data, globalClock, 'NA', trial_type, event_types['BLOCK_ONSET'],
-				'NA', 'NA' , 'NA')
 	return Scheduler.Event.NEXT;
 }
 
@@ -1251,7 +1243,7 @@ function generate_option_list() {
 				anchor: anchor_type,
 				letterHeight: 0.023,
 				fillColor: new util.Color("darkgrey"),
-				borderColor: new util.Color("blue"),
+				borderColor: new util.Color("grey"),
 				borderWidth: 0.005,
 				color: new util.Color("white"), opacity: 1,
 				flipHoriz: false, flipVert: false,
@@ -1457,6 +1449,7 @@ function trialRoutineBegin(trials) {
 		generate_image_list()
 
 		questionText.setText(question)
+		questionText.height = parseFloat(config_values.question_size)
 
 		console.log("Trial Number: ", trial_number)
 
@@ -1498,9 +1491,9 @@ function trialRoutineRespond(trials) {
 			currentTrialText.status = PsychoJS.Status.FINISHED;
 
 			mark_event(trials_data, globalClock, trials.thisIndex, trial_type, event_types['TRIAL_ONSET'],
-				'NA', 'NA' , 'NA')
+				'NA', 'NA' , images_text_list.toString().replaceAll(',',' '))
 			mark_event(trials_data, globalClock, trials.thisIndex, trial_type, event_types['CHOICE_ONSET'],
-				'NA', 'initial' , 'NA')
+				'NA', 'NA' , options_text_list.toString().replaceAll(',',' '))
 		}
 
 		if (config_values.input_type == 'keys') {
@@ -1525,14 +1518,14 @@ function trialRoutineRespond(trials) {
 					pressed = true
 					option_list_for_input.forEach((opt) => {
 						if (input_key_list.indexOf(resp.keys) == option_list_for_input.indexOf(opt)) {
-							opt.setColor(new util.Color('yellow'))
+							opt.setColor(new util.Color('darkgrey'))
 							clicked_option = [opt.text, clicked_count++]
 							pressed = true
+							mark_event(trials_data, globalClock, trials.thisIndex, trial_type, event_types['CHOICE'],
+							'NA', resp.keys, opt.text)
 							feedbackClock.reset()
 						}
 					})
-					mark_event(trials_data, globalClock, trials.thisIndex, trial_type, event_types['CHOICE'],
-						'NA', 'left', 'NA')
 					feedbackClock.reset()
 				}
 
@@ -1548,10 +1541,14 @@ function trialRoutineRespond(trials) {
 			if (pressed == false) {
 				option_list.forEach((opt) => {
 					if (opt.isClicked) {
-						opt.setColor(new util.Color('yellow'))
+						opt.setColor(new util.Color('darkgrey'))
+						opt.setFillColor(new util.Color('grey'))
+						opt.setBorderColor(new util.Color('darkgrey'))
 						clicked_option = [opt.text, clicked_count++]
 					}
-					if (clicked_option[1] >= 1) {
+					if (clicked_option[1] >= 1 && !pressed) {
+						mark_event(trials_data, globalClock, trials.thisIndex, trial_type, event_types['CHOICE'],
+						'NA', config_values.input_type, opt.text)
 						pressed = true
 						feedbackClock.reset()
 					}
