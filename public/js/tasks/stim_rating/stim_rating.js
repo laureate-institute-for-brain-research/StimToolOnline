@@ -1165,6 +1165,7 @@ function generate_option_list() {
 	anchor_type = 'right'
 
 	// Generate a list for each row of options
+	options = options.toString()
 	options_text_list = options.split(" ")
 	for (let i = 0; i < options_text_list.length; i += parseInt(config_values.buttons_per_row)) {
 		const row = options_text_list.slice(i, i + parseInt(config_values.buttons_per_row));
@@ -1291,7 +1292,14 @@ function generate_option_list() {
 		})
 	}
 
-	//TODO: Order based on position and reassign the images so that they are in order
+	//TODO: Order based on position and reassign the texts so that they are in order
+	option_list = []
+	let ixx = 0
+	option_list_for_input.forEach((opt) => {
+		opt.text = options_text_list[ixx]
+		option_list.push(opt)
+		ixx++
+	})
 }
 
 var images_list = []
@@ -1299,7 +1307,8 @@ var images_text_list = []
 var images_count = 0;
 var images_row_count = 0;
 var images_list_list = []
-var images_list_count = []
+var images_list_pos_order = []
+var images_list_count = 0
 var img_row_center_index = 0
 var img_pos = [0, 0] // center position
 var img_spacing = 0.01
@@ -1308,6 +1317,7 @@ var img_signage = -1 // screen side
 function generate_image_list() {
 	// RESET THESE FOR IMAGE PLACEMENT
 	images_list = []
+	images_list_pos_order = []
 	images_list_list = []
 	images_list_count = 0
 	img_row_center_index = 0
@@ -1330,12 +1340,10 @@ function generate_image_list() {
 		images_list_count++
 		// images_count = 0;
 		images_row_count = 0
-		img_pos = [0, 0.0 + ((parseFloat(config_values.image_size) + img_spacing) * (images_list_count-1))] // center position
+		img_pos = [0, 0.0 + ((parseFloat(config_values.image_size) + img_spacing) * (images_list_list.length - images_list_count))] //separate row positioning
 		img_signage = -1 // screen side 
 		if (images_list_count > 1) {
 			img_row_center_index = parseInt(config_values.images_per_row) * (images_list_count - 1)
-		} else {
-			img_pos = [0,0]
 		}
 		// Handle proper option image placement one row at a time
 		imgs.forEach((img) => {
@@ -1395,6 +1403,33 @@ function generate_image_list() {
 	})
 
 	//TODO: Order based on position and reassign the images so that they are in order
+	let first_in = true
+	images_list.forEach((img) => { // loop through original option list
+		images_list_pos_order.forEach((imgin) => { // loop through input option list
+			if (first_in) { // just push the first one
+				images_list_pos_order.push(img)
+				first_in = false
+			}
+			// button name is unique, so used to skip duplicates
+			else if (img.pos[0] < imgin.pos[0] && img.pos[1] >= imgin.pos[1] && !images_list_pos_order.includes(img)) {
+				// if position is 'farther left' than an existing entry, then add it before
+				images_list_pos_order.splice(images_list_pos_order.indexOf(imgin), 0, img)
+			}
+		})
+		// if position is not 'farther left' than existing, then add to end (farthest right)
+		if (!images_list_pos_order.includes(img)) { 
+			images_list_pos_order.push(img)
+		}
+	})
+
+	images_list = []
+	let ixx = 0
+	images_list_pos_order.forEach((img) => {
+		console.log(images_text_list[ixx])
+		img.image = images_text_list[ixx]
+		images_list.push(img)
+		ixx++
+	})
 }
 
 var pressed;
