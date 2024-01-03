@@ -1163,6 +1163,7 @@ function generate_option_list() {
 	button_pos = [0, -0.2] // center position
 	signage = -1 // screen side 
 	anchor_type = 'right'
+	button_spacing = parseFloat(config_values.button_spacing)
 
 	// Generate a list for each row of options
 	options = options.toString()
@@ -1185,7 +1186,7 @@ function generate_option_list() {
 		// RESET for new list/row
 		list_count++
 		option_row_count = 0
-		button_pos = [0, -0.2 - (0.08 * (list_count-1))] // center position
+		button_pos = [0, -0.2 - ((0.05 + button_spacing) * (list_count-1))] // center position
 		signage = -1 // screen side 
 		anchor_type = 'right'
 		if (list_count > 1) {
@@ -1229,7 +1230,7 @@ function generate_option_list() {
 				if (option_row_count == 1 || option_row_count == 2) { // special case for first two
 					// Either anchor positioning on left or right depending on side placement
 					anchor_type = (signage > 0) ? 'left' : 'right'
-					button_pos[0] = button_pos[0] + (button_spacing * option_row_count * signage)
+					button_pos[0] = button_pos[0] + (button_spacing/2 * option_row_count * signage)
 					signage = signage * -1
 				}
 				else {
@@ -1256,7 +1257,7 @@ function generate_option_list() {
 				flipHoriz: false, flipVert: false,
 				texRes: 128, interpolate: true, depth: 0
 			});
-			temp_button.setSize([0.2, 0.06])
+			temp_button.setSize([parseFloat(config_values.button_width), 0.06])
 			option_list.push(temp_button)
 		})
 	})
@@ -1323,6 +1324,7 @@ function generate_image_list() {
 	img_row_center_index = 0
 	images_count = 0;
 	images_row_count = 0
+	img_spacing = parseFloat(config_values.image_spacing)
 	img_pos = [0, -0.21] // center position
 	img_signage = -1 // screen side
 
