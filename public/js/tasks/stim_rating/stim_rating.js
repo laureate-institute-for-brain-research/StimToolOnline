@@ -50,6 +50,9 @@ var image_ratio = 4 / 3; // used for setting image sizes (this gets set to diffe
 // global flags
 var set_fixation_flag = true
 var init_fixation_flag = true
+var in_practice = false
+var passed_instr_check = false
+var instr_check_selections = []
 
 // init psychoJS:
 const psychoJS = new PsychoJS({
@@ -130,7 +133,7 @@ window.onload = function () {
 			resources.push({ name: 'run_schedule.xls', path: values.schedule })
 			resources.push({ name: 'instruct_schedule.csv', path: values.instruct_schedule })
 			resources.push({ name: 'practice_schedule.csv', path: values.practice_schedule })
-			resources.push({ name: 'config.csv', path: values.config})
+			resources.push({ name: 'config.csv', path: values.config })
 
 			// Add file paths to expInfo
 			if (values.schedule) expInfo.task_schedule = values.schedule
@@ -155,10 +158,6 @@ window.onload = function () {
 							var obj = {};
 							var currentLine = allRows[i].split(',');
 							for (var j = 0; j < headerRows.length; j++){
-
-								// if (headerRows[j] == " ") {
-								// 	console.log('empty string')
-								// }
 								obj[headerRows[j]] = currentLine[j]
 							}
 							out.push(obj);
@@ -171,8 +170,6 @@ window.onload = function () {
 								resources.push({ name: obj.audio_path, path: obj.audio_path })
 							}
 						}
-						// console.log(out)
-						// console.log(resources)
 						resolve(data)
 					}
 				})
@@ -201,30 +198,22 @@ window.onload = function () {
 							}
 							// If there's media add to resources
 							if (obj.images != 'None' && obj.images != undefined) {
-								console.log(obj.images)
 								obj.images.split(" ").forEach((x) => {
-									console.log(x)
 									resources.push({ name: x , path: x })
 								})
 							}
 							if (obj.videos != 'None' && obj.videos != undefined) {
-								console.log(obj.videos)
 								obj.videos.split(" ").forEach((x) => {
-									console.log(x)
 									resources.push({ name: x , path: x })
 								})
 							}
 							if (obj.sounds != 'None' && obj.sounds != undefined) {
-								console.log(obj.sounds)
 								obj.sounds.split(" ").forEach((x) => {
-									console.log(x)
 									resources.push({ name: x , path: x })
 								})
 							}
 							if (obj.others != 'None' && obj.others != undefined) {
-								console.log(obj.others)
 								obj.others.split(" ").forEach((x) => {
-									console.log(x)
 									resources.push({ name: x , path: x })
 								})
 							}
@@ -255,12 +244,9 @@ window.onload = function () {
 							var obj = {};
 							var currentLine = allRows[i].split(',');
 							for (var j = 0; j < headerRows.length; j++) {
-								console.log(headerRows[j])
-								console.log(currentLine[j])
 								obj[headerRows[j]] = currentLine[j];	
 							}
 						}
-						console.log(obj)
 
 						config_values = obj
 
@@ -292,30 +278,22 @@ window.onload = function () {
 							}
 							// If there's media add to resources
 							if (obj.images != 'None' && obj.images != undefined) {
-								console.log(obj.images)
 								obj.images.split(" ").forEach((x) => {
-									console.log(x)
 									resources.push({ name: x , path: x })
 								})
 							}
 							if (obj.videos != 'None' && obj.videos != undefined) {
-								console.log(obj.videos)
 								obj.videos.split(" ").forEach((x) => {
-									console.log(x)
 									resources.push({ name: x , path: x })
 								})
 							}
 							if (obj.sounds != 'None' && obj.sounds != undefined) {
-								console.log(obj.sounds)
 								obj.sounds.split(" ").forEach((x) => {
-									console.log(x)
 									resources.push({ name: x , path: x })
 								})
 							}
 							if (obj.others != 'None' && obj.others != undefined) {
-								console.log(obj.others)
 								obj.others.split(" ").forEach((x) => {
-									console.log(x)
 									resources.push({ name: x , path: x })
 								})
 							}
@@ -361,7 +339,7 @@ psychoJS.openWindow({
 });
 
 // store info about the experiment session:
-let expName = 'Active Trust';  // from the Builder filename that created this script
+let expName = 'Stim Rating';  // from the Builder filename that created this script
 var expInfo = { 'participant': '' ,'session': '',  'run_id': '', 'date' : formatDate(), 'study': '', };
 
 // schedule the experiment:
@@ -419,11 +397,6 @@ const trialsLoopScheduler = new Scheduler(psychoJS);
 flowScheduler.add(trialsLoopBegin, trialsLoopScheduler);
 flowScheduler.add(trialsLoopScheduler);
 flowScheduler.add(trialsLoopEnd);
-
-flowScheduler.add(thanksRoutineBegin());
-flowScheduler.add(thanksRoutineEachFrame());
-flowScheduler.add(thanksRoutineEnd());
-flowScheduler.add(quitPsychoJS, '', true);
 
 // quit if user presses Cancel in dialog box:
 dialogCancelScheduler.add(quitPsychoJS, '', false);
@@ -877,8 +850,10 @@ function readyRoutineBegin(block_type) {
 		frameN = -1;
 
 		// Set readyStim based on block_type
+		in_practice = false
 		switch (block_type) {
 			case 'PRACTICE':
+				in_practice = true
 				readyStim = new visual.ImageStim({
 					win : psychoJS.window,
 					name : 'ready_stim', units : 'height', 
@@ -961,6 +936,10 @@ function readyRoutineEachFrame() {
 	return function () {
 		//------Loop for each frame of Routine 'ready'-------
 		let continueRoutine = true; // until we're told otherwise
+
+		if (config_values.instr_check === 'true') {
+			return Scheduler.Event.NEXT;
+		}
 		// get current time
 		t = readyClock.getTime();
 		if (resp.status == PsychoJS.Status.NOT_STARTED) {
@@ -1033,19 +1012,21 @@ function practiceTrialsLoopBegin(thisScheduler) {
 	resp.status = PsychoJS.Status.NOT_STARTED
 	init_fixation_flag = true
 	// Schedule all the trials in the trialList:
-	for (const thisTrial of trials) {
-		const snapshot = trials.getSnapshot();
+	if (config_values.instr_check === 'false') {
+		for (const thisTrial of trials) {
+			const snapshot = trials.getSnapshot();
 
-		thisScheduler.add(importConditions(snapshot));
-		thisScheduler.add(initialFixation(snapshot));
-		thisScheduler.add(trialRoutineBegin(snapshot));
-		thisScheduler.add(trialRoutineRespond(snapshot));
-		thisScheduler.add(trialRoutineEnd(snapshot));
-		thisScheduler.add(endLoopIteration(thisScheduler, snapshot));
+			thisScheduler.add(importConditions(snapshot));
+			thisScheduler.add(initialFixation(snapshot));
+			thisScheduler.add(trialRoutineBegin(snapshot));
+			thisScheduler.add(trialRoutineRespond(snapshot));
+			thisScheduler.add(trialRoutineEnd(snapshot));
+			thisScheduler.add(endLoopIteration(thisScheduler, snapshot));
+		}
+		trial_type = 'PRACTICE'
+		mark_event(trials_data, globalClock, 'NA', trial_type, event_types['BLOCK_ONSET'],
+			'NA', 'NA', 'NA')
 	}
-	trial_type = 'PRACTICE'
-	mark_event(trials_data, globalClock, 'NA', trial_type, event_types['BLOCK_ONSET'],
-				'NA', 'NA' , 'NA')
 	return Scheduler.Event.NEXT;
 }
 
@@ -1099,8 +1080,35 @@ function trialsLoopEnd() {
 	slideStim.setAutoDraw(false)
 
 	psychoJS.experiment.removeLoop(trials);
-
 	psychoJS.experiment.addData('globalClock', globalClock.getTime());
+
+	if (config_values.instr_check === 'true' && !passed_instr_check && !in_practice) {
+
+		// INSTRUCTIONS BLOCK
+		// Runs through instructions
+		if (!getQueryVariable('skip_instructions')) {
+			const instruct_pagesLoopScheduler = new Scheduler(psychoJS);
+			flowScheduler.add(instruct_pagesLoopBegin, instruct_pagesLoopScheduler);
+			flowScheduler.add(instruct_pagesLoopScheduler);
+			flowScheduler.add(instruct_pagesLoopEnd);
+		}
+
+		// MAIN BLOCK
+		// Ready Routine
+		flowScheduler.add(readyRoutineBegin('MAIN'));
+		flowScheduler.add(readyRoutineEachFrame());
+		flowScheduler.add(readyRoutineEnd());
+
+		const trialsLoopScheduler = new Scheduler(psychoJS);
+		flowScheduler.add(trialsLoopBegin, trialsLoopScheduler);
+		flowScheduler.add(trialsLoopScheduler);
+		flowScheduler.add(trialsLoopEnd);
+	} else if (!in_practice) {
+		flowScheduler.add(thanksRoutineBegin());
+		flowScheduler.add(thanksRoutineEachFrame());
+		flowScheduler.add(thanksRoutineEnd());
+		flowScheduler.add(quitPsychoJS, '', true);
+	}
 
 	return Scheduler.Event.NEXT;
 }
@@ -1289,7 +1297,7 @@ function generate_option_list() {
 	option_list = []
 	let ixx = 0
 	option_list_for_input.forEach((opt) => {
-		opt.text = options_text_list[ixx]
+		opt.text = options_text_list[ixx].replaceAll('+', ' ')
 		option_list.push(opt)
 		ixx++
 	})
@@ -1444,9 +1452,22 @@ function trialRoutineBegin(trials) {
 
 		clicked_count = 0
 		clicked_option = ['', 0]
+		instr_check_selections = []
 
 		generate_option_list()
-		generate_image_list()
+		if (media_type == 'image') {
+			generate_image_list()
+		} else if (media_type == 'video') {
+			//TODO generate_videos()
+		} else if (media_type == 'audio') {
+			//TODO generate_audios()
+		} else if (media_type == 'text') {
+			//TODO generate_texts()
+		} else if (media_type == 'image+audio') {
+			//TODO generate_image_audio_pairs()
+		} else if (media_type == 'audio+text') {
+			//TODO generate_audio_text_pairs()
+		}
 
 		questionText.setText(question)
 		questionText.height = parseFloat(config_values.question_size)
@@ -1518,9 +1539,16 @@ function trialRoutineRespond(trials) {
 					pressed = true
 					option_list_for_input.forEach((opt) => {
 						if (input_key_list.indexOf(resp.keys) == option_list_for_input.indexOf(opt)) {
+							if (config_values.instr_check === 'true' && opt.text != 'ENTER') {
+								instr_check_selections.push(option_list_for_input.indexOf(opt))
+							} else {
+								pressed = true
+							}
 							opt.setColor(new util.Color('darkgrey'))
+							opt.setFillColor(new util.Color('grey'))
+							opt.setBorderColor(new util.Color('darkgrey'))
 							clicked_option = [opt.text, clicked_count++]
-							pressed = true
+							// pressed = true
 							mark_event(trials_data, globalClock, trials.thisIndex, trial_type, event_types['CHOICE'],
 							'NA', resp.keys, opt.text)
 							feedbackClock.reset()
@@ -1532,7 +1560,13 @@ function trialRoutineRespond(trials) {
 				resp.keys = undefined;
 				resp.rt = undefined;
 			}
-			if (pressed == true && (feedbackClock.getTime() > parseFloat(config_values.feedback_duration))) {
+			if (config_values.instr_check === 'true') {
+				if (clicked_option[0] == 'ENTER') {
+					continueRoutine = false
+				} else if (clicked_option[0] != 'ENTER') {
+					continueRoutine = true
+				}
+			} else if ((pressed) && (feedbackClock.getTime() > parseFloat(config_values.feedback_duration))) {
 				continueRoutine = false
 			}
 		}
@@ -1541,6 +1575,9 @@ function trialRoutineRespond(trials) {
 			if (pressed == false) {
 				option_list.forEach((opt) => {
 					if (opt.isClicked) {
+						if ( config_values.instr_check === 'true' && opt.text != 'ENTER') {
+							instr_check_selections.push(option_list_for_input.indexOf(opt))
+						}
 						opt.setColor(new util.Color('darkgrey'))
 						opt.setFillColor(new util.Color('grey'))
 						opt.setBorderColor(new util.Color('darkgrey'))
@@ -1549,13 +1586,23 @@ function trialRoutineRespond(trials) {
 					if (clicked_option[1] >= 1 && !pressed) {
 						mark_event(trials_data, globalClock, trials.thisIndex, trial_type, event_types['CHOICE'],
 						'NA', config_values.input_type, opt.text)
-						pressed = true
+						if (config_values.instr_check === 'true') {
+							pressed = false
+						} else {
+							pressed = true
+						}
 						feedbackClock.reset()
 					}
 				})
 			}
 
-			if (pressed == true && (feedbackClock.getTime() > parseFloat(config_values.feedback_duration))) {
+			if (config_values.instr_check === 'true') {
+				if (clicked_option[0] == 'ENTER') {
+					continueRoutine = false
+				} else if (clicked_option[0] != 'ENTER') {
+					continueRoutine = true
+				}
+			} else if ((pressed) && (feedbackClock.getTime() > parseFloat(config_values.feedback_duration))) {
 				continueRoutine = false
 			}
 		}
@@ -1694,6 +1741,18 @@ function trialRoutineEnd(trials) {
 						'NA', 'NA', 'NA')
 					
 					points_fixation_stim.setAutoDraw(true)
+		}
+
+		// passed instruction check is true unless a wrong selection was made
+		passed_instr_check = true 
+		instr_check_selections.forEach((sel) => {
+			if (!config_values.instr_check_conditions.split(" ").includes(sel.toString())) {
+				// console.log('failed instr check')
+				passed_instr_check = false
+			}
+		})
+		if (!instr_check_selections.length) { // no selection (a.k.a. enter was the only selection)
+			passed_instr_check = false
 		}
 		
 			// hold the fixation for jitter time

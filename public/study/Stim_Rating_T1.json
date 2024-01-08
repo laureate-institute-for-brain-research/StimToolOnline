@@ -1,7 +1,8 @@
 {
     "name": "Stim Rating T1",
     "order": [
-        "/?index=0&task=stim_rating&run=Pilot_R1_FACES.json",
+        "/?index=0&task=stim_rating&run=Pilot_IN_FACES.json",
+        "/?index=1&task=stim_rating&run=Pilot_R1_FACES.json",
         "/completeMobile?"
     ],
     "fullscreen": true,
