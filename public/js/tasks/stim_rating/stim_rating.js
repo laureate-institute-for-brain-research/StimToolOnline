@@ -475,6 +475,8 @@ function experimentInit() {
 		practice = true;
 	}
 
+	psychoJS.window.color = new util.Color(config_values.background_color)
+
 	window_ratio = psychoJS.window.size[0]/psychoJS.window.size[1]
 	
 	// Initialize components for Routine "instruct"
