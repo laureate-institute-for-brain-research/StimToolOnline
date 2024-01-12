@@ -1167,6 +1167,9 @@ function generate_option_list() {
 
 	// Generate a list for each row of options
 	options = options.toString()
+	if (config_values.instr_check === 'true') {
+		options = options + " ENTER"
+	}
 	options_text_list = options.split(" ")
 	for (let i = 0; i < options_text_list.length; i += parseInt(config_values.buttons_per_row)) {
 		const row = options_text_list.slice(i, i + parseInt(config_values.buttons_per_row));
