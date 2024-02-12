@@ -810,7 +810,7 @@ function experimentInit() {
 		height: 0.06,
 		lineWidth: 3.5,
 		units: 'norm',
-		pos: [ 0, -0.4 ], ori: 0,
+		pos: [ 0, -0.1 ], ori: 0,
 		lineColor: new util.Color('grey'), opacity: 1,
 		depth: 0.0
 	});
@@ -822,7 +822,7 @@ function experimentInit() {
 		height: 0.06,
 		lineWidth: 3.5,
 		units: 'norm',
-		pos: [0, -0.4], ori: 0,
+		pos: [0, -0.1], ori: 0,
 		fillColor: new util.Color('#4d4d4d'),
 		lineColor: new util.Color('#4d4d4d'), opacity: 1,
 		depth: 0.0
@@ -835,7 +835,7 @@ function experimentInit() {
 		height: 0.06,
 		lineWidth: 0.1,
 		units: 'norm',
-		pos: [-0.5, -0.4], ori: 0,
+		pos: [-0.5, -0.1], ori: 0,
 		fillColor: new util.Color('#13aed1'),
 		lineColor: new util.Color('#13aed1'), opacity: 1,
 		depth: 0.0
@@ -847,7 +847,7 @@ function experimentInit() {
 		text: '-$$$',
 		font: 'Arial',
 		units: 'norm',
-		pos: [ -0.5, -0.3], height: 0.05, wrapWidth: undefined, ori: 0,
+		pos: [ -0.5, 0], height: 0.05, wrapWidth: undefined, ori: 0,
 		color: new util.Color('grey'), opacity: 1,
 		depth: 0.0
 	});
@@ -858,7 +858,7 @@ function experimentInit() {
 		text: '-$',
 		font: 'Arial',
 		units: 'norm',
-		pos: [ -0.25, -0.3], height: 0.05, wrapWidth: undefined, ori: 0,
+		pos: [ -0.25, 0], height: 0.05, wrapWidth: undefined, ori: 0,
 		color: new util.Color('grey'), opacity: 1,
 		depth: 0.0
 	});
@@ -869,7 +869,7 @@ function experimentInit() {
 		text: '+$$$',
 		font: 'Arial',
 		units: 'norm',
-		pos: [ 0.5, -0.3], height: 0.05, wrapWidth: undefined, ori: 0,
+		pos: [ 0.5, 0], height: 0.05, wrapWidth: undefined, ori: 0,
 		color: new util.Color('grey'), opacity: 1,
 		depth: 0.0
 	});
@@ -880,7 +880,7 @@ function experimentInit() {
 		text: '+$',
 		font: 'Arial',
 		units: 'norm',
-		pos: [ 0.25, -0.3], height: 0.05, wrapWidth: undefined, ori: 0,
+		pos: [ 0.25, 0], height: 0.05, wrapWidth: undefined, ori: 0,
 		color: new util.Color('grey'), opacity: 1,
 		depth: 0.0
 	});
@@ -891,7 +891,7 @@ function experimentInit() {
 		text: '0',
 		font: 'Arial',
 		units: 'norm',
-		pos: [ 0, -0.3], height: 0.05, wrapWidth: undefined, ori: 0,
+		pos: [ 0, 0], height: 0.05, wrapWidth: undefined, ori: 0,
 		color: new util.Color('grey'), opacity: 1,
 		depth: 0.0
 	});
@@ -957,7 +957,7 @@ function experimentInit() {
 		text: '0',
 		font: 'Arial',
 		units: 'norm',
-		pos: [0.04, -0.165], height: 0.11, wrapWidth: undefined, ori: 0,
+		pos: [0.04, 0.165], height: 0.11, wrapWidth: undefined, ori: 0,
 		color: new util.Color('#00ff00'), opacity: 1,
 		depth: 0.0
 	});
@@ -968,7 +968,7 @@ function experimentInit() {
 		text: 'Correct!',
 		font: 'Arial',
 		units: 'norm',
-		pos: [-0.15, -0.165], height: 0.11, wrapWidth: undefined, ori: 0,
+		pos: [-0.15, 0.165], height: 0.11, wrapWidth: undefined, ori: 0,
 		color: new util.Color('white'), opacity: 1,
 		depth: 0.0
 	});
@@ -1066,14 +1066,14 @@ function experimentInit() {
 	og_positions['score_bar_bottom_text'] = [0.29, -0.37]
 	og_positions['score_bar_midbottom_text'] = [0.29, -0.18]
 	og_positions['score_bar_mid_text'] = [0.29, 0]
-	og_positions['tot_score_bar'] = [ 0, -0.4 ]
-	og_positions['tot_score_bar_midline'] = [ 0, -0.4 ]
-	og_positions['tot_score_slide'] = [-0.5, -0.4]
-	og_positions['tot_score_bar_left_text'] = [ -0.5, -0.3]
-	og_positions['tot_score_bar_midleft_text'] = [ -0.25, -0.3]
-	og_positions['tot_score_bar_right_text'] = [ 0.5, -0.3]
-	og_positions['tot_score_bar_midright_text'] = [ 0.25, -0.3]
-	og_positions['tot_score_bar_mid_text'] = [ 0, -0.3]
+	og_positions['tot_score_bar'] = [ 0, -0.1 ]
+	og_positions['tot_score_bar_midline'] = [ 0, -0.1 ]
+	og_positions['tot_score_slide'] = [-0.5, -0.1]
+	og_positions['tot_score_bar_left_text'] = [ -0.5, -0]
+	og_positions['tot_score_bar_midleft_text'] = [ -0.25, -0]
+	og_positions['tot_score_bar_right_text'] = [ 0.5, -0]
+	og_positions['tot_score_bar_midright_text'] = [ 0.25, -0]
+	og_positions['tot_score_bar_mid_text'] = [ 0, -0]
 
 	// Tone Sounds
 	// high_tone = new Sound({
