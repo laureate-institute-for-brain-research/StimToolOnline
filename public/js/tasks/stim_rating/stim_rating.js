@@ -447,6 +447,7 @@ var blockClock;
 
 // static stim
 var questionText;
+var tryAgainText;
 //// UI Trackers
 var currentTrialNumber;
 var currentTrialText;
@@ -545,6 +546,17 @@ function experimentInit() {
 		text: '',
 		font: 'Arial', units: 'height',
 		pos: [0, 0.4], height: 0.027, wrapWidth: undefined, ori: 0,
+		alignHoriz: 'center',
+		color: new util.Color('white'), opacity: 1,
+		depth: 0.0
+	});
+
+	tryAgainText = new visual.TextStim({
+		win: psychoJS.window,
+		name: 'trialTracker',
+		text: 'Your answer/answers are NOT correct. Please read the instructions and try again.',
+		font: 'Arial', units: 'height',
+		pos: [0, 0], height: 0.05, wrapWidth: undefined, ori: 0,
 		alignHoriz: 'center',
 		color: new util.Color('white'), opacity: 1,
 		depth: 0.0
@@ -1106,22 +1118,17 @@ function trialsLoopEnd() {
 		flowScheduler.add(trialsLoopScheduler);
 		flowScheduler.add(trialsLoopEnd);
 	} else if (!in_practice) {
-		flowScheduler.add(thanksRoutineBegin());
-		flowScheduler.add(thanksRoutineEachFrame());
-		flowScheduler.add(thanksRoutineEnd());
-		flowScheduler.add(quitPsychoJS, '', true);
+		let thanks_text = `This is the end of the task run. Thank you!`
+		if (config_values.instr_check === 'true') {
+			thanks_text = `Your answer/answers are correct! We will now proceed to the task.`
+		}
+		flowScheduler.add(thanksRoutineBegin(thanks_text));
+		flowScheduler.add(thanksRoutineEachFrame(thanks_text));
+		flowScheduler.add(thanksRoutineEnd(thanks_text));
+		flowScheduler.add(quitPsychoJS, thanks_text, true);
 	}
 
 	return Scheduler.Event.NEXT;
-}
-
-function get_correct_side(left_p/*, right_p*/) {
-	if (Math.random() <= left_p) {
-		return true
-	}
-	else {
-		return false
-	}
 }
 
 // Recursively set multiplier to find one that both keeps the images ratio and keeps it in the window
@@ -1740,14 +1747,6 @@ function trialRoutineEnd(trials) {
 		//------Ending Routine 'trial'-------
 		t = endClock.getTime()
 
-		if (points_fixation_stim.status == PsychoJS.Status.NOT_STARTED) {
-					points_fixation_stim.setText('+')
-					mark_event(trials_data, globalClock, trials.thisIndex, trial_type, event_types['FIXATION_ONSET'],
-						'NA', 'NA', 'NA')
-					
-					points_fixation_stim.setAutoDraw(true)
-		}
-
 		// passed instruction check is true unless a wrong selection was made
 		passed_instr_check = true 
 		instr_check_selections.forEach((sel) => {
@@ -1759,11 +1758,28 @@ function trialRoutineEnd(trials) {
 		if (!instr_check_selections.length) { // no selection (a.k.a. enter was the only selection)
 			passed_instr_check = false
 		}
+
+		let try_again_duration = 0
+		if (!passed_instr_check) {
+			try_again_duration = 10
+		}
+
+		if (points_fixation_stim.status == PsychoJS.Status.NOT_STARTED && passed_instr_check) {
+			points_fixation_stim.setText('+')
+			mark_event(trials_data, globalClock, trials.thisIndex, trial_type, event_types['FIXATION_ONSET'],
+				'NA', 'NA', 'NA')
+			
+			points_fixation_stim.setAutoDraw(true)
+		}
 		
 			// hold the fixation for jitter time
-		if (t <= ITI) {
+		if (t <= ITI && passed_instr_check) {
+			return Scheduler.Event.FLIP_REPEAT;
+		} else if (t <= try_again_duration) {
+			tryAgainText.setAutoDraw(true)
 			return Scheduler.Event.FLIP_REPEAT;
 		} else {
+			tryAgainText.setAutoDraw(false)
 			resp.stop()
 			resp.status = PsychoJS.Status.NOT_STARTED
 			//sendData()
@@ -1777,7 +1793,7 @@ function trialRoutineEnd(trials) {
 
 var readyComponents;
 var thanksComponents;
-function thanksRoutineBegin(trials) {
+function thanksRoutineBegin(trials, thanks_text) {
 	return function () {
 		//------Prepare to start Routine 'thanks'-------
 		// Clear Trial Components
@@ -1788,7 +1804,7 @@ function thanksRoutineBegin(trials) {
 
 		// Show Final Points and money earned
 		// 100 points = 10 cents
-		thanksText.setText(`This is the end of the task run.`)
+		thanksText.setText(thanks_text)
 		// update component parameters for each repeat
 		// keep track of which components have finished
 		thanksComponents = [];
