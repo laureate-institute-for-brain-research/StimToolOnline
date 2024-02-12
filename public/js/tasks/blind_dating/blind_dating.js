@@ -283,7 +283,9 @@ var resources = [
 	{ name: 'ready.jpeg', path: '/js/tasks/blind_dating/media/instructions/Slide22.jpeg' },
 	{ name: 'MAIN_ready_audio.mp3', path: '/js/tasks/blind_dating/media/instructions_audio/Slide22.mp3'},
 	{ name: 'male.png', path: '/js/tasks/blind_dating/media/male.png' },
-	{ name: 'female.png', path: '/js/tasks/blind_dating/media/female.png'}
+	{ name: 'female.png', path: '/js/tasks/blind_dating/media/female.png' },
+	{ name: 'smile.png', path: '/js/tasks/blind_dating/media/smile.png' },
+	{ name: 'frown.png', path: '/js/tasks/blind_dating/media/frown.png' }
 ]
 
 var frameDur;
@@ -321,6 +323,8 @@ var trialClock;
 var fbClock;
 
 var offer_stim_text;
+var offer_emote_smile;
+var offer_emote_frown;
 var offer_rect;
 var profile_outline;
 
@@ -439,6 +443,30 @@ function experimentInit() {
 		pos: [0, 0.06], height: 0.07, wrapWidth: undefined, ori: 0,
 		color: new util.Color('white'), opacity: 1,
 		depth: 0.0
+	});
+
+	offer_emote_smile = new visual.ImageStim({
+		win : psychoJS.window,
+		name : `smile_image`, units : 'norm', 
+		image : 'smile.png', mask : undefined,
+		ori: 0,
+		pos: [0.52, 0.12 ], 
+		size: [0.15,0.25],
+		color: undefined, opacity: 1,
+		flipHoriz : false, flipVert : false,
+		texRes : 128, interpolate : true, depth : 0
+	});
+
+	offer_emote_frown = new visual.ImageStim({
+		win : psychoJS.window,
+		name : `frown_image`, units : 'norm', 
+		image : 'frown.png', mask : undefined,
+		ori: 0,
+		pos: [0.4, 0.12 ], 
+		size: [0.15,0.25],
+		color: undefined, opacity: 1,
+		flipHoriz : false, flipVert : false,
+		texRes : 128, interpolate : true, depth : 0
 	});
 
 	offer_rect= new visual.Rect({
@@ -1358,6 +1386,12 @@ function clear_stims() {
 	offer_stim_text.setAutoDraw(false)
 	offer_stim_text.status = PsychoJS.Status.NOT_STARTED
 
+	offer_emote_smile.setAutoDraw(false)
+	offer_emote_smile.status = PsychoJS.Status.NOT_STARTED
+
+	offer_emote_frown.setAutoDraw(false)
+	offer_emote_frown.status = PsychoJS.Status.NOT_STARTED
+
 	offer_rect.setAutoDraw(false)
 	offer_rect.status = PsychoJS.Status.NOT_STARTED
 
@@ -1604,6 +1638,7 @@ function trialRoutineEachFrame(trials) {
 				offer_stim_text.color = new util.Color('#00ff00')
 				offer_stim_text.setText('YOU HAVE A DATE!')
 				offer_stim_text.bold = true
+				offer_emote_smile.setAutoDraw(true)
 				// mark_event(trials_data, globalClock, trials.thisIndex, trial_type,
 				// 	event_types['FEEDBACK'], 'NA' , 'NA',  totalDates)
 				//result_time = t + 1.0
@@ -1631,6 +1666,7 @@ function trialRoutineEachFrame(trials) {
 				offer_stim_text.color = new util.Color('#ff0000')
 				offer_stim_text.setText(`END UP ALONE`)
 				offer_stim_text.bold = true
+				offer_emote_frown.setAutoDraw(true)
 				// mark_event(trials_data, globalClock, trials.thisIndex, trial_type,
 				// 	event_types['FEEDBACK'], 'NA' , 'NA',  totalDates)
 				
