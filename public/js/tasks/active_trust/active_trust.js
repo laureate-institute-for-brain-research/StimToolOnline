@@ -49,7 +49,8 @@ var LEFT_KEY = 'left'
 var RIGHT_KEY = 'right'
 var UP_KEY = 'up'
 var DOWN_KEY = 'down'
-var keyList = [LEFT_KEY, RIGHT_KEY, UP_KEY, DOWN_KEY]
+// var keyList = [LEFT_KEY, RIGHT_KEY, UP_KEY, DOWN_KEY]
+var keyList = [LEFT_KEY, RIGHT_KEY, UP_KEY]
 
 var window_ratio = 4 / 3; // used for general stimuli sizing
 var image_ratio = 4 / 3; // used for setting image sizes (this gets set to different image specific values throughout the code)
@@ -672,8 +673,7 @@ function experimentInit() {
 		name: 'trialTracker',
 		text: 'Invite Points: ',
 		font: 'Arial', units: 'height',
-		pos: [-window_ratio * 0.46, 0.41], height: 0.027, wrapWidth: undefined, ori: 0,
-		alignHoriz: 'left',
+		pos: [0, -0.3], height: 0.075, wrapWidth: undefined, ori: 0,
 		color: new util.Color('white'), opacity: 1,
 		depth: 0.0
 	});
@@ -682,8 +682,7 @@ function experimentInit() {
 		name: 'trialTracker',
 		text: '0',
 		font: 'Arial', units: 'height',
-		pos: [currentScoreText.getBoundingBox().right + (window_ratio * 0.005), 0.41], height: 0.027, wrapWidth: undefined, ori: 0,
-		alignHoriz: 'left',
+		pos: [0, -0.4], height: 0.075, wrapWidth: undefined, ori: 0,
 		color: new util.Color('white'), opacity: 1,
 		depth: 0.0
 	});
@@ -1604,8 +1603,8 @@ function trialRoutineBegin(trials) {
 		}
 		else if (wrong_score == '80') {
 			penalty_stim = eighty_score
-			dinnerSizeBottomText.text = 'MEDIUM'
-			block_dinner_size.text = 'Dinner Party Size: MEDIUM'
+			dinnerSizeBottomText.text = 'LARGE'
+			block_dinner_size.text = 'Dinner Party Size: LARGE'
 		}
 		else if (wrong_score == '60') {
 			penalty_stim = sixty_score
@@ -1686,7 +1685,7 @@ function trialRoutineRespond(trials) {
 			press_up.setAutoDraw(true)
 			press_left.setAutoDraw(true)
 			press_right.setAutoDraw(true)
-			press_down.setAutoDraw(true)
+			// press_down.setAutoDraw(true)
 			currentTrialText.setAutoDraw(true)
 			currentTrialNumber.setAutoDraw(true)
 			currentGameText.setAutoDraw(true)
@@ -1718,7 +1717,7 @@ function trialRoutineRespond(trials) {
 				press_up.setAutoDraw(false)
 				press_left.setAutoDraw(false)
 				press_right.setAutoDraw(false)
-				press_down.setAutoDraw(false)
+				// press_down.setAutoDraw(false)
 				currentTrialText.setAutoDraw(false)
 				currentTrialNumber.setAutoDraw(false)
 				currentGameText.setAutoDraw(false)
@@ -1803,15 +1802,15 @@ function trialRoutineRespond(trials) {
 				feedbackClock.reset()
 			}
 
-			// No Choice
-			if (resp.keys == DOWN_KEY) {
-				no_choice = true
-				pressed = true
-				reward_stim = zero_score // remove score cause no choice was picked
-				mark_event(trials_data, globalClock, trials.thisIndex, trial_type, event_types['CHOICE'],
-				'NA', 'none' , 'NA')
-				feedbackClock.reset()
-			}
+			// // No Choice
+			// if (resp.keys == DOWN_KEY) {
+			// 	no_choice = true
+			// 	pressed = true
+			// 	reward_stim = zero_score // remove score cause no choice was picked
+			// 	mark_event(trials_data, globalClock, trials.thisIndex, trial_type, event_types['CHOICE'],
+			// 	'NA', 'none' , 'NA')
+			// 	feedbackClock.reset()
+			// }
 
 			// // Save Data on each Press
 			// mark_event(trials_data, globalClock, trials.thisIndex, trial_type, event_types['RESPONSE'],
@@ -1972,7 +1971,7 @@ function trialRoutineRespond(trials) {
 			press_up.setAutoDraw(false)
 			press_left.setAutoDraw(false)
 			press_right.setAutoDraw(false)
-			press_down.setAutoDraw(false)
+			// press_down.setAutoDraw(false)
 			currentTrialText.setAutoDraw(false)
 			currentTrialNumber.setAutoDraw(false)
 			currentGameText.setAutoDraw(false)
