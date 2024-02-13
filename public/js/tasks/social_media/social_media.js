@@ -42,8 +42,8 @@ const { round } = util;
 import { Sound } from '/lib/sound-2020.1.js';
 
 var practice = false;
-var LEFT_KEY = 'comma'
-var RIGHT_KEY = 'period'
+var LEFT_KEY = 'left'
+var RIGHT_KEY = 'right'
 
 var last_selection = 'right'
 var start_like_dislike = "like";
@@ -394,7 +394,8 @@ var resources = [
 	{ name: 'maxlikes_begin.jpeg', path: '/js/tasks/social_media/media/instructions/Slide34.jpeg' },
 	{ name: 'mindislikes_begin.jpeg', path: '/js/tasks/social_media/media/instructions/Slide35.jpeg' },
 	{ name: 'maxlikes.jpeg', path: '/js/tasks/social_media/media/instructions/Slide36.jpeg' },
-	{ name: 'mindislikes.jpeg', path: '/js/tasks/social_media/media/instructions/Slide37.jpeg'}
+	{ name: 'mindislikes.jpeg', path: '/js/tasks/social_media/media/instructions/Slide37.jpeg'},
+	{ name: 'user2.png', path: '/js/tasks/social_media/media/user2.png'}
 ]
 
 var frameDur;
@@ -1260,7 +1261,7 @@ function experimentInit() {
 		postStims_l[i].profile_photo = new visual.ImageStim({
 			win : psychoJS.window,
 			name : `profile_pic_post_${i}`, units : 'norm', 
-			image : 'profile_pic.png', mask : undefined,
+			image : 'user2.png', mask : undefined,
 			ori: 0,
 			pos: [ -0.473, postStims[i].postphoto_y ], 
 			size: [0.04, 0.09],
@@ -1273,7 +1274,7 @@ function experimentInit() {
 		postStims_l[i].profileRR_photo = new visual.ImageStim({
 			win : psychoJS.window,
 			name : `profile_picRR_post_${i}`, units : 'norm', 
-			image : 'profile_picRR.png', mask : undefined,
+			image : 'user2.png', mask : undefined,
 			ori: 0,
 			pos: [ -0.473, postStims[i].postphoto_y ], 
 			size: [0.04, 0.09],
@@ -1381,7 +1382,7 @@ function experimentInit() {
 		postStims_r[i].profile_photo = new visual.ImageStim({
 			win : psychoJS.window,
 			name : `profile_pic_post_${i}`, units : 'norm', 
-			image : 'profile_pic.png', mask : undefined,
+			image : 'user2.png', mask : undefined,
 			ori: 0,
 			pos: [ -0.473, postStims[i].postphoto_y ], 
 			size: [0.04, 0.09],
@@ -1394,7 +1395,7 @@ function experimentInit() {
 		postStims_r[i].profileRR_photo = new visual.ImageStim({
 			win : psychoJS.window,
 			name : `profile_picRR_post_${i}`, units : 'norm', 
-			image : 'profile_picRR.png', mask : undefined,
+			image : 'user2.png', mask : undefined,
 			ori: 0,
 			pos: [ -0.473, postStims[i].postphoto_y ], 
 			size: [0.04, 0.09],
@@ -1502,7 +1503,7 @@ function experimentInit() {
 		postStims[i].profile_photo = new visual.ImageStim({
 			win : psychoJS.window,
 			name : `profile_pic_post_${i}`, units : 'norm', 
-			image : 'profile_pic.png', mask : undefined,
+			image : 'user2.png', mask : undefined,
 			ori: 0,
 			pos: [ -0.473, postStims[i].postphoto_y ], 
 			size: [0.04, 0.09],
@@ -1515,7 +1516,7 @@ function experimentInit() {
 		postStims[i].profileRR_photo = new visual.ImageStim({
 			win : psychoJS.window,
 			name : `profile_picRR_post_${i}`, units : 'norm', 
-			image : 'profile_picRR.png', mask : undefined,
+			image : 'user2.png', mask : undefined,
 			ori: 0,
 			pos: [ -0.473, postStims[i].postphoto_y ], 
 			size: [0.04, 0.09],
@@ -2865,7 +2866,7 @@ function trialRoleReversalRoutineBegin(trials) {
 			postStims_l[trial_num].profileRR_photo = new visual.ImageStim({
 				win : psychoJS.window,
 				name : `profile_pic_post_${trial_num}`, units : 'norm', 
-				image : 'profile_pic.png', mask : undefined,
+				image : 'user2.png', mask : undefined,
 				ori: 0,
 				pos: [ post_stim_l_x_pos.left.profile_photo, postStims_l[trial_num].postphoto_y ], 
 				size: [0.07,0.09],
@@ -2942,7 +2943,7 @@ function trialRoleReversalRoutineBegin(trials) {
 			postStims_r[trial_num].profileRR_photo = new visual.ImageStim({
 				win : psychoJS.window,
 				name : `profile_pic_post_${trial_num}`, units : 'norm', 
-				image : 'profile_pic.png', mask : undefined,
+				image : 'user2.png', mask : undefined,
 				ori: 0,
 				pos: [ post_stim_r_x_pos.right.profile_photo, postStims_r[trial_num].postphoto_y ], 
 				size: [0.07,0.09],
@@ -3197,7 +3198,7 @@ function trialRoutineEachFrameWaitforInput(trials) {
 					postStims_l[trial_num].profile_photo = new visual.ImageStim({
 						win : psychoJS.window,
 						name : `profile_pic_post_${trial_num}`, units : 'norm', 
-						image : 'profile_pic.png',
+						image : 'user2.png',
 						ori: 0,
 						pos: [ post_stim_l_x_pos.left.profile_photo, postStims_l[trial_num].postphoto_y ], 
 						size: [0.07,0.09],
@@ -3285,7 +3286,7 @@ function trialRoutineEachFrameWaitforInput(trials) {
 					postStims_r[trial_num].profile_photo = new visual.ImageStim({
 						win : psychoJS.window,
 						name : `profile_pic_post_${trial_num}`, units : 'norm', 
-						image : 'profile_pic.png',
+						image : 'user2.png',
 						ori: 0,
 						pos: [ post_stim_r_x_pos.right.profile_photo, postStims_r[trial_num].postphoto_y ], 
 						size: [0.07,0.09],
@@ -3513,14 +3514,14 @@ function trialRoutineEachFrameShowPost(trials) {
 				return Scheduler.Event.NEXT;
 			} else {
 				// Show Instructions about clicking space to go to next chat room
-				questionText.setText('\n\nPress SPACE key to go to\nthe next chatroom.')
+				questionText.setText('\n\nPress DOWN key to go to\nthe next chatroom.')
 				choice1Button.setAutoDraw(false)
 				choice2Button.setAutoDraw(false)
 
 				// postStims[trial_num].post_text.setAutoDraw(true) // for some reason, last poist doesnt' show
 
 				// wait for space key
-				let theseKeys = resp.getKeys({ keyList: ['space'], waitRelease: false });
+				let theseKeys = resp.getKeys({ keyList: ['down'], waitRelease: false });
 
 				do_not_show_switch = false
 				do_not_show_score = false
@@ -3757,10 +3758,10 @@ function trialRoleReversalRoutineEachFrameShowPost(trials) {
 			return Scheduler.Event.NEXT;
 		} else {
 			// Show Instructions about clicking space to go to next chat room
-			questionText.setText('\n\nPress SPACE key to go to\nthe next chatroom.')
+			questionText.setText('\n\nPress DOWN key to go to\nthe next chatroom.')
 
 			// wait for space key
-			let theseKeys = resp.getKeys({ keyList: ['space'], waitRelease: false });
+			let theseKeys = resp.getKeys({ keyList: ['down'], waitRelease: false });
 
 			if (theseKeys.length > 0) {
 				
