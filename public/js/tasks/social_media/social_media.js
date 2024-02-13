@@ -2649,8 +2649,6 @@ function trialRoutineBegin(trials) {
 			// Set the tweets
 			leftTopic = tweets[left_topic]
 			rightTopic = tweets[right_topic]
-			choice1Button.setText(left_topic)
-			choice2Button.setText(right_topic) 
 			leftTopicCounter = 0
 			rightTopicCounter = 0
 			lastTrialKeyPressed = false;
@@ -2658,6 +2656,18 @@ function trialRoutineBegin(trials) {
 			// bandits_rect['left'][trial_num].fillColor = false
 			reset_stims()
 			// clearBandits()
+		}
+		if (force_pos == 'L') {
+			choice1Button.setText(left_topic)
+			choice2Button.setText('')
+		}
+		else if (force_pos == 'R') {
+			choice1Button.setText('')
+			choice2Button.setText(right_topic)
+		}
+		else if (force_pos == 'X') {
+			choice1Button.setText(left_topic)
+			choice2Button.setText(right_topic)
 		}
 
 		// Set components from last trial
@@ -3650,11 +3660,11 @@ function trialRoleReversalRoutineEachFrameWaitforInput(trials) {
 			if (last_selection == 'left') {
 				// Turn the rewards to negative if it's a dislike_chartroom
 				if (dislike_room == 1) {
-					questionText.setText('\nPress ">" to add a dislike.\nPress "<" to not add a dislike.')
+					questionText.setText('\nPress "RIGHT" to add a dislike.\nPress "LEFT" to not add a dislike.')
 					postStims_l[trial_num].dislike_icon_outline.setAutoDraw(true)
 					postStims_l[trial_num].dislike_icon.setAutoDraw(false) // filled dislike
 				} else {
-					questionText.setText('\nPress ">" to add a like.\nPress "<" to not add a like.')
+					questionText.setText('\nPress "RIGHT" to add a like.\nPress "LEFT" to not add a like.')
 					postStims_l[trial_num].like_icon_outline.setAutoDraw(true)
 					postStims_l[trial_num].like_icon.setAutoDraw(false) // filed hard
 				}
@@ -3691,11 +3701,11 @@ function trialRoleReversalRoutineEachFrameWaitforInput(trials) {
 			{
 				// Turn the rewards to negative if it's a dislike_chartroom
 				if (dislike_room == 1) {
-					questionText.setText('\nPress ">" to add a dislike.\nPress "<" to not add a dislike.')
+					questionText.setText('\nPress "RIGHT" to add a dislike.\nPress "LEFT" to not add a dislike.')
 					postStims_r[trial_num].dislike_icon_outline.setAutoDraw(true)
 					postStims_r[trial_num].dislike_icon.setAutoDraw(false) // filled dislike
 				} else {
-					questionText.setText('\nPress ">" to add a like.\nPress "<" to not add a like.')
+					questionText.setText('\nPress "RIGHT" to add a like.\nPress "LEFT" to not add a like.')
 					postStims_r[trial_num].like_icon_outline.setAutoDraw(true)
 					postStims_r[trial_num].like_icon.setAutoDraw(false) // filed hard
 				}
