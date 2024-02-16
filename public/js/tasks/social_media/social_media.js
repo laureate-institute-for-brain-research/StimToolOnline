@@ -3441,6 +3441,7 @@ function trialRoutineEachFrameWaitforInput(trials) {
 }
 
 
+var clear_before_down = true;
 // This Routine hanlds the animation
 function trialRoutineEachFrameShowPost(trials) {
 	return function () {
@@ -3521,8 +3522,13 @@ function trialRoutineEachFrameShowPost(trials) {
 			if (!lastTrial) {
 				// Go to the next routine if it's not the last trial
 				trialClock.reset();
+				clear_before_down = true
 				return Scheduler.Event.NEXT;
 			} else {
+				if (clear_before_down) {
+					resp.clearEvents();
+					clear_before_down = false
+				}
 				// Show Instructions about clicking space to go to next chat room
 				questionText.setText('\n\nPress DOWN key to go to\nthe next chatroom.')
 				choice1Button.setAutoDraw(false)
