@@ -58,7 +58,8 @@ g.outcome_media = {
 // Text response to dislpay after choosing a selection.
 g.outcome_text_responses = {
 	'accept': "Sure, I'll help!",
-	'reject': "Too bad!" 
+	'reject': "Too bad!",
+	'neutral': '...'
 }
 
 var speech_img = 'speech_good'
@@ -403,14 +404,15 @@ var resources = [
 	{ name: 'last_neg_cb.mp3', path: '/js/tasks/cooperation_task/media/instructions_audio/CooperationTaskInstructionsSlide_BeforeLast_negative.mp3' },
 	{ name: 'positive_face', path: '/js/tasks/cooperation_task/media/smile.png' },
 	{ name: 'negative_face', path: '/js/tasks/cooperation_task/media/frown.png' },
-	{ name: 'neutral_face', path: '/js/tasks/cooperation_task/media/neutral_noface.png' },
+	{ name: 'neutral_face', path: '/js/tasks/cooperation_task/media/neutral.png' },
 	{ name: 'nothing', path: '/js/tasks/cooperation_task/media/nothing.png' },
 	{ name: 'speech', path: '/js/tasks/cooperation_task/media/speech.png' },
 	{ name: 'speech_good', path: '/js/tasks/cooperation_task/media/speech_good.png' },
 	{ name: 'speech_bad', path: '/js/tasks/cooperation_task/media/speech_bad.png' },
+	{ name: 'speech_neut', path: '/js/tasks/cooperation_task/media/speech_neut.png' },
 	{ name: 'coop_neut_sound.mp3', path: '/js/tasks/cooperation_task/media/neut.mp3' },
 	{ name: 'coop_pos_sound.mp3', path: '/js/tasks/cooperation_task/media/pos.mp3' },
-	{ name: 'scream.wav', path: '/js/tasks/cooperation_task/media/neg.mp3' },
+	{ name: 'scream.mp3', path: '/js/tasks/cooperation_task/media/neg.mp3' },
 	{ name: 'pleasant_bottom_text', path: '/js/tasks/cooperation_task/media/pleasant_text_bottom.png' },
 	{ name: 'unpleasant_bottom_text', path: '/js/tasks/cooperation_task/media/unpleasant_text_bottom.png'},
 ]
@@ -470,11 +472,6 @@ if (!getQueryVariable('skip_practice') && !getQueryVariable('run').includes('R2'
 // MAIN BLOCK
 // Ready Routine
 
-flowScheduler.add(readyRoutineBegin('CB', 'INSTR_POS_slide', 'instr_pos_cb.mp3'));
-flowScheduler.add(readyRoutineEachFrame());
-flowScheduler.add(readyRoutineEnd());
-	
-
 flowScheduler.add(readyRoutineBegin('MAIN', 'BEGIN_slide', undefined));
 flowScheduler.add(readyRoutineEachFrame());
 flowScheduler.add(readyRoutineEnd());
@@ -482,15 +479,6 @@ flowScheduler.add(readyRoutineEnd());
 const trialsLoopScheduler = new Scheduler(psychoJS);
 flowScheduler.add(trialsLoopBegin, trialsLoopScheduler);
 flowScheduler.add(trialsLoopScheduler);
-flowScheduler.add(trialsLoopEnd);
-
-flowScheduler.add(readyRoutineBegin('CB2', 'INSTR_POS_slide', 'instr_pos_cb.mp3'));
-flowScheduler.add(readyRoutineEachFrame());
-flowScheduler.add(readyRoutineEnd());
-
-const trialsLoopScheduler2 = new Scheduler(psychoJS);
-flowScheduler.add(trialsLoopBegin2, trialsLoopScheduler2);
-flowScheduler.add(trialsLoopScheduler2);
 flowScheduler.add(trialsLoopEnd);
 
 flowScheduler.add(thanksRoutineBegin());
@@ -586,7 +574,7 @@ function experimentInit() {
 		text: 'Game Number:', alignHoriz: 'left',
 		font: 'Arial',
 		units: 'norm',
-		pos: [-0.95, 0.9], height: 0.06, wrapWidth: undefined, ori: 0,
+		pos: [0.6, 0.9], height: 0.06, wrapWidth: undefined, ori: 0,
 		color: new util.Color('white'), opacity: 1,
 		depth: 0.0
 	});
@@ -594,10 +582,10 @@ function experimentInit() {
 	g.text_val_game_number  = new visual.TextStim({
 		win: psychoJS.window,
 		name: 'game_number',
-		text: '1', alignHoriz: 'right',
+		text: '1', alignHoriz: 'left',
 		font: 'Arial',
 		units: 'norm',
-		pos: [-0.3, 0.9], height: 0.06, wrapWidth: undefined, ori: 0,
+		pos: [0.9, 0.9], height: 0.06, wrapWidth: undefined, ori: 0,
 		color: new util.Color('white'), opacity: 1,
 		depth: 0.0
 	});
@@ -609,7 +597,7 @@ function experimentInit() {
 		text: 'Choice Number:',alignHoriz: 'left',
 		font: 'Arial',
 		units: 'norm',
-		pos: [-0.95, 0.8], height: 0.06, wrapWidth: undefined, ori: 0,
+		pos: [-0.95, 0.9], height: 0.06, wrapWidth: undefined, ori: 0,
 		color: new util.Color('white'), opacity: 1,
 		depth: 0.0
 	});
@@ -620,7 +608,18 @@ function experimentInit() {
 		text: '1',alignHoriz: 'right',
 		font: 'Arial',
 		units: 'norm',
-		pos: [-0.3, 0.8], height: 0.06, wrapWidth: undefined, ori: 0,
+		pos: [-0.6, 0.9], height: 0.06, wrapWidth: undefined, ori: 0,
+		color: new util.Color('white'), opacity: 1,
+		depth: 0.0
+	});
+
+	g.forced_text  = new visual.TextStim({
+		win: psychoJS.window,
+		name: 'trial_number',
+		text: '',
+		font: 'Arial',
+		units: 'norm',
+		pos: [0, 0.55], height: 0.12, wrapWidth: undefined, ori: 0,
 		color: new util.Color('white'), opacity: 1,
 		depth: 0.0
 	});
@@ -1886,7 +1885,7 @@ function blockRoutineBegin(block) {
 			name: '3',
 			image: 'nothing',
 			units: 'norm',
-			pos: [-0.9, -0.3], height: 0.075, wrapWidth: undefined, ori: 0,
+			pos: [-0.9, -0.43], height: 0.075, wrapWidth: undefined, ori: 0,
 			// color: new util.Color('black'), opacity: 1,
 			opacity: 1,
 			depth: 0.0
@@ -1897,7 +1896,7 @@ function blockRoutineBegin(block) {
 			name: '3',
 			image: 'nothing',
 			units: 'norm',
-			pos: [-0.9, -0.3], height: 0.075, wrapWidth: undefined, ori: 0,
+			pos: [-0.9, -0.43], height: 0.075, wrapWidth: undefined, ori: 0,
 			// color: new util.Color('black'), opacity: 1,
 			opacity: 1,
 			depth: 0.0
@@ -1912,7 +1911,7 @@ function blockRoutineBegin(block) {
 				name: '3',
 				image: base_score_one_neg.image,
 				units: 'norm',
-				pos: [base_score_one_neg.pos[0], -0.3], height: 0.075, wrapWidth: undefined, ori: 0,
+				pos: [base_score_one_neg.pos[0], -0.43], height: 0.075, wrapWidth: undefined, ori: 0,
 				// color: new util.Color('black'), opacity: 1,
 				opacity: 1,
 				depth: 0.0
@@ -1924,7 +1923,7 @@ function blockRoutineBegin(block) {
 			name: '3',
 			image: 'nothing',
 			units: 'norm',
-			pos: [-0.3, -0.3], height: 0.075, wrapWidth: undefined, ori: 0,
+			pos: [-0.3, -0.43], height: 0.075, wrapWidth: undefined, ori: 0,
 			// color: new util.Color('black'), opacity: 1,
 			opacity: 1,
 			depth: 0.0
@@ -1935,7 +1934,7 @@ function blockRoutineBegin(block) {
 			name: '3',
 			image: 'nothing',
 			units: 'norm',
-			pos: [-0.3, -0.3], height: 0.075, wrapWidth: undefined, ori: 0,
+			pos: [-0.3, -0.43], height: 0.075, wrapWidth: undefined, ori: 0,
 			// color: new util.Color('black'), opacity: 1,
 			opacity: 1,
 			depth: 0.0
@@ -1950,7 +1949,7 @@ function blockRoutineBegin(block) {
 				name: '3',
 				image: base_score_two_neg.image,
 				units: 'norm',
-				pos: [base_score_two_neg.pos[0], -0.3], height: 0.075, wrapWidth: undefined, ori: 0,
+				pos: [base_score_two_neg.pos[0], -0.43], height: 0.075, wrapWidth: undefined, ori: 0,
 				// color: new util.Color('black'), opacity: 1,
 				depth: 0.0
 			})
@@ -1961,7 +1960,7 @@ function blockRoutineBegin(block) {
 			name: '3',
 			image: 'nothing',
 			units: 'norm',
-			pos: [0.3, -0.3], height: 0.075, wrapWidth: undefined, ori: 0,
+			pos: [0.3, -0.43], height: 0.075, wrapWidth: undefined, ori: 0,
 			// color: new util.Color('black'), opacity: 1,
 			opacity: 1,
 			depth: 0.0
@@ -1972,7 +1971,7 @@ function blockRoutineBegin(block) {
 			name: '3',
 			image: 'nothing',
 			units: 'norm',
-			pos: [0.3, -0.3], height: 0.075, wrapWidth: undefined, ori: 0,
+			pos: [0.3, -0.43], height: 0.075, wrapWidth: undefined, ori: 0,
 			//color: new util.Color('black'), opacity: 1,
 			opacity: 1,
 			depth: 0.0
@@ -1987,7 +1986,7 @@ function blockRoutineBegin(block) {
 				name: '3',
 				image: base_score_three_neg.image,
 				units: 'norm',
-				pos: [base_score_three_neg.pos[0], -0.3], height: 0.075, wrapWidth: undefined, ori: 0,
+				pos: [base_score_three_neg.pos[0], -0.43], height: 0.075, wrapWidth: undefined, ori: 0,
 				// color: new util.Color('black'), opacity: 1,
 				depth: 0.0
 			})
@@ -1996,7 +1995,7 @@ function blockRoutineBegin(block) {
 
 		//------Prepare to start Routine 'trial'-------
 		t = 0;
-		trial_type = trials_block + '_' + probability_1 + '_' + probability_2 + '_' + probability_3
+		trial_type = trials_block + '_' + game_type
 		
 		// set the face image
 		g.faces_choice[1] = new visual.ImageStim({
@@ -2053,49 +2052,37 @@ function blockRoutineBegin(block) {
 
 		g.text_trial_number.setAutoDraw(true);
 		g.text_val_trial_number.setAutoDraw(true)
+		g.forced_text.setAutoDraw(true)
 	
 		g.trial_number = 1 // reset the trial_number after each block
 		g.text_val_trial_number.setText(g.trial_number + '/' +  trials_block);
 		g.last_trial_number = undefined; // store laste trial number
 
-		// g.text_game_type.setAutoDraw(true)
-		if (game_type == 'pleasant') {
-			g.text_val_game_type.color = g.PLEASANT_COLOR;
-			g.game_room_score.color = g.PLEASANT_COLOR_2;
-			g.text_val_game_type.setText('Positive Outcome Games')
-			g.game_room_score.setText(`Number of Positive Outcomes: 0/${trials_block}`)
-			g.game_type_text_image_stim = new visual.ImageStim({
-				win : psychoJS.window,
-				name : 'bottom_text_image', units : 'height', 
-				image : 'pleasant_bottom_text', mask : undefined,
-				ori : 0, pos: [0, -0.35], opacity : 1, size: [1,0.13],
-				flipHoriz : false, flipVert : false,
-				texRes : 128, interpolate : true, depth : 0
-			});
-		} else {
-			g.text_val_game_type.color = g.UNPLEASANT_COLOR;
-			g.game_room_score.color = g.UNPLEASANT_COLOR_2;
-			g.text_val_game_type.setText('Negative Outcome Games')
-			g.game_room_score.setText(`Number of Negative Outcomes: 0/${trials_block}`)
+		// New probabilities stuff
+		g.good_prob_neg = parseFloat(good_probabilities.split("_")[2]) // ex. 0.16 = 16% negative outcome
+		g.good_prob_pos_neut = parseFloat(good_probabilities.split("_")[2]) + parseFloat(good_probabilities.split("_")[1]) // ex. 0.16 + 0.25 = 41% (above is positive outcome 59%, below is neutral outcome 25%)
+		g.safe_prob_neg = parseFloat(safe_probabilities.split("_")[2]) // ex. 0.16 = 16% negative outcome
+		g.safe_prob_pos_neut = parseFloat(safe_probabilities.split("_")[2]) + parseFloat(safe_probabilities.split("_")[1]) // ex. 0.16 + 0.25 = 41% (above is positive outcome 59%, below is neutral outcome 25%)
+		g.bad_prob_neg = parseFloat(bad_probabilities.split("_")[2]) // ex. 0.16 = 16% negative outcome
+		g.bad_prob_pos_neut = parseFloat(bad_probabilities.split("_")[2]) + parseFloat(bad_probabilities.split("_")[1]) // ex. 0.16 + 0.25 = 41% (above is positive outcome 59%, below is neutral outcome 25%)
 
-			g.game_type_text_image_stim = new visual.ImageStim({
-				win : psychoJS.window,
-				name : 'bottom_text_image', units : 'height', 
-				image : 'unpleasant_bottom_text', mask : undefined,
-				ori : 0, pos: [0, -0.35], opacity : 1, size: [1,0.13],
-				flipHoriz : false, flipVert : false,
-				texRes : 128, interpolate : true, depth : 0
-			});
-		}
-		g.text_val_game_type.setAutoDraw(true)
-		g.game_room_score.setAutoDraw(true)
-
+		g.type_code_map = { 'g': [g.good_prob_neg, g.good_prob_pos_neut], 's': [g.safe_prob_neg, g.safe_prob_pos_neut], 'b': [g.bad_prob_neg, g.bad_prob_pos_neut] }
+		let dir_1 = game_type.split("_")[0].split("")[0]
+		let dir_2 = game_type.split("_")[0].split("")[1]
+		let dir_3 = game_type.split("_")[0].split("")[2]
+		g.forced_direction_map = new Map()
+		g.forced_direction_map.set(dir_1, 'L')
+		g.forced_direction_map.set(dir_2, 'M')
+		g.forced_direction_map.set(dir_3, 'R')
+		// g.forced_direction_map = { dir_1: 'L', dir_2: 'M', dir_3: 'R' }
+		g.forced_order = game_type.split("_")[1].split("")
+		g.forced_list = [g.forced_direction_map.get(g.forced_order[0]), g.forced_direction_map.get(g.forced_order[1]), g.forced_direction_map.get(g.forced_order[2])]
+		g.forced_outs = game_type.split("_")[2].split("")
+		g.forced_trials_count = 0
 		
-		g.game_type_text_image_stim.setAutoDraw(true);
-
-		// g.rect[1].setAutoDraw(true)
-		// g.rect[2].setAutoDraw(true)
-		// g.rect[3].setAutoDraw(true)
+		g.probs1 = g.type_code_map[game_type.split("_")[0].split("")[0]] // left
+    	g.probs2 = g.type_code_map[game_type.split("_")[0].split("")[1]] // middle
+    	g.probs3 = g.type_code_map[game_type.split("_")[0].split("")[2]] // right
 
 		// Draw the faces
 		g.faces_choice[1].setAutoDraw(true)
@@ -2207,27 +2194,41 @@ function incrementCounters(outcome_type) {
 
 /**
  * Returns either positive or negative given random probability
- * @param {*} probability probabilty 
+ * @param {*} probability probability 
+ * @param {*} forced_trials_count how many forced trials have occurred
+ * @param {*} forced_outs the arrays containing the order and positions of the forced outcomes
  */
-// TODO - Fix so that it works right for the negative games.
-function getRandomOutcome(probability, game_type) {
-	//console.log('get random: ', game_type, probability )
-	if (game_type == 'pleasant') {
-		if (Math.random() < probability) {
-			// returns the game_type. Either 'plesant' or 'unpleasant'
-			return (game_type == 'pleasant' ? 'positive' : 'negative');
-		} else {
-			return 'neutral'
-		}
+function getRandomOutcome(probability, forced_trials_count, forced_outs) {
+	let out = ''
+	let random_number = Math.random()
+	if (random_number <= probability[0]) {
+		out = 'negative'
+	}
+	else if (random_number <= probability[1]) {
+		out = 'neutral'
 	}
 	else {
-		if (Math.random() >= probability) {
-			// returns the game_type. Either 'plesant' or 'unpleasant'
-			return (game_type == 'pleasant' ? 'positive' : 'negative');
-		} else {
-			return 'neutral'
-		}
+		out = 'positive'
 	}
+
+	let forced_outcome = ''
+	if (forced_trials_count < 3) {
+		forced_outcome = forced_outs[forced_trials_count]
+		g.forced_trials_count += 1
+	}
+
+	if (forced_outcome == 'W') {
+		out = 'positive'
+	}
+	else if (forced_outcome == 'N') {
+		out = 'neutral'
+	}
+	else if (forced_outcome == 'L') {
+		out = 'negative'
+	}
+
+	return out
+
 }
 
 
@@ -2239,13 +2240,6 @@ function getOutcomePair(outcome, game_type, choice) {
 	
 	switch (outcome) {
 		case 'neutral':
-			// if (game_type == 'pleasant') {
-			// 	g.outcome_triple = g.outcome_media.positive[g.choice_counter['positive']];
-			// 	incrementCounters('positive')
-			// } else {
-			// 	g.outcome_triple = g.outcome_media.negative[g.choice_counter['negative']];
-			// 	incrementCounters('negative')
-			// }
 			g.outcome_image = new visual.ImageStim({
 				win : psychoJS.window,
 				name : 'outcome_image', units : 'norm', 
@@ -2265,18 +2259,6 @@ function getOutcomePair(outcome, game_type, choice) {
 
 			break;
 		case 'positive':
-			// g.outcome_triple = g.outcome_media.positive[g.choice_counter['positive']];
-			// incrementCounters('positive')
-
-			// g.outcome_image = new visual.ImageStim({
-			// 	win : psychoJS.window,
-			// 	name : 'outcome_image', units : 'norm',
-			// 	image : g.outcome_triple[0], mask : undefined,
-			// 	ori: 0,pos: [0,0], opacity : 1,size: [2,2],
-			// 	flipHoriz : false, flipVert : false,
-			// 	texRes : 128, interpolate : true, depth : 2
-			// })
-			
 			g.outcome_image = new visual.ImageStim({
 				win : psychoJS.window,
 				name : 'outcome_image', units : 'norm', 
@@ -2296,17 +2278,6 @@ function getOutcomePair(outcome, game_type, choice) {
 
 			break;
 		case 'negative':
-			// g.outcome_triple = g.outcome_media.negative[g.choice_counter['negative']];
-			// incrementCounters('negative')
-
-			// g.outcome_image = new visual.ImageStim({
-			// 	win : psychoJS.window,
-			// 	name : 'outcome_image', units : 'norm',
-			// 	image : g.outcome_triple[0], mask : undefined,
-			// 	ori: 0,pos: [0,0], opacity : 1,size: [2,2],
-			// 	flipHoriz : false, flipVert : false,
-			// 	texRes : 128, interpolate : true, depth : 2
-			// })
 			
 			g.outcome_image = new visual.ImageStim({
 				win : psychoJS.window,
@@ -2322,12 +2293,11 @@ function getOutcomePair(outcome, game_type, choice) {
 			// Outcome Sound Stim
 			g.outcome_sound = new Sound({
 				win: psychoJS.window,
-				value: 'scream.wav'
+				value: 'scream.mp3'
 			});
 
 			break;
 	}
-	//console.log('outcome: ', outcome, g.outcome_triple)
 	g.outcome_sound.setVolume(1.0);
 }
 
@@ -2339,22 +2309,16 @@ function getOutcomePair(outcome, game_type, choice) {
  * @param {*} choice the choice number the subjet selected, ie. 1, 2,3
  */
 function setOutcomeResponse(outcome, game_type, choice) {
-	if (game_type == 'pleasant') {
-		if (outcome == 'positive') {
-			// pleasant outcomes with positive images
-			speech_img = 'speech_good'
-		} else {
-			// pleasant outcomes with scrambled images
-			speech_img = 'speech_bad'
-		}
+
+	if (outcome == 'positive') {
+		// pleasant outcomes with positive images
+		speech_img = 'speech_good'
+	} else if (outcome == 'neutral') {
+		// pleasant outcomes with positive images
+		speech_img = 'speech_neut'
 	} else {
-		if (outcome == 'negative') {
-			// unpleasant outcomes with negative images
-			speech_img = 'speech_bad'
-		} else {
-			// unpleasant outcomes with scrambled iamges
-			speech_img = 'speech_good'
-		}
+		// pleasant outcomes with scrambled images
+		speech_img = 'speech_bad'
 	}
 
 	// Set the text x-position based of the choice
@@ -2394,6 +2358,7 @@ function setOutcomeResponse(outcome, game_type, choice) {
 
 var outcome;
 var outcome_response;
+var forced_choice_direction;
 function blockRoutineTrials(trials) {
 	return function () {
 		//------Loop for each frame of Routine 'trial'-------
@@ -2422,6 +2387,11 @@ function blockRoutineTrials(trials) {
 			mark_event(trials_data, globalClock, g.trial_number, trial_type, event_types['TRIAL_ONSET'],
 				'NA', 'NA', 'NA')
 			
+			forced_choice_direction = ''
+			if (g.forced_trials_count < 3) {
+				forced_choice_direction = g.forced_list[g.forced_trials_count]
+			}
+			
 			//sendData()
 			g.new_trial_marked = true;
 		}
@@ -2429,7 +2399,6 @@ function blockRoutineTrials(trials) {
 		if (g.outcome_sound && g.outcomeTimer.getTime() <= (g.outcome_sound.getDuration() + 0.5/* + 0.3*/) && g.outcome_image && g.outcome_image.status == PsychoJS.Status.NOT_STARTED) {
 			let play_sound_delay = 0.5
 			play_sound = true;
-			//console.log('show outcome image')
 
 			g.outcome_text_bubble.setAutoDraw(false)
 			g.black_rectangle.setAutoDraw(false)
@@ -2437,11 +2406,11 @@ function blockRoutineTrials(trials) {
 			// Outcome image onset
 			g.outcome_image.setAutoDraw(true)
 			mark_event(trials_data, globalClock, g.trial_number, trial_type, event_types['OUTCOME_IMAGE_ONSET'],
-				'NA', 'NA', g.outcome_triple[0])
+				'NA', 'NA', g.outcome_triple)
 			
 			// Outcome sound osnet
 			mark_event(trials_data, globalClock, g.trial_number, trial_type, event_types['OUTCOME_SOUND_ONSET'],
-				g.outcome_sound.getDuration(), 'NA', g.outcome_triple[1])
+				g.outcome_sound.getDuration(), 'NA', g.outcome_sound.value)
 			
 			g.trial_number++ // incremente trial number
 			g.global_trial_number++ // incremeante global trial number
@@ -2483,141 +2452,92 @@ function blockRoutineTrials(trials) {
 
 		if (ready.status === PsychoJS.Status.STARTED) {
 
-			let theseKeys = ready.getKeys({ keyList: ['left', 'up', 'right'], waitRelease: false });
+			let theseKeys = ''
+			if (forced_choice_direction == 'L') {
+				theseKeys = ready.getKeys({ keyList: ['left'], waitRelease: false });
+				g.forced_text.setText('CHOOSE LEFT')
+			}
+			else if (forced_choice_direction == 'M') {
+				theseKeys = ready.getKeys({ keyList: ['up'], waitRelease: false });
+				g.forced_text.setText('CHOOSE MIDDLE')
+			}
+			else if (forced_choice_direction == 'R') {
+				theseKeys = ready.getKeys({ keyList: ['right'], waitRelease: false });
+				g.forced_text.setText('CHOOSE RIGHT')
+			}
+			else {
+				theseKeys = ready.getKeys({ keyList: ['left', 'up', 'right'], waitRelease: false });
+				g.forced_text.setText('')
+			}
 			
 			if (theseKeys.length > 0 && g.outcomeTimer.getTime() <= 0 && globalClock.getTime() >= g.forced_dealy_abs) {
 				// Chose 1
 				if (theseKeys[0].name == 'left') {
 					let choice = 1
-					outcome = getRandomOutcome(probability_1, game_type)
+					outcome = getRandomOutcome(g.probs1, g.forced_trials_count, g.forced_outs)
 					getOutcomePair(outcome, game_type, choice) // Generate a random image/sound pair based on outcome
-					//setOutcome(outcome, choice)
 					setOutcomeResponse(outcome, game_type, choice)
-					if (game_type == 'pleasant')
-					{
-						if (outcome == 'positive')
-						{
-							score_one_pos += 1
-							g.game_room_score.setText(`Number of Positive Outcomes: ${score_one_pos + score_two_pos + score_three_pos}/${trials_block}`)
-							//g.outcome_scores_one[score_one - 1].setAutoDraw(false)
-							
-							g.outcome_scores_one_pos[score_one_pos].setAutoDraw(true)
-						}
-						else
-						{
-							score_one += 1
-							g.outcome_scores_one[score_one].setAutoDraw(true)
-						}
-					}
-					if (game_type == 'unpleasant')
-					{
-						if (outcome == 'negative')
-						{
-							score_one_neg += 1
-							g.game_room_score.setText(`Number of Negative Outcomes: ${score_one_neg + score_two_neg + score_three_neg}/${trials_block}`)
-							//g.outcome_scores_one[score_one - 1].setAutoDraw(false)
-							g.outcome_scores_one_neg[score_one_neg].setAutoDraw(true)
-						}
-						else
-						{
-							score_one += 1
-							g.outcome_scores_one[score_one].setAutoDraw(true)
-						}
+
+					if (outcome == 'positive') {
+						score_one_pos += 1
+						g.outcome_scores_one_pos[score_one_pos].setAutoDraw(true)
+					} else if (outcome == 'negative') {
+						score_one_neg += 1
+						g.outcome_scores_one_neg[score_one_neg].setAutoDraw(true)
+					} else {
+						score_one += 1
+						g.outcome_scores_one[score_one].setAutoDraw(true)
 					}
 				}
 				
 				// Chose 2
 				if (theseKeys[0].name == 'up') {
 					let choice = 2
-					outcome = getRandomOutcome(probability_2, game_type)
+					outcome = getRandomOutcome(g.probs2, g.forced_trials_count, g.forced_outs)
 					getOutcomePair(outcome, game_type, choice) // Generate a random image/sound pair based on outcome
-					//setOutcome(outcome, choice)
 					setOutcomeResponse(outcome, game_type, choice)
-					if (game_type == 'pleasant')
-					{
-						if (outcome == 'positive')
-						{
-							score_two_pos += 1
-							g.game_room_score.setText(`Number of Positive Outcomes: ${score_one_pos + score_two_pos + score_three_pos}/${trials_block}`)
-							//g.outcome_scores_two[score_two - 1].setAutoDraw(false)
-							g.outcome_scores_two_pos[score_two_pos].setAutoDraw(true)
-						}
-						else
-						{
-							score_two += 1
-							g.outcome_scores_two[score_two].setAutoDraw(true)
-						}
-					}
-					if (game_type == 'unpleasant')
-					{
-						if (outcome == 'negative')
-						{
-							score_two_neg += 1
-							g.game_room_score.setText(`Number of Negative Outcomes: ${score_one_neg + score_two_neg + score_three_neg}/${trials_block}`)
-							//g.outcome_scores_two[score_two - 1].setAutoDraw(false)
-							g.outcome_scores_two_neg[score_two_neg].setAutoDraw(true)
-						}
-						else
-						{
-							score_two += 1
-							g.outcome_scores_two[score_two].setAutoDraw(true)
-						}
+
+					if (outcome == 'positive') {
+						score_two_pos += 1
+						g.outcome_scores_two_pos[score_two_pos].setAutoDraw(true)
+					} else if (outcome == 'negative') {
+						score_two_neg += 1
+						g.outcome_scores_two_neg[score_two_neg].setAutoDraw(true)
+					} else {
+						score_two += 1
+						g.outcome_scores_two[score_two].setAutoDraw(true)
 					}
 				}
 				
 				// Chose 3
 				if (theseKeys[0].name == 'right') {
 					let choice = 3
-					outcome = getRandomOutcome(probability_3, game_type)
+					outcome = getRandomOutcome(g.probs3, g.forced_trials_count, g.forced_outs)
 					getOutcomePair(outcome, game_type, choice) // Generate a random image/sound pair based on outcome
-					//setOutcome(outcome, choice)
 					setOutcomeResponse(outcome, game_type, choice)
-					if (game_type == 'pleasant')
-					{
-						if (outcome == 'positive')
-						{
-							score_three_pos += 1
-							g.game_room_score.setText(`Number of Positive Outcomes: ${score_one_pos + score_two_pos + score_three_pos}/${trials_block}`)
-							//g.outcome_scores_three[score_three - 1].setAutoDraw(false)
-							g.outcome_scores_three_pos[score_three_pos].setAutoDraw(true)
-						}
-						else
-						{
-							score_three += 1
-							g.outcome_scores_three[score_three].setAutoDraw(true)
-						}
+
+					if (outcome == 'positive') {
+						score_three_pos += 1
+						g.outcome_scores_three_pos[score_three_pos].setAutoDraw(true)
+					} else if (outcome == 'negative') {
+						score_three_neg += 1
+						g.outcome_scores_three_neg[score_three_neg].setAutoDraw(true)
+					} else {
+						score_three += 1
+						g.outcome_scores_three[score_three].setAutoDraw(true)
 					}
-					if (game_type == 'unpleasant')
-					{
-						if (outcome == 'negative')
-						{
-							score_three_neg += 1
-							g.game_room_score.setText(`Number of Negative Outcomes: ${score_one_neg + score_two_neg + score_three_neg}/${trials_block}`)
-							//g.outcome_scores_three[score_three - 1].setAutoDraw(false)
-							g.outcome_scores_three_neg[score_three_neg].setAutoDraw(true)
-						}
-						else
-						{
-							score_three += 1
-							g.outcome_scores_three[score_three].setAutoDraw(true)
-						}
-					}
+
 				}
 
 				// Mark keypress
 				mark_event(trials_data, globalClock, g.trial_number, trial_type, event_types['SELECTION'],
 				theseKeys[0].rt, theseKeys[0].name , outcome)
 
-				// presed key
-				// g.trial_number++ // incremente trial number
-				// g.global_trial_number++ // incremeante global trial number
-
 				// Start Timer
 				g.OUTCOME_TEXT_DURATION = 0.5; // the time duration for the text to display after selecting the person
 				g.OUTCOME_SOUND_DURATION = 1; // the duration of the outcome sounds. both neutral and positive.
 				g.outcomeTimer.reset(g.OUTCOME_SOUND_DURATION + g.OUTCOME_TEXT_DURATION);
 				
-				// g.black_rectangle.setAutoDraw(true)
 				g.outcome_text_bubble.setAutoDraw(true)
 
 				ready.clock.reset(); // reset keyboard clock
@@ -2706,6 +2626,7 @@ function initialFixation(trials) {
 		g.text_val_game_number.setAutoDraw(false); // the game vale '2/2'
 		g.text_trial_number.setAutoDraw(false); // 'Choice Number:'
 		g.text_val_trial_number.setAutoDraw(false); // the choice val '16/16'
+		g.forced_text.setAutoDraw(false)
 	
 		// get current time
 		t_end = endClock.getTime();
@@ -2727,27 +2648,6 @@ function initialFixation(trials) {
 		 	points_fixation_stim.status = PsychoJS.Status.NOT_STARTED
 		 	continueRoutine = false
 		}
-		else if (t_end >= ITI) {
-			//continueRoutine = false
-			if (game_type == 'pleasant')
-			{
-				points_fixation_stim.color = new util.Color('#00ff00')
-				points_fixation_stim.setText('Positive Outcome Game')
-			}
-			else
-			{
-				points_fixation_stim.color = new util.Color('#ff0000')
-				points_fixation_stim.setText('Negative Outcome Game')
-			}
-			//points_fixation_stim.setAutoDraw(false)
-			//points_fixation_stim.status = PsychoJS.Status.NOT_STARTED
-		}
-		// else if (t_end >= (ITI + 0.5))
-		// {
-		// 	points_fixation_stim.setAutoDraw(false)
-		// 	points_fixation_stim.status = PsychoJS.Status.NOT_STARTED
-		// 	continueRoutine = false
-		// }
 		
 		// check for quit (typically the Esc key)
 		if (psychoJS.eventManager.getKeys({keyList:['escape']}).length > 0) {
@@ -2773,8 +2673,6 @@ function initialFixation(trials) {
  * Send Data over to the backend to save output data
  */
 function sendData() {
-	//console.log(trials_data)
-	//console.log(expInfo)
 	total_requests += 1
 	$.ajax({
         type: "POST",
