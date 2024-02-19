@@ -1,0 +1,9 @@
+{
+    "name": "WB Cooperation Task T1",
+    "order": [
+        "/?index=0&task=cooperation_task&run=Pilot_R1_NEW.json",
+        "/completeMobile?"
+    ],
+    "fullscreen": true,
+    "text_html": "<p>This study includes the following tasks: <ul><li>Cooperation Task - Run 1</li><li>Cooperation Task - Run 2</li></ul></p>"
+} 

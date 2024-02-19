@@ -1,5 +1,0 @@
-{
-    "schedule": "/js/tasks/emotional_faces_v2/faces_schedule1_v3_CB-retest.csv",
-    "schedule2": "/js/tasks/emotional_faces_v2/faces_schedule2_v3_CB-retest.csv",
-    "instruct_schedule": "/js/tasks/emotional_faces_v2/media/Pilot_R1_instructions.csv"
-}
