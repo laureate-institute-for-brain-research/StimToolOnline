@@ -1,0 +1,1114 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <style type="text/css">
+        @font-face {
+            font-family: gotham;
+            src: url(/gotham-book-regular.otf);
+        }
+
+        * {
+            font-family: Helvetica Neue;
+        }
+
+        a:link,
+        a:visited {
+            color: #5e3f99;
+        }
+
+        input[type=text]:focus {
+            border-color: #f68826;
+            box-shadow: 0 0 5px #f68826 !important;
+        }
+
+        input[type=email]:focus {
+            border-color: #f68826;
+            box-shadow: 0 0 5px #f68826 !important;
+        }
+
+        .sv-root-modern .sv-container-modern {
+            color: white !important;
+            fill: white !important;
+        }
+        .sv-radio__svg {
+            border-color: white !important;
+        }
+
+        .sv-root-modern .sv-radio--checked .sv-radio__svg  {
+            fill: white !important;
+        }
+
+        .sv-root-modern input.sv-text, textarea.sv-comment, select.sv-dropdown{
+            color: white !important;
+        }
+        
+    </style>
+    <title>Post Task Questions</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+        crossorigin="anonymous"></script>
+
+    <!-- Latest compiled and minified CSS -->
+    <!-- Using Bootsawtch theme: https://bootswatch.com/cyborg/ -->
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js" integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous"></script>
+
+    <link href="https://unpkg.com/survey-knockout@1.8.41/modern.css" type="text/css" rel="stylesheet"/>
+    <script src="https://unpkg.com/jquery"></script>
+    <script src="https://unpkg.com/survey-jquery@1.8.41/survey.jquery.min.js"></script>
+
+    <script type="text/javascript" src='/js/StimToolLib.js'></script>
+
+</head>
+
+<body>
+
+    <div class="container" style="max-width: 800px;">
+        <div class="py-5 text-center">
+            <img class="d-block mx-auto mb-4" src="/images/logo_reversed.jpg" alt="" width="180" height="50">
+            <!-- <h4>Cultural Survey</h4> -->
+          </div>
+    </div>
+
+    <div class="container" style="max-width: 800px;">
+        <div class="row" >
+            <div id="surveyElement" style="max-width: 800px; width: 770px; margin-bottom:40px"></div>
+            
+            <div id="surveyResult"></div>
+        </div>
+    </div>
+
+    <div class="jumbotron container" style="margin-bottom:0;max-width: 400px;">
+        <table class="table table-hover">
+            <tbody>
+                <tr>
+                  <th scope="row">ID:</th>
+                  <td><a id="participant"></a></td>
+                </tr>
+                <tr>
+                    <th scope="row">Session:</th>
+                    <td><a id="session"></a></td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Study:</th>
+                    <td><a id="study"></a></td>
+                  </tr>
+              </tbody>
+        </table>
+        <p style="text-align: center;">&copy; 2021 <a href="http://www.laureateinstitute.org">laureateinstitute.org</a>. All rights reserved.</p>
+    </div>
+
+    <script type="text/javascript">
+
+        Survey
+            .StylesManager
+            .applyTheme("modern");
+        // Survey.Survey.cssType = "bootstrap";
+        // Survey.defaultBootstrapCss.navigationButton = "btn";
+        var json = {
+             "title": "Savoring Beliefs Inventory",
+             "description": "Respond according to the following scale:",
+             "logoPosition": "right",
+             "pages": [
+              {
+               "name": "page1",
+               "elements": [
+                {
+                 "type": "radiogroup",
+                 "name": "question1",
+                 "title": "Before a good thing happens, I look forward to it in ways that give me pleasure in the present.",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "Item 1",
+                   "text": "1 - Strongly Disagree"
+                  },
+                  {
+                   "value": "Item 2",
+                   "text": "2"
+                  },
+                  {
+                   "value": "Item 3",
+                   "text": "3"
+                  },
+                  {
+                   "value": "Item 4",
+                   "text": "4"
+                  },
+                  {
+                   "value": "Item 5",
+                   "text": "5"
+                  },
+                  {
+                   "value": "Item 6",
+                   "text": "6"
+                  },
+                  {
+                   "value": "Item 7",
+                   "text": "7 - Strongly Agree"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question2",
+                 "title": "It's hard for me to hang onto a good feeling for very long.",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "Item 1",
+                   "text": "1 - Strongly Disagree"
+                  },
+                  {
+                   "value": "Item 2",
+                   "text": "2"
+                  },
+                  {
+                   "value": "Item 3",
+                   "text": "3"
+                  },
+                  {
+                   "value": "Item 4",
+                   "text": "4"
+                  },
+                  {
+                   "value": "Item 5",
+                   "text": "5"
+                  },
+                  {
+                   "value": "Item 6",
+                   "text": "6"
+                  },
+                  {
+                   "value": "Item 7",
+                   "text": "7 - Strongly Agree"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question3",
+                 "title": "I enjoy looking back on happy times from my past. ",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "Item 1",
+                   "text": "1 - Strongly Disagree"
+                  },
+                  {
+                   "value": "Item 2",
+                   "text": "2"
+                  },
+                  {
+                   "value": "Item 3",
+                   "text": "3"
+                  },
+                  {
+                   "value": "Item 4",
+                   "text": "4"
+                  },
+                  {
+                   "value": "Item 5",
+                   "text": "5"
+                  },
+                  {
+                   "value": "Item 6",
+                   "text": "6"
+                  },
+                  {
+                   "value": "Item 7",
+                   "text": "7 - Strongly Agree"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question4",
+                 "title": "I don't like to look forward to good times too much before they happen.",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "Item 1",
+                   "text": "1 - Strongly Disagree"
+                  },
+                  {
+                   "value": "Item 2",
+                   "text": "2"
+                  },
+                  {
+                   "value": "Item 3",
+                   "text": "3"
+                  },
+                  {
+                   "value": "Item 4",
+                   "text": "4"
+                  },
+                  {
+                   "value": "Item 5",
+                   "text": "5"
+                  },
+                  {
+                   "value": "Item 6",
+                   "text": "6"
+                  },
+                  {
+                   "value": "Item 7",
+                   "text": "7 - Strongly Agree"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question5",
+                 "title": "I know how to make the most of a good time.",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "Item 1",
+                   "text": "1 - Strongly Disagree"
+                  },
+                  {
+                   "value": "Item 2",
+                   "text": "2"
+                  },
+                  {
+                   "value": "Item 3",
+                   "text": "3"
+                  },
+                  {
+                   "value": "Item 4",
+                   "text": "4"
+                  },
+                  {
+                   "value": "Item 5",
+                   "text": "5"
+                  },
+                  {
+                   "value": "Item 6",
+                   "text": "6"
+                  },
+                  {
+                   "value": "Item 7",
+                   "text": "7 - Strongly Agree"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question6",
+                 "title": "I don't like to look back at good times too much after they've taken place.",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "Item 1",
+                   "text": "1 - Strongly Disagree"
+                  },
+                  {
+                   "value": "Item 2",
+                   "text": "2"
+                  },
+                  {
+                   "value": "Item 3",
+                   "text": "3"
+                  },
+                  {
+                   "value": "Item 4",
+                   "text": "4"
+                  },
+                  {
+                   "value": "Item 5",
+                   "text": "5"
+                  },
+                  {
+                   "value": "Item 6",
+                   "text": "6"
+                  },
+                  {
+                   "value": "Item 7",
+                   "text": "7 - Strongly Agree"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question7",
+                 "title": "I feel a joy of anticipation when I think about upcoming good things.",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "Item 1",
+                   "text": "1 - Strongly Disagree"
+                  },
+                  {
+                   "value": "Item 2",
+                   "text": "2"
+                  },
+                  {
+                   "value": "Item 3",
+                   "text": "3"
+                  },
+                  {
+                   "value": "Item 4",
+                   "text": "4"
+                  },
+                  {
+                   "value": "Item 5",
+                   "text": "5"
+                  },
+                  {
+                   "value": "Item 6",
+                   "text": "6"
+                  },
+                  {
+                   "value": "Item 7",
+                   "text": "7 - Strongly Agree"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question8",
+                 "title": "When it comes to enjoying myself, I'm my own \"worst enemy.\"",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "Item 1",
+                   "text": "1 - Strongly Disagree"
+                  },
+                  {
+                   "value": "Item 2",
+                   "text": "2"
+                  },
+                  {
+                   "value": "Item 3",
+                   "text": "3"
+                  },
+                  {
+                   "value": "Item 4",
+                   "text": "4"
+                  },
+                  {
+                   "value": "Item 5",
+                   "text": "5"
+                  },
+                  {
+                   "value": "Item 6",
+                   "text": "6"
+                  },
+                  {
+                   "value": "Item 7",
+                   "text": "7 - Strongly Agree"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question9",
+                 "title": "I can make myself feel good by remembering pleasant events from my past.",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "Item 1",
+                   "text": "1 - Strongly Disagree"
+                  },
+                  {
+                   "value": "Item 2",
+                   "text": "2"
+                  },
+                  {
+                   "value": "Item 3",
+                   "text": "3"
+                  },
+                  {
+                   "value": "Item 4",
+                   "text": "4"
+                  },
+                  {
+                   "value": "Item 5",
+                   "text": "5"
+                  },
+                  {
+                   "value": "Item 6",
+                   "text": "6"
+                  },
+                  {
+                   "value": "Item 7",
+                   "text": "7 - Strongly Agree"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question10",
+                 "title": "For me, anticipating what upcoming good events will be like is basically a waste of time.",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "Item 1",
+                   "text": "1 - Strongly Disagree"
+                  },
+                  {
+                   "value": "Item 2",
+                   "text": "2"
+                  },
+                  {
+                   "value": "Item 3",
+                   "text": "3"
+                  },
+                  {
+                   "value": "Item 4",
+                   "text": "4"
+                  },
+                  {
+                   "value": "Item 5",
+                   "text": "5"
+                  },
+                  {
+                   "value": "Item 6",
+                   "text": "6"
+                  },
+                  {
+                   "value": "Item 7",
+                   "text": "7 - Strongly Agree"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question11",
+                 "title": "When something good happens, I can make my enjoyment of it last longer by thinking or doing certain things.",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "Item 1",
+                   "text": "1 - Strongly Disagree"
+                  },
+                  {
+                   "value": "Item 2",
+                   "text": "2"
+                  },
+                  {
+                   "value": "Item 3",
+                   "text": "3"
+                  },
+                  {
+                   "value": "Item 4",
+                   "text": "4"
+                  },
+                  {
+                   "value": "Item 5",
+                   "text": "5"
+                  },
+                  {
+                   "value": "Item 6",
+                   "text": "6"
+                  },
+                  {
+                   "value": "Item 7",
+                   "text": "7 - Strongly Agree"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question12",
+                 "title": "When I reminisce about pleasant memories, I often start to feel sad or disappointed.",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "Item 1",
+                   "text": "1 - Strongly Disagree"
+                  },
+                  {
+                   "value": "Item 2",
+                   "text": "2"
+                  },
+                  {
+                   "value": "Item 3",
+                   "text": "3"
+                  },
+                  {
+                   "value": "Item 4",
+                   "text": "4"
+                  },
+                  {
+                   "value": "Item 5",
+                   "text": "5"
+                  },
+                  {
+                   "value": "Item 6",
+                   "text": "6"
+                  },
+                  {
+                   "value": "Item 7",
+                   "text": "7 - Strongly Agree"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question13",
+                 "title": "I can enjoy pleasant events in my mind before they actually occur.",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "Item 1",
+                   "text": "1 - Strongly Disagree"
+                  },
+                  {
+                   "value": "Item 2",
+                   "text": "2"
+                  },
+                  {
+                   "value": "Item 3",
+                   "text": "3"
+                  },
+                  {
+                   "value": "Item 4",
+                   "text": "4"
+                  },
+                  {
+                   "value": "Item 5",
+                   "text": "5"
+                  },
+                  {
+                   "value": "Item 6",
+                   "text": "6"
+                  },
+                  {
+                   "value": "Item 7",
+                   "text": "7 - Strongly Agree"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question14",
+                 "title": "I can't seem to capture the joy of happy moments.",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "Item 1",
+                   "text": "1 - Strongly Disagree"
+                  },
+                  {
+                   "value": "Item 2",
+                   "text": "2"
+                  },
+                  {
+                   "value": "Item 3",
+                   "text": "3"
+                  },
+                  {
+                   "value": "Item 4",
+                   "text": "4"
+                  },
+                  {
+                   "value": "Item 5",
+                   "text": "5"
+                  },
+                  {
+                   "value": "Item 6",
+                   "text": "6"
+                  },
+                  {
+                   "value": "Item 7",
+                   "text": "7 - Strongly Agree"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question15",
+                 "title": "I like to store memories of fun times that I go through so that I can recall them later.",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "Item 1",
+                   "text": "1 - Strongly Disagree"
+                  },
+                  {
+                   "value": "Item 2",
+                   "text": "2"
+                  },
+                  {
+                   "value": "Item 3",
+                   "text": "3"
+                  },
+                  {
+                   "value": "Item 4",
+                   "text": "4"
+                  },
+                  {
+                   "value": "Item 5",
+                   "text": "5"
+                  },
+                  {
+                   "value": "Item 6",
+                   "text": "6"
+                  },
+                  {
+                   "value": "Item 7",
+                   "text": "7 - Strongly Agree"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question16",
+                 "title": "It's hard for me to get very excited about fun times before they actually take place.",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "Item 1",
+                   "text": "1 - Strongly Disagree"
+                  },
+                  {
+                   "value": "Item 2",
+                   "text": "2"
+                  },
+                  {
+                   "value": "Item 3",
+                   "text": "3"
+                  },
+                  {
+                   "value": "Item 4",
+                   "text": "4"
+                  },
+                  {
+                   "value": "Item 5",
+                   "text": "5"
+                  },
+                  {
+                   "value": "Item 6",
+                   "text": "6"
+                  },
+                  {
+                   "value": "Item 7",
+                   "text": "7 - Strongly Agree"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question17",
+                 "title": "I feel fully able to appreciate good things that happen to me.",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "Item 1",
+                   "text": "1 - Strongly Disagree"
+                  },
+                  {
+                   "value": "Item 2",
+                   "text": "2"
+                  },
+                  {
+                   "value": "Item 3",
+                   "text": "3"
+                  },
+                  {
+                   "value": "Item 4",
+                   "text": "4"
+                  },
+                  {
+                   "value": "Item 5",
+                   "text": "5"
+                  },
+                  {
+                   "value": "Item 6",
+                   "text": "6"
+                  },
+                  {
+                   "value": "Item 7",
+                   "text": "7 - Strongly Agree"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question18",
+                 "title": "I find that thinking about good times from the past is basically a waste of time.",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "Item 1",
+                   "text": "1 - Strongly Disagree"
+                  },
+                  {
+                   "value": "Item 2",
+                   "text": "2"
+                  },
+                  {
+                   "value": "Item 3",
+                   "text": "3"
+                  },
+                  {
+                   "value": "Item 4",
+                   "text": "4"
+                  },
+                  {
+                   "value": "Item 5",
+                   "text": "5"
+                  },
+                  {
+                   "value": "Item 6",
+                   "text": "6"
+                  },
+                  {
+                   "value": "Item 7",
+                   "text": "7 - Strongly Agree"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question19",
+                 "title": "I can make myself feel good by imagining what a happy time that is about to happen will be like.",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "Item 1",
+                   "text": "1 - Strongly Disagree"
+                  },
+                  {
+                   "value": "Item 2",
+                   "text": "2"
+                  },
+                  {
+                   "value": "Item 3",
+                   "text": "3"
+                  },
+                  {
+                   "value": "Item 4",
+                   "text": "4"
+                  },
+                  {
+                   "value": "Item 5",
+                   "text": "5"
+                  },
+                  {
+                   "value": "Item 6",
+                   "text": "6"
+                  },
+                  {
+                   "value": "Item 7",
+                   "text": "7 - Strongly Agree"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question20",
+                 "title": "I don't enjoy things as much as I should.",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "Item 1",
+                   "text": "1 - Strongly Disagree"
+                  },
+                  {
+                   "value": "Item 2",
+                   "text": "2"
+                  },
+                  {
+                   "value": "Item 3",
+                   "text": "3"
+                  },
+                  {
+                   "value": "Item 4",
+                   "text": "4"
+                  },
+                  {
+                   "value": "Item 5",
+                   "text": "5"
+                  },
+                  {
+                   "value": "Item 6",
+                   "text": "6"
+                  },
+                  {
+                   "value": "Item 7",
+                   "text": "7 - Strongly Agree"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question21",
+                 "title": "It's easy for me to rekindle the joy from pleasant memories.",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "Item 1",
+                   "text": "1 - Strongly Disagree"
+                  },
+                  {
+                   "value": "Item 2",
+                   "text": "2"
+                  },
+                  {
+                   "value": "Item 3",
+                   "text": "3"
+                  },
+                  {
+                   "value": "Item 4",
+                   "text": "4"
+                  },
+                  {
+                   "value": "Item 5",
+                   "text": "5"
+                  },
+                  {
+                   "value": "Item 6",
+                   "text": "6"
+                  },
+                  {
+                   "value": "Item 7",
+                   "text": "7 - Strongly Agree"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question22",
+                 "title": "When I think about a pleasant event before it happens, I often start to feel uneasy or uncomfortable.",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "Item 1",
+                   "text": "1 - Strongly Disagree"
+                  },
+                  {
+                   "value": "Item 2",
+                   "text": "2"
+                  },
+                  {
+                   "value": "Item 3",
+                   "text": "3"
+                  },
+                  {
+                   "value": "Item 4",
+                   "text": "4"
+                  },
+                  {
+                   "value": "Item 5",
+                   "text": "5"
+                  },
+                  {
+                   "value": "Item 6",
+                   "text": "6"
+                  },
+                  {
+                   "value": "Item 7",
+                   "text": "7 - Strongly Agree"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question23",
+                 "title": "It's easy for me to enjoy myself when I want to.",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "Item 1",
+                   "text": "1 - Strongly Disagree"
+                  },
+                  {
+                   "value": "Item 2",
+                   "text": "2"
+                  },
+                  {
+                   "value": "Item 3",
+                   "text": "3"
+                  },
+                  {
+                   "value": "Item 4",
+                   "text": "4"
+                  },
+                  {
+                   "value": "Item 5",
+                   "text": "5"
+                  },
+                  {
+                   "value": "Item 6",
+                   "text": "6"
+                  },
+                  {
+                   "value": "Item 7",
+                   "text": "7 - Strongly Agree"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question24",
+                 "title": "For me, once a fun time is over and gone, it's best not to think about it.",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "Item 1",
+                   "text": "1 - Strongly Disagree"
+                  },
+                  {
+                   "value": "Item 2",
+                   "text": "2"
+                  },
+                  {
+                   "value": "Item 3",
+                   "text": "3"
+                  },
+                  {
+                   "value": "Item 4",
+                   "text": "4"
+                  },
+                  {
+                   "value": "Item 5",
+                   "text": "5"
+                  },
+                  {
+                   "value": "Item 6",
+                   "text": "6"
+                  },
+                  {
+                   "value": "Item 7",
+                   "text": "7 - Strongly Agree"
+                  }
+                 ]
+                }
+               ]
+              }
+             ]
+            }
+
+        window.survey = new Survey.Model(json);
+
+
+        // Recor the response time or how long they spent on a page
+        lastpage = survey.currentPage;
+        function timerLoop(elapsed) {
+            var page = survey.currentPage; // page variable is the currentPage on the survey
+            if (!page) return;
+            if (lastpage != page) {
+                // set new start date
+                start = new Date().getTime(); // sets new start Date object when page has changed.
+                lastpage = page // sets the last page to currente page 
+
+            }
+            var valueName = "TRQ" + survey.pages.indexOf(page);
+
+            var ms = survey.getValue(valueName); // gets the value of the valuename. e.g: TRQ1
+
+            if (ms == null) ms = 0;
+            else ms = elapsed;
+            survey.setValue(valueName, ms);
+            $('#timeEl').text(elapsed + ' ms');
+        }
+
+
+        function getQueryVariable(variable) {
+            var query = window.location.search.substring(1);
+            var vars = query.split('&');
+            for (var i = 0; i < vars.length; i++) {
+                var pair = vars[i].split('=');
+                if (decodeURIComponent(pair[0]) == variable) {
+                    return decodeURIComponent(pair[1]);
+                }
+            }
+            return 'NULL'
+        }
+
+        survey.showProgressBar = "bottom";
+
+        survey.goNextPageAutomatic = false
+        survey.showNavigationButtons = true;
+        survey.showCompletedPage = false;
+
+        // Get Query Variables
+        var surveyname = getQueryVariable('survey');
+
+        var expInfo = { 'participant': '' ,'session': '',  'task': surveyname, 'date' : formatDate(), 'study': '', 'id': getQueryVariable('id') };
+
+        // Get info Promize
+        const getInfoPromise = new Promise((resolve, reject) => {
+            $.ajax({
+                type: "POST",
+                url: '/getInfo',
+                data: { 'id': expInfo.id },
+                dataType: 'JSON',
+                success: function (data) {
+                    resolve(data)
+                }
+            })
+        })
+            // Read getINFO 
+            .then((values) => {
+                console.log(values)
+                if (values.subject && values.session && values.study) {
+                    expInfo.participant = values.subject
+                    expInfo.study = values.study
+                    expInfo.session = values.session
+                    expInfo.run_id = getQueryVariable('run')
+                }
+
+                survey.onComplete.add(function (result) {
+                    //result.preventDefault();
+                    postSurveyData(result.data, expInfo.session, expInfo.participant);
+                });
+
+                $("#surveyElement").Survey({model: survey});
+    
+                $("#participant").text(expInfo.participant);
+                $("#session").text(expInfo.session);
+                $("#study").text(expInfo.study);
+
+            })
+
+        function postSurveyData(data, session, mkturkid) {
+            console.log('/link?id=' + expInfo.id  + '&index=' + (parseInt(getQueryVariable('index')) + 1))
+            $.ajax({
+                type: "POST",
+                url: '/save',
+                data: {
+                    "trials_data": data,
+                    "expInfo": expInfo
+                },
+                dataType: 'JSON',
+                statusCode: {
+                    200: function() {
+                        console.log('sucess saved on backend')
+                        console.log('/link?id=' + expInfo.id  + '&index=' + (parseInt(getQueryVariable('index')) + 1))
+                        window.location.replace('/link?id=' + expInfo.id  + '&index=' + (parseInt(getQueryVariable('index')) + 1))
+                    }
+                }
+            }) 
+                
+        }
+
+        var start = new Date().getTime(),
+            elapsed = '0.0';
+
+        // executes timerCallback every 100 ms
+        timerID = window.setInterval(function () {
+
+            var time = new Date().getTime() - start;
+            elapsed = Math.floor(time);
+
+            //alert(elapsed);
+            //$('#timeEl').text(elapsed + ' ms');
+
+            //displayTime(1);
+            timerLoop(elapsed);
+
+        }, 5);
+    </script>
+
+</body>
+
+</html>

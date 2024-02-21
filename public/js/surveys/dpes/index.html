@@ -1,0 +1,1618 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <style type="text/css">
+        @font-face {
+            font-family: gotham;
+            src: url(/gotham-book-regular.otf);
+        }
+
+        * {
+            font-family: Helvetica Neue;
+        }
+
+        a:link,
+        a:visited {
+            color: #5e3f99;
+        }
+
+        input[type=text]:focus {
+            border-color: #f68826;
+            box-shadow: 0 0 5px #f68826 !important;
+        }
+
+        input[type=email]:focus {
+            border-color: #f68826;
+            box-shadow: 0 0 5px #f68826 !important;
+        }
+
+        .sv-root-modern .sv-container-modern {
+            color: white !important;
+            fill: white !important;
+        }
+        .sv-radio__svg {
+            border-color: white !important;
+        }
+
+        .sv-root-modern .sv-radio--checked .sv-radio__svg  {
+            fill: white !important;
+        }
+
+        .sv-root-modern input.sv-text, textarea.sv-comment, select.sv-dropdown{
+            color: white !important;
+        }
+        
+    </style>
+    <title>Post Task Questions</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+        crossorigin="anonymous"></script>
+
+    <!-- Latest compiled and minified CSS -->
+    <!-- Using Bootsawtch theme: https://bootswatch.com/cyborg/ -->
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js" integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous"></script>
+
+    <link href="https://unpkg.com/survey-knockout@1.8.41/modern.css" type="text/css" rel="stylesheet"/>
+    <script src="https://unpkg.com/jquery"></script>
+    <script src="https://unpkg.com/survey-jquery@1.8.41/survey.jquery.min.js"></script>
+
+    <script type="text/javascript" src='/js/StimToolLib.js'></script>
+
+</head>
+
+<body>
+
+    <div class="container" style="max-width: 800px;">
+        <div class="py-5 text-center">
+            <img class="d-block mx-auto mb-4" src="/images/logo_reversed.jpg" alt="" width="180" height="50">
+            <!-- <h4>Cultural Survey</h4> -->
+          </div>
+    </div>
+
+    <div class="container" style="max-width: 800px;">
+        <div class="row" >
+            <div id="surveyElement" style="max-width: 800px; width: 770px; margin-bottom:40px"></div>
+            
+            <div id="surveyResult"></div>
+        </div>
+    </div>
+
+    <div class="jumbotron container" style="margin-bottom:0;max-width: 400px;">
+        <table class="table table-hover">
+            <tbody>
+                <tr>
+                  <th scope="row">ID:</th>
+                  <td><a id="participant"></a></td>
+                </tr>
+                <tr>
+                    <th scope="row">Session:</th>
+                    <td><a id="session"></a></td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Study:</th>
+                    <td><a id="study"></a></td>
+                  </tr>
+              </tbody>
+        </table>
+        <p style="text-align: center;">&copy; 2021 <a href="http://www.laureateinstitute.org">laureateinstitute.org</a>. All rights reserved.</p>
+    </div>
+
+    <script type="text/javascript">
+
+        Survey
+            .StylesManager
+            .applyTheme("modern");
+        // Survey.Survey.cssType = "bootstrap";
+        // Survey.defaultBootstrapCss.navigationButton = "btn";
+        var json = {
+             "title": "Dispositional Positive Emotion Scales",
+             "description": "Respond according to the following scale:",
+             "logoPosition": "right",
+             "pages": [
+              {
+               "name": "page1",
+               "elements": [
+                {
+                 "type": "radiogroup",
+                 "name": "question1",
+                 "title": "I often feel bursts of joy.",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "Item 1",
+                   "text": "1 - Strongly Disagree"
+                  },
+                  {
+                   "value": "Item 2",
+                   "text": "2"
+                  },
+                  {
+                   "value": "Item 3",
+                   "text": "3"
+                  },
+                  {
+                   "value": "Item 4",
+                   "text": "4"
+                  },
+                  {
+                   "value": "Item 5",
+                   "text": "5"
+                  },
+                  {
+                   "value": "Item 6",
+                   "text": "6"
+                  },
+                  {
+                   "value": "Item 7",
+                   "text": "7 - Strongly Agree"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question2",
+                 "title": "I am an intensely cheerful person.",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "Item 1",
+                   "text": "1 - Strongly Disagree"
+                  },
+                  {
+                   "value": "Item 2",
+                   "text": "2"
+                  },
+                  {
+                   "value": "Item 3",
+                   "text": "3"
+                  },
+                  {
+                   "value": "Item 4",
+                   "text": "4"
+                  },
+                  {
+                   "value": "Item 5",
+                   "text": "5"
+                  },
+                  {
+                   "value": "Item 6",
+                   "text": "6"
+                  },
+                  {
+                   "value": "Item 7",
+                   "text": "7 - Strongly Agree"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question3",
+                 "title": "I am often completely overjoyed when something good happens.",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "Item 1",
+                   "text": "1 - Strongly Disagree"
+                  },
+                  {
+                   "value": "Item 2",
+                   "text": "2"
+                  },
+                  {
+                   "value": "Item 3",
+                   "text": "3"
+                  },
+                  {
+                   "value": "Item 4",
+                   "text": "4"
+                  },
+                  {
+                   "value": "Item 5",
+                   "text": "5"
+                  },
+                  {
+                   "value": "Item 6",
+                   "text": "6"
+                  },
+                  {
+                   "value": "Item 7",
+                   "text": "7 - Strongly Agree"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question4",
+                 "title": "On a typical day, many events make me happy.",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "Item 1",
+                   "text": "1 - Strongly Disagree"
+                  },
+                  {
+                   "value": "Item 2",
+                   "text": "2"
+                  },
+                  {
+                   "value": "Item 3",
+                   "text": "3"
+                  },
+                  {
+                   "value": "Item 4",
+                   "text": "4"
+                  },
+                  {
+                   "value": "Item 5",
+                   "text": "5"
+                  },
+                  {
+                   "value": "Item 6",
+                   "text": "6"
+                  },
+                  {
+                   "value": "Item 7",
+                   "text": "7 - Strongly Agree"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question5",
+                 "title": "Good things happen to me all the time.",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "Item 1",
+                   "text": "1 - Strongly Disagree"
+                  },
+                  {
+                   "value": "Item 2",
+                   "text": "2"
+                  },
+                  {
+                   "value": "Item 3",
+                   "text": "3"
+                  },
+                  {
+                   "value": "Item 4",
+                   "text": "4"
+                  },
+                  {
+                   "value": "Item 5",
+                   "text": "5"
+                  },
+                  {
+                   "value": "Item 6",
+                   "text": "6"
+                  },
+                  {
+                   "value": "Item 7",
+                   "text": "7 - Strongly Agree"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question6",
+                 "title": "My life is always improving.",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "Item 1",
+                   "text": "1 - Strongly Disagree"
+                  },
+                  {
+                   "value": "Item 2",
+                   "text": "2"
+                  },
+                  {
+                   "value": "Item 3",
+                   "text": "3"
+                  },
+                  {
+                   "value": "Item 4",
+                   "text": "4"
+                  },
+                  {
+                   "value": "Item 5",
+                   "text": "5"
+                  },
+                  {
+                   "value": "Item 6",
+                   "text": "6"
+                  },
+                  {
+                   "value": "Item 7",
+                   "text": "7 - Strongly Agree"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question7",
+                 "title": "I am generally a contented person.",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "Item 1",
+                   "text": "1 - Strongly Disagree"
+                  },
+                  {
+                   "value": "Item 2",
+                   "text": "2"
+                  },
+                  {
+                   "value": "Item 3",
+                   "text": "3"
+                  },
+                  {
+                   "value": "Item 4",
+                   "text": "4"
+                  },
+                  {
+                   "value": "Item 5",
+                   "text": "5"
+                  },
+                  {
+                   "value": "Item 6",
+                   "text": "6"
+                  },
+                  {
+                   "value": "Item 7",
+                   "text": "7 - Strongly Agree"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question8",
+                 "title": "I am at peace with my life.",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "Item 1",
+                   "text": "1 - Strongly Disagree"
+                  },
+                  {
+                   "value": "Item 2",
+                   "text": "2"
+                  },
+                  {
+                   "value": "Item 3",
+                   "text": "3"
+                  },
+                  {
+                   "value": "Item 4",
+                   "text": "4"
+                  },
+                  {
+                   "value": "Item 5",
+                   "text": "5"
+                  },
+                  {
+                   "value": "Item 6",
+                   "text": "6"
+                  },
+                  {
+                   "value": "Item 7",
+                   "text": "7 - Strongly Agree"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question9",
+                 "title": "When I think about my life I experience a deep feeling of contentment.",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "Item 1",
+                   "text": "1 - Strongly Disagree"
+                  },
+                  {
+                   "value": "Item 2",
+                   "text": "2"
+                  },
+                  {
+                   "value": "Item 3",
+                   "text": "3"
+                  },
+                  {
+                   "value": "Item 4",
+                   "text": "4"
+                  },
+                  {
+                   "value": "Item 5",
+                   "text": "5"
+                  },
+                  {
+                   "value": "Item 6",
+                   "text": "6"
+                  },
+                  {
+                   "value": "Item 7",
+                   "text": "7 - Strongly Agree"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question10",
+                 "title": "I feel satisfied more often than most people.",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "Item 1",
+                   "text": "1 - Strongly Disagree"
+                  },
+                  {
+                   "value": "Item 2",
+                   "text": "2"
+                  },
+                  {
+                   "value": "Item 3",
+                   "text": "3"
+                  },
+                  {
+                   "value": "Item 4",
+                   "text": "4"
+                  },
+                  {
+                   "value": "Item 5",
+                   "text": "5"
+                  },
+                  {
+                   "value": "Item 6",
+                   "text": "6"
+                  },
+                  {
+                   "value": "Item 7",
+                   "text": "7 - Strongly Agree"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question11",
+                 "title": "My life is very fulfilling.",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "Item 1",
+                   "text": "1 - Strongly Disagree"
+                  },
+                  {
+                   "value": "Item 2",
+                   "text": "2"
+                  },
+                  {
+                   "value": "Item 3",
+                   "text": "3"
+                  },
+                  {
+                   "value": "Item 4",
+                   "text": "4"
+                  },
+                  {
+                   "value": "Item 5",
+                   "text": "5"
+                  },
+                  {
+                   "value": "Item 6",
+                   "text": "6"
+                  },
+                  {
+                   "value": "Item 7",
+                   "text": "7 - Strongly Agree"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question12",
+                 "title": "I feel good about myself.",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "Item 1",
+                   "text": "1 - Strongly Disagree"
+                  },
+                  {
+                   "value": "Item 2",
+                   "text": "2"
+                  },
+                  {
+                   "value": "Item 3",
+                   "text": "3"
+                  },
+                  {
+                   "value": "Item 4",
+                   "text": "4"
+                  },
+                  {
+                   "value": "Item 5",
+                   "text": "5"
+                  },
+                  {
+                   "value": "Item 6",
+                   "text": "6"
+                  },
+                  {
+                   "value": "Item 7",
+                   "text": "7 - Strongly Agree"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question13",
+                 "title": "I am proud of myself and my accomplishments.",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "Item 1",
+                   "text": "1 - Strongly Disagree"
+                  },
+                  {
+                   "value": "Item 2",
+                   "text": "2"
+                  },
+                  {
+                   "value": "Item 3",
+                   "text": "3"
+                  },
+                  {
+                   "value": "Item 4",
+                   "text": "4"
+                  },
+                  {
+                   "value": "Item 5",
+                   "text": "5"
+                  },
+                  {
+                   "value": "Item 6",
+                   "text": "6"
+                  },
+                  {
+                   "value": "Item 7",
+                   "text": "7 - Strongly Agree"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question14",
+                 "title": "Many people respect me.",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "Item 1",
+                   "text": "1 - Strongly Disagree"
+                  },
+                  {
+                   "value": "Item 2",
+                   "text": "2"
+                  },
+                  {
+                   "value": "Item 3",
+                   "text": "3"
+                  },
+                  {
+                   "value": "Item 4",
+                   "text": "4"
+                  },
+                  {
+                   "value": "Item 5",
+                   "text": "5"
+                  },
+                  {
+                   "value": "Item 6",
+                   "text": "6"
+                  },
+                  {
+                   "value": "Item 7",
+                   "text": "7 - Strongly Agree"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question15",
+                 "title": "I always stand up for what I believe.",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "Item 1",
+                   "text": "1 - Strongly Disagree"
+                  },
+                  {
+                   "value": "Item 2",
+                   "text": "2"
+                  },
+                  {
+                   "value": "Item 3",
+                   "text": "3"
+                  },
+                  {
+                   "value": "Item 4",
+                   "text": "4"
+                  },
+                  {
+                   "value": "Item 5",
+                   "text": "5"
+                  },
+                  {
+                   "value": "Item 6",
+                   "text": "6"
+                  },
+                  {
+                   "value": "Item 7",
+                   "text": "7 - Strongly Agree"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question16",
+                 "title": "People usually recognize my authority.",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "Item 1",
+                   "text": "1 - Strongly Disagree"
+                  },
+                  {
+                   "value": "Item 2",
+                   "text": "2"
+                  },
+                  {
+                   "value": "Item 3",
+                   "text": "3"
+                  },
+                  {
+                   "value": "Item 4",
+                   "text": "4"
+                  },
+                  {
+                   "value": "Item 5",
+                   "text": "5"
+                  },
+                  {
+                   "value": "Item 6",
+                   "text": "6"
+                  },
+                  {
+                   "value": "Item 7",
+                   "text": "7 - Strongly Agree"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question17",
+                 "title": "Other people are generally trustworthy.",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "Item 1",
+                   "text": "1 - Strongly Disagree"
+                  },
+                  {
+                   "value": "Item 2",
+                   "text": "2"
+                  },
+                  {
+                   "value": "Item 3",
+                   "text": "3"
+                  },
+                  {
+                   "value": "Item 4",
+                   "text": "4"
+                  },
+                  {
+                   "value": "Item 5",
+                   "text": "5"
+                  },
+                  {
+                   "value": "Item 6",
+                   "text": "6"
+                  },
+                  {
+                   "value": "Item 7",
+                   "text": "7 - Strongly Agree"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question18",
+                 "title": "I develop strong feelings of closeness to people easily.",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "Item 1",
+                   "text": "1 - Strongly Disagree"
+                  },
+                  {
+                   "value": "Item 2",
+                   "text": "2"
+                  },
+                  {
+                   "value": "Item 3",
+                   "text": "3"
+                  },
+                  {
+                   "value": "Item 4",
+                   "text": "4"
+                  },
+                  {
+                   "value": "Item 5",
+                   "text": "5"
+                  },
+                  {
+                   "value": "Item 6",
+                   "text": "6"
+                  },
+                  {
+                   "value": "Item 7",
+                   "text": "7 - Strongly Agree"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question19",
+                 "title": "I find it easy to trust others.",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "Item 1",
+                   "text": "1 - Strongly Disagree"
+                  },
+                  {
+                   "value": "Item 2",
+                   "text": "2"
+                  },
+                  {
+                   "value": "Item 3",
+                   "text": "3"
+                  },
+                  {
+                   "value": "Item 4",
+                   "text": "4"
+                  },
+                  {
+                   "value": "Item 5",
+                   "text": "5"
+                  },
+                  {
+                   "value": "Item 6",
+                   "text": "6"
+                  },
+                  {
+                   "value": "Item 7",
+                   "text": "7 - Strongly Agree"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question20",
+                 "title": "I can depend on people when I need help.",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "Item 1",
+                   "text": "1 - Strongly Disagree"
+                  },
+                  {
+                   "value": "Item 2",
+                   "text": "2"
+                  },
+                  {
+                   "value": "Item 3",
+                   "text": "3"
+                  },
+                  {
+                   "value": "Item 4",
+                   "text": "4"
+                  },
+                  {
+                   "value": "Item 5",
+                   "text": "5"
+                  },
+                  {
+                   "value": "Item 6",
+                   "text": "6"
+                  },
+                  {
+                   "value": "Item 7",
+                   "text": "7 - Strongly Agree"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question21",
+                 "title": "People are usually considerate of my needs and feelings.",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "Item 1",
+                   "text": "1 - Strongly Disagree"
+                  },
+                  {
+                   "value": "Item 2",
+                   "text": "2"
+                  },
+                  {
+                   "value": "Item 3",
+                   "text": "3"
+                  },
+                  {
+                   "value": "Item 4",
+                   "text": "4"
+                  },
+                  {
+                   "value": "Item 5",
+                   "text": "5"
+                  },
+                  {
+                   "value": "Item 6",
+                   "text": "6"
+                  },
+                  {
+                   "value": "Item 7",
+                   "text": "7 - Strongly Agree"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question22",
+                 "title": "I love many people.",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "Item 1",
+                   "text": "1 - Strongly Disagree"
+                  },
+                  {
+                   "value": "Item 2",
+                   "text": "2"
+                  },
+                  {
+                   "value": "Item 3",
+                   "text": "3"
+                  },
+                  {
+                   "value": "Item 4",
+                   "text": "4"
+                  },
+                  {
+                   "value": "Item 5",
+                   "text": "5"
+                  },
+                  {
+                   "value": "Item 6",
+                   "text": "6"
+                  },
+                  {
+                   "value": "Item 7",
+                   "text": "7 - Strongly Agree"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question23",
+                 "title": "It’s important to take care of people who are vulnerable.",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "Item 1",
+                   "text": "1 - Strongly Disagree"
+                  },
+                  {
+                   "value": "Item 2",
+                   "text": "2"
+                  },
+                  {
+                   "value": "Item 3",
+                   "text": "3"
+                  },
+                  {
+                   "value": "Item 4",
+                   "text": "4"
+                  },
+                  {
+                   "value": "Item 5",
+                   "text": "5"
+                  },
+                  {
+                   "value": "Item 6",
+                   "text": "6"
+                  },
+                  {
+                   "value": "Item 7",
+                   "text": "7 - Strongly Agree"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question24",
+                 "title": "When I see someone hurt or in need, I feel a powerful urge to take care of them.",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "Item 1",
+                   "text": "1 - Strongly Disagree"
+                  },
+                  {
+                   "value": "Item 2",
+                   "text": "2"
+                  },
+                  {
+                   "value": "Item 3",
+                   "text": "3"
+                  },
+                  {
+                   "value": "Item 4",
+                   "text": "4"
+                  },
+                  {
+                   "value": "Item 5",
+                   "text": "5"
+                  },
+                  {
+                   "value": "Item 6",
+                   "text": "6"
+                  },
+                  {
+                   "value": "Item 7",
+                   "text": "7 - Strongly Agree"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question25",
+                 "title": "Taking care of others gives me a warm feeling inside.",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "Item 1",
+                   "text": "1 - Strongly Disagree"
+                  },
+                  {
+                   "value": "Item 2",
+                   "text": "2"
+                  },
+                  {
+                   "value": "Item 3",
+                   "text": "3"
+                  },
+                  {
+                   "value": "Item 4",
+                   "text": "4"
+                  },
+                  {
+                   "value": "Item 5",
+                   "text": "5"
+                  },
+                  {
+                   "value": "Item 6",
+                   "text": "6"
+                  },
+                  {
+                   "value": "Item 7",
+                   "text": "7 - Strongly Agree"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question26",
+                 "title": "I often notice people who need help.",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "Item 1",
+                   "text": "1 - Strongly Disagree"
+                  },
+                  {
+                   "value": "Item 2",
+                   "text": "2"
+                  },
+                  {
+                   "value": "Item 3",
+                   "text": "3"
+                  },
+                  {
+                   "value": "Item 4",
+                   "text": "4"
+                  },
+                  {
+                   "value": "Item 5",
+                   "text": "5"
+                  },
+                  {
+                   "value": "Item 6",
+                   "text": "6"
+                  },
+                  {
+                   "value": "Item 7",
+                   "text": "7 - Strongly Agree"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question27",
+                 "title": "I am a very compassionate person.",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "Item 1",
+                   "text": "1 - Strongly Disagree"
+                  },
+                  {
+                   "value": "Item 2",
+                   "text": "2"
+                  },
+                  {
+                   "value": "Item 3",
+                   "text": "3"
+                  },
+                  {
+                   "value": "Item 4",
+                   "text": "4"
+                  },
+                  {
+                   "value": "Item 5",
+                   "text": "5"
+                  },
+                  {
+                   "value": "Item 6",
+                   "text": "6"
+                  },
+                  {
+                   "value": "Item 7",
+                   "text": "7 - Strongly Agree"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question28",
+                 "title": "I find humor in almost everything.",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "Item 1",
+                   "text": "1 - Strongly Disagree"
+                  },
+                  {
+                   "value": "Item 2",
+                   "text": "2"
+                  },
+                  {
+                   "value": "Item 3",
+                   "text": "3"
+                  },
+                  {
+                   "value": "Item 4",
+                   "text": "4"
+                  },
+                  {
+                   "value": "Item 5",
+                   "text": "5"
+                  },
+                  {
+                   "value": "Item 6",
+                   "text": "6"
+                  },
+                  {
+                   "value": "Item 7",
+                   "text": "7 - Strongly Agree"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question29",
+                 "title": "I really enjoy teasing people I care about.",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "Item 1",
+                   "text": "1 - Strongly Disagree"
+                  },
+                  {
+                   "value": "Item 2",
+                   "text": "2"
+                  },
+                  {
+                   "value": "Item 3",
+                   "text": "3"
+                  },
+                  {
+                   "value": "Item 4",
+                   "text": "4"
+                  },
+                  {
+                   "value": "Item 5",
+                   "text": "5"
+                  },
+                  {
+                   "value": "Item 6",
+                   "text": "6"
+                  },
+                  {
+                   "value": "Item 7",
+                   "text": "7 - Strongly Agree"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question30",
+                 "title": "I am very easily amused.",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "Item 1",
+                   "text": "1 - Strongly Disagree"
+                  },
+                  {
+                   "value": "Item 2",
+                   "text": "2"
+                  },
+                  {
+                   "value": "Item 3",
+                   "text": "3"
+                  },
+                  {
+                   "value": "Item 4",
+                   "text": "4"
+                  },
+                  {
+                   "value": "Item 5",
+                   "text": "5"
+                  },
+                  {
+                   "value": "Item 6",
+                   "text": "6"
+                  },
+                  {
+                   "value": "Item 7",
+                   "text": "7 - Strongly Agree"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question31",
+                 "title": "The people around me make a lot of jokes.",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "Item 1",
+                   "text": "1 - Strongly Disagree"
+                  },
+                  {
+                   "value": "Item 2",
+                   "text": "2"
+                  },
+                  {
+                   "value": "Item 3",
+                   "text": "3"
+                  },
+                  {
+                   "value": "Item 4",
+                   "text": "4"
+                  },
+                  {
+                   "value": "Item 5",
+                   "text": "5"
+                  },
+                  {
+                   "value": "Item 6",
+                   "text": "6"
+                  },
+                  {
+                   "value": "Item 7",
+                   "text": "7 - Strongly Agree"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question32",
+                 "title": "I make jokes about everything.",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "Item 1",
+                   "text": "1 - Strongly Disagree"
+                  },
+                  {
+                   "value": "Item 2",
+                   "text": "2"
+                  },
+                  {
+                   "value": "Item 3",
+                   "text": "3"
+                  },
+                  {
+                   "value": "Item 4",
+                   "text": "4"
+                  },
+                  {
+                   "value": "Item 5",
+                   "text": "5"
+                  },
+                  {
+                   "value": "Item 6",
+                   "text": "6"
+                  },
+                  {
+                   "value": "Item 7",
+                   "text": "7 - Strongly Agree"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question33",
+                 "title": "I often feel awe.",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "Item 1",
+                   "text": "1 - Strongly Disagree"
+                  },
+                  {
+                   "value": "Item 2",
+                   "text": "2"
+                  },
+                  {
+                   "value": "Item 3",
+                   "text": "3"
+                  },
+                  {
+                   "value": "Item 4",
+                   "text": "4"
+                  },
+                  {
+                   "value": "Item 5",
+                   "text": "5"
+                  },
+                  {
+                   "value": "Item 6",
+                   "text": "6"
+                  },
+                  {
+                   "value": "Item 7",
+                   "text": "7 - Strongly Agree"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question34",
+                 "title": "I see beauty all around me.",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "Item 1",
+                   "text": "1 - Strongly Disagree"
+                  },
+                  {
+                   "value": "Item 2",
+                   "text": "2"
+                  },
+                  {
+                   "value": "Item 3",
+                   "text": "3"
+                  },
+                  {
+                   "value": "Item 4",
+                   "text": "4"
+                  },
+                  {
+                   "value": "Item 5",
+                   "text": "5"
+                  },
+                  {
+                   "value": "Item 6",
+                   "text": "6"
+                  },
+                  {
+                   "value": "Item 7",
+                   "text": "7 - Strongly Agree"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question35",
+                 "title": "I feel wonder almost every day.",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "Item 1",
+                   "text": "1 - Strongly Disagree"
+                  },
+                  {
+                   "value": "Item 2",
+                   "text": "2"
+                  },
+                  {
+                   "value": "Item 3",
+                   "text": "3"
+                  },
+                  {
+                   "value": "Item 4",
+                   "text": "4"
+                  },
+                  {
+                   "value": "Item 5",
+                   "text": "5"
+                  },
+                  {
+                   "value": "Item 6",
+                   "text": "6"
+                  },
+                  {
+                   "value": "Item 7",
+                   "text": "7 - Strongly Agree"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question36",
+                 "title": "I often look for patterns in the objects around me.",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "Item 1",
+                   "text": "1 - Strongly Disagree"
+                  },
+                  {
+                   "value": "Item 2",
+                   "text": "2"
+                  },
+                  {
+                   "value": "Item 3",
+                   "text": "3"
+                  },
+                  {
+                   "value": "Item 4",
+                   "text": "4"
+                  },
+                  {
+                   "value": "Item 5",
+                   "text": "5"
+                  },
+                  {
+                   "value": "Item 6",
+                   "text": "6"
+                  },
+                  {
+                   "value": "Item 7",
+                   "text": "7 - Strongly Agree"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question37",
+                 "title": "I have many opportunities to see the beauty of nature.",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "Item 1",
+                   "text": "1 - Strongly Disagree"
+                  },
+                  {
+                   "value": "Item 2",
+                   "text": "2"
+                  },
+                  {
+                   "value": "Item 3",
+                   "text": "3"
+                  },
+                  {
+                   "value": "Item 4",
+                   "text": "4"
+                  },
+                  {
+                   "value": "Item 5",
+                   "text": "5"
+                  },
+                  {
+                   "value": "Item 6",
+                   "text": "6"
+                  },
+                  {
+                   "value": "Item 7",
+                   "text": "7 - Strongly Agree"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question38",
+                 "title": "I seek out experiences that challenge my understanding of the world.",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "Item 1",
+                   "text": "1 - Strongly Disagree"
+                  },
+                  {
+                   "value": "Item 2",
+                   "text": "2"
+                  },
+                  {
+                   "value": "Item 3",
+                   "text": "3"
+                  },
+                  {
+                   "value": "Item 4",
+                   "text": "4"
+                  },
+                  {
+                   "value": "Item 5",
+                   "text": "5"
+                  },
+                  {
+                   "value": "Item 6",
+                   "text": "6"
+                  },
+                  {
+                   "value": "Item 7",
+                   "text": "7 - Strongly Agree"
+                  }
+                 ]
+                }
+               ]
+              }
+             ]
+            }
+
+        window.survey = new Survey.Model(json);
+
+
+        // Recor the response time or how long they spent on a page
+        lastpage = survey.currentPage;
+        function timerLoop(elapsed) {
+            var page = survey.currentPage; // page variable is the currentPage on the survey
+            if (!page) return;
+            if (lastpage != page) {
+                // set new start date
+                start = new Date().getTime(); // sets new start Date object when page has changed.
+                lastpage = page // sets the last page to currente page 
+
+            }
+            var valueName = "TRQ" + survey.pages.indexOf(page);
+
+            var ms = survey.getValue(valueName); // gets the value of the valuename. e.g: TRQ1
+
+            if (ms == null) ms = 0;
+            else ms = elapsed;
+            survey.setValue(valueName, ms);
+            $('#timeEl').text(elapsed + ' ms');
+        }
+
+
+        function getQueryVariable(variable) {
+            var query = window.location.search.substring(1);
+            var vars = query.split('&');
+            for (var i = 0; i < vars.length; i++) {
+                var pair = vars[i].split('=');
+                if (decodeURIComponent(pair[0]) == variable) {
+                    return decodeURIComponent(pair[1]);
+                }
+            }
+            return 'NULL'
+        }
+
+        survey.showProgressBar = "bottom";
+
+        survey.goNextPageAutomatic = false
+        survey.showNavigationButtons = true;
+        survey.showCompletedPage = false;
+
+        // Get Query Variables
+        var surveyname = getQueryVariable('survey');
+
+        var expInfo = { 'participant': '' ,'session': '',  'task': surveyname, 'date' : formatDate(), 'study': '', 'id': getQueryVariable('id') };
+
+        // Get info Promize
+        const getInfoPromise = new Promise((resolve, reject) => {
+            $.ajax({
+                type: "POST",
+                url: '/getInfo',
+                data: { 'id': expInfo.id },
+                dataType: 'JSON',
+                success: function (data) {
+                    resolve(data)
+                }
+            })
+        })
+            // Read getINFO 
+            .then((values) => {
+                console.log(values)
+                if (values.subject && values.session && values.study) {
+                    expInfo.participant = values.subject
+                    expInfo.study = values.study
+                    expInfo.session = values.session
+                    expInfo.run_id = getQueryVariable('run')
+                }
+
+                survey.onComplete.add(function (result) {
+                    //result.preventDefault();
+                    postSurveyData(result.data, expInfo.session, expInfo.participant);
+                });
+
+                $("#surveyElement").Survey({model: survey});
+    
+                $("#participant").text(expInfo.participant);
+                $("#session").text(expInfo.session);
+                $("#study").text(expInfo.study);
+
+            })
+
+        function postSurveyData(data, session, mkturkid) {
+            console.log('/link?id=' + expInfo.id  + '&index=' + (parseInt(getQueryVariable('index')) + 1))
+            $.ajax({
+                type: "POST",
+                url: '/save',
+                data: {
+                    "trials_data": data,
+                    "expInfo": expInfo
+                },
+                dataType: 'JSON',
+                statusCode: {
+                    200: function() {
+                        console.log('sucess saved on backend')
+                        console.log('/link?id=' + expInfo.id  + '&index=' + (parseInt(getQueryVariable('index')) + 1))
+                        window.location.replace('/link?id=' + expInfo.id  + '&index=' + (parseInt(getQueryVariable('index')) + 1))
+                    }
+                }
+            }) 
+                
+        }
+
+        var start = new Date().getTime(),
+            elapsed = '0.0';
+
+        // executes timerCallback every 100 ms
+        timerID = window.setInterval(function () {
+
+            var time = new Date().getTime() - start;
+            elapsed = Math.floor(time);
+
+            //alert(elapsed);
+            //$('#timeEl').text(elapsed + ' ms');
+
+            //displayTime(1);
+            timerLoop(elapsed);
+
+        }, 5);
+    </script>
+
+</body>
+
+</html>

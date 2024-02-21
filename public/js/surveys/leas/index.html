@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <style type="text/css">
+        @font-face {
+            font-family: gotham;
+            src: url(/gotham-book-regular.otf);
+        }
+
+        * {
+            font-family: Helvetica Neue;
+        }
+
+        a:link,
+        a:visited {
+            color: #5e3f99;
+        }
+
+        input[type=text]:focus {
+            border-color: #f68826;
+            box-shadow: 0 0 5px #f68826 !important;
+        }
+
+        input[type=email]:focus {
+            border-color: #f68826;
+            box-shadow: 0 0 5px #f68826 !important;
+        }
+
+        .sv-root-modern .sv-container-modern {
+            color: white !important;
+            fill: white !important;
+        }
+        .sv-radio__svg {
+            border-color: white !important;
+        }
+
+        .sv-root-modern .sv-radio--checked .sv-radio__svg  {
+            fill: white !important;
+        }
+
+        .sv-root-modern input.sv-text, textarea.sv-comment, select.sv-dropdown{
+            color: white !important;
+        }
+        
+    </style>
+    <title>Post Task Questions</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+        crossorigin="anonymous"></script>
+
+    <!-- Latest compiled and minified CSS -->
+    <!-- Using Bootsawtch theme: https://bootswatch.com/cyborg/ -->
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js" integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous"></script>
+
+    <link href="https://unpkg.com/survey-knockout@1.8.41/modern.css" type="text/css" rel="stylesheet"/>
+    <script src="https://unpkg.com/jquery"></script>
+    <script src="https://unpkg.com/survey-jquery@1.8.41/survey.jquery.min.js"></script>
+
+    <script type="text/javascript" src='/js/StimToolLib.js'></script>
+
+</head>
+
+<body>
+
+    <div class="container" style="max-width: 800px;">
+        <div class="py-5 text-center">
+            <img class="d-block mx-auto mb-4" src="/images/logo_reversed.jpg" alt="" width="180" height="50">
+            <!-- <h4>Cultural Survey</h4> -->
+          </div>
+    </div>
+
+    <div class="container" style="max-width: 800px;">
+        <div class="row" >
+            <div id="surveyElement" style="max-width: 800px; width: 770px; margin-bottom:40px"></div>
+            
+            <div id="surveyResult"></div>
+        </div>
+    </div>
+
+    <div class="jumbotron container" style="margin-bottom:0;max-width: 400px;">
+        <table class="table table-hover">
+            <tbody>
+                <tr>
+                  <th scope="row">ID:</th>
+                  <td><a id="participant"></a></td>
+                </tr>
+                <tr>
+                    <th scope="row">Session:</th>
+                    <td><a id="session"></a></td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Study:</th>
+                    <td><a id="study"></a></td>
+                  </tr>
+              </tbody>
+        </table>
+        <p style="text-align: center;">&copy; 2021 <a href="http://www.laureateinstitute.org">laureateinstitute.org</a>. All rights reserved.</p>
+    </div>
+
+    <script type="text/javascript">
+
+        Survey
+            .StylesManager
+            .applyTheme("modern");
+        // Survey.Survey.cssType = "bootstrap";
+        // Survey.defaultBootstrapCss.navigationButton = "btn";
+        var json = {
+             "title": "Levels of Emotional Awareness",
+             "description": "Please describe what you would feel in the following situations. The only requirement is that you use the word \"feel\" in your answers.  You may make your answers as brief or as long as necessary to express how you would feel. In each situation there is another person mentioned. Please indicate how you think that other person would feel as well.",
+             "logoPosition": "right",
+             "pages": [
+              {
+               "name": "page1",
+               "elements": [
+                {
+                 "type": "comment",
+                 "name": "question1",
+                 "title": "How would you feel?",
+                 "isRequired": true
+                },
+                {
+                 "type": "comment",
+                 "name": "question2",
+                 "title": "How would the neighbor feel?",
+                 "isRequired": true
+                }
+               ],
+               "description": "A neighbor asks you to repair a piece of furniture. As the neighbor looks on, you begin hammering the nail but then miss the nail and hit your finger. "
+              },
+              {
+               "name": "page2",
+               "elements": [
+                {
+                 "type": "comment",
+                 "name": "question3",
+                 "title": "How would you feel?",
+                 "isRequired": true
+                },
+                {
+                 "type": "comment",
+                 "name": "question4",
+                 "title": "How would your partner feel?",
+                 "isRequired": true
+                }
+               ],
+               "description": "A loved one gives you a back rub after you return from a hard day’s work. "
+              },
+              {
+               "name": "page3",
+               "elements": [
+                {
+                 "type": "comment",
+                 "name": "question5",
+                 "title": "How would you feel?",
+                 "isRequired": true
+                },
+                {
+                 "type": "comment",
+                 "name": "question6",
+                 "title": "How would the person feel?",
+                 "isRequired": true
+                }
+               ],
+               "description": "As you drive over a suspension bridge you see a person standing on the other side of the guardrail, looking down at the water. How would you feel?"
+              },
+              {
+               "name": "page4",
+               "elements": [
+                {
+                 "type": "comment",
+                 "name": "question7",
+                 "title": "How would you feel?",
+                 "isRequired": true
+                },
+                {
+                 "type": "comment",
+                 "name": "question8",
+                 "title": "How would your boss feel?",
+                 "isRequired": true
+                }
+               ],
+               "description": "Your boss tells you that your work has been unacceptable and needs to be improved. "
+              },
+              {
+               "name": "page5",
+               "elements": [
+                {
+                 "type": "comment",
+                 "name": "question9",
+                 "title": "How would you feel?",
+                 "isRequired": true
+                },
+                {
+                 "type": "comment",
+                 "name": "question10",
+                 "title": "How would the person in front of you feel?",
+                 "isRequired": true
+                }
+               ],
+               "description": "You are standing in line at the bank. The person in front of you steps up to the window and begins a very complicated transaction. "
+              },
+              {
+               "name": "page6",
+               "elements": [
+                {
+                 "type": "comment",
+                 "name": "question11",
+                 "title": "How would you feel?",
+                 "isRequired": true
+                },
+                {
+                 "type": "comment",
+                 "name": "question12",
+                 "title": "How would your boss feel?",
+                 "isRequired": true
+                }
+               ],
+               "description": "You have been working hard on a project for several months. Several days after submitting it, your boss stops by to tell you that your work was excellent. "
+              },
+              {
+               "name": "page7",
+               "elements": [
+                {
+                 "type": "comment",
+                 "name": "question13",
+                 "title": "How would you feel?",
+                 "isRequired": true
+                },
+                {
+                 "type": "comment",
+                 "name": "question14",
+                 "title": "How would the dentist feel?",
+                 "isRequired": true
+                }
+               ],
+               "description": "Your dentist has told you that you have several cavities and schedules you for a return visit. "
+              },
+              {
+               "name": "page8",
+               "elements": [
+                {
+                 "type": "comment",
+                 "name": "question15",
+                 "title": "How would you feel?",
+                 "isRequired": true
+                },
+                {
+                 "type": "comment",
+                 "name": "question16",
+                 "title": "How would your colleague feel?",
+                 "isRequired": true
+                }
+               ],
+               "description": "Your doctor told you to avoid fatty foods. A new colleague at work calls to say that she/he is going out for pizza and invites you to go along.  "
+              },
+              {
+               "name": "page9",
+               "elements": [
+                {
+                 "type": "comment",
+                 "name": "question17",
+                 "title": "How would you feel?",
+                 "isRequired": true
+                },
+                {
+                 "type": "comment",
+                 "name": "question18",
+                 "title": "How would your friend feel?",
+                 "isRequired": true
+                }
+               ],
+               "description": "You and a friend agree to invest money together to begin a new business venture. Several days later you call the friend back only to learn that she/he changed her/his mind. "
+              },
+              {
+               "name": "page10",
+               "elements": [
+                {
+                 "type": "comment",
+                 "name": "question19",
+                 "title": "How would you feel?",
+                 "isRequired": true
+                },
+                {
+                 "type": "comment",
+                 "name": "question20",
+                 "title": "How would she/he feel?",
+                 "isRequired": true
+                }
+               ],
+               "description": "You fall in love with someone who is both attractive and intelligent.  Although this person is not well off financially, this doesn’t matter to you-- your income is adequate. When you begin to discuss marriage, you learn that she/he is actually from an extremely wealthy family. She/he did not want that known for fear that people would only be interested in her/him for her/his money. "
+              }
+             ]
+            }
+
+        window.survey = new Survey.Model(json);
+
+
+        // Recor the response time or how long they spent on a page
+        lastpage = survey.currentPage;
+        function timerLoop(elapsed) {
+            var page = survey.currentPage; // page variable is the currentPage on the survey
+            if (!page) return;
+            if (lastpage != page) {
+                // set new start date
+                start = new Date().getTime(); // sets new start Date object when page has changed.
+                lastpage = page // sets the last page to currente page 
+
+            }
+            var valueName = "TRQ" + survey.pages.indexOf(page);
+
+            var ms = survey.getValue(valueName); // gets the value of the valuename. e.g: TRQ1
+
+            if (ms == null) ms = 0;
+            else ms = elapsed;
+            survey.setValue(valueName, ms);
+            $('#timeEl').text(elapsed + ' ms');
+        }
+
+
+        function getQueryVariable(variable) {
+            var query = window.location.search.substring(1);
+            var vars = query.split('&');
+            for (var i = 0; i < vars.length; i++) {
+                var pair = vars[i].split('=');
+                if (decodeURIComponent(pair[0]) == variable) {
+                    return decodeURIComponent(pair[1]);
+                }
+            }
+            return 'NULL'
+        }
+
+        survey.showProgressBar = "bottom";
+
+        survey.goNextPageAutomatic = false
+        survey.showNavigationButtons = true;
+        survey.showCompletedPage = false;
+
+        // Get Query Variables
+        var surveyname = getQueryVariable('survey');
+
+        var expInfo = { 'participant': '' ,'session': '',  'task': surveyname, 'date' : formatDate(), 'study': '', 'id': getQueryVariable('id') };
+
+        // Get info Promize
+        const getInfoPromise = new Promise((resolve, reject) => {
+            $.ajax({
+                type: "POST",
+                url: '/getInfo',
+                data: { 'id': expInfo.id },
+                dataType: 'JSON',
+                success: function (data) {
+                    resolve(data)
+                }
+            })
+        })
+            // Read getINFO 
+            .then((values) => {
+                console.log(values)
+                if (values.subject && values.session && values.study) {
+                    expInfo.participant = values.subject
+                    expInfo.study = values.study
+                    expInfo.session = values.session
+                    expInfo.run_id = getQueryVariable('run')
+                }
+
+                survey.onComplete.add(function (result) {
+                    //result.preventDefault();
+                    postSurveyData(result.data, expInfo.session, expInfo.participant);
+                });
+
+                $("#surveyElement").Survey({model: survey});
+    
+                $("#participant").text(expInfo.participant);
+                $("#session").text(expInfo.session);
+                $("#study").text(expInfo.study);
+
+            })
+
+        function postSurveyData(data, session, mkturkid) {
+            console.log('/link?id=' + expInfo.id  + '&index=' + (parseInt(getQueryVariable('index')) + 1))
+            $.ajax({
+                type: "POST",
+                url: '/save',
+                data: {
+                    "trials_data": data,
+                    "expInfo": expInfo
+                },
+                dataType: 'JSON',
+                statusCode: {
+                    200: function() {
+                        console.log('sucess saved on backend')
+                        console.log('/link?id=' + expInfo.id  + '&index=' + (parseInt(getQueryVariable('index')) + 1))
+                        window.location.replace('/link?id=' + expInfo.id  + '&index=' + (parseInt(getQueryVariable('index')) + 1))
+                    }
+                }
+            }) 
+                
+        }
+
+        var start = new Date().getTime(),
+            elapsed = '0.0';
+
+        // executes timerCallback every 100 ms
+        timerID = window.setInterval(function () {
+
+            var time = new Date().getTime() - start;
+            elapsed = Math.floor(time);
+
+            //alert(elapsed);
+            //$('#timeEl').text(elapsed + ' ms');
+
+            //displayTime(1);
+            timerLoop(elapsed);
+
+        }, 5);
+    </script>
+
+</body>
+
+</html>
