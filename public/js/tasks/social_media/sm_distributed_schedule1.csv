@@ -1,0 +1,561 @@
+﻿game_number,game_type,dislike_room,trial_num,mean_type,left_reward,right_reward,force_pos,left_mean,right_mean,left_topic,right_topic,ITI,max_score,min_score
+0,h1,0,0,HL,35,52,R,35,59,Baking,Knitting,0,65,32
+0,h1,0,1,HL,35,58,R,35,59,Baking,Knitting,0,65,32
+0,h1,0,2,HL,35,67,R,35,59,Baking,Knitting,0,65,32
+0,h1,0,3,HL,35,59,L,35,59,Baking,Knitting,0,65,32
+0,h1,0,4,HL,32,65,X,35,59,Baking,Knitting,1,65,32
+1,h6,0,0,HL,62,47,R,62,54,Fishing,Surfing,0,324,268
+1,h6,0,1,HL,62,53,R,62,54,Fishing,Surfing,0,324,268
+1,h6,0,2,HL,62,54,L,62,54,Fishing,Surfing,0,324,268
+1,h6,0,3,HL,62,62,R,62,54,Fishing,Surfing,0,324,268
+1,h6,0,4,HL,59,59,X,62,54,Fishing,Surfing,0,324,268
+1,h6,0,5,HL,63,48,X,62,54,Fishing,Surfing,0,324,268
+1,h6,0,6,HL,70,47,X,62,54,Fishing,Surfing,0,324,268
+1,h6,0,7,HL,53,62,X,62,54,Fishing,Surfing,0,324,268
+1,h6,0,8,HL,70,61,X,62,54,Fishing,Surfing,0.5,324,268
+2,h1,0,0,LH,53,60,L,56,60,Archery,Bowling,0,58,54
+2,h1,0,1,LH,64,60,L,56,60,Archery,Bowling,0,58,54
+2,h1,0,2,LH,51,60,L,56,60,Archery,Bowling,0,58,54
+2,h1,0,3,LH,56,60,R,56,60,Archery,Bowling,0,58,54
+2,h1,0,4,LH,54,58,X,56,60,Archery,Bowling,0.5,58,54
+3,h6,0,0,HL,59,38,R,59,47,80s Movies,Classic Literature,0,284,237
+3,h6,0,1,HL,59,51,R,59,47,80s Movies,Classic Literature,0,284,237
+3,h6,0,2,HL,59,47,L,59,47,80s Movies,Classic Literature,0,284,237
+3,h6,0,3,HL,59,52,R,59,47,80s Movies,Classic Literature,0,284,237
+3,h6,0,4,HL,56,50,X,59,47,80s Movies,Classic Literature,0,284,237
+3,h6,0,5,HL,48,44,X,59,47,80s Movies,Classic Literature,0,284,237
+3,h6,0,6,HL,50,38,X,59,47,80s Movies,Classic Literature,0,284,237
+3,h6,0,7,HL,68,47,X,59,47,80s Movies,Classic Literature,0,284,237
+3,h6,0,8,HL,62,58,X,59,47,80s Movies,Classic Literature,0.5,284,237
+4,h1,0,0,HL,40,36,R,40,42,Fencing,Karate,0,42,41
+4,h1,0,1,HL,40,41,R,40,42,Fencing,Karate,0,42,41
+4,h1,0,2,HL,40,49,R,40,42,Fencing,Karate,0,42,41
+4,h1,0,3,HL,40,42,L,40,42,Fencing,Karate,0,42,41
+4,h1,0,4,HL,41,42,X,40,42,Fencing,Karate,1,42,41
+5,h6,0,0,HL,42,43,R,42,50,Coding,Podcasts,0,264,208
+5,h6,0,1,HL,42,49,R,42,50,Coding,Podcasts,0,264,208
+5,h6,0,2,HL,42,50,L,42,50,Coding,Podcasts,0,264,208
+5,h6,0,3,HL,42,58,R,42,50,Coding,Podcasts,0,264,208
+5,h6,0,4,HL,39,55,X,42,50,Coding,Podcasts,0,264,208
+5,h6,0,5,HL,43,44,X,42,50,Coding,Podcasts,0,264,208
+5,h6,0,6,HL,50,43,X,42,50,Coding,Podcasts,0,264,208
+5,h6,0,7,HL,33,58,X,42,50,Coding,Podcasts,0,264,208
+5,h6,0,8,HL,50,57,X,42,50,Coding,Podcasts,1.5,264,208
+6,h1,0,0,LH,54,59,L,47,59,Salsa (Dance),Ballroom (Dance),0,63,43
+6,h1,0,1,LH,38,59,L,47,59,Salsa (Dance),Ballroom (Dance),0,63,43
+6,h1,0,2,LH,47,59,R,47,59,Salsa (Dance),Ballroom (Dance),0,63,43
+6,h1,0,3,LH,49,59,L,47,59,Salsa (Dance),Ballroom (Dance),0,63,43
+6,h1,0,4,LH,43,63,X,47,59,Salsa (Dance),Ballroom (Dance),1,63,43
+7,h6,0,0,HL,41,29,R,41,37,Microbiology,Astronomy,0,224,178
+7,h6,0,1,HL,41,37,L,41,37,Microbiology,Astronomy,0,224,178
+7,h6,0,2,HL,41,44,R,41,37,Microbiology,Astronomy,0,224,178
+7,h6,0,3,HL,41,38,R,41,37,Microbiology,Astronomy,0,224,178
+7,h6,0,4,HL,43,36,X,41,37,Microbiology,Astronomy,0,224,178
+7,h6,0,5,HL,42,22,X,41,37,Microbiology,Astronomy,0,224,178
+7,h6,0,6,HL,49,47,X,41,37,Microbiology,Astronomy,0,224,178
+7,h6,0,7,HL,47,40,X,41,37,Microbiology,Astronomy,0,224,178
+7,h6,0,8,HL,33,43,X,41,37,Microbiology,Astronomy,1.5,224,178
+8,h1,0,0,LH,33,40,L,32,40,Birding,Writing,0,42,28
+8,h1,0,1,LH,39,40,L,32,40,Birding,Writing,0,42,28
+8,h1,0,2,LH,32,40,R,32,40,Birding,Writing,0,42,28
+8,h1,0,3,LH,24,40,L,32,40,Birding,Writing,0,42,28
+8,h1,0,4,LH,28,42,X,32,40,Birding,Writing,1,42,28
+9,h6,0,0,LH,33,17,L,41,17,Silent Films,Western Movies,0,202,79
+9,h6,0,1,LH,42,17,L,41,17,Silent Films,Western Movies,0,202,79
+9,h6,0,2,LH,48,17,L,41,17,Silent Films,Western Movies,0,202,79
+9,h6,0,3,LH,40,17,R,41,17,Silent Films,Western Movies,0,202,79
+9,h6,0,4,LH,37,21,X,41,17,Silent Films,Western Movies,0,202,79
+9,h6,0,5,LH,46,11,X,41,17,Silent Films,Western Movies,0,202,79
+9,h6,0,6,LH,39,27,X,41,17,Silent Films,Western Movies,0,202,79
+9,h6,0,7,LH,32,8,X,41,17,Silent Films,Western Movies,0,202,79
+9,h6,0,8,LH,48,12,X,41,17,Silent Films,Western Movies,0.5,202,79
+10,h1,0,0,HL,65,53,R,65,61,Tap Dancing (Dance),Hip Hop (Dance),0,67,60
+10,h1,0,1,HL,65,61,L,65,61,Tap Dancing (Dance),Hip Hop (Dance),0,67,60
+10,h1,0,2,HL,65,68,R,65,61,Tap Dancing (Dance),Hip Hop (Dance),0,67,60
+10,h1,0,3,HL,65,62,R,65,61,Tap Dancing (Dance),Hip Hop (Dance),0,67,60
+10,h1,0,4,HL,67,60,X,65,61,Tap Dancing (Dance),Hip Hop (Dance),1,67,60
+11,h6,0,0,LH,34,40,L,42,40,Magic Tricks,Card Games,0,207,184
+11,h6,0,1,LH,50,40,L,42,40,Magic Tricks,Card Games,0,207,184
+11,h6,0,2,LH,42,40,L,42,40,Magic Tricks,Card Games,0,207,184
+11,h6,0,3,LH,42,40,R,42,40,Magic Tricks,Card Games,0,207,184
+11,h6,0,4,LH,41,39,X,42,40,Magic Tricks,Card Games,0,207,184
+11,h6,0,5,LH,36,35,X,42,40,Magic Tricks,Card Games,0,207,184
+11,h6,0,6,LH,47,46,X,42,40,Magic Tricks,Card Games,0,207,184
+11,h6,0,7,LH,33,32,X,42,40,Magic Tricks,Card Games,0,207,184
+11,h6,0,8,LH,50,32,X,42,40,Magic Tricks,Card Games,1.5,207,184
+12,h1,0,0,HL,53,32,R,53,41,Horseback Riding,Sailing,0,50,44
+12,h1,0,1,HL,53,45,R,53,41,Horseback Riding,Sailing,0,50,44
+12,h1,0,2,HL,53,41,L,53,41,Horseback Riding,Sailing,0,50,44
+12,h1,0,3,HL,53,46,R,53,41,Horseback Riding,Sailing,0,50,44
+12,h1,0,4,HL,50,44,X,53,41,Horseback Riding,Sailing,0.5,50,44
+13,h6,0,0,HL,15,32,R,15,39,Reality TV,Mystery Novels,0,155,69
+13,h6,0,1,HL,15,38,R,15,39,Reality TV,Mystery Novels,0,155,69
+13,h6,0,2,HL,15,47,R,15,39,Reality TV,Mystery Novels,0,155,69
+13,h6,0,3,HL,15,39,L,15,39,Reality TV,Mystery Novels,0,155,69
+13,h6,0,4,HL,8,33,X,15,39,Reality TV,Mystery Novels,0,155,69
+13,h6,0,5,HL,2,36,X,15,39,Reality TV,Mystery Novels,0,155,69
+13,h6,0,6,HL,21,20,X,15,39,Reality TV,Mystery Novels,0,155,69
+13,h6,0,7,HL,23,21,X,15,39,Reality TV,Mystery Novels,0,155,69
+13,h6,0,8,HL,18,42,X,15,39,Reality TV,Mystery Novels,1.5,155,69
+14,h1,0,0,LH,69,60,L,68,60,Origami,Skincare,0,64,62
+14,h1,0,1,LH,75,60,L,68,60,Origami,Skincare,0,64,62
+14,h1,0,2,LH,68,60,R,68,60,Origami,Skincare,0,64,62
+14,h1,0,3,LH,60,60,L,68,60,Origami,Skincare,0,64,62
+14,h1,0,4,LH,64,62,X,68,60,Origami,Skincare,0.5,64,62
+15,h6,0,0,HL,60,62,L,60,62,DJing,Botany,0,318,286
+15,h6,0,1,HL,60,56,R,60,62,DJing,Botany,0,318,286
+15,h6,0,2,HL,60,69,R,60,62,DJing,Botany,0,318,286
+15,h6,0,3,HL,60,61,R,60,62,DJing,Botany,0,318,286
+15,h6,0,4,HL,55,54,X,60,62,DJing,Botany,0,318,286
+15,h6,0,5,HL,62,64,X,60,62,DJing,Botany,0,318,286
+15,h6,0,6,HL,64,69,X,60,62,DJing,Botany,0,318,286
+15,h6,0,7,HL,51,62,X,60,62,DJing,Botany,0,318,286
+15,h6,0,8,HL,68,55,X,60,62,DJing,Botany,1,318,286
+16,h1,0,0,HL,63,32,R,63,39,Volleyball,Bicycling,0,60,45
+16,h1,0,1,HL,63,38,R,63,39,Volleyball,Bicycling,0,60,45
+16,h1,0,2,HL,63,47,R,63,39,Volleyball,Bicycling,0,60,45
+16,h1,0,3,HL,63,39,L,63,39,Volleyball,Bicycling,0,60,45
+16,h1,0,4,HL,60,45,X,63,39,Volleyball,Bicycling,1.5,60,45
+17,h6,0,0,HL,56,67,R,56,60,Philosophy,Environmentalism,0,313,270
+17,h6,0,1,HL,56,60,L,56,60,Philosophy,Environmentalism,0,313,270
+17,h6,0,2,HL,56,52,R,56,60,Philosophy,Environmentalism,0,313,270
+17,h6,0,3,HL,56,61,R,56,60,Philosophy,Environmentalism,0,313,270
+17,h6,0,4,HL,47,53,X,56,60,Philosophy,Environmentalism,0,313,270
+17,h6,0,5,HL,58,46,X,56,60,Philosophy,Environmentalism,0,313,270
+17,h6,0,6,HL,65,71,X,56,60,Philosophy,Environmentalism,0,313,270
+17,h6,0,7,HL,63,64,X,56,60,Philosophy,Environmentalism,0,313,270
+17,h6,0,8,HL,49,67,X,56,60,Philosophy,Environmentalism,1,313,270
+18,h1,0,0,LH,52,58,L,60,58,Ballet (Dance),Skiing,0,59,57
+18,h1,0,1,LH,68,58,L,60,58,Ballet (Dance),Skiing,0,59,57
+18,h1,0,2,LH,60,58,L,60,58,Ballet (Dance),Skiing,0,59,57
+18,h1,0,3,LH,60,58,R,60,58,Ballet (Dance),Skiing,0,59,57
+18,h1,0,4,LH,59,57,X,60,58,Ballet (Dance),Skiing,1,59,57
+19,h6,0,0,HL,59,62,R,59,71,Beach-combing,Candle Making,0,357,291
+19,h6,0,1,HL,59,75,R,59,71,Beach-combing,Candle Making,0,357,291
+19,h6,0,2,HL,59,71,L,59,71,Beach-combing,Candle Making,0,357,291
+19,h6,0,3,HL,59,76,R,59,71,Beach-combing,Candle Making,0,357,291
+19,h6,0,4,HL,63,74,X,59,71,Beach-combing,Candle Making,0,357,291
+19,h6,0,5,HL,48,68,X,59,71,Beach-combing,Candle Making,0,357,291
+19,h6,0,6,HL,50,62,X,59,71,Beach-combing,Candle Making,0,357,291
+19,h6,0,7,HL,68,71,X,59,71,Beach-combing,Candle Making,0,357,291
+19,h6,0,8,HL,62,82,X,59,71,Beach-combing,Candle Making,1,357,291
+20,h1,1,0,HL,65,48,R,65,41,Baseball,Basketball,0,68,35
+20,h1,1,1,HL,65,42,R,65,41,Baseball,Basketball,0,68,35
+20,h1,1,2,HL,65,33,R,65,41,Baseball,Basketball,0,68,35
+20,h1,1,3,HL,65,41,L,65,41,Baseball,Basketball,0,68,35
+20,h1,1,4,HL,68,35,X,65,41,Baseball,Basketball,1,68,35
+21,h6,1,0,HL,41,38,R,41,29,Tennis,Spelunking,0,209,143
+21,h6,1,1,HL,41,25,R,41,29,Tennis,Spelunking,0,209,143
+21,h6,1,2,HL,41,29,L,41,29,Tennis,Spelunking,0,209,143
+21,h6,1,3,HL,41,24,R,41,29,Tennis,Spelunking,0,209,143
+21,h6,1,4,HL,37,26,X,41,29,Tennis,Spelunking,0,209,143
+21,h6,1,5,HL,52,32,X,41,29,Tennis,Spelunking,0,209,143
+21,h6,1,6,HL,50,38,X,41,29,Tennis,Spelunking,0,209,143
+21,h6,1,7,HL,32,29,X,41,29,Tennis,Spelunking,0,209,143
+21,h6,1,8,HL,38,18,X,41,29,Tennis,Spelunking,1,209,143
+22,h1,1,0,LH,47,40,L,44,40,Country Music,Rap Music,0,46,42
+22,h1,1,1,LH,36,40,L,44,40,Country Music,Rap Music,0,46,42
+22,h1,1,2,LH,49,40,L,44,40,Country Music,Rap Music,0,46,42
+22,h1,1,3,LH,44,40,R,44,40,Country Music,Rap Music,0,46,42
+22,h1,1,4,LH,46,42,X,44,40,Country Music,Rap Music,1.5,46,42
+23,h6,1,0,HL,38,53,R,38,46,Coffee,Tea,0,232,176
+23,h6,1,1,HL,38,47,R,38,46,Coffee,Tea,0,232,176
+23,h6,1,2,HL,38,46,L,38,46,Coffee,Tea,0,232,176
+23,h6,1,3,HL,38,38,R,38,46,Coffee,Tea,0,232,176
+23,h6,1,4,HL,41,41,X,38,46,Coffee,Tea,0,232,176
+23,h6,1,5,HL,37,52,X,38,46,Coffee,Tea,0,232,176
+23,h6,1,6,HL,30,53,X,38,46,Coffee,Tea,0,232,176
+23,h6,1,7,HL,47,38,X,38,46,Coffee,Tea,0,232,176
+23,h6,1,8,HL,30,39,X,38,46,Coffee,Tea,1.5,232,176
+24,h1,1,0,LH,34,53,L,41,53,Action Movies,Sci-fi Movies,0,49,45
+24,h1,1,1,LH,50,53,L,41,53,Action Movies,Sci-fi Movies,0,49,45
+24,h1,1,2,LH,41,53,R,41,53,Action Movies,Sci-fi Movies,0,49,45
+24,h1,1,3,LH,39,53,L,41,53,Action Movies,Sci-fi Movies,0,49,45
+24,h1,1,4,LH,45,49,X,41,53,Action Movies,Sci-fi Movies,1,49,45
+25,h6,1,0,LH,67,83,L,59,83,American Football,Golf,0,421,298
+25,h6,1,1,LH,58,83,L,59,83,American Football,Golf,0,421,298
+25,h6,1,2,LH,52,83,L,59,83,American Football,Golf,0,421,298
+25,h6,1,3,LH,60,83,R,59,83,American Football,Golf,0,421,298
+25,h6,1,4,LH,63,79,X,59,83,American Football,Golf,0,421,298
+25,h6,1,5,LH,54,89,X,59,83,American Football,Golf,0,421,298
+25,h6,1,6,LH,61,73,X,59,83,American Football,Golf,0,421,298
+25,h6,1,7,LH,68,92,X,59,83,American Football,Golf,0,421,298
+25,h6,1,8,LH,52,88,X,59,83,American Football,Golf,1.5,421,298
+26,h1,1,0,LH,48,42,L,40,42,Sewing,Cooking,0,43,41
+26,h1,1,1,LH,32,42,L,40,42,Sewing,Cooking,0,43,41
+26,h1,1,2,LH,40,42,L,40,42,Sewing,Cooking,0,43,41
+26,h1,1,3,LH,40,42,R,40,42,Sewing,Cooking,0,43,41
+26,h1,1,4,LH,41,43,X,40,42,Sewing,Cooking,0.5,43,41
+27,h6,1,0,HL,59,71,R,59,63,Rock Music,Pop Music,0,322,276
+27,h6,1,1,HL,59,63,L,59,63,Rock Music,Pop Music,0,322,276
+27,h6,1,2,HL,59,56,R,59,63,Rock Music,Pop Music,0,322,276
+27,h6,1,3,HL,59,62,R,59,63,Rock Music,Pop Music,0,322,276
+27,h6,1,4,HL,57,64,X,59,63,Rock Music,Pop Music,0,322,276
+27,h6,1,5,HL,58,78,X,59,63,Rock Music,Pop Music,0,322,276
+27,h6,1,6,HL,51,53,X,59,63,Rock Music,Pop Music,0,322,276
+27,h6,1,7,HL,53,60,X,59,63,Rock Music,Pop Music,0,322,276
+27,h6,1,8,HL,67,57,X,59,63,Rock Music,Pop Music,0.5,322,276
+28,h1,1,0,LH,67,60,L,68,60,Romance Movies,Horror Movies,0,72,58
+28,h1,1,1,LH,61,60,L,68,60,Romance Movies,Horror Movies,0,72,58
+28,h1,1,2,LH,68,60,R,68,60,Romance Movies,Horror Movies,0,72,58
+28,h1,1,3,LH,76,60,L,68,60,Romance Movies,Horror Movies,0,72,58
+28,h1,1,4,LH,72,58,X,68,60,Romance Movies,Horror Movies,0.5,72,58
+29,h6,1,0,HL,44,33,R,44,40,Comedy Movies,Animated Movies,0,230,187
+29,h6,1,1,HL,44,40,L,44,40,Comedy Movies,Animated Movies,0,230,187
+29,h6,1,2,HL,44,48,R,44,40,Comedy Movies,Animated Movies,0,230,187
+29,h6,1,3,HL,44,39,R,44,40,Comedy Movies,Animated Movies,0,230,187
+29,h6,1,4,HL,53,47,X,44,40,Comedy Movies,Animated Movies,0,230,187
+29,h6,1,5,HL,42,54,X,44,40,Comedy Movies,Animated Movies,0,230,187
+29,h6,1,6,HL,35,29,X,44,40,Comedy Movies,Animated Movies,0,230,187
+29,h6,1,7,HL,37,36,X,44,40,Comedy Movies,Animated Movies,0,230,187
+29,h6,1,8,HL,51,33,X,44,40,Comedy Movies,Animated Movies,1,230,187
+30,h1,1,0,HL,60,64,R,60,58,Scuba Diving,Marine Biology,0,59,58
+30,h1,1,1,HL,60,59,R,60,58,Scuba Diving,Marine Biology,0,59,58
+30,h1,1,2,HL,60,51,R,60,58,Scuba Diving,Marine Biology,0,59,58
+30,h1,1,3,HL,60,58,L,60,58,Scuba Diving,Marine Biology,0,59,58
+30,h1,1,4,HL,59,58,X,60,58,Scuba Diving,Marine Biology,1,59,58
+31,h6,1,0,LH,51,19,L,43,19,Meditation,Drawing,0,218,101
+31,h6,1,1,LH,42,19,L,43,19,Meditation,Drawing,0,218,101
+31,h6,1,2,LH,36,19,L,43,19,Meditation,Drawing,0,218,101
+31,h6,1,3,LH,44,19,R,43,19,Meditation,Drawing,0,218,101
+31,h6,1,4,LH,47,15,X,43,19,Meditation,Drawing,0,218,101
+31,h6,1,5,LH,38,25,X,43,19,Meditation,Drawing,0,218,101
+31,h6,1,6,LH,45,9,X,43,19,Meditation,Drawing,0,218,101
+31,h6,1,7,LH,52,28,X,43,19,Meditation,Drawing,0,218,101
+31,h6,1,8,LH,36,24,X,43,19,Meditation,Drawing,0.5,218,101
+32,h1,1,0,LH,46,41,L,53,41,Summer (Season),Winter (Season),0,57,37
+32,h1,1,1,LH,62,41,L,53,41,Summer (Season),Winter (Season),0,57,37
+32,h1,1,2,LH,53,41,R,53,41,Summer (Season),Winter (Season),0,57,37
+32,h1,1,3,LH,51,41,L,53,41,Summer (Season),Winter (Season),0,57,37
+32,h1,1,4,LH,57,37,X,53,41,Summer (Season),Winter (Season),0.5,57,37
+33,h6,1,0,LH,66,60,L,58,60,Film-making,Scrap Booking,0,316,293
+33,h6,1,1,LH,50,60,L,58,60,Film-making,Scrap Booking,0,316,293
+33,h6,1,2,LH,58,60,L,58,60,Film-making,Scrap Booking,0,316,293
+33,h6,1,3,LH,58,60,R,58,60,Film-making,Scrap Booking,0,316,293
+33,h6,1,4,LH,59,61,X,58,60,Film-making,Scrap Booking,0,316,293
+33,h6,1,5,LH,64,65,X,58,60,Film-making,Scrap Booking,0,316,293
+33,h6,1,6,LH,53,54,X,58,60,Film-making,Scrap Booking,0,316,293
+33,h6,1,7,LH,67,68,X,58,60,Film-making,Scrap Booking,0,316,293
+33,h6,1,8,LH,50,68,X,58,60,Film-making,Scrap Booking,0.5,316,293
+34,h1,1,0,LH,31,40,L,32,40,Civil War History,Medieval History,0,38,36
+34,h1,1,1,LH,25,40,L,32,40,Civil War History,Medieval History,0,38,36
+34,h1,1,2,LH,32,40,R,32,40,Civil War History,Medieval History,0,38,36
+34,h1,1,3,LH,40,40,L,32,40,Civil War History,Medieval History,0,38,36
+34,h1,1,4,LH,36,38,X,32,40,Civil War History,Medieval History,1.5,38,36
+35,h6,1,0,HL,58,57,R,58,50,Jazz Music,Electronic Music,0,292,236
+35,h6,1,1,HL,58,51,R,58,50,Jazz Music,Electronic Music,0,292,236
+35,h6,1,2,HL,58,50,L,58,50,Jazz Music,Electronic Music,0,292,236
+35,h6,1,3,HL,58,42,R,58,50,Jazz Music,Electronic Music,0,292,236
+35,h6,1,4,HL,61,45,X,58,50,Jazz Music,Electronic Music,0,292,236
+35,h6,1,5,HL,57,56,X,58,50,Jazz Music,Electronic Music,0,292,236
+35,h6,1,6,HL,50,57,X,58,50,Jazz Music,Electronic Music,0,292,236
+35,h6,1,7,HL,67,42,X,58,50,Jazz Music,Electronic Music,0,292,236
+35,h6,1,8,HL,50,43,X,58,50,Jazz Music,Electronic Music,1,292,236
+36,h1,1,0,HL,37,68,R,37,61,Cars,Motorcycles,0,55,40
+36,h1,1,1,HL,37,62,R,37,61,Cars,Motorcycles,0,55,40
+36,h1,1,2,HL,37,53,R,37,61,Cars,Motorcycles,0,55,40
+36,h1,1,3,HL,37,61,L,37,61,Cars,Motorcycles,0,55,40
+36,h1,1,4,HL,40,55,X,37,61,Cars,Motorcycles,0.5,55,40
+37,h6,1,0,HL,41,62,R,41,53,Mythology,Zoology,0,263,216
+37,h6,1,1,HL,41,49,R,41,53,Mythology,Zoology,0,263,216
+37,h6,1,2,HL,41,53,L,41,53,Mythology,Zoology,0,263,216
+37,h6,1,3,HL,41,48,R,41,53,Mythology,Zoology,0,263,216
+37,h6,1,4,HL,44,50,X,41,53,Mythology,Zoology,0,263,216
+37,h6,1,5,HL,52,56,X,41,53,Mythology,Zoology,0,263,216
+37,h6,1,6,HL,50,62,X,41,53,Mythology,Zoology,0,263,216
+37,h6,1,7,HL,32,53,X,41,53,Mythology,Zoology,0,263,216
+37,h6,1,8,HL,38,42,X,41,53,Mythology,Zoology,1.5,263,216
+38,h1,1,0,LH,43,44,L,40,44,Fall (Season),Spring (Season),0,46,42
+38,h1,1,1,LH,32,44,L,40,44,Fall (Season),Spring (Season),0,46,42
+38,h1,1,2,LH,45,44,L,40,44,Fall (Season),Spring (Season),0,46,42
+38,h1,1,3,LH,40,44,R,40,44,Fall (Season),Spring (Season),0,46,42
+38,h1,1,4,LH,42,46,X,40,44,Fall (Season),Spring (Season),1.5,46,42
+39,h6,1,0,HL,40,38,L,40,38,Carpentry,Pottery,0,214,182
+39,h6,1,1,HL,40,44,R,40,38,Carpentry,Pottery,0,214,182
+39,h6,1,2,HL,40,31,R,40,38,Carpentry,Pottery,0,214,182
+39,h6,1,3,HL,40,39,R,40,38,Carpentry,Pottery,0,214,182
+39,h6,1,4,HL,45,46,X,40,38,Carpentry,Pottery,0,214,182
+39,h6,1,5,HL,38,36,X,40,38,Carpentry,Pottery,0,214,182
+39,h6,1,6,HL,36,31,X,40,38,Carpentry,Pottery,0,214,182
+39,h6,1,7,HL,49,38,X,40,38,Carpentry,Pottery,0,214,182
+39,h6,1,8,HL,32,45,X,40,38,Carpentry,Pottery,1.5,214,182
+40,h1,0,0,LH,57,56,L,60,56,Guitar,Piano,0,58,54
+40,h1,0,1,LH,68,56,L,60,56,Guitar,Piano,0,58,54
+40,h1,0,2,LH,55,56,L,60,56,Guitar,Piano,0,58,54
+40,h1,0,3,LH,60,56,R,60,56,Guitar,Piano,0,58,54
+40,h1,0,4,LH,58,54,X,60,56,Guitar,Piano,0.5,58,54
+41,h6,0,0,LH,49,81,L,57,81,Yoga,Singing,0,399,282
+41,h6,0,1,LH,58,81,L,57,81,Yoga,Singing,0,399,282
+41,h6,0,2,LH,64,81,L,57,81,Yoga,Singing,0,399,282
+41,h6,0,3,LH,56,81,R,57,81,Yoga,Singing,0,399,282
+41,h6,0,4,LH,53,85,X,57,81,Yoga,Singing,0,399,282
+41,h6,0,5,LH,62,75,X,57,81,Yoga,Singing,0,399,282
+41,h6,0,6,LH,55,91,X,57,81,Yoga,Singing,0,399,282
+41,h6,0,7,LH,48,72,X,57,81,Yoga,Singing,0,399,282
+41,h6,0,8,LH,64,76,X,57,81,Yoga,Singing,0.5,399,282
+42,h1,0,0,LH,66,47,L,59,47,Marathons,The Olympics,0,55,51
+42,h1,0,1,LH,50,47,L,59,47,Marathons,The Olympics,0,55,51
+42,h1,0,2,LH,59,47,R,59,47,Marathons,The Olympics,0,55,51
+42,h1,0,3,LH,61,47,L,59,47,Marathons,The Olympics,0,55,51
+42,h1,0,4,LH,55,51,X,59,47,Marathons,The Olympics,0.5,55,51
+43,h6,0,0,LH,32,39,L,35,39,Tattooing,Hairdressing,0,216,152
+43,h6,0,1,LH,43,39,L,35,39,Tattooing,Hairdressing,0,216,152
+43,h6,0,2,LH,30,39,L,35,39,Tattooing,Hairdressing,0,216,152
+43,h6,0,3,LH,35,39,R,35,39,Tattooing,Hairdressing,0,216,152
+43,h6,0,4,LH,26,44,X,35,39,Tattooing,Hairdressing,0,216,152
+43,h6,0,5,LH,37,33,X,35,39,Tattooing,Hairdressing,0,216,152
+43,h6,0,6,LH,28,45,X,35,39,Tattooing,Hairdressing,0,216,152
+43,h6,0,7,LH,44,28,X,35,39,Tattooing,Hairdressing,0,216,152
+43,h6,0,8,LH,37,46,X,35,39,Tattooing,Hairdressing,1.5,216,152
+44,h1,0,0,LH,28,60,L,36,60,Aviation,Space Exploration,0,64,32
+44,h1,0,1,LH,37,60,L,36,60,Aviation,Space Exploration,0,64,32
+44,h1,0,2,LH,43,60,L,36,60,Aviation,Space Exploration,0,64,32
+44,h1,0,3,LH,35,60,R,36,60,Aviation,Space Exploration,0,64,32
+44,h1,0,4,LH,32,64,X,36,60,Aviation,Space Exploration,1.5,64,32
+45,h6,0,0,LH,50,60,L,58,60,Astrology,Fossils,0,298,273
+45,h6,0,1,LH,66,60,L,58,60,Astrology,Fossils,0,298,273
+45,h6,0,2,LH,58,60,L,58,60,Astrology,Fossils,0,298,273
+45,h6,0,3,LH,58,60,R,58,60,Astrology,Fossils,0,298,273
+45,h6,0,4,LH,57,59,X,58,60,Astrology,Fossils,0,298,273
+45,h6,0,5,LH,52,55,X,58,60,Astrology,Fossils,0,298,273
+45,h6,0,6,LH,63,66,X,58,60,Astrology,Fossils,0,298,273
+45,h6,0,7,LH,49,52,X,58,60,Astrology,Fossils,0,298,273
+45,h6,0,8,LH,66,52,X,58,60,Astrology,Fossils,0.5,298,273
+46,h1,0,0,HL,61,57,R,61,65,Soccer (Football),Frisbee,0,64,63
+46,h1,0,1,HL,61,65,L,61,65,Soccer (Football),Frisbee,0,64,63
+46,h1,0,2,HL,61,72,R,61,65,Soccer (Football),Frisbee,0,64,63
+46,h1,0,3,HL,61,66,R,61,65,Soccer (Football),Frisbee,0,64,63
+46,h1,0,4,HL,63,64,X,61,65,Soccer (Football),Frisbee,0.5,64,63
+47,h6,0,0,LH,54,59,L,47,59,Rafting,Car Racing,0,307,217
+47,h6,0,1,LH,38,59,L,47,59,Rafting,Car Racing,0,307,217
+47,h6,0,2,LH,47,59,R,47,59,Rafting,Car Racing,0,307,217
+47,h6,0,3,LH,49,59,L,47,59,Rafting,Car Racing,0,307,217
+47,h6,0,4,LH,43,63,X,47,59,Rafting,Car Racing,0,307,217
+47,h6,0,5,LH,48,50,X,47,59,Rafting,Car Racing,0,307,217
+47,h6,0,6,LH,37,67,X,47,59,Rafting,Car Racing,0,307,217
+47,h6,0,7,LH,40,64,X,47,59,Rafting,Car Racing,0,307,217
+47,h6,0,8,LH,63,49,X,47,59,Rafting,Car Racing,0.5,307,217
+48,h1,0,0,HL,60,52,R,60,58,Sneakers,Fashion,0,61,58
+48,h1,0,1,HL,60,57,R,60,58,Sneakers,Fashion,0,61,58
+48,h1,0,2,HL,60,65,R,60,58,Sneakers,Fashion,0,61,58
+48,h1,0,3,HL,60,58,L,60,58,Sneakers,Fashion,0,61,58
+48,h1,0,4,HL,61,58,X,60,58,Sneakers,Fashion,1,61,58
+49,h6,0,0,LH,46,27,L,39,27,Cats,Holidays,0,197,127
+49,h6,0,1,LH,30,27,L,39,27,Cats,Holidays,0,197,127
+49,h6,0,2,LH,39,27,R,39,27,Cats,Holidays,0,197,127
+49,h6,0,3,LH,41,27,L,39,27,Cats,Holidays,0,197,127
+49,h6,0,4,LH,35,31,X,39,27,Cats,Holidays,0,197,127
+49,h6,0,5,LH,40,18,X,39,27,Cats,Holidays,0,197,127
+49,h6,0,6,LH,29,35,X,39,27,Cats,Holidays,0,197,127
+49,h6,0,7,LH,32,32,X,39,27,Cats,Holidays,0,197,127
+49,h6,0,8,LH,55,17,X,39,27,Cats,Holidays,1.5,197,127
+50,h1,0,0,HL,32,33,R,32,40,Documentaries,Travel,0,45,29
+50,h1,0,1,HL,32,40,L,32,40,Documentaries,Travel,0,45,29
+50,h1,0,2,HL,32,39,R,32,40,Documentaries,Travel,0,45,29
+50,h1,0,3,HL,32,48,R,32,40,Documentaries,Travel,0,45,29
+50,h1,0,4,HL,29,45,X,32,40,Documentaries,Travel,1,45,29
+51,h6,0,0,HL,64,33,R,64,40,Woodcarving,Classical Music,0,317,197
+51,h6,0,1,HL,64,39,R,64,40,Woodcarving,Classical Music,0,317,197
+51,h6,0,2,HL,64,48,R,64,40,Woodcarving,Classical Music,0,317,197
+51,h6,0,3,HL,64,40,L,64,40,Woodcarving,Classical Music,0,317,197
+51,h6,0,4,HL,57,34,X,64,40,Woodcarving,Classical Music,0,317,197
+51,h6,0,5,HL,51,47,X,64,40,Woodcarving,Classical Music,0,317,197
+51,h6,0,6,HL,70,31,X,64,40,Woodcarving,Classical Music,0,317,197
+51,h6,0,7,HL,72,32,X,64,40,Woodcarving,Classical Music,0,317,197
+51,h6,0,8,LH,67,53,X,64,40,Woodcarving,Classical Music,1.5,317,197
+52,h1,0,0,LH,32,42,L,40,42,Investing,Crossword,0,41,39
+52,h1,0,1,LH,48,42,L,40,42,Investing,Crossword,0,41,39
+52,h1,0,2,LH,40,42,L,40,42,Investing,Crossword,0,41,39
+52,h1,0,3,LH,40,42,R,40,42,Investing,Crossword,0,41,39
+52,h1,0,4,LH,39,41,X,40,42,Investing,Crossword,1,41,39
+53,h6,0,0,LH,40,39,L,43,39,Modeling,Blogging,0,232,176
+53,h6,0,1,LH,51,39,L,43,39,Modeling,Blogging,0,232,176
+53,h6,0,2,LH,38,39,L,43,39,Modeling,Blogging,0,232,176
+53,h6,0,3,LH,43,39,R,43,39,Modeling,Blogging,0,232,176
+53,h6,0,4,LH,34,44,X,43,39,Modeling,Blogging,0,232,176
+53,h6,0,5,LH,45,33,X,43,39,Modeling,Blogging,0,232,176
+53,h6,0,6,LH,36,45,X,43,39,Modeling,Blogging,0,232,176
+53,h6,0,7,LH,52,28,X,43,39,Modeling,Blogging,0,232,176
+53,h6,0,8,LH,45,46,X,43,39,Modeling,Blogging,1,232,176
+54,h1,0,0,HL,68,53,R,68,60,Video Games,Photography,0,65,65
+54,h1,0,1,HL,68,59,R,68,60,Video Games,Photography,0,65,65
+54,h1,0,2,HL,68,60,L,68,60,Video Games,Photography,0,65,65
+54,h1,0,3,HL,68,68,R,68,60,Video Games,Photography,0,65,65
+54,h1,0,4,HL,65,65,X,68,60,Video Games,Photography,1,65,65
+55,h6,0,0,LH,61,52,L,60,52,Beekeeping,Jewelry Making,0,309,243
+55,h6,0,1,LH,67,52,L,60,52,Beekeeping,Jewelry Making,0,309,243
+55,h6,0,2,LH,60,52,R,60,52,Beekeeping,Jewelry Making,0,309,243
+55,h6,0,3,LH,52,52,L,60,52,Beekeeping,Jewelry Making,0,309,243
+55,h6,0,4,LH,56,54,X,60,52,Beekeeping,Jewelry Making,0,309,243
+55,h6,0,5,LH,68,44,X,60,52,Beekeeping,Jewelry Making,0,309,243
+55,h6,0,6,LH,66,42,X,60,52,Beekeeping,Jewelry Making,0,309,243
+55,h6,0,7,LH,51,61,X,60,52,Beekeeping,Jewelry Making,0,309,243
+55,h6,0,8,LH,52,58,X,60,52,Beekeeping,Jewelry Making,1.5,309,243
+56,h1,0,0,LH,52,36,L,60,36,Boxing,Weightlifting,0,56,40
+56,h1,0,1,LH,61,36,L,60,36,Boxing,Weightlifting,0,56,40
+56,h1,0,2,LH,67,36,L,60,36,Boxing,Weightlifting,0,56,40
+56,h1,0,3,LH,59,36,R,60,36,Boxing,Weightlifting,0,56,40
+56,h1,0,4,LH,56,40,X,60,36,Boxing,Weightlifting,0.5,56,40
+57,h6,0,0,HL,40,32,R,40,38,Shopping,Makeup,0,214,184
+57,h6,0,1,HL,40,37,R,40,38,Shopping,Makeup,0,214,184
+57,h6,0,2,HL,40,45,R,40,38,Shopping,Makeup,0,214,184
+57,h6,0,3,HL,40,38,L,40,38,Shopping,Makeup,0,214,184
+57,h6,0,4,HL,41,38,X,40,38,Shopping,Makeup,0,214,184
+57,h6,0,5,HL,42,40,X,40,38,Shopping,Makeup,0,214,184
+57,h6,0,6,HL,44,45,X,40,38,Shopping,Makeup,0,214,184
+57,h6,0,7,HL,31,38,X,40,38,Shopping,Makeup,0,214,184
+57,h6,0,8,HL,48,31,X,40,38,Shopping,Makeup,1,214,184
+58,h1,0,0,HL,41,44,R,41,53,Poetry,Theater,0,56,38
+58,h1,0,1,HL,41,57,R,41,53,Poetry,Theater,0,56,38
+58,h1,0,2,HL,41,53,L,41,53,Poetry,Theater,0,56,38
+58,h1,0,3,HL,41,58,R,41,53,Poetry,Theater,0,56,38
+58,h1,0,4,HL,38,56,X,41,53,Poetry,Theater,1.5,56,38
+59,h6,0,0,LH,41,48,L,40,48,Disney,Dogs,0,255,177
+59,h6,0,1,LH,47,48,L,40,48,Disney,Dogs,0,255,177
+59,h6,0,2,LH,40,48,R,40,48,Disney,Dogs,0,255,177
+59,h6,0,3,LH,32,48,L,40,48,Disney,Dogs,0,255,177
+59,h6,0,4,LH,36,50,X,40,48,Disney,Dogs,0,255,177
+59,h6,0,5,LH,48,40,X,40,48,Disney,Dogs,0,255,177
+59,h6,0,6,LH,46,38,X,40,48,Disney,Dogs,0,255,177
+59,h6,0,7,LH,31,57,X,40,48,Disney,Dogs,0,255,177
+59,h6,0,8,LH,32,54,X,40,48,Disney,Dogs,1.5,255,177
+60,h1,1,0,HL,68,67,R,68,60,Robotics,Chess,0,71,55
+60,h1,1,1,HL,68,60,L,68,60,Robotics,Chess,0,71,55
+60,h1,1,2,HL,68,61,R,68,60,Robotics,Chess,0,71,55
+60,h1,1,3,HL,68,52,R,68,60,Robotics,Chess,0,71,55
+60,h1,1,4,HL,71,55,X,68,60,Robotics,Chess,0.5,71,55
+61,h6,1,0,HL,60,68,R,60,62,Hockey,Hiking,0,316,286
+61,h6,1,1,HL,60,63,R,60,62,Hockey,Hiking,0,316,286
+61,h6,1,2,HL,60,55,R,60,62,Hockey,Hiking,0,316,286
+61,h6,1,3,HL,60,62,L,60,62,Hockey,Hiking,0,316,286
+61,h6,1,4,HL,59,62,X,60,62,Hockey,Hiking,0,316,286
+61,h6,1,5,HL,58,60,X,60,62,Hockey,Hiking,0,316,286
+61,h6,1,6,HL,56,55,X,60,62,Hockey,Hiking,0,316,286
+61,h6,1,7,HL,69,62,X,60,62,Hockey,Hiking,0,316,286
+61,h6,1,8,HL,52,69,X,60,62,Hockey,Hiking,1.5,316,286
+62,h1,1,0,HL,47,68,R,47,59,Off-Roading,Rock Climbing,0,56,50
+62,h1,1,1,HL,47,55,R,47,59,Off-Roading,Rock Climbing,0,56,50
+62,h1,1,2,HL,47,59,L,47,59,Off-Roading,Rock Climbing,0,56,50
+62,h1,1,3,HL,47,54,R,47,59,Off-Roading,Rock Climbing,0,56,50
+62,h1,1,4,HL,50,56,X,47,59,Off-Roading,Rock Climbing,1,56,50
+63,h6,1,0,HL,85,68,R,85,61,Farming,Gardening,0,431,345
+63,h6,1,1,HL,85,62,R,85,61,Farming,Gardening,0,431,345
+63,h6,1,2,HL,85,53,R,85,61,Farming,Gardening,0,431,345
+63,h6,1,3,HL,85,61,L,85,61,Farming,Gardening,0,431,345
+63,h6,1,4,HL,92,67,X,85,61,Farming,Gardening,0,431,345
+63,h6,1,5,HL,98,64,X,85,61,Farming,Gardening,0,431,345
+63,h6,1,6,HL,79,80,X,85,61,Farming,Gardening,0,431,345
+63,h6,1,7,HL,77,79,X,85,61,Farming,Gardening,0,431,345
+63,h6,1,8,HL,82,58,X,85,61,Farming,Gardening,1.5,431,345
+64,h1,1,0,HL,32,47,R,32,40,Crocheting,Journaling,0,35,35
+64,h1,1,1,HL,32,41,R,32,40,Crocheting,Journaling,0,35,35
+64,h1,1,2,HL,32,40,L,32,40,Crocheting,Journaling,0,35,35
+64,h1,1,3,HL,32,32,R,32,40,Crocheting,Journaling,0,35,35
+64,h1,1,4,HL,35,35,X,32,40,Crocheting,Journaling,0.5,35,35
+65,h6,1,0,LH,68,61,L,65,61,Swimming,Cliff Diving,0,348,284
+65,h6,1,1,LH,57,61,L,65,61,Swimming,Cliff Diving,0,348,284
+65,h6,1,2,LH,70,61,L,65,61,Swimming,Cliff Diving,0,348,284
+65,h6,1,3,LH,65,61,R,65,61,Swimming,Cliff Diving,0,348,284
+65,h6,1,4,LH,74,56,X,65,61,Swimming,Cliff Diving,0,348,284
+65,h6,1,5,LH,63,67,X,65,61,Swimming,Cliff Diving,0,348,284
+65,h6,1,6,LH,72,55,X,65,61,Swimming,Cliff Diving,0,348,284
+65,h6,1,7,LH,56,72,X,65,61,Swimming,Cliff Diving,0,348,284
+65,h6,1,8,LH,63,54,X,65,61,Swimming,Cliff Diving,1.5,348,284
+66,h1,1,0,LH,68,58,L,60,58,Skateboarding,Skydiving,0,61,59
+66,h1,1,1,LH,52,58,L,60,58,Skateboarding,Skydiving,0,61,59
+66,h1,1,2,LH,60,58,L,60,58,Skateboarding,Skydiving,0,61,59
+66,h1,1,3,LH,60,58,R,60,58,Skateboarding,Skydiving,0,61,59
+66,h1,1,4,LH,61,59,X,60,58,Skateboarding,Skydiving,1,61,59
+67,h6,1,0,HL,36,67,R,36,60,Parkour,Cheerleading,0,303,183
+67,h6,1,1,HL,36,61,R,36,60,Parkour,Cheerleading,0,303,183
+67,h6,1,2,HL,36,52,R,36,60,Parkour,Cheerleading,0,303,183
+67,h6,1,3,HL,36,60,L,36,60,Parkour,Cheerleading,0,303,183
+67,h6,1,4,HL,43,66,X,36,60,Parkour,Cheerleading,0,303,183
+67,h6,1,5,HL,49,53,X,36,60,Parkour,Cheerleading,0,303,183
+67,h6,1,6,HL,30,69,X,36,60,Parkour,Cheerleading,0,303,183
+67,h6,1,7,HL,28,68,X,36,60,Parkour,Cheerleading,0,303,183
+67,h6,1,8,LH,33,47,X,36,60,Parkour,Cheerleading,1,303,183
+68,h1,1,0,HL,59,56,R,59,47,Ice Skating,Gymnastics,0,62,44
+68,h1,1,1,HL,59,43,R,59,47,Ice Skating,Gymnastics,0,62,44
+68,h1,1,2,HL,59,47,L,59,47,Ice Skating,Gymnastics,0,62,44
+68,h1,1,3,HL,59,42,R,59,47,Ice Skating,Gymnastics,0,62,44
+68,h1,1,4,HL,62,44,X,59,47,Ice Skating,Gymnastics,0.5,62,44
+69,h6,1,0,LH,59,52,L,60,52,Snowboarding,Paintball,0,323,245
+69,h6,1,1,LH,53,52,L,60,52,Snowboarding,Paintball,0,323,245
+69,h6,1,2,LH,60,52,R,60,52,Snowboarding,Paintball,0,323,245
+69,h6,1,3,LH,68,52,L,60,52,Snowboarding,Paintball,0,323,245
+69,h6,1,4,LH,64,50,X,60,52,Snowboarding,Paintball,0,323,245
+69,h6,1,5,LH,52,60,X,60,52,Snowboarding,Paintball,0,323,245
+69,h6,1,6,LH,54,62,X,60,52,Snowboarding,Paintball,0,323,245
+69,h6,1,7,LH,69,43,X,60,52,Snowboarding,Paintball,0,323,245
+69,h6,1,8,LH,68,46,X,60,52,Snowboarding,Paintball,1.5,323,245
+70,h1,1,0,HL,40,48,R,40,42,Kayaking,Camping,0,42,39
+70,h1,1,1,HL,40,43,R,40,42,Kayaking,Camping,0,42,39
+70,h1,1,2,HL,40,35,R,40,42,Kayaking,Camping,0,42,39
+70,h1,1,3,HL,40,42,L,40,42,Kayaking,Camping,0,42,39
+70,h1,1,4,HL,39,42,X,40,42,Kayaking,Camping,1.5,42,39
+71,h6,1,0,LH,46,41,L,53,41,Pool,Aquariums,0,283,193
+71,h6,1,1,LH,62,41,L,53,41,Pool,Aquariums,0,283,193
+71,h6,1,2,LH,53,41,R,53,41,Pool,Aquariums,0,283,193
+71,h6,1,3,LH,51,41,L,53,41,Pool,Aquariums,0,283,193
+71,h6,1,4,LH,57,37,X,53,41,Pool,Aquariums,0,283,193
+71,h6,1,5,LH,52,50,X,53,41,Pool,Aquariums,0,283,193
+71,h6,1,6,LH,63,33,X,53,41,Pool,Aquariums,0,283,193
+71,h6,1,7,LH,60,36,X,53,41,Pool,Aquariums,0,283,193
+71,h6,1,8,LH,37,51,X,53,41,Pool,Aquariums,1,283,193
+72,h1,1,0,LH,72,40,L,64,40,Violin,Drums,0,68,36
+72,h1,1,1,LH,63,40,L,64,40,Violin,Drums,0,68,36
+72,h1,1,2,LH,57,40,L,64,40,Violin,Drums,0,68,36
+72,h1,1,3,LH,65,40,R,64,40,Violin,Drums,0,68,36
+72,h1,1,4,LH,68,36,X,64,40,Violin,Drums,0.5,68,36
+73,h6,1,0,LH,39,48,L,40,48,Puzzles,Geology,0,257,191
+73,h6,1,1,LH,33,48,L,40,48,Puzzles,Geology,0,257,191
+73,h6,1,2,LH,40,48,R,40,48,Puzzles,Geology,0,257,191
+73,h6,1,3,LH,48,48,L,40,48,Puzzles,Geology,0,257,191
+73,h6,1,4,LH,44,46,X,40,48,Puzzles,Geology,0,257,191
+73,h6,1,5,LH,32,56,X,40,48,Puzzles,Geology,0,257,191
+73,h6,1,6,LH,34,58,X,40,48,Puzzles,Geology,0,257,191
+73,h6,1,7,LH,49,39,X,40,48,Puzzles,Geology,0,257,191
+73,h6,1,8,LH,48,42,X,40,48,Puzzles,Geology,1.5,257,191
+74,h1,1,0,HL,35,47,R,35,39,Welding,Sculpting,0,40,33
+74,h1,1,1,HL,35,39,L,35,39,Welding,Sculpting,0,40,33
+74,h1,1,2,HL,35,32,R,35,39,Welding,Sculpting,0,40,33
+74,h1,1,3,HL,35,38,R,35,39,Welding,Sculpting,0,40,33
+74,h1,1,4,HL,33,40,X,35,39,Welding,Sculpting,1,40,33
+75,h6,1,0,LH,60,61,L,57,61,Food,Anime,0,324,268
+75,h6,1,1,LH,49,61,L,57,61,Food,Anime,0,324,268
+75,h6,1,2,LH,62,61,L,57,61,Food,Anime,0,324,268
+75,h6,1,3,LH,57,61,R,57,61,Food,Anime,0,324,268
+75,h6,1,4,LH,66,56,X,57,61,Food,Anime,0,324,268
+75,h6,1,5,LH,55,67,X,57,61,Food,Anime,0,324,268
+75,h6,1,6,LH,64,55,X,57,61,Food,Anime,0,324,268
+75,h6,1,7,LH,48,72,X,57,61,Food,Anime,0,324,268
+75,h6,1,8,LH,55,54,X,57,61,Food,Anime,0.5,324,268
+76,h1,1,0,LH,48,64,L,40,64,Couponing,Geocaching,0,60,44
+76,h1,1,1,LH,39,64,L,40,64,Couponing,Geocaching,0,60,44
+76,h1,1,2,LH,33,64,L,40,64,Couponing,Geocaching,0,60,44
+76,h1,1,3,LH,41,64,R,40,64,Couponing,Geocaching,0,60,44
+76,h1,1,4,LH,44,60,X,40,64,Couponing,Geocaching,1,60,44
+77,h6,1,0,LH,50,40,L,42,40,Interior Design,Thrifting,0,227,202
+77,h6,1,1,LH,34,40,L,42,40,Interior Design,Thrifting,0,227,202
+77,h6,1,2,LH,42,40,L,42,40,Interior Design,Thrifting,0,227,202
+77,h6,1,3,LH,42,40,R,42,40,Interior Design,Thrifting,0,227,202
+77,h6,1,4,LH,43,41,X,42,40,Interior Design,Thrifting,0,227,202
+77,h6,1,5,LH,48,45,X,42,40,Interior Design,Thrifting,0,227,202
+77,h6,1,6,LH,37,34,X,42,40,Interior Design,Thrifting,0,227,202
+77,h6,1,7,LH,51,48,X,42,40,Interior Design,Thrifting,0,227,202
+77,h6,1,8,LH,34,48,X,42,40,Interior Design,Thrifting,0.5,227,202
+78,h1,1,0,HL,39,43,R,39,35,Graphic Design,Calligraphy,0,37,36
+78,h1,1,1,HL,39,35,L,39,35,Graphic Design,Calligraphy,0,37,36
+78,h1,1,2,HL,39,28,R,39,35,Graphic Design,Calligraphy,0,37,36
+78,h1,1,3,HL,39,34,R,39,35,Graphic Design,Calligraphy,0,37,36
+78,h1,1,4,HL,37,36,X,39,35,Graphic Design,Calligraphy,0.5,37,36
+79,h6,1,0,LH,54,73,L,61,73,Prepping,Shakespeare,0,373,303
+79,h6,1,1,LH,70,73,L,61,73,Prepping,Shakespeare,0,373,303
+79,h6,1,2,LH,61,73,R,61,73,Prepping,Shakespeare,0,373,303
+79,h6,1,3,LH,59,73,L,61,73,Prepping,Shakespeare,0,373,303
+79,h6,1,4,LH,65,69,X,61,73,Prepping,Shakespeare,0,373,303
+79,h6,1,5,LH,60,82,X,61,73,Prepping,Shakespeare,0,373,303
+79,h6,1,6,LH,71,65,X,61,73,Prepping,Shakespeare,0,373,303
+79,h6,1,7,LH,68,68,X,61,73,Prepping,Shakespeare,0,373,303
+79,h6,1,8,LH,45,83,X,61,73,Prepping,Shakespeare,1.5,373,303
