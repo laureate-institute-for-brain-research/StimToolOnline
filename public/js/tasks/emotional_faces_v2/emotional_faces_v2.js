@@ -44,8 +44,8 @@ import { Sound } from '/lib/sound-2020.1.js';
 
 // TASAK PARAMS
 var practice = false;
-var LEFT_KEY = 'comma'
-var RIGHT_KEY = 'period'
+var LEFT_KEY = 'left'
+var RIGHT_KEY = 'right'
 var keyList = [LEFT_KEY, RIGHT_KEY]
 
 var highOfferVal = 80
@@ -445,8 +445,8 @@ var resources = [
 	{ name: 'rate_faces_schedule.csv', path: '/js/tasks/emotional_faces_v2/rate_faces_schedule.csv' }, // faces lists
 	{ name: 'user.png', path: '/js/tasks/emotional_faces_v2/media/user.png' },
 	{ name: 'user_filled.png', path: '/js/tasks/emotional_faces_v2/media/user_filled.png' },
-	{ name: 'PRACTICE_ready', path: '/js/tasks/emotional_faces_v2/media/instructions/Slide15.jpeg'},
-	{ name: 'MAIN_ready', path: '/js/tasks/emotional_faces_v2/media/instructions/Slide16.jpeg' },
+	{ name: 'PRACTICE_ready', path: '/js/tasks/emotional_faces_v2/media/instructions/Slide16.JPG'},
+	{ name: 'MAIN_ready', path: '/js/tasks/emotional_faces_v2/media/instructions/Slide17.JPG' },
 	{ name: 'PRACTICE_ready_audio.mp3', path: '/js/tasks/emotional_faces_v2/media/instructions_audio/Slide15.mp3' },
 	{ name: 'MAIN_ready_audio.mp3', path: '/js/tasks/emotional_faces_v2/media/instructions_audio/Slide16.mp3'},
 	{ name: 'male.png', path: '/js/tasks/emotional_faces_v2/media/male.png' },

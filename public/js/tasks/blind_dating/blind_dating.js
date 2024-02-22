@@ -30,8 +30,8 @@ import { Sound } from '/lib/sound-2020.1.js';
 
 // TASAK PARAMS
 var practice = false;
-var LEFT_KEY = 'comma'
-var RIGHT_KEY = 'period'
+var LEFT_KEY = 'left'
+var RIGHT_KEY = 'right'
 var keyList = [LEFT_KEY, RIGHT_KEY]
 
 var highOfferVal = 90
@@ -280,7 +280,7 @@ var resources = [
 	{ name: 'practice_schedule.csv', path: '/js/tasks/blind_dating/practice_schedule.csv'},
 	{ name: 'user.png', path: '/js/tasks/blind_dating/media/user.png' },
 	{ name: 'user_filled.png', path: '/js/tasks/blind_dating/media/user_filled.png'},
-	{ name: 'ready.jpeg', path: '/js/tasks/blind_dating/media/instructions/Slide22.jpeg' },
+	{ name: 'ready.jpeg', path: '/js/tasks/blind_dating/media/instructions/Slide23.JPG' },
 	{ name: 'MAIN_ready_audio.mp3', path: '/js/tasks/blind_dating/media/instructions_audio/Slide22.mp3'},
 	{ name: 'male.png', path: '/js/tasks/blind_dating/media/male.png' },
 	{ name: 'female.png', path: '/js/tasks/blind_dating/media/female.png' },

@@ -422,8 +422,8 @@ dialogCancelScheduler.add(quitPsychoJS, '', false);
 // Add Slides to resources
 var resources = [
 	{ name: 'practice_schedule.csv', path: '/js/tasks/active_trust/practice_schedule.csv' },
-	{ name: 'PRACTICE_ready', path: '/js/tasks/active_trust/media/instructions/Slide10.JPG'},
-	{ name: 'MAIN_ready', path: '/js/tasks/active_trust/media/instructions/Slide11.JPG' },
+	{ name: 'PRACTICE_ready', path: '/js/tasks/active_trust/media/instructions/Slide11.JPG'},
+	{ name: 'MAIN_ready', path: '/js/tasks/active_trust/media/instructions/Slide12.JPG' },
 	{ name: 'PRACTICE_ready_audio.mp3', path: '/js/tasks/active_trust/media/instructions_audio/Slide10.mp3' },
 	{ name: 'MAIN_ready_audio.mp3', path: '/js/tasks/active_trust/media/instructions_audio/Slide11.mp3' },
 	{ name: 'try_left.png', path: '/js/tasks/active_trust/media/try_left.png' },
