@@ -386,9 +386,9 @@ var resources = [
 	{ name: 'practice_schedule.csv', path: '/js/tasks/cooperation_task/practice_schedule.csv' },
 	{ name: 'faces_paths.csv', path: '/js/tasks/cooperation_task/faces_paths.csv' }, // faces lists
 	{ name: 'PRACTICE_ready', path: '/js/tasks/cooperation_task/media/instructions/Slide17.JPG' },
-	{ name: 'PRACTICE_ready_audio.mp3', path: '/js/tasks/cooperation_task/media/instructions_audio/Slide20.mp3' },
+	{ name: 'PRACTICE_ready_audio.mp3', path: '/js/tasks/cooperation_task/media/instructions_audio/CooperationInstructions_Slide17.mp3' },
 	{ name: 'MAIN_ready', path: '/js/tasks/cooperation_task/media/instructions/Slide18.JPG' },
-	{ name: 'MAIN_ready_audio.mp3', path: '/js/tasks/cooperation_task/media/instructions_audio/Slide21.mp3' },
+	{ name: 'MAIN_ready_audio.mp3', path: '/js/tasks/cooperation_task/media/instructions_audio/CooperationInstructions_Slide18.mp3' },
 	{ name: 'INSTR_POS_slide', path: '/js/tasks/cooperation_task/media/instructions/Slide22.jpeg' },
 	{ name: 'INSTR_NEG_slide', path: '/js/tasks/cooperation_task/media/instructions/Slide23.jpeg' },
 	{ name: 'instr_pos_cb.mp3', path: '/js/tasks/cooperation_task/media/instructions_audio/CooperationTaskInstructionsSlide_BeforeStart_positive.mp3' },

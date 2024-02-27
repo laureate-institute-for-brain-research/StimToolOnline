@@ -1,0 +1,9 @@
+{
+    "name": "BK_Pilot T4",
+    "order": [
+        "/?index=0&task=horizon&run=Exercise_Study_R4.json",
+        "/completed?"
+    ],
+    "fullscreen": true,
+    "text_html": "<p>This study includes the following tasks: <ul><li>Horizon Task - Run 4</li></ul></p>"
+} 

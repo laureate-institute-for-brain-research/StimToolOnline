@@ -1,6 +1,7 @@
 ﻿/**
  * Horizon Task
  * @author James Touthang <jtouthang@laureateinstitute.org>
+ * Updated by @author Aardron Robinson <arobinson@laureateinstitute.org>
  */
 
 
@@ -102,7 +103,10 @@ window.onload = function () {
 							}
 							out.push(obj);
 							resources.push({ name: obj['instruct_slide'], path: obj['instruct_slide'] })
-							resources.push({ name: obj['audio_path'], path: obj['audio_path'] })
+							if (obj.audio_path && obj.audio_path != '\n'){
+								resources.push({ name: obj.audio_path, path: obj.audio_path })
+							}
+							// resources.push({ name: obj['audio_path'], path: obj['audio_path'] })
 						}
 						console.log(resources)
 
@@ -188,16 +192,28 @@ if (!getQueryVariable('skip_instructions')) {
 
 
 // // // Example Play
-if (getQueryVariable('run').includes('R1') ){
-	const example_playScheduler = new Scheduler(psychoJS);
-	flowScheduler.add(trials_exampleLoopBegin, example_playScheduler);
-	flowScheduler.add(example_playScheduler);
-	flowScheduler.add(exampleLoopEnd);
+if (getQueryVariable('run').includes('R1') || getQueryVariable('run').includes('Exercise')) { // maybe OR includes Exercise
+	if (getQueryVariable('run').includes('Exercise')) {
+		const example_playScheduler = new Scheduler(psychoJS);
+		flowScheduler.add(trials_exampleLoopBeginExercise, example_playScheduler);
+		flowScheduler.add(example_playScheduler);
+		flowScheduler.add(exampleLoopEnd);
 
-	// Ready Routine
-	flowScheduler.add(readyRoutineBegin());
-	flowScheduler.add(readyRoutineEachFrame());
-	flowScheduler.add(readyRoutineEnd());
+		// Ready Routine
+		flowScheduler.add(readyRoutineBegin());
+		flowScheduler.add(readyRoutineEachFrame());
+		flowScheduler.add(readyRoutineEnd());
+	} else {
+		const example_playScheduler = new Scheduler(psychoJS);
+		flowScheduler.add(trials_exampleLoopBegin, example_playScheduler);
+		flowScheduler.add(example_playScheduler);
+		flowScheduler.add(exampleLoopEnd);
+
+		// Ready Routine
+		flowScheduler.add(readyRoutineBegin());
+		flowScheduler.add(readyRoutineEachFrame());
+		flowScheduler.add(readyRoutineEnd());
+	}
 
 }
 
@@ -226,6 +242,7 @@ var resources = [
 	{ name: 'game_type_practice.xls', path: '/js/tasks/horizon/game_type_practice.xls' },
 	// { name: 'instruct_schedule.xls', path: '/js/tasks/horizon/media/instruct_schedule.xls' },
 	{ name: 'example_play.xls', path: '/js/tasks/horizon/media/example_play.xls' },
+	{ name: 'Horizon_GLframePR.xls', path: '/js/tasks/horizon/Horizon_GLframePR.xls' },
 	{ name: 'instruct_slide_r2.xls', path: '/js/tasks/horizon/media/instruct_slide_r2.xls' },
 	{ name: `/js/tasks/horizon/media/horizonInstructions/Slide22.jpeg`, path: `/js/tasks/horizon/media/horizonInstructions/Slide22.jpeg` },
 	{ name: `/js/tasks/horizon/media/instruction_audio/slide22.m4a`, path: `/js/tasks/horizon/media/instruction_audio/slide22.m4a` }
@@ -333,6 +350,9 @@ var readyText;
 
 var track;
 
+var max_text;
+var min_text;
+
 var resp;
 var thanksClock;
 var thanksText;
@@ -351,6 +371,28 @@ function experimentInit() {
 		units: 'height',
 		pos: [0, -.8], height: 0.05, wrapWidth: undefined, ori: 0,
 		color: new util.Color('white'), opacity: 1,
+		depth: 0.0
+	});
+
+	max_text = new visual.TextStim({
+		win: psychoJS.window,
+		name: 'instrBelow',
+		text: 'Maximize Wins',
+		font: 'Arial',
+		units: 'norm',
+		pos: [0, .8], height: 0.08, wrapWidth: undefined, ori: 0,
+		color: new util.Color('limegreen'), opacity: 1,
+		depth: 0.0
+	});
+
+	min_text = new visual.TextStim({
+		win: psychoJS.window,
+		name: 'instrBelow',
+		text: 'Minimize Losses',
+		font: 'Arial',
+		units: 'norm',
+		pos: [0, .8], height: 0.08, wrapWidth: undefined, ori: 0,
+		color: new util.Color('red'), opacity: 1,
 		depth: 0.0
 	});
 
@@ -498,7 +540,7 @@ function experimentInit() {
 			fontFamily: 'Arial',
 			units: 'norm',
 			pos: [-0.1, y_pos[i] - .1], height: 0.09, wrapWidth: undefined, ori: 0,
-			color: new util.Color('white'), opacity: 1,
+			color: new util.Color('limegreen'), opacity: 1,
 			depth: 0.0
 		});
 		// Init  Right TexStims
@@ -509,7 +551,7 @@ function experimentInit() {
 			fontFamily: 'Arial',
 			units: 'norm',
 			pos: [0.1, y_pos[i] -.1], height: 0.09, wrapWidth: undefined, ori: 0,
-			color: new util.Color('white'), opacity: 1,
+			color: new util.Color('limegreen'), opacity: 1,
 			depth: 0.0
 		});
 
@@ -569,7 +611,7 @@ function experimentInit() {
 		font: 'Arial',
 		units: 'norm',
 		pos: [0, -.9], height: 0.08, wrapWidth: undefined, ori: 0,
-		color: new util.Color('green'), opacity: 1,
+		color: new util.Color('limegreen'), opacity: 1,
 		depth: 0.0
 	});
 
@@ -713,7 +755,9 @@ function instructSlideRoutineEachFrame(trials) {
 
 			if (theseKeys.length > 0) {  // at least one key was pressed
 				// a response ends the routine
-				track.stop();
+				if (audio_path) {
+					track.stop();
+				}
 				continueRoutine = false;
 			}
 		}
@@ -851,6 +895,31 @@ function trials_exampleLoopBegin(thisScheduler) {
 	}
 	return Scheduler.Event.NEXT;
 }
+function trials_exampleLoopBeginExercise(thisScheduler) {
+	total_games = 4
+	clearBandits()
+	example_trials = new TrialHandler({
+		psychoJS: psychoJS,
+		nReps: 1, method: TrialHandler.Method.SEQUENTIAL,
+		extraInfo: expInfo, originPath: undefined,
+		trialList: 'Horizon_GLframePR.xls', 
+		seed: undefined, name: 'example_trials'
+	});
+	psychoJS.experiment.addLoop(example_trials); // add the loop to the experiment
+	currentLoop = example_trials;  // we're now the current loop
+
+	// Schedule all the example_trials in the trialList:
+	for (const thisTrial of example_trials) {
+		const snapshot = example_trials.getSnapshot();
+
+		thisScheduler.add(importConditions(snapshot));
+		thisScheduler.add(trialRoutineBegin(snapshot));
+		thisScheduler.add(trialRoutineEachFrame(snapshot));
+		thisScheduler.add(trialRoutineEnd(snapshot));
+		thisScheduler.add(endLoopIteration(thisScheduler, snapshot));
+	}
+	return Scheduler.Event.NEXT;
+}
 function instruct_pagesLoopEnd() {
 	psychoJS.experiment.removeLoop(slides);
 	return Scheduler.Event.NEXT;
@@ -902,6 +971,11 @@ function trialRoutineBegin(trials) {
 			lastTrialKeyPressed = false;
 			bandits_rect['right'][trial_num].fillColor = false
 			bandits_rect['left'][trial_num].fillColor = false
+			if (typeof dislike_room !== 'undefined') {
+				console.log('removing game type text')
+				min_text.setAutoDraw(false)
+				max_text.setAutoDraw(false)
+			}
 			clearBandits()
 		}
 
@@ -911,6 +985,15 @@ function trialRoutineBegin(trials) {
 		if (lastTrialKeyPressed) {
 			bandits_rect['right'][trial_num].fillColor = false
 			bandits_rect['left'][trial_num].fillColor = false
+		}
+
+		if (typeof dislike_room !== 'undefined') {
+			console.log('drawing game type text')
+			if (dislike_room == 0) {
+				max_text.setAutoDraw(true)
+			} else {
+				min_text.setAutoDraw(true)
+			}
 		}
 		
 		currentTrialNumber.setText(`Trial Number: ${trial_num}`)
@@ -978,6 +1061,15 @@ function trialRoutineEachFrame(trials) {
 				bandits['left'][i].setAutoDraw(true)
 				// Init  Right TexStims
 				bandits['right'][i].setAutoDraw(true)
+				if (typeof dislike_room !== 'undefined') {
+					if (dislike_room == 1) {
+						bandits['left'][i].setColor(new util.Color('red'))
+						bandits['right'][i].setColor(new util.Color('red'))
+					} else {
+						bandits['left'][i].setColor(new util.Color('limegreen'))
+						bandits['right'][i].setColor(new util.Color('limegreen'))
+					}
+				}
 			}
 		
 			if (showLastTrial) {
@@ -1041,6 +1133,13 @@ function trialRoutineEachFrame(trials) {
 			psychoJS.window.callOnFlip(function () { resp.clock.reset(); });  // t=0 on next screen flip
 			psychoJS.window.callOnFlip(function () { resp.start(); }); // start on screen flip
 			psychoJS.window.callOnFlip(function () { resp.clearEvents(); });
+
+			if (typeof dislike_room !== 'undefined') {
+				if (dislike_room == 1) {
+					left_reward = -left_reward
+					right_reward = -right_reward
+				}
+			}
 		}
 
 		if (resp.status === PsychoJS.Status.STARTED) {
@@ -1091,6 +1190,16 @@ function trialRoutineEachFrame(trials) {
 					bandit_right_down_handle.setAutoDraw(true)
 				}
 				// console.log(left_reward)
+
+				if (typeof dislike_room !== 'undefined') {
+					if (dislike_room == 1) {
+						bandits['left'][trial_num].setColor(new util.Color('red'))
+						bandits['right'][trial_num].setColor(new util.Color('red'))
+					} else {
+						bandits['left'][trial_num].setColor(new util.Color('limegreen'))
+						bandits['right'][trial_num].setColor(new util.Color('limegreen'))
+					}
+				}
 
 				// If it's the last trial, hang here for a second to show points
 				if (isLastTrial(game_type, trial_num)){
@@ -1231,6 +1340,8 @@ function readyRoutineBegin(trials) {
 		// keep track of which components have finished
 		readyComponents = [];
 		readyComponents.push(goodLuckStim);
+		min_text.setAutoDraw(false)
+		max_text.setAutoDraw(false)
 
 		return Scheduler.Event.NEXT;
 	};
@@ -1306,6 +1417,9 @@ function thanksRoutineBegin(trials) {
 			// 1000 points = 10 cents
 			thanksText.setText(`This is the end of the task run.\n\n\n Total Points Earned: ${totalPoints} \n\n Total Cents Earned: ${totalPoints / 100 } =  $${ (totalPoints / 10000).toFixed(2)}`)
 		} else if (getQueryVariable('run') == 'BK_Pilot_R1.json' || getQueryVariable('run') == 'BK_Pilot_R2.json' || getQueryVariable('run') == 'METH_Pilot_R1.json' || getQueryVariable('run') == 'METH_Pilot_R2.json' ) {
+			thanksText.setText(`This is the end of the task run.\n\n\n Total Points Earned: ${totalPoints} `)
+		}
+		else if (getQueryVariable('run').includes('Exercise')) {
 			thanksText.setText(`This is the end of the task run.\n\n\n Total Points Earned: ${totalPoints} `)
 		}
 		else {

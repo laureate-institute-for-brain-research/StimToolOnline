@@ -370,7 +370,7 @@ var resources = [
 	{ name: 'example_play.xls', path: '/js/tasks/social_media/adjusted_practice.csv' },
 	{ name: 'role_reversal_shedule.xls', path:'/js/tasks/social_media/role_reversal_shedule.xls' },
 	{ name: 'ready.jpeg', path: '/js/tasks/social_media/media/instructions/Slide20.JPG' },
-	{ name: 'ready.mp3', path: '/js/tasks/social_media/media/instructions_audio/Slide19.mp3'},
+	{ name: 'ready.mp3', path: '/js/tasks/social_media/media/instructions_audio/SocialMedia_InstructionSlide20.mp3'},
 	{ name: 'role_reversal_instruct_schedule.csv', path: '/js/tasks/social_media/media/role_reversal_instruct_schedule.csv'},
 	{ name: 'logo.png', path: '/js/tasks/social_media/media/body-organ.png' },
 	{ name: 'home.png', path: '/js/tasks/social_media/media/home.png' },

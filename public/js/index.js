@@ -153,6 +153,7 @@ $('#study-list').change(function () {
     studies_sessions = {
         'AAC-BET' : 2,
         'BK_Pilot': 2,
+        'Exercise_Study': 4,
         'METH_Pilot': 2,
         'CognitiveControl': 2,
         'NCAIR': 1,
