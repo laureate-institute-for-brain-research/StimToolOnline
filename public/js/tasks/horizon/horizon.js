@@ -200,8 +200,8 @@ if (getQueryVariable('run').includes('R1') || getQueryVariable('run').includes('
 		flowScheduler.add(exampleLoopEnd);
 
 		// Ready Routine
-		flowScheduler.add(readyRoutineBegin());
-		flowScheduler.add(readyRoutineEachFrame());
+		flowScheduler.add(readyRoutineBeginExercise());
+		flowScheduler.add(readyRoutineEachFrameExercise());
 		flowScheduler.add(readyRoutineEnd());
 	} else {
 		const example_playScheduler = new Scheduler(psychoJS);
@@ -245,6 +245,7 @@ var resources = [
 	{ name: 'Horizon_GLframePR.xls', path: '/js/tasks/horizon/Horizon_GLframePR.xls' },
 	{ name: 'instruct_slide_r2.xls', path: '/js/tasks/horizon/media/instruct_slide_r2.xls' },
 	{ name: `/js/tasks/horizon/media/horizonInstructions/Slide22.jpeg`, path: `/js/tasks/horizon/media/horizonInstructions/Slide22.jpeg` },
+	{ name: `/js/tasks/horizon/media/horizonInstructions/Slide25.JPG`, path: `/js/tasks/horizon/media/horizonInstructions/Slide25.JPG` },
 	{ name: `/js/tasks/horizon/media/instruction_audio/slide22.m4a`, path: `/js/tasks/horizon/media/instruction_audio/slide22.m4a` }
 	// { name: '/js/tasks/horizon/media/instruction_audio/slide1_23m4a.m4a', path: '/js/tasks/horizon/media/instruction_audio/slide1_23m4a.m4a'}
 ]
@@ -311,6 +312,7 @@ var forced_fillColor = '#FF0000'
 
 var slideStim;
 var goodLuckStim;
+var goodLuckStim_v2;
 var slides;
 var instructClock;
 var instrBelow;
@@ -410,6 +412,16 @@ function experimentInit() {
 		win : psychoJS.window,
 		name : 'goood_slide_stim', units : 'height', 
 		image : '/js/tasks/horizon/media/horizonInstructions/Slide22.jpeg', mask : undefined,
+		ori : 0, pos : [0, 0],
+		color : new util.Color([1, 1, 1]), opacity : 1,
+		flipHoriz : false, flipVert : false,
+		texRes : 128, interpolate : true, depth : 0
+	});
+	
+	goodLuckStim_v2 = new visual.ImageStim({
+		win : psychoJS.window,
+		name : 'goood_slide_stim', units : 'height', 
+		image : '/js/tasks/horizon/media/horizonInstructions/Slide25.JPG', mask : undefined,
 		ori : 0, pos : [0, 0],
 		color : new util.Color([1, 1, 1]), opacity : 1,
 		flipHoriz : false, flipVert : false,
@@ -1380,6 +1392,60 @@ function readyRoutineEachFrame(trials) {
 	};
 }
 
+var readyComponents;
+function readyRoutineBeginExercise(trials) {
+	return function () {
+		//------Prepare to start Routine 'ready'-------
+		// Clear Trial Components
+		clearBandits()
+		clearLevers()
+		t = 0;
+		psychoJS.eventManager.clearEvents()
+		readyClock.reset(); // clock
+		frameN = -1;
+		routineTimer.add(2.000000);
+		// update component parameters for each repeat
+		// keep track of which components have finished
+		readyComponents = [];
+		readyComponents.push(goodLuckStim_v2);
+		min_text.setAutoDraw(false)
+		max_text.setAutoDraw(false)
+
+		return Scheduler.Event.NEXT;
+	};
+}
+
+
+function readyRoutineEachFrameExercise(trials) {
+	return function () {
+		//------Loop for each frame of Routine 'ready'-------
+		let continueRoutine = true; // until we're told otherwise
+		// get current time
+		t = readyClock.getTime();
+		// frameN = frameN + 1;// number of completed frames (so 0 is the first frame)
+		// update/draw components on each frame
+
+		// console.log('in ready routine')
+		goodLuckStim_v2.setAutoDraw(true)
+
+		if (psychoJS.eventManager.getKeys({ keyList: ['right'] }).length > 0) {
+			continueRoutine = false
+		}
+
+		// check for quit (typically the Esc key)
+		if (psychoJS.experiment.experimentEnded || psychoJS.eventManager.getKeys({ keyList: ['escape'] }).length > 0) {
+			return quitPsychoJS('The [Escape] key was pressed. Goodbye!', false);
+		}
+
+		// refresh the screen if continuing
+		if (continueRoutine) {
+			return Scheduler.Event.FLIP_REPEAT;
+		}
+		else {
+			return Scheduler.Event.NEXT;
+		}
+	};
+}
 
 
 function readyRoutineEnd(trials) {
