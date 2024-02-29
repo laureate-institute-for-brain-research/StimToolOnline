@@ -2015,8 +2015,8 @@ function instructSlideRoutineEachFrame(trials, slides) {
 						win: psychoJS.window,
 						value: audio_path
 					});
-					//time_audio_end = t + track.getDuration()
-					time_audio_end = t + 2.0
+					time_audio_end = t + track.getDuration()
+					// time_audio_end = t + 2.0
 
 					// console.log(audio_path)
 					track.setVolume(1.0);
@@ -2026,8 +2026,8 @@ function instructSlideRoutineEachFrame(trials, slides) {
 						win: psychoJS.window,
 						value: audio_path
 					});
-					// time_audio_end = t + track.getDuration()
-					time_audio_end = t + 2.0
+					time_audio_end = t + track.getDuration()
+					// time_audio_end = t + 2.0
 					// console.log(audio_path)
 					track.setVolume(1.0);
 					track.play();
@@ -4164,17 +4164,18 @@ function instructRoutineBegin(trials) {
 		// console.log("InstructionSlides Index: ", trials.thisIndex)
 		instruct_prev_pressed = false
 
-		if (audio_path) {
-			track = new Sound({
-				win: psychoJS.window,
-				value: audio_path
-			  });
-			// console.log(audio_path)
-			//time_audio_end = t + track.getDuration()
-			time_audio_end = t + 2.0
-			track.setVolume(1.0);
-			track.play();
-		}
+		// if (audio_path) {
+		// 	track = new Sound({
+		// 		win: psychoJS.window,
+		// 		value: audio_path
+		// 	  });
+		// 	// console.log(audio_path)
+		// 	//time_audio_end = t + track.getDuration()
+		// 	time_audio_end = t + track.getDuration()
+		// 	track.setVolume(1.0);
+		// 	track.play();
+		// 	console.log('track play start !!!')
+		// }
 
 		for (const thisComponent of instructComponents)
 			if ('status' in thisComponent)

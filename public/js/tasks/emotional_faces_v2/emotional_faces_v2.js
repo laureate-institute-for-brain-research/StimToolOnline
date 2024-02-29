@@ -669,8 +669,8 @@ function experimentInit() {
 		name: 'left_text',
 		text: 'Angry',
 		font: 'Arial',
-		units: 'norm',
-		pos: [-0.3, 0], height: 0.09, wrapWidth: undefined, ori: 0,
+		units: 'height',
+		pos: [-0.2, 0], height: 0.09, wrapWidth: undefined, ori: 0,
 		color: new util.Color(angryColor), opacity: 1,
 		depth: 0.0
 	});
@@ -678,11 +678,11 @@ function experimentInit() {
 	left_rect = new visual.Rect({
 		win: psychoJS.window,
 		name: 'left_rect',
-		width: 0.16,
+		width: 0.26,
 		height: 0.09,
 		lineWidth: 3.5,
-		units: 'norm',
-		pos: [-0.3, 0 ], ori: 0,
+		units: 'height',
+		pos: [-0.2, 0 ], ori: 0,
 		lineColor: new util.Color('white'), opacity: 1,
 		depth: 0.0
 	});
@@ -692,8 +692,8 @@ function experimentInit() {
 		name: 'right_text',
 		text: 'Sad',
 		font: 'Arial',
-		units: 'norm',
-		pos: [ 0.3, 0], height: 0.09, wrapWidth: undefined, ori: 0,
+		units: 'height',
+		pos: [ 0.2, 0], height: 0.09, wrapWidth: undefined, ori: 0,
 		color: new util.Color(sadColor), opacity: 1,
 		depth: 0.0
 	});
@@ -701,11 +701,11 @@ function experimentInit() {
 	right_rect = new visual.Rect({
 		win: psychoJS.window,
 		name: 'right_rect',
-		width: 0.16,
+		width: 0.22,
 		height: 0.09,
 		lineWidth: 3.5,
-		units: 'norm',
-		pos: [ 0.3, 0 ], ori: 0,
+		units: 'height',
+		pos: [ 0.2, 0 ], ori: 0,
 		lineColor: new util.Color('white'), opacity: 1,
 		depth: 0.0
 	});
@@ -714,9 +714,9 @@ function experimentInit() {
 		win: psychoJS.window,
 		name: 'right_rect',
 		width: 0.06,
-		height: 0.8,
+		height: 0.5,
 		lineWidth: 3.5,
-		units: 'norm',
+		units: 'height',
 		pos: [ 0.23, 0 ], ori: 0,
 		lineColor: new util.Color('grey'), opacity: 1,
 		depth: 0.0
@@ -728,7 +728,7 @@ function experimentInit() {
 		width: 0.06,
 		height: 0.01,
 		lineWidth: 3.5,
-		units: 'norm',
+		units: 'height',
 		pos: [0.23, -0.18], ori: 0,
 		fillColor: new util.Color('#4d4d4d'),
 		lineColor: new util.Color('#4d4d4d'), opacity: 1,
@@ -741,7 +741,7 @@ function experimentInit() {
 		width: 0.06,
 		height: 0.01,
 		lineWidth: 3.5,
-		units: 'norm',
+		units: 'height',
 		pos: [0.23, 0.4], ori: 0,
 		fillColor: new util.Color('grey'),
 		lineColor: new util.Color('grey'), opacity: 1,
@@ -753,7 +753,7 @@ function experimentInit() {
 		name: 'bar_top_text',
 		text: '+75',
 		font: 'Arial',
-		units: 'norm',
+		units: 'height',
 		pos: [ 0.29, 0.38], height: 0.05, wrapWidth: undefined, ori: 0,
 		color: new util.Color('grey'), opacity: 1,
 		depth: 0.0
@@ -764,7 +764,7 @@ function experimentInit() {
 		name: 'bar_top_text',
 		text: '+50',
 		font: 'Arial',
-		units: 'norm',
+		units: 'height',
 		pos: [ 0.29, 0.19], height: 0.05, wrapWidth: undefined, ori: 0,
 		color: new util.Color('grey'), opacity: 1,
 		depth: 0.0
@@ -775,7 +775,7 @@ function experimentInit() {
 		name: 'bar_bottom_text',
 		text: '-25',
 		font: 'Arial',
-		units: 'norm',
+		units: 'height',
 		pos: [ 0.29, -0.37], height: 0.05, wrapWidth: undefined, ori: 0,
 		color: new util.Color('grey'), opacity: 1,
 		depth: 0.0
@@ -786,7 +786,7 @@ function experimentInit() {
 		name: 'bar_bottom_text',
 		text: '0',
 		font: 'Arial',
-		units: 'norm',
+		units: 'height',
 		pos: [ 0.29, -0.18], height: 0.05, wrapWidth: undefined, ori: 0,
 		color: new util.Color('grey'), opacity: 1,
 		depth: 0.0
@@ -797,7 +797,7 @@ function experimentInit() {
 		name: 'bar_bottom_text',
 		text: '+25',
 		font: 'Arial',
-		units: 'norm',
+		units: 'height',
 		pos: [ 0.29, 0], height: 0.05, wrapWidth: undefined, ori: 0,
 		color: new util.Color('grey'), opacity: 1,
 		depth: 0.0
@@ -809,7 +809,7 @@ function experimentInit() {
 		width: 1.05,
 		height: 0.06,
 		lineWidth: 3.5,
-		units: 'norm',
+		units: 'height',
 		pos: [ 0, -0.1 ], ori: 0,
 		lineColor: new util.Color('grey'), opacity: 1,
 		depth: 0.0
@@ -821,7 +821,7 @@ function experimentInit() {
 		width: 0.005,
 		height: 0.06,
 		lineWidth: 3.5,
-		units: 'norm',
+		units: 'height',
 		pos: [0, -0.1], ori: 0,
 		fillColor: new util.Color('#4d4d4d'),
 		lineColor: new util.Color('#4d4d4d'), opacity: 1,
@@ -834,7 +834,7 @@ function experimentInit() {
 		width: 0.01,
 		height: 0.06,
 		lineWidth: 0.1,
-		units: 'norm',
+		units: 'height',
 		pos: [-0.5, -0.1], ori: 0,
 		fillColor: new util.Color('#13aed1'),
 		lineColor: new util.Color('#13aed1'), opacity: 1,
@@ -846,7 +846,7 @@ function experimentInit() {
 		name: 'bar_top_text',
 		text: '-$$$',
 		font: 'Arial',
-		units: 'norm',
+		units: 'height',
 		pos: [ -0.5, 0], height: 0.05, wrapWidth: undefined, ori: 0,
 		color: new util.Color('grey'), opacity: 1,
 		depth: 0.0
@@ -857,7 +857,7 @@ function experimentInit() {
 		name: 'bar_top_text',
 		text: '-$',
 		font: 'Arial',
-		units: 'norm',
+		units: 'height',
 		pos: [ -0.25, 0], height: 0.05, wrapWidth: undefined, ori: 0,
 		color: new util.Color('grey'), opacity: 1,
 		depth: 0.0
@@ -868,7 +868,7 @@ function experimentInit() {
 		name: 'bar_bottom_text',
 		text: '+$$$',
 		font: 'Arial',
-		units: 'norm',
+		units: 'height',
 		pos: [ 0.5, 0], height: 0.05, wrapWidth: undefined, ori: 0,
 		color: new util.Color('grey'), opacity: 1,
 		depth: 0.0
@@ -879,7 +879,7 @@ function experimentInit() {
 		name: 'bar_bottom_text',
 		text: '+$',
 		font: 'Arial',
-		units: 'norm',
+		units: 'height',
 		pos: [ 0.25, 0], height: 0.05, wrapWidth: undefined, ori: 0,
 		color: new util.Color('grey'), opacity: 1,
 		depth: 0.0
@@ -890,7 +890,7 @@ function experimentInit() {
 		name: 'bar_bottom_text',
 		text: '0',
 		font: 'Arial',
-		units: 'norm',
+		units: 'height',
 		pos: [ 0, 0], height: 0.05, wrapWidth: undefined, ori: 0,
 		color: new util.Color('grey'), opacity: 1,
 		depth: 0.0
@@ -901,7 +901,7 @@ function experimentInit() {
 		name: 'trialTracker',
 		text: 'Trial Number: ',
 		font: 'Arial',
-		units: 'norm',
+		units: 'height',
 		pos: [0, -0.7], height: 0.08, wrapWidth: undefined, ori: 0,
 		color: new util.Color('white'), opacity: 1,
 		depth: 0.0
@@ -912,7 +912,7 @@ function experimentInit() {
 		name: 'gameTracker',
 		text: '1/80',
 		font: 'Arial',
-		units: 'norm',
+		units: 'height',
 		pos: [0, -0.8], height: 0.08, wrapWidth: undefined, ori: 0,
 		color: new util.Color('white'), opacity: 1,
 		depth: 0.0
@@ -923,7 +923,7 @@ function experimentInit() {
 		name: 'pointsTracker',
 		text: 'Total points: 0',
 		font: 'Arial',
-		units: 'norm',
+		units: 'height',
 		pos: [0, -0.9], height: 0.08, wrapWidth: undefined, ori: 0,
 		color: new util.Color('#00fa40'), opacity: 1,
 		depth: 0.0
@@ -934,7 +934,7 @@ function experimentInit() {
 		name: 'pointsTracker',
 		text: 'X',
 		font: 'Arial',
-		units: 'norm',
+		units: 'height',
 		pos: [0, 0], height: 0.12, wrapWidth: undefined, ori: 0,
 		color: new util.Color('white'), opacity: 1,
 		depth: 0.0
@@ -945,8 +945,8 @@ function experimentInit() {
 		name: 'feedback_text',
 		text: 'CORRECT',
 		font: 'Arial',
-		units: 'norm',
-		pos: [0, -0.5], height: 0.12, wrapWidth: undefined, ori: 0,
+		units: 'height',
+		pos: [0, -0.3], height: 0.08, wrapWidth: undefined, ori: 0,
 		color: new util.Color('white'), opacity: 1,
 		depth: 0.0
 	});
@@ -956,8 +956,8 @@ function experimentInit() {
 		name: 'correct_score_text',
 		text: '0',
 		font: 'Arial',
-		units: 'norm',
-		pos: [0.04, 0.165], height: 0.11, wrapWidth: undefined, ori: 0,
+		units: 'height',
+		pos: [0.14, 0.165], height: 0.1, wrapWidth: undefined, ori: 0,
 		color: new util.Color('#00ff00'), opacity: 1,
 		depth: 0.0
 	});
@@ -967,8 +967,8 @@ function experimentInit() {
 		name: 'correct_text',
 		text: 'Correct!',
 		font: 'Arial',
-		units: 'norm',
-		pos: [-0.15, 0.165], height: 0.11, wrapWidth: undefined, ori: 0,
+		units: 'height',
+		pos: [-0.15, 0.165], height: 0.05, wrapWidth: undefined, ori: 0,
 		color: new util.Color('white'), opacity: 1,
 		depth: 0.0
 	});
@@ -978,8 +978,8 @@ function experimentInit() {
 		name: 'correct_text',
 		text: 'Angry or Sad?',
 		font: 'Arial',
-		units: 'norm',
-		pos: [0, 0], height: 0.25, wrapWidth: undefined, ori: 0,
+		units: 'height',
+		pos: [0, 0], height: 0.15, wrapWidth: undefined, ori: 0,
 		color: new util.Color('white'), opacity: 1,
 		depth: 0.0
 	});
@@ -988,7 +988,7 @@ function experimentInit() {
 		win : psychoJS.window,
 		name : 'rightangry', units : 'height', 
 		image : 'rightangry.JPG', mask : undefined,
-		ori : 0, pos : [0, 0], opacity : 1,
+		ori : 0, pos : [0, 0], size: [1.1,1], opacity : 1,
 		flipHoriz : false, flipVert : false,
 		texRes : 128, interpolate : true, depth : 0
 	});
@@ -996,7 +996,7 @@ function experimentInit() {
 		win : psychoJS.window,
 		name : 'wrongangry', units : 'height', 
 		image : 'wrongangry.JPG', mask : undefined,
-		ori : 0, pos : [0, 0], opacity : 1,
+		ori : 0, pos : [0, 0], size: [1.1,1], opacity : 1,
 		flipHoriz : false, flipVert : false,
 		texRes : 128, interpolate : true, depth : 0
 	});
@@ -1004,7 +1004,7 @@ function experimentInit() {
 		win : psychoJS.window,
 		name : 'slowangry', units : 'height', 
 		image : 'slowangry.JPG', mask : undefined,
-		ori : 0, pos : [0, 0], opacity : 1,
+		ori : 0, pos : [0, 0], size: [1.1,1], opacity : 1,
 		flipHoriz : false, flipVert : false,
 		texRes : 128, interpolate : true, depth : 0
 	});
@@ -1013,7 +1013,7 @@ function experimentInit() {
 		win : psychoJS.window,
 		name : 'rightsad', units : 'height', 
 		image : 'rightsad.JPG', mask : undefined,
-		ori : 0, pos : [0, 0], opacity : 1,
+		ori : 0, pos : [0, 0], size: [1.1,1], opacity : 1,
 		flipHoriz : false, flipVert : false,
 		texRes : 128, interpolate : true, depth : 0
 	});
@@ -1021,7 +1021,7 @@ function experimentInit() {
 		win : psychoJS.window,
 		name : 'wrongsad', units : 'height', 
 		image : 'wrongsad.JPG', mask : undefined,
-		ori : 0, pos : [0, 0], opacity : 1,
+		ori : 0, pos : [0, 0], size: [1.1,1], opacity : 1,
 		flipHoriz : false, flipVert : false,
 		texRes : 128, interpolate : true, depth : 0
 	});
@@ -1029,7 +1029,7 @@ function experimentInit() {
 		win : psychoJS.window,
 		name : 'slowsad', units : 'height', 
 		image : 'slowsad.JPG', mask : undefined,
-		ori : 0, pos : [0, 0], opacity : 1,
+		ori : 0, pos : [0, 0], size: [1.1,1], opacity : 1,
 		flipHoriz : false, flipVert : false,
 		texRes : 128, interpolate : true, depth : 0
 	});
@@ -1054,26 +1054,27 @@ function experimentInit() {
 		depth: 0.0
 	});
 
-	og_positions['left_text'] = [-0.3, 0]
-	og_positions['left_rect'] = [-0.3, 0]
-	og_positions['right_text'] = [0.3, 0]
-	og_positions['right_rect'] = [0.3, 0]
-	og_positions['score_bar'] = [0.23, 0]
-	og_positions['score_bar_midline'] = [0.23, -0.18]
-	og_positions['score_slide'] = [0.23, 0.4]
-	og_positions['score_bar_top_text'] = [0.29, 0.38]
-	og_positions['score_bar_midtop_text'] = [0.29, 0.19]
-	og_positions['score_bar_bottom_text'] = [0.29, -0.37]
-	og_positions['score_bar_midbottom_text'] = [0.29, -0.18]
-	og_positions['score_bar_mid_text'] = [0.29, 0]
-	og_positions['tot_score_bar'] = [ 0, -0.1 ]
-	og_positions['tot_score_bar_midline'] = [ 0, -0.1 ]
-	og_positions['tot_score_slide'] = [-0.5, -0.1]
-	og_positions['tot_score_bar_left_text'] = [ -0.5, -0]
-	og_positions['tot_score_bar_midleft_text'] = [ -0.25, -0]
-	og_positions['tot_score_bar_right_text'] = [ 0.5, -0]
-	og_positions['tot_score_bar_midright_text'] = [ 0.25, -0]
-	og_positions['tot_score_bar_mid_text'] = [ 0, -0]
+	// TODO: UPDATE THESE
+	left_text.pos = og_positions['left_text'] = [-0.3, 0]
+	left_rect.pos = og_positions['left_rect'] = [-0.3, 0]
+	right_text.pos = og_positions['right_text'] = [0.3, 0]
+	right_rect.pos = og_positions['right_rect'] = [0.3, 0]
+	score_bar.pos = og_positions['score_bar'] = [0.23, 0]
+	score_bar_midline.pos = og_positions['score_bar_midline'] = [0.23, -0.12]
+	score_slide.pos = og_positions['score_slide'] = [0.23, 0.25]
+	score_bar_top_text.pos = og_positions['score_bar_top_text'] = [0.35, 0.245]
+	score_bar_midtop_text.pos = og_positions['score_bar_midtop_text'] = [0.35, 0.12]
+	score_bar_bottom_text.pos = og_positions['score_bar_bottom_text'] = [0.35, -0.245]
+	score_bar_midbottom_text.pos = og_positions['score_bar_midbottom_text'] = [0.35, -0.12]
+	score_bar_mid_text.pos = og_positions['score_bar_mid_text'] = [0.35, 0]
+	tot_score_bar.pos = og_positions['tot_score_bar'] = [ 0, -0.1 ]
+	tot_score_bar_midline.pos = og_positions['tot_score_bar_midline'] = [ 0, -0.1 ]
+	tot_score_slide.pos = og_positions['tot_score_slide'] = [-0.5, -0.1]
+	tot_score_bar_left_text.pos = og_positions['tot_score_bar_left_text'] = [ -0.5, -0]
+	tot_score_bar_midleft_text.pos = og_positions['tot_score_bar_midleft_text'] = [ -0.25, -0]
+	tot_score_bar_right_text.pos = og_positions['tot_score_bar_right_text'] = [ 0.5, -0]
+	tot_score_bar_midright_text.pos = og_positions['tot_score_bar_midright_text'] = [ 0.25, -0]
+	tot_score_bar_mid_text.pos = og_positions['tot_score_bar_mid_text'] = [ 0, -0]
 
 	// Tone Sounds
 	// high_tone = new Sound({
@@ -1117,7 +1118,7 @@ function resetRects() {
 	// 	depth: 0.0
 	// });
 
-	left_rect.width = 0.16;
+	left_rect.width = 0.26;
 	left_rect.height = 0.09;
 
 	// right_rect = new visual.Rect({
@@ -1782,7 +1783,7 @@ function rateFacesRoutingBegin(trials) {
 			win : psychoJS.window,
 			name : 'stimPath', units : 'height', 
 			image : stim_paths, mask : undefined,
-			ori : 0, pos : [0, 0.2], opacity : 1,
+			ori : 0, pos : [0, 0.2], size: [0.3, 0.4], opacity : 1,
 			flipHoriz : false, flipVert : false,
 			texRes : 128, interpolate : true, depth : 0
 		});
@@ -1794,10 +1795,10 @@ function rateFacesRoutingBegin(trials) {
 		right_rect.pos[1] = og_positions['right_rect'][1]
 
 		// For This block move the text slighty down
-		left_text.pos[1] = -0.2
+		left_text.pos[1] = -0.4
 		left_rect.pos[1] = left_text.pos[1]
 		
-		right_text.pos[1] = -0.2
+		right_text.pos[1] = -0.4
 		right_rect.pos[1] = right_text.pos[1]
 
 		if (window.screen.width >= 2560)
@@ -1805,7 +1806,7 @@ function rateFacesRoutingBegin(trials) {
 			left_text.pos[1] = -0.4
 			left_rect.pos[1] = left_text.pos[1]
 			
-			feedback_result_stim.pos[1] = -0.6
+			feedback_result_stim.pos[1] = -0.3
 		
 			right_text.pos[1] = -0.4
 			right_rect.pos[1] = right_text.pos[1]
@@ -1816,7 +1817,7 @@ function rateFacesRoutingBegin(trials) {
 			left_text.pos[1] = -0.4
 			left_rect.pos[1] = left_text.pos[1]
 
-			feedback_result_stim.pos[1] = -0.6
+			feedback_result_stim.pos[1] = -0.3
 		
 			right_text.pos[1] = -0.4
 			right_rect.pos[1] = right_text.pos[1]
@@ -2117,7 +2118,7 @@ function trialRoutineBegin(trials) {
 			win : psychoJS.window,
 			name : 'stimPath', units : 'height', 
 			image : stim_paths, mask : undefined,
-			ori : 0, pos : [0, 0], opacity : 1,
+			ori : 0, pos : [0, 0], size: [0.3, 0.4], opacity : 1,
 			flipHoriz : false, flipVert : false,
 			texRes : 128, interpolate : true, depth : 0
 		});
@@ -2142,87 +2143,87 @@ function trialRoutineBegin(trials) {
 
 		// For This block move the text slighty down
 		left_text.pos[0] = -0.25
-		left_text.pos[1] = -0.5
+		left_text.pos[1] = -0.4
 		left_rect.pos[0] = left_text.pos[0]
 		left_rect.pos[1] = left_text.pos[1]
 		
 		right_text.pos[0] = 0.25
-		right_text.pos[1] = -0.5
+		right_text.pos[1] = -0.4
 		right_rect.pos[0] = right_text.pos[0]
 		right_rect.pos[1] = right_text.pos[1]
 
-		correct_text.height = 0.11
+		correct_text.height = 0.1
 
 		if (window.screen.width >= 2560)
 		{
 			left_text.pos[0] = -0.25
-			left_text.pos[1] = -0.7
+			left_text.pos[1] = -0.4
 			left_rect.pos[0] = left_text.pos[0]
 			left_rect.pos[1] = left_text.pos[1]
 			
-			feedback_result_stim.pos[1] = -0.7
+			feedback_result_stim.pos[1] = -0.43
 		
 			right_text.pos[0] = 0.25
-			right_text.pos[1] = -0.7
+			right_text.pos[1] = -0.4
 			right_rect.pos[0] = right_text.pos[0]
 			right_rect.pos[1] = right_text.pos[1]
 
-			score_bar.pos[0] = .32
-			score_bar_midline.pos[0] = .32
-			score_slide.pos[0] = .32
-			score_bar_top_text.pos[0] = .38
-			score_bar_bottom_text.pos[0] = .38
-			score_bar_midtop_text.pos[0] = .38
-			score_bar_midbottom_text.pos[0] = .38
-			score_bar_mid_text.pos[0] = .38
+			// score_bar.pos[0] = .32
+			// score_bar_midline.pos[0] = .32
+			// score_slide.pos[0] = .32
+			// score_bar_top_text.pos[0] = .38
+			// score_bar_bottom_text.pos[0] = .38
+			// score_bar_midtop_text.pos[0] = .38
+			// score_bar_midbottom_text.pos[0] = .38
+			// score_bar_mid_text.pos[0] = .38
 
-			tot_score_bar.pos[1] = -0.5
-			tot_score_bar_midline.pos[1] = -0.5
-			tot_score_slide.pos[1] = -0.5
-			tot_score_bar_left_text.pos[1] = -0.4
-			tot_score_bar_right_text.pos[1] = -0.4
-			tot_score_bar_midleft_text.pos[1] = -0.4
-			tot_score_bar_midright_text.pos[1] = -0.4
-			tot_score_bar_mid_text.pos[1] = -0.4
+			// tot_score_bar.pos[1] = -0.5
+			// tot_score_bar_midline.pos[1] = -0.5
+			// tot_score_slide.pos[1] = -0.5
+			// tot_score_bar_left_text.pos[1] = -0.4
+			// tot_score_bar_right_text.pos[1] = -0.4
+			// tot_score_bar_midleft_text.pos[1] = -0.4
+			// tot_score_bar_midright_text.pos[1] = -0.4
+			// tot_score_bar_mid_text.pos[1] = -0.4
 
-			correct_text.height = 0.16
-			correct_score_text.height = 0.16
+			correct_text.height = 0.1
+			correct_score_text.height = 0.1
 			correct_score_text.pos[0] = 0.085
 		}
 	
 		if (window.screen.width <= 1280)
 		{
 			left_text.pos[0] = -0.25
-			left_text.pos[1] = -0.7
+			left_text.pos[1] = -0.4
 			left_rect.pos[0] = left_text.pos[0]
 			left_rect.pos[1] = left_text.pos[1]
 
-			feedback_result_stim.pos[1] = -0.7
+			feedback_result_stim.pos[1] = -0.43
 		
 			right_text.pos[0] = 0.25
-			right_text.pos[1] = -0.7
+			right_text.pos[1] = -0.4
 			right_rect.pos[0] = right_text.pos[0]
 			right_rect.pos[1] = right_text.pos[1]
 
-			score_bar.pos[0] = .32
-			score_bar_midline.pos[0] = .32
-			score_slide.pos[0] = .32
-			score_bar_top_text.pos[0] = .38
-			score_bar_bottom_text.pos[0] = .38
-			score_bar_midtop_text.pos[0] = .38
-			score_bar_midbottom_text.pos[0] = .38
-			score_bar_mid_text.pos[0] = .38
+			// score_bar.pos[0] = .32
+			// score_bar_midline.pos[0] = .32
+			// score_slide.pos[0] = .32
+			// score_bar_top_text.pos[0] = .38
+			// score_bar_bottom_text.pos[0] = .38
+			// score_bar_midtop_text.pos[0] = .38
+			// score_bar_midbottom_text.pos[0] = .38
+			// score_bar_mid_text.pos[0] = .38
 
-			tot_score_bar.pos[1] = -0.5
-			tot_score_bar_midline.pos[1] = -0.5
-			tot_score_slide.pos[1] = -0.5
-			tot_score_bar_left_text.pos[1] = -0.4
-			tot_score_bar_right_text.pos[1] = -0.4
-			tot_score_bar_midleft_text.pos[1] = -0.4
-			tot_score_bar_midright_text.pos[1] = -0.4
-			tot_score_bar_mid_text.pos[1] = -0.4
-			correct_text.height = 0.16
-			correct_score_text.height = 0.16
+			// tot_score_bar.pos[1] = -0.5
+			// tot_score_bar_midline.pos[1] = -0.5
+			// tot_score_slide.pos[1] = -0.5
+			// tot_score_bar_left_text.pos[1] = -0.4
+			// tot_score_bar_right_text.pos[1] = -0.4
+			// tot_score_bar_midleft_text.pos[1] = -0.4
+			// tot_score_bar_midright_text.pos[1] = -0.4
+			// tot_score_bar_mid_text.pos[1] = -0.4
+			correct_text.height = 0.1
+			correct_score_text.height = 0.1
 			correct_score_text.pos[0] = 0.085
 		}
 
@@ -2721,7 +2722,7 @@ function trialRoutineRespond(trials) {
 			score_bar_mid_text.setAutoDraw(false)
 
 			// reset score bar
-			score_slide.pos[1] = 0.4
+			score_slide.pos[1] = 0.25
 			score_slide.refresh()
 			old_t = 0
 
