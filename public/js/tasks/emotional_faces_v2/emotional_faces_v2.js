@@ -2188,7 +2188,7 @@ function trialRoutineBegin(trials) {
 
 			correct_text.height = 0.1
 			correct_score_text.height = 0.1
-			correct_score_text.pos[0] = 0.085
+			correct_score_text.pos[0] = 0.165
 		}
 	
 		if (window.screen.width <= 1280)
@@ -2224,7 +2224,7 @@ function trialRoutineBegin(trials) {
 			// tot_score_bar_mid_text.pos[1] = -0.4
 			correct_text.height = 0.1
 			correct_score_text.height = 0.1
-			correct_score_text.pos[0] = 0.085
+			correct_score_text.pos[0] = 0.165
 		}
 
 		left_text.refresh()
