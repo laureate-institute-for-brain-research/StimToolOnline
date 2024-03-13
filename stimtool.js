@@ -118,7 +118,7 @@ const isEqualHelperHandlerbar = function (a, b, opts) {
     }
 }
 
-app.engine('hbs', exphbs({
+app.engine('hbs', exphbs.engine({
     extname: '.hbs',
     defaultLayout: false,
     // handlebars: allowInsecurePrototypeAccess(Handlebars),
