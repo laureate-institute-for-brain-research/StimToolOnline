@@ -21,28 +21,13 @@
               <br>
               <a href=""><center><img class="logo" src="/images/logo.png"></center></a>
               <div class="card-body">
-                  <center><p> <a href="/studies">Studies</a> </p></center>
                   <h5 class="card-title text-center">Online StimTool</h5>
                   <br>
                   <form class="form-signin" id='adduser'>
                       <div class="form-label-group">
                           <select id='study-list' required class="form-control" name='study'>
                               <option disabled selected>Choose Study</option>
-                              <option value="AAC-BET">AAC-BET</option>
-                              <option value="BK_Pilot">BK_Pilot</option>
-                              <option value="Exercise_Study">Exercise_Study</option>
-                              <option value="METH_Pilot">METH_Pilot</option>
-                              <option value="CognitiveControl">Cognitive Control</option>
-                              <option value="NCAIR">NCAIR</option>
-                              <option value="NCAIR-Arousal">NCAIR-Arousal</option>
-                              <option value="Driving2">Driving2</option>
-                              <option value="RL_Task">RL_Task</option>
-                              <option value="RL_Task_CB">RL_Task_CB</option>
-                              <option value="Stim_Rating">Stim_Rating</option>
-                              <option value="WB_Pilot">WB_Pilot</option>
-                              <option value="WB_Prolific_Pilot">WB Prolific Pilot</option>
-                              <option value="WB_Cooperation_Task">WB Cooperation Task</option>
-                              <option value="Gorilla_Runner">Gorilla Runner</option>
+                              <option value="WB_Emotional_Faces">WB Session 1</option>
                           </select>
                       </div>
                       <br>
@@ -55,7 +40,7 @@
                       <div class="form-label-group" id="session_div" style="display: none;">
                           <select id='session-list' required class="form-control" name='session'>
                               <option selected disabled>Choose Session</option>
-                              <!-- <option value="T1">T1</option> -->
+                              <option value="T1">T1</option>
                           </select>
                       </div>
                       <br>
@@ -63,7 +48,6 @@
                       <div class="row" id="about_begin_div" style="display: none;">
                         <div class="col mx-auto">
                           <button id='about' class="btn btn-secondary" data-toggle="tooltip" data-placement="left" title="Click to learn more information about the study">About</button>
-                          <button id='skip' class="btn btn-warning" data-toggle="tooltip" data-placement="right" title="Click to skip to a task run">Skip</button>
                           <button id='begin' type="submit" class="btn btn-success float-right" data-toggle="tooltip" data-placement="right" title="Click to begin session">Begin</button>
                         </div>
                         <br>
@@ -184,7 +168,7 @@
   <script src="/js/StimToolLib.js"></script>
   <script src="/js/particles.js"></script>
   
-  <script src="/js/index.js"></script>
+  <script src="/js/index_sm.js"></script>
   
 
 </html>

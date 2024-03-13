@@ -165,6 +165,7 @@ $('#study-list').change(function () {
         'WB_Pilot': 1,
         'WB_Prolific_Pilot': 1,
         'WB_Cooperation_Task': 1,
+        'Gorilla_Runner':1,
     }
 
     // verify that the list of session list is the number of sessions
