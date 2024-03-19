@@ -35,7 +35,7 @@
     "serve-index": "^1.9.1",
     "shelljs": "^0.8.5",
     "sqlstring": "^2.3.3",
-    "survey-jquery": "^1.9.132",
+    "survey-jquery": "^1.9.135",
     "tape": "^5.7.5",
     "to": "^0.2.9",
     "util": "^0.12.5",
