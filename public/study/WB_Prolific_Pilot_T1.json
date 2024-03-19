@@ -52,6 +52,7 @@
         "/?index=48&survey=whodas&session=1",
         "/?index=49&survey=dfas&session=1",
         "/?index=50&survey=leas&session=1",
+        "/?index=51&survey=panasx&session=1",
         "/completeMobile?"
     ],
     "fullscreen": true,

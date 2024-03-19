@@ -5,10 +5,10 @@
  * @author James Touthang <james@touthang.info>
  */
 
-/*jshint -W069 */
-/*Disable Warning Justification:
-	Using bracket notation because it's familiar coding convention with python
-	Counterpart
+/* jshint -W069 */
+/* Disable Warning Justification:
+Using bracket notation because it's familiar coding convention with python
+Counterpart
 */
 
 var event_types = {
@@ -141,7 +141,7 @@ window.onload = function () {
 		.then((values) => {
 
 			resources.push({ name: 'run_schedule.xls', path: values.schedule })
-			resources.push({ name: 'run_schedule2.xls', path: values.schedule2 })
+			// resources.push({ name: 'run_schedule2.xls', path: values.schedule2 })
 			// resources.push({ name: 'run_schedule3.xls', path: values.schedule3 })
 			resources.push({ name: 'instruct_schedule.csv', path: values.instruct_schedule })
 
@@ -410,14 +410,14 @@ flowScheduler.add(trialsLoopEnd);
 
 // MAIN BLOCK
 // Ready Routine
-flowScheduler.add(readyRoutineBegin('MAIN2'));
-flowScheduler.add(readyRoutineEachFrame());
-flowScheduler.add(readyRoutineEnd());
+// flowScheduler.add(readyRoutineBegin('MAIN2'));
+// flowScheduler.add(readyRoutineEachFrame());
+// flowScheduler.add(readyRoutineEnd());
 
-const trialsLoopScheduler2 = new Scheduler(psychoJS);
-flowScheduler.add(trialsLoopBegin2, trialsLoopScheduler2);
-flowScheduler.add(trialsLoopScheduler2);
-flowScheduler.add(trialsLoopEnd);
+// const trialsLoopScheduler2 = new Scheduler(psychoJS);
+// flowScheduler.add(trialsLoopBegin2, trialsLoopScheduler2);
+// flowScheduler.add(trialsLoopScheduler2);
+// flowScheduler.add(trialsLoopEnd);
 
 // MAIN BLOCK
 // Ready Routine
