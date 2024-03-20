@@ -72,7 +72,7 @@
     <div class="container">
         <div class="py-5 text-center">
             <img class="d-block mx-auto mb-4" src="/images/logo_reversed.jpg" alt="" width="180" height="50">
-            <h4>You have completed this HIT!</h4>
+            <h4>You have completed this game!</h4>
             <br>
             <p>Thank You for Your Participation!</p>
           </div>
@@ -90,20 +90,32 @@
     </div>
     <div class="container" style="color: white;">
         <h5>Your Completion Code:</h5>
-        <p>Use the Code below to enter on Mturk to recieve payment.</p>
+        <p>Use the Code below to enter on Prolific and receive payment.</p>
         <h2 class="text-center" id='mturkcode' style="color: rgb(220, 241, 22);">1234</h2>
         <br>
     </div>
-    <div class="container" id='seesion1isntructions' style="color: white; display: none;">
-        <h5>Would you like to earn more <b>&#128176;</b>?</h5>
-        <p>Please complete session 2 of this HIT to recive an additional <b style="color: rgb(106, 173, 106);font-size: 20px;">$4.00</b> reward.</p>
+    <div class="container" id='studyInstr1' style="color: white; display: none;">
+        <h5>Please remember to return to the next session (Session 2) after at least 24 hours. </h5>
+        <p>This next session will pay <b style="color: rgb(106, 173, 106);font-size: 20px;">$10.50</b> for approximately 1 hour of your time.</p>
+        <p>As a reminder, if you complete all 5 sessions you will also receive an additional bonus of up to <b style="color: rgb(106, 173, 106);font-size: 20px;">$10</b> based on your task performance</p>
         <br>
-        <h5>Instructions to Complete Session 2:</h5>
-        <ol>
-            <li>Submit this code for this HIT on Mturk</li>
-            <li>Wait for approval and be added to the qualifications.</li>
-            <li>Accept and perform the HIT titled: Driving Task - Session 2</li>
-        </ol>
+    </div>
+    <div class="container" id='studyInstr2' style="color: white; display: none;">
+        <h5>Please remember to return to the next session (Session 3) after at least 24 hours. </h5>
+        <p>This next session will pay <b style="color: rgb(106, 173, 106);font-size: 20px;">$16.50</b> for approximately 90 minutes of your time.</p>
+        <p>As a reminder, if you complete all 5 sessions you will also receive an additional bonus of up to <b style="color: rgb(106, 173, 106);font-size: 20px;">$10</b> based on your task performance</p>
+        <br>
+    </div>
+    <div class="container" id='studyInstr3' style="color: white; display: none;">
+        <h5>Please remember to return to the next session (Session 4) after at least 24 hours. </h5>
+        <p>This next session will pay <b style="color: rgb(106, 173, 106);font-size: 20px;">$11.50</b> for approximately 1 hour of your time.</p>
+        <p>As a reminder, if you complete all 5 sessions you will also receive an additional bonus of up to <b style="color: rgb(106, 173, 106);font-size: 20px;">$10</b> based on your task performance</p>
+        <br>
+    </div>
+    <div class="container" id='studyInstr4' style="color: white; display: none;">
+        <h5>Please remember to return to the next session (Session 5) after at least 24 hours. </h5>
+        <p>This next session will pay <b style="color: rgb(106, 173, 106);font-size: 20px;">$12.00</b> for approximately 1 hour of your time.</p>
+        <p>As a reminder, if you complete all 5 sessions you will also receive an additional bonus of up to <b style="color: rgb(106, 173, 106);font-size: 20px;">$10</b> based on your task performance</p>
         <br>
     </div>
     <div class="container">
@@ -142,12 +154,27 @@
                     expInfo.run_id = getQueryVariable('run')
                 }
 
+                console.log("THE EXP INFO")
+                console.log(expInfo)
+
 
                 $("#participant").text(expInfo.participant);
                 $("#session").text(expInfo.session);
 
-                if (expInfo.session == 'T1'){
-                    document.getElementById('seesion1isntructions').style.display = 'block';
+                // if (expInfo.session == 'T1'){
+                //     document.getElementById('seesion1isntructions').style.display = 'block';
+                // }
+                if (expInfo.study == 'WB_Emotional_Faces'){
+                    document.getElementById('studyInstr1').style.display = 'block';
+                }
+                if (expInfo.study == 'WB_Advice'){
+                    document.getElementById('studyInstr2').style.display = 'block';
+                }
+                if (expInfo.study == 'WB_Blind_Dating'){
+                    document.getElementById('studyInstr3').style.display = 'block';
+                }
+                if (expInfo.study == 'WB_Social_Media'){
+                    document.getElementById('studyInstr4').style.display = 'block';
                 }
 
                 $("#study").text(expInfo.study);

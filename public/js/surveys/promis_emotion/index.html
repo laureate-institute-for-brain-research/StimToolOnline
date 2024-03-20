@@ -117,7 +117,7 @@
         // Survey.defaultBootstrapCss.navigationButton = "btn";
         var json = {
              "title": "PROMIS Emotional Support",
-             "description": "Please respond to each item by marking one box per row.",
+             "description": "",
              "logoPosition": "right",
              "pages": [
               {
@@ -130,23 +130,23 @@
                  "isRequired": true,
                  "choices": [
                   {
-                   "value": "Item 1",
+                   "value": "1",
                    "text": "Never"
                   },
                   {
-                   "value": "Item 2",
+                   "value": "2",
                    "text": "Rarely"
                   },
                   {
-                   "value": "Item 3",
+                   "value": "3",
                    "text": "Sometimes"
                   },
                   {
-                   "value": "Item 4",
+                   "value": "4",
                    "text": "Usually"
                   },
                   {
-                   "value": "Item 5",
+                   "value": "5",
                    "text": "Always"
                   }
                  ]
@@ -158,23 +158,23 @@
                  "isRequired": true,
                  "choices": [
                   {
-                   "value": "Item 1",
+                   "value": "1",
                    "text": "Never"
                   },
                   {
-                   "value": "Item 2",
+                   "value": "2",
                    "text": "Rarely"
                   },
                   {
-                   "value": "Item 3",
+                   "value": "3",
                    "text": "Sometimes"
                   },
                   {
-                   "value": "Item 4",
+                   "value": "4",
                    "text": "Usually"
                   },
                   {
-                   "value": "Item 5",
+                   "value": "5",
                    "text": "Always"
                   }
                  ]
@@ -186,23 +186,23 @@
                  "isRequired": true,
                  "choices": [
                   {
-                   "value": "Item 1",
+                   "value": "1",
                    "text": "Never"
                   },
                   {
-                   "value": "Item 2",
+                   "value": "2",
                    "text": "Rarely"
                   },
                   {
-                   "value": "Item 3",
+                   "value": "3",
                    "text": "Sometimes"
                   },
                   {
-                   "value": "Item 4",
+                   "value": "4",
                    "text": "Usually"
                   },
                   {
-                   "value": "Item 5",
+                   "value": "5",
                    "text": "Always"
                   }
                  ]
@@ -214,23 +214,23 @@
                  "isRequired": true,
                  "choices": [
                   {
-                   "value": "Item 1",
+                   "value": "1",
                    "text": "Never"
                   },
                   {
-                   "value": "Item 2",
+                   "value": "2",
                    "text": "Rarely"
                   },
                   {
-                   "value": "Item 3",
+                   "value": "3",
                    "text": "Sometimes"
                   },
                   {
-                   "value": "Item 4",
+                   "value": "4",
                    "text": "Usually"
                   },
                   {
-                   "value": "Item 5",
+                   "value": "5",
                    "text": "Always"
                   }
                  ]
@@ -242,23 +242,23 @@
                  "isRequired": true,
                  "choices": [
                   {
-                   "value": "Item 1",
+                   "value": "1",
                    "text": "Never"
                   },
                   {
-                   "value": "Item 2",
+                   "value": "2",
                    "text": "Rarely"
                   },
                   {
-                   "value": "Item 3",
+                   "value": "3",
                    "text": "Sometimes"
                   },
                   {
-                   "value": "Item 4",
+                   "value": "4",
                    "text": "Usually"
                   },
                   {
-                   "value": "Item 5",
+                   "value": "5",
                    "text": "Always"
                   }
                  ]
@@ -270,23 +270,23 @@
                  "isRequired": true,
                  "choices": [
                   {
-                   "value": "Item 1",
+                   "value": "1",
                    "text": "Never"
                   },
                   {
-                   "value": "Item 2",
+                   "value": "2",
                    "text": "Rarely"
                   },
                   {
-                   "value": "Item 3",
+                   "value": "3",
                    "text": "Sometimes"
                   },
                   {
-                   "value": "Item 4",
+                   "value": "4",
                    "text": "Usually"
                   },
                   {
-                   "value": "Item 5",
+                   "value": "5",
                    "text": "Always"
                   }
                  ]
@@ -367,8 +367,47 @@
                 }
 
                 survey.onComplete.add(function (result) {
-                    //result.preventDefault();
-                    postSurveyData(result.data, expInfo.session, expInfo.participant);
+                    // Table Lookup for PROMIS Short Form T-Score
+                    let scaleScoreLookup = new Map();
+                    scaleScoreLookup.set(6, 25.0);
+                    scaleScoreLookup.set(7, 28.9);
+                    scaleScoreLookup.set(8, 30.7);
+                    scaleScoreLookup.set(9, 32.2);
+                    scaleScoreLookup.set(10, 33.5);
+                    scaleScoreLookup.set(11, 34.6);
+                    scaleScoreLookup.set(12, 35.7);
+                    scaleScoreLookup.set(13, 36.8);
+                    scaleScoreLookup.set(14, 37.8);
+                    scaleScoreLookup.set(15, 38.9);
+                    scaleScoreLookup.set(16, 40.0);
+                    scaleScoreLookup.set(17, 41.1);
+                    scaleScoreLookup.set(18, 42.2);
+                    scaleScoreLookup.set(19, 43.3);
+                    scaleScoreLookup.set(20, 44.4);
+                    scaleScoreLookup.set(21, 45.5);
+                    scaleScoreLookup.set(22, 46.7);
+                    scaleScoreLookup.set(23, 48.0);
+                    scaleScoreLookup.set(24, 49.2);
+                    scaleScoreLookup.set(25, 50.5);
+                    scaleScoreLookup.set(26, 51.8);
+                    scaleScoreLookup.set(27, 53.3);
+                    scaleScoreLookup.set(28, 54.9);
+                    scaleScoreLookup.set(29, 57.2);
+                    scaleScoreLookup.set(30, 63.2);
+
+                    let sum = 0
+                    let tScore = 0
+                    Object.entries(result.data).forEach( (answer) => {
+                        if(!answer[0].includes('TRQ')) {
+                            sum = sum + parseInt(answer[1])
+                        }
+                    })
+                    tScore = scaleScoreLookup.get(sum)
+                    let newData = result.data
+                    const tempObj = {tScore: tScore}
+                    Object.assign(newData, tempObj)
+
+                    postSurveyData(newData, expInfo.session, expInfo.participant);
                 });
 
                 $("#surveyElement").Survey({model: survey});

@@ -116,7 +116,7 @@
         // Survey.Survey.cssType = "bootstrap";
         // Survey.defaultBootstrapCss.navigationButton = "btn";
         var json = {
-             "title": "PROMIS Social Isolation",
+             "title": "PROMIS Self Efficacy",
              "description": "",
              "logoPosition": "right",
              "pages": [
@@ -126,168 +126,112 @@
                 {
                  "type": "radiogroup",
                  "name": "question1",
-                 "title": "I feel left out.",
+                 "title": "I can manage to solve difficult problems if I try hard enough.",
                  "isRequired": true,
                  "choices": [
                   {
                    "value": "1",
-                   "text": "Never"
+                   "text": "I am not at all confident"
                   },
                   {
                    "value": "2",
-                   "text": "Rarely"
+                   "text": "I am a little confident"
                   },
                   {
                    "value": "3",
-                   "text": "Sometimes"
+                   "text": "I am somewhat confident"
                   },
                   {
                    "value": "4",
-                   "text": "Usually"
+                   "text": "I am quite confident"
                   },
                   {
                    "value": "5",
-                   "text": "Always"
-                  }
-                 ]
-                },
-                {
-                 "type": "radiogroup",
-                 "name": "question7",
-                 "title": "I feel that people barely know me.",
-                 "isRequired": true,
-                 "choices": [
-                  {
-                   "value": "1",
-                   "text": "Never"
-                  },
-                  {
-                   "value": "2",
-                   "text": "Rarely"
-                  },
-                  {
-                   "value": "3",
-                   "text": "Sometimes"
-                  },
-                  {
-                   "value": "4",
-                   "text": "Usually"
-                  },
-                  {
-                   "value": "5",
-                   "text": "Always"
+                   "text": "I am very confident"
                   }
                  ]
                 },
                 {
                  "type": "radiogroup",
                  "name": "question6",
-                 "title": "I feel isolated from others.",
+                 "title": "I am confident that I could deal efficiently with unexpected events.",
                  "isRequired": true,
                  "choices": [
                   {
                    "value": "1",
-                   "text": "Never"
+                   "text": "I am not at all confident"
                   },
                   {
                    "value": "2",
-                   "text": "Rarely"
+                   "text": "I am a little confident"
                   },
                   {
                    "value": "3",
-                   "text": "Sometimes"
+                   "text": "I am somewhat confident"
                   },
                   {
                    "value": "4",
-                   "text": "Usually"
+                   "text": "I am quite confident"
                   },
                   {
                    "value": "5",
-                   "text": "Always"
+                   "text": "I am very confident"
                   }
                  ]
                 },
                 {
                  "type": "radiogroup",
                  "name": "question5",
-                 "title": "I feel that people are around me but not with me.",
+                 "title": "If I am in trouble, I can think of a solution.",
                  "isRequired": true,
                  "choices": [
                   {
                    "value": "1",
-                   "text": "Never"
+                   "text": "I am not at all confident"
                   },
                   {
                    "value": "2",
-                   "text": "Rarely"
+                   "text": "I am a little confident"
                   },
                   {
                    "value": "3",
-                   "text": "Sometimes"
+                   "text": "I am somewhat confident"
                   },
                   {
                    "value": "4",
-                   "text": "Usually"
+                   "text": "I am quite confident"
                   },
                   {
                    "value": "5",
-                   "text": "Always"
+                   "text": "I am very confident"
                   }
                  ]
                 },
                 {
                  "type": "radiogroup",
                  "name": "question4",
-                 "title": "I feel isolated even when I am not alone.",
+                 "title": "I can handle whatever comes my way.",
                  "isRequired": true,
                  "choices": [
                   {
                    "value": "1",
-                   "text": "Never"
+                   "text": "I am not at all confident"
                   },
                   {
                    "value": "2",
-                   "text": "Rarely"
+                   "text": "I am a little confident"
                   },
                   {
                    "value": "3",
-                   "text": "Sometimes"
+                   "text": "I am somewhat confident"
                   },
                   {
                    "value": "4",
-                   "text": "Usually"
+                   "text": "I am quite confident"
                   },
                   {
                    "value": "5",
-                   "text": "Always"
-                  }
-                 ]
-                },
-                {
-                 "type": "radiogroup",
-                 "name": "question3",
-                 "title": "I feel that people avoid talking to me.",
-                 "isRequired": true,
-                 "choices": [
-                  {
-                   "value": "1",
-                   "text": "Never"
-                  },
-                  {
-                   "value": "2",
-                   "text": "Rarely"
-                  },
-                  {
-                   "value": "3",
-                   "text": "Sometimes"
-                  },
-                  {
-                   "value": "4",
-                   "text": "Usually"
-                  },
-                  {
-                   "value": "5",
-                   "text": "Always"
+                   "text": "I am very confident"
                   }
                  ]
                 }
@@ -369,31 +313,23 @@
                 survey.onComplete.add(function (result) {
                     // Table Lookup for PROMIS Short Form T-Score
                     let scaleScoreLookup = new Map();
-                    scaleScoreLookup.set(6, 34.4);
-                    scaleScoreLookup.set(7, 39.7);
-                    scaleScoreLookup.set(8, 42.2);
-                    scaleScoreLookup.set(9, 44.2);
-                    scaleScoreLookup.set(10, 45.8);
-                    scaleScoreLookup.set(11, 47.3);
-                    scaleScoreLookup.set(12, 48.7);
-                    scaleScoreLookup.set(13, 50.1);
-                    scaleScoreLookup.set(14, 51.5);
-                    scaleScoreLookup.set(15, 53.0);
-                    scaleScoreLookup.set(16, 54.4);
-                    scaleScoreLookup.set(17, 55.9);
-                    scaleScoreLookup.set(18, 57.3);
-                    scaleScoreLookup.set(19, 58.8);
-                    scaleScoreLookup.set(20, 60.2);
-                    scaleScoreLookup.set(21, 61.5);
-                    scaleScoreLookup.set(22, 62.8);
-                    scaleScoreLookup.set(23, 64.0);
-                    scaleScoreLookup.set(24, 65.2);
-                    scaleScoreLookup.set(25, 66.5);
-                    scaleScoreLookup.set(26, 67.7);
-                    scaleScoreLookup.set(27, 69.1);
-                    scaleScoreLookup.set(28, 70.8);
-                    scaleScoreLookup.set(29, 72.6);
-                    scaleScoreLookup.set(30, 76.2);
+                    scaleScoreLookup.set(4, 18.6);
+                    scaleScoreLookup.set(5, 22.2);
+                    scaleScoreLookup.set(6, 25.3);
+                    scaleScoreLookup.set(7, 28.1);
+                    scaleScoreLookup.set(8, 30.6);
+                    scaleScoreLookup.set(9, 32.9);
+                    scaleScoreLookup.set(10, 35.3);
+                    scaleScoreLookup.set(11, 37.5);
+                    scaleScoreLookup.set(12, 39.7);
+                    scaleScoreLookup.set(13, 42.0);
+                    scaleScoreLookup.set(14, 44.4);
+                    scaleScoreLookup.set(15, 46.9);
+                    scaleScoreLookup.set(16, 49.5);
+                    scaleScoreLookup.set(17, 52.2);
+                    scaleScoreLookup.set(18, 55.3);
+                    scaleScoreLookup.set(19, 58.9);
+                    scaleScoreLookup.set(20, 64.7);
 
                     let sum = 0
                     let tScore = 0
