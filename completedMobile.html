@@ -72,7 +72,7 @@
     <div class="container">
         <div class="py-5 text-center">
             <img class="d-block mx-auto mb-4" src="/images/logo_reversed.jpg" alt="" width="180" height="50">
-            <h4>You have completed this game!</h4>
+            <h4>You have completed this session!</h4>
             <br>
             <p>Thank You for Your Participation!</p>
           </div>
@@ -116,6 +116,11 @@
         <h5>Please remember to return to the next session (Session 5) after at least 24 hours. </h5>
         <p>This next session will pay <b style="color: rgb(106, 173, 106);font-size: 20px;">$12.00</b> for approximately 1 hour of your time.</p>
         <p>As a reminder, if you complete all 5 sessions you will also receive an additional bonus of up to <b style="color: rgb(106, 173, 106);font-size: 20px;">$10</b> based on your task performance</p>
+        <br>
+    </div>
+    <div class="container" id='studyInstr5' style="color: white; display: none;">
+        <h5>Congratulations! </h5>
+        <p>Based on your task performance, you have earned a bonus of <b style="color: rgb(106, 173, 106);font-size: 20px;">$10</b>!</p>
         <br>
     </div>
     <div class="container">
@@ -175,6 +180,9 @@
                 }
                 if (expInfo.study == 'WB_Social_Media'){
                     document.getElementById('studyInstr4').style.display = 'block';
+                }
+                if (expInfo.study == 'WB_Cooperation_Task'){
+                    document.getElementById('studyInstr5').style.display = 'block';
                 }
 
                 $("#study").text(expInfo.study);
