@@ -10,7 +10,7 @@ const logger = pino({ level: process.env.LOG_LEVEL || 'info' })
 module.exports = function (app) {
   // ROUTES
   app.get('/', function (req, res) {
-    const q = url.URL(req.url, true).query
+    const q = url.parse(req.url, true).query
     // const session = q.session
     // const mkturk_id = q.mkturk_id
     const survey = q.survey
@@ -32,7 +32,7 @@ module.exports = function (app) {
   // Returning the get request when it has
   // not been past 25hours
   app.get('/tooearly', function (req, res) {
-    // const q = url.URL(req.url, true).query
+    // const q = url.parse(req.url, true).query
     // const session = q.session
     // const mkturk_id = q.mkturk_id
 
@@ -40,7 +40,7 @@ module.exports = function (app) {
   })
 
   app.get('/completed', function (req, res) {
-    // const q = url.URL(req.url, true).query
+    // const q = url.parse(req.url, true).query
     // const session = q.session
     // const mkturk_id = q.mkturk_id
 
@@ -48,7 +48,7 @@ module.exports = function (app) {
   })
 
   app.get('/completedHIT', function (req, res) {
-    // const q = url.URL(req.url, true).query
+    // const q = url.parse(req.url, true).query
     // const session = q.session
     // const mkturk_id = q.mkturk_id
 
@@ -67,7 +67,7 @@ module.exports = function (app) {
   })
 
   app.get('/completeMobile', function (req, res) {
-    // const q = url.URL(req.url, true).query
+    // const q = url.parse(req.url, true).query
     // const session = q.session
     // const mkturk_id = q.mkturk_id
 
@@ -101,7 +101,7 @@ module.exports = function (app) {
   })
 
   app.get('/gonogo', function (req, res) {
-    const q = url.URL(req.url, true).query
+    const q = url.parse(req.url, true).query
     // logger.info(q.version);
     const fileurl = 'task/gonogo/version_' + q.version.toString() + '/gonogo' + q.version.toString() + '.html'
     fs.readFile(fileurl, function (err, data) {
@@ -135,12 +135,12 @@ module.exports = function (app) {
   })
 
   app.get('/chicken_estimate', function (req, res) {
-    const q = url.URL(req.url, true).query
+    const q = url.parse(req.url, true).query
     displayChickenEstimate(res, q.pattern)
   })
 
   app.post('/wave1proceed', function (req, res) {
-    // const q = url.URL(req.url, true).query
+    // const q = url.parse(req.url, true).query
     // const session = q.session
     // const mkturk_id = q.mkturk_id
     // const survey = q.survey
@@ -240,7 +240,7 @@ module.exports = function (app) {
 
     const month = d.getMonth() + 1 // on a separate since if we add, it concatenates the numbers
     const fileDate = d.getFullYear() + '_' + month + '_' + d.getDate() + '_' + d.getHours() + '_' + d.getMinutes()
-    const q = url.URL(req.url, true).query
+    const q = url.parse(req.url, true).query
     const session = q.session
     const study = q.study
     const mturkId = q.mkturk_id
@@ -338,7 +338,7 @@ module.exports = function (app) {
   })
 
   app.post('/saveSquareCircleRating', function (req, res) {
-    const q = url.URL(req.url, true).query
+    const q = url.parse(req.url, true).query
     const d = new Date()
     // const fields = ['datacamp_1', 'datacamp_2', 'datacamp_3', 'datacamp_4']
     // const opts = { fields }
@@ -398,7 +398,7 @@ module.exports = function (app) {
     const month = d.getMonth() + 1 // on a separate since if we add, it concatenates the numbers
 
     const fileDate = d.getFullYear() + '_' + month + '_' + d.getDate() + '_' + d.getHours() + '_' + d.getMinutes()
-    const q = url.URL(req.url, true).query
+    const q = url.parse(req.url, true).query
     const session = q.session
     const study = q.study
     const mturkId = q.mkturk_id
@@ -450,7 +450,7 @@ module.exports = function (app) {
   // Save The input of a file and if its' the same
   // id, study, and session, APPEND it
   app.post('/saveGoNoGo', (req, res) => {
-    const q = url.URL(req.url, true).query
+    const q = url.parse(req.url, true).query
 
     const payload = req.body // json input
     const ipaddr = req.headers['x-forwarded-for'] || req.connection.remoteAddress
@@ -489,7 +489,7 @@ module.exports = function (app) {
   // Save The input of a file and if its' the same
   // id, study, and session, APPEND it
   app.post('/saveFlanker', (req, res) => {
-    const q = url.URL(req.url, true).query
+    const q = url.parse(req.url, true).query
 
     const payload = req.body // json input
     const ipaddr = req.headers['x-forwarded-for'] || req.connection.remoteAddress
@@ -530,7 +530,7 @@ module.exports = function (app) {
   // Save The input of a file and if its' the same
   // id, study, and session, APPEND it
   app.post('/saveColorStroop', (req, res) => {
-    const q = url.URL(req.url, true).query
+    const q = url.parse(req.url, true).query
 
     const payload = req.body // json input
     const ipaddr = req.headers['x-forwarded-for'] || req.connection.remoteAddress
@@ -570,7 +570,7 @@ module.exports = function (app) {
   // Save The input of a file and if its' the same
   // id, study, and session, APPEND it
   app.post('/saveEmotionalStroop', (req, res) => {
-    const q = url.URL(req.url, true).query
+    const q = url.parse(req.url, true).query
 
     const payload = req.body // json input
     const ipaddr = req.headers['x-forwarded-for'] || req.connection.remoteAddress
@@ -629,7 +629,7 @@ module.exports = function (app) {
 
   // Return Time Life given id
   app.get('/getTimeReady', function (req, res) {
-    const q = url.URL(req.url, true).query
+    const q = url.parse(req.url, true).query
     const mturkId = q.mkturk_id
 
     const study = q.study
@@ -659,7 +659,7 @@ module.exports = function (app) {
 
   // Return the phq score of the given mkturk_id
   app.get('/getPHQ', function (req, res) {
-    const q = url.URL(req.url, true).query
+    const q = url.parse(req.url, true).query
     const mturkId = q.mkturk_id
     const session = q.session
     const study = q.study
@@ -668,7 +668,7 @@ module.exports = function (app) {
   })
 
   app.get('/getOASIS', function (req, res) {
-    const q = url.URL(req.url, true).query
+    const q = url.parse(req.url, true).query
     const mturkId = q.mkturk_id
     const session = q.session
     const study = q.study
@@ -684,7 +684,7 @@ module.exports = function (app) {
   // cognitive
   // social
   app.get('/getASI', function (req, res) {
-    const q = url.URL(req.url, true).query
+    const q = url.parse(req.url, true).query
     const mturkId = q.mkturk_id
     // var type = q.type;
 
@@ -710,7 +710,7 @@ module.exports = function (app) {
   })
 
   app.get('/getPANAS', function (req, res) {
-    const q = url.URL(req.url, true).query
+    const q = url.parse(req.url, true).query
     const mturkId = q.mkturk_id
     const session = q.session
     const study = q.study
@@ -731,7 +731,7 @@ module.exports = function (app) {
   })
 
   app.get('/getScores', (req, res) => {
-    const q = url.URL(req.url, true).query
+    const q = url.parse(req.url, true).query
     const mturkId = q.mkturk_id
     // const session = q.session
     const study = q.study
