@@ -1,0 +1,9 @@
+{
+    "name": "TTS Post Task T1",
+    "order": [
+        "/?index=0&survey=tts_post_task&session=1",
+        "/completeMobile?"
+    ],
+    "fullscreen": true,
+    "text_html": "<p>This study includes 7 surveys</p>"
+} 

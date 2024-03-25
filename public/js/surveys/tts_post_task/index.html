@@ -1,0 +1,2505 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <style type="text/css">
+        @font-face {
+            font-family: gotham;
+            src: url(/gotham-book-regular.otf);
+        }
+
+        * {
+            font-family: Helvetica Neue;
+        }
+
+        a:link,
+        a:visited {
+            color: #5e3f99;
+        }
+
+        input[type=text]:focus {
+            border-color: #f68826;
+            box-shadow: 0 0 5px #f68826 !important;
+        }
+
+        input[type=email]:focus {
+            border-color: #f68826;
+            box-shadow: 0 0 5px #f68826 !important;
+        }
+
+        span {
+            color: white !important;
+            fill: white !important;
+        }
+
+        .sv-root-modern .sv-container-modern {
+            color: white !important;
+            fill: white !important;
+        }
+        .sv-radio__svg {
+            border-color: white !important;
+        }
+
+        .sv-root-modern .sv-radio--checked .sv-radio__svg  {
+            fill: white !important;
+        }
+
+        .sv-root-modern input.sv-text, textarea.sv-comment, select.sv-dropdown{
+            color: white !important;
+        }
+        
+    </style>
+    <title>Post Task Questions</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+        crossorigin="anonymous"></script>
+
+    <!-- Latest compiled and minified CSS -->
+    <!-- Using Bootsawtch theme: https://bootswatch.com/cyborg/ -->
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js" integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous"></script>
+
+    <link href="https://unpkg.com/survey-knockout@1.8.41/modern.css" type="text/css" rel="stylesheet"/>
+    <script src="https://unpkg.com/jquery"></script>
+    <script src="https://unpkg.com/survey-jquery@1.8.41/survey.jquery.min.js"></script>
+
+    <script type="text/javascript" src='/js/StimToolLib.js'></script>
+
+</head>
+
+<body>
+
+    <div class="container" style="max-width: 800px;">
+        <div class="py-5 text-center">
+            <img class="d-block mx-auto mb-4" src="/images/logo_reversed.jpg" alt="" width="180" height="50">
+            <!-- <h4>Cultural Survey</h4> -->
+          </div>
+    </div>
+
+    <div class="container" style="max-width: 800px;">
+        <div class="row" >
+            <div id="surveyElement" style="max-width: 800px; width: 770px; margin-bottom:40px"></div>
+            
+            <div id="surveyResult"></div>
+        </div>
+    </div>
+
+    <div class="jumbotron container" style="margin-bottom:0;max-width: 400px;">
+        <table class="table table-hover">
+            <tbody>
+                <tr>
+                  <th scope="row">ID:</th>
+                  <td><a id="participant"></a></td>
+                </tr>
+                <tr>
+                    <th scope="row">Session:</th>
+                    <td><a id="session"></a></td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Study:</th>
+                    <td><a id="study"></a></td>
+                  </tr>
+              </tbody>
+        </table>
+        <p style="text-align: center;">&copy; 2021 <a href="http://www.laureateinstitute.org">laureateinstitute.org</a>. All rights reserved.</p>
+    </div>
+
+    <script type="text/javascript">
+
+        Survey
+            .StylesManager
+            .applyTheme("modern");
+        // Survey.Survey.cssType = "bootstrap";
+        // Survey.defaultBootstrapCss.navigationButton = "btn";
+        var json = {
+             "title": "Post-Experiment Questionnaire",
+             "description": "Please answer these questions based on your experience during Part C of the experiment only.",
+             "logoPosition": "right",
+             "pages": [
+              {
+               "name": "page1",
+               "elements": [
+                {
+                 "type": "html",
+                 "name": "question1",
+                 "html": "<p><u>When the Large Ring Appeared:</u></p>"
+                },
+                {
+                 "type": "rating",
+                 "name": "question2",
+                 "title": "How much did you want to tap the button to prevent the picture",
+                 "autoGenerate": false,
+                 "rateCount": 11,
+                 "rateValues": [
+                  {
+                   "value": 1,
+                   "text": "0"
+                  },
+                  {
+                   "value": 2,
+                   "text": "1"
+                  },
+                  {
+                   "value": 3,
+                   "text": "2"
+                  },
+                  {
+                   "value": 4,
+                   "text": "3"
+                  },
+                  {
+                   "value": 5,
+                   "text": "4"
+                  },
+                  {
+                   "value": 6,
+                   "text": "5"
+                  },
+                  {
+                   "value": 7,
+                   "text": "6"
+                  },
+                  {
+                   "value": 8,
+                   "text": "7"
+                  },
+                  {
+                   "value": 9,
+                   "text": "8"
+                  },
+                  {
+                   "value": 10,
+                   "text": "9"
+                  },
+                  {
+                   "value": 11,
+                   "text": "10"
+                  }
+                 ],
+                 "rateMax": 10
+                },
+                {
+                 "type": "rating",
+                 "name": "question3",
+                 "title": "How uncomfortable were trials where you did not have the opportunity to tap",
+                 "autoGenerate": false,
+                 "rateCount": 11,
+                 "rateValues": [
+                  {
+                   "value": 1,
+                   "text": "0"
+                  },
+                  {
+                   "value": 2,
+                   "text": "1"
+                  },
+                  {
+                   "value": 3,
+                   "text": "2"
+                  },
+                  {
+                   "value": 4,
+                   "text": "3"
+                  },
+                  {
+                   "value": 5,
+                   "text": "4"
+                  },
+                  {
+                   "value": 6,
+                   "text": "5"
+                  },
+                  {
+                   "value": 7,
+                   "text": "6"
+                  },
+                  {
+                   "value": 8,
+                   "text": "7"
+                  },
+                  {
+                   "value": 9,
+                   "text": "8"
+                  },
+                  {
+                   "value": 10,
+                   "text": "9"
+                  },
+                  {
+                   "value": 11,
+                   "text": "10"
+                  }
+                 ],
+                 "rateMax": 10
+                },
+                {
+                 "type": "html",
+                 "name": "question4",
+                 "html": "<p><u>When the Small Ring Appeared:</u></p>"
+                },
+                {
+                 "type": "rating",
+                 "name": "question5",
+                 "title": "How much did you want to tap the button to prevent the picture",
+                 "autoGenerate": false,
+                 "rateCount": 11,
+                 "rateValues": [
+                  {
+                   "value": 1,
+                   "text": "0"
+                  },
+                  {
+                   "value": 2,
+                   "text": "1"
+                  },
+                  {
+                   "value": 3,
+                   "text": "2"
+                  },
+                  {
+                   "value": 4,
+                   "text": "3"
+                  },
+                  {
+                   "value": 5,
+                   "text": "4"
+                  },
+                  {
+                   "value": 6,
+                   "text": "5"
+                  },
+                  {
+                   "value": 7,
+                   "text": "6"
+                  },
+                  {
+                   "value": 8,
+                   "text": "7"
+                  },
+                  {
+                   "value": 9,
+                   "text": "8"
+                  },
+                  {
+                   "value": 10,
+                   "text": "9"
+                  },
+                  {
+                   "value": 11,
+                   "text": "10"
+                  }
+                 ],
+                 "rateMax": 10
+                },
+                {
+                 "type": "rating",
+                 "name": "question6",
+                 "title": "How uncomfortable were trials where you did not have the opportunity to tap",
+                 "autoGenerate": false,
+                 "rateCount": 11,
+                 "rateValues": [
+                  {
+                   "value": 1,
+                   "text": "0"
+                  },
+                  {
+                   "value": 2,
+                   "text": "1"
+                  },
+                  {
+                   "value": 3,
+                   "text": "2"
+                  },
+                  {
+                   "value": 4,
+                   "text": "3"
+                  },
+                  {
+                   "value": 5,
+                   "text": "4"
+                  },
+                  {
+                   "value": 6,
+                   "text": "5"
+                  },
+                  {
+                   "value": 7,
+                   "text": "6"
+                  },
+                  {
+                   "value": 8,
+                   "text": "7"
+                  },
+                  {
+                   "value": 9,
+                   "text": "8"
+                  },
+                  {
+                   "value": 10,
+                   "text": "9"
+                  },
+                  {
+                   "value": 11,
+                   "text": "10"
+                  }
+                 ],
+                 "rateMax": 10
+                },
+                {
+                 "type": "html",
+                 "name": "question7",
+                 "html": "<p><u>When the Triangle Appeared:</u></p>"
+                },
+                {
+                 "type": "rating",
+                 "name": "question8",
+                 "title": "How much did you want to tap the button to prevent the picture",
+                 "autoGenerate": false,
+                 "rateCount": 11,
+                 "rateValues": [
+                  {
+                   "value": 1,
+                   "text": "0"
+                  },
+                  {
+                   "value": 2,
+                   "text": "1"
+                  },
+                  {
+                   "value": 3,
+                   "text": "2"
+                  },
+                  {
+                   "value": 4,
+                   "text": "3"
+                  },
+                  {
+                   "value": 5,
+                   "text": "4"
+                  },
+                  {
+                   "value": 6,
+                   "text": "5"
+                  },
+                  {
+                   "value": 7,
+                   "text": "6"
+                  },
+                  {
+                   "value": 8,
+                   "text": "7"
+                  },
+                  {
+                   "value": 9,
+                   "text": "8"
+                  },
+                  {
+                   "value": 10,
+                   "text": "9"
+                  },
+                  {
+                   "value": 11,
+                   "text": "10"
+                  }
+                 ],
+                 "rateMax": 10
+                },
+                {
+                 "type": "rating",
+                 "name": "question9",
+                 "title": "How uncomfortable were trials where you did not have the opportunity to tap",
+                 "autoGenerate": false,
+                 "rateCount": 11,
+                 "rateValues": [
+                  {
+                   "value": 1,
+                   "text": "0"
+                  },
+                  {
+                   "value": 2,
+                   "text": "1"
+                  },
+                  {
+                   "value": 3,
+                   "text": "2"
+                  },
+                  {
+                   "value": 4,
+                   "text": "3"
+                  },
+                  {
+                   "value": 5,
+                   "text": "4"
+                  },
+                  {
+                   "value": 6,
+                   "text": "5"
+                  },
+                  {
+                   "value": 7,
+                   "text": "6"
+                  },
+                  {
+                   "value": 8,
+                   "text": "7"
+                  },
+                  {
+                   "value": 9,
+                   "text": "8"
+                  },
+                  {
+                   "value": 10,
+                   "text": "9"
+                  },
+                  {
+                   "value": 11,
+                   "text": "10"
+                  }
+                 ],
+                 "rateMax": 10
+                },
+                {
+                 "type": "html",
+                 "name": "question10",
+                 "html": "<p><u>When a Middle-Sized Ring Appeared:</u></p>"
+                },
+                {
+                 "type": "rating",
+                 "name": "question11",
+                 "title": "How much did you want to tap the button to prevent the picture",
+                 "autoGenerate": false,
+                 "rateCount": 11,
+                 "rateValues": [
+                  {
+                   "value": 1,
+                   "text": "0"
+                  },
+                  {
+                   "value": 2,
+                   "text": "1"
+                  },
+                  {
+                   "value": 3,
+                   "text": "2"
+                  },
+                  {
+                   "value": 4,
+                   "text": "3"
+                  },
+                  {
+                   "value": 5,
+                   "text": "4"
+                  },
+                  {
+                   "value": 6,
+                   "text": "5"
+                  },
+                  {
+                   "value": 7,
+                   "text": "6"
+                  },
+                  {
+                   "value": 8,
+                   "text": "7"
+                  },
+                  {
+                   "value": 9,
+                   "text": "8"
+                  },
+                  {
+                   "value": 10,
+                   "text": "9"
+                  },
+                  {
+                   "value": 11,
+                   "text": "10"
+                  }
+                 ],
+                 "rateMax": 10
+                },
+                {
+                 "type": "rating",
+                 "name": "question12",
+                 "title": "How uncomfortable were trials where you did not have the opportunity to tap",
+                 "autoGenerate": false,
+                 "rateCount": 11,
+                 "rateValues": [
+                  {
+                   "value": 1,
+                   "text": "0"
+                  },
+                  {
+                   "value": 2,
+                   "text": "1"
+                  },
+                  {
+                   "value": 3,
+                   "text": "2"
+                  },
+                  {
+                   "value": 4,
+                   "text": "3"
+                  },
+                  {
+                   "value": 5,
+                   "text": "4"
+                  },
+                  {
+                   "value": 6,
+                   "text": "5"
+                  },
+                  {
+                   "value": 7,
+                   "text": "6"
+                  },
+                  {
+                   "value": 8,
+                   "text": "7"
+                  },
+                  {
+                   "value": 9,
+                   "text": "8"
+                  },
+                  {
+                   "value": 10,
+                   "text": "9"
+                  },
+                  {
+                   "value": 11,
+                   "text": "10"
+                  }
+                 ],
+                 "rateMax": 10
+                },
+                {
+                 "type": "html",
+                 "name": "question13",
+                 "html": "<p><u>When You Were Able to Tap the Button to Avoid the Picture, Regardless of Shape/Size:</u></p>"
+                },
+                {
+                 "type": "rating",
+                 "name": "question14",
+                 "title": "How much did you want to tap the button",
+                 "autoGenerate": false,
+                 "rateCount": 11,
+                 "rateValues": [
+                  {
+                   "value": 1,
+                   "text": "0"
+                  },
+                  {
+                   "value": 2,
+                   "text": "1"
+                  },
+                  {
+                   "value": 3,
+                   "text": "2"
+                  },
+                  {
+                   "value": 4,
+                   "text": "3"
+                  },
+                  {
+                   "value": 5,
+                   "text": "4"
+                  },
+                  {
+                   "value": 6,
+                   "text": "5"
+                  },
+                  {
+                   "value": 7,
+                   "text": "6"
+                  },
+                  {
+                   "value": 8,
+                   "text": "7"
+                  },
+                  {
+                   "value": 9,
+                   "text": "8"
+                  },
+                  {
+                   "value": 10,
+                   "text": "9"
+                  },
+                  {
+                   "value": 11,
+                   "text": "10"
+                  }
+                 ],
+                 "rateMax": 10
+                },
+                {
+                 "type": "rating",
+                 "name": "question15",
+                 "title": "How important was it to avoid making unnecessary button taps",
+                 "autoGenerate": false,
+                 "rateCount": 11,
+                 "rateValues": [
+                  {
+                   "value": 1,
+                   "text": "0"
+                  },
+                  {
+                   "value": 2,
+                   "text": "1"
+                  },
+                  {
+                   "value": 3,
+                   "text": "2"
+                  },
+                  {
+                   "value": 4,
+                   "text": "3"
+                  },
+                  {
+                   "value": 5,
+                   "text": "4"
+                  },
+                  {
+                   "value": 6,
+                   "text": "5"
+                  },
+                  {
+                   "value": 7,
+                   "text": "6"
+                  },
+                  {
+                   "value": 8,
+                   "text": "7"
+                  },
+                  {
+                   "value": 9,
+                   "text": "8"
+                  },
+                  {
+                   "value": 10,
+                   "text": "9"
+                  },
+                  {
+                   "value": 11,
+                   "text": "10"
+                  }
+                 ],
+                 "rateMax": 10
+                },
+                {
+                 "type": "rating",
+                 "name": "question16",
+                 "title": "How important was not seeing the picture",
+                 "autoGenerate": false,
+                 "rateCount": 11,
+                 "rateValues": [
+                  {
+                   "value": 1,
+                   "text": "0"
+                  },
+                  {
+                   "value": 2,
+                   "text": "1"
+                  },
+                  {
+                   "value": 3,
+                   "text": "2"
+                  },
+                  {
+                   "value": 4,
+                   "text": "3"
+                  },
+                  {
+                   "value": 5,
+                   "text": "4"
+                  },
+                  {
+                   "value": 6,
+                   "text": "5"
+                  },
+                  {
+                   "value": 7,
+                   "text": "6"
+                  },
+                  {
+                   "value": 8,
+                   "text": "7"
+                  },
+                  {
+                   "value": 9,
+                   "text": "8"
+                  },
+                  {
+                   "value": 10,
+                   "text": "9"
+                  },
+                  {
+                   "value": 11,
+                   "text": "10"
+                  }
+                 ],
+                 "rateMax": 10
+                },
+                {
+                 "type": "rating",
+                 "name": "question17",
+                 "title": "How effective were the button taps for preventing the picture",
+                 "autoGenerate": false,
+                 "rateCount": 11,
+                 "rateValues": [
+                  {
+                   "value": 1,
+                   "text": "0"
+                  },
+                  {
+                   "value": 2,
+                   "text": "1"
+                  },
+                  {
+                   "value": 3,
+                   "text": "2"
+                  },
+                  {
+                   "value": 4,
+                   "text": "3"
+                  },
+                  {
+                   "value": 5,
+                   "text": "4"
+                  },
+                  {
+                   "value": 6,
+                   "text": "5"
+                  },
+                  {
+                   "value": 7,
+                   "text": "6"
+                  },
+                  {
+                   "value": 8,
+                   "text": "7"
+                  },
+                  {
+                   "value": 9,
+                   "text": "8"
+                  },
+                  {
+                   "value": 10,
+                   "text": "9"
+                  },
+                  {
+                   "value": 11,
+                   "text": "10"
+                  }
+                 ],
+                 "rateMax": 10
+                },
+                {
+                 "type": "rating",
+                 "name": "question18",
+                 "title": "How much did Part A and Part B help you choose",
+                 "autoGenerate": false,
+                 "rateCount": 11,
+                 "rateValues": [
+                  {
+                   "value": 1,
+                   "text": "0"
+                  },
+                  {
+                   "value": 2,
+                   "text": "1"
+                  },
+                  {
+                   "value": 3,
+                   "text": "2"
+                  },
+                  {
+                   "value": 4,
+                   "text": "3"
+                  },
+                  {
+                   "value": 5,
+                   "text": "4"
+                  },
+                  {
+                   "value": 6,
+                   "text": "5"
+                  },
+                  {
+                   "value": 7,
+                   "text": "6"
+                  },
+                  {
+                   "value": 8,
+                   "text": "7"
+                  },
+                  {
+                   "value": 9,
+                   "text": "8"
+                  },
+                  {
+                   "value": 10,
+                   "text": "9"
+                  },
+                  {
+                   "value": 11,
+                   "text": "10"
+                  }
+                 ],
+                 "rateMax": 10
+                },
+                {
+                 "type": "html",
+                 "name": "question19",
+                 "html": "<p><u>When You Were Not Able to Tap the Button to Avoid the Picture, Regardless of Shape/Size:</u></p>"
+                },
+                {
+                 "type": "rating",
+                 "name": "question20",
+                 "title": "How much did you wish you were able to tap the button",
+                 "autoGenerate": false,
+                 "rateCount": 11,
+                 "rateValues": [
+                  {
+                   "value": 1,
+                   "text": "0"
+                  },
+                  {
+                   "value": 2,
+                   "text": "1"
+                  },
+                  {
+                   "value": 3,
+                   "text": "2"
+                  },
+                  {
+                   "value": 4,
+                   "text": "3"
+                  },
+                  {
+                   "value": 5,
+                   "text": "4"
+                  },
+                  {
+                   "value": 6,
+                   "text": "5"
+                  },
+                  {
+                   "value": 7,
+                   "text": "6"
+                  },
+                  {
+                   "value": 8,
+                   "text": "7"
+                  },
+                  {
+                   "value": 9,
+                   "text": "8"
+                  },
+                  {
+                   "value": 10,
+                   "text": "9"
+                  },
+                  {
+                   "value": 11,
+                   "text": "10"
+                  }
+                 ],
+                 "rateMax": 10
+                },
+                {
+                 "type": "html",
+                 "name": "question21",
+                 "html": "<p><u>In General:</u></p>"
+                },
+                {
+                 "type": "rating",
+                 "name": "question22",
+                 "title": "How much did you like the study",
+                 "autoGenerate": false,
+                 "rateCount": 11,
+                 "rateValues": [
+                  {
+                   "value": 1,
+                   "text": "0"
+                  },
+                  {
+                   "value": 2,
+                   "text": "1"
+                  },
+                  {
+                   "value": 3,
+                   "text": "2"
+                  },
+                  {
+                   "value": 4,
+                   "text": "3"
+                  },
+                  {
+                   "value": 5,
+                   "text": "4"
+                  },
+                  {
+                   "value": 6,
+                   "text": "5"
+                  },
+                  {
+                   "value": 7,
+                   "text": "6"
+                  },
+                  {
+                   "value": 8,
+                   "text": "7"
+                  },
+                  {
+                   "value": 9,
+                   "text": "8"
+                  },
+                  {
+                   "value": 10,
+                   "text": "9"
+                  },
+                  {
+                   "value": 11,
+                   "text": "10"
+                  }
+                 ],
+                 "rateMax": 10
+                },
+                {
+                 "type": "rating",
+                 "name": "question23",
+                 "title": "How hard was it to pay attention to the shapes",
+                 "autoGenerate": false,
+                 "rateCount": 11,
+                 "rateValues": [
+                  {
+                   "value": 1,
+                   "text": "0"
+                  },
+                  {
+                   "value": 2,
+                   "text": "1"
+                  },
+                  {
+                   "value": 3,
+                   "text": "2"
+                  },
+                  {
+                   "value": 4,
+                   "text": "3"
+                  },
+                  {
+                   "value": 5,
+                   "text": "4"
+                  },
+                  {
+                   "value": 6,
+                   "text": "5"
+                  },
+                  {
+                   "value": 7,
+                   "text": "6"
+                  },
+                  {
+                   "value": 8,
+                   "text": "7"
+                  },
+                  {
+                   "value": 9,
+                   "text": "8"
+                  },
+                  {
+                   "value": 10,
+                   "text": "9"
+                  },
+                  {
+                   "value": 11,
+                   "text": "10"
+                  }
+                 ],
+                 "rateMax": 10
+                },
+                {
+                 "type": "rating",
+                 "name": "question24",
+                 "title": "How anxious were you",
+                 "autoGenerate": false,
+                 "rateCount": 11,
+                 "rateValues": [
+                  {
+                   "value": 1,
+                   "text": "0"
+                  },
+                  {
+                   "value": 2,
+                   "text": "1"
+                  },
+                  {
+                   "value": 3,
+                   "text": "2"
+                  },
+                  {
+                   "value": 4,
+                   "text": "3"
+                  },
+                  {
+                   "value": 5,
+                   "text": "4"
+                  },
+                  {
+                   "value": 6,
+                   "text": "5"
+                  },
+                  {
+                   "value": 7,
+                   "text": "6"
+                  },
+                  {
+                   "value": 8,
+                   "text": "7"
+                  },
+                  {
+                   "value": 9,
+                   "text": "8"
+                  },
+                  {
+                   "value": 10,
+                   "text": "9"
+                  },
+                  {
+                   "value": 11,
+                   "text": "10"
+                  }
+                 ],
+                 "rateMax": 10
+                },
+                {
+                 "type": "rating",
+                 "name": "question25",
+                 "title": "How bored were you",
+                 "autoGenerate": false,
+                 "rateCount": 11,
+                 "rateValues": [
+                  {
+                   "value": 1,
+                   "text": "0"
+                  },
+                  {
+                   "value": 2,
+                   "text": "1"
+                  },
+                  {
+                   "value": 3,
+                   "text": "2"
+                  },
+                  {
+                   "value": 4,
+                   "text": "3"
+                  },
+                  {
+                   "value": 5,
+                   "text": "4"
+                  },
+                  {
+                   "value": 6,
+                   "text": "5"
+                  },
+                  {
+                   "value": 7,
+                   "text": "6"
+                  },
+                  {
+                   "value": 8,
+                   "text": "7"
+                  },
+                  {
+                   "value": 9,
+                   "text": "8"
+                  },
+                  {
+                   "value": 10,
+                   "text": "9"
+                  },
+                  {
+                   "value": 11,
+                   "text": "10"
+                  }
+                 ],
+                 "rateMax": 10
+                },
+                {
+                 "type": "rating",
+                 "name": "question26",
+                 "title": "How hard was it to focus due to boredom",
+                 "autoGenerate": false,
+                 "rateCount": 11,
+                 "rateValues": [
+                  {
+                   "value": 1,
+                   "text": "0"
+                  },
+                  {
+                   "value": 2,
+                   "text": "1"
+                  },
+                  {
+                   "value": 3,
+                   "text": "2"
+                  },
+                  {
+                   "value": 4,
+                   "text": "3"
+                  },
+                  {
+                   "value": 5,
+                   "text": "4"
+                  },
+                  {
+                   "value": 6,
+                   "text": "5"
+                  },
+                  {
+                   "value": 7,
+                   "text": "6"
+                  },
+                  {
+                   "value": 8,
+                   "text": "7"
+                  },
+                  {
+                   "value": 9,
+                   "text": "8"
+                  },
+                  {
+                   "value": 10,
+                   "text": "9"
+                  },
+                  {
+                   "value": 11,
+                   "text": "10"
+                  }
+                 ],
+                 "rateMax": 10
+                },
+                {
+                 "type": "rating",
+                 "name": "question27",
+                 "title": "How hard was it to focus due to anxiety",
+                 "autoGenerate": false,
+                 "rateCount": 11,
+                 "rateValues": [
+                  {
+                   "value": 1,
+                   "text": "0"
+                  },
+                  {
+                   "value": 2,
+                   "text": "1"
+                  },
+                  {
+                   "value": 3,
+                   "text": "2"
+                  },
+                  {
+                   "value": 4,
+                   "text": "3"
+                  },
+                  {
+                   "value": 5,
+                   "text": "4"
+                  },
+                  {
+                   "value": 6,
+                   "text": "5"
+                  },
+                  {
+                   "value": 7,
+                   "text": "6"
+                  },
+                  {
+                   "value": 8,
+                   "text": "7"
+                  },
+                  {
+                   "value": 9,
+                   "text": "8"
+                  },
+                  {
+                   "value": 10,
+                   "text": "9"
+                  },
+                  {
+                   "value": 11,
+                   "text": "10"
+                  }
+                 ],
+                 "rateMax": 10
+                },
+                {
+                 "type": "rating",
+                 "name": "question28",
+                 "title": "How uncomfortable were the negative pictures",
+                 "autoGenerate": false,
+                 "rateCount": 11,
+                 "rateValues": [
+                  {
+                   "value": 1,
+                   "text": "0"
+                  },
+                  {
+                   "value": 2,
+                   "text": "1"
+                  },
+                  {
+                   "value": 3,
+                   "text": "2"
+                  },
+                  {
+                   "value": 4,
+                   "text": "3"
+                  },
+                  {
+                   "value": 5,
+                   "text": "4"
+                  },
+                  {
+                   "value": 6,
+                   "text": "5"
+                  },
+                  {
+                   "value": 7,
+                   "text": "6"
+                  },
+                  {
+                   "value": 8,
+                   "text": "7"
+                  },
+                  {
+                   "value": 9,
+                   "text": "8"
+                  },
+                  {
+                   "value": 10,
+                   "text": "9"
+                  },
+                  {
+                   "value": 11,
+                   "text": "10"
+                  }
+                 ],
+                 "rateMax": 10
+                },
+                {
+                 "type": "rating",
+                 "name": "question29",
+                 "title": "How much did you like tapping the button",
+                 "autoGenerate": false,
+                 "rateCount": 11,
+                 "rateValues": [
+                  {
+                   "value": 1,
+                   "text": "0"
+                  },
+                  {
+                   "value": 2,
+                   "text": "1"
+                  },
+                  {
+                   "value": 3,
+                   "text": "2"
+                  },
+                  {
+                   "value": 4,
+                   "text": "3"
+                  },
+                  {
+                   "value": 5,
+                   "text": "4"
+                  },
+                  {
+                   "value": 6,
+                   "text": "5"
+                  },
+                  {
+                   "value": 7,
+                   "text": "6"
+                  },
+                  {
+                   "value": 8,
+                   "text": "7"
+                  },
+                  {
+                   "value": 9,
+                   "text": "8"
+                  },
+                  {
+                   "value": 10,
+                   "text": "9"
+                  },
+                  {
+                   "value": 11,
+                   "text": "10"
+                  }
+                 ],
+                 "rateMax": 10
+                },
+                {
+                 "type": "rating",
+                 "name": "question30",
+                 "title": "How tiring was it to tap the button",
+                 "autoGenerate": false,
+                 "rateCount": 11,
+                 "rateValues": [
+                  {
+                   "value": 1,
+                   "text": "0"
+                  },
+                  {
+                   "value": 2,
+                   "text": "1"
+                  },
+                  {
+                   "value": 3,
+                   "text": "2"
+                  },
+                  {
+                   "value": 4,
+                   "text": "3"
+                  },
+                  {
+                   "value": 5,
+                   "text": "4"
+                  },
+                  {
+                   "value": 6,
+                   "text": "5"
+                  },
+                  {
+                   "value": 7,
+                   "text": "6"
+                  },
+                  {
+                   "value": 8,
+                   "text": "7"
+                  },
+                  {
+                   "value": 9,
+                   "text": "8"
+                  },
+                  {
+                   "value": 10,
+                   "text": "9"
+                  },
+                  {
+                   "value": 11,
+                   "text": "10"
+                  }
+                 ],
+                 "rateMax": 10
+                },
+                {
+                 "type": "rating",
+                 "name": "question31",
+                 "title": "How willing were you to risk seeing the picture to avoid button-tapping",
+                 "autoGenerate": false,
+                 "rateCount": 11,
+                 "rateValues": [
+                  {
+                   "value": 1,
+                   "text": "0"
+                  },
+                  {
+                   "value": 2,
+                   "text": "1"
+                  },
+                  {
+                   "value": 3,
+                   "text": "2"
+                  },
+                  {
+                   "value": 4,
+                   "text": "3"
+                  },
+                  {
+                   "value": 5,
+                   "text": "4"
+                  },
+                  {
+                   "value": 6,
+                   "text": "5"
+                  },
+                  {
+                   "value": 7,
+                   "text": "6"
+                  },
+                  {
+                   "value": 8,
+                   "text": "7"
+                  },
+                  {
+                   "value": 9,
+                   "text": "8"
+                  },
+                  {
+                   "value": 10,
+                   "text": "9"
+                  },
+                  {
+                   "value": 11,
+                   "text": "10"
+                  }
+                 ],
+                 "rateMax": 10
+                },
+                {
+                 "type": "rating",
+                 "name": "question32",
+                 "title": "How important was it to avoid unnecessary button taps",
+                 "autoGenerate": false,
+                 "rateCount": 11,
+                 "rateValues": [
+                  {
+                   "value": 1,
+                   "text": "0"
+                  },
+                  {
+                   "value": 2,
+                   "text": "1"
+                  },
+                  {
+                   "value": 3,
+                   "text": "2"
+                  },
+                  {
+                   "value": 4,
+                   "text": "3"
+                  },
+                  {
+                   "value": 5,
+                   "text": "4"
+                  },
+                  {
+                   "value": 6,
+                   "text": "5"
+                  },
+                  {
+                   "value": 7,
+                   "text": "6"
+                  },
+                  {
+                   "value": 8,
+                   "text": "7"
+                  },
+                  {
+                   "value": 9,
+                   "text": "8"
+                  },
+                  {
+                   "value": 10,
+                   "text": "9"
+                  },
+                  {
+                   "value": 11,
+                   "text": "10"
+                  }
+                 ],
+                 "rateMax": 10
+                },
+                {
+                 "type": "rating",
+                 "name": "question33",
+                 "title": "How important was it to not see the picture",
+                 "autoGenerate": false,
+                 "rateCount": 11,
+                 "rateValues": [
+                  {
+                   "value": 1,
+                   "text": "0"
+                  },
+                  {
+                   "value": 2,
+                   "text": "1"
+                  },
+                  {
+                   "value": 3,
+                   "text": "2"
+                  },
+                  {
+                   "value": 4,
+                   "text": "3"
+                  },
+                  {
+                   "value": 5,
+                   "text": "4"
+                  },
+                  {
+                   "value": 6,
+                   "text": "5"
+                  },
+                  {
+                   "value": 7,
+                   "text": "6"
+                  },
+                  {
+                   "value": 8,
+                   "text": "7"
+                  },
+                  {
+                   "value": 9,
+                   "text": "8"
+                  },
+                  {
+                   "value": 10,
+                   "text": "9"
+                  },
+                  {
+                   "value": 11,
+                   "text": "10"
+                  }
+                 ],
+                 "rateMax": 10
+                },
+                {
+                 "type": "rating",
+                 "name": "question34",
+                 "title": "How happy were you when you did not see the picture",
+                 "autoGenerate": false,
+                 "rateCount": 11,
+                 "rateValues": [
+                  {
+                   "value": 1,
+                   "text": "0"
+                  },
+                  {
+                   "value": 2,
+                   "text": "1"
+                  },
+                  {
+                   "value": 3,
+                   "text": "2"
+                  },
+                  {
+                   "value": 4,
+                   "text": "3"
+                  },
+                  {
+                   "value": 5,
+                   "text": "4"
+                  },
+                  {
+                   "value": 6,
+                   "text": "5"
+                  },
+                  {
+                   "value": 7,
+                   "text": "6"
+                  },
+                  {
+                   "value": 8,
+                   "text": "7"
+                  },
+                  {
+                   "value": 9,
+                   "text": "8"
+                  },
+                  {
+                   "value": 10,
+                   "text": "9"
+                  },
+                  {
+                   "value": 11,
+                   "text": "10"
+                  }
+                 ],
+                 "rateMax": 10
+                },
+                {
+                 "type": "rating",
+                 "name": "question35",
+                 "title": "How effective do you think the button taps were for avoiding the picture",
+                 "autoGenerate": false,
+                 "rateCount": 11,
+                 "rateValues": [
+                  {
+                   "value": 1,
+                   "text": "0"
+                  },
+                  {
+                   "value": 2,
+                   "text": "1"
+                  },
+                  {
+                   "value": 3,
+                   "text": "2"
+                  },
+                  {
+                   "value": 4,
+                   "text": "3"
+                  },
+                  {
+                   "value": 5,
+                   "text": "4"
+                  },
+                  {
+                   "value": 6,
+                   "text": "5"
+                  },
+                  {
+                   "value": 7,
+                   "text": "6"
+                  },
+                  {
+                   "value": 8,
+                   "text": "7"
+                  },
+                  {
+                   "value": 9,
+                   "text": "8"
+                  },
+                  {
+                   "value": 10,
+                   "text": "9"
+                  },
+                  {
+                   "value": 11,
+                   "text": "10"
+                  }
+                 ],
+                 "rateMax": 10
+                },
+                {
+                 "type": "panel",
+                 "name": "question36",
+                 "title": "Were the pictures predictable during Part C (choose one answer below)?",
+                 "elements": [
+                  {
+                   "type": "radiogroup",
+                   "name": "question36a",
+                   "title": "   ",
+                   "choices": [
+                    "Yes",
+                    "No",
+                    "I'm not sure"
+                   ]
+                  },
+                  {
+                   "type": "comment",
+                   "name": "question36b",
+                   "title": 'explain'
+                  }
+                 ],
+                 "isRequired": true
+                },
+                {
+                 "type": "panel",
+                 "name": "question37",
+                 "title": "Did button tapping prevent the picture during Part C (choose one answer below)?",
+                 "elements": [
+                  {
+                   "type": "radiogroup",
+                   "name": "question37a",
+                   "title": "   ",
+                   "choices": [
+                    "Yes",
+                    "No",
+                    "I'm not sure"
+                   ]
+                  },
+                  {
+                   "type": "comment",
+                   "name": "question37b",
+                   "title": 'explain'
+                  }
+                 ],
+                 "isRequired": true
+                },
+                {
+                 "type": "html",
+                 "name": "question38",
+                 "html": "<p><u>Instructions:</u> Please fill in the blanks below by choosing a percentage between 0-100% considering times that you tapped the button. If you never engaged in button tapping, enter 'N/A'.</p>"
+                },
+                {
+                 "type": "dropdown",
+                 "name": "question39",
+                 "title": "How likely were you to receive the picture when you TAPPED THE BUTTON QUICKLY? ______% (0-100%)",
+                 "isRequired": true,
+                 "choices": [
+                  "0","1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30",
+                  "31","32","33","34","35","36","37","38","39","40","41","42","43","44","45","46","47","48","49","50","51","52","53","54","55","56","57","58","59","60",
+                  "61","62","63","64","65","66","67","68","69","70","71","72","73","74","75","76","77","78","79","80","81","82","83","84","85","86","87","88","89","90",
+                  "91","92","93","94","95","96","97","98","99","100"
+                 ]
+                },
+                {
+                 "type": "dropdown",
+                 "name": "question40",
+                 "title": "How likely were you to receive the picture when you TAPPED THE BUTTON SLOWLY? ______% (0-100%)",
+                 "isRequired": true,
+                 "choices": [
+                  "0","1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30",
+                  "31","32","33","34","35","36","37","38","39","40","41","42","43","44","45","46","47","48","49","50","51","52","53","54","55","56","57","58","59","60",
+                  "61","62","63","64","65","66","67","68","69","70","71","72","73","74","75","76","77","78","79","80","81","82","83","84","85","86","87","88","89","90",
+                  "91","92","93","94","95","96","97","98","99","100"
+                 ]
+                },
+                {
+                 "type": "dropdown",
+                 "name": "question41",
+                 "title": "During the experiment I felt _____% in control of avoiding the pictures by button tapping.",
+                 "isRequired": true,
+                 "choices": [
+                  "0","1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30",
+                  "31","32","33","34","35","36","37","38","39","40","41","42","43","44","45","46","47","48","49","50","51","52","53","54","55","56","57","58","59","60",
+                  "61","62","63","64","65","66","67","68","69","70","71","72","73","74","75","76","77","78","79","80","81","82","83","84","85","86","87","88","89","90",
+                  "91","92","93","94","95","96","97","98","99","100"
+                 ]
+                },
+                {
+                 "type": "text",
+                 "name": "question42",
+                 "title": "How many different sized rings were there?",
+                 "inputType": "number"
+                },
+                {
+                 "type": "text",
+                 "name": "question43",
+                 "title": "How many different rings gave you the negative pictures?",
+                 "inputType": "number"
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question44",
+                 "title": "During the study, did you ever tap the button to avoid seeing the negative picture? (Please choose YES or NO)",
+                 "choices": [
+                  "YES",
+                  "NO"
+                 ]
+                },
+                {
+                 "type": "html",
+                 "name": "question45",
+                 "html": "<p><b><i>(If YES, please answer the questions below)</b></i></p>"
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question46",
+                 "title": "When you tapped the button, did you ever use fingers other than your left pinky finger? (Please answer honestly)",
+                 "choices": [
+                  "YES",
+                  "NO"
+                 ]
+                },
+                {
+                 "type": "text",
+                 "name": "question47",
+                 "title": "When you did tap the button, what were your reasons for doing so?"
+                },
+                {
+                 "type": "rating",
+                 "name": "question48",
+                 "title": "When you did tap the button, how much was it because you were nervous about getting the picture?",
+                 "autoGenerate": false,
+                 "rateCount": 11,
+                 "rateValues": [
+                  {
+                   "value": 1,
+                   "text": "0"
+                  },
+                  {
+                   "value": 2,
+                   "text": "1"
+                  },
+                  {
+                   "value": 3,
+                   "text": "2"
+                  },
+                  {
+                   "value": 4,
+                   "text": "3"
+                  },
+                  {
+                   "value": 5,
+                   "text": "4"
+                  },
+                  {
+                   "value": 6,
+                   "text": "5"
+                  },
+                  {
+                   "value": 7,
+                   "text": "6"
+                  },
+                  {
+                   "value": 8,
+                   "text": "7"
+                  },
+                  {
+                   "value": 9,
+                   "text": "8"
+                  },
+                  {
+                   "value": 10,
+                   "text": "9"
+                  },
+                  {
+                   "value": 11,
+                   "text": "10"
+                  }
+                 ],
+                 "rateMax": 10
+                },
+                {
+                 "type": "rating",
+                 "name": "question49",
+                 "title": "When you did tap the button, how much was it because tapping the button wasn't very uncomfortable or tiring?",
+                 "autoGenerate": false,
+                 "rateCount": 11,
+                 "rateValues": [
+                  {
+                   "value": 1,
+                   "text": "0"
+                  },
+                  {
+                   "value": 2,
+                   "text": "1"
+                  },
+                  {
+                   "value": 3,
+                   "text": "2"
+                  },
+                  {
+                   "value": 4,
+                   "text": "3"
+                  },
+                  {
+                   "value": 5,
+                   "text": "4"
+                  },
+                  {
+                   "value": 6,
+                   "text": "5"
+                  },
+                  {
+                   "value": 7,
+                   "text": "6"
+                  },
+                  {
+                   "value": 8,
+                   "text": "7"
+                  },
+                  {
+                   "value": 9,
+                   "text": "8"
+                  },
+                  {
+                   "value": 10,
+                   "text": "9"
+                  },
+                  {
+                   "value": 11,
+                   "text": "10"
+                  }
+                 ],
+                 "rateMax": 10
+                },
+                {
+                 "type": "rating",
+                 "name": "question50",
+                 "title": "When you did tap the button, how much was it because you believed tapping the button would prevent you from seeing a negative picture?",
+                 "autoGenerate": false,
+                 "rateCount": 11,
+                 "rateValues": [
+                  {
+                   "value": 1,
+                   "text": "0"
+                  },
+                  {
+                   "value": 2,
+                   "text": "1"
+                  },
+                  {
+                   "value": 3,
+                   "text": "2"
+                  },
+                  {
+                   "value": 4,
+                   "text": "3"
+                  },
+                  {
+                   "value": 5,
+                   "text": "4"
+                  },
+                  {
+                   "value": 6,
+                   "text": "5"
+                  },
+                  {
+                   "value": 7,
+                   "text": "6"
+                  },
+                  {
+                   "value": 8,
+                   "text": "7"
+                  },
+                  {
+                   "value": 9,
+                   "text": "8"
+                  },
+                  {
+                   "value": 10,
+                   "text": "9"
+                  },
+                  {
+                   "value": 11,
+                   "text": "10"
+                  }
+                 ],
+                 "rateMax": 10
+                },
+                {
+                 "type": "rating",
+                 "name": "question51",
+                 "title": "When you did tap the button, how much was it because you wanted to perform well on the task?",
+                 "autoGenerate": false,
+                 "rateCount": 11,
+                 "rateValues": [
+                  {
+                   "value": 1,
+                   "text": "0"
+                  },
+                  {
+                   "value": 2,
+                   "text": "1"
+                  },
+                  {
+                   "value": 3,
+                   "text": "2"
+                  },
+                  {
+                   "value": 4,
+                   "text": "3"
+                  },
+                  {
+                   "value": 5,
+                   "text": "4"
+                  },
+                  {
+                   "value": 6,
+                   "text": "5"
+                  },
+                  {
+                   "value": 7,
+                   "text": "6"
+                  },
+                  {
+                   "value": 8,
+                   "text": "7"
+                  },
+                  {
+                   "value": 9,
+                   "text": "8"
+                  },
+                  {
+                   "value": 10,
+                   "text": "9"
+                  },
+                  {
+                   "value": 11,
+                   "text": "10"
+                  }
+                 ],
+                 "rateMax": 10
+                },
+                {
+                 "type": "text",
+                 "name": "question52",
+                 "title": "When you did tap the button, how did you decide how much tapping to do?"
+                },
+                {
+                 "type": "rating",
+                 "name": "question53",
+                 "title": "When you did tap the button, how often did you count your button taps?",
+                 "autoGenerate": false,
+                 "rateCount": 11,
+                 "rateValues": [
+                  {
+                   "value": 1,
+                   "text": "0"
+                  },
+                  {
+                   "value": 2,
+                   "text": "1"
+                  },
+                  {
+                   "value": 3,
+                   "text": "2"
+                  },
+                  {
+                   "value": 4,
+                   "text": "3"
+                  },
+                  {
+                   "value": 5,
+                   "text": "4"
+                  },
+                  {
+                   "value": 6,
+                   "text": "5"
+                  },
+                  {
+                   "value": 7,
+                   "text": "6"
+                  },
+                  {
+                   "value": 8,
+                   "text": "7"
+                  },
+                  {
+                   "value": 9,
+                   "text": "8"
+                  },
+                  {
+                   "value": 10,
+                   "text": "9"
+                  },
+                  {
+                   "value": 11,
+                   "text": "10"
+                  }
+                 ],
+                 "rateMax": 10
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question54",
+                 "title": "During the study, did you ever decide to not tap the button when given the opportunity, even though you thought a picture might appear? (Please choose YES or NO)",
+                 "choices": [
+                  "YES",
+                  "NO"
+                 ]
+                },
+                {
+                 "type": "html",
+                 "name": "question55",
+                 "html": "<p><b><i>(If YES, please answer the questions below)</b></i></p>"
+                },
+                {
+                 "type": "text",
+                 "name": "question56",
+                 "title": "What was your reason for not tapping the button?"
+                },
+                {
+                 "type": "rating",
+                 "name": "question57",
+                 "title": "When you did not tap the button, how much was that due to the button tapping being tiring or uncomfortable?",
+                 "autoGenerate": false,
+                 "rateCount": 11,
+                 "rateValues": [
+                  {
+                   "value": 1,
+                   "text": "0"
+                  },
+                  {
+                   "value": 2,
+                   "text": "1"
+                  },
+                  {
+                   "value": 3,
+                   "text": "2"
+                  },
+                  {
+                   "value": 4,
+                   "text": "3"
+                  },
+                  {
+                   "value": 5,
+                   "text": "4"
+                  },
+                  {
+                   "value": 6,
+                   "text": "5"
+                  },
+                  {
+                   "value": 7,
+                   "text": "6"
+                  },
+                  {
+                   "value": 8,
+                   "text": "7"
+                  },
+                  {
+                   "value": 9,
+                   "text": "8"
+                  },
+                  {
+                   "value": 10,
+                   "text": "9"
+                  },
+                  {
+                   "value": 11,
+                   "text": "10"
+                  }
+                 ],
+                 "rateMax": 10
+                },
+                {
+                 "type": "rating",
+                 "name": "question58",
+                 "title": "When you did not tap the button, how much was it because you did not think the button tapping was effective for preventing the picture?",
+                 "autoGenerate": false,
+                 "rateCount": 11,
+                 "rateValues": [
+                  {
+                   "value": 1,
+                   "text": "0"
+                  },
+                  {
+                   "value": 2,
+                   "text": "1"
+                  },
+                  {
+                   "value": 3,
+                   "text": "2"
+                  },
+                  {
+                   "value": 4,
+                   "text": "3"
+                  },
+                  {
+                   "value": 5,
+                   "text": "4"
+                  },
+                  {
+                   "value": 6,
+                   "text": "5"
+                  },
+                  {
+                   "value": 7,
+                   "text": "6"
+                  },
+                  {
+                   "value": 8,
+                   "text": "7"
+                  },
+                  {
+                   "value": 9,
+                   "text": "8"
+                  },
+                  {
+                   "value": 10,
+                   "text": "9"
+                  },
+                  {
+                   "value": 11,
+                   "text": "10"
+                  }
+                 ],
+                 "rateMax": 10
+                },
+                {
+                 "type": "rating",
+                 "name": "question59",
+                 "title": "When you did not tap the button, how much was it because you were not very nervous about getting the picture?",
+                 "autoGenerate": false,
+                 "rateCount": 11,
+                 "rateValues": [
+                  {
+                   "value": 1,
+                   "text": "0"
+                  },
+                  {
+                   "value": 2,
+                   "text": "1"
+                  },
+                  {
+                   "value": 3,
+                   "text": "2"
+                  },
+                  {
+                   "value": 4,
+                   "text": "3"
+                  },
+                  {
+                   "value": 5,
+                   "text": "4"
+                  },
+                  {
+                   "value": 6,
+                   "text": "5"
+                  },
+                  {
+                   "value": 7,
+                   "text": "6"
+                  },
+                  {
+                   "value": 8,
+                   "text": "7"
+                  },
+                  {
+                   "value": 9,
+                   "text": "8"
+                  },
+                  {
+                   "value": 10,
+                   "text": "9"
+                  },
+                  {
+                   "value": 11,
+                   "text": "10"
+                  }
+                 ],
+                 "rateMax": 10
+                },
+                {
+                 "type": "rating",
+                 "name": "question60",
+                 "title": "When you did not tap the button, how much was it because you wanted to face your fear of the picture?",
+                 "autoGenerate": false,
+                 "rateCount": 11,
+                 "rateValues": [
+                  {
+                   "value": 1,
+                   "text": "0"
+                  },
+                  {
+                   "value": 2,
+                   "text": "1"
+                  },
+                  {
+                   "value": 3,
+                   "text": "2"
+                  },
+                  {
+                   "value": 4,
+                   "text": "3"
+                  },
+                  {
+                   "value": 5,
+                   "text": "4"
+                  },
+                  {
+                   "value": 6,
+                   "text": "5"
+                  },
+                  {
+                   "value": 7,
+                   "text": "6"
+                  },
+                  {
+                   "value": 8,
+                   "text": "7"
+                  },
+                  {
+                   "value": 9,
+                   "text": "8"
+                  },
+                  {
+                   "value": 10,
+                   "text": "9"
+                  },
+                  {
+                   "value": 11,
+                   "text": "10"
+                  }
+                 ],
+                 "rateMax": 10
+                },
+                {
+                 "type": "html",
+                 "name": "question61",
+                 "html": "<p>Please answer the following questions with regard to your experience of Part D of the task</p>"
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question62",
+                 "title": "Were the pictures predictable during Part D? (choose one answer below)",
+                 "choices": [
+                  "Yes",
+                  "No",
+                  "I'm not sure"
+                 ]
+                },
+                {
+                 "type": "text",
+                 "name": "question63",
+                 "title": "Explain:"
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question64",
+                 "title": "Did button tapping prevent the picture during Part D? (choose one answer below)",
+                 "choices": [
+                  "Yes",
+                  "No",
+                  "I'm not sure"
+                 ]
+                },
+                {
+                 "type": "text",
+                 "name": "question65",
+                 "title": "Explain:"
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question66",
+                 "title": "Was anything different in Part D compared to Part C? (choose one answer below)",
+                 "choices": [
+                  "Yes",
+                  "No",
+                  "I'm not sure"
+                 ]
+                },
+                {
+                 "type": "text",
+                 "name": "question67",
+                 "title": "Explain:"
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question68",
+                 "title": "Which of these best describes your approach to the computer task overall? (choose one answer below)",
+                 "choices": [
+                  "Better safe than sorry",
+                  "Don't waste effort",
+                  "Tap exactly the right amount",
+                  "Other"
+                 ]
+                },
+                {
+                 "type": "text",
+                 "name": "question69",
+                 "title": "Regardless of your answer to the previous question, please describe your overall approach to the task in your own words, as best you can."
+                }
+               ]
+              }
+             ]
+            }
+
+        window.survey = new Survey.Model(json);
+
+
+        // Recor the response time or how long they spent on a page
+        lastpage = survey.currentPage;
+        function timerLoop(elapsed) {
+            var page = survey.currentPage; // page variable is the currentPage on the survey
+            if (!page) return;
+            if (lastpage != page) {
+                // set new start date
+                start = new Date().getTime(); // sets new start Date object when page has changed.
+                lastpage = page // sets the last page to currente page 
+
+            }
+            var valueName = "TRQ" + survey.pages.indexOf(page);
+
+            var ms = survey.getValue(valueName); // gets the value of the valuename. e.g: TRQ1
+
+            if (ms == null) ms = 0;
+            else ms = elapsed;
+            survey.setValue(valueName, ms);
+            $('#timeEl').text(elapsed + ' ms');
+        }
+
+
+        function getQueryVariable(variable) {
+            var query = window.location.search.substring(1);
+            var vars = query.split('&');
+            for (var i = 0; i < vars.length; i++) {
+                var pair = vars[i].split('=');
+                if (decodeURIComponent(pair[0]) == variable) {
+                    return decodeURIComponent(pair[1]);
+                }
+            }
+            return 'NULL'
+        }
+
+        survey.showProgressBar = "bottom";
+
+        survey.goNextPageAutomatic = false
+        survey.showNavigationButtons = true;
+        survey.showCompletedPage = false;
+
+        // Get Query Variables
+        var surveyname = getQueryVariable('survey');
+
+        var expInfo = { 'participant': '' ,'session': '',  'task': surveyname, 'date' : formatDate(), 'study': '', 'id': getQueryVariable('id') };
+
+        // Get info Promize
+        const getInfoPromise = new Promise((resolve, reject) => {
+            $.ajax({
+                type: "POST",
+                url: '/getInfo',
+                data: { 'id': expInfo.id },
+                dataType: 'JSON',
+                success: function (data) {
+                    resolve(data)
+                }
+            })
+        })
+            // Read getINFO 
+            .then((values) => {
+                console.log(values)
+                if (values.subject && values.session && values.study) {
+                    expInfo.participant = values.subject
+                    expInfo.study = values.study
+                    expInfo.session = values.session
+                    expInfo.run_id = getQueryVariable('run')
+                }
+
+                survey.onComplete.add(function (result) {
+                    //result.preventDefault();
+                    postSurveyData(result.data, expInfo.session, expInfo.participant);
+                });
+
+                $("#surveyElement").Survey({model: survey});
+    
+                $("#participant").text(expInfo.participant);
+                $("#session").text(expInfo.session);
+                $("#study").text(expInfo.study);
+
+            })
+
+        function postSurveyData(data, session, mkturkid) {
+            console.log('/link?id=' + expInfo.id  + '&index=' + (parseInt(getQueryVariable('index')) + 1))
+            $.ajax({
+                type: "POST",
+                url: '/save',
+                data: {
+                    "trials_data": data,
+                    "expInfo": expInfo
+                },
+                dataType: 'JSON',
+                statusCode: {
+                    200: function() {
+                        console.log('sucess saved on backend')
+                        console.log('/link?id=' + expInfo.id  + '&index=' + (parseInt(getQueryVariable('index')) + 1))
+                        window.location.replace('/link?id=' + expInfo.id  + '&index=' + (parseInt(getQueryVariable('index')) + 1))
+                    }
+                }
+            }) 
+                
+        }
+
+        var start = new Date().getTime(),
+            elapsed = '0.0';
+
+        // executes timerCallback every 100 ms
+        timerID = window.setInterval(function () {
+
+            var time = new Date().getTime() - start;
+            elapsed = Math.floor(time);
+
+            //alert(elapsed);
+            //$('#timeEl').text(elapsed + ' ms');
+
+            //displayTime(1);
+            timerLoop(elapsed);
+
+        }, 5);
+    </script>
+
+</body>
+
+</html>

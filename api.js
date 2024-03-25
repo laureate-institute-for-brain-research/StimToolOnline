@@ -15,6 +15,9 @@ module.exports = function (app) {
     // const mkturk_id = q.mkturk_id
     const survey = q.survey
     const task = q.task
+    console.log('IN GET REQUEST')
+    console.log(q)
+
     // const study = q.study
 
     // const ctpattern = q.pattern
@@ -23,6 +26,8 @@ module.exports = function (app) {
     if (task) {
       displayTask(task, req, res, q)
     } else if (survey) {
+      console.log('correct')
+      console.log(survey)
       displaySurvey(survey, res)
     } else {
       displayHome(res)
@@ -1270,9 +1275,13 @@ module.exports = function (app) {
     })
   }
 
-  function displaySurvey (survey, res) {
+  function displaySurvey(survey, res) {
+    console.log('survey requested')
     logger.info('survey requested: ' + survey)
     fs.readFile(`public/js/surveys/${survey}/index.html`, function (err, data) {
+      if (err) {
+        console.log(err.stack)
+      }
       // Write Header
       res.writeHead(200, {
         'Content-Type': 'text/html'

@@ -169,7 +169,8 @@ $('#study-list').change(function () {
       'WB_Social_Media': 1,
         'WB_Prolific_Pilot': 1,
         'WB_Cooperation_Task': 1,
-        'Gorilla_Runner':1,
+      'Gorilla_Runner': 1,
+      'TTS_Surveys':1,
     }
 
     // verify that the list of session list is the number of sessions
@@ -359,7 +360,9 @@ document.getElementById('skip').addEventListener('click', (event) => {
                 // } else {
                 //     var link = run_val + '&id=' + result.respond.info.link + '&index=' + idx
                 // }
-                var link = run_val + '&id=' + result.respond.info.link + '&index=' + idx
+              var link = run_val + '&id=' + result.respond.info.link + '&index=' + idx
+              console.log("THE GENERATED LINK")
+              console.log(link)
                 window.location.replace(link);
             })
         })

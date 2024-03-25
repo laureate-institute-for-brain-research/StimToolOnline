@@ -1,0 +1,1479 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <style type="text/css">
+        @font-face {
+            font-family: gotham;
+            src: url(/gotham-book-regular.otf);
+        }
+
+        * {
+            font-family: Helvetica Neue;
+        }
+
+        a:link,
+        a:visited {
+            color: #5e3f99;
+        }
+
+        input[type=text]:focus {
+            border-color: #f68826;
+            box-shadow: 0 0 5px #f68826 !important;
+        }
+
+        input[type=email]:focus {
+            border-color: #f68826;
+            box-shadow: 0 0 5px #f68826 !important;
+        }
+
+        span {
+            color: white !important;
+            fill: white !important;
+        }
+
+        .sv-root-modern .sv-container-modern {
+            color: white !important;
+            fill: white !important;
+        }
+        .sv-radio__svg {
+            border-color: white !important;
+        }
+
+        .sv-root-modern .sv-radio--checked .sv-radio__svg  {
+            fill: white !important;
+        }
+
+        .sv-root-modern input.sv-text, textarea.sv-comment, select.sv-dropdown{
+            color: white !important;
+        }
+        
+    </style>
+    <title>Post Task Questions</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+        crossorigin="anonymous"></script>
+
+    <!-- Latest compiled and minified CSS -->
+    <!-- Using Bootsawtch theme: https://bootswatch.com/cyborg/ -->
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js" integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous"></script>
+
+    <link href="https://unpkg.com/survey-knockout@1.8.41/modern.css" type="text/css" rel="stylesheet"/>
+    <script src="https://unpkg.com/jquery"></script>
+    <script src="https://unpkg.com/survey-jquery@1.8.41/survey.jquery.min.js"></script>
+
+    <script type="text/javascript" src='/js/StimToolLib.js'></script>
+
+</head>
+
+<body>
+
+    <div class="container" style="max-width: 800px;">
+        <div class="py-5 text-center">
+            <img class="d-block mx-auto mb-4" src="/images/logo_reversed.jpg" alt="" width="180" height="50">
+            <!-- <h4>Cultural Survey</h4> -->
+          </div>
+    </div>
+
+    <div class="container" style="max-width: 800px;">
+        <div class="row" >
+            <div id="surveyElement" style="max-width: 800px; width: 770px; margin-bottom:40px"></div>
+            
+            <div id="surveyResult"></div>
+        </div>
+    </div>
+
+    <div class="jumbotron container" style="margin-bottom:0;max-width: 400px;">
+        <table class="table table-hover">
+            <tbody>
+                <tr>
+                  <th scope="row">ID:</th>
+                  <td><a id="participant"></a></td>
+                </tr>
+                <tr>
+                    <th scope="row">Session:</th>
+                    <td><a id="session"></a></td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Study:</th>
+                    <td><a id="study"></a></td>
+                  </tr>
+              </tbody>
+        </table>
+        <p style="text-align: center;">&copy; 2021 <a href="http://www.laureateinstitute.org">laureateinstitute.org</a>. All rights reserved.</p>
+    </div>
+
+    <script type="text/javascript">
+
+        Survey
+            .StylesManager
+            .applyTheme("modern");
+        // Survey.Survey.cssType = "bootstrap";
+        // Survey.defaultBootstrapCss.navigationButton = "btn";
+        var json = {
+             "title": "ICBC",
+             "description": "This list consists of several behaviors that we all engage in from time to time. It can be challenging to be honest about your level of involvement in these behaviors and therefore we emphasize that all information here will be confidential. You will not be judged in any way based on your answers and we encourage you to fill this list honestly and accurately. When considering your responses, please do not include issues that are caused by medical conditions (e.g. diabetes, erectile dysfunction). Please answer the questions below for every behavior on the list by selecting the appropriate response on the scale ranging from 'Never' to 'Always'. Please answer each question as it applies to you over the last 12 months. Do YOU and/or OTHERS think you have an issue/problem with any of the following behaviors?",
+             "logoPosition": "right",
+             "pages": [
+              {
+               "name": "page1",
+               "elements": [
+                {
+                 "type": "radiogroup",
+                 "name": "question1",
+                 "title": "Washing",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "Item 1",
+                   "text": "Never"
+                  },
+                  {
+                   "value": "Item 2",
+                   "text": "Sometimes"
+                  },
+                  {
+                   "value": "Item 3",
+                   "text": "Often"
+                  },
+                  {
+                   "value": "Item 4",
+                   "text": "Always"
+                  }
+                 ]
+                },
+                {
+                 "type": "checkbox",
+                 "name": "question1d",
+                 "title": "This behaviour/urge/desire causes ME distress:(tick if \"Yes\")",
+                 "isRequired": false,
+                 "choices": [
+                  {
+                   "value": "Item 1",
+                   "text": "Yes"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question2",
+                 "title": "Smoking",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "Item 1",
+                   "text": "Never"
+                  },
+                  {
+                   "value": "Item 2",
+                   "text": "Sometimes"
+                  },
+                  {
+                   "value": "Item 3",
+                   "text": "Often"
+                  },
+                  {
+                   "value": "Item 4",
+                   "text": "Always"
+                  }
+                 ]
+                },
+                {
+                 "type": "checkbox",
+                 "name": "question2d",
+                 "title": "This behaviour/urge/desire causes ME distress:(tick if \"Yes\")",
+                 "isRequired": false,
+                 "choices": [
+                  {
+                   "value": "Item 1",
+                   "text": "Yes"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question3",
+                 "title": "Feeling compelled to collect free things (books, journals, sample items when shopping) or saving something you know you will never use.",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "Item 1",
+                   "text": "Never"
+                  },
+                  {
+                   "value": "Item 2",
+                   "text": "Sometimes"
+                  },
+                  {
+                   "value": "Item 3",
+                   "text": "Often"
+                  },
+                  {
+                   "value": "Item 4",
+                   "text": "Always"
+                  }
+                 ]
+                },
+                {
+                 "type": "checkbox",
+                 "name": "question3d",
+                 "title": "This behaviour/urge/desire causes ME distress:(tick if \"Yes\")",
+                 "isRequired": false,
+                 "choices": [
+                  {
+                   "value": "Item 1",
+                   "text": "Yes"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question4",
+                 "title": "Being overly cautious with money",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "Item 1",
+                   "text": "Never"
+                  },
+                  {
+                   "value": "Item 2",
+                   "text": "Sometimes"
+                  },
+                  {
+                   "value": "Item 3",
+                   "text": "Often"
+                  },
+                  {
+                   "value": "Item 4",
+                   "text": "Always"
+                  }
+                 ]
+                },
+                {
+                 "type": "checkbox",
+                 "name": "question4d",
+                 "title": "This behaviour/urge/desire causes ME distress:(tick if \"Yes\")",
+                 "isRequired": false,
+                 "choices": [
+                  {
+                   "value": "Item 1",
+                   "text": "Yes"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question5",
+                 "title": "(Re)arranging/ordering",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "Item 1",
+                   "text": "Never"
+                  },
+                  {
+                   "value": "Item 2",
+                   "text": "Sometimes"
+                  },
+                  {
+                   "value": "Item 3",
+                   "text": "Often"
+                  },
+                  {
+                   "value": "Item 4",
+                   "text": "Always"
+                  }
+                 ]
+                },
+                {
+                 "type": "checkbox",
+                 "name": "question5d",
+                 "title": "This behaviour/urge/desire causes ME distress:(tick if \"Yes\")",
+                 "isRequired": false,
+                 "choices": [
+                  {
+                   "value": "Item 1",
+                   "text": "Yes"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question6",
+                 "title": "Shopping",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "Item 1",
+                   "text": "Never"
+                  },
+                  {
+                   "value": "Item 2",
+                   "text": "Sometimes"
+                  },
+                  {
+                   "value": "Item 3",
+                   "text": "Often"
+                  },
+                  {
+                   "value": "Item 4",
+                   "text": "Always"
+                  }
+                 ]
+                },
+                {
+                 "type": "checkbox",
+                 "name": "question6d",
+                 "title": "This behaviour/urge/desire causes ME distress:(tick if \"Yes\")",
+                 "isRequired": false,
+                 "choices": [
+                  {
+                   "value": "Item 1",
+                   "text": "Yes"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question7",
+                 "title": "List making",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "Item 1",
+                   "text": "Never"
+                  },
+                  {
+                   "value": "Item 2",
+                   "text": "Sometimes"
+                  },
+                  {
+                   "value": "Item 3",
+                   "text": "Often"
+                  },
+                  {
+                   "value": "Item 4",
+                   "text": "Always"
+                  }
+                 ]
+                },
+                {
+                 "type": "checkbox",
+                 "name": "question7d",
+                 "title": "This behaviour/urge/desire causes ME distress:(tick if \"Yes\")",
+                 "isRequired": false,
+                 "choices": [
+                  {
+                   "value": "Item 1",
+                   "text": "Yes"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question8",
+                 "title": "Counting (e.g. money, tiles)",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "Item 1",
+                   "text": "Never"
+                  },
+                  {
+                   "value": "Item 2",
+                   "text": "Sometimes"
+                  },
+                  {
+                   "value": "Item 3",
+                   "text": "Often"
+                  },
+                  {
+                   "value": "Item 4",
+                   "text": "Always"
+                  }
+                 ]
+                },
+                {
+                 "type": "checkbox",
+                 "name": "question8d",
+                 "title": "This behaviour/urge/desire causes ME distress:(tick if \"Yes\")",
+                 "isRequired": false,
+                 "choices": [
+                  {
+                   "value": "Item 1",
+                   "text": "Yes"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question9",
+                 "title": "Grooming",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "Item 1",
+                   "text": "Never"
+                  },
+                  {
+                   "value": "Item 2",
+                   "text": "Sometimes"
+                  },
+                  {
+                   "value": "Item 3",
+                   "text": "Often"
+                  },
+                  {
+                   "value": "Item 4",
+                   "text": "Always"
+                  }
+                 ]
+                },
+                {
+                 "type": "checkbox",
+                 "name": "question9d",
+                 "title": "This behaviour/urge/desire causes ME distress:(tick if \"Yes\")",
+                 "isRequired": false,
+                 "choices": [
+                  {
+                   "value": "Item 1",
+                   "text": "Yes"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question10",
+                 "title": "Idiosyncratic routines (performing a very personalised sequence of actions)",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "Item 1",
+                   "text": "Never"
+                  },
+                  {
+                   "value": "Item 2",
+                   "text": "Sometimes"
+                  },
+                  {
+                   "value": "Item 3",
+                   "text": "Often"
+                  },
+                  {
+                   "value": "Item 4",
+                   "text": "Always"
+                  }
+                 ]
+                },
+                {
+                 "type": "checkbox",
+                 "name": "question10d",
+                 "title": "This behaviour/urge/desire causes ME distress:(tick if \"Yes\")",
+                 "isRequired": false,
+                 "choices": [
+                  {
+                   "value": "Item 1",
+                   "text": "Yes"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question11",
+                 "title": "Repeating actions (performing actions over and over again)",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "Item 1",
+                   "text": "Never"
+                  },
+                  {
+                   "value": "Item 2",
+                   "text": "Sometimes"
+                  },
+                  {
+                   "value": "Item 3",
+                   "text": "Often"
+                  },
+                  {
+                   "value": "Item 4",
+                   "text": "Always"
+                  }
+                 ]
+                },
+                {
+                 "type": "checkbox",
+                 "name": "question11d",
+                 "title": "This behaviour/urge/desire causes ME distress:(tick if \"Yes\")",
+                 "isRequired": false,
+                 "choices": [
+                  {
+                   "value": "Item 1",
+                   "text": "Yes"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question12",
+                 "title": "Exercising",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "Item 1",
+                   "text": "Never"
+                  },
+                  {
+                   "value": "Item 2",
+                   "text": "Sometimes"
+                  },
+                  {
+                   "value": "Item 3",
+                   "text": "Often"
+                  },
+                  {
+                   "value": "Item 4",
+                   "text": "Always"
+                  }
+                 ]
+                },
+                {
+                 "type": "checkbox",
+                 "name": "question12d",
+                 "title": "This behaviour/urge/desire causes ME distress:(tick if \"Yes\")",
+                 "isRequired": false,
+                 "choices": [
+                  {
+                   "value": "Item 1",
+                   "text": "Yes"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question13",
+                 "title": "Betting/gambling",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "Item 1",
+                   "text": "Never"
+                  },
+                  {
+                   "value": "Item 2",
+                   "text": "Sometimes"
+                  },
+                  {
+                   "value": "Item 3",
+                   "text": "Often"
+                  },
+                  {
+                   "value": "Item 4",
+                   "text": "Always"
+                  }
+                 ]
+                },
+                {
+                 "type": "checkbox",
+                 "name": "question13d",
+                 "title": "This behaviour/urge/desire causes ME distress:(tick if \"Yes\")",
+                 "isRequired": false,
+                 "choices": [
+                  {
+                   "value": "Item 1",
+                   "text": "Yes"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question14",
+                 "title": "Hair picking",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "Item 1",
+                   "text": "Never"
+                  },
+                  {
+                   "value": "Item 2",
+                   "text": "Sometimes"
+                  },
+                  {
+                   "value": "Item 3",
+                   "text": "Often"
+                  },
+                  {
+                   "value": "Item 4",
+                   "text": "Always"
+                  }
+                 ]
+                },
+                {
+                 "type": "checkbox",
+                 "name": "question14d",
+                 "title": "This behaviour/urge/desire causes ME distress:(tick if \"Yes\")",
+                 "isRequired": false,
+                 "choices": [
+                  {
+                   "value": "Item 1",
+                   "text": "Yes"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question15",
+                 "title": "Lying",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "Item 1",
+                   "text": "Never"
+                  },
+                  {
+                   "value": "Item 2",
+                   "text": "Sometimes"
+                  },
+                  {
+                   "value": "Item 3",
+                   "text": "Often"
+                  },
+                  {
+                   "value": "Item 4",
+                   "text": "Always"
+                  }
+                 ]
+                },
+                {
+                 "type": "checkbox",
+                 "name": "question15d",
+                 "title": "This behaviour/urge/desire causes ME distress:(tick if \"Yes\")",
+                 "isRequired": false,
+                 "choices": [
+                  {
+                   "value": "Item 1",
+                   "text": "Yes"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question16",
+                 "title": "Sexual activities/behaviours",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "Item 1",
+                   "text": "Never"
+                  },
+                  {
+                   "value": "Item 2",
+                   "text": "Sometimes"
+                  },
+                  {
+                   "value": "Item 3",
+                   "text": "Often"
+                  },
+                  {
+                   "value": "Item 4",
+                   "text": "Always"
+                  }
+                 ]
+                },
+                {
+                 "type": "checkbox",
+                 "name": "question16d",
+                 "title": "This behaviour/urge/desire causes ME distress:(tick if \"Yes\")",
+                 "isRequired": false,
+                 "choices": [
+                  {
+                   "value": "Item 1",
+                   "text": "Yes"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question17",
+                 "title": "Alcohol consumption",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "Item 1",
+                   "text": "Never"
+                  },
+                  {
+                   "value": "Item 2",
+                   "text": "Sometimes"
+                  },
+                  {
+                   "value": "Item 3",
+                   "text": "Often"
+                  },
+                  {
+                   "value": "Item 4",
+                   "text": "Always"
+                  }
+                 ]
+                },
+                {
+                 "type": "checkbox",
+                 "name": "question17d",
+                 "title": "This behaviour/urge/desire causes ME distress:(tick if \"Yes\")",
+                 "isRequired": false,
+                 "choices": [
+                  {
+                   "value": "Item 1",
+                   "text": "Yes"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question_check1",
+                 "title": "Select 'Often'",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "Item 1",
+                   "text": "Never"
+                  },
+                  {
+                   "value": "Item 2",
+                   "text": "Sometimes"
+                  },
+                  {
+                   "value": "Item 3",
+                   "text": "Often"
+                  },
+                  {
+                   "value": "Item 4",
+                   "text": "Always"
+                  }
+                 ]
+                },
+                {
+                 "type": "checkbox",
+                 "name": "question_check1d",
+                 "title": "This behaviour/urge/desire causes ME distress:(Select \"Yes\")",
+                 "isRequired": false,
+                 "choices": [
+                  {
+                   "value": "Item 1",
+                   "text": "Yes"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question18",
+                 "title": "Planning (e.g. over-organising)",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "Item 1",
+                   "text": "Never"
+                  },
+                  {
+                   "value": "Item 2",
+                   "text": "Sometimes"
+                  },
+                  {
+                   "value": "Item 3",
+                   "text": "Often"
+                  },
+                  {
+                   "value": "Item 4",
+                   "text": "Always"
+                  }
+                 ]
+                },
+                {
+                 "type": "checkbox",
+                 "name": "question18d",
+                 "title": "This behaviour/urge/desire causes ME distress:(tick if \"Yes\")",
+                 "isRequired": false,
+                 "choices": [
+                  {
+                   "value": "Item 1",
+                   "text": "Yes"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question19",
+                 "title": "Illicit drug use",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "Item 1",
+                   "text": "Never"
+                  },
+                  {
+                   "value": "Item 2",
+                   "text": "Sometimes"
+                  },
+                  {
+                   "value": "Item 3",
+                   "text": "Often"
+                  },
+                  {
+                   "value": "Item 4",
+                   "text": "Always"
+                  }
+                 ]
+                },
+                {
+                 "type": "checkbox",
+                 "name": "question19d",
+                 "title": "This behaviour/urge/desire causes ME distress:(tick if \"Yes\")",
+                 "isRequired": false,
+                 "choices": [
+                  {
+                   "value": "Item 1",
+                   "text": "Yes"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question20",
+                 "title": "Cleaning too much",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "Item 1",
+                   "text": "Never"
+                  },
+                  {
+                   "value": "Item 2",
+                   "text": "Sometimes"
+                  },
+                  {
+                   "value": "Item 3",
+                   "text": "Often"
+                  },
+                  {
+                   "value": "Item 4",
+                   "text": "Always"
+                  }
+                 ]
+                },
+                {
+                 "type": "checkbox",
+                 "name": "question20d",
+                 "title": "This behaviour/urge/desire causes ME distress:(tick if \"Yes\")",
+                 "isRequired": false,
+                 "choices": [
+                  {
+                   "value": "Item 1",
+                   "text": "Yes"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question21",
+                 "title": "Verbal Aggression",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "Item 1",
+                   "text": "Never"
+                  },
+                  {
+                   "value": "Item 2",
+                   "text": "Sometimes"
+                  },
+                  {
+                   "value": "Item 3",
+                   "text": "Often"
+                  },
+                  {
+                   "value": "Item 4",
+                   "text": "Always"
+                  }
+                 ]
+                },
+                {
+                 "type": "checkbox",
+                 "name": "question21d",
+                 "title": "This behaviour/urge/desire causes ME distress:(tick if \"Yes\")",
+                 "isRequired": false,
+                 "choices": [
+                  {
+                   "value": "Item 1",
+                   "text": "Yes"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question22",
+                 "title": "Violence towards object/properties",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "Item 1",
+                   "text": "Never"
+                  },
+                  {
+                   "value": "Item 2",
+                   "text": "Sometimes"
+                  },
+                  {
+                   "value": "Item 3",
+                   "text": "Often"
+                  },
+                  {
+                   "value": "Item 4",
+                   "text": "Always"
+                  }
+                 ]
+                },
+                {
+                 "type": "checkbox",
+                 "name": "question22d",
+                 "title": "This behaviour/urge/desire causes ME distress:(tick if \"Yes\")",
+                 "isRequired": false,
+                 "choices": [
+                  {
+                   "value": "Item 1",
+                   "text": "Yes"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question23",
+                 "title": "Swearing",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "Item 1",
+                   "text": "Never"
+                  },
+                  {
+                   "value": "Item 2",
+                   "text": "Sometimes"
+                  },
+                  {
+                   "value": "Item 3",
+                   "text": "Often"
+                  },
+                  {
+                   "value": "Item 4",
+                   "text": "Always"
+                  }
+                 ]
+                },
+                {
+                 "type": "checkbox",
+                 "name": "question23d",
+                 "title": "This behaviour/urge/desire causes ME distress:(tick if \"Yes\")",
+                 "isRequired": false,
+                 "choices": [
+                  {
+                   "value": "Item 1",
+                   "text": "Yes"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question24",
+                 "title": "Checking (e.g. locks, light switches)",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "Item 1",
+                   "text": "Never"
+                  },
+                  {
+                   "value": "Item 2",
+                   "text": "Sometimes"
+                  },
+                  {
+                   "value": "Item 3",
+                   "text": "Often"
+                  },
+                  {
+                   "value": "Item 4",
+                   "text": "Always"
+                  }
+                 ]
+                },
+                {
+                 "type": "checkbox",
+                 "name": "question24d",
+                 "title": "This behaviour/urge/desire causes ME distress:(tick if \"Yes\")",
+                 "isRequired": false,
+                 "choices": [
+                  {
+                   "value": "Item 1",
+                   "text": "Yes"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question25",
+                 "title": "Checking (e.g. yourself in the mirror)",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "Item 1",
+                   "text": "Never"
+                  },
+                  {
+                   "value": "Item 2",
+                   "text": "Sometimes"
+                  },
+                  {
+                   "value": "Item 3",
+                   "text": "Often"
+                  },
+                  {
+                   "value": "Item 4",
+                   "text": "Always"
+                  }
+                 ]
+                },
+                {
+                 "type": "checkbox",
+                 "name": "question25d",
+                 "title": "This behaviour/urge/desire causes ME distress:(tick if \"Yes\")",
+                 "isRequired": false,
+                 "choices": [
+                  {
+                   "value": "Item 1",
+                   "text": "Yes"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question26",
+                 "title": "Speed driving",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "Item 1",
+                   "text": "Never"
+                  },
+                  {
+                   "value": "Item 2",
+                   "text": "Sometimes"
+                  },
+                  {
+                   "value": "Item 3",
+                   "text": "Often"
+                  },
+                  {
+                   "value": "Item 4",
+                   "text": "Always"
+                  }
+                 ]
+                },
+                {
+                 "type": "checkbox",
+                 "name": "question26d",
+                 "title": "This behaviour/urge/desire causes ME distress:(tick if \"Yes\")",
+                 "isRequired": false,
+                 "choices": [
+                  {
+                   "value": "Item 1",
+                   "text": "Yes"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question27",
+                 "title": "Medication use",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "Item 1",
+                   "text": "Never"
+                  },
+                  {
+                   "value": "Item 2",
+                   "text": "Sometimes"
+                  },
+                  {
+                   "value": "Item 3",
+                   "text": "Often"
+                  },
+                  {
+                   "value": "Item 4",
+                   "text": "Always"
+                  }
+                 ]
+                },
+                {
+                 "type": "checkbox",
+                 "name": "question27d",
+                 "title": "This behaviour/urge/desire causes ME distress:(tick if \"Yes\")",
+                 "isRequired": false,
+                 "choices": [
+                  {
+                   "value": "Item 1",
+                   "text": "Yes"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question28",
+                 "title": "Physical aggression",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "Item 1",
+                   "text": "Never"
+                  },
+                  {
+                   "value": "Item 2",
+                   "text": "Sometimes"
+                  },
+                  {
+                   "value": "Item 3",
+                   "text": "Often"
+                  },
+                  {
+                   "value": "Item 4",
+                   "text": "Always"
+                  }
+                 ]
+                },
+                {
+                 "type": "checkbox",
+                 "name": "question28d",
+                 "title": "This behaviour/urge/desire causes ME distress:(tick if \"Yes\")",
+                 "isRequired": false,
+                 "choices": [
+                  {
+                   "value": "Item 1",
+                   "text": "Yes"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question29",
+                 "title": "Social networking (e.g. Facebook, twitter, Google +, Myspace)",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "Item 1",
+                   "text": "Never"
+                  },
+                  {
+                   "value": "Item 2",
+                   "text": "Sometimes"
+                  },
+                  {
+                   "value": "Item 3",
+                   "text": "Often"
+                  },
+                  {
+                   "value": "Item 4",
+                   "text": "Always"
+                  }
+                 ]
+                },
+                {
+                 "type": "checkbox",
+                 "name": "question29d",
+                 "title": "This behaviour/urge/desire causes ME distress:(tick if \"Yes\")",
+                 "isRequired": false,
+                 "choices": [
+                  {
+                   "value": "Item 1",
+                   "text": "Yes"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question30",
+                 "title": "Applying rules",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "Item 1",
+                   "text": "Never"
+                  },
+                  {
+                   "value": "Item 2",
+                   "text": "Sometimes"
+                  },
+                  {
+                   "value": "Item 3",
+                   "text": "Often"
+                  },
+                  {
+                   "value": "Item 4",
+                   "text": "Always"
+                  }
+                 ]
+                },
+                {
+                 "type": "checkbox",
+                 "name": "question30d",
+                 "title": "This behaviour/urge/desire causes ME distress:(tick if \"Yes\")",
+                 "isRequired": false,
+                 "choices": [
+                  {
+                   "value": "Item 1",
+                   "text": "Yes"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question31",
+                 "title": "Purposeful self-injury (i.e. not accidental)",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "Item 1",
+                   "text": "Never"
+                  },
+                  {
+                   "value": "Item 2",
+                   "text": "Sometimes"
+                  },
+                  {
+                   "value": "Item 3",
+                   "text": "Often"
+                  },
+                  {
+                   "value": "Item 4",
+                   "text": "Always"
+                  }
+                 ]
+                },
+                {
+                 "type": "checkbox",
+                 "name": "question31d",
+                 "title": "This behaviour/urge/desire causes ME distress:(tick if \"Yes\")",
+                 "isRequired": false,
+                 "choices": [
+                  {
+                   "value": "Item 1",
+                   "text": "Yes"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question32",
+                 "title": "Re-writing/re-reading",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "Item 1",
+                   "text": "Never"
+                  },
+                  {
+                   "value": "Item 2",
+                   "text": "Sometimes"
+                  },
+                  {
+                   "value": "Item 3",
+                   "text": "Often"
+                  },
+                  {
+                   "value": "Item 4",
+                   "text": "Always"
+                  }
+                 ]
+                },
+                {
+                 "type": "checkbox",
+                 "name": "question32d",
+                 "title": "This behaviour/urge/desire causes ME distress:(tick if \"Yes\")",
+                 "isRequired": false,
+                 "choices": [
+                  {
+                   "value": "Item 1",
+                   "text": "Yes"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question33",
+                 "title": "Tattooing",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "Item 1",
+                   "text": "Never"
+                  },
+                  {
+                   "value": "Item 2",
+                   "text": "Sometimes"
+                  },
+                  {
+                   "value": "Item 3",
+                   "text": "Often"
+                  },
+                  {
+                   "value": "Item 4",
+                   "text": "Always"
+                  }
+                 ]
+                },
+                {
+                 "type": "checkbox",
+                 "name": "question33d",
+                 "title": "This behaviour/urge/desire causes ME distress:(tick if \"Yes\")",
+                 "isRequired": false,
+                 "choices": [
+                  {
+                   "value": "Item 1",
+                   "text": "Yes"
+                  }
+                 ]
+                }
+               ]
+              }
+             ]
+            }
+
+        window.survey = new Survey.Model(json);
+
+
+        // Recor the response time or how long they spent on a page
+        lastpage = survey.currentPage;
+        function timerLoop(elapsed) {
+            var page = survey.currentPage; // page variable is the currentPage on the survey
+            if (!page) return;
+            if (lastpage != page) {
+                // set new start date
+                start = new Date().getTime(); // sets new start Date object when page has changed.
+                lastpage = page // sets the last page to currente page 
+
+            }
+            var valueName = "TRQ" + survey.pages.indexOf(page);
+
+            var ms = survey.getValue(valueName); // gets the value of the valuename. e.g: TRQ1
+
+            if (ms == null) ms = 0;
+            else ms = elapsed;
+            survey.setValue(valueName, ms);
+            $('#timeEl').text(elapsed + ' ms');
+        }
+
+
+        function getQueryVariable(variable) {
+            var query = window.location.search.substring(1);
+            var vars = query.split('&');
+            for (var i = 0; i < vars.length; i++) {
+                var pair = vars[i].split('=');
+                if (decodeURIComponent(pair[0]) == variable) {
+                    return decodeURIComponent(pair[1]);
+                }
+            }
+            return 'NULL'
+        }
+
+        survey.showProgressBar = "bottom";
+
+        survey.goNextPageAutomatic = false
+        survey.showNavigationButtons = true;
+        survey.showCompletedPage = false;
+
+        // Get Query Variables
+        var surveyname = getQueryVariable('survey');
+
+        var expInfo = { 'participant': '' ,'session': '',  'task': surveyname, 'date' : formatDate(), 'study': '', 'id': getQueryVariable('id') };
+
+        // Get info Promize
+        const getInfoPromise = new Promise((resolve, reject) => {
+            $.ajax({
+                type: "POST",
+                url: '/getInfo',
+                data: { 'id': expInfo.id },
+                dataType: 'JSON',
+                success: function (data) {
+                    resolve(data)
+                }
+            })
+        })
+            // Read getINFO 
+            .then((values) => {
+                console.log(values)
+                if (values.subject && values.session && values.study) {
+                    expInfo.participant = values.subject
+                    expInfo.study = values.study
+                    expInfo.session = values.session
+                    expInfo.run_id = getQueryVariable('run')
+                }
+
+                survey.onComplete.add(function (result) {
+                    //result.preventDefault();
+                    postSurveyData(result.data, expInfo.session, expInfo.participant);
+                });
+
+                $("#surveyElement").Survey({model: survey});
+    
+                $("#participant").text(expInfo.participant);
+                $("#session").text(expInfo.session);
+                $("#study").text(expInfo.study);
+
+            })
+
+        function postSurveyData(data, session, mkturkid) {
+            console.log('/link?id=' + expInfo.id  + '&index=' + (parseInt(getQueryVariable('index')) + 1))
+            $.ajax({
+                type: "POST",
+                url: '/save',
+                data: {
+                    "trials_data": data,
+                    "expInfo": expInfo
+                },
+                dataType: 'JSON',
+                statusCode: {
+                    200: function() {
+                        console.log('sucess saved on backend')
+                        console.log('/link?id=' + expInfo.id  + '&index=' + (parseInt(getQueryVariable('index')) + 1))
+                        window.location.replace('/link?id=' + expInfo.id  + '&index=' + (parseInt(getQueryVariable('index')) + 1))
+                    }
+                }
+            }) 
+                
+        }
+
+        var start = new Date().getTime(),
+            elapsed = '0.0';
+
+        // executes timerCallback every 100 ms
+        timerID = window.setInterval(function () {
+
+            var time = new Date().getTime() - start;
+            elapsed = Math.floor(time);
+
+            //alert(elapsed);
+            //$('#timeEl').text(elapsed + ' ms');
+
+            //displayTime(1);
+            timerLoop(elapsed);
+
+        }, 5);
+    </script>
+
+</body>
+
+</html>

@@ -116,8 +116,8 @@
         // Survey.Survey.cssType = "bootstrap";
         // Survey.defaultBootstrapCss.navigationButton = "btn";
         var json = {
-             "title": "Anxiety Sensitivity Index",
-             "description": "Select the response that best describes how typical or characteristic each of the 18 items is of you. You should make your ratings in terms of how much you agree or disagree with the statement as a general description of yourself.",
+             "title": "GAD-7",
+             "description": "Over the last two weeks, how often have you been bothered by the following feelings?",
              "logoPosition": "right",
              "pages": [
               {
@@ -126,504 +126,192 @@
                 {
                  "type": "radiogroup",
                  "name": "question1",
-                 "title": "It is important for me not to appear nervous.",
+                 "title": "Feeling nervous, anxious, or on edge.",
                  "isRequired": true,
                  "choices": [
                   {
                    "value": "Item 1",
-                   "text": "very little"
+                   "text": "Not at all"
                   },
                   {
                    "value": "Item 2",
-                   "text": "a little"
+                   "text": "Several Days"
                   },
                   {
                    "value": "Item 3",
-                   "text": "some"
+                   "text": "Over half of the days"
                   },
                   {
                    "value": "Item 4",
-                   "text": "much"
-                  },
-                  {
-                   "value": "Item 5",
-                   "text": "very much"
+                   "text": "Nearly every day"
                   }
                  ]
                 },
                 {
                  "type": "radiogroup",
                  "name": "question2",
-                 "title": "When I cannot keep my mind on a task, I worry that I might be going crazy.",
+                 "title": "Not being able to stop or control worrying. ",
                  "isRequired": true,
                  "choices": [
                   {
                    "value": "Item 1",
-                   "text": "very little"
+                   "text": "Not at all"
                   },
                   {
                    "value": "Item 2",
-                   "text": "a little"
+                   "text": "Several Days"
                   },
                   {
                    "value": "Item 3",
-                   "text": "some"
+                   "text": "Over half of the days"
                   },
                   {
                    "value": "Item 4",
-                   "text": "much"
-                  },
-                  {
-                   "value": "Item 5",
-                   "text": "very much"
+                   "text": "Nearly every day"
                   }
                  ]
                 },
                 {
                  "type": "radiogroup",
                  "name": "question3",
-                 "title": "It scares me when my heart beats rapidly.",
+                 "title": "Worrying too much about different things. ",
                  "isRequired": true,
                  "choices": [
                   {
                    "value": "Item 1",
-                   "text": "very little"
+                   "text": "Not at all"
                   },
                   {
                    "value": "Item 2",
-                   "text": "a little"
+                   "text": "Several Days"
                   },
                   {
                    "value": "Item 3",
-                   "text": "some"
+                   "text": "Over half of the days"
                   },
                   {
                    "value": "Item 4",
-                   "text": "much"
-                  },
-                  {
-                   "value": "Item 5",
-                   "text": "very much"
+                   "text": "Nearly every day"
                   }
                  ]
                 },
                 {
                  "type": "radiogroup",
                  "name": "question4",
-                 "title": "When my stomach is upset, I worry that I might be seriously ill.",
+                 "title": "Trouble relaxing. ",
                  "isRequired": true,
                  "choices": [
                   {
                    "value": "Item 1",
-                   "text": "very little"
+                   "text": "Not at all"
                   },
                   {
                    "value": "Item 2",
-                   "text": "a little"
+                   "text": "Several Days"
                   },
                   {
                    "value": "Item 3",
-                   "text": "some"
+                   "text": "Over half of the days"
                   },
                   {
                    "value": "Item 4",
-                   "text": "much"
+                   "text": "Nearly every day"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question_check1",
+                 "title": "Select 'Several Days'",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "Item 1",
+                   "text": "Not at all"
                   },
                   {
-                   "value": "Item 5",
-                   "text": "very much"
+                   "value": "Item 2",
+                   "text": "Several Days"
+                  },
+                  {
+                   "value": "Item 3",
+                   "text": "Over half of the days"
+                  },
+                  {
+                   "value": "Item 4",
+                   "text": "Nearly every day"
                   }
                  ]
                 },
                 {
                  "type": "radiogroup",
                  "name": "question5",
-                 "title": "It scares me when I am unable to keep my mind on a task.",
+                 "title": "Being so restless that it's hard to sit still. ",
                  "isRequired": true,
                  "choices": [
                   {
                    "value": "Item 1",
-                   "text": "very little"
+                   "text": "Not at all"
                   },
                   {
                    "value": "Item 2",
-                   "text": "a little"
+                   "text": "Several Days"
                   },
                   {
                    "value": "Item 3",
-                   "text": "some"
+                   "text": "Over half of the days"
                   },
                   {
                    "value": "Item 4",
-                   "text": "much"
-                  },
-                  {
-                   "value": "Item 5",
-                   "text": "very much"
+                   "text": "Nearly every day"
                   }
                  ]
                 },
                 {
                  "type": "radiogroup",
                  "name": "question6",
-                 "title": "When I tremble in the presence of others, I fear what people might think of me.",
+                 "title": "Becoming easily annoyed or irritable. ",
                  "isRequired": true,
                  "choices": [
                   {
                    "value": "Item 1",
-                   "text": "very little"
+                   "text": "Not at all"
                   },
                   {
                    "value": "Item 2",
-                   "text": "a little"
+                   "text": "Several Days"
                   },
                   {
                    "value": "Item 3",
-                   "text": "some"
+                   "text": "Over half of the days"
                   },
                   {
                    "value": "Item 4",
-                   "text": "much"
-                  },
-                  {
-                   "value": "Item 5",
-                   "text": "very much"
+                   "text": "Nearly every day"
                   }
                  ]
                 },
                 {
                  "type": "radiogroup",
                  "name": "question7",
-                 "title": "When my chest feels tight, I get scared that I won't be able to breathe properly.",
+                 "title": "Feeling afraid as if something awful might happen. ",
                  "isRequired": true,
                  "choices": [
                   {
                    "value": "Item 1",
-                   "text": "very little"
+                   "text": "Not at all"
                   },
                   {
                    "value": "Item 2",
-                   "text": "a little"
+                   "text": "Several Days"
                   },
                   {
                    "value": "Item 3",
-                   "text": "some"
+                   "text": "Over half of the days"
                   },
                   {
                    "value": "Item 4",
-                   "text": "much"
-                  },
-                  {
-                   "value": "Item 5",
-                   "text": "very much"
-                  }
-                 ]
-                },
-                {
-                 "type": "radiogroup",
-                 "name": "question8",
-                 "title": "When I feel pain in my chest, I worry that I'm going to have a heart attack.",
-                 "isRequired": true,
-                 "choices": [
-                  {
-                   "value": "Item 1",
-                   "text": "very little"
-                  },
-                  {
-                   "value": "Item 2",
-                   "text": "a little"
-                  },
-                  {
-                   "value": "Item 3",
-                   "text": "some"
-                  },
-                  {
-                   "value": "Item 4",
-                   "text": "much"
-                  },
-                  {
-                   "value": "Item 5",
-                   "text": "very much"
-                  }
-                 ]
-                },
-                {
-                 "type": "radiogroup",
-                 "name": "question9",
-                 "title": "I worry that other people will notice my anxiety.",
-                 "isRequired": true,
-                 "choices": [
-                  {
-                   "value": "Item 1",
-                   "text": "very little"
-                  },
-                  {
-                   "value": "Item 2",
-                   "text": "a little"
-                  },
-                  {
-                   "value": "Item 3",
-                   "text": "some"
-                  },
-                  {
-                   "value": "Item 4",
-                   "text": "much"
-                  },
-                  {
-                   "value": "Item 5",
-                   "text": "very much"
-                  }
-                 ]
-                },
-                {
-                 "type": "radiogroup",
-                 "name": "question10",
-                 "title": "When I feel \"spacey\" or spaced out I worry that I may be mentally ill.",
-                 "isRequired": true,
-                 "choices": [
-                  {
-                   "value": "Item 1",
-                   "text": "very little"
-                  },
-                  {
-                   "value": "Item 2",
-                   "text": "a little"
-                  },
-                  {
-                   "value": "Item 3",
-                   "text": "some"
-                  },
-                  {
-                   "value": "Item 4",
-                   "text": "much"
-                  },
-                  {
-                   "value": "Item 5",
-                   "text": "very much"
-                  }
-                 ]
-                },
-                {
-                 "type": "radiogroup",
-                 "name": "question11",
-                 "title": "It scares me when I blush in front of people.",
-                 "isRequired": true,
-                 "choices": [
-                  {
-                   "value": "Item 1",
-                   "text": "very little"
-                  },
-                  {
-                   "value": "Item 2",
-                   "text": "a little"
-                  },
-                  {
-                   "value": "Item 3",
-                   "text": "some"
-                  },
-                  {
-                   "value": "Item 4",
-                   "text": "much"
-                  },
-                  {
-                   "value": "Item 5",
-                   "text": "very much"
-                  }
-                 ]
-                },
-                {
-                 "type": "radiogroup",
-                 "name": "question12",
-                 "title": "When I notice my heart skipping a beat, I worry that there is something seriously wrong with me.",
-                 "isRequired": true,
-                 "choices": [
-                  {
-                   "value": "Item 1",
-                   "text": "very little"
-                  },
-                  {
-                   "value": "Item 2",
-                   "text": "a little"
-                  },
-                  {
-                   "value": "Item 3",
-                   "text": "some"
-                  },
-                  {
-                   "value": "Item 4",
-                   "text": "much"
-                  },
-                  {
-                   "value": "Item 5",
-                   "text": "very much"
-                  }
-                 ]
-                },
-                {
-                 "type": "radiogroup",
-                 "name": "question13",
-                 "title": "When I begin to sweat in a social situation, I fear people will think negatively of me.",
-                 "isRequired": true,
-                 "choices": [
-                  {
-                   "value": "Item 1",
-                   "text": "very little"
-                  },
-                  {
-                   "value": "Item 2",
-                   "text": "a little"
-                  },
-                  {
-                   "value": "Item 3",
-                   "text": "some"
-                  },
-                  {
-                   "value": "Item 4",
-                   "text": "much"
-                  },
-                  {
-                   "value": "Item 5",
-                   "text": "very much"
-                  }
-                 ]
-                },
-                {
-                 "type": "radiogroup",
-                 "name": "question14",
-                 "title": "When my thoughts seem to speed up, I worry that I might be going crazy.",
-                 "isRequired": true,
-                 "choices": [
-                  {
-                   "value": "Item 1",
-                   "text": "very little"
-                  },
-                  {
-                   "value": "Item 2",
-                   "text": "a little"
-                  },
-                  {
-                   "value": "Item 3",
-                   "text": "some"
-                  },
-                  {
-                   "value": "Item 4",
-                   "text": "much"
-                  },
-                  {
-                   "value": "Item 5",
-                   "text": "very much"
-                  }
-                 ]
-                },
-                {
-                 "type": "radiogroup",
-                 "name": "question15",
-                 "title": "When my throat feels tight, I worry that I could choke to death.",
-                 "isRequired": true,
-                 "choices": [
-                  {
-                   "value": "Item 1",
-                   "text": "very little"
-                  },
-                  {
-                   "value": "Item 2",
-                   "text": "a little"
-                  },
-                  {
-                   "value": "Item 3",
-                   "text": "some"
-                  },
-                  {
-                   "value": "Item 4",
-                   "text": "much"
-                  },
-                  {
-                   "value": "Item 5",
-                   "text": "very much"
-                  }
-                 ]
-                },
-                {
-                 "type": "radiogroup",
-                 "name": "question16",
-                 "title": "When I have trouble thinking clearly, I worry that there is something wrong with me.",
-                 "isRequired": true,
-                 "choices": [
-                  {
-                   "value": "Item 1",
-                   "text": "very little"
-                  },
-                  {
-                   "value": "Item 2",
-                   "text": "a little"
-                  },
-                  {
-                   "value": "Item 3",
-                   "text": "some"
-                  },
-                  {
-                   "value": "Item 4",
-                   "text": "much"
-                  },
-                  {
-                   "value": "Item 5",
-                   "text": "very much"
-                  }
-                 ]
-                },
-                {
-                 "type": "radiogroup",
-                 "name": "question17",
-                 "title": "I think it would be horrible for me to faint in public.",
-                 "isRequired": true,
-                 "choices": [
-                  {
-                   "value": "Item 1",
-                   "text": "very little"
-                  },
-                  {
-                   "value": "Item 2",
-                   "text": "a little"
-                  },
-                  {
-                   "value": "Item 3",
-                   "text": "some"
-                  },
-                  {
-                   "value": "Item 4",
-                   "text": "much"
-                  },
-                  {
-                   "value": "Item 5",
-                   "text": "very much"
-                  }
-                 ]
-                },
-                {
-                 "type": "radiogroup",
-                 "name": "question18",
-                 "title": "When my mind goes blank, I worry there is something terribly wrong with me.",
-                 "isRequired": true,
-                 "choices": [
-                  {
-                   "value": "Item 1",
-                   "text": "very little"
-                  },
-                  {
-                   "value": "Item 2",
-                   "text": "a little"
-                  },
-                  {
-                   "value": "Item 3",
-                   "text": "some"
-                  },
-                  {
-                   "value": "Item 4",
-                   "text": "much"
-                  },
-                  {
-                   "value": "Item 5",
-                   "text": "very much"
+                   "text": "Nearly every day"
                   }
                  ]
                 }

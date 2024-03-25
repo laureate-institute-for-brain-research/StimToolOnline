@@ -1,0 +1,13 @@
+{
+    "name": "TTS Surveys T1",
+    "order": [
+        "/?index=0&survey=ocir&session=1",
+        "/?index=1&survey=icbc&session=1",
+        "/?index=2&survey=gad_7&session=1",
+        "/?index=3&survey=promis_anxiety&session=1",
+        "/?index=4&survey=promis_depression&session=1",
+        "/completeMobile?"
+    ],
+    "fullscreen": true,
+    "text_html": "<p>This study includes 7 surveys</p>"
+} 

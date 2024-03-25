@@ -116,514 +116,589 @@
         // Survey.Survey.cssType = "bootstrap";
         // Survey.defaultBootstrapCss.navigationButton = "btn";
         var json = {
-             "title": "Anxiety Sensitivity Index",
-             "description": "Select the response that best describes how typical or characteristic each of the 18 items is of you. You should make your ratings in terms of how much you agree or disagree with the statement as a general description of yourself.",
+             "title": "Generalized Anxiety Disorder",
+             "description": "	This questionnaire asks you about 4 different types of concerns that you might or might not experience. For each type there is a description of the kinds of thoughts (sometimes called obsessions) and behaviors (sometimes called rituals or compulsions) that are typical of that particular concern, followed by 5 questions about your experiences with these thoughts and behaviors. Please read each description carefully and answer the questions for each category based on your experiences in the last month.",
              "logoPosition": "right",
              "pages": [
               {
                "name": "page1",
+               "description":"Category 1: Concerns about Germs and Contamination. Examples...-Thoughts or feelings that you are contaminated because you came into contact with (or were nearby) a certain object or person.-The feeling of being contaminated because you were in a certain place (such as a bathroom).-Thoughts about germs, sickness, or the possibility of spreading contamination.-Washing your hands, using hand sanitizer gels, showering, changing your clothes, or cleaning objects because of concerns about contamination.-Following a certain routine (e.g., in the bathroom, getting dressed) because of contamination -Avoiding certain people, objects, or places because of contamination. The next questions ask about your experiences with thoughts and behaviors related to contamination over the last month. Keep in mind that your experiences might be different than the examples listed above.",
                "elements": [
                 {
                  "type": "radiogroup",
                  "name": "question1",
-                 "title": "It is important for me not to appear nervous.",
+                 "title": "About how much time have you spent each day thinking about contamination and engaging in washing or cleaning behaviors because of contamination?",
                  "isRequired": true,
                  "choices": [
                   {
                    "value": "Item 1",
-                   "text": "very little"
+                   "text": "None at all"
                   },
                   {
                    "value": "Item 2",
-                   "text": "a little"
+                   "text": "Less than 1 hour each day"
                   },
                   {
                    "value": "Item 3",
-                   "text": "some"
+                   "text": "Between 1 and 3 hours each day"
                   },
                   {
                    "value": "Item 4",
-                   "text": "much"
+                   "text": "Between 3 and 8 hours each day"
                   },
                   {
                    "value": "Item 5",
-                   "text": "very much"
+                   "text": "8 hours or more each day"
                   }
                  ]
                 },
                 {
                  "type": "radiogroup",
                  "name": "question2",
-                 "title": "When I cannot keep my mind on a task, I worry that I might be going crazy.",
+                 "title": "To what extent have you avoided situations in order to prevent concerns with contamination or having to spend time washing, cleaning, or showering?",
                  "isRequired": true,
                  "choices": [
                   {
                    "value": "Item 1",
-                   "text": "very little"
+                   "text": "None at all"
                   },
                   {
                    "value": "Item 2",
-                   "text": "a little"
+                   "text": "A little avoidance"
                   },
                   {
                    "value": "Item 3",
-                   "text": "some"
+                   "text": "A moderate amount of avoidance"
                   },
                   {
                    "value": "Item 4",
-                   "text": "much"
+                   "text": "A great deal of avoidance"
                   },
                   {
                    "value": "Item 5",
-                   "text": "very much"
+                   "text": "Extreme avoidance of nearly all things"
                   }
                  ]
                 },
                 {
                  "type": "radiogroup",
                  "name": "question3",
-                 "title": "It scares me when my heart beats rapidly.",
+                 "title": " If you had thoughts about contamination but could not wash, clean, or shower (or otherwise remove the contamination), how distressed or anxious did you become? ",
                  "isRequired": true,
                  "choices": [
                   {
                    "value": "Item 1",
-                   "text": "very little"
+                   "text": "Not at all distressed/anxious"
                   },
                   {
                    "value": "Item 2",
-                   "text": "a little"
+                   "text": "Mildly distressed/anxious"
                   },
                   {
                    "value": "Item 3",
-                   "text": "some"
+                   "text": "Moderately distressed/anxious"
                   },
                   {
                    "value": "Item 4",
-                   "text": "much"
+                   "text": "Severely distressed/anxious"
                   },
                   {
                    "value": "Item 5",
-                   "text": "very much"
+                   "text": "Extremely distressed/anxious"
                   }
                  ]
                 },
                 {
                  "type": "radiogroup",
                  "name": "question4",
-                 "title": "When my stomach is upset, I worry that I might be seriously ill.",
+                 "title": "To what extent has your daily routine (work, school, self-care, social life) been disrupted by contamination concerns and excessive washing, showering, cleaning, or avoidance behaviors? ",
                  "isRequired": true,
                  "choices": [
                   {
                    "value": "Item 1",
-                   "text": "very little"
+                   "text": "No disruption at all"
                   },
                   {
                    "value": "Item 2",
-                   "text": "a little"
+                   "text": "A little disruption, but I mostly function well"
                   },
                   {
                    "value": "Item 3",
-                   "text": "some"
+                   "text": "Many things are disrupted, but I can still manage"
                   },
                   {
                    "value": "Item 4",
-                   "text": "much"
+                   "text": "My life is disrupted in many ways and I have trouble managing"
                   },
                   {
                    "value": "Item 5",
-                   "text": "very much"
+                   "text": "My life is completely disrupted and I cannot function at all"
                   }
                  ]
                 },
                 {
                  "type": "radiogroup",
                  "name": "question5",
-                 "title": "It scares me when I am unable to keep my mind on a task.",
+                 "title": "How difficult is it for you to disregard thoughts about contamination and refrain from behaviors such as washing, showering, cleaning, and other decontamination routines when you try to do so? ",
                  "isRequired": true,
                  "choices": [
                   {
                    "value": "Item 1",
-                   "text": "very little"
+                   "text": "Not at all difficult"
                   },
                   {
                    "value": "Item 2",
-                   "text": "a little"
+                   "text": "A little difficult"
                   },
                   {
                    "value": "Item 3",
-                   "text": "some"
+                   "text": "Moderately difficult"
                   },
                   {
                    "value": "Item 4",
-                   "text": "much"
+                   "text": "Very difficult"
                   },
                   {
                    "value": "Item 5",
-                   "text": "very much"
+                   "text": "Extremely difficult"
                   }
                  ]
-                },
+                }
+               ]
+              },
+              {
+               "name": "page2",
+               "description":'Category 2: Concerns about being Responsible for Harm, Injury, or Bad Luck Examples...-A doubt that you might have made a mistake that could cause something awful or harmful to happen.-The thought that a terrible accident, disaster, injury, or other bad luck might have occurred and you weren\'t careful enough to prevent it.-The thought that you could prevent harm or bad luck by doing things in a certain way, counting to certain numbers, or by avoiding certain \"bad\" numbers or words.-Thought of losing something important that you are unlikely to lose (e.g., wallet, identify theft, papers). -Checking things such as locks, switches, your wallet, etc. more often than is necessary.-Repeatedly asking or checking for reassurance that something bad did not (or will not) happen. -Mentally reviewing past events to make sure you didn\'t do anything wrong.-The need to follow a special routine because it will prevent harm or disasters from occurring.-The need to count to certain numbers, or avoid certain bad numbers, due to the fear of harm. The next questions ask about your experiences with thoughts and behaviors related to harm and disasters over the last month. Keep in mind that your experiences might be slightly different than the examples listed above. Please circle the number next to your answer:',
+               "elements": [
                 {
                  "type": "radiogroup",
                  "name": "question6",
-                 "title": "When I tremble in the presence of others, I fear what people might think of me.",
+                 "title": "About how much time have you spent each day thinking about the possibility of harm or disasters and engaging in checking or efforts to get reassurance that such things do not (or did not) occur?",
                  "isRequired": true,
                  "choices": [
                   {
                    "value": "Item 1",
-                   "text": "very little"
+                   "text": "None at all"
                   },
                   {
                    "value": "Item 2",
-                   "text": "a little"
+                   "text": "Less than 1 hour each day"
                   },
                   {
                    "value": "Item 3",
-                   "text": "some"
+                   "text": "Between 1 and 3 hours each day"
                   },
                   {
                    "value": "Item 4",
-                   "text": "much"
+                   "text": "Between 3 and 8 hours each day"
                   },
                   {
                    "value": "Item 5",
-                   "text": "very much"
+                   "text": "8 hours or more each day"
                   }
                  ]
                 },
                 {
                  "type": "radiogroup",
                  "name": "question7",
-                 "title": "When my chest feels tight, I get scared that I won't be able to breathe properly.",
+                 "title": "To what extent have you avoided situations so that you did not have to check for danger or worry about possible harm or disasters?",
                  "isRequired": true,
                  "choices": [
                   {
                    "value": "Item 1",
-                   "text": "very little"
+                   "text": "None at all"
                   },
                   {
                    "value": "Item 2",
-                   "text": "a little"
+                   "text": "A little avoidance"
                   },
                   {
                    "value": "Item 3",
-                   "text": "some"
+                   "text": "A moderate amount of avoidance"
                   },
                   {
                    "value": "Item 4",
-                   "text": "much"
+                   "text": "A great deal of avoidance"
                   },
                   {
                    "value": "Item 5",
-                   "text": "very much"
+                   "text": "Extreme avoidance of nearly all things"
                   }
                  ]
                 },
                 {
                  "type": "radiogroup",
                  "name": "question8",
-                 "title": "When I feel pain in my chest, I worry that I'm going to have a heart attack.",
+                 "title": "When you think about the possibility of harm or disasters, or if you cannot check or get reassurance about these things, how distressed or anxious did you become?",
                  "isRequired": true,
                  "choices": [
                   {
                    "value": "Item 1",
-                   "text": "very little"
+                   "text": "Not at all distressed/anxious"
                   },
                   {
                    "value": "Item 2",
-                   "text": "a little"
+                   "text": "Mildly distressed/anxious"
                   },
                   {
                    "value": "Item 3",
-                   "text": "some"
+                   "text": "Moderately distressed/anxious"
                   },
                   {
                    "value": "Item 4",
-                   "text": "much"
+                   "text": "Severely distressed/anxious"
                   },
                   {
                    "value": "Item 5",
-                   "text": "very much"
+                   "text": "Extremely distressed/anxious"
                   }
                  ]
                 },
                 {
                  "type": "radiogroup",
                  "name": "question9",
-                 "title": "I worry that other people will notice my anxiety.",
+                 "title": "To what extent has your daily routine (work, school, self-care, social life) been disrupted by thoughts about harm or disasters and excessive checking or asking for reassurance?",
                  "isRequired": true,
                  "choices": [
                   {
                    "value": "Item 1",
-                   "text": "very little"
+                   "text": "No disruption at all"
                   },
                   {
                    "value": "Item 2",
-                   "text": "a little"
+                   "text": "A little disruption, but I mostly function well"
                   },
                   {
                    "value": "Item 3",
-                   "text": "some"
+                   "text": "Many things are disrupted, but I can still manage"
                   },
                   {
                    "value": "Item 4",
-                   "text": "much"
+                   "text": "My life is disrupted in many ways and I have trouble managing"
                   },
                   {
                    "value": "Item 5",
-                   "text": "very much"
+                   "text": "My life is completely disrupted and I cannot function at all"
                   }
                  ]
                 },
                 {
                  "type": "radiogroup",
                  "name": "question10",
-                 "title": "When I feel \"spacey\" or spaced out I worry that I may be mentally ill.",
+                 "title": "How difficult is it for you to disregard thoughts about possible harm or disasters and refrain from checking or reassurance-seeking behaviors when you try to do so?",
                  "isRequired": true,
                  "choices": [
                   {
                    "value": "Item 1",
-                   "text": "very little"
+                   "text": "Not at all difficult"
                   },
                   {
                    "value": "Item 2",
-                   "text": "a little"
+                   "text": "A little difficult"
                   },
                   {
                    "value": "Item 3",
-                   "text": "some"
+                   "text": "Moderately difficult"
                   },
                   {
                    "value": "Item 4",
-                   "text": "much"
+                   "text": "Very difficult"
                   },
                   {
                    "value": "Item 5",
-                   "text": "very much"
+                   "text": "Extremely difficult"
                   }
                  ]
-                },
+                }
+               ]
+              },
+              {
+               "name": "page3",
+               "description":'Category 3: Unacceptable Thoughts Examples...-Unpleasant thoughts about sex, immorality, or violence that come to mind against your will.-Thoughts about doing awful, improper, or embarrassing things that you don\'t really want to do.-Repeating an action or following a special routine because of a bad thought.-Mentally performing an action or saying prayers to get rid of an unwanted or unpleasant thought.-Avoidance of certain people, places, situations or other triggers of unwanted or unpleasant thoughts. The next questions ask about your experiences with thoughts and behaviors related to harm and disasters over the last month. Keep in mind that your experiences might be slightly different than the examples listed above. Please circle the number next to your answer:',
+               "elements": [
                 {
                  "type": "radiogroup",
                  "name": "question11",
-                 "title": "It scares me when I blush in front of people.",
+                 "title": "About how much time have you spent each day with unwanted unpleasant thoughts and with behavioral or mental actions to deal with them?",
                  "isRequired": true,
                  "choices": [
                   {
                    "value": "Item 1",
-                   "text": "very little"
+                   "text": "None at all"
                   },
                   {
                    "value": "Item 2",
-                   "text": "a little"
+                   "text": "Less than 1 hour each day"
                   },
                   {
                    "value": "Item 3",
-                   "text": "some"
+                   "text": "Between 1 and 3 hours each day"
                   },
                   {
                    "value": "Item 4",
-                   "text": "much"
+                   "text": "Between 3 and 8 hours each day"
                   },
                   {
                    "value": "Item 5",
-                   "text": "very much"
+                   "text": "8 hours or more each day"
                   }
                  ]
                 },
                 {
                  "type": "radiogroup",
                  "name": "question12",
-                 "title": "When I notice my heart skipping a beat, I worry that there is something seriously wrong with me.",
+                 "title": "To what extent have you been avoiding situations, places, objects and other reminders (e.g., numbers, people) thattrigger unwanted or unpleasant thoughts?",
                  "isRequired": true,
                  "choices": [
                   {
                    "value": "Item 1",
-                   "text": "very little"
+                   "text": "None at all"
                   },
                   {
                    "value": "Item 2",
-                   "text": "a little"
+                   "text": "A little avoidance"
                   },
                   {
                    "value": "Item 3",
-                   "text": "some"
+                   "text": "A moderate amount of avoidance"
                   },
                   {
                    "value": "Item 4",
-                   "text": "much"
+                   "text": "A great deal of avoidance"
                   },
                   {
                    "value": "Item 5",
-                   "text": "very much"
+                   "text": "Extreme avoidance of nearly all things"
                   }
                  ]
                 },
                 {
                  "type": "radiogroup",
                  "name": "question13",
-                 "title": "When I begin to sweat in a social situation, I fear people will think negatively of me.",
+                 "title": "When unwanted or unpleasant thoughts come to mind against your will how distressed or anxious did you become?",
                  "isRequired": true,
                  "choices": [
                   {
                    "value": "Item 1",
-                   "text": "very little"
+                   "text": "Not at all distressed/anxious"
                   },
                   {
                    "value": "Item 2",
-                   "text": "a little"
+                   "text": "Mildly distressed/anxious"
                   },
                   {
                    "value": "Item 3",
-                   "text": "some"
+                   "text": "Moderately distressed/anxious"
                   },
                   {
                    "value": "Item 4",
-                   "text": "much"
+                   "text": "Severely distressed/anxious"
                   },
                   {
                    "value": "Item 5",
-                   "text": "very much"
+                   "text": "Extremely distressed/anxious"
                   }
                  ]
                 },
                 {
                  "type": "radiogroup",
                  "name": "question14",
-                 "title": "When my thoughts seem to speed up, I worry that I might be going crazy.",
+                 "title": "To what extent has your daily routine (work, school, self-care, social life) been disrupted by unwanted and unpleasant thoughts and efforts to avoid or deal with such thoughts?",
                  "isRequired": true,
                  "choices": [
                   {
                    "value": "Item 1",
-                   "text": "very little"
+                   "text": "No disruption at all"
                   },
                   {
                    "value": "Item 2",
-                   "text": "a little"
+                   "text": "A little disruption, but I mostly function well"
                   },
                   {
                    "value": "Item 3",
-                   "text": "some"
+                   "text": "Many things are disrupted, but I can still manage"
                   },
                   {
                    "value": "Item 4",
-                   "text": "much"
+                   "text": "My life is disrupted in many ways and I have trouble managing"
                   },
                   {
                    "value": "Item 5",
-                   "text": "very much"
+                   "text": "My life is completely disrupted and I cannot function at all"
                   }
                  ]
                 },
                 {
                  "type": "radiogroup",
                  "name": "question15",
-                 "title": "When my throat feels tight, I worry that I could choke to death.",
+                 "title": "How difficult is it for you to disregard unwanted or unpleasant thoughts and refrain from using behavioral or mental acts to deal with them when you try to do so?",
                  "isRequired": true,
                  "choices": [
                   {
                    "value": "Item 1",
-                   "text": "very little"
+                   "text": "Not at all difficult"
                   },
                   {
                    "value": "Item 2",
-                   "text": "a little"
+                   "text": "A little difficult"
                   },
                   {
                    "value": "Item 3",
-                   "text": "some"
+                   "text": "Moderately difficult"
                   },
                   {
                    "value": "Item 4",
-                   "text": "much"
+                   "text": "Very difficult"
                   },
                   {
                    "value": "Item 5",
-                   "text": "very much"
+                   "text": "Extremely difficult"
                   }
                  ]
-                },
+                }
+               ]
+              },
+              {
+               "name": "page4",
+               "description":'Category 4: Concerns about Symmetry, Completeness, and the Need for Things to be "Just Right"Examples...-The need for symmetry, evenness, balance, or exactness.-Feelings that something isn\'t \"just right.\"-Repeating a routine action until it feels \"just right\" or \"balanced.\"-Counting senseless things (e.g., ceiling tiles, words in a sentence).-Unnecessarily arranging things in \"order.\"-Having to say something over and over in the same way until it feels \"just right.\" The next questions ask about your experiences with unwanted thoughts that come to mind against your will and behaviors designed to deal with these kinds of thoughts over the last month. Keep in mind that your experiences might be slightly different than the examples listed above. Please circle the number next to your answer:',
+               "elements": [
                 {
                  "type": "radiogroup",
                  "name": "question16",
-                 "title": "When I have trouble thinking clearly, I worry that there is something wrong with me.",
+                 "title": "About how much time have you spent each day with unwanted thoughts about symmetry, order, or balance and with behaviors intended to achieve symmetry, order or balance?",
                  "isRequired": true,
                  "choices": [
                   {
                    "value": "Item 1",
-                   "text": "very little"
+                   "text": "None at all"
                   },
                   {
                    "value": "Item 2",
-                   "text": "a little"
+                   "text": "Less than 1 hour each day"
                   },
                   {
                    "value": "Item 3",
-                   "text": "some"
+                   "text": "Between 1 and 3 hours each day"
                   },
                   {
                    "value": "Item 4",
-                   "text": "much"
+                   "text": "Between 3 and 8 hours each day"
                   },
                   {
                    "value": "Item 5",
-                   "text": "very much"
+                   "text": "8 hours or more each day"
                   }
                  ]
                 },
                 {
                  "type": "radiogroup",
                  "name": "question17",
-                 "title": "I think it would be horrible for me to faint in public.",
+                 "title": "To what extent have you been avoiding situations, places or objects associated with feelings that something is not symmetrical or \"just right?\"",
                  "isRequired": true,
                  "choices": [
                   {
                    "value": "Item 1",
-                   "text": "very little"
+                   "text": "None at all"
                   },
                   {
                    "value": "Item 2",
-                   "text": "a little"
+                   "text": "A little avoidance"
                   },
                   {
                    "value": "Item 3",
-                   "text": "some"
+                   "text": "A moderate amount of avoidance"
                   },
                   {
                    "value": "Item 4",
-                   "text": "much"
+                   "text": "A great deal of avoidance"
                   },
                   {
                    "value": "Item 5",
-                   "text": "very much"
+                   "text": "Extreme avoidance of nearly all things"
                   }
                  ]
                 },
                 {
                  "type": "radiogroup",
                  "name": "question18",
-                 "title": "When my mind goes blank, I worry there is something terribly wrong with me.",
+                 "title": "When you have the feeling of something being \"not just right,\" how distressed or anxious did you become?",
                  "isRequired": true,
                  "choices": [
                   {
                    "value": "Item 1",
-                   "text": "very little"
+                   "text": "Not at all distressed/anxious"
                   },
                   {
                    "value": "Item 2",
-                   "text": "a little"
+                   "text": "Mildly distressed/anxious"
                   },
                   {
                    "value": "Item 3",
-                   "text": "some"
+                   "text": "Moderately distressed/anxious"
                   },
                   {
                    "value": "Item 4",
-                   "text": "much"
+                   "text": "Severely distressed/anxious"
                   },
                   {
                    "value": "Item 5",
-                   "text": "very much"
+                   "text": "Extremely distressed/anxious"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question19",
+                 "title": "To what extent has your daily routine (work, school, self-care, social life) been disrupted by the feeling of things being \"not just right,\" and efforts to put things in order or make them feel right?",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "Item 1",
+                   "text": "No disruption at all"
+                  },
+                  {
+                   "value": "Item 2",
+                   "text": "A little disruption, but I mostly function well"
+                  },
+                  {
+                   "value": "Item 3",
+                   "text": "Many things are disrupted, but I can still manage"
+                  },
+                  {
+                   "value": "Item 4",
+                   "text": "My life is disrupted in many ways and I have trouble managing"
+                  },
+                  {
+                   "value": "Item 5",
+                   "text": "My life is completely disrupted and I cannot function at all"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question20",
+                 "title": "How difficult is it for you to disregard thoughts about the lack of symmetry and order, and refrain from urges to arrange things in order or repeat certain behaviors when you try to do so?",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "Item 1",
+                   "text": "Not at all difficult"
+                  },
+                  {
+                   "value": "Item 2",
+                   "text": "A little difficult"
+                  },
+                  {
+                   "value": "Item 3",
+                   "text": "Moderately difficult"
+                  },
+                  {
+                   "value": "Item 4",
+                   "text": "Very difficult"
+                  },
+                  {
+                   "value": "Item 5",
+                   "text": "Extremely difficult"
                   }
                  ]
                 }
