@@ -11,6 +11,7 @@
         "/?index=7&survey=dpes&session=1",
         "/?index=8&task=active_trust&run=Pilot_R1_CB1.json",
         "/?index=9&survey=pdsq&session=1",
+        "/?index=10&survey=health_questions&session=1",
         "/completeMobile?"
     ],
     "fullscreen": true,
