@@ -117,69 +117,17 @@
         // Survey.defaultBootstrapCss.navigationButton = "btn";
         var json = {
                  "title": "Ladder Scale",
-                 "description": "Picture yourself on this ladder...",
-                 "logo": "https://api.surveyjs.io/private/Surveys/files?name=49223604-ddde-46a1-8069-101d296fe07e",
+                 "description": "",
                  "logoPosition": "right",
                  "pages": [
                   {
                    "name": "page1",
+                   "description": "Please imagine a ladder with steps numbered from zero at the bottom to 10 at the top. The top of the ladder represents the best possible life for you.",
                    "elements": [
                     {
                      "type": "radiogroup",
                      "name": "question1",
                      "title": "On which step of the ladder would you say you personally feel you stand at this time?",
-                     "isRequired": true,
-                     "choices": [
-                      {
-                       "value": "Item 1",
-                       "text": "0"
-                      },
-                      {
-                       "value": "Item 2",
-                       "text": "1"
-                      },
-                      {
-                       "value": "Item 3",
-                       "text": "2"
-                      },
-                      {
-                       "value": "Item 4",
-                       "text": "3"
-                      },
-                      {
-                       "value": "Item 5",
-                       "text": "4"
-                      },
-                      {
-                       "value": "Item 6",
-                       "text": "5"
-                      },
-                      {
-                       "value": "Item 7",
-                       "text": "6"
-                      },
-                      {
-                       "value": "Item 8",
-                       "text": "7"
-                      },
-                      {
-                       "value": "Item 9",
-                       "text": "8"
-                      },
-                      {
-                       "value": "Item 10",
-                       "text": "9"
-                      },
-                      {
-                       "value": "Item 11",
-                       "text": "10"
-                      }
-                     ]
-                    },
-                    {
-                     "type": "radiogroup",
-                     "name": "question4",
-                     "title": "As your best guess, overall how satisfied with your life do you expect to feel in 5 years time?",
                      "isRequired": true,
                      "choices": [
                       {
@@ -279,11 +227,17 @@
                        "text": "10"
                       }
                      ]
-                    },
+                    }
+                   ]
+                  },
+                  {
+                   "name": "page2",
+                   "description": "The following question asks how happy you feel, on a scale from 0 to 10. Zero means you feel 'Not at all happy' and ten means 'completely happy'",
+                   "elements": [
                     {
                      "type": "radiogroup",
                      "name": "question3",
-                     "title": "Overall, how satisfied with your life were you 5 years ago? ",
+                     "title": "Taking all things together, how happy would you say you are?",
                      "isRequired": true,
                      "choices": [
                       {
@@ -332,8 +286,117 @@
                       }
                      ]
                     }
-                   ],
-                   "description": "Refer to the ladder image above to answer the following questions:"
+                   ]
+                  },
+                  {
+                   "name": "page3",
+                   "description": "The following questions ask how satisfied you feel, on a scale from 0 to 10. Zero means you feel 'not at all satisfied' and ten means 'completely satisfied.'",
+                   "elements": [
+                    {
+                     "type": "radiogroup",
+                     "name": "question4",
+                     "title": "Overall, how satisfied with your life were you 5 years ago?",
+                     "isRequired": true,
+                     "choices": [
+                      {
+                       "value": "Item 1",
+                       "text": "0"
+                      },
+                      {
+                       "value": "Item 2",
+                       "text": "1"
+                      },
+                      {
+                       "value": "Item 3",
+                       "text": "2"
+                      },
+                      {
+                       "value": "Item 4",
+                       "text": "3"
+                      },
+                      {
+                       "value": "Item 5",
+                       "text": "4"
+                      },
+                      {
+                       "value": "Item 6",
+                       "text": "5"
+                      },
+                      {
+                       "value": "Item 7",
+                       "text": "6"
+                      },
+                      {
+                       "value": "Item 8",
+                       "text": "7"
+                      },
+                      {
+                       "value": "Item 9",
+                       "text": "8"
+                      },
+                      {
+                       "value": "Item 10",
+                       "text": "9"
+                      },
+                      {
+                       "value": "Item 11",
+                       "text": "10"
+                      }
+                     ]
+                    },
+                    {
+                     "type": "radiogroup",
+                     "name": "question5",
+                     "title": "As your best guess, overall how satisfied with your life do you expect to feel in 5 years time?",
+                     "isRequired": true,
+                     "choices": [
+                      {
+                       "value": "Item 1",
+                       "text": "0"
+                      },
+                      {
+                       "value": "Item 2",
+                       "text": "1"
+                      },
+                      {
+                       "value": "Item 3",
+                       "text": "2"
+                      },
+                      {
+                       "value": "Item 4",
+                       "text": "3"
+                      },
+                      {
+                       "value": "Item 5",
+                       "text": "4"
+                      },
+                      {
+                       "value": "Item 6",
+                       "text": "5"
+                      },
+                      {
+                       "value": "Item 7",
+                       "text": "6"
+                      },
+                      {
+                       "value": "Item 8",
+                       "text": "7"
+                      },
+                      {
+                       "value": "Item 9",
+                       "text": "8"
+                      },
+                      {
+                       "value": "Item 10",
+                       "text": "9"
+                      },
+                      {
+                       "value": "Item 11",
+                       "text": "10"
+                      }
+                     ]
+                    }
+                   ]
                   }
                  ]
                 }

@@ -116,197 +116,129 @@
         // Survey.Survey.cssType = "bootstrap";
         // Survey.defaultBootstrapCss.navigationButton = "btn";
         var json = {
-                 "title": "Satisfaction With Life Scale",
-                 "description": "Below are five statements with which you may agree or disagree. Please be open and honest in your responding.",
-                 "logoPosition": "right",
-                 "pages": [
+             "title": "Managing Emotions",
+             "description": "Please respond to each question or statement by selecting one option.",
+             "logoPosition": "right",
+             "pages": [
+              {
+               "name": "page1",
+               "elements": [
+                {
+                 "type": "radiogroup",
+                 "name": "question1",
+                 "title": "I can handle negative feelings.",
+                 "isRequired": true,
+                 "choices": [
                   {
-                   "name": "page1",
-                   "elements": [
-                    {
-                     "type": "radiogroup",
-                     "name": "question1",
-                     "title": "In most ways my life is close to my ideal. ",
-                     "isRequired": true,
-                     "choices": [
-                      {
-                       "value": "Item 1",
-                       "text": "1 - Strongly disagree"
-                      },
-                      {
-                       "value": "Item 2",
-                       "text": "2 - Disagree"
-                      },
-                      {
-                       "value": "Item 3",
-                       "text": "3 - Slightly disagree"
-                      },
-                      {
-                       "value": "Item 4",
-                       "text": "4 - Neither agree not disagree"
-                      },
-                      {
-                       "value": "Item 5",
-                       "text": "5 - Slightly agree"
-                      },
-                      {
-                       "value": "Item 6",
-                       "text": "6 - Agree"
-                      },
-                      {
-                       "value": "Item 7",
-                       "text": "7 - Strongly Agree"
-                      }
-                     ]
-                    },
-                    {
-                     "type": "radiogroup",
-                     "name": "question2",
-                     "title": "The conditions of my life are excellent.",
-                     "isRequired": true,
-                     "choices": [
-                      {
-                       "value": "Item 1",
-                       "text": "1 - Strongly disagree"
-                      },
-                      {
-                       "value": "Item 2",
-                       "text": "2 - Disagree"
-                      },
-                      {
-                       "value": "Item 3",
-                       "text": "3 - Slightly disagree"
-                      },
-                      {
-                       "value": "Item 4",
-                       "text": "4 - Neither agree not disagree"
-                      },
-                      {
-                       "value": "Item 5",
-                       "text": "5 - Slightly agree"
-                      },
-                      {
-                       "value": "Item 6",
-                       "text": "6 - Agree"
-                      },
-                      {
-                       "value": "Item 7",
-                       "text": "7 - Strongly Agree"
-                      }
-                     ]
-                    },
-                    {
-                     "type": "radiogroup",
-                     "name": "question3",
-                     "title": "I am satisfied with my life.",
-                     "isRequired": true,
-                     "choices": [
-                      {
-                       "value": "Item 1",
-                       "text": "1 - Strongly disagree"
-                      },
-                      {
-                       "value": "Item 2",
-                       "text": "2 - Disagree"
-                      },
-                      {
-                       "value": "Item 3",
-                       "text": "3 - Slightly disagree"
-                      },
-                      {
-                       "value": "Item 4",
-                       "text": "4 - Neither agree not disagree"
-                      },
-                      {
-                       "value": "Item 5",
-                       "text": "5 - Slightly agree"
-                      },
-                      {
-                       "value": "Item 6",
-                       "text": "6 - Agree"
-                      },
-                      {
-                       "value": "Item 7",
-                       "text": "7 - Strongly Agree"
-                      }
-                     ]
-                    },
-                    {
-                     "type": "radiogroup",
-                     "name": "question4",
-                     "title": "So far I have gotten the important things I want in life.",
-                     "isRequired": true,
-                     "choices": [
-                      {
-                       "value": "Item 1",
-                       "text": "1 - Strongly disagree"
-                      },
-                      {
-                       "value": "Item 2",
-                       "text": "2 - Disagree"
-                      },
-                      {
-                       "value": "Item 3",
-                       "text": "3 - Slightly disagree"
-                      },
-                      {
-                       "value": "Item 4",
-                       "text": "4 - Neither agree not disagree"
-                      },
-                      {
-                       "value": "Item 5",
-                       "text": "5 - Slightly agree"
-                      },
-                      {
-                       "value": "Item 6",
-                       "text": "6 - Agree"
-                      },
-                      {
-                       "value": "Item 7",
-                       "text": "7 - Strongly Agree"
-                      }
-                     ]
-                    },
-                    {
-                     "type": "radiogroup",
-                     "name": "question5",
-                     "title": "If I could live my life over, I would change almost nothing.",
-                     "isRequired": true,
-                     "choices": [
-                      {
-                       "value": "Item 1",
-                       "text": "1 - Strongly disagree"
-                      },
-                      {
-                       "value": "Item 2",
-                       "text": "2 - Disagree"
-                      },
-                      {
-                       "value": "Item 3",
-                       "text": "3 - Slightly disagree"
-                      },
-                      {
-                       "value": "Item 4",
-                       "text": "4 - Neither agree not disagree"
-                      },
-                      {
-                       "value": "Item 5",
-                       "text": "5 - Slightly agree"
-                      },
-                      {
-                       "value": "Item 6",
-                       "text": "6 - Agree"
-                      },
-                      {
-                       "value": "Item 7",
-                       "text": "7 - Strongly Agree"
-                      }
-                     ]
-                    }
-                   ]
+                   "value": "1",
+                   "text": "I am not at all confident"
+                  },
+                  {
+                   "value": "2",
+                   "text": "I am a little confident"
+                  },
+                  {
+                   "value": "3",
+                   "text": "I am somewhat confident"
+                  },
+                  {
+                   "value": "4",
+                   "text": "I am quite confident"
+                  },
+                  {
+                   "value": "5",
+                   "text": "I am very confident"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question2",
+                 "title": "I can find ways to manage stress.",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "1",
+                   "text": "I am not at all confident"
+                  },
+                  {
+                   "value": "2",
+                   "text": "I am a little confident"
+                  },
+                  {
+                   "value": "3",
+                   "text": "I am somewhat confident"
+                  },
+                  {
+                   "value": "4",
+                   "text": "I am quite confident"
+                  },
+                  {
+                   "value": "5",
+                   "text": "I am very confident"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question3",
+                 "title": "I can avoid feeling discouraged.",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "1",
+                   "text": "I am not at all confident"
+                  },
+                  {
+                   "value": "2",
+                   "text": "I am a little confident"
+                  },
+                  {
+                   "value": "3",
+                   "text": "I am somewhat confident"
+                  },
+                  {
+                   "value": "4",
+                   "text": "I am quite confident"
+                  },
+                  {
+                   "value": "5",
+                   "text": "I am very confident"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question4",
+                 "title": "I can bounce back from disappointment.",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "1",
+                   "text": "I am not at all confident"
+                  },
+                  {
+                   "value": "2",
+                   "text": "I am a little confident"
+                  },
+                  {
+                   "value": "3",
+                   "text": "I am somewhat confident"
+                  },
+                  {
+                   "value": "4",
+                   "text": "I am quite confident"
+                  },
+                  {
+                   "value": "5",
+                   "text": "I am very confident"
                   }
                  ]
                 }
+               ]
+              }
+             ]
+            }
 
         window.survey = new Survey.Model(json);
 
@@ -379,8 +311,39 @@
                 }
 
                 survey.onComplete.add(function (result) {
-                    //result.preventDefault();
-                    postSurveyData(result.data, expInfo.session, expInfo.participant);
+                    // Table Lookup for PROMIS Short Form T-Score
+                    let scaleScoreLookup = new Map();
+                    scaleScoreLookup.set(4, 24.82);
+                    scaleScoreLookup.set(5, 29.01);
+                    scaleScoreLookup.set(6, 31.42);
+                    scaleScoreLookup.set(7, 33.41);
+                    scaleScoreLookup.set(8, 35.20);
+                    scaleScoreLookup.set(9, 36.93);
+                    scaleScoreLookup.set(10, 38.67);
+                    scaleScoreLookup.set(11, 40.43);
+                    scaleScoreLookup.set(12, 42.18);
+                    scaleScoreLookup.set(13, 43.98);
+                    scaleScoreLookup.set(14, 45.88);
+                    scaleScoreLookup.set(15, 47.86);
+                    scaleScoreLookup.set(16, 49.89);
+                    scaleScoreLookup.set(17, 52.02);
+                    scaleScoreLookup.set(18, 54.38);
+                    scaleScoreLookup.set(19, 57.29);
+                    scaleScoreLookup.set(20, 63.45);
+
+                    let sum = 0
+                    let tScore = 0
+                    Object.entries(result.data).forEach( (answer) => {
+                        if(!answer[0].includes('TRQ')) {
+                            sum = sum + parseInt(answer[1])
+                        }
+                    })
+                    tScore = scaleScoreLookup.get(sum)
+                    let newData = result.data
+                    const tempObj = {tScore: tScore}
+                    Object.assign(newData, tempObj)
+
+                    postSurveyData(newData, expInfo.session, expInfo.participant);
                 });
 
                 $("#surveyElement").Survey({model: survey});

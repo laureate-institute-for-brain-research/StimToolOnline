@@ -117,12 +117,17 @@
         // Survey.defaultBootstrapCss.navigationButton = "btn";
         var json = {
              "title": "PDSQ",
-             "description": "This form asks you about emotions, moods, thoughts, and behaviors DURING THE PAST TWO WEEKS. For each question, select YES in the column next to that question, if it describes how you have been acting, feeling, or thinking. If the item does not apply to you, select NO in the column next to that question.",
+             "description": "This form asks you about emotions, moods, thoughts, and behaviors. For each question, select YES in the column next to that question, if it describes how you have been acting, feeling, or thinking. If the item does not apply to you, select NO in the column next to that question.",
              "logoPosition": "right",
              "pages": [
               {
                "name": "page1",
                "elements": [
+               {
+                 "type": "html",
+                 "name": "label1",
+                 "html": "<p><u>DURING THE PAST 2 WEEKS</u></p>"
+                },
                 {
                  "type": "radiogroup",
                  "name": "question1",
@@ -130,11 +135,11 @@
                  "isRequired": true,
                  "choices": [
                   {
-                   "value": "Item 1",
+                   "value": "1",
                    "text": "YES"
                   },
                   {
-                   "value": "Item 2",
+                   "value": "0",
                    "text": "NO"
                   }
                  ]
@@ -146,11 +151,11 @@
                  "isRequired": true,
                  "choices": [
                   {
-                   "value": "Item 1",
+                   "value": "1",
                    "text": "YES"
                   },
                   {
-                   "value": "Item 2",
+                   "value": "0",
                    "text": "NO"
                   }
                  ]
@@ -162,11 +167,11 @@
                  "isRequired": true,
                  "choices": [
                   {
-                   "value": "Item 1",
+                   "value": "1",
                    "text": "YES"
                   },
                   {
-                   "value": "Item 2",
+                   "value": "0",
                    "text": "NO"
                   }
                  ]
@@ -178,11 +183,11 @@
                  "isRequired": true,
                  "choices": [
                   {
-                   "value": "Item 1",
+                   "value": "1",
                    "text": "YES"
                   },
                   {
-                   "value": "Item 2",
+                   "value": "0",
                    "text": "NO"
                   }
                  ]
@@ -194,11 +199,11 @@
                  "isRequired": true,
                  "choices": [
                   {
-                   "value": "Item 1",
+                   "value": "1",
                    "text": "YES"
                   },
                   {
-                   "value": "Item 2",
+                   "value": "0",
                    "text": "NO"
                   }
                  ]
@@ -210,11 +215,11 @@
                  "isRequired": true,
                  "choices": [
                   {
-                   "value": "Item 1",
+                   "value": "1",
                    "text": "YES"
                   },
                   {
-                   "value": "Item 2",
+                   "value": "0",
                    "text": "NO"
                   }
                  ]
@@ -226,11 +231,11 @@
                  "isRequired": true,
                  "choices": [
                   {
-                   "value": "Item 1",
+                   "value": "1",
                    "text": "YES"
                   },
                   {
-                   "value": "Item 2",
+                   "value": "0",
                    "text": "NO"
                   }
                  ]
@@ -242,11 +247,11 @@
                  "isRequired": true,
                  "choices": [
                   {
-                   "value": "Item 1",
+                   "value": "1",
                    "text": "YES"
                   },
                   {
-                   "value": "Item 2",
+                   "value": "0",
                    "text": "NO"
                   }
                  ]
@@ -258,11 +263,11 @@
                  "isRequired": true,
                  "choices": [
                   {
-                   "value": "Item 1",
+                   "value": "1",
                    "text": "YES"
                   },
                   {
-                   "value": "Item 2",
+                   "value": "0",
                    "text": "NO"
                   }
                  ]
@@ -274,11 +279,11 @@
                  "isRequired": true,
                  "choices": [
                   {
-                   "value": "Item 1",
+                   "value": "1",
                    "text": "YES"
                   },
                   {
-                   "value": "Item 2",
+                   "value": "0",
                    "text": "NO"
                   }
                  ]
@@ -290,11 +295,11 @@
                  "isRequired": true,
                  "choices": [
                   {
-                   "value": "Item 1",
+                   "value": "1",
                    "text": "YES"
                   },
                   {
-                   "value": "Item 2",
+                   "value": "0",
                    "text": "NO"
                   }
                  ]
@@ -306,11 +311,11 @@
                  "isRequired": true,
                  "choices": [
                   {
-                   "value": "Item 1",
+                   "value": "1",
                    "text": "YES"
                   },
                   {
-                   "value": "Item 2",
+                   "value": "0",
                    "text": "NO"
                   }
                  ]
@@ -322,11 +327,11 @@
                  "isRequired": true,
                  "choices": [
                   {
-                   "value": "Item 1",
+                   "value": "1",
                    "text": "YES"
                   },
                   {
-                   "value": "Item 2",
+                   "value": "0",
                    "text": "NO"
                   }
                  ]
@@ -338,11 +343,11 @@
                  "isRequired": true,
                  "choices": [
                   {
-                   "value": "Item 1",
+                   "value": "1",
                    "text": "YES"
                   },
                   {
-                   "value": "Item 2",
+                   "value": "0",
                    "text": "NO"
                   }
                  ]
@@ -354,76 +359,1720 @@
                  "isRequired": true,
                  "choices": [
                   {
-                   "value": "Item 1",
+                   "value": "1",
                    "text": "YES"
                   },
                   {
-                   "value": "Item 2",
+                   "value": "0",
                    "text": "NO"
                   }
                  ]
-                }
-               ],
-               "description": "During the past two weeks..."
-              },
-              {
-               "name": "page2",
-               "elements": [
+                },
+                {
+                 "type": "html",
+                 "name": "label1",
+                 "html": "<p>______________________________________</p>"
+                },
+                {
+                 "type": "html",
+                 "name": "label1",
+                 "html": "<p><u>THROUGHOUT YOUR WHOLE LIFE</u></p>"
+                },
                 {
                  "type": "radiogroup",
-                 "name": "question16",
+                 "name": "question22",
                  "title": "Have you ever experienced a traumatic event such as combat, rape, assault, sexual abuse, or any other extremely upsetting event?",
                  "isRequired": true,
                  "choices": [
                   {
-                   "value": "Item 1",
+                   "value": "1",
                    "text": "YES"
                   },
                   {
-                   "value": "Item 2",
+                   "value": "0",
                    "text": "NO"
                   }
                  ]
                 },
                 {
                  "type": "radiogroup",
-                 "name": "question17",
+                 "name": "question23",
                  "title": "Have you ever witnessed a traumatic event such as rape, assault, someone dying in an accident, or any other extremely upsetting incident?",
                  "isRequired": true,
                  "choices": [
                   {
-                   "value": "Item 1",
+                   "value": "1",
                    "text": "YES"
                   },
                   {
-                   "value": "Item 2",
+                   "value": "0",
+                   "text": "NO"
+                  }
+                 ]
+                },
+                {
+                 "type": "html",
+                 "name": "label2",
+                 "html": "<p>______________________________________</p>"
+                },
+                {
+                 "type": "html",
+                 "name": "label3",
+                 "html": "<p><u>DURING THE PAST 2 WEEKS</u></p>"
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question24",
+                 "title": "…did thoughts about a traumatic event frequently pop into your mind?",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "1",
+                   "text": "YES"
+                  },
+                  {
+                   "value": "0",
+                   "text": "NO"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question25",
+                 "title": "…did you frequently get upset because you were thinking about a traumatic event?",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "1",
+                   "text": "YES"
+                  },
+                  {
+                   "value": "0",
+                   "text": "NO"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question26",
+                 "title": "…were you frequently bothered by memories or dreams of a traumatic event?",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "1",
+                   "text": "YES"
+                  },
+                  {
+                   "value": "0",
+                   "text": "NO"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question27",
+                 "title": "…did reminders of a traumatic event cause you to feel intense distress?",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "1",
+                   "text": "YES"
+                  },
+                  {
+                   "value": "0",
+                   "text": "NO"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question28",
+                 "title": "…did you try to block out thoughts or feelings related to a traumatic event?",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "1",
+                   "text": "YES"
+                  },
+                  {
+                   "value": "0",
+                   "text": "NO"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question29",
+                 "title": "…did you try to avoid activities, places, or people that reminded you of a traumatic event?",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "1",
+                   "text": "YES"
+                  },
+                  {
+                   "value": "0",
+                   "text": "NO"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question30",
+                 "title": "…did you have flashbacks, where it felt like you were reliving a traumatic event?",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "1",
+                   "text": "YES"
+                  },
+                  {
+                   "value": "0",
+                   "text": "NO"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question31",
+                 "title": "…did reminders of a traumatic event make you shake, break out into a sweat, or have a racing heart?",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "1",
+                   "text": "YES"
+                  },
+                  {
+                   "value": "0",
+                   "text": "NO"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question32",
+                 "title": "…did you feel distant and cutoff from other people because of having experienced a traumatic event?",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "1",
+                   "text": "YES"
+                  },
+                  {
+                   "value": "0",
+                   "text": "NO"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question33",
+                 "title": "…did you feel emotionally numb because of having experienced a traumatic event?",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "1",
+                   "text": "YES"
+                  },
+                  {
+                   "value": "0",
+                   "text": "NO"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question34",
+                 "title": "…did you give up on goals for the future because of having experienced a traumatic event?",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "1",
+                   "text": "YES"
+                  },
+                  {
+                   "value": "0",
+                   "text": "NO"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question35",
+                 "title": "…did you keep your guard up because of having experienced a traumatic event?",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "1",
+                   "text": "YES"
+                  },
+                  {
+                   "value": "0",
+                   "text": "NO"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question36",
+                 "title": "…were you jumpy and easily startled because of having experienced a traumatic event?",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "1",
+                   "text": "YES"
+                  },
+                  {
+                   "value": "0",
+                   "text": "NO"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question37",
+                 "title": "…did you often go on eating binges (eating a very large amount of food very quickly over a short period of time)?",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "1",
+                   "text": "YES"
+                  },
+                  {
+                   "value": "0",
+                   "text": "NO"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question38",
+                 "title": "…did you often feel you could not control how much you were eating during an eating binge?",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "1",
+                   "text": "YES"
+                  },
+                  {
+                   "value": "0",
+                   "text": "NO"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question39",
+                 "title": "…did you go on eating binges during which you ate so much that you felt uncomfortably full?",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "1",
+                   "text": "YES"
+                  },
+                  {
+                   "value": "0",
+                   "text": "NO"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question40",
+                 "title": "…did you go on eating binges during which you ate a large amount of food even when you didn't feel hungry?",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "1",
+                   "text": "YES"
+                  },
+                  {
+                   "value": "0",
+                   "text": "NO"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question41",
+                 "title": "…did you eat alone during an eating binge because you were embarrassed by how much you were eating?",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "1",
+                   "text": "YES"
+                  },
+                  {
+                   "value": "0",
+                   "text": "NO"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question42",
+                 "title": "…did you go on eating binges and then feel disgusted with yourself afterwards?",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "1",
+                   "text": "YES"
+                  },
+                  {
+                   "value": "0",
+                   "text": "NO"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question43",
+                 "title": "…were you very upset with yourself because you were going on eating binges?",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "1",
+                   "text": "YES"
+                  },
+                  {
+                   "value": "0",
+                   "text": "NO"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question44",
+                 "title": "…to prevent gaining weight from an eating binge did you go on strict diets or exercise excessively?",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "1",
+                   "text": "YES"
+                  },
+                  {
+                   "value": "0",
+                   "text": "NO"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question45",
+                 "title": "…to prevent weight gain from an eating binge did you force yourself to vomit or use laxatives or water pills?",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "1",
+                   "text": "YES"
+                  },
+                  {
+                   "value": "0",
+                   "text": "NO"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question46",
+                 "title": "…was your weight, or the shape of your body, one of the most important things that affected your opinion of yourself?",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "1",
+                   "text": "YES"
+                  },
+                  {
+                   "value": "0",
+                   "text": "NO"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question47",
+                 "title": "…did you worry obsessively about dirt, germs, or chemicals?",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "1",
+                   "text": "YES"
+                  },
+                  {
+                   "value": "0",
+                   "text": "NO"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question48",
+                 "title": "…did you worry obsessively that something bad would happen because you forgot to do something important - like locking the door, turning off the stove, or pulling out the electrical cords of appliances?",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "1",
+                   "text": "YES"
+                  },
+                  {
+                   "value": "0",
+                   "text": "NO"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question49",
+                 "title": "…were there things you felt compelled to do over and over (for at least ½ hour per day) that you could not stop doing when you tried?",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "1",
+                   "text": "YES"
+                  },
+                  {
+                   "value": "0",
+                   "text": "NO"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question50",
+                 "title": "…were there things you felt compelled to do over and over even though they interfered with getting other things done?",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "1",
+                   "text": "YES"
+                  },
+                  {
+                   "value": "0",
+                   "text": "NO"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question51",
+                 "title": "…did you wash and clean yourself or things around you obsessively and excessively?",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "1",
+                   "text": "YES"
+                  },
+                  {
+                   "value": "0",
+                   "text": "NO"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question52",
+                 "title": "…did you obsessively and excessively check things or repeat actions over and over again?",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "1",
+                   "text": "YES"
+                  },
+                  {
+                   "value": "0",
+                   "text": "NO"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question53",
+                 "title": "…did you count things obsessively and excessively?",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "1",
+                   "text": "YES"
+                  },
+                  {
+                   "value": "0",
+                   "text": "NO"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question54",
+                 "title": "…did you get very scared because your heart was beating fast?",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "1",
+                   "text": "YES"
+                  },
+                  {
+                   "value": "0",
+                   "text": "NO"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question55",
+                 "title": "…did you get very scared because you were short of breath?",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "1",
+                   "text": "YES"
+                  },
+                  {
+                   "value": "0",
+                   "text": "NO"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question56",
+                 "title": "…did you get very scared because you were feeling shaky or faint?",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "1",
+                   "text": "YES"
+                  },
+                  {
+                   "value": "0",
+                   "text": "NO"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question57",
+                 "title": "…did you get sudden attacks of intense anxiety or fear that came on from out of the blue, for no reason at all?",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "1",
+                   "text": "YES"
+                  },
+                  {
+                   "value": "0",
+                   "text": "NO"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question58",
+                 "title": "…did you get sudden attacks of very intense anxiety or fear during which you thought something terrible might happen, such as your dying, going crazy; or losing control?",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "1",
+                   "text": "YES"
+                  },
+                  {
+                   "value": "0",
+                   "text": "NO"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question59",
+                 "title": "…did you have sudden, unexpected attacks of anxiety during which you had three or more of the following symptoms: heart racing or pounding, sweating, shakiness, shortness of breath, nausea, dizziness, or feeling faint?",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "1",
+                   "text": "YES"
+                  },
+                  {
+                   "value": "0",
+                   "text": "NO"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question60",
+                 "title": "…did you worry a lot about having unexpected anxiety attacks?",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "1",
+                   "text": "YES"
+                  },
+                  {
+                   "value": "0",
+                   "text": "NO"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question61",
+                 "title": "…did you have anxiety attacks that caused you to avoid certain situations or to change your behavior or normal routine?",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "1",
+                   "text": "YES"
+                  },
+                  {
+                   "value": "0",
+                   "text": "NO"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question62",
+                 "title": "…did things happen that you knew were true, but that other people told you were your imagination?",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "1",
+                   "text": "YES"
+                  },
+                  {
+                   "value": "0",
+                   "text": "NO"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question63",
+                 "title": "…were you convinced that other people were watching you, talking about you, or spying on you?",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "1",
+                   "text": "YES"
+                  },
+                  {
+                   "value": "0",
+                   "text": "NO"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question64",
+                 "title": "…did you think that you were in danger because someone was plotting to hurt you?",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "1",
+                   "text": "YES"
+                  },
+                  {
+                   "value": "0",
+                   "text": "NO"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question65",
+                 "title": "…did you think that you had special powers other people didn't have?",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "1",
+                   "text": "YES"
+                  },
+                  {
+                   "value": "0",
+                   "text": "NO"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question66",
+                 "title": "…did you think that some outside force or power was controlling you body or mind?",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "1",
+                   "text": "YES"
+                  },
+                  {
+                   "value": "0",
+                   "text": "NO"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question67",
+                 "title": "…did you hear voices that other people didn't hear, or see things that other people didn't see?",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "1",
+                   "text": "YES"
+                  },
+                  {
+                   "value": "0",
+                   "text": "NO"
+                  }
+                 ]
+                },
+                {
+                 "type": "html",
+                 "name": "label2",
+                 "html": "<p>______________________________________</p>"
+                },
+                {
+                 "type": "html",
+                 "name": "label3",
+                 "html": "<p><u>DURING THE PAST 6 MONTHS</u></p>"
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question68",
+                 "title": "…did you regularly avoid any situations because you were afraid they'd cause you to have an anxiety attack?",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "1",
+                   "text": "YES"
+                  },
+                  {
+                   "value": "0",
+                   "text": "NO"
+                  }
+                 ]
+                },
+                {
+                 "type": "html",
+                 "name": "question69",
+                 "html": "<p><b>…did any of the following make you feel fearful, anxious, or nervous because you were afraid you'd have an anxiety attack in the situation?</b></p>"
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question69a",
+                 "title": "going outside far away from home",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "1",
+                   "text": "YES"
+                  },
+                  {
+                   "value": "0",
+                   "text": "NO"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question69b",
+                 "title": "being in crowded places",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "1",
+                   "text": "YES"
+                  },
+                  {
+                   "value": "0",
+                   "text": "NO"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question69c",
+                 "title": "standing in long lines",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "1",
+                   "text": "YES"
+                  },
+                  {
+                   "value": "0",
+                   "text": "NO"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question69d",
+                 "title": "being on a bridge or in a tunnel",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "1",
+                   "text": "YES"
+                  },
+                  {
+                   "value": "0",
+                   "text": "NO"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question69e",
+                 "title": "traveling in a bus, train, or plane",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "1",
+                   "text": "YES"
+                  },
+                  {
+                   "value": "0",
+                   "text": "NO"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question69f",
+                 "title": "driving or riding in a car",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "1",
+                   "text": "YES"
+                  },
+                  {
+                   "value": "0",
+                   "text": "NO"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question69g",
+                 "title": "being home alone",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "1",
+                   "text": "YES"
+                  },
+                  {
+                   "value": "0",
+                   "text": "NO"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question69h",
+                 "title": "being in wide-open spaces (like a park)",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "1",
+                   "text": "YES"
+                  },
+                  {
+                   "value": "0",
+                   "text": "NO"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question70",
+                 "title": "…did you almost always get very anxious as soon as you were in any of the above situations?",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "1",
+                   "text": "YES"
+                  },
+                  {
+                   "value": "0",
+                   "text": "NO"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question71",
+                 "title": "…did you avoid any of the above situations because they made you feel anxious or fearful?",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "1",
+                   "text": "YES"
+                  },
+                  {
+                   "value": "0",
+                   "text": "NO"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question72",
+                 "title": "…did you worry a lot about embarrassing yourself in front of others?",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "1",
+                   "text": "YES"
+                  },
+                  {
+                   "value": "0",
+                   "text": "NO"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question73",
+                 "title": "…did you worry a lot that you might do something to make people think that you were stupid or foolish?",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "1",
+                   "text": "YES"
+                  },
+                  {
+                   "value": "0",
+                   "text": "NO"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question74",
+                 "title": "…did you feel very nervous in situations where people might pay attention to you?",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "1",
+                   "text": "YES"
+                  },
+                  {
+                   "value": "0",
+                   "text": "NO"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question75",
+                 "title": "…were you extremely nervous in social situations?",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "1",
+                   "text": "YES"
+                  },
+                  {
+                   "value": "0",
+                   "text": "NO"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question76",
+                 "title": "…did you regularly avoid any situations because you were afraid you'd do or say something to embarrass yourself?",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "1",
+                   "text": "YES"
+                  },
+                  {
+                   "value": "0",
+                   "text": "NO"
+                  }
+                 ]
+                },
+                {
+                 "type": "html",
+                 "name": "question77",
+                 "html": "<p><b>…did you worry a lot about doing or saying something to embarrass yourself in any of the following situations?</b></p>"
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question77a",
+                 "title": "public speaking",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "1",
+                   "text": "YES"
+                  },
+                  {
+                   "value": "0",
+                   "text": "NO"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question77b",
+                 "title": "eating in front of other people",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "1",
+                   "text": "YES"
+                  },
+                  {
+                   "value": "0",
+                   "text": "NO"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question77c",
+                 "title": "using public restrooms",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "1",
+                   "text": "YES"
+                  },
+                  {
+                   "value": "0",
+                   "text": "NO"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question77d",
+                 "title": "writing in front of others",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "1",
+                   "text": "YES"
+                  },
+                  {
+                   "value": "0",
+                   "text": "NO"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question77e",
+                 "title": "saying something stupid when you were with a group of people",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "1",
+                   "text": "YES"
+                  },
+                  {
+                   "value": "0",
+                   "text": "NO"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question77f",
+                 "title": "asking a question when in a group of people",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "1",
+                   "text": "YES"
+                  },
+                  {
+                   "value": "0",
+                   "text": "NO"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question77g",
+                 "title": "business meetings",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "1",
+                   "text": "YES"
+                  },
+                  {
+                   "value": "0",
+                   "text": "NO"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question77h",
+                 "title": "parties or other social gatherings",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "1",
+                   "text": "YES"
+                  },
+                  {
+                   "value": "0",
+                   "text": "NO"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question78",
+                 "title": "…did you almost always get very anxious as soon as you were in any of the above situations?",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "1",
+                   "text": "YES"
+                  },
+                  {
+                   "value": "0",
+                   "text": "NO"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question79",
+                 "title": "…did you avoid any of the above situations because they made you feel anxious or fearful?",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "1",
+                   "text": "YES"
+                  },
+                  {
+                   "value": "0",
+                   "text": "NO"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question80",
+                 "title": "…did you think that you were drinking too much?",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "1",
+                   "text": "YES"
+                  },
+                  {
+                   "value": "0",
+                   "text": "NO"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question81",
+                 "title": "…did anyone in your family think or say that you were drinking too much, or that you had an alcohol problem?",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "1",
+                   "text": "YES"
+                  },
+                  {
+                   "value": "0",
+                   "text": "NO"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question82",
+                 "title": "…did friends, a doctor, or anyone else think or say that you were drinking too much?",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "1",
+                   "text": "YES"
+                  },
+                  {
+                   "value": "0",
+                   "text": "NO"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question83",
+                 "title": "…did you think about cutting down or limiting your drinking?",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "1",
+                   "text": "YES"
+                  },
+                  {
+                   "value": "0",
+                   "text": "NO"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question84",
+                 "title": "…did you think that you had an alcohol problem?",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "1",
+                   "text": "YES"
+                  },
+                  {
+                   "value": "0",
+                   "text": "NO"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question85",
+                 "title": "…because of your drinking did you have problems in your marriage; at your job; with your friends or family; doing household chores; or in any other important area of your life?",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "1",
+                   "text": "YES"
+                  },
+                  {
+                   "value": "0",
+                   "text": "NO"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question86",
+                 "title": "…did you think that you were using drugs too much?",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "1",
+                   "text": "YES"
+                  },
+                  {
+                   "value": "0",
+                   "text": "NO"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question87",
+                 "title": "…did anyone in your family think or say that you were using drugs too much, or that you had a drug problem?",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "1",
+                   "text": "YES"
+                  },
+                  {
+                   "value": "0",
+                   "text": "NO"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question88",
+                 "title": "…did friends, a doctor, or anyone else think or say that you were using drugs too much?",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "1",
+                   "text": "YES"
+                  },
+                  {
+                   "value": "0",
+                   "text": "NO"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question89",
+                 "title": "…did you think about cutting down or limiting your drug use?",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "1",
+                   "text": "YES"
+                  },
+                  {
+                   "value": "0",
+                   "text": "NO"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question90",
+                 "title": "…did you think that you had a drug problem?",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "1",
+                   "text": "YES"
+                  },
+                  {
+                   "value": "0",
+                   "text": "NO"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question91",
+                 "title": "…because of your drug use did you have problems in your marriage; at your job; with your friends or family; doing household chores; or in any other important area of your life?",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "1",
+                   "text": "YES"
+                  },
+                  {
+                   "value": "0",
+                   "text": "NO"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question92",
+                 "title": "…were you a nervous person on most days?",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "1",
+                   "text": "YES"
+                  },
+                  {
+                   "value": "0",
+                   "text": "NO"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question93",
+                 "title": "…did you worry a lot that bad things might happen to you or someone close to you?",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "1",
+                   "text": "YES"
+                  },
+                  {
+                   "value": "0",
+                   "text": "NO"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question94",
+                 "title": "…did you worry about things that other people said you shouldn't worry about?",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "1",
+                   "text": "YES"
+                  },
+                  {
+                   "value": "0",
+                   "text": "NO"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question95",
+                 "title": "…were you worried or anxious about a number of things in your daily life on most days?",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "1",
+                   "text": "YES"
+                  },
+                  {
+                   "value": "0",
+                   "text": "NO"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question96",
+                 "title": "…did you often feel restless or on edge because you were worrying?",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "1",
+                   "text": "YES"
+                  },
+                  {
+                   "value": "0",
+                   "text": "NO"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question97",
+                 "title": "…did you often have problems falling asleep because you were worrying about things?",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "1",
+                   "text": "YES"
+                  },
+                  {
+                   "value": "0",
+                   "text": "NO"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question98",
+                 "title": "…did you often feel tension in your muscles because of anxiety or stress?",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "1",
+                   "text": "YES"
+                  },
+                  {
+                   "value": "0",
+                   "text": "NO"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question99",
+                 "title": "…did you often have difficulty concentrating because your mind was on your worries?",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "1",
+                   "text": "YES"
+                  },
+                  {
+                   "value": "0",
+                   "text": "NO"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question100",
+                 "title": "…were you often snappy or irritable because you were worrying or feeling stressed out?",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "1",
+                   "text": "YES"
+                  },
+                  {
+                   "value": "0",
+                   "text": "NO"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question101",
+                 "title": "…was it hard for you to control or stop your worrying on most days?",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "1",
+                   "text": "YES"
+                  },
+                  {
+                   "value": "0",
+                   "text": "NO"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question102",
+                 "title": "…have you had a lot of stomach and intestinal problems such as nausea, vomiting, excessive gas, stomach bloating, or diarrhea?",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "1",
+                   "text": "YES"
+                  },
+                  {
+                   "value": "0",
+                   "text": "NO"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question103",
+                 "title": "…have you been bothered by aches and pains in many different parts of your body?",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "1",
+                   "text": "YES"
+                  },
+                  {
+                   "value": "0",
+                   "text": "NO"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question104",
+                 "title": "Do you get sick more than most people?",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "1",
+                   "text": "YES"
+                  },
+                  {
+                   "value": "0",
+                   "text": "NO"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question105",
+                 "title": "Has your physical health been poor most of your life?",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "1",
+                   "text": "YES"
+                  },
+                  {
+                   "value": "0",
+                   "text": "NO"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question106",
+                 "title": "Are your doctors usually unable to find a physical cause for your physical symptoms?",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "1",
+                   "text": "YES"
+                  },
+                  {
+                   "value": "0",
+                   "text": "NO"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question107",
+                 "title": "…did you often worry that you might have a serious physical illness?",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "1",
+                   "text": "YES"
+                  },
+                  {
+                   "value": "0",
+                   "text": "NO"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question108",
+                 "title": "…was it hard to stop worrying that you have a serious physical illness?",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "1",
+                   "text": "YES"
+                  },
+                  {
+                   "value": "0",
+                   "text": "NO"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question109",
+                 "title": "…did your doctor say you didn't have a serious illness but it was still hard to stop thinking about it?",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "1",
+                   "text": "YES"
+                  },
+                  {
+                   "value": "0",
+                   "text": "NO"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question110",
+                 "title": "…did you worry so much about having a serious illness that it interfered with your activities or it caused you problems?",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "1",
+                   "text": "YES"
+                  },
+                  {
+                   "value": "0",
+                   "text": "NO"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question111",
+                 "title": "…did you visit the doctor a lot because you were worried that you had a serious physical illness?",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "1",
+                   "text": "YES"
+                  },
+                  {
+                   "value": "0",
                    "text": "NO"
                   }
                  ]
                 }
                ]
-              },
-              {
-               "name": "page3",
-               "elements": [
-                {
-                 "type": "radiogroup",
-                 "name": "question18",
-                 "title": "...did thoughts about a traumatic event frequently pop into your mind?",
-                 "isRequired": true,
-                 "choices": [
-                  {
-                   "value": "Item 1",
-                   "text": "YES"
-                  },
-                  {
-                   "value": "Item 2",
-                   "text": "NO"
-                  }
-                 ]
-                }
-               ],
-               "description": "During the past two weeks..."
               }
              ]
             }
@@ -499,8 +2148,58 @@
                 }
 
                 survey.onComplete.add(function (result) {
-                    //result.preventDefault();
-                    postSurveyData(result.data, expInfo.session, expInfo.participant);
+                    // let sum = 0
+                    // let tScore = 0
+                    // Object.entries(result.data).forEach( (answer) => {
+                    //     if(!answer[0].includes('TRQ')) {
+                    //         sum = sum + parseInt(answer[1])
+                    //     }
+                    // })
+                    // tScore = scaleScoreLookup.get(sum)
+                    console.log(result.data)
+                    const mdd_score = parseInt(result.data['question1']) + parseInt(result.data['question2']) + parseInt(result.data['question3']) + parseInt(result.data['question4']) + parseInt(result.data['question5'])
+                    + parseInt(result.data['question6']) + parseInt(result.data['question7']) + parseInt(result.data['question8']) + parseInt(result.data['question9']) + parseInt(result.data['question10'])
+                    + parseInt(result.data['question11']) + parseInt(result.data['question12']) + parseInt(result.data['question13']) + parseInt(result.data['question14']) + parseInt(result.data['question15'])
+                    + parseInt(result.data['question22']) + parseInt(result.data['question23'])
+                    const ptsd_score = parseInt(result.data['question24']) + parseInt(result.data['question25']) + parseInt(result.data['question26']) + parseInt(result.data['question27']) 
+                    + parseInt(result.data['question28']) + parseInt(result.data['question29']) + parseInt(result.data['question30']) + parseInt(result.data['question31']) 
+                    + parseInt(result.data['question32']) + parseInt(result.data['question33']) + parseInt(result.data['question34']) + parseInt(result.data['question35']) 
+                    + parseInt(result.data['question36'])
+                    const bulimia_score = parseInt(result.data['question37']) + parseInt(result.data['question38']) + parseInt(result.data['question39']) + parseInt(result.data['question40']) 
+                    + parseInt(result.data['question41']) + parseInt(result.data['question42']) + parseInt(result.data['question43']) + parseInt(result.data['question44']) 
+                    + parseInt(result.data['question45']) + parseInt(result.data['question46'])
+                    const ocd_score = parseInt(result.data['question47']) + parseInt(result.data['question48']) + parseInt(result.data['question49']) + parseInt(result.data['question50']) 
+                    + parseInt(result.data['question51']) + parseInt(result.data['question52']) + parseInt(result.data['question53'])
+                    const panic_score = parseInt(result.data['question54']) + parseInt(result.data['question55']) + parseInt(result.data['question56']) + parseInt(result.data['question57']) 
+                    + parseInt(result.data['question58']) + parseInt(result.data['question59']) + parseInt(result.data['question60']) + parseInt(result.data['question61'])
+                    const psychosis_score = parseInt(result.data['question62']) + parseInt(result.data['question63']) + parseInt(result.data['question64']) + parseInt(result.data['question65']) 
+                    + parseInt(result.data['question66']) + parseInt(result.data['question67'])
+                    const agoraphobia_score = parseInt(result.data['question68']) + parseInt(result.data['question69a']) + parseInt(result.data['question69b']) + parseInt(result.data['question69c'])
+                    + parseInt(result.data['question69d']) + parseInt(result.data['question69e']) + parseInt(result.data['question69f']) + parseInt(result.data['question69g']) 
+                    + parseInt(result.data['question69h']) + parseInt(result.data['question70']) + parseInt(result.data['question71'])
+                    const social_phobia_score = parseInt(result.data['question72']) + parseInt(result.data['question73']) + parseInt(result.data['question74']) + parseInt(result.data['question75'])
+                    + parseInt(result.data['question76']) + parseInt(result.data['question77a']) + parseInt(result.data['question77b']) + parseInt(result.data['question77c']) 
+                    + parseInt(result.data['question77d']) + parseInt(result.data['question77e']) + parseInt(result.data['question77f']) + parseInt(result.data['question77g']) 
+                    + parseInt(result.data['question77h']) + parseInt(result.data['question78']) + parseInt(result.data['question79'])  
+                    const alc_abuse_score = parseInt(result.data['question80']) + parseInt(result.data['question81']) + parseInt(result.data['question82']) + parseInt(result.data['question83']) 
+                    + parseInt(result.data['question84']) + parseInt(result.data['question85'])
+                    const drug_abuse_score = parseInt(result.data['question86']) + parseInt(result.data['question87']) + parseInt(result.data['question88']) + parseInt(result.data['question89']) 
+                    + parseInt(result.data['question90']) + parseInt(result.data['question91'])
+                    const gad_score = parseInt(result.data['question92']) + parseInt(result.data['question93']) + parseInt(result.data['question94']) + parseInt(result.data['question95']) 
+                    + parseInt(result.data['question96']) + parseInt(result.data['question97']) + parseInt(result.data['question98']) + parseInt(result.data['question99'])
+                    + parseInt(result.data['question100']) + parseInt(result.data['question101'])
+                    const soma_score =  parseInt(result.data['question102']) + parseInt(result.data['question103']) + parseInt(result.data['question104']) + parseInt(result.data['question105'])
+                    + parseInt(result.data['question106'])
+                    const hypo_score =  parseInt(result.data['question107']) + parseInt(result.data['question108']) + parseInt(result.data['question109']) + parseInt(result.data['question110'])
+                    + parseInt(result.data['question111'])
+                                    
+                    let newData = result.data
+                    const tempObj = {mdd_score: mdd_score, ptsd_score: ptsd_score, bulimia_score: bulimia_score, ocd_score: ocd_score, panic_score: panic_score, psychosis_score: psychosis_score
+                    , agoraphobia_score: agoraphobia_score, social_phobia_score: social_phobia_score, alc_abuse_score: alc_abuse_score, drug_abuse_score: drug_abuse_score
+                    , gad_score: gad_score, soma_score: soma_score, hypo_score: hypo_score}
+                    Object.assign(newData, tempObj)
+
+                    postSurveyData(newData, expInfo.session, expInfo.participant);
                 });
 
                 $("#surveyElement").Survey({model: survey});
