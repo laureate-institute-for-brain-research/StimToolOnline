@@ -189,13 +189,13 @@
                     {
                     "type": "text",
                     "name": "question_diagnose_other",
-                    "visibleIf": "{question1} contains 'Item Other'",
+                    "visibleIf": "{question_diagnose} contains 'Item Other'",
                     "title": "Other"
                     },
                     {
                     "type": "checkbox",
                     "name": "question_ed",
-                    "visibleIf": "{question1} contains 'Item 6'",
+                    "visibleIf": "{question_diagnose} contains 'Item 6'",
                     "title": "Eating Disorders",
                     "choices": [
                     {
@@ -219,13 +219,13 @@
                     {
                     "type": "text",
                     "name": "question_ed_other",
-                    "visibleIf": "{question2} contains 'Item Other'",
+                    "visibleIf": "{question_ed} contains 'Item Other'",
                     "title": "Other"
                     },
                     {
                     "type": "checkbox",
                     "name": "question_sud",
-                    "visibleIf": "{question1} contains 'Item 7'",
+                    "visibleIf": "{question_diagnose} contains 'Item 7'",
                     "title": "Substance Use Disorders",
                     "choices": [
                     {
@@ -257,7 +257,7 @@
                     {
                     "type": "text",
                     "name": "question_sud_other",
-                    "visibleIf": "{question3} contains 'Item Other'",
+                    "visibleIf": "{question_sud} contains 'Item Other'",
                     "title": "Other"
                     },
                     {
@@ -314,13 +314,13 @@
                     {
                     "type": "text",
                     "name": "question_med_other",
-                    "visibleIf": "{question4} contains 'Item Other'",
+                    "visibleIf": "{question_med} contains 'Item Other'",
                     "title": "Other"
                     },
                     {
                     "type": "checkbox",
                     "name": "question_antidep",
-                    "visibleIf": "{question4} contains 'Item 1'",
+                    "visibleIf": "{question_med} contains 'Item 1'",
                     "title": "Antidepressants",
                     "choices": [
                     {
@@ -384,13 +384,13 @@
                     {
                     "type": "text",
                     "name": "question_antidep_other",
-                    "visibleIf": "{question5} contains 'Item Other'",
+                    "visibleIf": "{question_antidep} contains 'Item Other'",
                     "title": "Other"
                     },
                     {
                     "type": "checkbox",
                     "name": "question_antianx",
-                    "visibleIf": "{question4} contains 'Item 2'",
+                    "visibleIf": "{question_med} contains 'Item 2'",
                     "title": "Anti-Anxiety Medications",
                     "choices": [
                     {
@@ -422,13 +422,13 @@
                     {
                     "type": "text",
                     "name": "question_antianx_other",
-                    "visibleIf": "{question6} contains 'Item Other'",
+                    "visibleIf": "{question_antianx} contains 'Item Other'",
                     "title": "Other"
                     },
                     {
                     "type": "checkbox",
                     "name": "question_moodstab",
-                    "visibleIf": "{question4} contains 'Item 3'",
+                    "visibleIf": "{question_med} contains 'Item 3'",
                     "title": "Mood Stabilizers",
                     "choices": [
                     {
@@ -456,13 +456,13 @@
                     {
                     "type": "text",
                     "name": "question_moodstab_other",
-                    "visibleIf": "{question7} contains 'Item Other'",
+                    "visibleIf": "{question_moodstab} contains 'Item Other'",
                     "title": "Other"
                     },
                     {
                     "type": "checkbox",
                     "name": "question_neur",
-                    "visibleIf": "{question4} contains 'Item 4'",
+                    "visibleIf": "{question_med} contains 'Item 4'",
                     "title": "Neuroleptics",
                     "choices": [
                     {
@@ -498,13 +498,13 @@
                     {
                     "type": "text",
                     "name": "question_neur_other",
-                    "visibleIf": "{question8} contains 'Item Other'",
+                    "visibleIf": "{question_neur} contains 'Item Other'",
                     "title": "Other"
                     },
                     {
                     "type": "checkbox",
                     "name": "question_adhd",
-                    "visibleIf": "{question4} contains 'Item 5'",
+                    "visibleIf": "{question_med} contains 'Item 5'",
                     "title": "ADHD Medications",
                     "choices": [
                     {
@@ -540,13 +540,13 @@
                     {
                     "type": "text",
                     "name": "question_adhd_other",
-                    "visibleIf": "{question9} contains 'Item Other'",
+                    "visibleIf": "{question_adhd} contains 'Item Other'",
                     "title": "Other"
                     },
                     {
                     "type": "checkbox",
                     "name": "question_sleep",
-                    "visibleIf": "{question4} contains 'Item 6'",
+                    "visibleIf": "{question_med} contains 'Item 6'",
                     "title": "Sleep Disorder Medications",
                     "choices": [
                     {
@@ -574,13 +574,13 @@
                     {
                     "type": "text",
                     "name": "question_sleep_other",
-                    "visibleIf": "{question10} contains 'Item Other'",
+                    "visibleIf": "{question_sleep} contains 'Item Other'",
                     "title": "Other"
                     },
                     {
                     "type": "checkbox",
                     "name": "question_seiz",
-                    "visibleIf": "{question4} contains 'Item 7'",
+                    "visibleIf": "{question_med} contains 'Item 7'",
                     "title": "Seizure Medications",
                     "choices": [
                     {
@@ -612,13 +612,13 @@
                     {
                     "type": "text",
                     "name": "question_seiz_other",
-                    "visibleIf": "{question11} contains 'Item Other'",
+                    "visibleIf": "{question_seiz} contains 'Item Other'",
                     "title": "Other"
                     },
                     {
                     "type": "checkbox",
                     "name": "question_withd",
-                    "visibleIf": "{question4} contains 'Item 8'",
+                    "visibleIf": "{question_med} contains 'Item 8'",
                     "title": "Withdrawal Aids",
                     "choices": [
                     {
@@ -642,13 +642,13 @@
                     {
                     "type": "text",
                     "name": "question_withd_other",
-                    "visibleIf": "{question12} contains 'Item Other'",
+                    "visibleIf": "{question_withd} contains 'Item Other'",
                     "title": "Other"
                     },
                     {
                     "type": "checkbox",
                     "name": "question_sudmed",
-                    "visibleIf": "{question4} contains 'Item 9'",
+                    "visibleIf": "{question_med} contains 'Item 9'",
                     "title": "Medications for Substance Use Disorders",
                     "choices": [
                     {
@@ -672,7 +672,7 @@
                     {
                     "type": "text",
                     "name": "question_sudmed_other",
-                    "visibleIf": "{question13} contains 'Item Other'",
+                    "visibleIf": "{question_sudmed} contains 'Item Other'",
                     "title": "Other"
                     },
                     {
@@ -725,7 +725,7 @@
                     {
                     "type": "text",
                     "name": "question_medical_other",
-                    "visibleIf": "{question14} contains 'Item Other'",
+                    "visibleIf": "{question_medical} contains 'Item Other'",
                     "title": "Other"
                     }
                   ]
