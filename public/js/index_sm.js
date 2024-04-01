@@ -215,7 +215,11 @@ document.getElementById("about").addEventListener("click", function(event){
 document.getElementById('begin').addEventListener('click', (event) => {
     event.preventDefault();
 
-    if (!disable_begin) {
+    console.log(document.getElementById('id_input'))
+  console.log(document.getElementById('id_input').length)
+  console.log(document.getElementById('id_input').value.length)
+  console.log(document.getElementById('session-list').value)
+    if (!disable_begin && document.getElementById('id_input').value.length !== 0 && document.getElementById('session-list').value !== 'Choose Session') {
         var values = {};
         $.each($('#adduser').serializeArray(), function (i, field) {
             values[field.name] = field.value;
