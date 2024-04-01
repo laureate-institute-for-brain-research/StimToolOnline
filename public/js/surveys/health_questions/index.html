@@ -125,7 +125,7 @@
                 "elements": [
                     {
                     "type": "checkbox",
-                    "name": "question1",
+                    "name": "question_diagnose",
                     "title": "Have you ever been diagnosed with any of the following? (check all that apply)",
                     "choices": [
                     {
@@ -188,13 +188,13 @@
                     },
                     {
                     "type": "text",
-                    "name": "question1_other",
+                    "name": "question_diagnose_other",
                     "visibleIf": "{question1} contains 'Item Other'",
                     "title": "Other"
                     },
                     {
                     "type": "checkbox",
-                    "name": "question2",
+                    "name": "question_ed",
                     "visibleIf": "{question1} contains 'Item 6'",
                     "title": "Eating Disorders",
                     "choices": [
@@ -218,13 +218,13 @@
                     },
                     {
                     "type": "text",
-                    "name": "question2_other",
+                    "name": "question_ed_other",
                     "visibleIf": "{question2} contains 'Item Other'",
                     "title": "Other"
                     },
                     {
                     "type": "checkbox",
-                    "name": "question3",
+                    "name": "question_sud",
                     "visibleIf": "{question1} contains 'Item 7'",
                     "title": "Substance Use Disorders",
                     "choices": [
@@ -256,13 +256,13 @@
                     },
                     {
                     "type": "text",
-                    "name": "question3_other",
+                    "name": "question_sud_other",
                     "visibleIf": "{question3} contains 'Item Other'",
                     "title": "Other"
                     },
                     {
                     "type": "checkbox",
-                    "name": "question4",
+                    "name": "question_med",
                     "title": "Within the past six weeks, have you taken any of the following types of medication? (check all that apply)",
                     "choices": [
                     {
@@ -313,13 +313,13 @@
                     },
                     {
                     "type": "text",
-                    "name": "question4_other",
+                    "name": "question_med_other",
                     "visibleIf": "{question4} contains 'Item Other'",
                     "title": "Other"
                     },
                     {
                     "type": "checkbox",
-                    "name": "question5",
+                    "name": "question_antidep",
                     "visibleIf": "{question4} contains 'Item 1'",
                     "title": "Antidepressants",
                     "choices": [
@@ -383,13 +383,13 @@
                     },
                     {
                     "type": "text",
-                    "name": "question5_other",
+                    "name": "question_antidep_other",
                     "visibleIf": "{question5} contains 'Item Other'",
                     "title": "Other"
                     },
                     {
                     "type": "checkbox",
-                    "name": "question6",
+                    "name": "question_antianx",
                     "visibleIf": "{question4} contains 'Item 2'",
                     "title": "Anti-Anxiety Medications",
                     "choices": [
@@ -421,13 +421,13 @@
                     },
                     {
                     "type": "text",
-                    "name": "question6_other",
+                    "name": "question_antianx_other",
                     "visibleIf": "{question6} contains 'Item Other'",
                     "title": "Other"
                     },
                     {
                     "type": "checkbox",
-                    "name": "question7",
+                    "name": "question_moodstab",
                     "visibleIf": "{question4} contains 'Item 3'",
                     "title": "Mood Stabilizers",
                     "choices": [
@@ -455,13 +455,13 @@
                     },
                     {
                     "type": "text",
-                    "name": "question7_other",
+                    "name": "question_moodstab_other",
                     "visibleIf": "{question7} contains 'Item Other'",
                     "title": "Other"
                     },
                     {
                     "type": "checkbox",
-                    "name": "question8",
+                    "name": "question_neur",
                     "visibleIf": "{question4} contains 'Item 4'",
                     "title": "Neuroleptics",
                     "choices": [
@@ -497,13 +497,13 @@
                     },
                     {
                     "type": "text",
-                    "name": "question8_other",
+                    "name": "question_neur_other",
                     "visibleIf": "{question8} contains 'Item Other'",
                     "title": "Other"
                     },
                     {
                     "type": "checkbox",
-                    "name": "question9",
+                    "name": "question_adhd",
                     "visibleIf": "{question4} contains 'Item 5'",
                     "title": "ADHD Medications",
                     "choices": [
@@ -539,13 +539,13 @@
                     },
                     {
                     "type": "text",
-                    "name": "question9_other",
+                    "name": "question_adhd_other",
                     "visibleIf": "{question9} contains 'Item Other'",
                     "title": "Other"
                     },
                     {
                     "type": "checkbox",
-                    "name": "question10",
+                    "name": "question_sleep",
                     "visibleIf": "{question4} contains 'Item 6'",
                     "title": "Sleep Disorder Medications",
                     "choices": [
@@ -573,13 +573,13 @@
                     },
                     {
                     "type": "text",
-                    "name": "question10_other",
+                    "name": "question_sleep_other",
                     "visibleIf": "{question10} contains 'Item Other'",
                     "title": "Other"
                     },
                     {
                     "type": "checkbox",
-                    "name": "question11",
+                    "name": "question_seiz",
                     "visibleIf": "{question4} contains 'Item 7'",
                     "title": "Seizure Medications",
                     "choices": [
@@ -597,6 +597,10 @@
                     },
                     {
                     "value": "Item 4",
+                    "text": "Lamotrigine/Lamictal"
+                    },
+                    {
+                    "value": "Item 5",
                     "text": "Prefer not to answer"
                     },
                     {
@@ -607,13 +611,13 @@
                     },
                     {
                     "type": "text",
-                    "name": "question11_other",
+                    "name": "question_seiz_other",
                     "visibleIf": "{question11} contains 'Item Other'",
                     "title": "Other"
                     },
                     {
                     "type": "checkbox",
-                    "name": "question12",
+                    "name": "question_withd",
                     "visibleIf": "{question4} contains 'Item 8'",
                     "title": "Withdrawal Aids",
                     "choices": [
@@ -637,13 +641,13 @@
                     },
                     {
                     "type": "text",
-                    "name": "question12_other",
+                    "name": "question_withd_other",
                     "visibleIf": "{question12} contains 'Item Other'",
                     "title": "Other"
                     },
                     {
                     "type": "checkbox",
-                    "name": "question13",
+                    "name": "question_sudmed",
                     "visibleIf": "{question4} contains 'Item 9'",
                     "title": "Medications for Substance Use Disorders",
                     "choices": [
@@ -667,13 +671,13 @@
                     },
                     {
                     "type": "text",
-                    "name": "question13_other",
+                    "name": "question_sudmed_other",
                     "visibleIf": "{question13} contains 'Item Other'",
                     "title": "Other"
                     },
                     {
                     "type": "checkbox",
-                    "name": "question14",
+                    "name": "question_medical",
                     "title": "Have you ever experienced any of the following medical conditions?",
                     "choices": [
                     {
@@ -702,6 +706,14 @@
                     },
                     {
                     "value": "Item 7",
+                    "text": "Persistent memory or attention difficulties"
+                    },
+                    {
+                    "value": "Item 8",
+                    "text": "Loss of consciousness for more than 30 minutes due to a head injury"
+                    },
+                    {
+                    "value": "Item 9",
                     "text": "Prefer not to answer"
                     },
                     {
@@ -712,7 +724,7 @@
                     },
                     {
                     "type": "text",
-                    "name": "question14_other",
+                    "name": "question_medical_other",
                     "visibleIf": "{question14} contains 'Item Other'",
                     "title": "Other"
                     }

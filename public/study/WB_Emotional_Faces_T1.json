@@ -6,10 +6,9 @@
         "/?index=2&survey=panasx&session=1",
         "/?index=3&survey=qes&session=1",
         "/?index=4&task=emotional_faces_v2&run=Pilot_R1_CB1.json",
-        "/?index=5&survey=psy_med&session=1",
-        "/?index=6&survey=sticsa_state&session=1",
-        "/?index=7&survey=sticsa_trait&session=1",
-        "/?index=8&survey=ctq&session=1",
+        "/?index=5&survey=sticsa_state&session=1",
+        "/?index=6&survey=sticsa_trait&session=1",
+        "/?index=7&survey=ctq&session=1",
         "/completeMobile?"
     ],
     "fullscreen": true,
