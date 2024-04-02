@@ -462,7 +462,7 @@
                     let sum = 0
                     let tScore = 0
                     Object.entries(result.data).forEach( (answer) => {
-                        if(!answer[0].includes('TRQ')) {
+                        if(!answer[0].includes('TRQ') && !answer[0].includes('check')) {
                             sum = sum + parseInt(answer[1])
                         }
                     })

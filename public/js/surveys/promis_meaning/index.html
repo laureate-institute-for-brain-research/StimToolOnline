@@ -153,7 +153,7 @@
                 },
                 {
                  "type": "radiogroup",
-                 "name": "question6",
+                 "name": "question2",
                  "title": "I generally feel that what I do in my life is valuable and worthwhile.",
                  "isRequired": true,
                  "choices": [
@@ -181,7 +181,7 @@
                 },
                 {
                  "type": "radiogroup",
-                 "name": "question5",
+                 "name": "question3",
                  "title": "I have very clear goals and aims for my life.",
                  "isRequired": true,
                  "choices": [
@@ -204,6 +204,34 @@
                   {
                    "value": "5",
                    "text": "Strongly agree"
+                  }
+                 ]
+                },
+                {
+                 "type": "radiogroup",
+                 "name": "question_check1",
+                 "title": "Please select 'Quite a bit'.",
+                 "isRequired": true,
+                 "choices": [
+                  {
+                   "value": "1",
+                   "text": "Not at all"
+                  },
+                  {
+                   "value": "2",
+                   "text": "A little bit"
+                  },
+                  {
+                   "value": "3",
+                   "text": "Somewhat"
+                  },
+                  {
+                   "value": "4",
+                   "text": "Quite a bit"
+                  },
+                  {
+                   "value": "5",
+                   "text": "Very much"
                   }
                  ]
                 },
@@ -237,7 +265,7 @@
                 },
                 {
                  "type": "radiogroup",
-                 "name": "question3",
+                 "name": "question5",
                  "title": "My life has significance.",
                  "isRequired": true,
                  "choices": [
@@ -265,7 +293,7 @@
                 },
                 {
                  "type": "radiogroup",
-                 "name": "question2",
+                 "name": "question6",
                  "title": "I have a clear sense of direction in life.",
                  "isRequired": true,
                  "choices": [
@@ -293,7 +321,7 @@
                 },
                 {
                  "type": "radiogroup",
-                 "name": "question3",
+                 "name": "question7",
                  "title": "I experience deep fulfillment in my life.",
                  "isRequired": true,
                  "choices": [
@@ -321,7 +349,7 @@
                 },
                 {
                  "type": "radiogroup",
-                 "name": "question3",
+                 "name": "question8",
                  "title": "My life has purpose.",
                  "isRequired": true,
                  "choices": [
@@ -462,7 +490,7 @@
                     let sum = 0
                     let tScore = 0
                     Object.entries(result.data).forEach( (answer) => {
-                        if(!answer[0].includes('TRQ')) {
+                        if(!answer[0].includes('TRQ') && !answer[0].includes('check')) {
                             sum = sum + parseInt(answer[1])
                         }
                     })
