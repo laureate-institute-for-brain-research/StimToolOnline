@@ -1829,7 +1829,7 @@ function trialRoutineEnd (trials) {
     // hold the fixation for jitter time
     if (t <= ITI && passed_instr_check) {
       return Scheduler.Event.FLIP_REPEAT
-    } else if (t <= try_again_duration) {
+    } else if (t <= try_again_duration && config_values.instr_check == 'true') {
       tryAgainText.setAutoDraw(true)
       return Scheduler.Event.FLIP_REPEAT
     } else {
