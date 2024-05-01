@@ -1,4 +1,6 @@
-﻿/* eslint-disable eqeqeq */
+﻿/* eslint-disable no-undef */
+/* eslint-disable camelcase */
+/* eslint-disable eqeqeq */
 /**
  * Stim Rating
  * @author Aardron Robinson
@@ -6,8 +8,8 @@
 
 /* jshint -W069 */
 /* Disable Warning Justification:
-	Using bracket notation because it's familiar coding convention with python
-	Counterpart
+Using bracket notation because it's familiar coding convention with python
+Counterpart
 */
 
 import { core, data, sound, util, visual } from '../../../../../../../psychojs/psychojs-2021.2.3.js'
@@ -39,17 +41,11 @@ const { abs, sin, cos, PI: pi, sqrt } = Math
 const { round } = util
 
 // TASK PARAMS
-const LEFT_KEY = 'left'
 const RIGHT_KEY = 'right'
-const UP_KEY = 'up'
-const DOWN_KEY = 'down'
-const keyList = [LEFT_KEY, RIGHT_KEY, UP_KEY, DOWN_KEY]
 
 let window_ratio = 4 / 3 // used for general stimuli sizing
-const image_ratio = 4 / 3 // used for setting image sizes (this gets set to different image specific values throughout the code)
 
 // global flags
-let set_fixation_flag = true
 let init_fixation_flag = true
 let in_practice = false
 let passed_instr_check = false
@@ -82,7 +78,6 @@ function waitForElm (selector) {
 
 window.onload = function () {
   const id = getQueryVariable('id')
-  const study = getQueryVariable('study')
 
   // Get info Promize
   const getInfoPromise = new Promise((resolve, reject) => {
@@ -182,7 +177,6 @@ window.onload = function () {
           dataType: 'text',
           async: false,
           success: (data) => {
-            const out = []
             const allRows = data.split('\n') // split rows at new line
 
             const headerRows = allRows[0].split(',')
@@ -231,7 +225,6 @@ window.onload = function () {
           dataType: 'text',
           async: false,
           success: (data) => {
-            const out = []
             const allRows = data.split('\n') // split rows at new line
 
             const headerRows = allRows[0].split(',')
@@ -260,7 +253,6 @@ window.onload = function () {
           dataType: 'text',
           async: false,
           success: (data) => {
-            const out = []
             const allRows = data.split('\n') // split rows at new line
 
             const headerRows = allRows[0].split(',')
@@ -316,7 +308,7 @@ window.onload = function () {
         expName,
         expInfo,
         resources
-			  })
+      })
       psychoJS._config.experiment.saveFormat = undefined // don't save to client side
     })
 }
@@ -425,11 +417,8 @@ let instructClock
 let kb
 let trialClock
 let toneClock
-let stimClock
-let adviceClock
 let feedbackClock
 let respondClock
-let blockClock
 
 // static stim
 let questionText
@@ -453,13 +442,8 @@ let thanksText
 let globalClock
 let routineTimer
 
-let debugClock
-
 function experimentInit () {
   // Check if there is an practice
-  if (getQueryVariable('practice') == 'true') {
-    practice = true
-  }
 
   psychoJS.window.color = new util.Color(config_values.background_color)
 
@@ -508,12 +492,8 @@ function experimentInit () {
   // Initialize components for Routine "trial"
   trialClock = new util.Clock()
   toneClock = new util.Clock()
-  stimClock = new util.Clock()
-  adviceClock = new util.Clock()
   feedbackClock = new util.Clock()
   respondClock = new util.Clock()
-  blockClock = new util.Clock()
-  debugClock = new util.Clock()
 
   // Trial/Choice counter
   currentTrialText = new visual.TextStim({
@@ -647,10 +627,6 @@ function instruct_pagesLoopBegin (thisScheduler) {
   })
 
   psychoJS.experiment.addLoop(slides) // add the loop to the experiment
-  currentLoop = slides // we're now the current loop
-
-  const currentInstructIndex = 0
-  const maxInstructions = slides.nTotal
 
   const snapshot = slides.getSnapshot()
   thisScheduler.add(importConditions(snapshot))
@@ -695,7 +671,7 @@ function instructRoutineBegin (trials) {
       track = new Sound({
         win: psychoJS.window,
         value: audio_path
-			  })
+      })
       console.log(audio_path)
       time_audio_end = t + track.getDuration()
       track.setVolume(1.0)
@@ -1053,9 +1029,7 @@ function readyRoutineEnd (trials) {
 }
 
 let trials
-let currentLoop
 let trial_type
-let current_block_size
 function practiceTrialsLoopBegin (thisScheduler) {
   trials = new TrialHandler({
     psychoJS,
@@ -1071,7 +1045,6 @@ function practiceTrialsLoopBegin (thisScheduler) {
   last_trial_num = trials.nTotal
 
   psychoJS.experiment.addLoop(trials) // add the loop to the experiment
-  currentLoop = trials // we're now the current loop
 
   endClock.reset()
   resp.stop()
@@ -1119,7 +1092,6 @@ function trialsLoopBegin (thisScheduler) {
   last_trial_num = trials.nTotal
 
   psychoJS.experiment.addLoop(trials) // add the loop to the experiment
-  currentLoop = trials // we're now the current loop
 
   init_fixation_flag = true
 
@@ -1310,7 +1282,7 @@ function generate_option_list () {
         text: opt,
         mask: undefined,
         ori: 0,
-        pos: button_pos,
+        pos: [button_pos[0], button_pos[1] + parseFloat(config_values.button_y_offset)],
         anchor: anchor_type,
         letterHeight: 0.023,
         fillColor: new util.Color('darkgrey'),
@@ -1429,8 +1401,8 @@ function generate_image_list () {
         } else if (images_row_count == 2 || images_row_count == 3) { // special case for second and third
           // Either anchor positioning on left or right depending on side placement
           img_pos[0] = (images_list[img_row_center_index].pos[0] + // start at position of furthest image position on correct side
-						(img_signage * images_list[img_row_center_index].size[0]) + // Add half of size of center image in correct direction
-						(img_signage * img_spacing)) // add image spacing in correct direction
+				    (img_signage * images_list[img_row_center_index].size[0]) + // Add half of size of center image in correct direction
+				    (img_signage * img_spacing)) // add image spacing in correct direction
           img_signage = img_signage * -1
         } else {
           // Either anchor positioning on left or right depending on side placement
@@ -1460,7 +1432,7 @@ function generate_image_list () {
         image: img,
         mask: undefined,
         ori: 0,
-        pos: img_pos,
+        pos: [img_pos[0], img_pos[1] + parseFloat(config_values.image_y_offset)],
         size: [parseFloat(config_values.image_size), parseFloat(config_values.image_size)],
         color: new util.Color([1, 1, 1]),
         opacity: 1,
@@ -1541,6 +1513,7 @@ function trialRoutineBegin (trials) {
 
     questionText.setText(question)
     questionText.height = parseFloat(config_values.question_size)
+    questionText.pos[1] = questionText.pos[1] + parseFloat(config_values.question_y_offset)
 
     console.log('Trial Number: ', trial_number)
 
@@ -1696,7 +1669,7 @@ function trialRoutineRespond (trials) {
         opt.setAutoDraw(false)
       })
 
-      set_fixation_flag = true
+      // set_fixation_flag = true
       endClock.reset()
       return Scheduler.Event.NEXT
     }

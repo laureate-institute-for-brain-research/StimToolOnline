@@ -1,2 +1,2 @@
-﻿input_type,background_color,instr_check,instr_check_conditions,question_size,buttons_per_row,button_width,button_spacing,images_per_row,image_size,image_spacing,feedback_duration,
-mouse,black,true,1,0.06,1,1.5,0.02,5,0.25,0.01,0.5,
+﻿input_type,background_color,instr_check,instr_check_conditions,question_size,question_y_offset,buttons_per_row,button_width,button_spacing,button_y_offset,images_per_row,image_size,image_spacing,image_y_offset,feedback_duration,
+mouse,black,true,1,0.06,-0.25,1,1.5,0.02,0.1,5,0.25,0.01,0,0.5,
