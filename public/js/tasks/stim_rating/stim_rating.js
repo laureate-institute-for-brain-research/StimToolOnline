@@ -1030,7 +1030,10 @@ function readyRoutineEnd (trials) {
 
 let trials
 let trial_type
-function practiceTrialsLoopBegin (thisScheduler) {
+function practiceTrialsLoopBegin(thisScheduler) {
+  if (expInfo.practice_schedule == undefined) {
+    return Scheduler.Event.NEXT
+  }
   trials = new TrialHandler({
     psychoJS,
     nReps: 1,
@@ -1476,6 +1479,140 @@ function generate_image_list () {
   })
 }
 
+let videos_list = []
+let videos_text_list = []
+let videos_count = 0
+let videos_row_count = 0
+let videos_list_list = []
+let videos_list_pos_order = []
+let videos_list_count = 0
+let vid_row_center_index = 0
+let vid_pos = [0, 0] // center position
+let vid_spacing = 0.01
+let vid_signage = -1 // screen side
+
+function generate_video_list() {
+  videos_list = []
+  videos_list_pos_order = []
+  videos_list_list = []
+  videos_list_count = 0
+  vid_row_center_index = 0
+  videos_count = 0
+  videos_row_count = 0
+  vid_spacing = parseFloat(config_values.image_spacing)
+  vid_pos = [0, -0.21] // center position
+  vid_signage = -1 // screen side
+
+  // Generate a list for each row of options
+  videos_text_list = videos.split(' ')
+  for (let i = 0; i < images_text_list.length; i += parseInt(config_values.images_per_row)) {
+    const row = videos_text_list.slice(i, i + parseInt(config_values.images_per_row))
+    videos_list_list.push(row)
+  }
+
+  // Generate properly positioned images
+  // Loop through the list of rows
+  videos_list_list.forEach((vids) => {
+    // RESET for new list/row
+    videos_list_count++
+    // images_count = 0;
+    videos_row_count = 0
+    vid_pos = [0, 0.0 + ((parseFloat(config_values.image_size) + vid_spacing) * (videos_list_list.length - videos_list_count))] // separate row positioning
+    vid_signage = -1 // screen side
+    if (videos_list_count > 1) {
+      vid_row_center_index = parseInt(config_values.images_per_row) * (videos_list_count - 1)
+    }
+    // Handle proper option image placement one row at a time
+    vids.forEach((vid) => {
+      videos_count++
+      videos_row_count++
+      // positioning logic:
+      // If only one, then center.
+      // Else, bounce between left and right screen placement.
+      if (vids.length % 2 != 0) {
+        if (videos_row_count == 1) { // special case for first one
+          // Either anchor positioning on left or right depending on side placement
+          vid_pos[0] = vid_pos[0]
+          vid_signage = vid_signage * -1
+        } else if (videos_row_count == 2 || videos_row_count == 3) { // special case for second and third
+          // Either anchor positioning on left or right depending on side placement
+          vid_pos[0] = (videos_list[vid_row_center_index].pos[0] + // start at position of furthest video position on correct side
+				    (vid_signage * videos_list[vid_row_center_index].size[0]) + // Add half of size of center video in correct direction
+				    (vid_signage * vid_spacing)) // add video spacing in correct direction
+          vid_signage = vid_signage * -1
+        } else {
+          // Either anchor positioning on left or right depending on side placement
+          vid_pos[0] = (videos_list[videos_count - 3].pos[0] + // start at position of furthest video position on correct side
+						(vid_signage * videos_list[videos_count - 3].size[0]) + // Add size of video in the correct direction
+						(vid_signage * vid_spacing)) // add video spacing in correct direction
+          vid_signage = vid_signage * -1
+        }
+      } else {
+        if (videos_row_count == 1 || videos_row_count == 2) { // special case for first two
+          // Either anchor positioning on left or right depending on side placement
+          vid_pos[0] = (parseFloat(config_values.video_size) / 2 + vid_spacing / 2) * vid_signage
+          vid_signage = vid_signage * -1
+        } else {
+          // Either anchor positioning on left or right depending on side placement
+          vid_pos[0] = (videos_list[videos_count - 3].pos[0] + // start at position of furthest video position on correct side
+						(vid_signage * videos_list[videos_count - 3].size[0]) + // Add size of video in the correct direction
+						(vid_signage * vid_spacing)) // add video spacing in correct direction
+          vid_signage = vid_signage * -1
+        }
+      }
+      // Create the video and add to list
+      const temp_video = new visual.MovieStim({
+        win: psychoJS.window,
+        name: `stim${videos_count}`,
+        units: 'height',
+        movie: vid,
+        loop: true,
+        mask: undefined,
+        ori: 0,
+        pos: [vid_pos[0], vid_pos[1] + parseFloat(config_values.image_y_offset)],
+        size: [parseFloat(config_values.image_size), parseFloat(config_values.image_size)],
+        color: new util.Color([1, 1, 1]),
+        opacity: 1,
+        flipHoriz: false,
+        flipVert: false,
+        texRes: 128,
+        interpolate: true,
+        depth: 0
+      })
+      videos_list.push(temp_video)
+    })
+  })
+
+  // TODO: Order based on position and reassign the videos so that they are in order
+  let first_in = true
+  videos_list.forEach((vid) => { // loop through original option list
+    videos_list_pos_order.forEach((vidin) => { // loop through input option list
+      if (first_in) { // just push the first one
+        videos_list_pos_order.push(vid)
+        first_in = false
+      }
+      // button name is unique, so used to skip duplicates
+      else if (vid.pos[0] < vidin.pos[0] && vid.pos[1] >= vidin.pos[1] && !videos_list_pos_order.includes(vid)) {
+        // if position is 'farther left' than an existing entry, then add it before
+        videos_list_pos_order.splice(videos_list_pos_order.indexOf(vidin), 0, vid)
+      }
+    })
+    // if position is not 'farther left' than existing, then add to end (farthest right)
+    if (!videos_list_pos_order.includes(vid)) {
+      videos_list_pos_order.push(vid)
+    }
+  })
+
+  videos_list = []
+  let ixx = 0
+  videos_list_pos_order.forEach((vid) => {
+    console.log(videos_text_list[ixx])
+    vid.movie = videos_text_list[ixx]
+    videos_list.push(vid)
+    ixx++
+  })
+}
+
 let pressed
 var last_trial_num = 0
 let clicked_option = ['', 0] // [option name, times clicked]
@@ -1500,7 +1637,7 @@ function trialRoutineBegin (trials) {
     if (media_type == 'image') {
       generate_image_list()
     } else if (media_type == 'video') {
-      // TODO generate_videos()
+      generate_video_list()
     } else if (media_type == 'audio') {
       // TODO generate_audios()
     } else if (media_type == 'text') {
@@ -1546,6 +1683,10 @@ function trialRoutineRespond (trials) {
       currentTrialText.setAutoDraw(true)
       currentTrialNumber.setAutoDraw(true)
       questionText.setAutoDraw(true)
+      videos_list.forEach((vid) => {
+        vid.setAutoDraw(true)
+        vid.play()
+      })
       images_list.forEach((img) => {
         img.setAutoDraw(true)
       })
@@ -1662,6 +1803,10 @@ function trialRoutineRespond (trials) {
       currentTrialText.setAutoDraw(false)
       currentTrialNumber.setAutoDraw(false)
       questionText.setAutoDraw(false)
+      videos_list.forEach((vid) => {
+        vid.setAutoDraw(false)
+        vid.stop()
+      })
       images_list.forEach((img) => {
         img.setAutoDraw(false)
       })

@@ -1,4 +1,6 @@
 ﻿trial_number,ITI,media_type,images,sounds,videos,texts,others,options,question
+1,0.25,image,None,None,/js/tasks/stim_rating/media/29b_Homesteaders_Neutral_norm.mp4,None,None,"Yes No","Was this entertaining?"
+1,0.25,image,None,None,/js/tasks/stim_rating/media/29b_Homesteaders_Neutral_norm.mp4 /js/tasks/stim_rating/media/23_TEDxLanguage_Neutral_norm.mp4,None,None,"Left Right","Which is more entertaining?"
 1,0.25,image,/js/tasks/stim_rating/media/test.jpg,None,None,None,None,"REAL SYNTHETIC","Please select the apple."
 2,0.25,image,/js/tasks/stim_rating/media/test.jpg,None,None,None,None,"REAL SYNTHETIC","Is the face REAL or SYNTHETIC?"
 3,0.25,image,/js/tasks/stim_rating/media/test.jpg,None,None,None,None,"REAL SYNTHETIC","Is the face REAL or SYNTHETIC?"
