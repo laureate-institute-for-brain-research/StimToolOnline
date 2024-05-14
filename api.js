@@ -1,6 +1,7 @@
 // API realted function
 const fs = require('fs')
 const url = require('url')
+const path = require('path');
 
 // eslint-disable-next-line no-unused-vars
 const models = require('./models')

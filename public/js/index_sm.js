@@ -163,7 +163,11 @@ $('#study-list').change(function () {
         'WBMTURK_Blind_Dating',
         'WBMTURK_Emotional_Faces',
         'WBMTURK_Cooperation_Task',
-        'WBMTURK_Invitation_Task'
+      'WBMTURK_Invitation_Task',
+      'WB_Cooperation_Task',
+      'WB_Social_Media',
+      'WB_Advice',
+      'WB_Emotional_Faces'
     ]
     if (!two_session_studies.includes(document.getElementById('study-list').value)) {
         var selectobject = document.getElementById("session-list");

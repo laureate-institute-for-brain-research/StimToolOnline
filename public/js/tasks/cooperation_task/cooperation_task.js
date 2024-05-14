@@ -87,6 +87,13 @@ const { round } = util;
  
 import { Sound } from '/lib/sound-2020.1.js';
 
+window.addEventListener('beforeunload', function (e) {
+  // Cancel the event
+  e.preventDefault(); // If you prevent default behavior in Mozilla Firefox prompt will always be shown
+  // Chrome requires returnValue to be set
+  e.returnValue = 'Warning: If you refresh this page, your data will be lost. If so, your submission may be rejected.';
+});
+
 function waitForElm(selector) {
     return new Promise(resolve => {
         if (document.querySelector(selector)) {
