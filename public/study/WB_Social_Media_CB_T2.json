@@ -11,7 +11,7 @@
         "/?index=7&survey=mhs&session=1",
         "/?index=8&survey=dpes&session=1",
         "/?index=9&survey=refresh&session=1",
-        "/?index=10&task=social_media&run=Pilot_R1_CB1.json",
+        "/?index=10&task=social_media&run=Pilot_R1_CB2.json",
         "/?index=11&survey=pdsq&session=1",
         "/?index=12&survey=health_questions&session=1",
         "/completeMobile?"

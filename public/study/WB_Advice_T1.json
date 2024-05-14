@@ -10,9 +10,10 @@
         "/?index=6&survey=hils&session=1",
         "/?index=7&survey=mhs&session=1",
         "/?index=8&survey=dpes&session=1",
-        "/?index=9&task=active_trust&run=Pilot_R1_CB1.json",
-        "/?index=10&survey=pdsq&session=1",
-        "/?index=11&survey=health_questions&session=1",
+        "/?index=9&survey=refresh&session=1",
+        "/?index=10&task=active_trust&run=Pilot_R1_CB1.json",
+        "/?index=11&survey=pdsq&session=1",
+        "/?index=12&survey=health_questions&session=1",
         "/completeMobile?"
     ],
     "fullscreen": true,

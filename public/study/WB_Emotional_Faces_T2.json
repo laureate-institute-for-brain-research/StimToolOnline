@@ -10,9 +10,10 @@
         "/?index=6&survey=promis_social_iso&session=1",
         "/?index=7&survey=promis_social_sat&session=1",
         "/?index=8&survey=leas&session=1",
-        "/?index=9&task=emotional_faces_v2&run=Pilot_R1_CB1.json",
-        "/?index=10&survey=whodas&session=1",
-        "/?index=11&survey=dfas&session=1",
+        "/?index=9&survey=refresh&session=1",
+        "/?index=10&task=emotional_faces_v2&run=Pilot_R1_CB1.json",
+        "/?index=11&survey=whodas&session=1",
+        "/?index=12&survey=dfas&session=1",
         "/completeMobile?"
     ],
     "fullscreen": true,
