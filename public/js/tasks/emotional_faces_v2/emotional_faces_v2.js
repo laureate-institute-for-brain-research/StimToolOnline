@@ -26,12 +26,14 @@ var event_types = {
 	'PREDICTION': 12
 }
 
-window.addEventListener('beforeunload', function (e) {
+function refreshBlock (e) {
   // Cancel the event
   e.preventDefault(); // If you prevent default behavior in Mozilla Firefox prompt will always be shown
   // Chrome requires returnValue to be set
   e.returnValue = 'Warning: If you refresh this page, your data will be lost. If so, your submission may be rejected.';
-});
+}
+
+window.addEventListener('beforeunload', refreshBlock)
 
 var trials_data = []
 
@@ -320,7 +322,10 @@ window.onload = function () {
 			// Sanitze the resources. Needs to be clean so that psychoJS doesn't complain
 			resources = sanitizeResources(resources)
 			console.log(resources)
-			// expInfo.study = study
+      // expInfo.study = study
+      if (getQueryVariable('run').includes('CB2')) {
+        expInfo.session = expInfo.session + "_CB"
+      }
 			psychoJS.start({
 				expName, 
 				expInfo,
@@ -3206,7 +3211,9 @@ function thanksRoutineBegin(trials) {
 		t = 0;
 		thanksClock.reset(); // clock
 		frameN = -1;
-		routineTimer.add(20.000000);
+    routineTimer.add(20.000000);
+    
+    window.removeEventListener('beforeunload', refreshBlock);
 
 		// Show Final Points and money earned
 		// 100 points = 10 cents
@@ -3320,7 +3327,7 @@ function endLoopIteration(thisScheduler, loop = undefined) {
 			sendData()
 		}
 		else if (main_loop_count == last_trial_num)
-		{
+    {
 			console.log("sending data")
 			sendData()
 		}
@@ -3345,7 +3352,9 @@ function quitPsychoJS(message, isCompleted) {
 	// Check for and save orphaned data
 	if (psychoJS.experiment.isEntryEmpty()) {
 		psychoJS.experiment.nextEntry();
-	}
+  }
+  
+  window.removeEventListener('beforeunload', refreshBlock);
 
 	psychoJS.window.close();
 	psychoJS.quit({ message: message, isCompleted: isCompleted });

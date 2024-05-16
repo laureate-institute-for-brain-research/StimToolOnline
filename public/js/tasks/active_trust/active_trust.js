@@ -66,12 +66,14 @@ const psychoJS = new PsychoJS({
 	debug: false
 });
 
-window.addEventListener('beforeunload', function (e) {
+function refreshBlock (e) {
   // Cancel the event
   e.preventDefault(); // If you prevent default behavior in Mozilla Firefox prompt will always be shown
   // Chrome requires returnValue to be set
   e.returnValue = 'Warning: If you refresh this page, your data will be lost. If so, your submission may be rejected.';
-});
+}
+
+window.addEventListener('beforeunload', refreshBlock)
 
 function waitForElm(selector) {
     return new Promise(resolve => {
@@ -2133,7 +2135,8 @@ function thanksRoutineBegin(trials) {
 		t = 0;
 		thanksClock.reset(); // clock
 		frameN = -1;
-		routineTimer.add(20.000000);
+    routineTimer.add(20.000000);
+    window.removeEventListener('beforeunload', refreshBlock);
 
 		// Show Final Points and money earned
 		// 100 points = 10 cents
@@ -2247,7 +2250,8 @@ function endLoopIteration(thisScheduler, loop = undefined) {
 			sendData()
 		}
 		else if (main_loop_count == last_trial_num)
-		{
+    {
+      window.removeEventListener('beforeunload', refreshBlock);
 			console.log("sending data last trial num")
 			sendData()
 		}
