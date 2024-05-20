@@ -1965,7 +1965,7 @@ function thanksRoutineEachFrame(trials) {
 			}
 
 		// refresh the screen if continuing
-		if (continueRoutine && routineTimer.getTime() > 0) {
+		if (continueRoutine) {
 			return Scheduler.Event.FLIP_REPEAT;
 		}
 		else {
