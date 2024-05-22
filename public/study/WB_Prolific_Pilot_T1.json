@@ -55,6 +55,7 @@
         "/?index=51&survey=panasx&session=1",
         "/?index=52&survey=health_questions&session=1",
         "/?index=53&survey=pdsq&session=1",
+        "/?index=54&survey=speed_test&session=1",
         "/completeMobile?"
     ],
     "fullscreen": true,
