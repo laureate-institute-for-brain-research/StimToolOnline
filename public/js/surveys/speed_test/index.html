@@ -89,6 +89,7 @@
     <div class="container" style="max-width: 800px;">
         <div class="py-5 text-center">
             <h1 id="progress" style="font-family:sans-serif; color: #969696!important;">Either JavaScript is turned off or the browser is operating slowly</h1>
+            <p id="progress2" style="font-family:sans-serif; color: #969696!important; font-size: 1.4rem;"></p>
         </div>
     </div>
 
@@ -143,6 +144,23 @@
                 oProgress.innerHTML = actualHTML;
             }
         }
+        function ShowProgress2Message(msg) {
+            if (console) {
+                if (typeof msg == "string") {
+                    console.log(msg);
+                } else {
+                    for (var i = 0; i < msg.length; i++) {
+                        console.log(msg[i]);
+                    }
+                }
+            }
+
+            var oProgress = document.getElementById("progress2");
+            if (oProgress) {
+                var actualHTML = (typeof msg == "string") ? msg : msg.join("<br />");
+                oProgress.innerHTML = actualHTML;
+            }
+        }
 
         function InitiateSpeedDetection() {
             ShowProgressMessage("Loading the image, please wait...");
@@ -155,35 +173,6 @@
             window.attachEvent('onload', InitiateSpeedDetection);
         }
 
-        function MeasureConnectionSpeed() {
-            var startTime, endTime;
-            var download = new Image();
-            download.onload = function () {
-                endTime = (new Date()).getTime();
-                showResults();
-            }
-
-            download.onerror = function (err, msg) {
-                ShowProgressMessage("Invalid image, or error downloading");
-            }
-
-            startTime = (new Date()).getTime();
-            var cacheBuster = "?nnn=" + startTime;
-            download.src = imageAddr + cacheBuster;
-
-            function showResults() {
-                var duration = (endTime - startTime) / 1000;
-                var bitsLoaded = downloadSize * 8;
-                var speedBps = (bitsLoaded / duration).toFixed(2);
-                var speedKbps = (speedBps / 1024).toFixed(2);
-                var speedMbps = (speedKbps / 1024).toFixed(2);
-                ShowProgressMessage([
-                    "Your connection speed is:", 
-                    speedMbps + " Mbps"
-                ]);
-            }
-        }
-
         Survey
             .StylesManager
             .applyTheme("modern");
@@ -191,7 +180,7 @@
         // Survey.defaultBootstrapCss.navigationButton = "btn";
         var json = {
              "title": "Speed Test",
-             "description": "Warning: If the connection speed displayed is less than 20 Mbps, then it is likely that there will be issues with your ability to complete this study. Please attempt to find a location with a more stable connection if it is below 20 Mbps.",
+             "description": "Warning: We require a stable connection speed of >20 Mbps. Technical issues are likely to occur at connection speeds less than our requirement. Please maintain a stable connection throughout this session.",
              "logoPosition": "right",
              "pages": [
               {
@@ -218,11 +207,80 @@
                ]
               }
 
-        window.survey = new Survey.Model(json);
+        function MeasureConnectionSpeed() {
+            var startTime, endTime;
+            var download = new Image();
+            download.onload = function () {
+                endTime = (new Date()).getTime();
+                showResults();
+            }
+
+            download.onerror = function (err, msg) {
+                ShowProgressMessage("Invalid image, or error downloading");
+            }
+
+            startTime = (new Date()).getTime();
+            var cacheBuster = "?nnn=" + startTime;
+            download.src = imageAddr + cacheBuster;
+
+            function showResults() {
+                var duration = (endTime - startTime) / 1000;
+                var bitsLoaded = downloadSize * 8;
+                var speedBps = (bitsLoaded / duration).toFixed(2);
+                var speedKbps = (speedBps / 1024).toFixed(2);
+                var speedMbps = (speedKbps / 1024).toFixed(2);
+                // speedMbps = 19
+                console.log(speedMbps)
+                if (speedMbps >= 20){
+                    ShowProgressMessage([
+                        "Your connection speed is:", 
+                        speedMbps + " Mbps"
+                    ]);
+                    window.survey = new Survey.Model(json);
+                    lastpage = survey.currentPage;
+                    survey.showProgressBar = "bottom";
+                    survey.goNextPageAutomatic = false
+                    survey.showNavigationButtons = true;
+                    survey.showCompletedPage = false;
+                    var start = new Date().getTime(),
+                    elapsed = '0.0';
+                    // executes timerCallback every 100 ms
+                    timerID = window.setInterval(function () {
+                    
+                        var time = new Date().getTime() - start;
+                        elapsed = Math.floor(time);
+                        //alert(elapsed);
+                        //$('#timeEl').text(elapsed + ' ms');
+                    
+                        //displayTime(1);
+                        timerLoop(elapsed);
+                    }, 5);
+                    survey.onComplete.add(function (result) {
+                        //result.preventDefault();
+                        survey.setValue('connection_speed_mbps', speedMbps);
+                        postSurveyData(result.data, expInfo.session, expInfo.participant);
+                    });
+
+                    $("#surveyElement").Survey({model: survey});
+                } else {
+                    ShowProgressMessage([
+                        "Your connection speed is:", 
+                        speedMbps + " Mbps",
+                        ""
+                    ]);
+                    ShowProgress2Message([
+                        "This is below our requirement of >20 Mbps.",
+                        "It is likely that technical issues will be encountered while participating with your current connection.",
+                        "Please attempt to participate in a location with a more stable connection.",
+                        "If that is not feasible, then please return the study."
+                    ]);
+                }
+            }
+        }
 
 
         // Recor the response time or how long they spent on a page
-        lastpage = survey.currentPage;
+        // lastpage = survey.currentPage;
         function timerLoop(elapsed) {
             var page = survey.currentPage; // page variable is the currentPage on the survey
             if (!page) return;
@@ -255,12 +313,6 @@
             return 'NULL'
         }
 
-        survey.showProgressBar = "bottom";
-
-        survey.goNextPageAutomatic = false
-        survey.showNavigationButtons = true;
-        survey.showCompletedPage = false;
-
         // Get Query Variables
         var surveyname = getQueryVariable('survey');
 
@@ -288,12 +340,6 @@
                     expInfo.run_id = getQueryVariable('run')
                 }
 
-                survey.onComplete.add(function (result) {
-                    //result.preventDefault();
-                    postSurveyData(result.data, expInfo.session, expInfo.participant);
-                });
-
-                $("#surveyElement").Survey({model: survey});
     
                 $("#participant").text(expInfo.participant);
                 $("#session").text(expInfo.session);
@@ -321,23 +367,6 @@
             }) 
                 
         }
-
-        var start = new Date().getTime(),
-            elapsed = '0.0';
-
-        // executes timerCallback every 100 ms
-        timerID = window.setInterval(function () {
-
-            var time = new Date().getTime() - start;
-            elapsed = Math.floor(time);
-
-            //alert(elapsed);
-            //$('#timeEl').text(elapsed + ' ms');
-
-            //displayTime(1);
-            timerLoop(elapsed);
-
-        }, 5);
     </script>
 
 </body>
