@@ -1,7 +1,7 @@
 {
     "name": "WB Emotional Faces Task T1",
     "order": [
-        "/?index=0&survey=speed_test&session=1",
+        "/?index=0&survey=speed_test_info&session=1",
         "/?index=1&survey=well_being&session=1",
         "/?index=2&survey=ryff_wb&session=1",
         "/?index=3&survey=panasx&session=1",
