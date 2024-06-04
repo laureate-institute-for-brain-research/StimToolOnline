@@ -1,0 +1,3822 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <style type="text/css">
+        @font-face {
+            font-family: gotham;
+            src: url(/gotham-book-regular.otf);
+        }
+
+        * {
+            font-family: Helvetica Neue;
+        }
+
+        a:link,
+        a:visited {
+            color: #5e3f99;
+        }
+
+        input[type=text]:focus {
+            border-color: #f68826;
+            box-shadow: 0 0 5px #f68826 !important;
+        }
+
+        input[type=email]:focus {
+            border-color: #f68826;
+            box-shadow: 0 0 5px #f68826 !important;
+        }
+
+        span {
+            color: #969696!important;
+            fill: #969696!important;
+        }
+
+        .sv-root-modern .sv-container-modern {
+            color:#969696!important;
+            fill:#969696!important;
+        }
+        .sv-radio__svg {
+            border-color: #969696!important;
+        }
+
+        .sv-root-modern .sv-radio--checked .sv-radio__svg  {
+            fill: #969696!important;
+        }
+
+        .sv-root-modern input.sv-text, textarea.sv-comment, select.sv-dropdown{
+            color: #969696!important;
+        }
+
+        input[type=button] {
+            color: black !important;
+        }
+        
+    </style>
+    <title>Surveys</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+        crossorigin="anonymous"></script>
+
+    <!-- Latest compiled and minified CSS -->
+    <!-- Using Bootsawtch theme: https://bootswatch.com/cyborg/ -->
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js" integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous"></script>
+
+    <link href="https://unpkg.com/survey-knockout@1.8.41/modern.css" type="text/css" rel="stylesheet"/>
+    <script src="https://unpkg.com/jquery"></script>
+    <script src="https://unpkg.com/survey-jquery@1.8.41/survey.jquery.min.js"></script>
+
+    <script type="text/javascript" src='/js/StimToolLib.js'></script>
+
+</head>
+
+<body>
+
+    <div class="container" style="max-width: 800px;">
+        <div class="py-5 text-center">
+            <img class="d-block mx-auto mb-4" src="/images/logo_reversed.jpg" alt="" width="180" height="50">
+            <!-- <h4>Cultural Survey</h4> -->
+          </div>
+    </div>
+
+    <!-- <div id='calendar'></div> -->
+    <div class="container" style="max-width: 800px;">
+        <div id='calendar'></div>
+        <div class="row" >
+            <div id="surveyElement" style="max-width: 800px; width: 770px; margin-bottom:40px"></div>
+            
+            <div id="surveyResult"></div>
+        </div>
+    </div>
+
+    <div class="jumbotron container" style="margin-bottom:0;max-width: 400px;">
+        <table class="table table-hover">
+            <tbody>
+                <tr>
+                  <th scope="row">ID:</th>
+                  <td><a id="participant"></a></td>
+                </tr>
+                <tr>
+                    <th scope="row">Session:</th>
+                    <td><a id="session"></a></td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Study:</th>
+                    <td><a id="study"></a></td>
+                  </tr>
+              </tbody>
+        </table>
+        <p style="text-align: center;">&copy; 2021 <a href="http://www.laureateinstitute.org">laureateinstitute.org</a>. All rights reserved.</p>
+    </div>
+
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.13/index.global.min.js'></script>
+    <script type="text/javascript">
+
+        let assessmentDays = getQueryVariable('days')
+        if (assessmentDays == 'NULL'){
+            assessmentDays = '1'
+        }
+
+        var calendar;
+        var dates;
+        document.addEventListener('DOMContentLoaded', function() {
+            let assessmentDays = getQueryVariable('days')
+            if (assessmentDays == 'NULL'){
+                assessmentDays = '1'
+            }
+            let first_date = new Date()
+            first_date.setDate(first_date.getDate() - parseInt(assessmentDays))
+            let last_date = new Date()
+            var calendarEl = document.getElementById('calendar');
+            calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'dayGridMonth',
+                initialDate: first_date.toLocaleDateString("ko-KR", {year: "numeric", month: "2-digit", day: "2-digit"}).replaceAll('. ','-').replaceAll('.','').toString(),
+                // height: '25rem',
+                events: [
+                    {
+                        id:'assessment',
+                        start: first_date.toLocaleDateString("ko-KR", {year: "numeric", month: "2-digit", day: "2-digit"}).replaceAll('. ','-').replaceAll('.','').toString(),
+                        end: last_date.toLocaleDateString("ko-KR", {year: "numeric", month: "2-digit", day: "2-digit"}).replaceAll('. ','-').replaceAll('.','').toString(),
+                        display: 'background'
+                    },
+                    {
+                        id:'current',
+                        title:'Current Day',
+                        start: first_date.toLocaleDateString("ko-KR", {year: "numeric", month: "2-digit", day: "2-digit"}).replaceAll('. ','-').replaceAll('.','').toString(),
+                        display: 'block'
+                    }
+                ],
+                dateClick: function(info) {
+                  alert('Navigating to: ' + info.dateStr);
+                  window.survey.currentPage = window.survey.getPageByName(info.dateStr)
+                }
+            });
+
+            console.log(calendar)
+            calendar.render();
+        });
+
+
+        function generate_pages(assessmentDays) {
+
+            let page_list = []
+            dates = []
+            rev_ix = parseInt(assessmentDays)
+            for (let ix = 1; ix <= parseInt(assessmentDays); ix++) {
+                let first_date = new Date()
+                first_date.setDate(first_date.getDate() - parseInt(ix))
+                let label_date = first_date.toLocaleDateString().replaceAll('/','-')
+                dates.push(first_date.toLocaleDateString("ko-KR", {year: "numeric", month: "2-digit", day: "2-digit"}).replaceAll('. ','-').replaceAll('.',''))
+                page_list.push({
+                  "name": first_date.toLocaleDateString("ko-KR", {year: "numeric", month: "2-digit", day: "2-digit"}).replaceAll('. ','-').replaceAll('.',''),
+                  "description": first_date.toLocaleDateString() + ` (${ix} days ago)`,
+                  "elements": [
+                   {
+                    "type": "checkbox",
+                    "name": `substances_${rev_ix}`,
+                    "title": "Were any substances used on this day? If so, please select all of the substances used. If no, please select None",
+                    "isRequired": true,
+                    "choices": [
+                     {
+                      "value": "alcohol",
+                      "text": "Alcohol (i.e cannabis infused alcohol, beer, wine, hard liquor, etc.)"
+                     },
+                     {
+                      "value": "tobacco",
+                      "text": "Tobacco (cigarettes, e-cigarettes, chew/dip,cigars, hookah, dokha, nicotine patch, etc.)"
+                     },
+                     {
+                      "value": "cannabis",
+                      "text": "Cannabis (i.e. medical AND recreational use of flower/bud, edibles, concentrates/dabs, topicals, etc.)"
+                     },
+                     {
+                      "value": "presDrugs",
+                      "text": "Prescription drugs for medical and recreational use (i.e., opioids, anti-depressant, ADHD medication, etc.)"
+                     },
+                     {
+                      "value": "illeDrugs",
+                      "text": "Illegal recreational drugs (i.e. cocaine, LSD, etc.)"
+                     },
+                     {
+                      "value": "caffeine",
+                      "text": "Caffeine (i.e. Coffee, energy drinks, tea, other caffeinated products)"
+                     },
+                     {
+                      "value": "other",
+                      "text": "Other (i.e. recreational use of prescription drugs, salvia, kratom, synthetic cannabis (K2, spice), etc.)"
+                     },
+                     {
+                      "value": "none",
+                      "text": "None (I did not use substances on this day)"
+                     }
+                    ]
+                   },
+                   {
+                    "type": "checkbox",
+                    "name": `alcoholType_${rev_ix}`,
+                    "visibleIf": `{substances_${rev_ix}} contains 'alcohol'`,
+                    "title": "What type of alcohol did you have?",
+                    "isRequired": true,
+                    "choices": [
+                     {
+                      "value": "beer",
+                      "text": "Beer"
+                     },
+                     {
+                      "value": "wine",
+                      "text": "Wine/Champagne"
+                     },
+                     {
+                      "value": "hard",
+                      "text": "Hard Liquor (or mixed drinks)"
+                     },
+                     {
+                      "value": "other",
+                      "text": "Other alcohol (include liqueur (e.g. schnapps), cannabis infused beer, cannabis infused hard liquor, etc)"
+                     }
+                    ]
+                   },
+                   {
+                    "type": "dropdown",
+                    "name": `beerQuantity_${rev_ix}`,
+                    "visibleIf": `{alcoholType_${rev_ix}} contains 'beer'`,
+                    "title": "How many beers did you drink? (consider a 12 oz. can/bottle = 1 beer AND a 16 oz US pint = 1 1/2 beers)",
+                    "isRequired": true,
+                    "choices": [
+                     {
+                      "value": "0.5-",
+                      "text": "1/2 or less"
+                     },
+                     {
+                      "value": "1",
+                      "text": "1"
+                     },
+                     {
+                      "value": "1.5",
+                      "text": "1 1/2"
+                     },
+                     {
+                      "value": "2",
+                      "text": "2"
+                     },
+                     {
+                      "value": "2.5",
+                      "text": "2 1/2"
+                     },
+                     {
+                      "value": "3",
+                      "text": "3"
+                     },
+                     {
+                      "value": "3.5",
+                      "text": "3 1/2"
+                     },
+                     {
+                      "value": "4",
+                      "text": "4"
+                     },
+                     {
+                      "value": "4.5",
+                      "text": "4 1/2"
+                     },
+                     {
+                      "value": "5",
+                      "text": "5"
+                     },
+                     {
+                      "value": "6",
+                      "text": "6"
+                     },
+                     {
+                      "value": "7",
+                      "text": "7"
+                     },
+                     {
+                      "value": "8",
+                      "text": "8"
+                     },
+                     {
+                      "value": "9",
+                      "text": "9"
+                     },
+                     {
+                      "value": "10",
+                      "text": "10"
+                     },
+                     {
+                      "value": "11",
+                      "text": "11"
+                     },
+                     {
+                      "value": "12",
+                      "text": "12"
+                     },
+                     {
+                      "value": "13",
+                      "text": "13"
+                     },
+                     {
+                      "value": "14",
+                      "text": "14"
+                     },
+                     {
+                      "value": "15",
+                      "text": "15"
+                     },
+                     {
+                      "value": "16",
+                      "text": "16"
+                     },
+                     {
+                      "value": "17",
+                      "text": "17"
+                     },
+                     {
+                      "value": "18",
+                      "text": "18"
+                     },
+                     {
+                      "value": "19",
+                      "text": "19"
+                     },
+                     {
+                      "value": "20+",
+                      "text": "20 or more"
+                     }
+                    ]
+                   },
+                   {
+                    "type": "dropdown",
+                    "name": `wineQuantity_${rev_ix}`,
+                    "visibleIf": `{alcoholType_${rev_ix}} contains 'wine'`,
+                    "title": "How many glasses of wine did you drink? (1 glass = 5 oz. = 1 standard drink)",
+                    "isRequired": true,
+                    "choices": [
+                     {
+                      "value": "0.5-",
+                      "text": "1/2 or less"
+                     },
+                     {
+                      "value": "1",
+                      "text": "1"
+                     },
+                     {
+                      "value": "1.5",
+                      "text": "1 1/2"
+                     },
+                     {
+                      "value": "2",
+                      "text": "2"
+                     },
+                     {
+                      "value": "2.5",
+                      "text": "2 1/2"
+                     },
+                     {
+                      "value": "3",
+                      "text": "3"
+                     },
+                     {
+                      "value": "3.5",
+                      "text": "3 1/2"
+                     },
+                     {
+                      "value": "4",
+                      "text": "4"
+                     },
+                     {
+                      "value": "4.5",
+                      "text": "4 1/2"
+                     },
+                     {
+                      "value": "5",
+                      "text": "5"
+                     },
+                     {
+                      "value": "6",
+                      "text": "6"
+                     },
+                     {
+                      "value": "7",
+                      "text": "7"
+                     },
+                     {
+                      "value": "8",
+                      "text": "8"
+                     },
+                     {
+                      "value": "9",
+                      "text": "9"
+                     },
+                     {
+                      "value": "10",
+                      "text": "10"
+                     },
+                     {
+                      "value": "11",
+                      "text": "11"
+                     },
+                     {
+                      "value": "12",
+                      "text": "12"
+                     },
+                     {
+                      "value": "13",
+                      "text": "13"
+                     },
+                     {
+                      "value": "14",
+                      "text": "14"
+                     },
+                     {
+                      "value": "15",
+                      "text": "15"
+                     },
+                     {
+                      "value": "16",
+                      "text": "16"
+                     },
+                     {
+                      "value": "17",
+                      "text": "17"
+                     },
+                     {
+                      "value": "18",
+                      "text": "18"
+                     },
+                     {
+                      "value": "19",
+                      "text": "19"
+                     },
+                     {
+                      "value": "20+",
+                      "text": "20 or more"
+                     }
+                    ]
+                   },
+                   {
+                    "type": "dropdown",
+                    "name": `hardQuantity_${rev_ix}`,
+                    "visibleIf": `{alcoholType_${rev_ix}} contains 'hard'`,
+                    "title": "How many shots (or mixed drinks) of hard liquor did you have? (consider 1 shot = 1.5 oz, drinks are usually more than 1 shot)",
+                    "isRequired": true,
+                    "choices": [
+                     {
+                      "value": "0.5-",
+                      "text": "1/2 or less"
+                     },
+                     {
+                      "value": "1",
+                      "text": "1"
+                     },
+                     {
+                      "value": "1.5",
+                      "text": "1 1/2"
+                     },
+                     {
+                      "value": "2",
+                      "text": "2"
+                     },
+                     {
+                      "value": "2.5",
+                      "text": "2 1/2"
+                     },
+                     {
+                      "value": "3",
+                      "text": "3"
+                     },
+                     {
+                      "value": "3.5",
+                      "text": "3 1/2"
+                     },
+                     {
+                      "value": "4",
+                      "text": "4"
+                     },
+                     {
+                      "value": "4.5",
+                      "text": "4 1/2"
+                     },
+                     {
+                      "value": "5",
+                      "text": "5"
+                     },
+                     {
+                      "value": "6",
+                      "text": "6"
+                     },
+                     {
+                      "value": "7",
+                      "text": "7"
+                     },
+                     {
+                      "value": "8",
+                      "text": "8"
+                     },
+                     {
+                      "value": "9",
+                      "text": "9"
+                     },
+                     {
+                      "value": "10",
+                      "text": "10"
+                     },
+                     {
+                      "value": "11",
+                      "text": "11"
+                     },
+                     {
+                      "value": "12",
+                      "text": "12"
+                     },
+                     {
+                      "value": "13",
+                      "text": "13"
+                     },
+                     {
+                      "value": "14",
+                      "text": "14"
+                     },
+                     {
+                      "value": "15",
+                      "text": "15"
+                     },
+                     {
+                      "value": "16",
+                      "text": "16"
+                     },
+                     {
+                      "value": "17",
+                      "text": "17"
+                     },
+                     {
+                      "value": "18",
+                      "text": "18"
+                     },
+                     {
+                      "value": "19",
+                      "text": "19"
+                     },
+                     {
+                      "value": "20+",
+                      "text": "20 or more"
+                     }
+                    ]
+                   },
+                   {
+                    "type": "multipletext",
+                    "name": `alcoholOther_${rev_ix}`,
+                    "visibleIf": `{alcoholType_${rev_ix}} contains 'other'`,
+                    "title": "Please answer the following questions about the other alcohol you drank:",
+                    "isRequired": true,
+                    "items": [
+                     {
+                      "name": `otherType_${rev_ix}`,
+                      "title": "Other Alcohol (Please fill in type)"
+                     },
+                     {
+                      "name": `otherQuantity_${rev_ix}`,
+                      "title": "Other Alcohol Quantity (Please fill in the potency, content, or amount of what you used with units (i.e., drinks, mg, grams, ml, %, etc.))"
+                     }
+                    ]
+                   },
+                   {
+                    "type": "checkbox",
+                    "name": `tobaccoType_${rev_ix}`,
+                    "visibleIf": `{substances_${rev_ix}} contains 'tobacco'`,
+                    "title": "What type of tobacco did you use?",
+                    "isRequired": true,
+                    "choices": [
+                     {
+                      "value": "cigarettes",
+                      "text": "Cigarettes"
+                     },
+                     {
+                      "value": "ecigarettes",
+                      "text": "E-Cigarettes"
+                     },
+                     {
+                      "value": "chew",
+                      "text": "Chew/Dip"
+                     },
+                     {
+                      "value": "cigars",
+                      "text": "Cigars"
+                     },
+                     {
+                      "value": "hookah",
+                      "text": "Hookah"
+                     },
+                     {
+                      "value": "other",
+                      "text": "Other tobacco (include dokha, nicotine patch, etc)"
+                     }
+                    ]
+                   },
+                   {
+                    "type": "dropdown",
+                    "name": `cigaretteQuantity_${rev_ix}`,
+                    "visibleIf": `{tobaccoType_${rev_ix}} contains 'cigarettes'`,
+                    "title": "How many cigarettes did you smoke?",
+                    "isRequired": true,
+                    "choices": [
+                     {
+                      "value": "0.5-",
+                      "text": "1/2 or less"
+                     },
+                     {
+                      "value": "1",
+                      "text": "1"
+                     },
+                     {
+                      "value": "1.5",
+                      "text": "1 1/2"
+                     },
+                     {
+                      "value": "2",
+                      "text": "2"
+                     },
+                     {
+                      "value": "2.5",
+                      "text": "2 1/2"
+                     },
+                     {
+                      "value": "3",
+                      "text": "3"
+                     },
+                     {
+                      "value": "3.5",
+                      "text": "3 1/2"
+                     },
+                     {
+                      "value": "4",
+                      "text": "4"
+                     },
+                     {
+                      "value": "4.5",
+                      "text": "4 1/2"
+                     },
+                     {
+                      "value": "5",
+                      "text": "5"
+                     },
+                     {
+                      "value": "6",
+                      "text": "6"
+                     },
+                     {
+                      "value": "7",
+                      "text": "7"
+                     },
+                     {
+                      "value": "8",
+                      "text": "8"
+                     },
+                     {
+                      "value": "9",
+                      "text": "9"
+                     },
+                     {
+                      "value": "10",
+                      "text": "10"
+                     },
+                     {
+                      "value": "11",
+                      "text": "11"
+                     },
+                     {
+                      "value": "12",
+                      "text": "12"
+                     },
+                     {
+                      "value": "13",
+                      "text": "13"
+                     },
+                     {
+                      "value": "14",
+                      "text": "14"
+                     },
+                     {
+                      "value": "15",
+                      "text": "15"
+                     },
+                     {
+                      "value": "16",
+                      "text": "16"
+                     },
+                     {
+                      "value": "17",
+                      "text": "17"
+                     },
+                     {
+                      "value": "18",
+                      "text": "18"
+                     },
+                     {
+                      "value": "19",
+                      "text": "19"
+                     },
+                     {
+                      "value": "20+",
+                      "text": "20 or more"
+                     }
+                    ]
+                   },
+                   {
+                    "type": "dropdown",
+                    "name": `ecigaretteQuantity_${rev_ix}`,
+                    "visibleIf": `{tobaccoType_${rev_ix}} contains 'ecigarettes'`,
+                    "title": "How many times did you use your e-cigarette? (consider 1 e-cigarette use= ~10 minutes of smoking or 15 puffs)",
+                    "isRequired": true,
+                    "choices": [
+                     {
+                      "value": "0.25-",
+                      "text": "1/4 or less"
+                     },
+                     {
+                      "value": "0.5",
+                      "text": "1/2"
+                     },
+                     {
+                      "value": "0.75",
+                      "text": "3/4"
+                     },
+                     {
+                      "value": "1",
+                      "text": "1"
+                     },
+                     {
+                      "value": "1.5",
+                      "text": "1 1/2"
+                     },
+                     {
+                      "value": "2",
+                      "text": "2"
+                     },
+                     {
+                      "value": "2.5",
+                      "text": "2 1/2"
+                     },
+                     {
+                      "value": "3",
+                      "text": "3"
+                     },
+                     {
+                      "value": "3.5",
+                      "text": "3 1/2"
+                     },
+                     {
+                      "value": "4",
+                      "text": "4"
+                     },
+                     {
+                      "value": "4.5",
+                      "text": "4 1/2"
+                     },
+                     {
+                      "value": "5",
+                      "text": "5"
+                     },
+                     {
+                      "value": "6",
+                      "text": "6"
+                     },
+                     {
+                      "value": "7",
+                      "text": "7"
+                     },
+                     {
+                      "value": "8",
+                      "text": "8"
+                     },
+                     {
+                      "value": "9",
+                      "text": "9"
+                     },
+                     {
+                      "value": "10",
+                      "text": "10"
+                     },
+                     {
+                      "value": "11",
+                      "text": "11"
+                     },
+                     {
+                      "value": "12",
+                      "text": "12"
+                     },
+                     {
+                      "value": "13",
+                      "text": "13"
+                     },
+                     {
+                      "value": "14",
+                      "text": "14"
+                     },
+                     {
+                      "value": "15",
+                      "text": "15"
+                     },
+                     {
+                      "value": "16",
+                      "text": "16"
+                     },
+                     {
+                      "value": "17",
+                      "text": "17"
+                     },
+                     {
+                      "value": "18",
+                      "text": "18"
+                     },
+                     {
+                      "value": "19",
+                      "text": "19"
+                     },
+                     {
+                      "value": "20+",
+                      "text": "20 or more"
+                     }
+                    ]
+                   },
+                   {
+                    "type": "dropdown",
+                    "name": `chewQuantity_${rev_ix}`,
+                    "visibleIf": `{tobaccoType_${rev_ix}} contains 'chew'`,
+                    "title": "How many times did you chew? (consider number of pinches or dips)",
+                    "isRequired": true,
+                    "choices": [
+                     {
+                      "value": "0.5-",
+                      "text": "1/2 less"
+                     },
+                     {
+                      "value": "1",
+                      "text": "1"
+                     },
+                     {
+                      "value": "1.5",
+                      "text": "1 1/2"
+                     },
+                     {
+                      "value": "2",
+                      "text": "2"
+                     },
+                     {
+                      "value": "2.5",
+                      "text": "2 1/2"
+                     },
+                     {
+                      "value": "3",
+                      "text": "3"
+                     },
+                     {
+                      "value": "3.5",
+                      "text": "3 1/2"
+                     },
+                     {
+                      "value": "4",
+                      "text": "4"
+                     },
+                     {
+                      "value": "4.5",
+                      "text": "4 1/2"
+                     },
+                     {
+                      "value": "5",
+                      "text": "5"
+                     },
+                     {
+                      "value": "6",
+                      "text": "6"
+                     },
+                     {
+                      "value": "7",
+                      "text": "7"
+                     },
+                     {
+                      "value": "8",
+                      "text": "8"
+                     },
+                     {
+                      "value": "9",
+                      "text": "9"
+                     },
+                     {
+                      "value": "10",
+                      "text": "10"
+                     },
+                     {
+                      "value": "11",
+                      "text": "11"
+                     },
+                     {
+                      "value": "12",
+                      "text": "12"
+                     },
+                     {
+                      "value": "13",
+                      "text": "13"
+                     },
+                     {
+                      "value": "14",
+                      "text": "14"
+                     },
+                     {
+                      "value": "15",
+                      "text": "15"
+                     },
+                     {
+                      "value": "16",
+                      "text": "16"
+                     },
+                     {
+                      "value": "17",
+                      "text": "17"
+                     },
+                     {
+                      "value": "18",
+                      "text": "18"
+                     },
+                     {
+                      "value": "19",
+                      "text": "19"
+                     },
+                     {
+                      "value": "20+",
+                      "text": "20 or more"
+                     }
+                    ]
+                   },
+                   {
+                    "type": "dropdown",
+                    "name": `cigarQuantity_${rev_ix}`,
+                    "visibleIf": `{tobaccoType_${rev_ix}} contains 'cigars'`,
+                    "title": "How many cigars did you smoke?",
+                    "isRequired": true,
+                    "choices": [
+                     {
+                      "value": "0.25-",
+                      "text": "1/4 or less"
+                     },
+                     {
+                      "value": "0.5",
+                      "text": "1/2"
+                     },
+                     {
+                      "value": "0.75",
+                      "text": "3/4"
+                     },
+                     {
+                      "value": "1",
+                      "text": "1"
+                     },
+                     {
+                      "value": "1.5",
+                      "text": "1 1/2"
+                     },
+                     {
+                      "value": "2",
+                      "text": "2"
+                     },
+                     {
+                      "value": "2.5",
+                      "text": "2 1/2"
+                     },
+                     {
+                      "value": "3",
+                      "text": "3"
+                     },
+                     {
+                      "value": "3.5",
+                      "text": "3 1/2"
+                     },
+                     {
+                      "value": "4",
+                      "text": "4"
+                     },
+                     {
+                      "value": "4.5",
+                      "text": "4 1/2"
+                     },
+                     {
+                      "value": "5",
+                      "text": "5"
+                     },
+                     {
+                      "value": "6",
+                      "text": "6"
+                     },
+                     {
+                      "value": "7",
+                      "text": "7"
+                     },
+                     {
+                      "value": "8",
+                      "text": "8"
+                     },
+                     {
+                      "value": "9",
+                      "text": "9"
+                     },
+                     {
+                      "value": "10",
+                      "text": "10"
+                     },
+                     {
+                      "value": "11",
+                      "text": "11"
+                     },
+                     {
+                      "value": "12",
+                      "text": "12"
+                     },
+                     {
+                      "value": "13",
+                      "text": "13"
+                     },
+                     {
+                      "value": "14",
+                      "text": "14"
+                     },
+                     {
+                      "value": "15",
+                      "text": "15"
+                     },
+                     {
+                      "value": "16",
+                      "text": "16"
+                     },
+                     {
+                      "value": "17",
+                      "text": "17"
+                     },
+                     {
+                      "value": "18",
+                      "text": "18"
+                     },
+                     {
+                      "value": "19",
+                      "text": "19"
+                     },
+                     {
+                      "value": "20+",
+                      "text": "20 or more"
+                     }
+                    ]
+                   },
+                   {
+                    "type": "dropdown",
+                    "name": `hookahQuantity_${rev_ix}`,
+                    "visibleIf": `{tobaccoType_${rev_ix}} contains 'hookah'`,
+                    "title": "How many hookah drags/puffs did you have?",
+                    "isRequired": true,
+                    "choices": [
+                     {
+                      "value": "0.5-",
+                      "text": "1/2 less"
+                     },
+                     {
+                      "value": "1",
+                      "text": "1"
+                     },
+                     {
+                      "value": "1.5",
+                      "text": "1 1/2"
+                     },
+                     {
+                      "value": "2",
+                      "text": "2"
+                     },
+                     {
+                      "value": "2.5",
+                      "text": "2 1/2"
+                     },
+                     {
+                      "value": "3",
+                      "text": "3"
+                     },
+                     {
+                      "value": "3.5",
+                      "text": "3 1/2"
+                     },
+                     {
+                      "value": "4",
+                      "text": "4"
+                     },
+                     {
+                      "value": "4.5",
+                      "text": "4 1/2"
+                     },
+                     {
+                      "value": "5",
+                      "text": "5"
+                     },
+                     {
+                      "value": "6",
+                      "text": "6"
+                     },
+                     {
+                      "value": "7",
+                      "text": "7"
+                     },
+                     {
+                      "value": "8",
+                      "text": "8"
+                     },
+                     {
+                      "value": "9",
+                      "text": "9"
+                     },
+                     {
+                      "value": "10",
+                      "text": "10"
+                     },
+                     {
+                      "value": "11",
+                      "text": "11"
+                     },
+                     {
+                      "value": "12",
+                      "text": "12"
+                     },
+                     {
+                      "value": "13",
+                      "text": "13"
+                     },
+                     {
+                      "value": "14",
+                      "text": "14"
+                     },
+                     {
+                      "value": "15",
+                      "text": "15"
+                     },
+                     {
+                      "value": "16",
+                      "text": "16"
+                     },
+                     {
+                      "value": "17",
+                      "text": "17"
+                     },
+                     {
+                      "value": "18",
+                      "text": "18"
+                     },
+                     {
+                      "value": "19",
+                      "text": "19"
+                     },
+                     {
+                      "value": "20+",
+                      "text": "20 or more"
+                     }
+                    ]
+                   },
+                   {
+                    "type": "multipletext",
+                    "name": `tobaccoOther_${rev_ix}`,
+                    "visibleIf": `{tobaccoType_${rev_ix}} contains 'other'`,
+                    "title": "Please answer the following questions about the other tobacco you used:",
+                    "isRequired": true,
+                    "items": [
+                     {
+                      "name": `otherType_${rev_ix}`,
+                      "title": "Other form of tobacco (Please fill in type)"
+                     },
+                     {
+                      "name": `otherQuantity_${rev_ix}`,
+                      "title": "Amount of other tobacco (Please fill in the potency, content, or amount of what you used with units (i.e., drinks, mg, grams, ml, %, etc.))"
+                     }
+                    ]
+                   },
+                   {
+                    "type": "checkbox",
+                    "name": `cannabisType_${rev_ix}`,
+                    "visibleIf": `{substances_${rev_ix}} contains 'cannabis'`,
+                    "title": "What type of non-study cannabis product did you use?",
+                    "isRequired": true,
+                    "choices": [
+                     {
+                      "value": "flower",
+                      "text": "Non-study Cannabis Flower/Bud (Includes using a pipe, bong, bubbler, joint, blunt, spliff, vaporizer, etc.)"
+                     },
+                     {
+                      "value": "edible",
+                      "text": "Non-study Cannabis Edible/Ingested (Includes eating a piece of chocolate bar, gummy, baked good, capsule, tincture, etc.)"
+                     },
+                     {
+                      "value": "concentrate",
+                      "text": "Non-study Cannabis Concentrate (Includes shatter, wax, vape pen cartridges, disposable vape pen, etc.)"
+                     },
+                     {
+                      "value": "other",
+                      "text": "Other Non-study Cannabis (Includes topical creams, topical body oils, transdermal patches, vaginal suppositories, personal lubricant, bath bombs, etc.)"
+                     }
+                    ]
+                   },
+                   {
+                    "type": "panel",
+                    "name": `flower_${rev_ix}`,
+                    "elements": [
+                     {
+                      "type": "dropdown",
+                      "name": `flowerQuantity_${rev_ix}`,
+                      "title": "Flower/bud amount (how many total grams of cannabis did you use?)",
+                      "isRequired": true,
+                      "choices": [
+                       {
+                        "value": "0.05",
+                        "text": "0.05 or less"
+                       },
+                       {
+                        "value": "0.10",
+                        "text": "0.10"
+                       },
+                       {
+                        "value": "0.15",
+                        "text": "0.15"
+                       },
+                       {
+                        "value": "0.2",
+                        "text": "0.2"
+                       },
+                       {
+                        "value": "0.25",
+                        "text": "0.25"
+                       },
+                       {
+                        "value": "0.3",
+                        "text": "0.3"
+                       },
+                       {
+                        "value": "0.35",
+                        "text": "0.35"
+                       },
+                       {
+                        "value": "0.4",
+                        "text": "0.4"
+                       },
+                       {
+                        "value": "0.45",
+                        "text": "0.45"
+                       },
+                       {
+                        "value": "0.5",
+                        "text": "0.5"
+                       },
+                       {
+                        "value": "0.55",
+                        "text": "0.55"
+                       },
+                       {
+                        "value": "0.6",
+                        "text": "0.6"
+                       },
+                       {
+                        "value": "0.65",
+                        "text": "0.65"
+                       },
+                       {
+                        "value": "0.7",
+                        "text": "0.7"
+                       },
+                       {
+                        "value": "0.75",
+                        "text": "0.75"
+                       },
+                       {
+                        "value": "0.8",
+                        "text": "0.8"
+                       },
+                       {
+                        "value": "0.85",
+                        "text": "0.85"
+                       },
+                       {
+                        "value": "0.9",
+                        "text": "0.9"
+                       },
+                       {
+                        "value": "0.95",
+                        "text": "0.95"
+                       },
+                       {
+                        "value": "1",
+                        "text": "1"
+                       },
+                       {
+                        "value": "1.1",
+                        "text": "1.1"
+                       },
+                       {
+                        "value": "1.2",
+                        "text": "1.2"
+                       },
+                       {
+                        "value": "1.3",
+                        "text": "1.3"
+                       },
+                       {
+                        "value": "1.4",
+                        "text": "1.4"
+                       },
+                       {
+                        "value": "1.5",
+                        "text": "1.5"
+                       },
+                       {
+                        "value": "1.6",
+                        "text": "1.6"
+                       },
+                       {
+                        "value": "1.7",
+                        "text": "1.7"
+                       },
+                       {
+                        "value": "1.8",
+                        "text": "1.8"
+                       },
+                       {
+                        "value": "1.9",
+                        "text": "1.9"
+                       },
+                       {
+                        "value": "2.0",
+                        "text": "2.0"
+                       },
+                       {
+                        "value": "2.1",
+                        "text": "2.1"
+                       },
+                       {
+                        "value": "2.2",
+                        "text": "2.2"
+                       },
+                       {
+                        "value": "2.3",
+                        "text": "2.3"
+                       },
+                       {
+                        "value": "2.4",
+                        "text": "2.4"
+                       },
+                       {
+                        "value": "2.5",
+                        "text": "2.5"
+                       },
+                       {
+                        "value": "2.6",
+                        "text": "2.6"
+                       },
+                       {
+                        "value": "2.7",
+                        "text": "2.7"
+                       },
+                       {
+                        "value": "2.8",
+                        "text": "2.8"
+                       },
+                       {
+                        "value": "2.9",
+                        "text": "2.9"
+                       },
+                       {
+                        "value": "3.0",
+                        "text": "3.0"
+                       },
+                       {
+                        "value": "3.1",
+                        "text": "3.1"
+                       },
+                       {
+                        "value": "3.2",
+                        "text": "3.2"
+                       },
+                       {
+                        "value": "3.3",
+                        "text": "3.3"
+                       },
+                       {
+                        "value": "3.4",
+                        "text": "3.4"
+                       },
+                       {
+                        "value": "3.5",
+                        "text": "3.5"
+                       },
+                       {
+                        "value": "3.6",
+                        "text": "3.6"
+                       },
+                       {
+                        "value": "3.7",
+                        "text": "3.7"
+                       },
+                       {
+                        "value": "3.8",
+                        "text": "3.8"
+                       },
+                       {
+                        "value": "3.9",
+                        "text": "3.9"
+                       },
+                       {
+                        "value": "4.0",
+                        "text": "4.0"
+                       },
+                       {
+                        "value": "4.1",
+                        "text": "4.1"
+                       },
+                       {
+                        "value": "4.2",
+                        "text": "4.2"
+                       },
+                       {
+                        "value": "4.3",
+                        "text": "4.3"
+                       },
+                       {
+                        "value": "4.4",
+                        "text": "4.4"
+                       },
+                       {
+                        "value": "4.5",
+                        "text": "4.5"
+                       },
+                       {
+                        "value": "4.6",
+                        "text": "4.6"
+                       },
+                       {
+                        "value": "4.7",
+                        "text": "4.7"
+                       },
+                       {
+                        "value": "4.8",
+                        "text": "4.8"
+                       },
+                       {
+                        "value": "4.9",
+                        "text": "4.9"
+                       },
+                       {
+                        "value": "5.0",
+                        "text": "5"
+                       },
+                       {
+                        "value": "6",
+                        "text": "6"
+                       },
+                       {
+                        "value": "7",
+                        "text": "7"
+                       },
+                       {
+                        "value": "8",
+                        "text": "8"
+                       },
+                       {
+                        "value": "9",
+                        "text": "9"
+                       },
+                       {
+                        "value": "10",
+                        "text": "10"
+                       },
+                       {
+                        "value": "11",
+                        "text": "11"
+                       },
+                       {
+                        "value": "12",
+                        "text": "12"
+                       },
+                       {
+                        "value": "13",
+                        "text": "13"
+                       },
+                       {
+                        "value": "14",
+                        "text": "14"
+                       },
+                       {
+                        "value": "15",
+                        "text": "15"
+                       },
+                       {
+                        "value": "16",
+                        "text": "16"
+                       },
+                       {
+                        "value": "17",
+                        "text": "17"
+                       },
+                       {
+                        "value": "18",
+                        "text": "18"
+                       },
+                       {
+                        "value": "19",
+                        "text": "19"
+                       },
+                       {
+                        "value": "20+",
+                        "text": "20 or more"
+                       }
+                      ]
+                     },
+                     {
+                      "type": "dropdown",
+                      "name": `flowerTHC_${rev_ix}`,
+                      "title": "Flower/bud THC (what was the potency?)",
+                      "isRequired": true,
+                      "choices": [
+                       {
+                        "value": "Unknown",
+                        "text": "Unknown %"
+                       },
+                       {
+                        "value": "1-",
+                        "text": "1 or less %"
+                       },
+                       {
+                        "value": "2",
+                        "text": "2%"
+                       },
+                       {
+                        "value": "3",
+                        "text": "3%"
+                       },
+                       {
+                        "value": "4",
+                        "text": "4%"
+                       },
+                       {
+                        "value": "5",
+                        "text": "5%"
+                       },
+                       {
+                        "value": "6",
+                        "text": "6%"
+                       },
+                       {
+                        "value": "7",
+                        "text": "7%"
+                       },
+                       {
+                        "value": "8",
+                        "text": "8%"
+                       },
+                       {
+                        "value": "9",
+                        "text": "9%"
+                       },
+                       {
+                        "value": "10",
+                        "text": "10%"
+                       },
+                       {
+                        "value": "11",
+                        "text": "11%"
+                       },
+                       {
+                        "value": "12",
+                        "text": "12%"
+                       },
+                       {
+                        "value": "13",
+                        "text": "13%"
+                       },
+                       {
+                        "value": "14",
+                        "text": "14%"
+                       },
+                       {
+                        "value": "15",
+                        "text": "15%"
+                       },
+                       {
+                        "value": "16",
+                        "text": "16%"
+                       },
+                       {
+                        "value": "17",
+                        "text": "17%"
+                       },
+                       {
+                        "value": "18",
+                        "text": "18%"
+                       },
+                       {
+                        "value": "19",
+                        "text": "19%"
+                       },
+                       {
+                        "value": "20",
+                        "text": "20%"
+                       },
+                       {
+                        "value": "21",
+                        "text": "21%"
+                       },
+                       {
+                        "value": "22",
+                        "text": "22%"
+                       },   
+                       {
+                        "value": "23",
+                        "text": "23%"
+                       },
+                       {
+                        "value": "24",
+                        "text": "24%"
+                       },
+                       {
+                        "value": "25",
+                        "text": "25%"
+                       },
+                       {
+                        "value": "26",
+                        "text": "26%"
+                       },
+                       {
+                        "value": "27",
+                        "text": "27%"
+                       },
+                       {
+                        "value": "28",
+                        "text": "28%"
+                       },
+                       {
+                        "value": "39",
+                        "text": "29%"
+                       },
+                       {
+                        "value": "30",
+                        "text": "30%"
+                       },
+                       {
+                        "value": "31",
+                        "text": "31%"
+                       },
+                       {
+                        "value": "32",
+                        "text": "32%"
+                       },
+                       {
+                        "value": "33",
+                        "text": "33%"
+                       },
+                       {
+                        "value": "34",
+                        "text": "34%"
+                       },
+                       {
+                        "value": "35+",
+                        "text": "35 or more %"
+                       }
+                      ]
+                     },
+                     {
+                      "type": "dropdown",
+                      "name": `flowerCBD_${rev_ix}`,
+                      "title": "Flower/bud CBD",
+                      "isRequired": true,
+                      "choices": [
+                      {
+                        "value": "Unknown",
+                        "text": "Unknown %"
+                       },
+                       {
+                        "value": "1-",
+                        "text": "1 or less %"
+                       },
+                       {
+                        "value": "2",
+                        "text": "2%"
+                       },
+                       {
+                        "value": "3",
+                        "text": "3%"
+                       },
+                       {
+                        "value": "4",
+                        "text": "4%"
+                       },
+                       {
+                        "value": "5",
+                        "text": "5%"
+                       },
+                       {
+                        "value": "6",
+                        "text": "6%"
+                       },
+                       {
+                        "value": "7",
+                        "text": "7%"
+                       },
+                       {
+                        "value": "8",
+                        "text": "8%"
+                       },
+                       {
+                        "value": "9",
+                        "text": "9%"
+                       },
+                       {
+                        "value": "10",
+                        "text": "10%"
+                       },
+                       {
+                        "value": "11",
+                        "text": "11%"
+                       },
+                       {
+                        "value": "12",
+                        "text": "12%"
+                       },
+                       {
+                        "value": "13",
+                        "text": "13%"
+                       },
+                       {
+                        "value": "14",
+                        "text": "14%"
+                       },
+                       {
+                        "value": "15",
+                        "text": "15%"
+                       },
+                       {
+                        "value": "16",
+                        "text": "16%"
+                       },
+                       {
+                        "value": "17",
+                        "text": "17%"
+                       },
+                       {
+                        "value": "18",
+                        "text": "18%"
+                       },
+                       {
+                        "value": "19",
+                        "text": "19%"
+                       },
+                       {
+                        "value": "20",
+                        "text": "20%"
+                       },
+                       {
+                        "value": "21",
+                        "text": "21%"
+                       },
+                       {
+                        "value": "22",
+                        "text": "22%"
+                       },   
+                       {
+                        "value": "23",
+                        "text": "23%"
+                       },
+                       {
+                        "value": "24",
+                        "text": "24%"
+                       },
+                       {
+                        "value": "25",
+                        "text": "25%"
+                       },
+                       {
+                        "value": "26",
+                        "text": "26%"
+                       },
+                       {
+                        "value": "27",
+                        "text": "27%"
+                       },
+                       {
+                        "value": "28",
+                        "text": "28%"
+                       },
+                       {
+                        "value": "39",
+                        "text": "29%"
+                       },
+                       {
+                        "value": "30",
+                        "text": "30%"
+                       },
+                       {
+                        "value": "31",
+                        "text": "31%"
+                       },
+                       {
+                        "value": "32",
+                        "text": "32%"
+                       },
+                       {
+                        "value": "33",
+                        "text": "33%"
+                       },
+                       {
+                        "value": "34",
+                        "text": "34%"
+                       },
+                       {
+                        "value": "35+",
+                        "text": "35 or more %"
+                       }
+                      ]
+                     }
+                    ],
+                    "visibleIf": `{cannabisType_${rev_ix}} contains 'flower'`,
+                    "title": "Non-study Cannabis - Flower",
+                    "isRequired": true
+                   },
+                   {
+                    "type": "panel",
+                    "name": `edible_${rev_ix}`,
+                    "elements": [
+                     {
+                      "type": "dropdown",
+                      "name": `edibleTHCQuantity_${rev_ix}`,
+                      "title": "Edible/Ingested THC\n(How many total THC milligrams (best guess) did you consume?)",
+                      "isRequired": true,
+                      "choices": [
+                       {
+                        "value": "Unknown",
+                        "text": "Unknown mg"
+                       },
+                       {
+                        "value": "1-",
+                        "text": "1 or less mg"
+                       },
+                       {
+                        "value": "1.5",
+                        "text": "1 1/2 mg"
+                       },
+                       {
+                        "value": "2",
+                        "text": "2 mg"
+                       },
+                       {
+                        "value": "2.5",
+                        "text": "2 1/2 mg"
+                       },
+                       {
+                        "value": "3",
+                        "text": "3 mg"
+                       },
+                       {
+                        "value": "3.5",
+                        "text": "3 1/2 mg"
+                       },
+                       {
+                        "value": "4",
+                        "text": "4 mg"
+                       },
+                       {
+                        "value": "4.5",
+                        "text": "4 1/2 mg"
+                       },
+                       {
+                        "value": "5",
+                        "text": "5 mg"
+                       },
+                       {
+                        "value": "6",
+                        "text": "6 mg"
+                       },
+                       {
+                        "value": "7",
+                        "text": "7 mg"
+                       },
+                       {
+                        "value": "8",
+                        "text": "8 mg"
+                       },
+                       {
+                        "value": "9",
+                        "text": "9 mg"
+                       },
+                       {
+                        "value": "10",
+                        "text": "10 mg"
+                       },
+                       {
+                        "value": "15",
+                        "text": "15 mg"
+                       },
+                       {
+                        "value": "20",
+                        "text": "20 mg"
+                       },
+                       {
+                        "value": "25",
+                        "text": "25 mg"
+                       },
+                       {
+                        "value": "30",
+                        "text": "30 mg"
+                       },
+                       {
+                        "value": "35",
+                        "text": "35 mg"
+                       },
+                       {
+                        "value": "40",
+                        "text": "40 mg"
+                       },
+                       {
+                        "value": "45",
+                        "text": "45 mg"
+                       },
+                       {
+                        "value": "50",
+                        "text": "50 mg"
+                       },
+                       {
+                        "value": "60",
+                        "text": "60 mg"
+                       },
+                       {
+                        "value": "70",
+                        "text": "70 mg"
+                       },
+                       {
+                        "value": "80",
+                        "text": "80 mg"
+                       },
+                       {
+                        "value": "90",
+                        "text": "90 mg"
+                       },
+                       {
+                        "value": "100",
+                        "text": "100 mg"
+                       },
+                       {
+                        "value": "125",
+                        "text": "125 mg"
+                       },
+                       {
+                        "value": "150",
+                        "text": "150 mg"
+                       },
+                       {
+                        "value": "175",
+                        "text": "175 mg"
+                       },
+                       {
+                        "value": "200+",
+                        "text": "200 or more mg"
+                       }
+                      ]
+                     },
+                     {
+                      "type": "dropdown",
+                      "name": `edibleCBDQuantity_${rev_ix}`,
+                      "title": "Edible/Ingested CBD\n(How many total CBD milligrams (best guess) did you consume?)",
+                      "isRequired": true,
+                      "choices": [
+                      {
+                        "value": "Unknown",
+                        "text": "Unknown mg"
+                       },
+                       {
+                        "value": "1-",
+                        "text": "1 or less mg"
+                       },
+                       {
+                        "value": "1.5",
+                        "text": "1 1/2 mg"
+                       },
+                       {
+                        "value": "2",
+                        "text": "2 mg"
+                       },
+                       {
+                        "value": "2.5",
+                        "text": "2 1/2 mg"
+                       },
+                       {
+                        "value": "3",
+                        "text": "3 mg"
+                       },
+                       {
+                        "value": "3.5",
+                        "text": "3 1/2 mg"
+                       },
+                       {
+                        "value": "4",
+                        "text": "4 mg"
+                       },
+                       {
+                        "value": "4.5",
+                        "text": "4 1/2 mg"
+                       },
+                       {
+                        "value": "5",
+                        "text": "5 mg"
+                       },
+                       {
+                        "value": "6",
+                        "text": "6 mg"
+                       },
+                       {
+                        "value": "7",
+                        "text": "7 mg"
+                       },
+                       {
+                        "value": "8",
+                        "text": "8 mg"
+                       },
+                       {
+                        "value": "9",
+                        "text": "9 mg"
+                       },
+                       {
+                        "value": "10",
+                        "text": "10 mg"
+                       },
+                       {
+                        "value": "15",
+                        "text": "15 mg"
+                       },
+                       {
+                        "value": "20",
+                        "text": "20 mg"
+                       },
+                       {
+                        "value": "25",
+                        "text": "25 mg"
+                       },
+                       {
+                        "value": "30",
+                        "text": "30 mg"
+                       },
+                       {
+                        "value": "35",
+                        "text": "35 mg"
+                       },
+                       {
+                        "value": "40",
+                        "text": "40 mg"
+                       },
+                       {
+                        "value": "45",
+                        "text": "45 mg"
+                       },
+                       {
+                        "value": "50",
+                        "text": "50 mg"
+                       },
+                       {
+                        "value": "60",
+                        "text": "60 mg"
+                       },
+                       {
+                        "value": "70",
+                        "text": "70 mg"
+                       },
+                       {
+                        "value": "80",
+                        "text": "80 mg"
+                       },
+                       {
+                        "value": "90",
+                        "text": "90 mg"
+                       },
+                       {
+                        "value": "100",
+                        "text": "100 mg"
+                       },
+                       {
+                        "value": "125",
+                        "text": "125 mg"
+                       },
+                       {
+                        "value": "150",
+                        "text": "150 mg"
+                       },
+                       {
+                        "value": "175",
+                        "text": "175 mg"
+                       },
+                       {
+                        "value": "200+",
+                        "text": "200 or more mg"
+                       }
+                      ]
+                     }
+                    ],
+                    "visibleIf": `{cannabisType_${rev_ix}} contains 'edible'`,
+                    "title": "Non-study Cannabis - Edible/Ingested",
+                    "isRequired": true
+                   },
+                   {
+                    "type": "panel",
+                    "name": `concentrate_${rev_ix}`,
+                    "elements": [
+                     {
+                      "type": "dropdown",
+                      "name": `concentrateQuantity_${rev_ix}`,
+                      "title": "Cannabis Concentrate\n(How many dabs/drags/hits did you do?)",
+                      "isRequired": true,
+                      "choices": [
+                       {
+                        "value": "1",
+                        "text": "1"
+                       },
+                       {
+                        "value": "2",
+                        "text": "2"
+                       },
+                       {
+                        "value": "3",
+                        "text": "3"
+                       },
+                       {
+                        "value": "4",
+                        "text": "4"
+                       },
+                       {
+                        "value": "5",
+                        "text": "5"
+                       },
+                       {
+                        "value": "6",
+                        "text": "6"
+                       },
+                       {
+                        "value": "7",
+                        "text": "7"
+                       },
+                       {
+                        "value": "8",
+                        "text": "8"
+                       },
+                       {
+                        "value": "9",
+                        "text": "9"
+                       },
+                       {
+                        "value": "10",
+                        "text": "10"
+                       },
+                       {
+                        "value": "11",
+                        "text": "11"
+                       },
+                       {
+                        "value": "12",
+                        "text": "12"
+                       },
+                       {
+                        "value": "13",
+                        "text": "13"
+                       },
+                       {
+                        "value": "14",
+                        "text": "14"
+                       },
+                       {
+                        "value": "15",
+                        "text": "15"
+                       },
+                       {
+                        "value": "16",
+                        "text": "16"
+                       },
+                       {
+                        "value": "17",
+                        "text": "17"
+                       },
+                       {
+                        "value": "18",
+                        "text": "18"
+                       },
+                       {
+                        "value": "19",
+                        "text": "19"
+                       },
+                       {
+                        "value": "20",
+                        "text": "20"
+                       },
+                       {
+                        "value": "25",
+                        "text": "25"
+                       },
+                       {
+                        "value": "30",
+                        "text": "30"
+                       },
+                       {
+                        "value": "35",
+                        "text": "35"
+                       },
+                       {
+                        "value": "40+",
+                        "text": "40 or more"
+                       }
+                      ]
+                     },
+                     {
+                      "type": "dropdown",
+                      "name": `concentrateTHC_${rev_ix}`,
+                      "title": "Cannabis Concentrate THC\n(What was the concentrate THC potency (best guess, % 0-100)?)",
+                      "isRequired": true,
+                      "choices": [
+                       {
+                        "value": "Unknown",
+                        "text": "Unknown %"
+                       },
+                       {
+                        "value": "1",
+                        "text": "1%"
+                       },
+                       {
+                        "value": "2",
+                        "text": "2%"
+                       },
+                       {
+                        "value": "3",
+                        "text": "3%"
+                       },
+                       {
+                        "value": "4",
+                        "text": "4%"
+                       },
+                       {
+                        "value": "5",
+                        "text": "5%"
+                       },
+                       {
+                        "value": "6",
+                        "text": "6%"
+                       },
+                       {
+                        "value": "7",
+                        "text": "7%"
+                       },
+                       {
+                        "value": "8",
+                        "text": "8%"
+                       },
+                       {
+                        "value": "9",
+                        "text": "9%"
+                       },
+                       {
+                        "value": "10",
+                        "text": "10%"
+                       },
+                       {
+                        "value": "11",
+                        "text": "11%"
+                       },
+                       {
+                        "value": "12",
+                        "text": "12%"
+                       },
+                       {
+                        "value": "13",
+                        "text": "13%"
+                       },
+                       {
+                        "value": "14",
+                        "text": "14%"
+                       },
+                       {
+                        "value": "15",
+                        "text": "15%"
+                       },
+                       {
+                        "value": "16",
+                        "text": "16%"
+                       },
+                       {
+                        "value": "17",
+                        "text": "17%"
+                       },
+                       {
+                        "value": "18",
+                        "text": "18%"
+                       },
+                       {
+                        "value": "19",
+                        "text": "19%"
+                       },
+                       {
+                        "value": "20",
+                        "text": "20%"
+                       },
+                       {
+                        "value": "21",
+                        "text": "21%"
+                       },
+                       {
+                        "value": "22",
+                        "text": "22%"
+                       },
+                       {
+                        "value": "23",
+                        "text": "23%"
+                       },
+                       {
+                        "value": "24",
+                        "text": "24%"
+                       },
+                       {
+                        "value": "25",
+                        "text": "25%"
+                       },
+                       {
+                        "value": "26",
+                        "text": "26%"
+                       },
+                       {
+                        "value": "27",
+                        "text": "27%"
+                       },
+                       {
+                        "value": "28",
+                        "text": "28%"
+                       },
+                       {
+                        "value": "29",
+                        "text": "29%"
+                       },
+                       {
+                        "value": "30",
+                        "text": "30%"
+                       },
+                       {
+                        "value": "31",
+                        "text": "31%"
+                       },
+                       {
+                        "value": "32",
+                        "text": "32%"
+                       },
+                       {
+                        "value": "33",
+                        "text": "33%"
+                       },
+                       {
+                        "value": "34",
+                        "text": "34%"
+                       },
+                       {
+                        "value": "35",
+                        "text": "35%"
+                       },
+                       {
+                        "value": "40",
+                        "text": "40%"
+                       },
+                       {
+                        "value": "45",
+                        "text": "45%"
+                       },
+                       {
+                        "value": "50",
+                        "text": "50%"
+                       },
+                       {
+                        "value": "55",
+                        "text": "55%"
+                       },
+                       {
+                        "value": "60",
+                        "text": "60%"
+                       },
+                       {
+                        "value": "65",
+                        "text": "65%"
+                       },
+                       {
+                        "value": "70",
+                        "text": "70%"
+                       },
+                       {
+                        "value": "75",
+                        "text": "75%"
+                       },
+                       {
+                        "value": "80",
+                        "text": "80%"
+                       },
+                       {
+                        "value": "85",
+                        "text": "85%"
+                       },
+                       {
+                        "value": "90",
+                        "text": "90%"
+                       },
+                       {
+                        "value": "95+",
+                        "text": "95 or more %"
+                       }
+                      ]
+                     },
+                     {
+                      "type": "dropdown",
+                      "name": `concentrateCBD_${rev_ix}`,
+                      "title": "Cannabis Concentrate CBD\n(What was the concentrate CBD potency (best guess, % 0-100)?)",
+                      "isRequired": true,
+                      "choices": [
+                      {
+                        "value": "Unknown",
+                        "text": "Unknown %"
+                       },
+                       {
+                        "value": "1",
+                        "text": "1%"
+                       },
+                       {
+                        "value": "2",
+                        "text": "2%"
+                       },
+                       {
+                        "value": "3",
+                        "text": "3%"
+                       },
+                       {
+                        "value": "4",
+                        "text": "4%"
+                       },
+                       {
+                        "value": "5",
+                        "text": "5%"
+                       },
+                       {
+                        "value": "6",
+                        "text": "6%"
+                       },
+                       {
+                        "value": "7",
+                        "text": "7%"
+                       },
+                       {
+                        "value": "8",
+                        "text": "8%"
+                       },
+                       {
+                        "value": "9",
+                        "text": "9%"
+                       },
+                       {
+                        "value": "10",
+                        "text": "10%"
+                       },
+                       {
+                        "value": "11",
+                        "text": "11%"
+                       },
+                       {
+                        "value": "12",
+                        "text": "12%"
+                       },
+                       {
+                        "value": "13",
+                        "text": "13%"
+                       },
+                       {
+                        "value": "14",
+                        "text": "14%"
+                       },
+                       {
+                        "value": "15",
+                        "text": "15%"
+                       },
+                       {
+                        "value": "16",
+                        "text": "16%"
+                       },
+                       {
+                        "value": "17",
+                        "text": "17%"
+                       },
+                       {
+                        "value": "18",
+                        "text": "18%"
+                       },
+                       {
+                        "value": "19",
+                        "text": "19%"
+                       },
+                       {
+                        "value": "20",
+                        "text": "20%"
+                       },
+                       {
+                        "value": "21",
+                        "text": "21%"
+                       },
+                       {
+                        "value": "22",
+                        "text": "22%"
+                       },
+                       {
+                        "value": "23",
+                        "text": "23%"
+                       },
+                       {
+                        "value": "24",
+                        "text": "24%"
+                       },
+                       {
+                        "value": "25",
+                        "text": "25%"
+                       },
+                       {
+                        "value": "26",
+                        "text": "26%"
+                       },
+                       {
+                        "value": "27",
+                        "text": "27%"
+                       },
+                       {
+                        "value": "28",
+                        "text": "28%"
+                       },
+                       {
+                        "value": "29",
+                        "text": "29%"
+                       },
+                       {
+                        "value": "30",
+                        "text": "30%"
+                       },
+                       {
+                        "value": "31",
+                        "text": "31%"
+                       },
+                       {
+                        "value": "32",
+                        "text": "32%"
+                       },
+                       {
+                        "value": "33",
+                        "text": "33%"
+                       },
+                       {
+                        "value": "34",
+                        "text": "34%"
+                       },
+                       {
+                        "value": "35",
+                        "text": "35%"
+                       },
+                       {
+                        "value": "40",
+                        "text": "40%"
+                       },
+                       {
+                        "value": "45",
+                        "text": "45%"
+                       },
+                       {
+                        "value": "50",
+                        "text": "50%"
+                       },
+                       {
+                        "value": "55",
+                        "text": "55%"
+                       },
+                       {
+                        "value": "60",
+                        "text": "60%"
+                       },
+                       {
+                        "value": "65",
+                        "text": "65%"
+                       },
+                       {
+                        "value": "70",
+                        "text": "70%"
+                       },
+                       {
+                        "value": "75",
+                        "text": "75%"
+                       },
+                       {
+                        "value": "80",
+                        "text": "80%"
+                       },
+                       {
+                        "value": "85",
+                        "text": "85%"
+                       },
+                       {
+                        "value": "90",
+                        "text": "90%"
+                       },
+                       {
+                        "value": "95+",
+                        "text": "95 or more %"
+                       }
+                      ]
+                     }
+                    ],
+                    "visibleIf": `{cannabisType_${rev_ix}} contains 'concentrate'`,
+                    "title": "Non-study Cannabis - Concentrate",
+                    "isRequired": true
+                   },
+                   {
+                    "type": "multipletext",
+                    "name": `cannabisOther_${rev_ix}`,
+                    "visibleIf": `{cannabisType_${rev_ix}} contains 'other'`,
+                    "title": "Non-study Cannabis - Other",
+                    "isRequired": true,
+                    "items": [
+                     {
+                      "name": "otherTopical",
+                      "title": "Non-study Cannabis topical/patch (Includes topical creams, topical body oils, transdermal patches, bath bombs, etc.)"
+                     },
+                     {
+                      "name": "otherOther",
+                      "title": "Other  non-study cannabis name (Please fill in the type of cannabis used. Include vaginal suppositories, personal lubricant, etc.)"
+                     }
+                    ]
+                   },
+                   {
+                    "type": "checkbox",
+                    "name": `presDrugsType_${rev_ix}`,
+                    "visibleIf": `{substances_${rev_ix}} contains 'presDrugs'`,
+                    "title": "What type of prescription drugs did you use (for medical OR recreational purposes)?",
+                    "isRequired": true,
+                    "choices": [
+                     {
+                      "value": "opioids",
+                      "text": "Opioids (Includes: Codeine, Tramadol (ConZip), Fentanyl (Duragesic, Fentora, Actiq), Oxymorphone (Opana), Morphine (Avinza, Duramorph), Hydrocodone (Vicodin, Lortab), Hydrocodone Extended Release (Hysingla ER, Zohydro ER), Oxycodone (Percocet, OxyContin), Hydromorphone (Dilaudid))"
+                     },
+                     {
+                      "value": "sleep",
+                      "text": "Sleep Medication (Includes: Eszopiclone (Lunesta and generic), Ramelteon (Rozerem and generic), Zaleplon (Sonata and generic), Zolpidem (Ambien, Ambien CR, Edluar, ZolpiMist, and generic))"
+                     },
+                     {
+                      "value": "relaxants",
+                      "text": "Muscle Relaxants (Includes: Methocarbamol (Robaxin), Carisoprodol (Soma), Cyclobenzaprine (Amrix, Fexmid))"
+                     },
+                     {
+                      "value": "nsaid",
+                      "text": "Non-Steroidal Anti-Inflammatory Drugs (NSAIDs) (Includes: Celecoxib (Celebrex), Diclofenac (Voltaren))"
+                     },
+                     {
+                      "value": "nerve",
+                      "text": "Nerve Pain Medication (Includes: Cyclobenzaprine (Flexeril, Amrix, Fexmid), Gabapentin (Neurontin, Gralise, Horizant), Duloxetine (Cymbalta, Irenka), Pregabalin (Lyrica), Milnacipran (Savella))"
+                     },
+                     {
+                      "value": "adhd",
+                      "text": "ADHD Medication (Includes: Adderall, Ritalin, etc.)"
+                     },
+                     {
+                      "value": "other",
+                      "text": "Other Medication (Includes: Suboxone, etc.)"
+                     }
+                    ]
+                   },
+                   {
+                    "type": "panel",
+                    "name": `opioids_${rev_ix}`,
+                    "elements": [
+                     {
+                      "type": "dropdown",
+                      "name": `opioidsQuantity_${rev_ix}`,
+                      "title": "Opioids (How many pills/tablets did you use?)",
+                      "isRequired": true,
+                      "choices": [
+                       {
+                        "value": "0.5-",
+                        "text": "1/2 or less"
+                       },
+                       {
+                        "value": "1",
+                        "text": "1"
+                       },
+                       {
+                        "value": "1.5",
+                        "text": "1 1/2"
+                       },
+                       {
+                        "value": "2",
+                        "text": "2"
+                       },
+                       {
+                        "value": "2.5",
+                        "text": "2 1/2"
+                       },
+                       {
+                        "value": "3",
+                        "text": "3"
+                       },
+                       {
+                        "value": "3.5",
+                        "text": "3 1/2"
+                       },
+                       {
+                        "value": "4",
+                        "text": "4"
+                       },
+                       {
+                        "value": "4.5",
+                        "text": "4 1/2"
+                       },
+                       {
+                        "value": "5",
+                        "text": "5"
+                       },
+                       {
+                        "value": "6",
+                        "text": "6"
+                       },
+                       {
+                        "value": "7",
+                        "text": "7"
+                       },
+                       {
+                        "value": "8",
+                        "text": "8"
+                       },
+                       {
+                        "value": "9",
+                        "text": "9"
+                       },
+                       {
+                        "value": "10",
+                        "text": "10"
+                       },
+                       {
+                        "value": "11",
+                        "text": "11"
+                       },
+                       {
+                        "value": "12",
+                        "text": "12"
+                       },
+                       {
+                        "value": "13",
+                        "text": "13"
+                       },
+                       {
+                        "value": "14",
+                        "text": "14"
+                       },
+                       {
+                        "value": "15",
+                        "text": "15"
+                       },
+                       {
+                        "value": "16",
+                        "text": "16"
+                       },
+                       {
+                        "value": "17",
+                        "text": "17"
+                       },
+                       {
+                        "value": "18",
+                        "text": "18"
+                       },
+                       {
+                        "value": "19",
+                        "text": "19"
+                       },
+                       {
+                        "value": "20+",
+                        "text": "20 or more"
+                       }
+                      ]
+                     },
+                     {
+                      "type": "text",
+                      "name": `opioidDosage_${rev_ix}`,
+                      "title": "Opioid Dosage (Please fill in the typical number of milligrams (mg) per pill/tablet (i.e., 2.5 mg/pill, 200 mg/pill, 1000 mg/pill))",
+                      "isRequired": true
+                     }
+                    ],
+                    "visibleIf": `{presDrugsType_${rev_ix}} contains 'opioids'`,
+                    "title": "Opioids",
+                    "isRequired": true
+                   },
+                   {
+                    "type": "panel",
+                    "name": `sleep_${rev_ix}`,
+                    "elements": [
+                     {
+                      "type": "dropdown",
+                      "name": `sleepQuantity_${rev_ix}`,
+                      "title": "Sleep Medication (How many pills/tablets did you use?)",
+                      "isRequired": true,
+                      "choices": [
+                       {
+                        "value": "0.5-",
+                        "text": "1/2 or less"
+                       },
+                       {
+                        "value": "1",
+                        "text": "1"
+                       },
+                       {
+                        "value": "1.5",
+                        "text": "1 1/2"
+                       },
+                       {
+                        "value": "2",
+                        "text": "2"
+                       },
+                       {
+                        "value": "2.5",
+                        "text": "2 1/2"
+                       },
+                       {
+                        "value": "3",
+                        "text": "3"
+                       },
+                       {
+                        "value": "3.5",
+                        "text": "3 1/2"
+                       },
+                       {
+                        "value": "4",
+                        "text": "4"
+                       },
+                       {
+                        "value": "4.5",
+                        "text": "4 1/2"
+                       },
+                       {
+                        "value": "5",
+                        "text": "5"
+                       },
+                       {
+                        "value": "6",
+                        "text": "6"
+                       },
+                       {
+                        "value": "7",
+                        "text": "7"
+                       },
+                       {
+                        "value": "8",
+                        "text": "8"
+                       },
+                       {
+                        "value": "9",
+                        "text": "9"
+                       },
+                       {
+                        "value": "10",
+                        "text": "10"
+                       },
+                       {
+                        "value": "11",
+                        "text": "11"
+                       },
+                       {
+                        "value": "12",
+                        "text": "12"
+                       },
+                       {
+                        "value": "13",
+                        "text": "13"
+                       },
+                       {
+                        "value": "14",
+                        "text": "14"
+                       },
+                       {
+                        "value": "15",
+                        "text": "15"
+                       },
+                       {
+                        "value": "16",
+                        "text": "16"
+                       },
+                       {
+                        "value": "17",
+                        "text": "17"
+                       },
+                       {
+                        "value": "18",
+                        "text": "18"
+                       },
+                       {
+                        "value": "19",
+                        "text": "19"
+                       },
+                       {
+                        "value": "20+",
+                        "text": "20 or more"
+                       }
+                      ]
+                     },
+                     {
+                      "type": "text",
+                      "name": `sleepDosage_${rev_ix}`,
+                      "title": "Sleep Medication Dosage (Please fill in the typical number of milligrams (mg) per pill/tablet (i.e., 2.5 mg/pill, 200 mg/pill, 1000 mg/pill))",
+                      "isRequired": true
+                     }
+                    ],
+                    "visibleIf": `{presDrugsType_${rev_ix}} contains 'sleep'`,
+                    "title": "Sleep Medication",
+                    "isRequired": true
+                   },
+                   {
+                    "type": "panel",
+                    "name": `relaxants_${rev_ix}`,
+                    "elements": [
+                     {
+                      "type": "dropdown",
+                      "name": `relaxantsQuantity_${rev_ix}`,
+                      "title": "Muscle Relaxants (How many pills/tablets did you use?)",
+                      "isRequired": true,
+                      "choices": [
+                       {
+                        "value": "0.5-",
+                        "text": "1/2 or less"
+                       },
+                       {
+                        "value": "1",
+                        "text": "1"
+                       },
+                       {
+                        "value": "1.5",
+                        "text": "1 1/2"
+                       },
+                       {
+                        "value": "2",
+                        "text": "2"
+                       },
+                       {
+                        "value": "2.5",
+                        "text": "2 1/2"
+                       },
+                       {
+                        "value": "3",
+                        "text": "3"
+                       },
+                       {
+                        "value": "3.5",
+                        "text": "3 1/2"
+                       },
+                       {
+                        "value": "4",
+                        "text": "4"
+                       },
+                       {
+                        "value": "4.5",
+                        "text": "4 1/2"
+                       },
+                       {
+                        "value": "5",
+                        "text": "5"
+                       },
+                       {
+                        "value": "6",
+                        "text": "6"
+                       },
+                       {
+                        "value": "7",
+                        "text": "7"
+                       },
+                       {
+                        "value": "8",
+                        "text": "8"
+                       },
+                       {
+                        "value": "9",
+                        "text": "9"
+                       },
+                       {
+                        "value": "10",
+                        "text": "10"
+                       },
+                       {
+                        "value": "11",
+                        "text": "11"
+                       },
+                       {
+                        "value": "12",
+                        "text": "12"
+                       },
+                       {
+                        "value": "13",
+                        "text": "13"
+                       },
+                       {
+                        "value": "14",
+                        "text": "14"
+                       },
+                       {
+                        "value": "15",
+                        "text": "15"
+                       },
+                       {
+                        "value": "16",
+                        "text": "16"
+                       },
+                       {
+                        "value": "17",
+                        "text": "17"
+                       },
+                       {
+                        "value": "18",
+                        "text": "18"
+                       },
+                       {
+                        "value": "19",
+                        "text": "19"
+                       },
+                       {
+                        "value": "20+",
+                        "text": "20 or more"
+                       }
+                      ]
+                     },
+                     {
+                      "type": "text",
+                      "name": `relaxantsDosage_${rev_ix}`,
+                      "title": "Muscle Relaxants Dosage (Please fill in the typical number of milligrams (mg) per pill/tablet (i.e., 2.5 mg/pill, 200 mg/pill, 1000 mg/pill))",
+                      "isRequired": true
+                     }
+                    ],
+                    "visibleIf": `{presDrugsType_${rev_ix}} contains 'relaxants'`,
+                    "title": "Muscle Relaxants"
+                   },
+                   {
+                    "type": "panel",
+                    "name": `nsaid_${rev_ix}`,
+                    "elements": [
+                     {
+                      "type": "dropdown",
+                      "name": `nsaidQuantity_${rev_ix}`,
+                      "title": "Non-Steroidal Anti-Inflammatory Drugs (NSAIDs) (How many pills/tablets did you use?)",
+                      "isRequired": true,
+                      "choices": [
+                       {
+                        "value": "0.5-",
+                        "text": "1/2 or less"
+                       },
+                       {
+                        "value": "1",
+                        "text": "1"
+                       },
+                       {
+                        "value": "1.5",
+                        "text": "1 1/2"
+                       },
+                       {
+                        "value": "2",
+                        "text": "2"
+                       },
+                       {
+                        "value": "2.5",
+                        "text": "2 1/2"
+                       },
+                       {
+                        "value": "3",
+                        "text": "3"
+                       },
+                       {
+                        "value": "3.5",
+                        "text": "3 1/2"
+                       },
+                       {
+                        "value": "4",
+                        "text": "4"
+                       },
+                       {
+                        "value": "4.5",
+                        "text": "4 1/2"
+                       },
+                       {
+                        "value": "5",
+                        "text": "5"
+                       },
+                       {
+                        "value": "6",
+                        "text": "6"
+                       },
+                       {
+                        "value": "7",
+                        "text": "7"
+                       },
+                       {
+                        "value": "8",
+                        "text": "8"
+                       },
+                       {
+                        "value": "9",
+                        "text": "9"
+                       },
+                       {
+                        "value": "10",
+                        "text": "10"
+                       },
+                       {
+                        "value": "11",
+                        "text": "11"
+                       },
+                       {
+                        "value": "12",
+                        "text": "12"
+                       },
+                       {
+                        "value": "13",
+                        "text": "13"
+                       },
+                       {
+                        "value": "14",
+                        "text": "14"
+                       },
+                       {
+                        "value": "15",
+                        "text": "15"
+                       },
+                       {
+                        "value": "16",
+                        "text": "16"
+                       },
+                       {
+                        "value": "17",
+                        "text": "17"
+                       },
+                       {
+                        "value": "18",
+                        "text": "18"
+                       },
+                       {
+                        "value": "19",
+                        "text": "19"
+                       },
+                       {
+                        "value": "20+",
+                        "text": "20 or more"
+                       }
+                      ]
+                     },
+                     {
+                      "type": "text",
+                      "name": `nsaidDosage_${rev_ix}`,
+                      "title": "NSAIDs Dosage (Please fill in the typical number of milligrams (mg) per pill/tablet (i.e., 2.5 mg/pill, 200 mg/pill, 1000 mg/pill))",
+                      "isRequired": true
+                     }
+                    ],
+                    "visibleIf": `{presDrugsType_${rev_ix}} contains 'nsaid'`,
+                    "title": "Non-Steroidal Anti-Inflammatory Drugs (NSAIDs)",
+                    "isRequired": true
+                   },
+                   {
+                    "type": "panel",
+                    "name": `nerve_${rev_ix}`,
+                    "elements": [
+                     {
+                      "type": "dropdown",
+                      "name": `nerveQuantity_${rev_ix}`,
+                      "title": "Nerve Pain Medication (How many pills/tablets did you use?)",
+                      "isRequired": true,
+                      "choices": [
+                       {
+                        "value": "0.5-",
+                        "text": "1/2 or less"
+                       },
+                       {
+                        "value": "1",
+                        "text": "1"
+                       },
+                       {
+                        "value": "1.5",
+                        "text": "1 1/2"
+                       },
+                       {
+                        "value": "2",
+                        "text": "2"
+                       },
+                       {
+                        "value": "2.5",
+                        "text": "2 1/2"
+                       },
+                       {
+                        "value": "3",
+                        "text": "3"
+                       },
+                       {
+                        "value": "3.5",
+                        "text": "3 1/2"
+                       },
+                       {
+                        "value": "4",
+                        "text": "4"
+                       },
+                       {
+                        "value": "4.5",
+                        "text": "4 1/2"
+                       },
+                       {
+                        "value": "5",
+                        "text": "5"
+                       },
+                       {
+                        "value": "6",
+                        "text": "6"
+                       },
+                       {
+                        "value": "7",
+                        "text": "7"
+                       },
+                       {
+                        "value": "8",
+                        "text": "8"
+                       },
+                       {
+                        "value": "9",
+                        "text": "9"
+                       },
+                       {
+                        "value": "10",
+                        "text": "10"
+                       },
+                       {
+                        "value": "11",
+                        "text": "11"
+                       },
+                       {
+                        "value": "12",
+                        "text": "12"
+                       },
+                       {
+                        "value": "13",
+                        "text": "13"
+                       },
+                       {
+                        "value": "14",
+                        "text": "14"
+                       },
+                       {
+                        "value": "15",
+                        "text": "15"
+                       },
+                       {
+                        "value": "16",
+                        "text": "16"
+                       },
+                       {
+                        "value": "17",
+                        "text": "17"
+                       },
+                       {
+                        "value": "18",
+                        "text": "18"
+                       },
+                       {
+                        "value": "19",
+                        "text": "19"
+                       },
+                       {
+                        "value": "20+",
+                        "text": "20 or more"
+                       }
+                      ]
+                     },
+                     {
+                      "type": "text",
+                      "name": `nerveDosage_${rev_ix}`,
+                      "title": "Nerve Pain Medication Dosage (Please fill in the typical number of milligrams (mg) per pill/tablet (i.e., 2.5 mg/pill, 200 mg/pill, 1000 mg/pill))",
+                      "isRequired": true
+                     }
+                    ],
+                    "visibleIf": `{presDrugsType_${rev_ix}} contains 'nerve'`,
+                    "title": "Nerve Pain Medication",
+                    "isRequired": true
+                   },
+                   {
+                    "type": "panel",
+                    "name": `adhd_${rev_ix}`,
+                    "elements": [
+                     {
+                      "type": "dropdown",
+                      "name": `adhdQuantity_${rev_ix}`,
+                      "title": "ADHD Medication (How many pills/tablets did you use?)",
+                      "isRequired": true,
+                      "choices": [
+                       {
+                        "value": "0.5-",
+                        "text": "1/2 or less"
+                       },
+                       {
+                        "value": "1",
+                        "text": "1"
+                       },
+                       {
+                        "value": "1.5",
+                        "text": "1 1/2"
+                       },
+                       {
+                        "value": "2",
+                        "text": "2"
+                       },
+                       {
+                        "value": "2.5",
+                        "text": "2 1/2"
+                       },
+                       {
+                        "value": "3",
+                        "text": "3"
+                       },
+                       {
+                        "value": "3.5",
+                        "text": "3 1/2"
+                       },
+                       {
+                        "value": "4",
+                        "text": "4"
+                       },
+                       {
+                        "value": "4.5",
+                        "text": "4 1/2"
+                       },
+                       {
+                        "value": "5",
+                        "text": "5"
+                       },
+                       {
+                        "value": "6",
+                        "text": "6"
+                       },
+                       {
+                        "value": "7",
+                        "text": "7"
+                       },
+                       {
+                        "value": "8",
+                        "text": "8"
+                       },
+                       {
+                        "value": "9",
+                        "text": "9"
+                       },
+                       {
+                        "value": "10",
+                        "text": "10"
+                       },
+                       {
+                        "value": "11",
+                        "text": "11"
+                       },
+                       {
+                        "value": "12",
+                        "text": "12"
+                       },
+                       {
+                        "value": "13",
+                        "text": "13"
+                       },
+                       {
+                        "value": "14",
+                        "text": "14"
+                       },
+                       {
+                        "value": "15",
+                        "text": "15"
+                       },
+                       {
+                        "value": "16",
+                        "text": "16"
+                       },
+                       {
+                        "value": "17",
+                        "text": "17"
+                       },
+                       {
+                        "value": "18",
+                        "text": "18"
+                       },
+                       {
+                        "value": "19",
+                        "text": "19"
+                       },
+                       {
+                        "value": "20+",
+                        "text": "20 or more"
+                       }
+                      ]
+                     },
+                     {
+                      "type": "text",
+                      "name": `adhdDosage_${rev_ix}`,
+                      "title": "ADHD Medication Dosage (Please fill in the typical number of milligrams (mg) per pill/tablet (i.e., 2.5 mg/pill, 200 mg/pill, 1000 mg/pill))",
+                      "isRequired": true
+                     }
+                    ],
+                    "visibleIf": `{presDrugsType_${rev_ix}} contains 'adhd'`,
+                    "title": "ADHD Medication",
+                    "isRequired": true
+                   },
+                   {
+                    "type": "panel",
+                    "name": `presDrugsOther_${rev_ix}`,
+                    "elements": [
+                     {
+                      "type": "text",
+                      "name": `presDrugsOtherType_${rev_ix}`,
+                      "title": "Other Medication Name (Please fill in other medication name/type)",
+                      "isRequired": true
+                     },
+                     {
+                      "type": "dropdown",
+                      "name": `presDrugsOtherQuantity_${rev_ix}`,
+                      "title": "Other Medication Quantity (How many pills/tablets did you use?)",
+                      "isRequired": true,
+                      "choices": [
+                       {
+                        "value": "0.5-",
+                        "text": "1/2 or less"
+                       },
+                       {
+                        "value": "1",
+                        "text": "1"
+                       },
+                       {
+                        "value": "1.5",
+                        "text": "1 1/2"
+                       },
+                       {
+                        "value": "2",
+                        "text": "2"
+                       },
+                       {
+                        "value": "2.5",
+                        "text": "2 1/2"
+                       },
+                       {
+                        "value": "3",
+                        "text": "3"
+                       },
+                       {
+                        "value": "3.5",
+                        "text": "3 1/2"
+                       },
+                       {
+                        "value": "4",
+                        "text": "4"
+                       },
+                       {
+                        "value": "4.5",
+                        "text": "4 1/2"
+                       },
+                       {
+                        "value": "5",
+                        "text": "5"
+                       },
+                       {
+                        "value": "6",
+                        "text": "6"
+                       },
+                       {
+                        "value": "7",
+                        "text": "7"
+                       },
+                       {
+                        "value": "8",
+                        "text": "8"
+                       },
+                       {
+                        "value": "9",
+                        "text": "9"
+                       },
+                       {
+                        "value": "10",
+                        "text": "10"
+                       },
+                       {
+                        "value": "11",
+                        "text": "11"
+                       },
+                       {
+                        "value": "12",
+                        "text": "12"
+                       },
+                       {
+                        "value": "13",
+                        "text": "13"
+                       },
+                       {
+                        "value": "14",
+                        "text": "14"
+                       },
+                       {
+                        "value": "15",
+                        "text": "15"
+                       },
+                       {
+                        "value": "16",
+                        "text": "16"
+                       },
+                       {
+                        "value": "17",
+                        "text": "17"
+                       },
+                       {
+                        "value": "18",
+                        "text": "18"
+                       },
+                       {
+                        "value": "19",
+                        "text": "19"
+                       },
+                       {
+                        "value": "20+",
+                        "text": "20 or more"
+                       }
+                      ]
+                     },
+                     {
+                      "type": "text",
+                      "name": `presDrugsOtherDosage_${rev_ix}`,
+                      "title": "Other Medication Dosage (Please fill in the typical number of milligrams (mg) per pill/tablet (i.e., 2.5 mg/pill, 200 mg/pill, 1000 mg/pill))",
+                      "isRequired": true
+                     }
+                    ],
+                    "visibleIf": `{presDrugsType_${rev_ix}} contains 'other'`,
+                    "title": "Other Medication",
+                    "isRequired": true
+                   },
+                   {
+                    "type": "panel",
+                    "name": `illeDrugs_${rev_ix}`,
+                    "elements": [
+                     {
+                      "type": "checkbox",
+                      "name": `illeDrugsType_${rev_ix}`,
+                      "title": "What type of illegal drugs did you use?",
+                      "isRequired": true,
+                      "choices": [
+                       {
+                        "value": "cocaine",
+                        "text": "Cocaine"
+                       },
+                       {
+                        "value": "amphetamine",
+                        "text": "Amphetamine"
+                       },
+                       {
+                        "value": "methamphetamine",
+                        "text": "Methamphetamine"
+                       },
+                       {
+                        "value": "mdma",
+                        "text": "MDMA"
+                       },
+                       {
+                        "value": "heroin",
+                        "text": "Heroin"
+                       },
+                       {
+                        "value": "lsd",
+                        "text": "LSD"
+                       },
+                       {
+                        "value": "mushrooms",
+                        "text": "Mushrooms"
+                       },
+                       {
+                        "value": "peyote",
+                        "text": "Peyote"
+                       },
+                       {
+                        "value": "ecstasy",
+                        "text": "Ecstasy"
+                       },
+                       {
+                        "value": "other",
+                        "text": "Other"
+                       }
+                      ]
+                     },
+                     {
+                      "type": "text",
+                      "name": `illeDrugsOther_${rev_ix}`,
+                      "title": "Other drugs (please fill in the name/type of other drugs)",
+                      "requiredIf": `{illeDrugsType_${rev_ix}} = ['other']`
+                     }
+                    ],
+                    "visibleIf": `{substances_${rev_ix}} contains 'illeDrugs'`,
+                    "title": " "
+                   },
+                   {
+                    "type": "panel",
+                    "name": `caffeine_${rev_ix}`,
+                    "elements": [
+                     {
+                      "type": "checkbox",
+                      "name": `caffeineType_${rev_ix}`,
+                      "title": "What type/types of caffeinated products did you use?",
+                      "isRequired": true,
+                      "choices": [
+                       {
+                        "value": "coffee",
+                        "text": "Coffee"
+                       },
+                       {
+                        "value": "energyDrink",
+                        "text": "Energy Drink"
+                       },
+                       {
+                        "value": "tea",
+                        "text": "Tea"
+                       },
+                       {
+                        "value": "other",
+                        "text": "Other"
+                       }
+                      ]
+                     },
+                     {
+                      "type": "text",
+                      "name": `caffeineOther_${rev_ix}`,
+                      "title": "Other caffeine products (please fill in the name/type of other caffeinated products)",
+                      "requiredIf": `{caffeineType_${rev_ix}} = ['other']`
+                     }
+                    ],
+                    "visibleIf": `{substances_${rev_ix}} contains 'caffeine'`,
+                    "title": " "
+                   },
+                   {
+                    "type": "paneldynamic",
+                    "name": `other_${rev_ix}`,
+                    "visibleIf": `{substances_${rev_ix}} contains 'other'`,
+                    "title": "What type of other substances did you use?",
+                    "templateElements": [
+                     {
+                      "type": "text",
+                      "name": `otherSubstance_${rev_ix}`,
+                      "title": "Other Substance Names (Please fill in name/type of other substances and how much of this substance was used. i.e.: any recreational use of prescription drugs (please include amount of pills and dosage), 1 hit of salvia, 1 g kratom, 5 mg synthetic cannabis (K2, spice), etc.)"
+                     }
+                    ]
+                   }
+                  ]
+                 })
+                 rev_ix--
+                }
+                dates = dates.reverse()
+                return page_list
+            }
+
+        Survey
+        .StylesManager
+        .applyTheme("modern");
+        // Survey.Survey.cssType = "bootstrap";
+        // Survey.defaultBootstrapCss.navigationButton = "btn";
+        var json = {
+            "title": "Timeline Follow-back",
+            "description": `This assessment will ask about any use of caffeine, nicotine, alcohol, or drugs during the assessment period. For this session of this study, the assessment period covers the past ${assessmentDays} days, beginning on the date of the previous TLFB.`,
+            "logoPosition": "right",
+            "pages": generate_pages(assessmentDays).reverse()
+        }
+
+        window.survey = new Survey.Model(json);
+        survey.onCurrentPageChanged.add(() => {
+            window.scrollTo(0,0)
+            calendar.getEventById('current').setDates(window.survey.currentPage.name, null, {allDay: true})
+            calendar.render()
+        })
+
+
+        // Recor the response time or how long they spent on a page
+        lastpage = survey.currentPage;
+        function timerLoop(elapsed) {
+            var page = survey.currentPage; // page variable is the currentPage on the survey
+            if (!page) return;
+            if (lastpage != page) {
+                // set new start date
+                start = new Date().getTime(); // sets new start Date object when page has changed.
+                lastpage = page // sets the last page to currente page 
+
+            }
+            var valueName = "TRQ" + survey.pages.indexOf(page);
+
+            var ms = survey.getValue(valueName); // gets the value of the valuename. e.g: TRQ1
+
+            if (ms == null) ms = 0;
+            else ms = elapsed;
+            // survey.setValue(valueName, ms);
+            $('#timeEl').text(elapsed + ' ms');
+        }
+
+
+        function getQueryVariable(variable) {
+            var query = window.location.search.substring(1);
+            var vars = query.split('&');
+            for (var i = 0; i < vars.length; i++) {
+                var pair = vars[i].split('=');
+                if (decodeURIComponent(pair[0]) == variable) {
+                    return decodeURIComponent(pair[1]);
+                }
+            }
+            return 'NULL'
+        }
+
+        survey.showProgressBar = "bottom";
+
+        survey.goNextPageAutomatic = false
+        survey.showNavigationButtons = true;
+        survey.showCompletedPage = false;
+
+        // Get Query Variables
+        var surveyname = getQueryVariable('survey');
+
+        var expInfo = { 'participant': '' ,'session': '',  'task': surveyname, 'date' : formatDate(), 'study': '', 'id': getQueryVariable('id') };
+
+        // Get info Promize
+        const getInfoPromise = new Promise((resolve, reject) => {
+            $.ajax({
+                type: "POST",
+                url: '/getInfo',
+                data: { 'id': expInfo.id },
+                dataType: 'JSON',
+                success: function (data) {
+                    resolve(data)
+                }
+            })
+        })
+            // Read getINFO 
+            .then((values) => {
+                console.log(values)
+                if (values.subject && values.session && values.study) {
+                    expInfo.participant = values.subject
+                    expInfo.study = values.study
+                    expInfo.session = values.session
+                    expInfo.run_id = getQueryVariable('run')
+                }
+
+                survey.onComplete.add(function (result) {
+                    //result.preventDefault();
+                    survey.setValue('assessed_dates', dates)
+                    postSurveyData(result.data, expInfo.session, expInfo.participant);
+                });
+
+                $("#surveyElement").Survey({model: survey});
+    
+                $("#participant").text(expInfo.participant);
+                $("#session").text(expInfo.session);
+                $("#study").text(expInfo.study);
+
+            })
+
+        function postSurveyData(data, session, mkturkid) {
+            console.log('/link?id=' + expInfo.id  + '&index=' + (parseInt(getQueryVariable('index')) + 1))
+            $.ajax({
+                type: "POST",
+                url: '/save',
+                data: {
+                    "trials_data": data,
+                    "expInfo": expInfo
+                },
+                dataType: 'JSON',
+                statusCode: {
+                    200: function() {
+                        console.log('sucess saved on backend')
+                        console.log('/link?id=' + expInfo.id  + '&index=' + (parseInt(getQueryVariable('index')) + 1))
+                        window.location.replace('/link?id=' + expInfo.id  + '&index=' + (parseInt(getQueryVariable('index')) + 1))
+                    }
+                }
+            }) 
+                
+        }
+
+        var start = new Date().getTime(),
+            elapsed = '0.0';
+
+        // executes timerCallback every 100 ms
+        timerID = window.setInterval(function () {
+
+            var time = new Date().getTime() - start;
+            elapsed = Math.floor(time);
+
+            //alert(elapsed);
+            //$('#timeEl').text(elapsed + ' ms');
+
+            //displayTime(1);
+            timerLoop(elapsed);
+
+        }, 5);
+    </script>
+
+</body>
+
+</html>

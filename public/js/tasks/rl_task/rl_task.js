@@ -1851,7 +1851,7 @@ function instruct_pagesLoopEndFirst() {
 		} else {
 			not_drawn = true;
 			form_enter_pressed = false;
-			doitonce = true;
+			// doitonce = true;
 			not_drawn = true
 			first_sel_made = false
 			second_sel_made = false

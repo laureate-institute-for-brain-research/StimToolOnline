@@ -1,9 +1,10 @@
 {
     "name": "MD_MUD_SES1 T1",
     "order": [
-        "/?index=0&survey=wurs&session=1",
-        "/?index=1&survey=mdq&session=1",
-        "/?index=1&task=blind_dating&run=Pilot_R1.json",
+        "/?index=0&survey=tlfb_drugs&session=1&days=10",
+        "/?index=1&survey=stai_state&session=1",
+        "/?index=1&survey=panasx&session=1",
+        "/?index=1&task=rl_task&run=Pilot_RL.json",
         "/completed?"
     ],
     "fullscreen": true,
