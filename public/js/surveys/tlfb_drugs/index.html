@@ -122,9 +122,7 @@
             assessmentDays = '1'
         }
 
-        // let first_date = new Date()
-        // first_date.setDate(first_date.getDate() - parseInt(assessmentDays))
-        // let last_date = new Date()
+        var calendar;
         document.addEventListener('DOMContentLoaded', function() {
             let assessmentDays = getQueryVariable('days')
             if (assessmentDays == 'NULL'){
@@ -133,20 +131,22 @@
             let first_date = new Date()
             first_date.setDate(first_date.getDate() - parseInt(assessmentDays))
             let last_date = new Date()
-            console.log(first_date.toLocaleDateString("ko-KR", {year: "numeric", month: "2-digit", day: "2-digit"}).replaceAll('. ','-').replaceAll('.',''))
-            console.log(last_date.toLocaleDateString("ko-KR", {year: "numeric", month: "2-digit", day: "2-digit"}).replaceAll('. ','-').replaceAll('.',''))
             var calendarEl = document.getElementById('calendar');
-            var calendar = new FullCalendar.Calendar(calendarEl, {
+            calendar = new FullCalendar.Calendar(calendarEl, {
             initialView: 'dayGridMonth',
             height: '25rem',
             events: [
                 {
                     id:'assessment',
-                    name: 'assessment period',
                     start: first_date.toLocaleDateString("ko-KR", {year: "numeric", month: "2-digit", day: "2-digit"}).replaceAll('. ','-').replaceAll('.','').toString(),
                     end: last_date.toLocaleDateString("ko-KR", {year: "numeric", month: "2-digit", day: "2-digit"}).replaceAll('. ','-').replaceAll('.','').toString(),
-                    // overlap: false,
                     display: 'background'
+                },
+                {
+                    id:'current',
+                    title:'Current Day',
+                    start: first_date.toLocaleDateString("ko-KR", {year: "numeric", month: "2-digit", day: "2-digit"}).replaceAll('. ','-').replaceAll('.','').toString(),
+                    display: 'block'
                 }
             ]
             });
@@ -165,7 +165,7 @@
                 first_date.setDate(first_date.getDate() - parseInt(ix))
                 let label_date = first_date.toLocaleDateString().replaceAll('/','-')
                 page_list.push({
-                  "name": `page${ix}`,
+                  "name": first_date.toLocaleDateString("ko-KR", {year: "numeric", month: "2-digit", day: "2-digit"}).replaceAll('. ','-').replaceAll('.',''),
                   "description": first_date.toLocaleDateString() + ` (${ix} days ago)`,
                   "elements": [
                    {
@@ -3680,6 +3680,10 @@
         }
 
         window.survey = new Survey.Model(json);
+        survey.onCurrentPageChanged.add(() => {
+            calendar.getEventById('current').setDates(window.survey.currentPage.name, null, {allDay: true})
+            calendar.render()
+        })
 
 
         // Recor the response time or how long they spent on a page
