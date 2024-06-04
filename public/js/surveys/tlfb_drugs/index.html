@@ -123,6 +123,7 @@
         }
 
         var calendar;
+        var dates;
         document.addEventListener('DOMContentLoaded', function() {
             let assessmentDays = getQueryVariable('days')
             if (assessmentDays == 'NULL'){
@@ -133,22 +134,27 @@
             let last_date = new Date()
             var calendarEl = document.getElementById('calendar');
             calendar = new FullCalendar.Calendar(calendarEl, {
-            initialView: 'dayGridMonth',
-            height: '25rem',
-            events: [
-                {
-                    id:'assessment',
-                    start: first_date.toLocaleDateString("ko-KR", {year: "numeric", month: "2-digit", day: "2-digit"}).replaceAll('. ','-').replaceAll('.','').toString(),
-                    end: last_date.toLocaleDateString("ko-KR", {year: "numeric", month: "2-digit", day: "2-digit"}).replaceAll('. ','-').replaceAll('.','').toString(),
-                    display: 'background'
-                },
-                {
-                    id:'current',
-                    title:'Current Day',
-                    start: first_date.toLocaleDateString("ko-KR", {year: "numeric", month: "2-digit", day: "2-digit"}).replaceAll('. ','-').replaceAll('.','').toString(),
-                    display: 'block'
+                initialView: 'dayGridMonth',
+                initialDate: first_date.toLocaleDateString("ko-KR", {year: "numeric", month: "2-digit", day: "2-digit"}).replaceAll('. ','-').replaceAll('.','').toString(),
+                // height: '25rem',
+                events: [
+                    {
+                        id:'assessment',
+                        start: first_date.toLocaleDateString("ko-KR", {year: "numeric", month: "2-digit", day: "2-digit"}).replaceAll('. ','-').replaceAll('.','').toString(),
+                        end: last_date.toLocaleDateString("ko-KR", {year: "numeric", month: "2-digit", day: "2-digit"}).replaceAll('. ','-').replaceAll('.','').toString(),
+                        display: 'background'
+                    },
+                    {
+                        id:'current',
+                        title:'Current Day',
+                        start: first_date.toLocaleDateString("ko-KR", {year: "numeric", month: "2-digit", day: "2-digit"}).replaceAll('. ','-').replaceAll('.','').toString(),
+                        display: 'block'
+                    }
+                ],
+                dateClick: function(info) {
+                  alert('Navigating to: ' + info.dateStr);
+                  window.survey.currentPage = window.survey.getPageByName(info.dateStr)
                 }
-            ]
             });
 
             console.log(calendar)
@@ -159,18 +165,20 @@
         function generate_pages(assessmentDays) {
 
             let page_list = []
-            
+            dates = []
+            rev_ix = parseInt(assessmentDays)
             for (let ix = 1; ix <= parseInt(assessmentDays); ix++) {
                 let first_date = new Date()
                 first_date.setDate(first_date.getDate() - parseInt(ix))
                 let label_date = first_date.toLocaleDateString().replaceAll('/','-')
+                dates.push(first_date.toLocaleDateString("ko-KR", {year: "numeric", month: "2-digit", day: "2-digit"}).replaceAll('. ','-').replaceAll('.',''))
                 page_list.push({
                   "name": first_date.toLocaleDateString("ko-KR", {year: "numeric", month: "2-digit", day: "2-digit"}).replaceAll('. ','-').replaceAll('.',''),
                   "description": first_date.toLocaleDateString() + ` (${ix} days ago)`,
                   "elements": [
                    {
                     "type": "checkbox",
-                    "name": `substances_${label_date}`,
+                    "name": `substances_${rev_ix}`,
                     "title": "Were any substances used on this day? If so, please select all of the substances used. If no, please select None",
                     "isRequired": true,
                     "choices": [
@@ -210,8 +218,8 @@
                    },
                    {
                     "type": "checkbox",
-                    "name": `alcoholType_${label_date}`,
-                    "visibleIf": `{substances_${label_date}} contains 'alcohol'`,
+                    "name": `alcoholType_${rev_ix}`,
+                    "visibleIf": `{substances_${rev_ix}} contains 'alcohol'`,
                     "title": "What type of alcohol did you have?",
                     "isRequired": true,
                     "choices": [
@@ -235,8 +243,8 @@
                    },
                    {
                     "type": "dropdown",
-                    "name": `beerQuantity_${label_date}`,
-                    "visibleIf": `{alcoholType_${label_date}} contains 'beer'`,
+                    "name": `beerQuantity_${rev_ix}`,
+                    "visibleIf": `{alcoholType_${rev_ix}} contains 'beer'`,
                     "title": "How many beers did you drink? (consider a 12 oz. can/bottle = 1 beer AND a 16 oz US pint = 1 1/2 beers)",
                     "isRequired": true,
                     "choices": [
@@ -344,8 +352,8 @@
                    },
                    {
                     "type": "dropdown",
-                    "name": `wineQuantity_${label_date}`,
-                    "visibleIf": `{alcoholType_${label_date}} contains 'wine'`,
+                    "name": `wineQuantity_${rev_ix}`,
+                    "visibleIf": `{alcoholType_${rev_ix}} contains 'wine'`,
                     "title": "How many glasses of wine did you drink? (1 glass = 5 oz. = 1 standard drink)",
                     "isRequired": true,
                     "choices": [
@@ -453,8 +461,8 @@
                    },
                    {
                     "type": "dropdown",
-                    "name": `hardQuantity_${label_date}`,
-                    "visibleIf": `{alcoholType_${label_date}} contains 'hard'`,
+                    "name": `hardQuantity_${rev_ix}`,
+                    "visibleIf": `{alcoholType_${rev_ix}} contains 'hard'`,
                     "title": "How many shots (or mixed drinks) of hard liquor did you have? (consider 1 shot = 1.5 oz, drinks are usually more than 1 shot)",
                     "isRequired": true,
                     "choices": [
@@ -562,25 +570,25 @@
                    },
                    {
                     "type": "multipletext",
-                    "name": `alcoholOther_${label_date}`,
-                    "visibleIf": `{alcoholType_${label_date}} contains 'other'`,
+                    "name": `alcoholOther_${rev_ix}`,
+                    "visibleIf": `{alcoholType_${rev_ix}} contains 'other'`,
                     "title": "Please answer the following questions about the other alcohol you drank:",
                     "isRequired": true,
                     "items": [
                      {
-                      "name": `otherType_${label_date}`,
+                      "name": `otherType_${rev_ix}`,
                       "title": "Other Alcohol (Please fill in type)"
                      },
                      {
-                      "name": `otherQuantity_${label_date}`,
+                      "name": `otherQuantity_${rev_ix}`,
                       "title": "Other Alcohol Quantity (Please fill in the potency, content, or amount of what you used with units (i.e., drinks, mg, grams, ml, %, etc.))"
                      }
                     ]
                    },
                    {
                     "type": "checkbox",
-                    "name": `tobaccoType_${label_date}`,
-                    "visibleIf": `{substances_${label_date}} contains 'tobacco'`,
+                    "name": `tobaccoType_${rev_ix}`,
+                    "visibleIf": `{substances_${rev_ix}} contains 'tobacco'`,
                     "title": "What type of tobacco did you use?",
                     "isRequired": true,
                     "choices": [
@@ -612,8 +620,8 @@
                    },
                    {
                     "type": "dropdown",
-                    "name": `cigaretteQuantity_${label_date}`,
-                    "visibleIf": `{tobaccoType_${label_date}} contains 'cigarettes'`,
+                    "name": `cigaretteQuantity_${rev_ix}`,
+                    "visibleIf": `{tobaccoType_${rev_ix}} contains 'cigarettes'`,
                     "title": "How many cigarettes did you smoke?",
                     "isRequired": true,
                     "choices": [
@@ -721,8 +729,8 @@
                    },
                    {
                     "type": "dropdown",
-                    "name": `ecigaretteQuantity_${label_date}`,
-                    "visibleIf": `{tobaccoType_${label_date}} contains 'ecigarette'`,
+                    "name": `ecigaretteQuantity_${rev_ix}`,
+                    "visibleIf": `{tobaccoType_${rev_ix}} contains 'ecigarettes'`,
                     "title": "How many times did you use your e-cigarette? (consider 1 e-cigarette use= ~10 minutes of smoking or 15 puffs)",
                     "isRequired": true,
                     "choices": [
@@ -838,8 +846,8 @@
                    },
                    {
                     "type": "dropdown",
-                    "name": `chewQuantity_${label_date}`,
-                    "visibleIf": `{tobaccoType_${label_date}} contains 'chew'`,
+                    "name": `chewQuantity_${rev_ix}`,
+                    "visibleIf": `{tobaccoType_${rev_ix}} contains 'chew'`,
                     "title": "How many times did you chew? (consider number of pinches or dips)",
                     "isRequired": true,
                     "choices": [
@@ -947,8 +955,8 @@
                    },
                    {
                     "type": "dropdown",
-                    "name": `cigarQuantity_${label_date}`,
-                    "visibleIf": `{tobaccoType_${label_date}} contains 'cigars'`,
+                    "name": `cigarQuantity_${rev_ix}`,
+                    "visibleIf": `{tobaccoType_${rev_ix}} contains 'cigars'`,
                     "title": "How many cigars did you smoke?",
                     "isRequired": true,
                     "choices": [
@@ -1064,8 +1072,8 @@
                    },
                    {
                     "type": "dropdown",
-                    "name": `hookahQuantity_${label_date}`,
-                    "visibleIf": `{tobaccoType_${label_date}} contains 'hookah'`,
+                    "name": `hookahQuantity_${rev_ix}`,
+                    "visibleIf": `{tobaccoType_${rev_ix}} contains 'hookah'`,
                     "title": "How many hookah drags/puffs did you have?",
                     "isRequired": true,
                     "choices": [
@@ -1173,25 +1181,25 @@
                    },
                    {
                     "type": "multipletext",
-                    "name": `tobaccoOther_${label_date}`,
-                    "visibleIf": `{tobaccoType_${label_date}} contains 'other'`,
+                    "name": `tobaccoOther_${rev_ix}`,
+                    "visibleIf": `{tobaccoType_${rev_ix}} contains 'other'`,
                     "title": "Please answer the following questions about the other tobacco you used:",
                     "isRequired": true,
                     "items": [
                      {
-                      "name": `otherType_${label_date}`,
+                      "name": `otherType_${rev_ix}`,
                       "title": "Other form of tobacco (Please fill in type)"
                      },
                      {
-                      "name": `otherQuantity_${label_date}`,
+                      "name": `otherQuantity_${rev_ix}`,
                       "title": "Amount of other tobacco (Please fill in the potency, content, or amount of what you used with units (i.e., drinks, mg, grams, ml, %, etc.))"
                      }
                     ]
                    },
                    {
                     "type": "checkbox",
-                    "name": `cannabisType_${label_date}`,
-                    "visibleIf": `{substances_${label_date}} contains 'cannabis'`,
+                    "name": `cannabisType_${rev_ix}`,
+                    "visibleIf": `{substances_${rev_ix}} contains 'cannabis'`,
                     "title": "What type of non-study cannabis product did you use?",
                     "isRequired": true,
                     "choices": [
@@ -1215,11 +1223,11 @@
                    },
                    {
                     "type": "panel",
-                    "name": `flower_${label_date}`,
+                    "name": `flower_${rev_ix}`,
                     "elements": [
                      {
                       "type": "dropdown",
-                      "name": `flowerQuantity_${label_date}`,
+                      "name": `flowerQuantity_${rev_ix}`,
                       "title": "Flower/bud amount (how many total grams of cannabis did you use?)",
                       "isRequired": true,
                       "choices": [
@@ -1527,7 +1535,7 @@
                      },
                      {
                       "type": "dropdown",
-                      "name": `flowerTHC_${label_date}`,
+                      "name": `flowerTHC_${rev_ix}`,
                       "title": "Flower/bud THC (what was the potency?)",
                       "isRequired": true,
                       "choices": [
@@ -1679,7 +1687,7 @@
                      },
                      {
                       "type": "dropdown",
-                      "name": `flowerCBD_${label_date}`,
+                      "name": `flowerCBD_${rev_ix}`,
                       "title": "Flower/bud CBD",
                       "isRequired": true,
                       "choices": [
@@ -1830,17 +1838,17 @@
                       ]
                      }
                     ],
-                    "visibleIf": `{cannabisType_${label_date}} contains 'flower'`,
+                    "visibleIf": `{cannabisType_${rev_ix}} contains 'flower'`,
                     "title": "Non-study Cannabis - Flower",
                     "isRequired": true
                    },
                    {
                     "type": "panel",
-                    "name": `edible_${label_date}`,
+                    "name": `edible_${rev_ix}`,
                     "elements": [
                      {
                       "type": "dropdown",
-                      "name": `edibleTHCQuantity_${label_date}`,
+                      "name": `edibleTHCQuantity_${rev_ix}`,
                       "title": "Edible/Ingested THC\n(How many total THC milligrams (best guess) did you consume?)",
                       "isRequired": true,
                       "choices": [
@@ -1976,7 +1984,7 @@
                      },
                      {
                       "type": "dropdown",
-                      "name": `edibleCBDQuantity_${label_date}`,
+                      "name": `edibleCBDQuantity_${rev_ix}`,
                       "title": "Edible/Ingested CBD\n(How many total CBD milligrams (best guess) did you consume?)",
                       "isRequired": true,
                       "choices": [
@@ -2111,17 +2119,17 @@
                       ]
                      }
                     ],
-                    "visibleIf": `{cannabisType_${label_date}} contains 'edible'`,
+                    "visibleIf": `{cannabisType_${rev_ix}} contains 'edible'`,
                     "title": "Non-study Cannabis - Edible/Ingested",
                     "isRequired": true
                    },
                    {
                     "type": "panel",
-                    "name": `concentrate_${label_date}`,
+                    "name": `concentrate_${rev_ix}`,
                     "elements": [
                      {
                       "type": "dropdown",
-                      "name": `concentrateQuantity_${label_date}`,
+                      "name": `concentrateQuantity_${rev_ix}`,
                       "title": "Cannabis Concentrate\n(How many dabs/drags/hits did you do?)",
                       "isRequired": true,
                       "choices": [
@@ -2225,7 +2233,7 @@
                      },
                      {
                       "type": "dropdown",
-                      "name": `concentrateTHC_${label_date}`,
+                      "name": `concentrateTHC_${rev_ix}`,
                       "title": "Cannabis Concentrate THC\n(What was the concentrate THC potency (best guess, % 0-100)?)",
                       "isRequired": true,
                       "choices": [
@@ -2425,7 +2433,7 @@
                      },
                      {
                       "type": "dropdown",
-                      "name": `concentrateCBD_${label_date}`,
+                      "name": `concentrateCBD_${rev_ix}`,
                       "title": "Cannabis Concentrate CBD\n(What was the concentrate CBD potency (best guess, % 0-100)?)",
                       "isRequired": true,
                       "choices": [
@@ -2624,14 +2632,14 @@
                       ]
                      }
                     ],
-                    "visibleIf": `{cannabisType_${label_date}} contains 'concentrate'`,
+                    "visibleIf": `{cannabisType_${rev_ix}} contains 'concentrate'`,
                     "title": "Non-study Cannabis - Concentrate",
                     "isRequired": true
                    },
                    {
                     "type": "multipletext",
-                    "name": `cannabisOther_${label_date}`,
-                    "visibleIf": `{cannabisType_${label_date}} contains 'other'`,
+                    "name": `cannabisOther_${rev_ix}`,
+                    "visibleIf": `{cannabisType_${rev_ix}} contains 'other'`,
                     "title": "Non-study Cannabis - Other",
                     "isRequired": true,
                     "items": [
@@ -2647,8 +2655,8 @@
                    },
                    {
                     "type": "checkbox",
-                    "name": `presDrugsType_${label_date}`,
-                    "visibleIf": `{substances_${label_date}} contains 'presDrugs'`,
+                    "name": `presDrugsType_${rev_ix}`,
+                    "visibleIf": `{substances_${rev_ix}} contains 'presDrugs'`,
                     "title": "What type of prescription drugs did you use (for medical OR recreational purposes)?",
                     "isRequired": true,
                     "choices": [
@@ -2684,11 +2692,11 @@
                    },
                    {
                     "type": "panel",
-                    "name": `opioids_${label_date}`,
+                    "name": `opioids_${rev_ix}`,
                     "elements": [
                      {
                       "type": "dropdown",
-                      "name": `opioidsQuantity_${label_date}`,
+                      "name": `opioidsQuantity_${rev_ix}`,
                       "title": "Opioids (How many pills/tablets did you use?)",
                       "isRequired": true,
                       "choices": [
@@ -2796,22 +2804,22 @@
                      },
                      {
                       "type": "text",
-                      "name": `opioidDosage_${label_date}`,
+                      "name": `opioidDosage_${rev_ix}`,
                       "title": "Opioid Dosage (Please fill in the typical number of milligrams (mg) per pill/tablet (i.e., 2.5 mg/pill, 200 mg/pill, 1000 mg/pill))",
                       "isRequired": true
                      }
                     ],
-                    "visibleIf": `{presDrugsType_${label_date}} contains 'opioids'`,
+                    "visibleIf": `{presDrugsType_${rev_ix}} contains 'opioids'`,
                     "title": "Opioids",
                     "isRequired": true
                    },
                    {
                     "type": "panel",
-                    "name": `sleep_${label_date}`,
+                    "name": `sleep_${rev_ix}`,
                     "elements": [
                      {
                       "type": "dropdown",
-                      "name": `sleepQuantity_${label_date}`,
+                      "name": `sleepQuantity_${rev_ix}`,
                       "title": "Sleep Medication (How many pills/tablets did you use?)",
                       "isRequired": true,
                       "choices": [
@@ -2919,22 +2927,22 @@
                      },
                      {
                       "type": "text",
-                      "name": `sleepDosage_${label_date}`,
+                      "name": `sleepDosage_${rev_ix}`,
                       "title": "Sleep Medication Dosage (Please fill in the typical number of milligrams (mg) per pill/tablet (i.e., 2.5 mg/pill, 200 mg/pill, 1000 mg/pill))",
                       "isRequired": true
                      }
                     ],
-                    "visibleIf": `{presDrugsType_${label_date}} contains 'sleep'`,
+                    "visibleIf": `{presDrugsType_${rev_ix}} contains 'sleep'`,
                     "title": "Sleep Medication",
                     "isRequired": true
                    },
                    {
                     "type": "panel",
-                    "name": `relaxants_${label_date}`,
+                    "name": `relaxants_${rev_ix}`,
                     "elements": [
                      {
                       "type": "dropdown",
-                      "name": `relaxantsQuantity_${label_date}`,
+                      "name": `relaxantsQuantity_${rev_ix}`,
                       "title": "Muscle Relaxants (How many pills/tablets did you use?)",
                       "isRequired": true,
                       "choices": [
@@ -3042,21 +3050,21 @@
                      },
                      {
                       "type": "text",
-                      "name": `relaxantsDosage_${label_date}`,
+                      "name": `relaxantsDosage_${rev_ix}`,
                       "title": "Muscle Relaxants Dosage (Please fill in the typical number of milligrams (mg) per pill/tablet (i.e., 2.5 mg/pill, 200 mg/pill, 1000 mg/pill))",
                       "isRequired": true
                      }
                     ],
-                    "visibleIf": `{presDrugsType_${label_date}} contains 'relaxants'`,
+                    "visibleIf": `{presDrugsType_${rev_ix}} contains 'relaxants'`,
                     "title": "Muscle Relaxants"
                    },
                    {
                     "type": "panel",
-                    "name": `nsaid_${label_date}`,
+                    "name": `nsaid_${rev_ix}`,
                     "elements": [
                      {
                       "type": "dropdown",
-                      "name": `nsaidQuantity_${label_date}`,
+                      "name": `nsaidQuantity_${rev_ix}`,
                       "title": "Non-Steroidal Anti-Inflammatory Drugs (NSAIDs) (How many pills/tablets did you use?)",
                       "isRequired": true,
                       "choices": [
@@ -3164,22 +3172,22 @@
                      },
                      {
                       "type": "text",
-                      "name": `nsaidDosage_${label_date}`,
+                      "name": `nsaidDosage_${rev_ix}`,
                       "title": "NSAIDs Dosage (Please fill in the typical number of milligrams (mg) per pill/tablet (i.e., 2.5 mg/pill, 200 mg/pill, 1000 mg/pill))",
                       "isRequired": true
                      }
                     ],
-                    "visibleIf": `{presDrugsType_${label_date}} contains 'nsaid'`,
+                    "visibleIf": `{presDrugsType_${rev_ix}} contains 'nsaid'`,
                     "title": "Non-Steroidal Anti-Inflammatory Drugs (NSAIDs)",
                     "isRequired": true
                    },
                    {
                     "type": "panel",
-                    "name": `nerve_${label_date}`,
+                    "name": `nerve_${rev_ix}`,
                     "elements": [
                      {
                       "type": "dropdown",
-                      "name": `nerveQuantity_${label_date}`,
+                      "name": `nerveQuantity_${rev_ix}`,
                       "title": "Nerve Pain Medication (How many pills/tablets did you use?)",
                       "isRequired": true,
                       "choices": [
@@ -3287,22 +3295,22 @@
                      },
                      {
                       "type": "text",
-                      "name": `nerveDosage_${label_date}`,
+                      "name": `nerveDosage_${rev_ix}`,
                       "title": "Nerve Pain Medication Dosage (Please fill in the typical number of milligrams (mg) per pill/tablet (i.e., 2.5 mg/pill, 200 mg/pill, 1000 mg/pill))",
                       "isRequired": true
                      }
                     ],
-                    "visibleIf": `{presDrugsType_${label_date}} contains 'nerve'`,
+                    "visibleIf": `{presDrugsType_${rev_ix}} contains 'nerve'`,
                     "title": "Nerve Pain Medication",
                     "isRequired": true
                    },
                    {
                     "type": "panel",
-                    "name": `adhd_${label_date}`,
+                    "name": `adhd_${rev_ix}`,
                     "elements": [
                      {
                       "type": "dropdown",
-                      "name": `adhdQuantity_${label_date}`,
+                      "name": `adhdQuantity_${rev_ix}`,
                       "title": "ADHD Medication (How many pills/tablets did you use?)",
                       "isRequired": true,
                       "choices": [
@@ -3410,28 +3418,28 @@
                      },
                      {
                       "type": "text",
-                      "name": `adhdDosage_${label_date}`,
+                      "name": `adhdDosage_${rev_ix}`,
                       "title": "ADHD Medication Dosage (Please fill in the typical number of milligrams (mg) per pill/tablet (i.e., 2.5 mg/pill, 200 mg/pill, 1000 mg/pill))",
                       "isRequired": true
                      }
                     ],
-                    "visibleIf": `{presDrugsType_${label_date}} contains 'adhd'`,
+                    "visibleIf": `{presDrugsType_${rev_ix}} contains 'adhd'`,
                     "title": "ADHD Medication",
                     "isRequired": true
                    },
                    {
                     "type": "panel",
-                    "name": `presDrugsOther_${label_date}`,
+                    "name": `presDrugsOther_${rev_ix}`,
                     "elements": [
                      {
                       "type": "text",
-                      "name": `presDrugsOtherType_${label_date}`,
+                      "name": `presDrugsOtherType_${rev_ix}`,
                       "title": "Other Medication Name (Please fill in other medication name/type)",
                       "isRequired": true
                      },
                      {
                       "type": "dropdown",
-                      "name": `presDrugsOtherQuantity_${label_date}`,
+                      "name": `presDrugsOtherQuantity_${rev_ix}`,
                       "title": "Other Medication Quantity (How many pills/tablets did you use?)",
                       "isRequired": true,
                       "choices": [
@@ -3539,22 +3547,22 @@
                      },
                      {
                       "type": "text",
-                      "name": `presDrugsOtherDosage_${label_date}`,
+                      "name": `presDrugsOtherDosage_${rev_ix}`,
                       "title": "Other Medication Dosage (Please fill in the typical number of milligrams (mg) per pill/tablet (i.e., 2.5 mg/pill, 200 mg/pill, 1000 mg/pill))",
                       "isRequired": true
                      }
                     ],
-                    "visibleIf": `{presDrugsType_${label_date}} contains 'other'`,
+                    "visibleIf": `{presDrugsType_${rev_ix}} contains 'other'`,
                     "title": "Other Medication",
                     "isRequired": true
                    },
                    {
                     "type": "panel",
-                    "name": `illeDrugs_${label_date}`,
+                    "name": `illeDrugs_${rev_ix}`,
                     "elements": [
                      {
                       "type": "checkbox",
-                      "name": `illeDrugsType_${label_date}`,
+                      "name": `illeDrugsType_${rev_ix}`,
                       "title": "What type of illegal drugs did you use?",
                       "isRequired": true,
                       "choices": [
@@ -3602,21 +3610,21 @@
                      },
                      {
                       "type": "text",
-                      "name": `illeDrugsOther_${label_date}`,
+                      "name": `illeDrugsOther_${rev_ix}`,
                       "title": "Other drugs (please fill in the name/type of other drugs)",
-                      "requiredIf": `{illeDrugsType_${label_date}} = ['other']`
+                      "requiredIf": `{illeDrugsType_${rev_ix}} = ['other']`
                      }
                     ],
-                    "visibleIf": `{substances_${label_date}} contains 'illeDrugs'`,
+                    "visibleIf": `{substances_${rev_ix}} contains 'illeDrugs'`,
                     "title": " "
                    },
                    {
                     "type": "panel",
-                    "name": `caffeine_${label_date}`,
+                    "name": `caffeine_${rev_ix}`,
                     "elements": [
                      {
                       "type": "checkbox",
-                      "name": `caffeineType_${label_date}`,
+                      "name": `caffeineType_${rev_ix}`,
                       "title": "What type/types of caffeinated products did you use?",
                       "isRequired": true,
                       "choices": [
@@ -3640,30 +3648,32 @@
                      },
                      {
                       "type": "text",
-                      "name": `caffeineOther_${label_date}`,
+                      "name": `caffeineOther_${rev_ix}`,
                       "title": "Other caffeine products (please fill in the name/type of other caffeinated products)",
-                      "requiredIf": `{caffeineType_${label_date}} = ['other']`
+                      "requiredIf": `{caffeineType_${rev_ix}} = ['other']`
                      }
                     ],
-                    "visibleIf": `{substances_${label_date}} contains 'caffeine'`,
+                    "visibleIf": `{substances_${rev_ix}} contains 'caffeine'`,
                     "title": " "
                    },
                    {
                     "type": "paneldynamic",
-                    "name": `other_${label_date}`,
-                    "visibleIf": `{substances_${label_date}} contains 'other'`,
+                    "name": `other_${rev_ix}`,
+                    "visibleIf": `{substances_${rev_ix}} contains 'other'`,
                     "title": "What type of other substances did you use?",
                     "templateElements": [
                      {
                       "type": "text",
-                      "name": `otherSubstance_${label_date}`,
+                      "name": `otherSubstance_${rev_ix}`,
                       "title": "Other Substance Names (Please fill in name/type of other substances and how much of this substance was used. i.e.: any recreational use of prescription drugs (please include amount of pills and dosage), 1 hit of salvia, 1 g kratom, 5 mg synthetic cannabis (K2, spice), etc.)"
                      }
                     ]
                    }
                   ]
                  })
+                 rev_ix--
                 }
+                dates = dates.reverse()
                 return page_list
             }
 
@@ -3681,6 +3691,7 @@
 
         window.survey = new Survey.Model(json);
         survey.onCurrentPageChanged.add(() => {
+            window.scrollTo(0,0)
             calendar.getEventById('current').setDates(window.survey.currentPage.name, null, {allDay: true})
             calendar.render()
         })
@@ -3703,7 +3714,7 @@
 
             if (ms == null) ms = 0;
             else ms = elapsed;
-            survey.setValue(valueName, ms);
+            // survey.setValue(valueName, ms);
             $('#timeEl').text(elapsed + ' ms');
         }
 
@@ -3755,6 +3766,7 @@
 
                 survey.onComplete.add(function (result) {
                     //result.preventDefault();
+                    survey.setValue('assessed_dates', dates)
                     postSurveyData(result.data, expInfo.session, expInfo.participant);
                 });
 
