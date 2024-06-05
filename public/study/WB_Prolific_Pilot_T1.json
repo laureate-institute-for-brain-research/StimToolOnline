@@ -59,7 +59,8 @@
         "/?index=55&survey=wurs&session=1",
         "/?index=56&survey=speed_test_info&session=1",
         "/?index=57&survey=tlfb_drugs&session=1&days=3",
-        "/?index=58&survey=bdi&session=1",
+        "/?index=58&survey=tlfb_events_drugs&session=1&days=3",
+        "/?index=59&survey=bdi&session=1",
         "/completeMobile?"
     ],
     "fullscreen": true,
