@@ -123,6 +123,35 @@
         <p>Based on your task performance, you have earned a bonus of <b style="color: rgb(106, 173, 106);font-size: 20px;">$10</b>!</p>
         <br>
     </div>
+    <div class="container" id='studyInstr1b' style="color: white; display: none;">
+        <h5>Please remember to return to the next session (Session 4) after at least 24 hours. </h5>
+        <p>This next session will pay <b style="color: rgb(106, 173, 106);font-size: 20px;">$11.50</b> for approximately 1 hour of your time.</p>
+        <p>As a reminder, if you complete all 5 sessions you will also receive an additional bonus of up to <b style="color: rgb(106, 173, 106);font-size: 20px;">$10</b> based on your task performance</p>
+        <br>
+    </div>
+    <div class="container" id='studyInstr2b' style="color: white; display: none;">
+        <h5>Please remember to return to the next session (Session 3) after at least 24 hours. </h5>
+        <p>This next session will pay <b style="color: rgb(106, 173, 106);font-size: 20px;">$16.50</b> for approximately 90 minutes of your time.</p>
+        <p>As a reminder, if you complete all 5 sessions you will also receive an additional bonus of up to <b style="color: rgb(106, 173, 106);font-size: 20px;">$10</b> based on your task performance</p>
+        <br>
+    </div>
+    <div class="container" id='studyInstr3b' style="color: white; display: none;">
+        <h5>Please remember to return to the next session (Session 2) after at least 24 hours. </h5>
+        <p>This next session will pay <b style="color: rgb(106, 173, 106);font-size: 20px;">$10.50</b> for approximately 1 hour of your time.</p>
+        <p>As a reminder, if you complete all 5 sessions you will also receive an additional bonus of up to <b style="color: rgb(106, 173, 106);font-size: 20px;">$10</b> based on your task performance</p>
+        <br>
+    </div>
+    <div class="container" id='studyInstr4b' style="color: white; display: none;">
+        <h5>Please remember to return to the next session (Session 5) after at least 24 hours. </h5>
+        <p>This next session will pay <b style="color: rgb(106, 173, 106);font-size: 20px;">$12.00</b> for approximately 1 hour of your time.</p>
+        <p>As a reminder, if you complete all 5 sessions you will also receive an additional bonus of up to <b style="color: rgb(106, 173, 106);font-size: 20px;">$10</b> based on your task performance</p>
+        <br>
+    </div>
+    <div class="container" id='studyInstr5b' style="color: white; display: none;">
+        <h5>Congratulations! </h5>
+        <p>Based on your task performance, you have earned a bonus of <b style="color: rgb(106, 173, 106);font-size: 20px;">$10</b>!</p>
+        <br>
+    </div>
     <div class="container">
         <p>You may exit and close this window at anytime.</p>
     </div>
@@ -169,20 +198,36 @@
                 // if (expInfo.session == 'T1'){
                 //     document.getElementById('seesion1isntructions').style.display = 'block';
                 // }
-                if (expInfo.study == 'WB_Emotional_Faces'){
+                if (expInfo.study == 'WB_Emotional_Faces' && expInfo.session == 'T1'){
                     document.getElementById('studyInstr1').style.display = 'block';
                 }
-                if (expInfo.study == 'WB_Advice'){
+                if (expInfo.study == 'WB_Advice' && expInfo.session == 'T1'){
                     document.getElementById('studyInstr2').style.display = 'block';
                 }
-                if (expInfo.study == 'WB_Blind_Dating'){
+                if (expInfo.study == 'WB_Blind_Dating' && expInfo.session == 'T1'){
                     document.getElementById('studyInstr3').style.display = 'block';
                 }
-                if (expInfo.study == 'WB_Social_Media'){
+                if (expInfo.study == 'WB_Social_Media' && expInfo.session == 'T1'){
                     document.getElementById('studyInstr4').style.display = 'block';
                 }
-                if (expInfo.study == 'WB_Cooperation_Task'){
+                if (expInfo.study == 'WB_Cooperation_Task' && expInfo.session == 'T1'){
                     document.getElementById('studyInstr5').style.display = 'block';
+                }
+
+                if (expInfo.study == 'WB_Emotional_Faces' && sexpInfo.ession == 'T2'){
+                    document.getElementById('studyInstr5b').style.display = 'block';
+                }
+                if (expInfo.study == 'WB_Advice' && expInfo.session == 'T2'){
+                    document.getElementById('studyInstr4b').style.display = 'block';
+                }
+                if (expInfo.study == 'WB_Blind_Dating' && expInfo.session == 'T2'){
+                    document.getElementById('studyInstr1b').style.display = 'block';
+                }
+                if (expInfo.study == 'WB_Social_Media' && expInfo.session == 'T2'){
+                    document.getElementById('studyInstr2b').style.display = 'block';
+                }
+                if (expInfo.study == 'WB_Cooperation_Task' && expInfo.session == 'T2'){
+                    document.getElementById('studyInstr3b').style.display = 'block';
                 }
 
                 $("#study").text(expInfo.study);
