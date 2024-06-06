@@ -1,0 +1,14 @@
+{
+    "name": "MD_MUD_SES3 T1",
+    "order": [
+        "/?index=0&survey=tlfb_events_drugs&session=1&days=1",
+        "/?index=1&survey=stai_state&session=1",
+        "/?index=2&survey=panasx&session=1",
+        "/?index=3&survey=tlfb_events_mood&session=1&days=1",
+        "/?index=4&survey=valence_arousal&session=1",
+        "/?index=5&task=rl_task&run=Pilot_RL.json",
+        "/completeMobile?"
+    ],
+    "fullscreen": true,
+    "text_html": ""
+} 

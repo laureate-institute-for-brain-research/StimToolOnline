@@ -1,0 +1,13 @@
+{
+    "name": "MD_MUD_SES1 T1",
+    "order": [
+        "/?index=0&survey=demo&session=1",
+        "/?index=1&survey=bdi&session=1",
+        "/?index=2&survey=wurs&session=1",
+        "/?index=3&survey=mdq&session=1",
+        "/?index=4&survey=stai_trait&session=1",
+        "/completeMobile?"
+    ],
+    "fullscreen": true,
+    "text_html": ""
+}
