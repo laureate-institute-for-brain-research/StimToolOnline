@@ -307,10 +307,6 @@
                       "text": "Illegal recreational drugs (i.e. cocaine, LSD, etc.)"
                      },
                      {
-                      "value": "caffeine",
-                      "text": "Caffeine (i.e. Coffee, energy drinks, tea, other caffeinated products)"
-                     },
-                     {
                       "value": "other",
                       "text": "Other (i.e. recreational use of prescription drugs, salvia, kratom, synthetic cannabis (K2, spice), etc.)"
                      },
@@ -3879,6 +3875,53 @@
                     expInfo.run_id = getQueryVariable('run')
                 }
 
+                survey.onValueChanged.add(function (result) {
+                    let alc_count = 0
+                    let tob_count = 0
+                    let can_count = 0
+                    let pre_count = 0
+                    let ill_count = 0
+                    let caf_count = 0
+                    let oth_count = 0
+                    
+                    for (const element in result.data) {
+                        if(element.includes("substances_")) {
+                            result.data[element].forEach(subs => {
+                                if(subs.includes('alcohol')) {
+                                    alc_count++
+                                }
+                                if(subs.includes('tobacco')) {
+                                    tob_count++
+                                }
+                                if(subs.includes('cannabis')) {
+                                    can_count++
+                                }
+                                if(subs.includes('illeDrugs')) {
+                                    ill_count++
+                                }
+                                if(subs.includes('presDrugs')) {
+                                    pre_count++
+                                }
+                                if(subs.includes('caffeine')) {
+                                    caf_count++
+                                }
+                                if(subs.includes('other')) {
+                                    oth_count++
+                                }
+                            })
+                        }
+                    }
+                    survey.setValue('assessed_dates', dates)
+                    survey.setValue('alcohol_count', alc_count)
+                    survey.setValue('tobacco_count', tob_count)
+                    survey.setValue('cannabis_count', can_count)
+                    survey.setValue('illeDrugs_count', ill_count)
+                    survey.setValue('presDrugs_count', pre_count)
+                    survey.setValue('caffeine_count', caf_count)
+                    survey.setValue('other_count', oth_count)
+                    postAutoSaveSurveyData(result.data, expInfo.session, expInfo.participant);
+                });
+
                 survey.onComplete.add(function (result) {
                     window.removeEventListener('beforeunload', refreshBlock);
                     //result.preventDefault();
@@ -3919,8 +3962,6 @@
                             })
                         }
                     }
-                    console.log(alc_count)
-                    console.log(tob_count)
                     survey.setValue('assessed_dates', dates)
                     survey.setValue('alcohol_count', alc_count)
                     survey.setValue('tobacco_count', tob_count)
@@ -3955,6 +3996,25 @@
                         console.log('sucess saved on backend')
                         console.log('/link?id=' + expInfo.id  + '&index=' + (parseInt(getQueryVariable('index')) + 1))
                         window.location.replace('/link?id=' + expInfo.id  + '&index=' + (parseInt(getQueryVariable('index')) + 1))
+                    }
+                }
+            }) 
+                
+        }
+
+        function postAutoSaveSurveyData(data, session, mkturkid) {
+            console.log('autosave')
+            $.ajax({
+                type: "POST",
+                url: '/save',
+                data: {
+                    "trials_data": data,
+                    "expInfo": expInfo
+                },
+                dataType: 'JSON',
+                statusCode: {
+                    200: function() {
+                        console.log('sucess saved on backend')
                     }
                 }
             }) 
