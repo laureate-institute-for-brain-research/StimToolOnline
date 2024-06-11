@@ -180,7 +180,7 @@
         // Survey.defaultBootstrapCss.navigationButton = "btn";
         var json = {
              "title": "Speed Test",
-             "description": "Warning: We require a stable connection speed of >20 Mbps. Technical issues are likely to occur at connection speeds less than our requirement. Please maintain a stable connection throughout this session.",
+             "description": "Warning: We require a stable connection speed of >50 Mbps. Technical issues are likely to occur at connection speeds less than our requirement. Please maintain a stable connection throughout this session.",
              "logoPosition": "right",
              "pages": [
               {
@@ -231,7 +231,7 @@
                 var speedMbps = (speedKbps / 1024).toFixed(2);
                 // speedMbps = 19
                 console.log(speedMbps)
-                if (speedMbps >= 20){
+                if (speedMbps >= 50){
                     ShowProgressMessage([
                         "Your connection speed is:", 
                         speedMbps + " Mbps"
@@ -279,7 +279,7 @@
                         ""
                     ]);
                     ShowProgress2Message([
-                        "This is below our requirement of >20 Mbps.",
+                        "This is below our requirement of >50 Mbps.",
                         "It is likely that technical issues will be encountered while participating with your current connection.",
                         "Please attempt to participate in a location with a more stable connection.",
                         "If that is not feasible, then please return the study."
