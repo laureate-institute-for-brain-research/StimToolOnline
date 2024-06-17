@@ -63,6 +63,8 @@
         "/?index=59&survey=tlfb_events_mood&session=1&days=3",
         "/?index=60&survey=tlfb_ampa&session=1&days=3",
         "/?index=61&survey=bdi&session=1",
+        "/?index=62&survey=audit&session=1",
+        "/?index=63&survey=dudit&session=1",
         "/completeMobile?"
     ],
     "fullscreen": true,

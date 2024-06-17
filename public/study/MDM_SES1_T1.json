@@ -6,6 +6,8 @@
         "/?index=2&survey=wurs&session=1",
         "/?index=3&survey=mdq&session=1",
         "/?index=4&survey=stai_trait&session=1",
+        "/?index=5&survey=audit&session=1",
+        "/?index=6&survey=dudit&session=1",
         "/completeMobile?"
     ],
     "fullscreen": true,
