@@ -173,7 +173,8 @@ $('#study-list').change(function () {
         'WB_Cooperation_Task': 2,
       'Gorilla_Runner': 1,
       'TTS_Surveys': 1,
-      'MDM_PHYSIO_RL':1,
+      'MDM_PHYSIO_RL_R1': 1,
+      'MDM_PHYSIO_RL_R2':1,
     }
 
     // verify that the list of session list is the number of sessions
