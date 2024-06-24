@@ -710,7 +710,7 @@ function experimentInit() {
 	thanksText = new visual.TextStim({
 		win: psychoJS.window,
 		name: 'thanksText',
-		text: 'This is the end of the task run.\n\nThanks!',
+		text: 'This is the end of the task run. Please wait for the upcoming survey and for all task data to be saved. Thank you!',
 		font: 'Arial',
 		units: 'height',
 		pos: [0, 0], height: 0.05, wrapWidth: undefined, ori: 0,
@@ -1852,6 +1852,7 @@ var key_map = {
 }
 
 function sendData() {
+  total_requests += 1
 	$.ajax({
         type: "POST",
         url: '/save',
@@ -1863,7 +1864,17 @@ function sendData() {
 		success:function(data) {
 			console.log(data)
 		  }
-    })
+  })
+  .done(function (data) {
+		total_requests -= 1
+		console.log("success:")
+		console.log(Date.now())
+		console.log(data)
+	})
+		.fail(function (err) {
+		console.log("ERR:")
+		console.log(err)	
+	})
 }
 
 
@@ -1964,6 +1975,11 @@ function thanksRoutineEachFrame(trials) {
 				break;
 			}
 
+      if (total_requests > 0)
+      {
+          continueRoutine = true
+      }
+    
 		// refresh the screen if continuing
 		if (continueRoutine) {
 			return Scheduler.Event.FLIP_REPEAT;
