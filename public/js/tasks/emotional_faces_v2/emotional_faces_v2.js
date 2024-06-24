@@ -399,6 +399,10 @@ if (!getQueryVariable('skip_practice')) {
 	// Single Slide
 	flowScheduler.add(readyRoutineBegin('PRACTICE'));
 	flowScheduler.add(readyRoutineEachFrame());
+  flowScheduler.add(readyRoutineEnd());
+  
+  flowScheduler.add(readyRoutineBegin('PRACTICE2'));
+	flowScheduler.add(readyRoutineEachFrame());
 	flowScheduler.add(readyRoutineEnd());
 
 	const practiceTrialsLoopScheduler = new Scheduler(psychoJS);
@@ -457,7 +461,8 @@ var resources = [
 	{ name: 'rate_faces_schedule.csv', path: '/js/tasks/emotional_faces_v2/rate_faces_schedule.csv' }, // faces lists
 	{ name: 'user.png', path: '/js/tasks/emotional_faces_v2/media/user.png' },
 	{ name: 'user_filled.png', path: '/js/tasks/emotional_faces_v2/media/user_filled.png' },
-	{ name: 'PRACTICE_ready', path: '/js/tasks/emotional_faces_v2/media/instructions/Slide16.JPG'},
+  { name: 'PRACTICE_ready', path: '/js/tasks/emotional_faces_v2/media/instructions/Slide16.JPG' },
+  { name: 'PRACTICE_remember', path: '/js/tasks/emotional_faces_v2/media/instructions/make_two_choices_instructions.jpg'},
 	{ name: 'MAIN_ready', path: '/js/tasks/emotional_faces_v2/media/instructions/Slide17.JPG' },
 	{ name: 'PRACTICE_ready_audio.mp3', path: '/js/tasks/emotional_faces_v2/media/instructions_audio/Slide15.mp3' },
 	{ name: 'MAIN_ready_audio.mp3', path: '/js/tasks/emotional_faces_v2/media/instructions_audio/Slide16.mp3'},
@@ -1426,7 +1431,18 @@ function readyRoutineBegin(block_type) {
 					value: 'PRACTICE_ready_audio.mp3'
 				});
 				track.setVolume(1.0);
-				break
+        break
+      case 'PRACTICE2':
+        readyStim = new visual.ImageStim({
+          win : psychoJS.window,
+          name : 'ready_stim', units : 'height', 
+          image : 'PRACTICE_remember', mask : undefined,
+          ori : 0, pos : [0, 0],
+          color : new util.Color([1, 1, 1]), opacity : 1,
+          flipHoriz : false, flipVert : false,
+          texRes : 128, interpolate : true, depth : 0
+        });
+        break
 			case 'MAIN':
 				readyStim = new visual.ImageStim({
 					win : psychoJS.window,
@@ -1511,7 +1527,7 @@ function readyRoutineEachFrame() {
 		// update/draw components on each frame
 		let theseKeys = resp.getKeys({ keyList: [RIGHT_KEY, 'right'], waitRelease: false });
 		if (theseKeys.length > 0) {
-			if(track) track.stop();
+      if (track) track.stop();
 			continueRoutine = false
 		}
 
@@ -1538,7 +1554,8 @@ function readyRoutineEnd(trials) {
 			if (typeof thisComponent.setAutoDraw === 'function') {
 				thisComponent.setAutoDraw(false);
 			}
-		}
+    }
+    resp.status = PsychoJS.Status.NOT_STARTED
 		return Scheduler.Event.NEXT;
 	};
 }
