@@ -16,7 +16,8 @@
 	'ISI': 9,
  }
 
- var trials_data = []
+var trials_data = []
+var total_requests = 0
 
  import { core, data, sound, util, visual } from '/psychojs/psychojs-2021.2.3.js';
  const { PsychoJS } = core;
