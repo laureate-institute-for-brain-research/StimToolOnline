@@ -1861,7 +1861,7 @@ function sendData() {
 			"trials_data": trials_data,
 			"expInfo": expInfo
 		},
-		dataType: 'JSON',
+		// dataType: 'JSON',
 		success:function(data) {
 			console.log(data)
 		  }
