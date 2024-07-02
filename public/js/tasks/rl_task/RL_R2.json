@@ -1,0 +1,11 @@
+{
+    "schedule": "/js/tasks/rl_task/rl_schedule_learn_cb.csv",
+    "schedule_test": "/js/tasks/rl_task/rl_schedule_test_cb.csv",
+    "schedule_exp": "/js/tasks/rl_task/rl_schedule_explicit_cb.csv",
+    "instruct_schedule_p": "/js/tasks/rl_task/media/Pilot_PR2_instructions.csv",
+    "instruct_schedule_1": "/js/tasks/rl_task/media/Pilot_P1_instructions.csv",
+    "instruct_schedule_2": "/js/tasks/rl_task/media/Pilot_P2_instructions.csv",
+    "instruct_schedule_3": "/js/tasks/rl_task/media/Pilot_P3_instructions.csv",
+    "practice_schedule": "/js/tasks/rl_task/practice_schedule_none.csv",
+    "config": "/js/tasks/rl_task/rl_config2_local.csv"
+}

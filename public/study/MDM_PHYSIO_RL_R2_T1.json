@@ -1,7 +1,7 @@
 {
     "name": "MDM_PHYSIO_RL T1",
     "order": [
-        "/?index=0&task=rl_task&run=Pilot_RL_R2.json",
+        "/?index=0&task=rl_task&run=RL_R2.json",
         "/completed?"
     ],
     "fullscreen": true,

@@ -3715,20 +3715,38 @@ function thanksRoutineBegin(phase_flag) {
 
 		// 1000 points =  $1
 		console.log(Math.ceil((total_score/1000)*10)/10)
-		if (phase_flag == 1) {
-			thanksText.setText(`You finished the first phase of the cognitive experiment.
+    if (phase_flag == 1) {
+      if (config_values.money == 'true') {
+        thanksText.setText(`You finished the first phase of the cognitive experiment.
 									 So far, you have earned ${total_score} points = $${Math.ceil((total_score / 1000) * 10) / 10}
 									 \n\n\nPress the right button to continue`)
+      } else {
+        thanksText.setText(`You finished the first phase of the cognitive experiment.
+          So far, you have earned ${total_score} points.
+          \n\n\nPress the right button to continue`)
+      }
 		}
-		else if (phase_flag == 2) {
-			thanksText.setText(`You finished the second phase of the cognitive experiment.
+    else if (phase_flag == 2) {
+      if (config_values.money == 'true') {
+        thanksText.setText(`You finished the second phase of the cognitive experiment.
 									 So far, you have earned ${total_score} points = $${Math.ceil((total_score / 1000) * 10) / 10}
 									 \n\n\nPress the right button to continue`)
+      } else {
+        thanksText.setText(`You finished the second phase of the cognitive experiment.
+          So far, you have earned ${total_score} points.
+          \n\n\nPress the right button to continue`)
+      }
 		}
-		else {
-			thanksText.setText(`You finished the third and final phase of the cognitive experiment.
+    else {
+      if (config_values.money == 'true') {
+        thanksText.setText(`You finished the third and final phase of the cognitive experiment.
 									 You have earned ${total_score} points = $${Math.ceil((total_score / 1000) * 10) / 10}
 									 \n\n\nPress the right button to continue`)
+      } else {
+        thanksText.setText(`You finished the third and final phase of the cognitive experiment.
+          You have earned ${total_score} points.
+          \n\n\nPress the right button to continue`)
+      }
 		}
 
 		// update component parameters for each repeat
