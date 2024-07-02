@@ -2571,11 +2571,13 @@ function trialRoutineBeginTesting(trials) {
 		to_undraw = []
 
 		let mean_dict = {
-			"L1": L_mean, "M1": M_mean, "H1": H_mean, "L2": L_mean, "M2": M_mean, "H2": H_mean,
+      "L1": L_mean, "M1": M_mean, "H1": H_mean, "L2": L_mean, "M2": M_mean, "H2": H_mean,
+      "L3": L_mean, "M3": M_mean, "H3": H_mean, "L4": L_mean, "M4": M_mean, "H4": H_mean,
 			"L5": L_mean, "M5": M_mean, "H5": H_mean, "L6": L_mean, "M6": M_mean, "H6": H_mean
 		}
 		let variance_dict = {
-			"L1": L_variance, "M1": M_variance, "H1": H_variance, "L2": L_variance, "M2": M_variance, "H2": H_variance,
+      "L1": L_variance, "M1": M_variance, "H1": H_variance, "L2": L_variance, "M2": M_variance, "H2": H_variance,
+      "L3": L_variance, "M3": M_variance, "H3": H_variance, "L4": L_variance, "M4": M_variance, "H4": H_variance,
 			"L5": L_variance, "M5": M_variance, "H5": H_variance, "L6": L_variance, "M6": M_variance, "H6": H_variance
 		}
 
@@ -2591,19 +2593,19 @@ function trialRoutineBeginTesting(trials) {
 		}
 
 		if (pos_score_array[0] != "") {
-			if (pos_score_array[0][0].includes("L1") || pos_score_array[0][0].includes("L5")) {
+			if (pos_score_array[0][0].includes("L1") || pos_score_array[0][0].includes("L5") || pos_score_array[0][0].includes("L3")) {
 				low_pos = [window_ratio * -0.15, 0]
 				low_score_txt = pos_score_array[0][1]
-			} else if (pos_score_array[0][0].includes("L2") || pos_score_array[0][0].includes("L6")) {
+			} else if (pos_score_array[0][0].includes("L2") || pos_score_array[0][0].includes("L6") || pos_score_array[0][0].includes("L4")) {
 				low_pos2 = [window_ratio * -0.15, 0]
 				low_score_txt2 = pos_score_array[0][1]
-			} else if (pos_score_array[0][0].includes("M1") || pos_score_array[0][0].includes("M5")) {
+			} else if (pos_score_array[0][0].includes("M1") || pos_score_array[0][0].includes("M5") || pos_score_array[0][0].includes("M3")) {
 				mid_pos = [window_ratio * -0.15, 0]
 				mid_score_txt = pos_score_array[0][1]
-			} else if (pos_score_array[0][0].includes("M2") || pos_score_array[0][0].includes("M6")) {
+			} else if (pos_score_array[0][0].includes("M2") || pos_score_array[0][0].includes("M6") || pos_score_array[0][0].includes("M4")) {
 				mid_pos2 = [window_ratio * -0.15, 0]
 				mid_score_txt2 = pos_score_array[0][1]
-			} else if (pos_score_array[0][0].includes("H1") || pos_score_array[0][0].includes("H5")) {
+			} else if (pos_score_array[0][0].includes("H1") || pos_score_array[0][0].includes("H5") || pos_score_array[0][0].includes("H3")) {
 				hi_pos = [window_ratio * -0.15, 0]
 				high_score_txt = pos_score_array[0][1]
 			} else {
@@ -2614,19 +2616,19 @@ function trialRoutineBeginTesting(trials) {
 		}
 
 		if (pos_score_array[1] != "") {
-			if (pos_score_array[1][0].includes("L1") || pos_score_array[0][0].includes("L5")) {
+			if (pos_score_array[1][0].includes("L1") || pos_score_array[0][0].includes("L5") || pos_score_array[0][0].includes("L3")) {
 				low_pos = [window_ratio * 0, 0]
 				low_score_txt = pos_score_array[1][1]
-			} else if (pos_score_array[1][0].includes("L2") || pos_score_array[0][0].includes("L6")) {
+			} else if (pos_score_array[1][0].includes("L2") || pos_score_array[0][0].includes("L6") || pos_score_array[0][0].includes("L4")) {
 				low_pos2 = [window_ratio * 0, 0]
 				low_score_txt2 = pos_score_array[1][1]
-			} else if (pos_score_array[1][0].includes("M1") || pos_score_array[0][0].includes("M5")) {
+			} else if (pos_score_array[1][0].includes("M1") || pos_score_array[0][0].includes("M5") || pos_score_array[0][0].includes("M3")) {
 				mid_pos = [window_ratio * 0, 0]
 				mid_score_txt = pos_score_array[1][1]
-			} else if (pos_score_array[1][0].includes("M2") || pos_score_array[0][0].includes("M6")) {
+			} else if (pos_score_array[1][0].includes("M2") || pos_score_array[0][0].includes("M6") || pos_score_array[0][0].includes("M4")) {
 				mid_pos2 = [window_ratio * 0, 0]
 				mid_score_txt2 = pos_score_array[1][1]
-			} else if (pos_score_array[1][0].includes("H1") || pos_score_array[0][0].includes("H5")) {
+			} else if (pos_score_array[1][0].includes("H1") || pos_score_array[0][0].includes("H5") || pos_score_array[0][0].includes("H3")) {
 				hi_pos = [window_ratio * 0, 0]
 				high_score_txt = pos_score_array[1][1]
 			} else {
@@ -2637,19 +2639,19 @@ function trialRoutineBeginTesting(trials) {
 		}
 
 		if (pos_score_array[2] != "") {
-			if (pos_score_array[2][0].includes("L1") || pos_score_array[2][0].includes("L5")) {
+			if (pos_score_array[2][0].includes("L1") || pos_score_array[2][0].includes("L5") || pos_score_array[2][0].includes("L3")) {
 				low_pos = [window_ratio * 0.15, 0]
 				low_score_txt = pos_score_array[2][1]
-			} else if (pos_score_array[2][0].includes("L2") || pos_score_array[2][0].includes("L6")) {
+			} else if (pos_score_array[2][0].includes("L2") || pos_score_array[2][0].includes("L6") || pos_score_array[2][0].includes("L4")) {
 				low_pos2 = [window_ratio * 0.15, 0]
 				low_score_txt2 = pos_score_array[2][1]
-			} else if (pos_score_array[2][0].includes("M1") || pos_score_array[2][0].includes("M5")) {
+			} else if (pos_score_array[2][0].includes("M1") || pos_score_array[2][0].includes("M5") || pos_score_array[2][0].includes("M3")) {
 				mid_pos = [window_ratio * 0.15, 0]
 				mid_score_txt = pos_score_array[2][1]
-			} else if (pos_score_array[2][0].includes("M2") || pos_score_array[2][0].includes("M6")) {
+			} else if (pos_score_array[2][0].includes("M2") || pos_score_array[2][0].includes("M6") || pos_score_array[2][0].includes("M4")) {
 				mid_pos2 = [window_ratio * 0.15, 0]
 				mid_score_txt2 = pos_score_array[2][1]
-			} else if (pos_score_array[2][0].includes("H1") || pos_score_array[2][0].includes("H5")) {
+			} else if (pos_score_array[2][0].includes("H1") || pos_score_array[2][0].includes("H5") || pos_score_array[2][0].includes("H3")) {
 				hi_pos = [window_ratio * 0.15, 0]
 				high_score_txt = pos_score_array[2][1]
 			} else {
@@ -2909,6 +2911,88 @@ function trialRoutineBeginTesting(trials) {
 				});
 				high6.setAutoDraw(true)
 				to_undraw.push(high6)
+			}
+    }
+    if (options.includes('3')) {
+			if (options.includes("L3")) {
+				low3 = new visual.ImageStim({
+					win: psychoJS.window,
+					name: 'stimPath', units: 'height',
+					image: 'L3_img', mask: undefined,
+					ori: 0, pos: low_pos, opacity: 1,
+					size: [0.3,0.3],
+					flipHoriz: false, flipVert: false,
+					texRes: 128, interpolate: true, depth: 0
+				});
+				low3.setAutoDraw(true)
+				to_undraw.push(low3)
+			}
+			if (options.includes("M3")) {
+				mid3 = new visual.ImageStim({
+					win: psychoJS.window,
+					name: 'stimPath', units: 'height',
+					image: 'M3_img', mask: undefined,
+					ori: 0, pos: mid_pos, opacity: 1,
+					size: [0.3,0.3],
+					flipHoriz: false, flipVert: false,
+					texRes: 128, interpolate: true, depth: 0
+				});
+				mid3.setAutoDraw(true)
+				to_undraw.push(mid3)
+			}
+			if (options.includes("H3")) {
+				high3 = new visual.ImageStim({
+					win: psychoJS.window,
+					name: 'stimPath', units: 'height',
+					image: 'H3_img', mask: undefined,
+					ori: 0, pos: hi_pos, opacity: 1,
+					size: [0.3,0.3],
+					flipHoriz: false, flipVert: false,
+					texRes: 128, interpolate: true, depth: 0
+				});
+				high3.setAutoDraw(true)
+				to_undraw.push(high3)
+			}
+    }
+    if (options.includes('4')) {
+			if (options.includes("L4")) {
+				low4 = new visual.ImageStim({
+					win: psychoJS.window,
+					name: 'stimPath', units: 'height',
+					image: 'L4_img', mask: undefined,
+					ori: 0, pos: low_pos2, opacity: 1,
+					size: [0.3,0.3],
+					flipHoriz: false, flipVert: false,
+					texRes: 128, interpolate: true, depth: 0
+				});
+				low4.setAutoDraw(true)
+				to_undraw.push(low4)
+			}
+			if (options.includes("M4")) {
+				mid4 = new visual.ImageStim({
+					win: psychoJS.window,
+					name: 'stimPath', units: 'height',
+					image: 'M4_img', mask: undefined,
+					ori: 0, pos: mid_pos2, opacity: 1,
+					size: [0.3,0.3],
+					flipHoriz: false, flipVert: false,
+					texRes: 128, interpolate: true, depth: 0
+				});
+				mid4.setAutoDraw(true)
+				to_undraw.push(mid4)
+			}
+			if (options.includes("H4")) {
+				high4 = new visual.ImageStim({
+					win: psychoJS.window,
+					name: 'stimPath', units: 'height',
+					image: 'H4_img', mask: undefined,
+					ori: 0, pos: hi_pos2, opacity: 1,
+					size: [0.3,0.3],
+					flipHoriz: false, flipVert: false,
+					texRes: 128, interpolate: true, depth: 0
+				});
+				high4.setAutoDraw(true)
+				to_undraw.push(high4)
 			}
 		}
 		let pos_to_mark = []
@@ -3191,6 +3275,88 @@ function trialRoutineBeginExplicit(trials) {
 				});
 				high6.setAutoDraw(true)
 				to_undraw.push(high6)
+			}
+    }
+    if (options.includes('3')) {
+			if (options.includes("L")) {
+				low3 = new visual.ImageStim({
+					win: psychoJS.window,
+					name: 'stimPath', units: 'height',
+					image: 'L3_img', mask: undefined,
+					ori: 0, pos: [0,0], opacity: 1,
+					size: [0.3,0.3],
+					flipHoriz: false, flipVert: false,
+					texRes: 128, interpolate: true, depth: 0
+				});
+				low3.setAutoDraw(true)
+				to_undraw.push(low3)
+			}
+			if (options.includes("M")) {
+				mid3 = new visual.ImageStim({
+					win: psychoJS.window,
+					name: 'stimPath', units: 'height',
+					image: 'M3_img', mask: undefined,
+					ori: 0, pos: [0,0], opacity: 1,
+					size: [0.3,0.3],
+					flipHoriz: false, flipVert: false,
+					texRes: 128, interpolate: true, depth: 0
+				});
+				mid3.setAutoDraw(true)
+				to_undraw.push(mid3)
+			}
+			if (options.includes("H")) {
+				high3 = new visual.ImageStim({
+					win: psychoJS.window,
+					name: 'stimPath', units: 'height',
+					image: 'H3_img', mask: undefined,
+					ori: 0, pos: [0,0], opacity: 1,
+					size: [0.3,0.3],
+					flipHoriz: false, flipVert: false,
+					texRes: 128, interpolate: true, depth: 0
+				});
+				high3.setAutoDraw(true)
+				to_undraw.push(high3)
+			}
+		}
+		if (options.includes('4')) {
+			if (options.includes("L")) {
+				low4 = new visual.ImageStim({
+					win: psychoJS.window,
+					name: 'stimPath', units: 'height',
+					image: 'L4_img', mask: undefined,
+					ori: 0, pos: [0,0], opacity: 1,
+					size: [0.3,0.3],
+					flipHoriz: false, flipVert: false,
+					texRes: 128, interpolate: true, depth: 0
+				});
+				low4.setAutoDraw(true)
+				to_undraw.push(low4)
+			}
+			if (options.includes("M")) {
+				mid4 = new visual.ImageStim({
+					win: psychoJS.window,
+					name: 'stimPath', units: 'height',
+					image: 'M4_img', mask: undefined,
+					ori: 0, pos: [0,0], opacity: 1,
+					size: [0.3,0.3],
+					flipHoriz: false, flipVert: false,
+					texRes: 128, interpolate: true, depth: 0
+				});
+				mid4.setAutoDraw(true)
+				to_undraw.push(mid4)
+			}
+			if (options.includes("H")) {
+				high4 = new visual.ImageStim({
+					win: psychoJS.window,
+					name: 'stimPath', units: 'height',
+					image: 'H4_img', mask: undefined,
+					ori: 0, pos: [0,0], opacity: 1,
+					size: [0.3,0.3],
+					flipHoriz: false, flipVert: false,
+					texRes: 128, interpolate: true, depth: 0
+				});
+				high4.setAutoDraw(true)
+				to_undraw.push(high4)
 			}
 		}
 

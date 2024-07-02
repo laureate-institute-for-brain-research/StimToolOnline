@@ -6,7 +6,7 @@
         "/?index=2&survey=panasx&session=1",
         "/?index=3&survey=tlfb_events_mood&session=1&days=10",
         "/?index=4&survey=valence_arousal&session=1",
-        "/?index=5&task=rl_task&run=Pilot_RL_R1.json",
+        "/?index=5&task=rl_task&run=Pilot_RL_R3.json",
         "/completeMobile?"
     ],
     "fullscreen": true,
