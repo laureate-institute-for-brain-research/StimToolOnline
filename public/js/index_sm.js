@@ -217,15 +217,35 @@ document.getElementById("about").addEventListener("click", function(event){
 });
 
 // Submit Logic
+document.getElementById('begin').addEventListener('mouseover', (event) => {
+  if (document.getElementById('id_input').value === 'taskuser') {
+    $('#begin').attr('data-original-title', 'PLEASE USE YOUR PROLIFIC ID')
+    document.getElementById('id_input').style.color = 'red'
+  } else {
+    $('#begin').attr('data-original-title', 'Click to begin session')
+    document.getElementById('id_input').style.color = 'black'
+  }
+})
 
 document.getElementById('begin').addEventListener('click', (event) => {
-    event.preventDefault();
+  event.preventDefault();
 
-    console.log(document.getElementById('id_input'))
+  console.log(document.getElementById('id_input'))
   console.log(document.getElementById('id_input').length)
   console.log(document.getElementById('id_input').value.length)
   console.log(document.getElementById('session-list').value)
-    if (!disable_begin && document.getElementById('id_input').value.length !== 0 && document.getElementById('session-list').value !== 'Choose Session') {
+
+  // if (document.getElementById('id_input').value === 'taskuser') {
+  //   $('#begin').attr('data-original-title', 'PLEASE USE YOUR PROLIFIC ID')
+  //   document.getElementById('id_input').style.color = 'red'
+  // } else {
+  //   $('#begin').attr('data-original-title', 'Click to begin session')
+  //   document.getElementById('id_input').style.color = 'black'
+  // }
+
+  if (!disable_begin && document.getElementById('id_input').value.length !== 0 &&
+    document.getElementById('session-list').value !== 'Choose Session' &&
+    document.getElementById('id_input').value !== 'taskuser') {
         var values = {};
         $.each($('#adduser').serializeArray(), function (i, field) {
             values[field.name] = field.value;

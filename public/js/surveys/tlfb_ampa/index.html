@@ -2760,27 +2760,15 @@
                     "choices": [
                      {
                       "value": "opioids",
-                      "text": "Opioids (Includes: Codeine, Tramadol (ConZip), Fentanyl (Duragesic, Fentora, Actiq), Oxymorphone (Opana), Morphine (Avinza, Duramorph), Hydrocodone (Vicodin, Lortab), Hydrocodone Extended Release (Hysingla ER, Zohydro ER), Oxycodone (Percocet, OxyContin), Hydromorphone (Dilaudid))"
+                      "text": "Opioids / Painkillers (Includes: Codeine, Tramadol (ConZip), Fentanyl (Duragesic, Fentora, Actiq), Oxymorphone (Opana), Morphine (Avinza, Duramorph), Hydrocodone (Vicodin, Lortab), Hydrocodone Extended Release (Hysingla ER, Zohydro ER), Oxycodone (Percocet, OxyContin), Hydromorphone (Dilaudid))"
                      },
                      {
                       "value": "sleep",
-                      "text": "Sleep Medication (Includes: Eszopiclone (Lunesta and generic), Ramelteon (Rozerem and generic), Zaleplon (Sonata and generic), Zolpidem (Ambien, Ambien CR, Edluar, ZolpiMist, and generic))"
-                     },
-                     {
-                      "value": "relaxants",
-                      "text": "Muscle Relaxants (Includes: Methocarbamol (Robaxin), Carisoprodol (Soma), Cyclobenzaprine (Amrix, Fexmid))"
-                     },
-                     {
-                      "value": "nsaid",
-                      "text": "Non-Steroidal Anti-Inflammatory Drugs (NSAIDs) (Includes: Celecoxib (Celebrex), Diclofenac (Voltaren))"
-                     },
-                     {
-                      "value": "nerve",
-                      "text": "Nerve Pain Medication (Includes: Cyclobenzaprine (Flexeril, Amrix, Fexmid), Gabapentin (Neurontin, Gralise, Horizant), Duloxetine (Cymbalta, Irenka), Pregabalin (Lyrica), Milnacipran (Savella))"
+                      "text": "Sleep Medication / Sedatives / Tranquilizers (Includes: Eszopiclone (Lunesta and generic), Ramelteon (Rozerem and generic), Zaleplon (Sonata and generic), Zolpidem (Ambien, Ambien CR, Edluar, ZolpiMist, and generic))"
                      },
                      {
                       "value": "adhd",
-                      "text": "ADHD Medication (Includes: Adderall, Ritalin, etc.)"
+                      "text": "ADHD Medication / Stimulants (Includes: Adderall, Ritalin, Concerta, Provigil, Cylert, etc.)"
                      },
                      {
                       "value": "other",
@@ -3701,6 +3689,10 @@
                         "text": "Ecstasy"
                        },
                        {
+                        "value": "inhalants",
+                        "text": "Inhalants or Solvents"
+                       },
+                       {
                         "value": "other",
                         "text": "Other"
                        }
@@ -3790,6 +3782,21 @@
                         "name": "dates",
                         "elements": [
                         {
+                         "type": "html",
+                         "name": "block1",
+                         "html": `For this exercise, you will be asked about your use of various substances (e.g., alcohol, cannabis, recreational drugs, etc.) over the past ${assessmentDays} days. For this interview, we will be collecting information for the past ${assessmentDays} days. You will be asked about medical and recreational use of cannabis, as well as any substances you take recreationally. You will be entering responses into a calendar that is programmed to show you the last ${assessmentDays} days.`
+                        },
+                        {
+                         "type": "html",
+                         "name": "block2",
+                         "html": `The page we are on now is to help you remember what you did on a certain day. To complete this page, it can be helpful to also use personal items such as text messages or your personal calendar to help you remember. You can mark any memorable events that occurred (e.g. birthdays, holidays, parties, concert, camping trip). This event will now show up on the next page.`
+                        },
+                        {
+                         "type": "html",
+                         "name": "block3",
+                         "html": `The next page will be where you enter the substances you’ve used. For each day on the calendar you will indicate all substances you used that day. Then, you will be prompted to answer more detailed questions related to each item that you selected (e.g., What type of tobacco did you use? How many cigarettes did you smoke?). If you can't remember certain days or details perfectly, it is okay. For example, if you had about 8-10 drinks last Thursday or Friday but can't be sure, just give it your best guess. What is important is that 8 or 10 drinks is very different than 1 or 20 drinks.The survey should take you about 20 minutes. Please, try to be as accurate as possible.`
+                        },
+                        {
                          "type": "text",
                          "name": "start_date",
                          "title": "Start Date",
@@ -3806,6 +3813,11 @@
                          "name": "confirm_dates",
                          "visibleIf": "{start_date} notempty and {num_days} > 0",
                          "title": "Would you like to apply the above date range?"
+                        },
+                        {
+                         "type": "html",
+                         "name": "events_page_instructions",
+                         "html": "Please use the 'Add Event' button to enter any meaningful life events that occurred within the assessment period. Continue to the next part of the survey using the next button after you have finished entering events."
                         }
                         ]
                       }]
@@ -3816,9 +3828,9 @@
 
         var json = {
             "title": "Timeline Follow-back",
-            "description": `This assessment will ask about any use of caffeine, nicotine, alcohol, or drugs during the assessment period. For this session of this study, the assessment period covers the past ${assessmentDays} days, beginning on the date of the previous TLFB.`,
+            "description": ``,
             "logoPosition": "right",
-            "pages": custom_dates_page.concat(events_page.concat(generate_pages(new Date(), assessmentDays).reverse()))
+            "pages": custom_dates_page.concat(generate_pages(new Date(), assessmentDays).reverse())
         }
 
         window.survey = new Survey.Model(json);
