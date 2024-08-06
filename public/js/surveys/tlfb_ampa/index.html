@@ -4018,9 +4018,9 @@
 
                 var json = {
                     "title": "Timeline Follow-back",
-                    "description": `This assessment will ask about any use of caffeine, nicotine, alcohol, or drugs during the assessment period. For this session of this study, the assessment period covers the past ${assessmentDays} days, beginning on the date of the previous TLFB.`,
+                    "description": `For this session of this study, the assessment period covers the past ${result.data.num_days} days.`,
                     "logoPosition": "right",
-                    "pages": custom_dates_page.concat(events_page.concat(generate_pages(date_for_func, parseInt(result.data.num_days)).reverse()))
+                    "pages": custom_dates_page.concat(generate_pages(date_for_func, parseInt(result.data.num_days)).reverse())
                 }
             
                 window.survey = new Survey.Model(json);
