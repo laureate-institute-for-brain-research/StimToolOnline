@@ -1,0 +1,9 @@
+{
+    "name": "AMPA TLFB Week 7",
+    "order": [
+        "/?index=0&survey=tlfb_ampa&session=1&days=3",
+        "/completeMobile?"
+    ],
+    "fullscreen": true,
+    "text_html": "<p>This study includes the following tasks: <ul><li>Cooperation Task - Run 1</li><li>Social Media Task - Run 1</li><li>Advice Task - Run 1</li><li>Blind Dating Task - Run 1</li><li>Emotional Faces Task - Run 1</li></ul></p>"
+} 

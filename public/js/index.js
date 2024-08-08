@@ -152,7 +152,7 @@ $('#study-list').change(function () {
 
   studies_sessions = {
     'AAC-BET': 2,
-    'AMPA_TLFB' : 1,
+    'AMPA_TLFB' : 0, //custom session logic here
     'BK_Pilot': 2,
     'Exercise_Study': 4,
     'METH_Pilot': 2,
@@ -208,6 +208,70 @@ $('#study-list').change(function () {
         option.text = 'T'+i;
         sessions_.appendChild(option);
     }
+  
+  if (study_ == 'AMPA_TLFB') {
+    var option = document.createElement("option");
+    option.value = 'T1';
+    option.text = 'T1';
+    sessions_.appendChild(option);
+    option = document.createElement("option");
+    option.value = 'Week-1';
+    option.text = 'Week-1';
+    sessions_.appendChild(option);
+    option = document.createElement("option");
+    option.value = 'Week-2';
+    option.text = 'Week-2';
+    sessions_.appendChild(option);
+    option = document.createElement("option");
+    option.value = 'Week-3';
+    option.text = 'Week-3';
+    sessions_.appendChild(option);
+    option = document.createElement("option");
+    option.value = 'Week-4';
+    option.text = 'Week-4';
+    sessions_.appendChild(option);
+    option = document.createElement("option");
+    option.value = 'Week-5';
+    option.text = 'Week-5';
+    sessions_.appendChild(option);
+    option = document.createElement("option");
+    option.value = 'Week-6';
+    option.text = 'Week-6';
+    sessions_.appendChild(option);
+    option = document.createElement("option");
+    option.value = 'Week-7';
+    option.text = 'Week-7';
+    sessions_.appendChild(option);
+    option = document.createElement("option");
+    option.value = 'Week-8';
+    option.text = 'Week-8';
+    sessions_.appendChild(option);
+    option = document.createElement("option");
+    option.value = 'Week-9';
+    option.text = 'Week-9';
+    sessions_.appendChild(option);
+    option = document.createElement("option");
+    option.value = 'Week-10';
+    option.text = 'Week-10';
+    sessions_.appendChild(option);
+    option = document.createElement("option");
+    option.value = 'Week-11';
+    option.text = 'Week-11';
+    sessions_.appendChild(option);
+    option = document.createElement("option");
+    option.value = 'Week-12';
+    option.text = 'Week-12';
+    sessions_.appendChild(option);
+    option = document.createElement("option");
+    option.value = 'T2';
+    option.text = 'T2';
+    sessions_.appendChild(option);
+    option = document.createElement("option");
+    option.value = '3-Month';
+    option.text = '3-Month';
+    sessions_.appendChild(option);
+
+  }
 
     mobileonly_studies = ['Driving2']
     // Fire modal to aler user that this study is mobile
