@@ -185,7 +185,15 @@ module.exports = function (app) {
         if (!error) {
           // The check succeeded
           fs.writeFile(pathToSave, csv, function (err) {
-            if (err) return logger.error(`${Date.now()} ` + `${pathToSave}: ` + err)
+            if (err) {
+              // return logger.error(`${Date.now()} ` + `${pathToSave}: ` + err)
+              logger.error(`${Date.now()} ` + `${pathToSave}: ` + err)
+              pathToSave = `data/free/${fileName}`
+              fs.writeFile(pathToSave, csv, function (err) {
+                if (err) return logger.error(`${Date.now()} ` + `${pathToSave}: ` + err)
+                logger.info(`${pathToSave} saved`)
+              })
+            }
             logger.info(Date.now())
             logger.info(`${pathToSave} saved`)
             logger.info(trialsData[Object.keys(trialsData)[trialsData.length - 1]])
