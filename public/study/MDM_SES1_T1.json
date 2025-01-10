@@ -2,10 +2,10 @@
     "name": "MD_MUD_SES1 T1",
     "order": [
         "/?index=0&survey=demo&session=1",
-        "/?index=1&survey=bdi&session=1",
+        "/?index=1&survey=promis_anxiety_8a&session=1",
         "/?index=2&survey=wurs&session=1",
         "/?index=3&survey=mdq&session=1",
-        "/?index=4&survey=stai_trait&session=1",
+        "/?index=4&survey=promis_depression_8b&session=1",
         "/?index=5&survey=audit&session=1",
         "/?index=6&survey=dudit&session=1",
         "/?index=7&survey=mdm_post_surveys&session=1",
