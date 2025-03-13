@@ -175,7 +175,8 @@ $('#study-list').change(function () {
     'Gorilla_Runner': 1,
     'TTS_Surveys': 1,
     'MDM_PHYSIO_RL_R1': 1,
-    'MDM_PHYSIO_RL_R2':1,
+    'MDM_PHYSIO_RL_R2': 1,
+    'DP1':1
   }
 
     // verify that the list of session list is the number of sessions
@@ -320,7 +321,7 @@ document.getElementById('begin').addEventListener('click', (event) => {
         $.each($('#adduser').serializeArray(), function (i, field) {
             values[field.name] = field.value;
         });
-        // console.log(values)
+        console.log(values)
 
         $.ajax({
             type: "POST",
