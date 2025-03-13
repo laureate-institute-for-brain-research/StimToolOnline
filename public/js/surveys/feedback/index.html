@@ -52,6 +52,11 @@
             color: black !important;
         }
 
+        .sv-list {
+            display: block !important;
+            max-height: 15rem !important;
+        }
+
         textarea{
             color: black;
         }
@@ -119,9 +124,7 @@
 
     <script type="text/javascript">
 
-        Survey
-            .StylesManager
-            .applyTheme("modern");
+        
         // Survey.Survey.cssType = "bootstrap";
         // Survey.defaultBootstrapCss.navigationButton = "btn";
         var json = {
@@ -248,6 +251,7 @@
             ]
             }
         window.survey = new Survey.Model(json);
+        survey.applyTheme(SurveyTheme.SharpDark);
 
 
         // Recor the response time or how long they spent on a page

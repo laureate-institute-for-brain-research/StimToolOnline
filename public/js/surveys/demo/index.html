@@ -52,7 +52,12 @@
             color: black !important;
         }
 
-        .sv-popup {
+        .sv-list {
+            display: block !important;
+            max-height: 15rem !important;
+        }
+
+        /* .sv-popup {
             z-index: 9999;
         }
         .sv-popup__container {
@@ -69,7 +74,7 @@
         }
         .sv-dropdown__hint-suffix {
             display: none !important;
-        }
+        } */
         .sv-dropdown__filter-string-input {
             background: black;
             color: white;
@@ -94,6 +99,8 @@
 
     <link href="https://unpkg.com/survey-knockout@1.8.41/modern.css" type="text/css" rel="stylesheet"/>
     <script src="https://unpkg.com/jquery"></script>
+    <link href="https://unpkg.com/survey-core/survey-core.min.css" type="text/css" rel="stylesheet">
+    <script type="text/javascript" src="https://unpkg.com/survey-core/themes/index.min.js"></script>
     <script type="text/javascript" src="https://unpkg.com/survey-core/survey.core.min.js"></script>
     <script type="text/javascript" src="https://unpkg.com/survey-js-ui/survey-js-ui.min.js"></script>
 
@@ -163,9 +170,7 @@
 
     <script type="text/javascript">
 
-        Survey
-            .StylesManager
-            .applyTheme("modern");
+        
         // Survey.Survey.cssType = "bootstrap";
         // Survey.defaultBootstrapCss.navigationButton = "btn";
         var json = {
@@ -998,6 +1003,7 @@
         }
         
         window.survey = new Survey.Model(json);
+        survey.applyTheme(SurveyTheme.SharpDark);
 
 
         // Recor the response time or how long they spent on a page

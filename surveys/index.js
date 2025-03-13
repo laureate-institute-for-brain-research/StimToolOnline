@@ -37,6 +37,7 @@ var json = {
 };
 
 window.survey = new Survey.Model(json);
+        survey.applyTheme(SurveyTheme.SharpDark);
 
 survey
     .onComplete
