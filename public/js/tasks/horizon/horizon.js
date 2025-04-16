@@ -4,13 +4,14 @@
  * Updated by @author Aardron Robinson <arobinson@laureateinstitute.org>
  */
 
+import { core, data, sound, util, visual } from '/psychojs/psychojs-2021.2.3.js';
+const { PsychoJS } = core;
+const { TrialHandler } = data;
+const { Scheduler } = util;
+//some handy aliases as in the psychopy scripts;
+const { abs, sin, cos, PI: pi, sqrt } = Math;
+const { round } = util;
 
-import { PsychoJS } from '/lib/core-2020.1.js';
-import * as core from '/lib/core-2020.1.js';
-import { TrialHandler } from '/lib/data-2020.1.js';
-import { Scheduler } from '/lib/util-2020.1.js';
-import * as util from '/lib/util-2020.1.js';
-import * as visual from '/lib/visual-2020.1.js';
 import { Sound } from '/lib/sound-2020.1.js';
 
 var practice = false;
@@ -801,8 +802,9 @@ function instructSlideRoutineEachFrame(trials) {
 	};
 }
 
-
+var autoDrawing_rects = false;
 function clearBandits() {
+  autoDrawing_rects = false
 	for (var i = 0; i <= 9; i++) {
 		// Init Left textStims
 		bandits['left'][i].setAutoDraw(false)
@@ -967,6 +969,7 @@ var trialComponents;
 var lastGameNumber;
 var lastTrial;
 var lastTrialPoints = 0;
+var rectColorSet = false;
 function trialRoutineBegin(trials) {
 	return function () {
 		//------Prepare to start Routine 'trial'-------
@@ -980,9 +983,10 @@ function trialRoutineBegin(trials) {
 		// If it's a new game, clear other texts
 		// console.log(lastGameNumber)
 		if (game_number != lastGameNumber) {
-			lastTrialKeyPressed = false;
-			bandits_rect['right'][trial_num].fillColor = false
-			bandits_rect['left'][trial_num].fillColor = false
+      lastTrialKeyPressed = false;
+      rectColorSet = false;
+			bandits_rect['right'][trial_num].fillColor = undefined
+			bandits_rect['left'][trial_num].fillColor = undefined
 			if (typeof dislike_room !== 'undefined') {
 				console.log('removing game type text')
 				min_text.setAutoDraw(false)
@@ -994,9 +998,10 @@ function trialRoutineBegin(trials) {
 		// Set components from last trial
 		
 
-		if (lastTrialKeyPressed) {
-			bandits_rect['right'][trial_num].fillColor = false
-			bandits_rect['left'][trial_num].fillColor = false
+    if (lastTrialKeyPressed) {
+      rectColorSet = false;
+			bandits_rect['right'][trial_num].fillColor = undefined
+			bandits_rect['left'][trial_num].fillColor = undefined
 		}
 
 		if (typeof dislike_room !== 'undefined') {
@@ -1050,7 +1055,7 @@ function trialRoutineEachFrame(trials) {
 	
 		// get current time
 		t = trialClock.getTime();
-		frameN = frameN + 1;// number of completed frames (so 0 is the first frame)
+    frameN = frameN + 1;// number of completed frames (so 0 is the first frame)
 
 
 		// update/draw components on each frame
@@ -1062,11 +1067,13 @@ function trialRoutineEachFrame(trials) {
 
 		
 			
-			
-			for (var i = 0; i < horizon_map[game_type]; i++){
-				bandits_rect['left'][i].setAutoDraw(true)
-				bandits_rect['right'][i].setAutoDraw(true)
-			}
+      if (!autoDrawing_rects) {
+        autoDrawing_rects = true
+        for (var i = 0; i < horizon_map[game_type]; i++) {
+          bandits_rect['left'][i].setAutoDraw(true)
+          bandits_rect['right'][i].setAutoDraw(true)
+        }
+      }
 
 			// Show only last Trials
 			for (var i = 0; i < trial_num; i++){
@@ -1096,21 +1103,28 @@ function trialRoutineEachFrame(trials) {
 			bandit_left_down_handle.setAutoDraw(false) 
 			bandit_right_down_handle.setAutoDraw(false)
 			
-			if (!showLastTrial) {
+      if (!showLastTrial && !rectColorSet) {
+        rectColorSet = true;
 				switch (force_pos) {
 					case 'R':
-						bandits_rect['right'][trial_num].fillColor = new util.Color(forced_fillColor)
+            bandits_rect['right'][trial_num].fillColor = new util.Color(forced_fillColor)
+            bandits_rect['right'][trial_num].refresh()
+            bandits_rect['left'][trial_num].refresh()
 						break;
 					case 'L':
-						bandits_rect['left'][trial_num].fillColor = new util.Color(forced_fillColor)
+            bandits_rect['left'][trial_num].fillColor = new util.Color(forced_fillColor)
+            bandits_rect['right'][trial_num].refresh()
+            bandits_rect['left'][trial_num].refresh()
 						break;
 					case 'X':
 						// Show both
 						bandits_rect['right'][trial_num].fillColor = new util.Color(rect_fillColor)
-						bandits_rect['left'][trial_num].fillColor = new util.Color(rect_fillColor)
-					default:
-					
-				}
+            bandits_rect['left'][trial_num].fillColor = new util.Color(rect_fillColor)
+            bandits_rect['right'][trial_num].refresh()
+            bandits_rect['left'][trial_num].refresh()
+          default:
+            
+        }
 			}
 			
 			
@@ -1215,10 +1229,10 @@ function trialRoutineEachFrame(trials) {
 
 				// If it's the last trial, hang here for a second to show points
 				if (isLastTrial(game_type, trial_num)){
-					// wait a second
+          // wait a second
 					showLastTrial = true;
-					bandits_rect['right'][trial_num].fillColor = false
-					bandits_rect['left'][trial_num].fillColor = false
+					bandits_rect['right'][trial_num].fillColor = undefined
+					bandits_rect['left'][trial_num].fillColor = undefined
 
 					
 					now = trialClock.getTime();
@@ -1251,7 +1265,7 @@ function trialRoutineEachFrame(trials) {
 		if (continueRoutine) {
 			return Scheduler.Event.FLIP_REPEAT;
 		}
-		else {
+    else {
 			return Scheduler.Event.NEXT;
 		}
 	};
@@ -1312,9 +1326,9 @@ function trialRoutineEnd(trials) {
 		if (typeof resp.keys !== 'undefined') {  // we had a response
 			psychoJS.experiment.addData('resp.rt', resp.rt);
 			routineTimer.reset();
-		}
-		bandits_rect['right'][trial_num].fillColor = false
-		bandits_rect['left'][trial_num].fillColor = false
+    }
+		bandits_rect['right'][trial_num].fillColor = undefined
+		bandits_rect['left'][trial_num].fillColor = undefined
 
 		
 
