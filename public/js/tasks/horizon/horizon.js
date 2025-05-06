@@ -6,8 +6,10 @@
 
 import { core, data, sound, util, visual } from '/psychojs/psychojs-2021.2.3.js';
 const { PsychoJS } = core;
-const { TrialHandler } = data;
-const { Scheduler } = util;
+// const { TrialHandler } = data;
+// const { Scheduler } = util;
+import { TrialHandler } from '/lib/data-2020.1.js';
+import { Scheduler } from '/lib/util-2020.1.js';
 //some handy aliases as in the psychopy scripts;
 const { abs, sin, cos, PI: pi, sqrt } = Math;
 const { round } = util;
