@@ -3600,7 +3600,7 @@ var key_map = {
 }
 
 function sendData() {
-	total_requests += 1
+  total_requests += 1
 	$.ajax({
         type: "POST",
         url: '/save',
@@ -3613,7 +3613,8 @@ function sendData() {
 		  }
 	})
 	.done(function (data) {
-		total_requests -= 1
+    // total_requests -= 1
+    total_requests = 0
 		console.log("success:")
 		console.log(Date.now())
 		console.log(data)
@@ -3819,7 +3820,8 @@ function thanksRoutineEachFrame(trials) {
 		}
 		
 		// reverts to true if we are still waiting for http requests to finish
-		if (total_requests > 0) {
+    if (total_requests > 0) {
+      console.log("total requests is greater than 0")
 			continueRoutine = true
 		}
 
