@@ -16,20 +16,20 @@ var config = require('./wave2-config.json')
 
 // Connecting to database
 // Each study/wave should have their own database
-var con = mysql.createConnection({
-	host		: config.mysql_host,
-	user		: config.mysql_user,
-	password	: config.mysql_password,
-	database	: config.mysql_database
-});
+// var con = mysql.createConnection({
+// 	host		: config.mysql_host,
+// 	user		: config.mysql_user,
+// 	password	: config.mysql_password,
+// 	database	: config.mysql_database
+// });
 
-con.connect(function(err) {
-   if (!err)
-	   console.log('wave2 db is Connected');
-   else
-	   console.log('wave2 db connection err.');
+// con.connect(function(err) {
+//    if (!err)
+// 	   console.log('wave2 db is Connected');
+//    else
+// 	   console.log('wave2 db connection err.');
 
-});
+// });
 
 module.exports = {
 

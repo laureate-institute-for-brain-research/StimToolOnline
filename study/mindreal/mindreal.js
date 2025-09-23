@@ -17,20 +17,20 @@ var config = require('./mindreal-config.json')
 
 // Connecting to database
 // Each study/wave should have their own database
-var con = mysql.createConnection({
-	host		: config.mysql_host,
-	user		: config.mysql_user,
-	password	: config.mysql_password,
-	database	: config.mysql_database
-});
+// var con = mysql.createConnection({
+// 	host		: config.mysql_host,
+// 	user		: config.mysql_user,
+// 	password	: config.mysql_password,
+// 	database	: config.mysql_database
+// });
 
-con.connect(function(err) {
-   if (!err)
-	   console.log('mindreal db is Connected');
-   else
-	   console.log('mindreal db connection err.');
+// con.connect(function(err) {
+//    if (!err)
+// 	   console.log('mindreal db is Connected');
+//    else
+// 	   console.log('mindreal db connection err.');
 
-});
+// });
 
 module.exports = {
 

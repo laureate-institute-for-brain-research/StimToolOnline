@@ -30,38 +30,38 @@ app.use(cors())
 // STUDIES//
 
 // This is the Module for wave2
-var wave2 = require('./study/wave2/wave2');
-var wave2route = wave2.routes(app)
+// var wave2 = require('./study/wave2/wave2');
+// var wave2route = wave2.routes(app)
 
-// This is the Module for wave3
-var wave3 = require('./study/wave3/wave3');
-var wave3route = wave3.routes(app)
+// // This is the Module for wave3
+// var wave3 = require('./study/wave3/wave3');
+// var wave3route = wave3.routes(app)
 
-// Module for mindReal
-var mindreal = require('./study/mindreal/mindreal');
-var mindrealroute = mindreal.routes(app)
+// // Module for mindReal
+// var mindreal = require('./study/mindreal/mindreal');
+// var mindrealroute = mindreal.routes(app)
 
 
-// Module for Cognitive Control
-var cognitive_control = require('./study/cognitive_control/cognitive_control');
-var cognitive_control_route = cognitive_control.routes(app)
+// // Module for Cognitive Control
+// var cognitive_control = require('./study/cognitive_control/cognitive_control');
+// var cognitive_control_route = cognitive_control.routes(app)
 
 var models = require('./models')
 
 // Sync Database with the models
-models.sequelize.sync({ force: false }).then(function () {
-    logger.info('Database Connected for Models')
-}).catch(function (err) {
-    logger.error(err, 'Error connecting to Database')
-})
+// models.sequelize.sync({ force: false }).then(function () {
+//     logger.info('Database Connected for Models')
+// }).catch(function (err) {
+//     logger.error(err, 'Error connecting to Database')
+// })
 
 // Connecting to database
-var con = mysql.createConnection({
-    host: process.env.MYSQL_HOST,
-    user: process.env.MYSQL_USER,
-    password: process.env.MYSQL_PASSWORD,
-    database: process.env.MYSQL_DATABASE
-});
+// var con = mysql.createConnection({
+//     host: process.env.MYSQL_HOST,
+//     user: process.env.MYSQL_USER,
+//     password: process.env.MYSQL_PASSWORD,
+//     database: process.env.MYSQL_DATABASE
+// });
 
 // Setup the configurations for CDN
 // cloudinary.config({
@@ -70,12 +70,12 @@ var con = mysql.createConnection({
 //     api_secret: config.cloudinary_api_secret
 // });
 
-con.connect(function(err) {
-    if (!err)
-        logger.info('wave1 db is Connected');
-    else
-        logger.info('wave1 db connection err.');
-});
+// con.connect(function(err) {
+//     if (!err)
+//         logger.info('wave1 db is Connected');
+//     else
+//         logger.info('wave1 db connection err.');
+// });
 
 
 // parse application/x-www-form-urlencoded
