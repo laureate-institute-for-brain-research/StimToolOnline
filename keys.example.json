@@ -1,0 +1,16 @@
+{
+  "cloudinary": {
+    "name": "",
+    "api_key": "",
+    "api_secret": ""
+  },
+  "google": {
+    "calendar_api_key": ""
+  },
+  "legacy": {
+    "mysql_user": "",
+    "mysql_password": "",
+    "mailgun_api_key": "",
+    "mailgun_domain": ""
+  }
+}

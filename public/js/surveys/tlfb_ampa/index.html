@@ -237,7 +237,6 @@
                     event.url = "";
                     return event;
                 },
-                googleCalendarApiKey: 'AIzaSyDZEkMYtJhg0M-d5ci2HQYZ754cFbqvxrs',
                 eventSources: [
                     {
                         events: [
@@ -257,7 +256,6 @@
                         ]
                     }
                 ],
-                events: {googleCalendarId: 'en.usa#holiday@group.v.calendar.google.com', display: 'list-item', groupId: 'fc-gcal-id'},
                 dateClick: function(info) {
                   window.survey.currentPage = window.survey.getPageByName(info.dateStr)
                 },
@@ -286,6 +284,14 @@
             });
 
             calendar.render();
+
+            // US holidays come from Google Calendar; the API key is served from keys.json
+            fetch('/clientKeys')
+                .then(response => response.json())
+                .then(clientKeys => {
+                    calendar.addEventSource({googleCalendarId: 'en.usa#holiday@group.v.calendar.google.com', googleCalendarApiKey: clientKeys.googleCalendarApiKey, display: 'list-item', groupId: 'fc-gcal-id'})
+                })
+                .catch(err => console.log('Could not load holiday calendar', err));
         });
 
         function eventDialog() {

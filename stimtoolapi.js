@@ -7,6 +7,7 @@ const { v4: uuidv4 } = require('uuid')
 const jsonexport = require('jsonexport')
 const pino = require('pino')
 const logger = pino({ level: process.env.LOG_LEVEL || 'info' })
+const keys = require('./keys')
 
 // const accountSid = process.env.TWILIO_ACCOUNT_SID
 // const authToken = process.env.TWILIO_AUTH_TOKEN
@@ -137,6 +138,14 @@ module.exports = function (app) {
       .catch(error => {
         res.send({})
       })
+  })
+
+  // Keys that the browser needs (e.g. FullCalendar's Google Calendar source in the TLFB surveys).
+  // Only add keys here that are safe to expose to participants.
+  app.get('/clientKeys', (req, res) => {
+    res.send({
+      googleCalendarApiKey: keys.google.calendar_api_key
+    })
   })
 
   // send dashboard info given link

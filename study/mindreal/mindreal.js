@@ -14,6 +14,7 @@ const requestIp = require('request-ip');
 
 // Configuration File for Wave 2 Study
 var config = require('./mindreal-config.json')
+var keys = require('../../keys')
 
 // Connecting to database
 // Each study/wave should have their own database
@@ -375,8 +376,8 @@ function sendEmailRemind(mkturk_id,hours_away=30, study){
 			// var remind = getRemind(mkturk_id, con);
 			var next24hrdate = getFormattedDate(getFuture24Date(currentdate,hours_away)); // will be delivery 30 hours from current datetime
 
-			var api_key = 'key-fa2d65c78c52cfabac185c98eb95721e';
-			var DOMAIN = 'paulus.touthang.info';
+			var api_key = keys.legacy.mailgun_api_key;
+			var DOMAIN = keys.legacy.mailgun_domain;
 			var mailgun = require('mailgun-js')({apiKey: api_key, domain: DOMAIN});
 
 			var session2Link = 'http://brainworkout.paulus.libr.net/?session=2&mkturk_id=' + mkturk_id + '&survey=demo'+ '&study=' + study;
@@ -419,8 +420,8 @@ function sendEmailCode(mkturk_id){
 			remind = jsondata.remind;
 			//deliverydate = jsondata.time_ready;
 
-			var api_key = 'key-fa2d65c78c52cfabac185c98eb95721e';
-			var DOMAIN = 'paulus.touthang.info';
+			var api_key = keys.legacy.mailgun_api_key;
+			var DOMAIN = keys.legacy.mailgun_domain;
 			var mailgun = require('mailgun-js')({apiKey: api_key, domain: DOMAIN});
 
 			var data = {

@@ -5,3 +5,5 @@ data/
 .env
 public/js/tasks/cooperation_task/media/outcome_media/
 public/js/tasks/cooperation_task_v1/media/outcome_media/
+keys.json
+docs/INTERNAL.md

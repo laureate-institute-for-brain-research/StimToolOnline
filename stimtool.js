@@ -65,9 +65,9 @@ var models = require('./models')
 
 // Setup the configurations for CDN
 // cloudinary.config({
-//     cloud_name: config.cloudinary_name,
-//     api_key: config.cloudinary_api_key,
-//     api_secret: config.cloudinary_api_secret
+//     cloud_name: keys.cloudinary.name,
+//     api_key: keys.cloudinary.api_key,
+//     api_secret: keys.cloudinary.api_secret
 // });
 
 // con.connect(function(err) {

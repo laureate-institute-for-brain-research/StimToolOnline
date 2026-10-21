@@ -5,6 +5,7 @@ var path = require("path");
 var Sequelize = require("sequelize");
 var env = process.env.NODE_ENV || "development";
 var config = require(path.join(__dirname, '..','cognitive_control-config'));
+var keys = require(path.join(__dirname, '..', '..', '..', 'keys'));
 
 
 //console.log(config)
@@ -16,7 +17,7 @@ var opts = {
     }
 }
 
-var sequelize = new Sequelize(config.mysql_database, config.mysql_user, config.mysql_password, opts);
+var sequelize = new Sequelize(config.mysql_database, keys.legacy.mysql_user, keys.legacy.mysql_password, opts);
 var db = {};
  
 // Creating the models in the model(__dirname) folder
