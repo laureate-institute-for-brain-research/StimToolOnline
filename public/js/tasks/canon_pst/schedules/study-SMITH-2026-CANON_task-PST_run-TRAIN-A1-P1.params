@@ -1,0 +1,9 @@
+run_id _PST-T1-_BEH
+task_name PST
+param_file _SET-RX-PARA.txt
+practice False
+select '1'
+jitter_fixation True
+instruction_schedule pst_instruct_schedule_canon_train_p1.csv
+count_based_outcome True
+count_outcome_schedule PST_count_based_outcome_schedule_visit_A_P1.csv

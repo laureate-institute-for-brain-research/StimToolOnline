@@ -1,0 +1,11 @@
+TrialTypes (Male/Female_GroupColor_Name),Stimuli,Durations (fixation delay),ExtraArgs (feedback type 1=like 2=dislike 0=neutral)
+MG_Name #1,,3 1.0,1
+MR_Name #2,,1.5 1.0,2
+MLR_Name #3,,1 1.5,2
+MLG_Name #4,,2 1.5,0
+RATING,,4 0,1
+FLG_Name #5,,2.5 1.0,1
+FLR_Name #6,,3 2.0,0
+FR_Name #7,,2 2.0,2
+FG_Name #8,,1 2.0,1
+RATING,,4 0,1

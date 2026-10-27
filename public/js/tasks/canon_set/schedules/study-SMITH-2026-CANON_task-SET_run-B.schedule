@@ -1,0 +1,152 @@
+TrialTypes (Male/Female_GroupColor_Name),Stimuli,Durations (fixation delay),ExtraArgs (feedback type 1=like 2=dislike 0=neutral)
+MR_Antoine H.,,2.5 2.0,2
+MR_Dominic K.,,1.0 1.5,2
+RATING,,0.5 0,1
+FR_Minji K.,,3.0 1.0,1
+FR_Morgan P.,,1.5 1.5,2
+MG_Hayden S.,,1.5 1.5,1
+RATING,,1.0 0,1
+MG_Preston B.,,1.0 1.0,2
+FG_Miriam H.,,2.5 1.0,1
+FG_Lacey P.,,3.0 2.0,2
+RATING,,0.5 0,1
+MLR_Shawn C.,,2.5 1.5,2
+MLR_Neil S.,,3.0 1.5,1
+FLR_Caitlin P.,,2.5 1.0,2
+RATING,,1.5 0,1
+FLR_Rachel C.,,1.0 1.5,2
+MLG_Brian B.,,1.5 2.0,1
+MLG_Declan R.,,4.0 1.0,2
+RATING,,1.0 0,1
+FLG_Laura B.,,1.0 2.0,2
+FLG_Carly H.,,1.5 1.0,2
+RATING,,0.5 0,1
+MG_Demetrius B.,,3.0 1.5,2
+MG_Dawson M.,,2.5 2.0,0
+FG_Maggie M.,,1.0 2.0,1
+RATING,,1.5 0,1
+FG_Shanice W.,,5.0 1.0,1
+MLR_Felix M.,,3.0 1.5,2
+MLR_Devonte J.,,2.5 2.0,2
+RATING,,1.5 0,1
+FLR_Serena H.,,1.0 2.0,1
+FLR_Laurel B.,,1.0 1.5,0
+MLG_Marquis W.,,2.5 1.5,0
+RATING,,0.5 0,1
+MLG_Hudson W.,,3.0 1.0,1
+FLG_Brenna A.,,1.5 1.5,1
+FLG_Janelle T.,,2.5 1.0,1
+RATING,,1.5 0,1
+MR_Calvin H.,,1.0 2.0,2
+MR_Graham J.,,1.0 1.0,2
+FR_Asha R.,,1.5 1.0,0
+RATING,,1.0 0,1
+FR_Erica L.,,4.0 1.5,1
+MG_Waylon R.,,3.0 2.0,1
+MG_Gideon J.,,1.5 2.0,1
+RATING,,1.5 0,1
+FG_Macy B.,,1.5 2.0,1
+FG_Fiona R.,,1.5 1.5,1
+MR_Nelson M.,,3.0 1.5,1
+RATING,,1.5 0,1
+MR_Lawrence H.,,1.0 1.0,2
+FR_Marina F.,,3.0 2.0,2
+RATING,,4.0 0,0
+FR_Jada W.,,5.0 1.5,1
+MLR_Porter G.,,1.5 1.0,2
+MLR_Kareem C.,,1.5 1.0,1
+RATING,,1.5 0,1
+FLR_Raven C.,,1.0 2.0,2
+FLR_Mallory J.,,1.0 2.0,1
+MLG_Tucker C.,,2.5 1.0,2
+RATING,,0.5 0,1
+MLG_Malachi J.,,3.0 1.5,1
+FLG_Miranda G.,,1.5 1.0,1
+FLG_Cora T.,,3.0 1.0,1
+RATING,,1.5 0,1
+MLR_Martin C.,,2.5 1.5,1
+MLR_Kevin H.,,1.5 1.0,2
+FLR_Lauren J.,,2.5 2.0,1
+RATING,,0.5 0,1
+FLR_Chantel L.,,3.0 2.0,0
+MLG_Gregory B.,,5.0 2.0,2
+MLG_Ravi P.,,3.0 2.0,1
+RATING,,1.0 0,1
+FLG_Holly L.,,1.5 1.5,1
+FLG_Bethany B.,,2.5 1.5,0
+RATING,,1.0 0,1
+MG_Sanjay K.,,1.5 1.5,1
+MG_Douglas M.,,1.0 1.0,1
+FG_Danielle J.,,2.5 1.0,1
+RATING,,0.5 0,1
+FG_Kara Y.,,1.0 1.0,0
+MR_Tyrone W.,,1.0 1.0,0
+MR_Bao S.,,3.0 2.0,2
+RATING,,1.5 0,1
+FR_Brooke C.,,1.5 2.0,2
+FR_Sylvia T.,,2.5 1.5,2
+MLG_Drew W.,,3.0 2.0,2
+RATING,,1.0 0,1
+MLG_Cormac S.,,4.0 1.5,1
+FLG_Daphne M.,,3.0 1.0,2
+FLG_Celia P.,,1.5 2.0,2
+RATING,,0.5 0,1
+MR_Brett S.,,1.5 1.0,2
+MR_Brody J.,,1.0 1.5,2
+FR_Kaitlyn R.,,2.0 1.5,2
+RATING,,1.5 0,1
+FR_Genevieve J.,,1.5 2.0,2
+MG_Arthur R.,,1.5 1.0,2
+RATING,,1.5 0,1
+MG_Gage G.,,3.0 2.0,1
+FG_Rina S.,,2.5 1.5,2
+FG_Julia M.,,5.0 1.5,2
+RATING,,0.5 0,1
+MLR_Akira T.,,1.0 1.0,2
+MLR_Theodore C.,,2.5 1.5,2
+FLR_Rose R.,,1.5 1.5,2
+RATING,,0.5 0,1
+FLR_Callie H.,,1.0 2.0,1
+MLG_Dustin C.,,2.5 1.0,1
+MLG_Tanner W.,,3.0 1.0,2
+RATING,,0.5 0,1
+FLG_Juliet W.,,1.5 1.5,1
+FLG_Keisha D.,,1.0 2.0,0
+MLR_Bennett R.,,2.5 1.5,2
+RATING,,1.5 0,1
+FLR_Noelle P.,,3.0 1.0,2
+FLR_Sakura L.,,1.5 1.5,2
+MLR_Patrick M.,,2.5 1.0,0
+RATING,,1.5 0,1
+MR_Eric H.,,1.5 1.0,1
+MR_Emerson B.,,1.0 2.0,2
+FR_Anneliese L.,,1.5 1.0,2
+RATING,,1.0 0,1
+FR_Beatrice W.,,3.0 1.5,0
+MG_Louis A.,,1.0 2.0,0
+MG_Harrison P.,,1.0 1.5,1
+RATING,,0.5 0,1
+FG_Allison F.,,1.5 2.0,1
+FG_Eleanor C.,,1.5 2.0,1
+MLR_Parker R.,,2.5 1.5,1
+RATING,,0.5 0,1
+MLR_Wesley M.,,1.0 1.5,1
+FLR_Kylie S.,,1.0 1.0,2
+FLR_Jocelyn S.,,3.0 2.0,1
+RATING,,1.5 0,1
+FLG_Kavya L.,,1.5 2.0,2
+MLG_Dean T.,,2.5 1.0,1
+MLG_Beckett A.,,2.5 2.0,1
+RATING,,0.5 0,1
+FLG_Bianca S.,,1.0 1.5,1
+FR_Bailey D.,,1.5 1.0,2
+MR_Maxwell P.,,3.0 2.0,1
+RATING,,0.5 0,1
+MR_Timothy P.,,3.0 1.0,1
+FR_Mabel S.,,3.0 1.0,1
+MG_Clark D.,,1.0 1.5,1
+RATING,,1.0 0,1
+FG_Sienna H.,,2.5 1.5,1
+MG_Rashad S.,,1.0 2.0,2
+FG_Camille D.,,1.0 2.0,2
+RATING,,4.0 0,0

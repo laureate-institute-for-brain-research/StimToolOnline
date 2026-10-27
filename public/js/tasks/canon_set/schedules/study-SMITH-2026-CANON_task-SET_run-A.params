@@ -1,0 +1,10 @@
+run_id _SET-R2-_BEH
+task_name SET
+param_file _SET-RX-PARA.txt
+practice False
+select '1'
+fixed_length True
+response_duration 2.0
+instruction_schedule set_instruct_schedule_canon.csv
+lock_in_rating True
+show_trial_counter True

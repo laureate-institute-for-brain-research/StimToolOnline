@@ -1,0 +1,7 @@
+run_id _PST-PR-_BEH
+task_name PST
+param_file _SET-RX-PARA.txt
+practice False
+select '1'
+instruction_schedule pst_instruct_schedule_canon_pr_right_A.csv
+run_start enter

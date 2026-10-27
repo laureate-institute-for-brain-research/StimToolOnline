@@ -1,0 +1,11 @@
+run_id _SET-PR-_BEH
+task_name SET
+param_file _SET-RX-PARA.txt
+practice False
+select '1'
+instruction_schedule set_instruct_schedule_canon_pr.csv
+run_start enter
+lock_in_rating True
+show_trial_counter True
+response_duration 2.0
+fixed_length True

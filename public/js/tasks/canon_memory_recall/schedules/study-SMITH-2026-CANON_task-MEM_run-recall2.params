@@ -1,0 +1,5 @@
+run_id _MEM-R2-_BEH
+mode display
+show_instructions True
+instruction_schedule mem_instruct_recall.csv
+run_start enter

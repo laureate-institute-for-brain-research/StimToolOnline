@@ -1,0 +1,26 @@
+{
+    "name": "CANON_A2_HAPPY_PM3 T2",
+    "order": [
+        "/?index=0&task=canon_memory_recall&run=entry&letter=A&outlist=2&valence=happy&probmap=ALT2",
+        "/?index=1&task=canon_pst&run=PRAC&letter=A&outlist=2&valence=happy&probmap=ALT2",
+        "/?index=2&task=canon_wheel&run=PRAC&letter=A&outlist=2&valence=happy&probmap=ALT2",
+        "/?index=3&task=canon_memory_recall&run=recall1&letter=A&outlist=2&valence=happy&probmap=ALT2",
+        "/?index=4&task=canon_wheel&run=1&letter=A&outlist=2&valence=happy&probmap=ALT2",
+        "/?index=5&task=canon_slider&run=PRE-PST&letter=A&outlist=2&valence=happy&probmap=ALT2",
+        "/?index=6&task=canon_pst&run=TRAIN-P1&letter=A&outlist=2&valence=happy&probmap=ALT2",
+        "/?index=7&task=canon_pst&run=TRAIN-P2&letter=A&outlist=2&valence=happy&probmap=ALT2",
+        "/?index=8&task=canon_slider&run=POST-TRAIN&letter=A&outlist=2&valence=happy&probmap=ALT2",
+        "/?index=9&task=canon_pst&run=TEST&letter=A&outlist=2&valence=happy&probmap=ALT2",
+        "/?index=10&task=canon_slider&run=POST-TEST&letter=A&outlist=2&valence=happy&probmap=ALT2",
+        "/?index=11&task=canon_break&run=BREAK&letter=A&outlist=2&valence=happy&probmap=ALT2",
+        "/?index=12&task=canon_set&run=PRAC&letter=A&outlist=2&valence=happy&probmap=ALT2",
+        "/?index=13&task=canon_memory_recall&run=recall2&letter=A&outlist=2&valence=happy&probmap=ALT2",
+        "/?index=14&task=canon_wheel&run=2&letter=A&outlist=2&valence=happy&probmap=ALT2",
+        "/?index=15&task=canon_slider&run=PRE-SET&letter=A&outlist=2&valence=happy&probmap=ALT2",
+        "/?index=16&task=canon_set&run=MAIN&letter=A&outlist=2&valence=happy&probmap=ALT2",
+        "/?index=17&task=canon_slider&run=POST-SET&letter=A&outlist=2&valence=happy&probmap=ALT2",
+        "/completed?"
+    ],
+    "fullscreen": true,
+    "text_html": "<p>CANON functional session (online). Condition: schedule letter <b>A</b>, PST outcome list <b>2</b>, memory valence <b>happy</b>, PST probability map <b>PM3</b> (ALT2).</p><p>Tasks: <ul><li>Memory entry</li><li>PST practice</li><li>Bonus Wheel practice</li><li>Memory recall 1 + Bonus Wheel 1</li><li>Ratings, PST training (2 parts), ratings, PST test, ratings</li><li>Break</li><li>SET practice</li><li>Memory recall 2 + Bonus Wheel 2</li><li>Ratings, SET, ratings</li></ul></p><p>Use the opposite schedule letter for the participant's other visit.</p>"
+}
