@@ -5,6 +5,7 @@ const path = require('path');
 
 // eslint-disable-next-line no-unused-vars
 const models = require('./models')
+const keys = require('./keys')
 const pino = require('pino')
 const logger = pino({ level: process.env.LOG_LEVEL || 'info' })
 
@@ -1743,8 +1744,8 @@ module.exports = function (app) {
         const next24hrdate = getFuture24Date(new Date(), hours_away).toUTCString() // will be delivery 30 hours from current datetime
 
         var mailgun = require('mailgun-js')
-        const api_key = 'key-fa2d65c78c52cfabac185c98eb95721e'
-        const DOMAIN = 'paulus.touthang.info'
+        const api_key = keys.legacy.mailgun_api_key
+        const DOMAIN = keys.legacy.mailgun_domain
         var mailgun = require('mailgun-js')({ apiKey: api_key, domain: DOMAIN })
 
         const session2Link = 'http://brainworkout.paulus.libr.net/?session=2&mkturk_id=' + mturkId + '&survey=demo' + '&study=' + study
@@ -1784,8 +1785,8 @@ module.exports = function (app) {
         // deliverydate = jsondata.time_ready;
 
         var mailgun = require('mailgun-js')
-        const api_key = 'key-fa2d65c78c52cfabac185c98eb95721e'
-        const DOMAIN = 'paulus.touthang.info'
+        const api_key = keys.legacy.mailgun_api_key
+        const DOMAIN = keys.legacy.mailgun_domain
         var mailgun = require('mailgun-js')({ apiKey: api_key, domain: DOMAIN })
 
         const data = {

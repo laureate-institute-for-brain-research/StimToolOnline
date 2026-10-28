@@ -19,13 +19,13 @@ var models = require("./models");
 
 
 //Sync Database with the models
-models.sequelize.sync({force: false}).then(function() {
-    console.log('Database Connected for Models');
+// models.sequelize.sync({force: false}).then(function() {
+//     console.log('Database Connected for Models');
 
     
-}).catch(function(err) {
-    console.log(err, "Error connecting to Database");
-});
+// }).catch(function(err) {
+//     console.log(err, "Error connecting to Database");
+// });
 
 
 
