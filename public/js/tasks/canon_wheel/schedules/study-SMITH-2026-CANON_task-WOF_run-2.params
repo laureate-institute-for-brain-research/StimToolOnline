@@ -1,0 +1,6 @@
+run_id _WOF-R2-_BEH
+rigged_amount_happy 5
+rigged_amount_sad -5
+show_instructions True
+instruction_schedule wof_instruct_go.csv
+run_start enter

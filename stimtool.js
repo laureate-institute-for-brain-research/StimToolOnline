@@ -134,6 +134,7 @@ app.set('views', './views')
 
 var stimToolAPiRoute = require('./stimtoolapi.js')(app)
 var authRoute = require('./routes/auth.js')(app)
+var canonRoute = require('./canonapi.js')(app) // before api.js, which ends with a catch-all route
 var apiRoute = require('./api.js')(app)
 
  /// IGNORE EVERYTHING AFTER HERE

@@ -1,0 +1,17 @@
+Question_Type,Question,Sub Text,Audio,Number of Choices,Ticks Position
+pleasent_unpleasant,How were you feeling during the task?,,None,11,Very\nNegative,,,,,Neither Negative\nor Positive,,,,,Very\nPositive
+happy,How happy or unhappy did you feel during the task?,,None,5,1,2,3,4,5
+positive,During the task: I felt positive,,None,5,Very rarely\nor never,Rarely,Sometimes,Often,Very often\nor always
+negative,During the task: I felt negative,,None,5,Very rarely\nor never,Rarely,Sometimes,Often,Very often\nor always
+good,During the task: I felt good,,None,5,Very rarely\nor never,Rarely,Sometimes,Often,Very often\nor always
+bad,During the task: I felt bad,,None,5,Very rarely\nor never,Rarely,Sometimes,Often,Very often\nor always
+pleasant,During the task: I felt pleasant,,None,5,Very rarely\nor never,Rarely,Sometimes,Often,Very often\nor always
+unpleasant,During the task: I felt unpleasant,,None,5,Very rarely\nor never,Rarely,Sometimes,Often,Very often\nor always
+happytask,During the task: I felt happy,,None,5,Very rarely\nor never,Rarely,Sometimes,Often,Very often\nor always
+sad,During the task: I felt sad,,None,5,Very rarely\nor never,Rarely,Sometimes,Often,Very often\nor always
+afraid,During the task: I felt afraid,,None,5,Very rarely\nor never,Rarely,Sometimes,Often,Very often\nor always
+joyful,During the task: I felt joyful,,None,5,Very rarely\nor never,Rarely,Sometimes,Often,Very often\nor always
+angry,During the task: I felt angry,,None,5,Very rarely\nor never,Rarely,Sometimes,Often,Very often\nor always
+contented,During the task: I felt contented,,None,5,Very rarely\nor never,Rarely,Sometimes,Often,Very often\nor always
+difficult,How difficult was the previous task?,,None,11,0 - Not at all\ndifficult,,,,,5 - Moderately\ndifficult,,,,,10 - Extremely\ndifficult
+attention,How difficult was it to maintain attention during the task?,,None,11,0 - Not at all\ndifficult,,,,,5 - Moderately\ndifficult,,,,,10 - Extremely\ndifficult

@@ -1,0 +1,3 @@
+Question_Type,Question,Sub Text,Audio,Number of Choices,Ticks Position
+pleasent_unpleasant,How are you feeling right now?,,None,11,Very\nNegative,,,,,Neither Negative\nor Positive,,,,,Very\nPositive
+happy,How happy or unhappy are you feeling right now?,,None,5,1,2,3,4,5

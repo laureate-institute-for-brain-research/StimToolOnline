@@ -1,0 +1,5 @@
+TrialTypes (Male/Female_GroupColor_Name),Stimuli,Durations (fixation),ExtraArgs (feedback 1 = )
+1_6,media\canon_images\A_2.bmp media\canon_images\B_2.bmp,0.25 0.25,0
+2_5,media\canon_images\C_2.bmp media\canon_images\D_2.bmp,0.25 0.25,0
+3_4,media\canon_images\E_2.bmp media\canon_images\F_2.bmp,0.25 0.25,1
+HAPPY,media\canon_images\E_2.bmp media\canon_images\F_2.bmp,0.25 0.25,1
