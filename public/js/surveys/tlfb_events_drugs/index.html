@@ -209,7 +209,15 @@
 
         var calendar;
         var dates;
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', async function() {
+            // Google Calendar API key is served from keys.json on the server
+            let googleCalendarApiKey = ''
+            try {
+                const keyResponse = await fetch('/api/keys/google-calendar')
+                googleCalendarApiKey = (await keyResponse.json()).googleCalendarApiKey
+            } catch (err) {
+                console.error('Could not load Google Calendar API key', err)
+            }
             let assessmentDays = getQueryVariable('days')
             if (assessmentDays == 'NULL'){
                 assessmentDays = '1'
@@ -225,7 +233,7 @@
                     event.url = "";
                     return event;
                 },
-                googleCalendarApiKey: 'AIzaSyDZEkMYtJhg0M-d5ci2HQYZ754cFbqvxrs',
+                googleCalendarApiKey: googleCalendarApiKey,
                 eventSources: [
                     {
                         events: [

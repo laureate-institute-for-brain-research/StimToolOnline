@@ -132,6 +132,17 @@ app.set('views', './views')
 
 
 
+// Google Calendar API key for the TLFB survey calendar, read from keys.json
+var googleCalendarApiKey = ''
+try {
+    googleCalendarApiKey = require('./keys.json').google.calendar_api_key
+} catch (err) {
+    logger.error(err, 'Could not load google.calendar_api_key from keys.json')
+}
+app.get('/api/keys/google-calendar', function (req, res) {
+    res.json({ googleCalendarApiKey: googleCalendarApiKey })
+})
+
 var stimToolAPiRoute = require('./stimtoolapi.js')(app)
 var authRoute = require('./routes/auth.js')(app)
 var canonRoute = require('./canonapi.js')(app) // before api.js, which ends with a catch-all route
