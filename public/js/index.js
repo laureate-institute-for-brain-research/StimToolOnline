@@ -274,6 +274,35 @@ $('#study-list').change(function () {
 
   }
 
+  if (study_ == 'LTCC_TLFB') {
+    
+    var option = document.createElement("option");
+    option.value = 'V1';
+    option.text = 'V1';
+    sessions_.appendChild(option);
+
+    option = document.createElement("option");
+    option.value = 'V2';
+    option.text = 'V2';
+    sessions_.appendChild(option);
+
+    option = document.createElement("option");
+    option.value = 'V2-Follow-Up';
+    option.text = 'V2-Follow-Up';
+    sessions_.appendChild(option);
+
+    option = document.createElement("option");
+    option.value = 'V3';
+    option.text = 'V3';
+    sessions_.appendChild(option);
+
+    option = document.createElement("option");
+    option.value = 'V3-Follow-Up';
+    option.text = 'V3-Follow-Up';
+    sessions_.appendChild(option);
+
+  }
+
     mobileonly_studies = ['Driving2']
     // Fire modal to aler user that this study is mobile
     if (mobileonly_studies.includes(document.getElementById('study-list').value)) {
