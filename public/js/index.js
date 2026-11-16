@@ -386,8 +386,7 @@ document.getElementById('skip').addEventListener('click', (event) => {
         type: "POST",
         url: '/logStuff',
         data: {
-            "csvpath": "/media/stimtool_online/HIT_CODES/custom_log.csv",
-            "content": document.getElementById('id_input').value + ":  !!! skip pressed in index !!! - " + Date.now() + "," 
+            "content": document.getElementById('id_input').value + ":  !!! skip pressed in index !!! - " + Date.now()
         },
         dataType: 'JSON',
         statusCode: {

@@ -243,8 +243,7 @@
                 type: "POST",
                 url: '/SaveHitCSV',
                 data: {
-                    "csvpath": "/media/stimtool_online/HIT_CODES/hit_codes.csv",
-                    "content": (document.getElementById('mturkcode').innerHTML + ",")
+                    "content": document.getElementById('mturkcode').innerHTML
                 },
                 dataType: 'JSON',
                 statusCode: {
@@ -270,10 +269,9 @@
                     type: "POST",
                     url: '/SaveDevInfo',
                     data: {
-                        "csvpath": "/media/stimtool_online/HIT_CODES/device_info.csv",
                         "username": values.subject,
                         "dimensions": `Width-${screen.availWidth} + Height-${screen.availHeight}`,
-                        "content": navigator.userAgent.replace(",", "") + "," 
+                        "content": navigator.userAgent
                     },
                     dataType: 'JSON',
                     statusCode: {

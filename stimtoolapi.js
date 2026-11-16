@@ -8,6 +8,7 @@ const jsonexport = require('jsonexport')
 const pino = require('pino')
 const logger = pino({ level: process.env.LOG_LEVEL || 'info' })
 const keys = require('./keys')
+const { registerHitLogRoutes } = require('./hitlog')
 
 // const accountSid = process.env.TWILIO_ACCOUNT_SID
 // const authToken = process.env.TWILIO_AUTH_TOKEN
@@ -271,38 +272,8 @@ module.exports = function (app) {
     res.status(200).send('data saved')
   })
 
-  app.post('/SaveHitCSV', (req, res) => {
-    const csvpath = req.body.csvpath
-    const content = req.body.content
-
-    fs.appendFile(csvpath, content, (err) => {
-      console.log(err)
-    })
-
-    res.status(200).send('data saved')
-  })
-
-  app.post('/logStuff', (req, res) => {
-    const csvpath = req.body.csvpath
-    const content = req.body.content
-
-    fs.appendFile(csvpath, content, (err) => {
-      console.log(err)
-    })
-
-    res.status(200).send('data saved')
-  })
-
-  app.post('/SaveDevInfo', (req, res) => {
-    const csvpath = req.body.csvpath
-    const content = `user: ${req.body.username} ::: ${req.body.dimensions} ::: ${req.body.content}`
-
-    fs.appendFile(csvpath, content, (err) => {
-      console.log(err)
-    })
-
-    res.status(200).send('dev data saved')
-  })
+  // POST /SaveHitCSV, /logStuff, /SaveDevInfo: append to fixed files in HIT_LOG_DIR
+  registerHitLogRoutes(app)
 
   // save Audio
   app.post('/saveAudio', (req, res) => {
