@@ -1,14 +1,12 @@
 /* eslint-disable n/handle-callback-err */
 // API realted function
-const fs = require('fs')
 // const url = require('url')
-const path = require('path')
 const { v4: uuidv4 } = require('uuid')
-const jsonexport = require('jsonexport')
 const pino = require('pino')
 const logger = pino({ level: process.env.LOG_LEVEL || 'info' })
 const keys = require('./keys')
 const { registerHitLogRoutes } = require('./hitlog')
+const { registerDataSaveRoutes } = require('./datasave')
 
 // const accountSid = process.env.TWILIO_ACCOUNT_SID
 // const authToken = process.env.TWILIO_AUTH_TOKEN
@@ -172,151 +170,11 @@ module.exports = function (app) {
       })
   })
 
-  // send save info given link
-  app.post('/save', (req, res) => {
-    const trialsData = req.body.trials_data
-
-    // console.log(trials_data)
-    req.body.expInfo.date = req.body.expInfo.date.split('/').join('_')
-    // Save to /data/folder based of study
-    jsonexport(trialsData, function (err, csv) {
-      if (err) return logger.error(err)
-
-      // File name is by taskname, participant id, session and date
-      const fileName = req.sanitize(req.body.expInfo.task) + '_' + req.sanitize(req.body.expInfo.participant) + '_' + req.sanitize(req.body.expInfo.session) + '_' + req.sanitize(req.body.expInfo.date) + '.csv'
-
-      // fileName = fileName.replaceAll("/", "_")
-
-      let pathToSave = `${process.env.DATA_PATH}/${req.sanitize(req.body.expInfo.study)}/${fileName}` // save results directly the cephfs local path
-
-      // logger.info(`trying to save to ${pathToSave}`);
-
-      fs.access(path.dirname(pathToSave), error => {
-        if (!error) {
-          // The check succeeded
-          fs.writeFile(pathToSave, csv, function (err) {
-            if (err) {
-              // return logger.error(`${Date.now()} ` + `${pathToSave}: ` + err)
-              logger.error(`${Date.now()} ` + `${pathToSave}: ` + err)
-              pathToSave = `data/free/${fileName}`
-              fs.writeFile(pathToSave, csv, function (err) {
-                if (err) return logger.error(`${Date.now()} ` + `${pathToSave}: ` + err)
-                logger.info(`${pathToSave} saved`)
-              })
-            }
-            logger.info(Date.now())
-            logger.info(`${pathToSave} saved`)
-            logger.info(trialsData[Object.keys(trialsData)[trialsData.length - 1]])
-          })
-        } else {
-          // The check failed
-          // meaning subject probably entered their own  study -_- or field is blank
-          // Save to local
-          pathToSave = `data/free/${fileName}`
-
-          fs.writeFile(pathToSave, csv, function (err) {
-            if (err) return logger.error(`${Date.now()} ` + `${pathToSave}: ` + err)
-            logger.info(`${pathToSave} saved`)
-          })
-        }
-      })
-    })
-    res.status(200).send('data saved')
-  })
-
-  // send save info given link
-  app.post('/savecoop', (req, res) => {
-    const trialsData = req.body.trials_data
-
-    // console.log(trials_data)
-    req.body.expInfo.date = req.body.expInfo.date.split('/').join('_')
-    // File name is by taskname, participant id, session and date
-    let fileName = req.sanitize(req.body.expInfo.task) + '_' + req.sanitize(req.body.expInfo.participant) + '_' + req.sanitize(req.body.expInfo.session) + '_' + req.sanitize(req.body.expInfo.run_id.split('.')[0]) + '_' + req.sanitize(req.body.expInfo.date) + '.csv'
-
-    // fileName = fileName.replaceAll("/", "_")
-    let pathToSave = `${process.env.DATA_PATH}/${req.sanitize(req.body.expInfo.study)}/${fileName}` // save results directly the cephfs local path
-
-    // Save to /data/folder based of study
-    jsonexport(trialsData, function (err, csv) {
-      if (err) return logger.error(`${Date.now()} ` + `${pathToSave}: ` + err)
-
-      // File name is by taskname, participant id, session and date
-      fileName = req.sanitize(req.body.expInfo.task) + '_' + req.sanitize(req.body.expInfo.participant) + '_' + req.sanitize(req.body.expInfo.session) + '_' + req.sanitize(req.body.expInfo.run_id.split('.')[0]) + '_' + req.sanitize(req.body.expInfo.date) + '.csv'
-
-      // fileName = fileName.replaceAll("/", "_")
-
-      pathToSave = `${process.env.DATA_PATH}/${req.sanitize(req.body.expInfo.study)}/${fileName}` // save results directly the cephfs local path
-
-      // logger.info(`trying to save to ${pathToSave}`);
-
-      fs.access(path.dirname(pathToSave), error => {
-        if (!error) {
-          // The check succeeded
-          fs.writeFile(pathToSave, csv, function (err) {
-            if (err) return logger.error(`${Date.now()} ` + `${pathToSave}: ` + err)
-            logger.info(`${pathToSave} saved`)
-          })
-        } else {
-          // The check failed
-          // meaning subject probably entered their own  study -_- or field is blank
-          // Save to local
-          pathToSave = `data/free/${fileName}`
-
-          fs.writeFile(pathToSave, csv, function (err) {
-            if (err) return logger.error(`${Date.now()} ` + `${pathToSave}: ` + err)
-            logger.info(`${pathToSave} saved`)
-          })
-        }
-      })
-    })
-    res.status(200).send('data saved')
-  })
+  // POST /save, /savecoop, /saveAudio: write result files under DATA_PATH/<study> or data/free
+  registerDataSaveRoutes(app)
 
   // POST /SaveHitCSV, /logStuff, /SaveDevInfo: append to fixed files in HIT_LOG_DIR
   registerHitLogRoutes(app)
-
-  // save Audio
-  app.post('/saveAudio', (req, res) => {
-    // const q = url.URL(req.url, true).query
-    logger.info('saving Audio Post requested')
-    // console.log(req.body)
-    const base64 = req.body.base64data
-
-    const data = base64.replace(/^data:audio\/\w+;base64,/, '')
-    // var buffer = new Buffer(req.body.audio, 'base64'); // decode
-
-    // const savePath = 'data/cognitive_control/audio/' + q.task + '/'
-
-    // filename = savePath + q.task + '-' + q.subject + '-' + 'B' + q.block + '-' + 'T' + q.session + '.wav'
-    let fileName = req.sanitize(req.body.expInfo.task) + '_' + req.sanitize(req.body.expInfo.participant) +
-            '_B' + req.sanitize(req.body.expInfo.block) + '_' + req.sanitize(req.body.expInfo.session) +
-            '_' + req.sanitize(req.body.expInfo.date) + '.wav'
-
-    fileName = fileName.replace_all('/', '_')
-
-    let pathToSave = `${process.env.DATA_PATH}/${req.sanitize(req.body.expInfo.study)}/${fileName}` // save results directly the cephfs local path
-    fs.access(path.dirname(pathToSave), error => {
-      if (!error) {
-        // The check succeeded
-        fs.writeFile(pathToSave, data, { encoding: 'base64' }, function (err) {
-          if (err) {
-            logger.error('err', err)
-          }
-        })
-      } else {
-        // The check failed
-        // meaning subject probably entered their own  study -_- or field is blank
-
-        pathToSave = `data/free/${fileName}`
-        fs.writeFile(pathToSave, data, { encoding: 'base64' }, function (err) {
-          if (err) {
-            logger.error('err', err)
-          }
-        })
-      }
-    })
-    res.send('audio saved')
-  })
 
   // send save info given link
   app.post('/share', (req, res) => {

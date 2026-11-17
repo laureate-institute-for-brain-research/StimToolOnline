@@ -45,7 +45,7 @@
     "minimist": "1.2.6"
   },
   "scripts": {
-    "test": "tape test/hitlog.test.js"
+    "test": "tape test/hitlog.test.js test/datasave.test.js"
   },
   "repository": {
     "type": "git",

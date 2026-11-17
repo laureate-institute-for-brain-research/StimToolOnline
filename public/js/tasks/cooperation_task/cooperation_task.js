@@ -41,6 +41,11 @@ var trials_data = []
 var main_loop_count = 0
 var last_trial_num = 0
 var total_requests = 0
+// Random per-run token sent with every save. The server updates only the file this
+// token created, so a later run (or anyone else) cannot replace it.
+var save_token = Array.from(window.crypto.getRandomValues(new Uint8Array(16)), function (b) {
+	return ('0' + b.toString(16)).slice(-2)
+}).join('')
 var g = {}				// global variables
 g.PLEASANT_COLOR = '#00ff00' //'green';
 g.UNPLEASANT_COLOR = '#ff0000' //'red';
@@ -2688,15 +2693,18 @@ function sendData() {
         url: '/savecoop',
 		data: {
 			"trials_data": trials_data,
-			"expInfo": expInfo
+			"expInfo": expInfo,
+			"save_token": save_token
 		},
 		// dataType: 'JSON',
 		success:function(data) {
 			console.log(data)
 		  }
 	})
+	.always(function () {
+		total_requests -= 1 // also on failure, or the thanks screen waits forever
+	})
 	.done(function (data) {
-		total_requests -= 1
 		console.log("success:")
 		console.log(Date.now())
 		console.log(data)

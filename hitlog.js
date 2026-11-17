@@ -14,7 +14,7 @@ const pino = require('pino')
 const logger = pino({ level: process.env.LOG_LEVEL || 'info' })
 
 const APP_ROOT = path.resolve(__dirname)
-const DEFAULT_LOG_DIR = '/media/stimtool_online/HIT_CODES'
+const DEFAULT_LOG_DIR = '/media/stimtool_online/HIT_CODES/'
 
 // Fixed set of log files. Keys are internal identifiers, never taken from the request.
 const LOG_FILES = Object.freeze({
