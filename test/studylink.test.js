@@ -146,13 +146,19 @@ test('/link redirects to the study order entry for a valid row', async (t) => {
   t.end()
 })
 
+// study '../../x' + '_' + session '/../<name>' gives 'public/study/../../x_/../<name>.json':
+// the leading '/' in session closes the 'x_' segment so the following '..' is a real dot
+// segment, and the path resolves to <app root>/<name>.json.
+const ESCAPE_STUDY = '../../x'
+const escapeSession = (name) => '/../' + name
+
 test('/link never executes a planted .json.js outside public/study (traversal row)', async (t) => {
   const flag = flagName()
   const name = `pwned-${hex()}`
-  const study = '../../x'
-  const session = '../' + name
+  const study = ESCAPE_STUDY
+  const session = escapeSession(name)
   const target = legacyPath(study, session)
-  t.notEqual(path.dirname(target), STUDY_DIR, 'legacy path escapes public/study')
+  t.equal(target, path.join(APP_ROOT, name + '.json'), 'legacy path escapes public/study to the app root')
   // require(target) finds no .json file and falls back to target + '.js'
   plant(target + '.js', `global[${JSON.stringify(flag)}] = true\nmodule.exports = { order: ['https://evil.example/pwned?'] }\n`)
 
@@ -166,9 +172,10 @@ test('/link never executes a planted .json.js outside public/study (traversal ro
 
 test('/link never reads a planted JSON file outside public/study', async (t) => {
   const name = `pwned-${hex()}`
-  const study = '../../x'
-  const session = '../' + name
+  const study = ESCAPE_STUDY
+  const session = escapeSession(name)
   const target = legacyPath(study, session)
+  t.equal(target, path.join(APP_ROOT, name + '.json'), 'legacy path escapes public/study to the app root')
   plant(target, JSON.stringify({ order: ['https://evil.example/json?'] }))
 
   const r = await getLink(server, plantRow(study, session))
@@ -194,6 +201,7 @@ test('/link never executes <study>_<session>.json.js inside public/study', async
 
 test('/link redirects home for rows with separators, dot segments or extensions', async (t) => {
   const bad = [
+    [ESCAPE_STUDY, escapeSession('package')], // resolves to <app root>/package.json, which exists
     ['..', '..'],
     ['../study', SYNTH_SESSION],
     [SYNTH_STUDY, '../' + SYNTH_STUDY + '_' + SYNTH_SESSION],
@@ -236,6 +244,7 @@ test('/link with an unknown id redirects home', async (t) => {
 // ---- /adduser and /mturklink --------------------------------------------------------------
 
 const BAD_PAIRS = [
+  ['../../x', '/../pwned'], // the working escape from the finding
   ['../../x', '../pwned'],
   ['..', '..'],
   ['a/b', SYNTH_SESSION],
