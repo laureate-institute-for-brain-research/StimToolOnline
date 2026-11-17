@@ -7,6 +7,7 @@ const logger = pino({ level: process.env.LOG_LEVEL || 'info' })
 const keys = require('./keys')
 const { registerHitLogRoutes } = require('./hitlog')
 const { registerDataSaveRoutes } = require('./datasave')
+const { studyExists, loadStudy, isLocalPath } = require('./studyfiles')
 
 // const accountSid = process.env.TWILIO_ACCOUNT_SID
 // const authToken = process.env.TWILIO_AUTH_TOKEN
@@ -33,38 +34,44 @@ module.exports = function (app) {
   /**
      * Adds user to database
      * Returns json object with message and subject info json object
+     *
+     * `study` and `session` must name an existing public/study/<study>_<session>.json
+     * (see studyfiles.js). Anything else, including values with path separators or dot
+     * segments, is rejected with 400 and no row is created.
      */
-  app.post('/adduser', (req, res) => {
-    // console.log(req.body)
+  app.post('/adduser', async (req, res) => {
+    const { study, session } = req.body
+    if (!(await studyExists(study, session))) {
+      return res.status(400).send({ message: 'invalid study or session' })
+    }
+    const subject = typeof req.body.subject === 'string' ? req.sanitize(req.body.subject) : ''
+    if (!subject) {
+      return res.status(400).send({ message: 'invalid subject' })
+    }
 
     models.dashboard.findOne({
-      where: req.body
+      where: { subject, study, session }
     })
       .then((result) => {
-        // console.log(result)
         if (result == null) {
-          req.body.link = uuidv4() // Create unique uuid for this user/stud/session
-
-          models.dashboard.create({
-            subject: req.sanitize(req.body.subject),
-            study: req.sanitize(req.body.study),
-            session: req.sanitize(req.body.session),
-            link: req.sanitize(req.body.link)
-          })
+          const link = uuidv4() // Create unique uuid for this user/stud/session
+          return models.dashboard.create({ subject, study, session, link })
             .then(() => {
               res.send({
                 message: 'ok',
-                info: req.body
+                info: { subject, study, session, link }
               })
             })
-        } else {
-          // already have same subject, study, session
-          // console.log(result)
-          res.send({
-            message: 'subject/study/session already exists in database',
-            info: result
-          })
         }
+        // already have same subject, study, session
+        res.send({
+          message: 'subject/study/session already exists in database',
+          info: result
+        })
+      })
+      .catch((error) => {
+        logger.error(error)
+        res.status(500).send({ message: 'error adding user' })
       })
   })
 
@@ -77,9 +84,13 @@ module.exports = function (app) {
       id = req.body.id
     }
 
+    if (typeof id !== 'string' || id === '') {
+      return res.redirect('/')
+    }
+
     // Change where to route them based on id
     if (id.charAt(0) === 'U') {
-      res.redirect('/js/tasks/driving/completed.html')
+      return res.redirect('/js/tasks/driving/completed.html')
     }
 
     models.dashboard.findOne({
@@ -87,32 +98,43 @@ module.exports = function (app) {
         link: id
       }
     })
-      .then(function (link) {
+      .then(async function (link) {
         if (link == null) {
-          res.redirect('/')
           logger.info('homepage redirect')
-        } else {
-          // res.send(link)
-          let index = 0
-          // If index  paramater is set, than use that, if not, default is 0
-          if (req.query.index) { index = parseInt(req.query.index) }
-          const jsonLink = './public/study/' + link.study + '_' + link.session + '.json'
-          logger.info('redirect jsonlink')
-          logger.info(`${jsonLink}`)
-          // console.log('study json: ', jsonLink)
-          const sessionFile = require(jsonLink)
-          logger.info('redirect linklink')
-          logger.info(`${link.link}`)
-          res.redirect(sessionFile.order[index] + '&id=' + link.link)
+          return res.redirect('/')
         }
-      },
-      function (err) {
-        res.redirect('/')
-      }
-      )
+
+        // The study definition is read as JSON data from public/study/ only; study and
+        // session must be plain names (see studyfiles.js). Never require() this path.
+        const sessionFile = await loadStudy(link.study, link.session)
+        const order = sessionFile && Array.isArray(sessionFile.order) ? sessionFile.order : null
+        if (order === null) {
+          logger.warn({ study: link.study, session: link.session }, '/link: no valid study definition for row')
+          return res.redirect('/')
+        }
+
+        // If index paramater is set, then use that, if not, default is 0
+        let index = 0
+        if (req.query.index) {
+          if (typeof req.query.index !== 'string' || !/^\d{1,4}$/.test(req.query.index)) {
+            return res.redirect('/')
+          }
+          index = parseInt(req.query.index, 10)
+        }
+
+        const step = index < order.length ? order[index] : undefined
+        const target = isLocalPath(step) ? step + '&id=' + encodeURIComponent(link.link) : null
+        if (target === null || !isLocalPath(target)) {
+          logger.warn({ study: link.study, session: link.session, index }, '/link: order entry is not a local path')
+          return res.redirect('/')
+        }
+        logger.info('redirect linklink')
+        logger.info(`${link.link}`)
+        res.redirect(target)
+      })
       .catch(error => {
         logger.error(error)
-        res.redirect('/')
+        if (!res.headersSent) res.redirect('/')
       })
   })
 
@@ -218,13 +240,18 @@ module.exports = function (app) {
       })
   })
 
-  app.post('/mturklink', (req, res) => {
+  app.post('/mturklink', async (req, res) => {
     logger.info('/mturklink called')
+    // Same rule as /adduser: only names of an existing study definition are stored
+    const { study, session } = req.body
+    if (!(await studyExists(study, session))) {
+      return res.status(400).send('invalid study or session')
+    }
     models.dashboard.findOne({
       where: {
         subject: req.sanitize(req.body.subject),
-        study: req.sanitize(req.body.study),
-        session: req.sanitize(req.body.session)
+        study,
+        session
       }
     })
       .then((result) => {
@@ -233,10 +260,10 @@ module.exports = function (app) {
           logger.info('creating account')
           req.body.link = uuidv4() // Create unique uuid for this user/stud/session
 
-          models.dashboard.create({
+          return models.dashboard.create({
             subject: req.sanitize(req.body.subject),
-            study: req.sanitize(req.body.study),
-            session: req.sanitize(req.body.session),
+            study,
+            session,
             email: req.sanitize(req.body.email),
             phone: req.sanitize(req.body.phone),
             link: req.sanitize(req.body.link)
@@ -264,6 +291,7 @@ module.exports = function (app) {
           // })
         }
       })
+      .catch((error) => logger.error(error))
 
     res.redirect(301, '/mturk/driving?submitform=completed')
   })
