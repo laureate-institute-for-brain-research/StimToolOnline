@@ -45,7 +45,8 @@
     "minimist": "1.2.6"
   },
   "scripts": {
-    "test": "tape test/hitlog.test.js test/datasave.test.js test/studylink.test.js"
+    "test": "tape test/hitlog.test.js test/datasave.test.js test/studylink.test.js test/unitybuildscan.test.js",
+    "scan:unity": "node unitybuildscan.js public"
   },
   "repository": {
     "type": "git",
