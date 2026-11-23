@@ -69,8 +69,38 @@ async function postJson (url, body) {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(body)
   })
-  if (!response.ok) throw new Error(url + ' failed (' + response.status + ')')
+  if (!response.ok) {
+    const err = new Error(url + ' failed (' + response.status + ')')
+    err.status = response.status
+    throw err
+  }
   return response.json()
+}
+
+// Memory key: the server issues it on the first save of this visit's memories and never sends
+// it again; reading the memories back needs it. Kept in this browser per session link.
+const memoryKeyName = (link) => 'canon_memory_key:' + link
+function loadMemoryKey (link) {
+  for (const store of ['localStorage', 'sessionStorage']) {
+    try {
+      const value = window[store].getItem(memoryKeyName(link))
+      if (value) return value
+    } catch (err) { /* storage blocked */ }
+  }
+  return undefined
+}
+function storeMemoryKey (link, key) {
+  for (const store of ['localStorage', 'sessionStorage']) {
+    try {
+      window[store].setItem(memoryKeyName(link), key)
+      return
+    } catch (err) { /* storage blocked: try the next one */ }
+  }
+}
+function forgetMemoryKey (link) {
+  for (const store of ['localStorage', 'sessionStorage']) {
+    try { window[store].removeItem(memoryKeyName(link)) } catch (err) { /* storage blocked */ }
+  }
 }
 
 new CanonPage({
@@ -85,9 +115,10 @@ new CanonPage({
     scheduleRows = parseSchedule(await fetchText(SCHEDULE(slot)))
     if (page.cfg.debugTrials) scheduleRows = scheduleRows.slice(0, page.cfg.debugTrials)
     deckUrls = parseDeck(await fetchText(TASK_DIR + 'decks/recall.csv'))
-    if (page.link) {
+    const key = page.link ? loadMemoryKey(page.link) : undefined
+    if (key) {
       try {
-        memories = (await postJson('/getCanonMemories', { id: page.link })).memories
+        memories = (await postJson('/getCanonMemories', { id: page.link, key })).memories
       } catch (err) {
         console.error(err)
       }
@@ -131,7 +162,8 @@ function buildEntry (page) {
       page.scene.clear()
       form = createEntryForm(page.cfg.valence, async (sentences) => {
         if (page.link) {
-          await postJson('/saveCanonMemories', { id: page.link, memories: sentences })
+          const result = await postJson('/saveCanonMemories', { id: page.link, memories: sentences, key: loadMemoryKey(page.link) })
+          if (result.key) storeMemoryKey(page.link, result.key)
         }
         const t = run.now()
         sentences.forEach((sentence, i) => {
@@ -232,6 +264,11 @@ function createEntryForm (valence, onSubmit) {
       message.textContent = ''
     } catch (err) {
       console.error(err)
+      if (err.status === 403) {
+        // saved earlier from another browser/computer: only staff can clear that (/resetCanonMemories)
+        message.textContent = 'Your memories for this session were already saved on another computer or browser. Please contact the study team.'
+        return
+      }
       message.textContent = 'Your memories could not be saved. Please check your internet connection and press Continue to try again.'
       inputs.forEach((input) => { input.disabled = false })
       button.disabled = false
@@ -313,7 +350,11 @@ function buildRecall (page) {
       }
       return true
     },
-    end: () => page.scene.clear()
+    end: () => {
+      page.scene.clear()
+      // recall2 is the last page that reads the memories: drop the key from this browser
+      if (slot === 'recall2' && page.link) forgetMemoryKey(page.link)
+    }
   })
   page.add(page.finishRoutine(run))
 }

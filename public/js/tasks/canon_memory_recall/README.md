@@ -10,12 +10,32 @@ grey screen between memories.
 
 | `run` URL value | run_id | What happens |
 |---|---|---|
-| `entry` | `_MEM-EN-_BEH` | Six required single-line fields. The sentences are saved on the server (`/saveCanonMemories`, keyed by subject + visit) and logged. |
+| `entry` | `_MEM-EN-_BEH` | Six required single-line fields. The sentences are saved on the server (`/saveCanonMemories`, keyed by subject + study + visit, guarded by a memory key) and logged. |
 | `recall1` | `_MEM-R1-_BEH` | Memories 1, 2, 3 (schedule `MEM_run-recall1.schedule`) |
 | `recall2` | `_MEM-R2-_BEH` | Memories 4, 5, 6 (schedule `MEM_run-recall2.schedule`) |
 
 The recall pages read the memories back with `/getCanonMemories`. If they cannot be found, the page shows an
 error and does not run (desktop aborts the same way).
+
+## Memory key (access control)
+A session link is not proof of being the participant (anyone can get a fresh link for a subject ID from the
+landing page), so the memories are protected separately:
+- They are stored per **enrolment**: subject + CANON condition study + visit
+  (`enrolments["<study>/<visit>"]` in `<subject>.json`). Only the 24 `CANON_{A|B}{1|2}_{HAPPY|SAD}_PM{1|2|3}`
+  studies and visits `T1`/`T2` get CANON state.
+- The first `/saveCanonMemories` for an enrolment returns a random **memory key**, once. The entry page
+  keeps it in the browser (`localStorage`, key `canon_memory_key:<link>`); the server stores only its SHA-256.
+  Reading the memories, or saving them again, requires the key. `recall2` removes it from the browser when it
+  finishes.
+- So the whole session must run in the **same browser**. If a participant moves to another computer after the
+  entry page, the recall pages show "could not be found" and a new entry page says the memories were already
+  saved. Staff can clear that enrolment's memories (they are not shown) and the participant re-enters them:
+
+  ```
+  curl -u "$DASHBOARD_USER" -X POST -H 'Content-Type: application/json' \
+       -d '{"id":"<session link id from /dashboard>"}' https://<server>/resetCanonMemories
+  ```
+- Memories saved before this change (old `visits.<visit>.memories` layout) are not served.
 
 # TRIAL STRUCTURE (recall)
 
@@ -59,7 +79,7 @@ Expected rows: entry `92, 1, 3x6, 99`; recall `92, 1, 2, 4, 5, 4, 5, 4, 99`.
   The entry page refuses to run without a valid valence (the prompt depends on it).
 - Memory fields are single-line, trimmed, max 250 characters; line breaks are removed (pressing Enter moves
   to the next field), so stored memories stay one per index.
-- Memories are stored per subject **and visit**, so a T2 recall can never show T1 memories (desktop keyed
-  the file by subject only).
+- Memories are stored per subject, condition study **and visit**, so a T2 recall can never show T1 memories
+  (desktop keyed the file by subject only).
 - The RA ENTER start gate is replaced by the 3 s "Task will begin soon" screen.
 - Online CSVs quote sentences that contain commas (desktop wrote them raw).

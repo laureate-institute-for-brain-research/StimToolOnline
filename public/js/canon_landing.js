@@ -74,10 +74,33 @@ function addUser (values) {
   })
 }
 
+// /adduser returns a session link only when it creates the row; this browser remembers it so the
+// session can be resumed here. Elsewhere, staff give out the link from /dashboard.
+var NO_LINK_MESSAGE = 'A session for this ID already exists. To continue it, please use your original ' +
+  'session link or contact the study team.'
+
+function linkStoreName (values) {
+  return 'stimtool_link:' + JSON.stringify([values.subject, values.study, values.session])
+}
+
+function rememberLink (values, link) {
+  try { localStorage.setItem(linkStoreName(values), link) } catch (err) { /* storage blocked */ }
+}
+
+/** The link for this subject/study/session: from /adduser if it created the row, else from this browser. */
+function sessionLink (values, result) {
+  if (result && result.info && result.info.link) {
+    rememberLink(values, result.info.link)
+    return result.info.link
+  }
+  try { return localStorage.getItem(linkStoreName(values)) || null } catch (err) { return null }
+}
+
 function showWarning (message, onProceed) {
   $('#modalCenter').modal({})
   document.getElementById('errorMessage').innerText = message
-  $('#procceed_anyways').off('click').on('click', onProceed)
+  $('#procceed_anyways').toggle(Boolean(onProceed)).off('click')
+  if (onProceed) $('#procceed_anyways').on('click', onProceed)
 }
 
 // About
@@ -101,10 +124,13 @@ document.getElementById('begin').addEventListener('click', (event) => {
   checkVisit(values)
     .then((warning) => {
       var start = () => addUser(values).then((result) => {
-        if (result.message === 'ok') {
-          window.location.replace('/link?id=' + result.info.link)
+        var link = sessionLink(values, result)
+        if (result.message === 'ok' && link) {
+          window.location.replace('/link?id=' + link)
+        } else if (link) {
+          showWarning(result.message, () => window.location.replace('/link?id=' + link))
         } else {
-          showWarning(result.message, () => window.location.replace('/link?id=' + result.info.link))
+          showWarning(NO_LINK_MESSAGE, null)
         }
       })
       if (warning) {
@@ -123,9 +149,14 @@ document.getElementById('skip').addEventListener('click', (event) => {
   values.subject = values.subject.trim()
   addUser(values)
     .then((result) => {
+      var link = sessionLink(values, result)
+      if (!link) {
+        showWarning(NO_LINK_MESSAGE, null)
+        return new Promise(() => {}) // stop here
+      }
       return new Promise((resolve) => {
         $.getJSON('/study/' + result.info.study + '_' + result.info.session + '.json', function (data) {
-          data.respond = result
+          data.link = link
           resolve(data)
         })
       })
@@ -148,7 +179,7 @@ document.getElementById('skip').addEventListener('click', (event) => {
         event.preventDefault()
         // each order entry already carries its own index=N
         var runVal = selectForm.options[selectForm.selectedIndex].value
-        window.location.replace(runVal + '&id=' + result.respond.info.link)
+        window.location.replace(runVal + '&id=' + result.link)
       })
     })
 })

@@ -8,6 +8,17 @@ const keys = require('./keys')
 const { registerHitLogRoutes } = require('./hitlog')
 const { registerDataSaveRoutes } = require('./datasave')
 const { studyExists, loadStudy, isLocalPath } = require('./studyfiles')
+const staffAuth = require('./authentication/basic.js')
+
+// Link ids are the only thing that lets a browser continue a session (and, for CANON, reach the
+// participant's memories). They are sent once, to whoever creates the row, and otherwise only to
+// staff (/dashboard, /getSubjectInfo). No unauthenticated route may look a row up by subject,
+// study, session or primary key and return its link or any other stored field.
+
+// Fields a page may read about the row its own link points to (it already holds the link)
+function publicRowInfo (row) {
+  return { subject: row.subject, study: row.study, session: row.session, link: row.link }
+}
 
 // const accountSid = process.env.TWILIO_ACCOUNT_SID
 // const authToken = process.env.TWILIO_AUTH_TOKEN
@@ -63,10 +74,12 @@ module.exports = function (app) {
               })
             })
         }
-        // already have same subject, study, session
+        // already have same subject, study, session. Never hand out the existing row's link:
+        // anyone can send any subject ID here. The browser that created the row remembers the
+        // link; otherwise staff can give it out from /dashboard.
         res.send({
           message: 'subject/study/session already exists in database',
-          info: result
+          info: { subject, study, session }
         })
       })
       .catch((error) => {
@@ -138,9 +151,10 @@ module.exports = function (app) {
       })
   })
 
-  // send dashboard info given link
+  // send dashboard info given link (only to a caller that already holds the link)
   app.post('/getInfo', (req, res) => {
-    const id = req.sanitize(req.body.id)
+    const id = typeof req.body.id === 'string' ? req.sanitize(req.body.id) : ''
+    if (!id) return res.send({})
 
     models.dashboard.findOne({
       where: {
@@ -152,7 +166,7 @@ module.exports = function (app) {
           if (result == null) {
             res.send({})
           } else {
-            res.send(result)
+            res.send(publicRowInfo(result))
           }
         }
       )
@@ -169,8 +183,8 @@ module.exports = function (app) {
     })
   })
 
-  // send dashboard info given link
-  app.post('/getSubjectInfo', (req, res) => {
+  // Staff only: every dashboard row (with links) for a subject
+  app.post('/getSubjectInfo', staffAuth, (req, res) => {
     const subject = req.sanitize(req.body.subject)
 
     models.dashboard.findAll({
@@ -279,10 +293,10 @@ module.exports = function (app) {
         } else {
           logger.info('already have account')
           // already have same subject, study, session
-          // Still send them the link
+          // Re-send the link, but only to the email/phone stored with the row: sending it to
+          // contact details from this (unauthenticated) request would hand any row's link to
+          // whoever names its subject.
           // console.error(result)
-          result.email = req.sanitize(req.body.email)
-          result.phone = req.sanitize(req.body.phone)
           result.link_type = req.sanitize(req.body.link_type)
           sendLink(result)
           // res.send({

@@ -340,6 +340,29 @@ document.getElementById("about").addEventListener("click", function(event){
     }
 });
 
+// Session links: /adduser returns a link only when it creates the row; this browser remembers it
+// so the session can be resumed here. Elsewhere, staff give out the link from /dashboard.
+var NO_LINK_MESSAGE = 'A session for this ID already exists. To continue it, please use your original ' +
+    'session link or contact the study team.'
+
+function linkStoreName(values) {
+    return 'stimtool_link:' + JSON.stringify([values.subject, values.study, values.session])
+}
+
+function sessionLink(values, result) {
+    if (result && result.info && result.info.link) {
+        try { localStorage.setItem(linkStoreName(values), result.info.link) } catch (err) { /* storage blocked */ }
+        return result.info.link
+    }
+    try { return localStorage.getItem(linkStoreName(values)) || null } catch (err) { return null }
+}
+
+function showNoLink() {
+    $('#modalCenter').modal({});
+    document.getElementById('errorMessage').innerText = NO_LINK_MESSAGE;
+    $('#procceed_anyways').hide();
+}
+
 // Submit Logic
 
 document.getElementById('begin').addEventListener('click', (event) => {
@@ -359,19 +382,22 @@ document.getElementById('begin').addEventListener('click', (event) => {
             dataType: 'JSON',
             success: function (result) {
                 console.log(result);
-                if (result.message == 'ok') {
+                var link = sessionLink(values, result)
+                if (result.message == 'ok' && link) {
 
-                    next_link = '/link?id=' + result.info.link
+                    next_link = '/link?id=' + link
                     window.location.replace(next_link);
-                } else {
+                } else if (link) {
                     // Open Modal to Confirm Already Exists Subject
                     $('#modalCenter').modal({});
 
                     document.getElementById('errorMessage').innerText = result.message;
-                    document.getElementById('procceed_anyways').addEventListener('click', () => {
-                        next_link = '/link?id=' + result.info.link
+                    $('#procceed_anyways').show().off('click').on('click', () => {
+                        next_link = '/link?id=' + link
                         window.location.replace(next_link);
                     });
+                } else {
+                    showNoLink()
                 }
             }
         });
@@ -412,11 +438,17 @@ document.getElementById('skip').addEventListener('click', (event) => {
         });
     })
         .then((result) => {
+            var link = sessionLink(values, result)
+            if (!link) {
+                showNoLink()
+                return new Promise(() => {}) // stop here
+            }
             // Get The study list
             return new Promise((resolve, reject) => {
                 url = '/study/' + result.info.study + '_' + result.info.session + '.json'
                 $.getJSON(url, function (data) {
                     data.respond = result
+                    data.link = link
                     resolve(data)
                 });
             })
@@ -458,7 +490,7 @@ document.getElementById('skip').addEventListener('click', (event) => {
                 // } else {
                 //     var link = run_val + '&id=' + result.respond.info.link + '&index=' + idx
                 // }
-              var link = run_val + '&id=' + result.respond.info.link + '&index=' + idx
+              var link = run_val + '&id=' + result.link + '&index=' + idx
               console.log("THE GENERATED LINK")
               console.log(link)
                 window.location.replace(link);

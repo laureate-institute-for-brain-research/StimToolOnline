@@ -95,8 +95,9 @@ app.use(expressSanitizer()); // use for sanitizing data
 
 app.use(express.static('public'));
 
-// Serve the static files
-app.use('/data', serveIndex('data', {
+// Directory listing of data/ (file names carry subject IDs, e.g. data/CANON/state/<subject>.json):
+// staff only
+app.use('/data', require('./authentication/basic.js'), serveIndex('data', {
     'icons': true,
     'index': true,
     'setHeaders': setHeaders
