@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>LIBR | CANON</title>
+    <link rel="shortcut icon" type="image/png" href="https://www.dropbox.com/s/adtwtls9yevcoda/LIBR_full_color_logo_highres_brain_only.png?raw=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link rel="stylesheet" media="screen" href="/css/index.css">
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+  </head>
+  <!-- Picker for the 24 CANON condition landing pages (public/canon/CANON_*.html). Served at /canon/. -->
+  <body>
+  <div id="particles-js"></div>
+  <div class="container">
+      <div class="row">
+        <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
+          <div class="card card-signin my-5">
+              <br>
+              <a href=""><center><img class="logo" src="/images/logo.png"></center></a>
+              <div class="card-body">
+                  <h5 class="card-title text-center">CANON Sessions</h5>
+                  <br>
+                  <form id='canon-picker'>
+                      <div class="form-label-group">
+                          <label for='condition-list'>Condition</label>
+                          <select id='condition-list' required class="form-control">
+                              <option value="" selected disabled>Choose Condition</option>
+                          </select>
+                      </div>
+                      <br>
+                      <div class="form-label-group">
+                          <label for='visit-list'>Visit</label>
+                          <select id='visit-list' class="form-control">
+                              <option value="" selected>Choose on the next page</option>
+                              <option value="T1">T1</option>
+                              <option value="T2">T2</option>
+                          </select>
+                      </div>
+                      <br>
+                      <div class="form-label-group">
+                          <label for='link-output'>Link</label>
+                          <div class="input-group">
+                              <input id='link-output' class="form-control" type="text" readonly placeholder="Choose a condition">
+                              <span class="input-group-btn">
+                                  <button id='copy' class="btn btn-secondary" type="button" disabled>Copy</button>
+                              </span>
+                          </div>
+                      </div>
+                      <br>
+                      <button id='open' type="submit" class="btn btn-success float-right" disabled>Open</button>
+                  </form>
+                </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <footer>
+      <div style="text-align:center; font-size: small;  position: fixed; bottom: 0px; right: 0px; left: 0px; color: white;">
+        <p>&copy; 2022 <a href="http://www.laureateinstitute.org">laureateinstitute.org</a><br>All rights reserved.
+      </div>
+    </footer>
+
+  </body>
+  <!-- scripts -->
+  <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+  <script src="/js/particles.js"></script>
+
+  <script src="/js/canon_index.js"></script>
+
+</html>
