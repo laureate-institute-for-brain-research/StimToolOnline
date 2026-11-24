@@ -45,13 +45,14 @@ counter shows row + 1 / rows); `trial_type` is the full schedule string (e.g. `M
 ```
 COUNTERBALANCE (92)   result: arm string
 INSTRUCT_ONSET (1)
-TASK_ONSET (2)        response_time: instructions + start gate
+TASK_ONSET (2)        response_time: instructions + start gate; result: run schedule filename
+                      (e.g. study-SMITH-2026-CANON_task-SET_run-A.schedule)
 TRIAL_ONSET (3)       result: trial_type
 FIXATION (4)          result: fixation seconds
 RATER_ONSET (5)
 PREDICTION (6)        absolute_time: key time; response_time: RT from RATER_ONSET; result: YES / NO (no row if missed)
 DELAY_ONSET (7)       result: delay seconds
-FEEDBACK (8)          (outcome = feedback_code)
+FEEDBACK (8)          result: feedback code (1 like, 2 dislike, 0 neutral)
 QUESTION_ONSET (9)
 RATING_ONSET (10)     result: 5
 RATING_CHANGE (11)    response: key name; response_time: ABSOLUTE key time (desktop quirk); result: new position

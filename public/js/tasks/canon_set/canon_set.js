@@ -308,7 +308,7 @@ function build (page) {
       if (phase === 'delay') {
         phase = 'feedback'
         phaseEnd += FEEDBACK_DURATION
-        logOnFlip(event_types.FEEDBACK, 'NA')
+        logOnFlip(event_types.FEEDBACK, trial.feedback) // feedback code: 1 like, 2 dislike, 0 neutral
         return true
       }
     }
@@ -352,7 +352,7 @@ function build (page) {
   page.add({
     begin: () => {
       idealTrialStart = run.now()
-      run.log('NA', 'NA', event_types.TASK_ONSET, idealTrialStart - instructStart, 'NA', 'NA', {}, idealTrialStart)
+      run.log('NA', 'NA', event_types.TASK_ONSET, idealTrialStart - instructStart, 'NA', runFile + '.schedule', {}, idealTrialStart)
       if (!startTrial()) phase = null
     },
     frame: () => {
