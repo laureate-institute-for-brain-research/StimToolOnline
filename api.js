@@ -8,10 +8,15 @@ const models = require('./models')
 const keys = require('./keys')
 const pino = require('pino')
 const logger = pino({ level: process.env.LOG_LEVEL || 'info' })
+const { isSafeName, sendHtmlFile, sendPageInDir } = require('./pages')
 
-module.exports = function (app) {
+// options.pagesRoot: directory the HTML pages are read from (default: working directory)
+module.exports = function (app, options = {}) {
+  const pagesRoot = path.resolve(options.pagesRoot || '.')
+  const page = (...parts) => path.join(pagesRoot, ...parts)
+
   // ROUTES
-  app.get('/', function (req, res) {
+  app.get('/', function (req, res, next) {
     const q = url.parse(req.url, true).query
     // const session = q.session
     // const mkturk_id = q.mkturk_id
@@ -26,124 +31,52 @@ module.exports = function (app) {
     // const type = q.type
 
     if (task) {
-      displayTask(task, req, res, q)
+      displayTask(task, req, res, next, q)
     } else if (survey) {
       console.log('correct')
       console.log(survey)
-      displaySurvey(survey, res)
+      displaySurvey(survey, res, next)
     } else {
-      displayHome(res)
+      displayHome(res, next)
     }
   })
 
   // Returning the get request when it has
   // not been past 25hours
-  app.get('/tooearly', function (req, res) {
-    // const q = url.parse(req.url, true).query
-    // const session = q.session
-    // const mkturk_id = q.mkturk_id
-
-    display24HourPage(res)
+  app.get('/tooearly', function (req, res, next) {
+    display24HourPage(res, next)
   })
 
-  app.get('/completed', function (req, res) {
-    // const q = url.parse(req.url, true).query
-    // const session = q.session
-    // const mkturk_id = q.mkturk_id
-
-    displayCompleted(res)
+  app.get('/completed', function (req, res, next) {
+    displayCompleted(res, next)
   })
 
-  app.get('/completedHIT', function (req, res) {
-    // const q = url.parse(req.url, true).query
-    // const session = q.session
-    // const mkturk_id = q.mkturk_id
-
-    fs.readFile('completedHIT.html', function (err, data) {
-      if (err) {
-        console.log('error')
-      }
-      // Write Header
-      res.writeHead(200, {
-        'Content-Type': 'text/html'
-      })
-      // Wrte Body
-      res.write(data)
-      res.end()
-    })
+  app.get('/completedHIT', function (req, res, next) {
+    sendHtmlFile(res, next, page('completedHIT.html'))
   })
 
-  app.get('/completeMobile', function (req, res) {
-    // const q = url.parse(req.url, true).query
-    // const session = q.session
-    // const mkturk_id = q.mkturk_id
-
-    fs.readFile('completedMobile.html', function (err, data) {
-      if (err) {
-        console.log('error')
-      }
-      // Write Header
-      res.writeHead(200, {
-        'Content-Type': 'text/html'
-      })
-      // Wrte Body
-      res.write(data)
-      res.end()
-    })
+  app.get('/completeMobile', function (req, res, next) {
+    sendHtmlFile(res, next, page('completedMobile.html'))
   })
 
-  app.get('/exclude', function (req, res) {
-    fs.readFile('exclude.html', function (err, data) {
-      if (err) {
-        console.log('error')
-      }
-      // Write Header
-      res.writeHead(200, {
-        'Content-Type': 'text/html'
-      })
-      // Wrte Body
-      res.write(data)
-      res.end()
-    })
+  app.get('/exclude', function (req, res, next) {
+    sendHtmlFile(res, next, page('exclude.html'))
   })
 
-  app.get('/gonogo', function (req, res) {
+  // task/gonogo/version_<v>/gonogo<v>.html, where version_<v> must be an existing directory
+  app.get('/gonogo', function (req, res, next) {
     const q = url.parse(req.url, true).query
-    // logger.info(q.version);
-    const fileurl = 'task/gonogo/version_' + q.version.toString() + '/gonogo' + q.version.toString() + '.html'
-    fs.readFile(fileurl, function (err, data) {
-      if (err) {
-        console.log('error')
-      }
-      // Write Header
-      res.writeHead(200, {
-        'Content-Type': 'text/html'
-      })
-      // Wrte Body
-      res.write(data)
-      res.end()
-    })
+    if (!isSafeName(q.version)) return res.status(404).type('text/plain').send('Not found')
+    sendPageInDir(res, next, page('task', 'gonogo'), 'version_' + q.version, 'gonogo' + q.version + '.html')
   })
 
-  app.get('/square_circle_rating', function (req, res) {
-    const fileurl = 'surveys/square_circle.html'
-    fs.readFile(fileurl, function (err, data) {
-      if (err) {
-        console.log('error')
-      }
-      // Write Header
-      res.writeHead(200, {
-        'Content-Type': 'text/html'
-      })
-      // Wrte Body
-      res.write(data)
-      res.end()
-    })
+  app.get('/square_circle_rating', function (req, res, next) {
+    sendHtmlFile(res, next, page('surveys', 'square_circle.html'))
   })
 
-  app.get('/chicken_estimate', function (req, res) {
+  app.get('/chicken_estimate', function (req, res, next) {
     const q = url.parse(req.url, true).query
-    displayChickenEstimate(res, q.pattern)
+    displayChickenEstimate(res, next, q.pattern)
   })
 
   app.post('/wave1proceed', function (req, res) {
@@ -263,14 +196,13 @@ module.exports = function (app) {
     // Write to File on current server
     const filename = 'data/' + study + '/tasks/' + study + '-DP-' + mturkId + '-' + 'T' + session + '.csv'
     fs.writeFile(filename, head1 + head2 + content, (err) => {
-      if (err) throw err
+      if (err) return logger.error(err, 'could not save DP task data')
       console.log(filename + ' DP saved!')
       // Copy the data to a shared folder in root to be accessed by other uses in the VM
       // This is done after writing the file
       fs.copyFile(filename, '/var/node_data/' + filename, (err) => {
         if (err) {
-          console.log('could not copy')
-          throw err
+          logger.error(err, 'could not copy DP task data')
         } else {
           console.log('copy complete')
         }
@@ -313,8 +245,7 @@ module.exports = function (app) {
     const month = d.getMonth() + 1 // on a separate since if we add, it concatenates the numbers
     const fileDate = d.getFullYear() + '_' + month + '_' + d.getDate() + '_' + d.getHours() + '_' + d.getMinutes()
 
-    let randomNUM = Math.floor(Math.random() * 100000) + 1
-    let outputPath = 'data/datacamp/dc-' + randomNUM + '.csv'
+    const randomPath = () => 'data/datacamp/dc-' + (Math.floor(Math.random() * 100000) + 1) + '.csv'
 
     // const input = fs.createReadStream(data, { encoding: 'utf8' });
     // const output = fs.createWriteStream(outputPath, { encoding: 'utf8' });
@@ -324,22 +255,9 @@ module.exports = function (app) {
 
     // console.log(csv)
 
-    fs.stat(outputPath, function (err, stat) {
-      // file exists, genereate new random number
-      // eslint-disable-next-line no-unmodified-loop-condition
-      while (err == null) {
-        randomNUM = Math.floor(Math.random() * 100000) + 1
-        outputPath = 'data/datacamp/dc-' + randomNUM + '.csv'
-      }
-      if (err.code === 'ENOENT') {
-        // file does not exist
-        fs.writeFile(outputPath, 'date:,' + fileDate + '\n' + csv, (err) => {
-          if (err) throw err
-          console.log(outputPath + ' DC saved!')
-        })
-      } else {
-        console.log('Some other error: ', err.code)
-      }
+    writeNewFile(randomPath(), randomPath, 'date:,' + fileDate + '\n' + csv, (err, outputPath) => {
+      if (err) return logger.error(err, 'could not save DC data')
+      console.log(outputPath + ' DC saved!')
     })
     res.send('saved DC')
   })
@@ -360,11 +278,8 @@ module.exports = function (app) {
     const month = d.getMonth() + 1 // on a separate since if we add, it concatenates the numbers
     const fileDate = d.getFullYear() + '_' + month + '_' + d.getDate() + '_' + d.getHours() + '_' + d.getMinutes()
 
-    let randomNUM = Math.floor(Math.random() * 100000) + 1
-    if (q.id) {
-      randomNUM = q.id
-    }
-    let outputPath = 'data/square_circle_rating/sc-' + randomNUM + '.csv'
+    const randomPath = () => 'data/square_circle_rating/sc-' + (Math.floor(Math.random() * 100000) + 1) + '.csv'
+    const firstPath = q.id ? 'data/square_circle_rating/sc-' + q.id + '.csv' : randomPath()
 
     // const input = fs.createReadStream(data, { encoding: 'utf8' });
     // const output = fs.createWriteStream(outputPath, { encoding: 'utf8' });
@@ -378,22 +293,9 @@ module.exports = function (app) {
 
     // console.log(csv)
 
-    fs.stat(outputPath, function (err, stat) {
-      // file exists, genereate new random number
-      // eslint-disable-next-line no-unmodified-loop-condition
-      while (err == null) {
-        randomNUM = Math.floor(Math.random() * 100000) + 1
-        outputPath = 'data/square_circle_rating/sc-' + randomNUM + '.csv'
-      }
-      if (err.code === 'ENOENT') {
-        // file does not exist
-        fs.writeFile(outputPath, 'date:,' + fileDate + '\n' + csv, (err) => {
-          if (err) throw err
-          console.log(outputPath + ' SC saved!')
-        })
-      } else {
-        console.log('Some other error: ', err.code)
-      }
+    writeNewFile(firstPath, randomPath, 'date:,' + fileDate + '\n' + csv, (err, outputPath) => {
+      if (err) return logger.error(err, 'could not save SC data')
+      console.log(outputPath + ' SC saved!')
     })
     res.send('saved SC')
   })
@@ -423,7 +325,7 @@ module.exports = function (app) {
 
     const filename = 'data/' + study + '/tasks/' + study + '-CT-' + mturkId + '-' + 'T' + session + '.csv'
     fs.writeFile(filename, head1 + head2 + content, (err) => {
-      if (err) throw err
+      if (err) return logger.error(err, 'could not save Chicken Task data')
       console.log('Saved Chicken Task Data!')
     })
 
@@ -476,14 +378,14 @@ module.exports = function (app) {
     // If File Exists, Append the payload
     if (fs.existsSync(filename)) {
       fs.appendFile(filename, datarow.replace('null', '').replace(undefined, ''), function (err) {
-        if (err) throw err
+        if (err) return logger.error(err, 'could not save task data')
         console.log('Append GT data!')
         console.log(datarow)
       })
     } else {
       // Create new File
       fs.writeFile(filename, head1 + head2 + datarow.replace('null', '').replace(undefined, ''), (err) => {
-        if (err) throw err
+        if (err) return logger.error(err, 'could not save task data')
         console.log('New GT File Created')
       })
     }
@@ -517,14 +419,14 @@ module.exports = function (app) {
     // If File Exists, Append the payload
     if (fs.existsSync(filename)) {
       fs.appendFile(filename, datarow.replace('null', '').replace(undefined, ''), function (err) {
-        if (err) throw err
+        if (err) return logger.error(err, 'could not save task data')
         console.log('Append FL data!')
         console.log(datarow)
       })
     } else {
       // Create new File
       fs.writeFile(filename, head1 + head2 + datarow.replace('null', '').replace(undefined, ''), (err) => {
-        if (err) throw err
+        if (err) return logger.error(err, 'could not save task data')
         console.log('New FL File Created')
       })
     }
@@ -558,14 +460,14 @@ module.exports = function (app) {
             // If File Exists, Append the payload
     if (fs.existsSync(filename)) {
       fs.appendFile(filename, datarow.replace('null', '').replace(undefined, ''), function (err) {
-        if (err) throw err
+        if (err) return logger.error(err, 'could not save task data')
         console.log('Appending ColorStroop data!')
         console.log(datarow)
       })
     } else {
       // Create new File
       fs.writeFile(filename, head1 + head2 + datarow.replace('null', '').replace(undefined, ''), (err) => {
-        if (err) throw err
+        if (err) return logger.error(err, 'could not save task data')
         console.log('New ColorStroop File Created')
       })
     }
@@ -598,14 +500,14 @@ module.exports = function (app) {
             // If File Exists, Append the payload
     if (fs.existsSync(filename)) {
       fs.appendFile(filename, datarow.replace('null', '').replace(undefined, ''), function (err) {
-        if (err) throw err
+        if (err) return logger.error(err, 'could not save task data')
         console.log('Appending Emotional Stroop data!')
         console.log(datarow)
       })
     } else {
       // Create new File
       fs.writeFile(filename, head1 + head2 + datarow.replace('null', '').replace(undefined, ''), (err) => {
-        if (err) throw err
+        if (err) return logger.error(err, 'could not save task data')
         console.log('New Emotional Stroop File Created')
       })
     }
@@ -758,8 +660,8 @@ module.exports = function (app) {
   })
 
   // 404 Page
-  app.get('/*', (req, res) => {
-    display404(res)
+  app.get('/*', (req, res, next) => {
+    display404(res, next)
     // es.send('404. We cant find that bro.');
   })
 
@@ -1093,151 +995,60 @@ module.exports = function (app) {
   }
 
   // 			Output Pages 		//
-  function displayHome (res) {
-    fs.readFile('index.html', function (err, data) {
-      // Write Header
-      res.writeHead(200, {
-        'Content-Type': 'text/html'
-      })
-      // Wrte Body
-      res.write(data)
-      res.end()
-    })
+  // Each helper responds with the page, 404 if it is missing, or forwards other read
+  // errors to Express (see pages.js); none of them can throw from an fs callback.
+  function displayHome (res, next) {
+    sendHtmlFile(res, next, page('index.html'))
   }
 
-  function displaySurveydemo (res) {
-    fs.readFile('surveys/demo.html', function (err, data) {
-      // Write Header
-      res.writeHead(200, {
-        'Content-Type': 'text/html'
-      })
-      // Wrte Body
-      res.write(data)
-      res.end()
-    })
+  function displaySurveydemo (res, next) {
+    sendHtmlFile(res, next, page('surveys', 'demo.html'))
   }
 
-  function displaySurveyphq (res) {
-    fs.readFile('surveys/phq.html', function (err, data) {
-      // Write Header
-      res.writeHead(200, {
-        'Content-Type': 'text/html'
-      })
-      // Wrte Body
-      res.write(data)
-      res.end()
-    })
+  function displaySurveyphq (res, next) {
+    sendHtmlFile(res, next, page('surveys', 'phq.html'))
   }
 
-  function displayFeedback (res) {
-    fs.readFile('surveys/feedback.html', function (err, data) {
-      // Write Header
-      res.writeHead(200, {
-        'Content-Type': 'text/html'
-      })
-      // Wrte Body
-      res.write(data)
-      res.end()
-    })
+  function displayFeedback (res, next) {
+    sendHtmlFile(res, next, page('surveys', 'feedback.html'))
   }
 
-  function displayDataCampSurvey (res) {
-    fs.readFile('surveys/datacamp.html', function (err, data) {
-      // Write Header
-      res.writeHead(200, {
-        'Content-Type': 'text/html'
-      })
-      // Wrte Body
-      res.write(data)
-      res.end()
-    })
+  function displayDataCampSurvey (res, next) {
+    sendHtmlFile(res, next, page('surveys', 'datacamp.html'))
   }
 
-  function displayAssessment (res) {
-    fs.readFile('surveys/asessment_questions.html', function (err, data) {
-      // Write Header
-      res.writeHead(200, {
-        'Content-Type': 'text/html'
-      })
-      // Wrte Body
-      res.write(data)
-      res.end()
-    })
+  function displayAssessment (res, next) {
+    sendHtmlFile(res, next, page('surveys', 'asessment_questions.html'))
   }
 
-  function displayTest (res) {
-    fs.readFile('task/dotprobe1-5Trial.html', function (err, data) {
-      // Write Header
-      res.writeHead(200, {
-        'Content-Type': 'text/html'
-      })
-      // Wrte Body
-      res.write(data)
-      res.end()
-    })
+  function displayTest (res, next) {
+    sendHtmlFile(res, next, page('task', 'dotprobe1-5Trial.html'))
   }
 
-  function display404 (res) {
-    fs.readFile('404.html', function (err, data) {
-      // Write Header
-      res.writeHead(200, {
-        'Content-Type': 'text/html'
-      })
-      // Wrte Body
-      res.write(data)
-      res.end()
-    })
+  function display404 (res, next) {
+    sendHtmlFile(res, next, page('404.html'))
   }
 
-  function displayChickenEstimate (res, version) {
-    if (version == undefined) {
+  function displayChickenEstimate (res, next, version) {
+    if (version === undefined) {
       version = '1'
     }
-    filename = 'task/chicken_task/estimate_version/pattern_' + version + '.html'
-    fs.readFile(filename, function (err, data) {
-      // Write Header
-      res.writeHead(200, {
-        'Content-Type': 'text/html'
-      })
-      // Wrte Body
-      // console.log(data)
-      res.write(data)
-      res.end()
-    })
+    if (!isSafeName(version)) return res.status(404).type('text/plain').send('Not found')
+    sendHtmlFile(res, next, page('task', 'chicken_task', 'estimate_version', 'pattern_' + version + '.html'))
   }
 
-  function displayChickenPredict2 (res, query) {
-    console.log(query)
-
+  function displayChickenPredict2 (res, next, query) {
     // If Version is specified, show them the folder
     if (query.version && query.pattern) {
-      filename = path.join('task', 'chicken_task', 'predict_version2', query.version, 'pattern_' + query.pattern + '.html')
+      if (!isSafeName(query.version) || !isSafeName(query.pattern)) return res.status(404).type('text/plain').send('Not found')
+      sendPageInDir(res, next, page('task', 'chicken_task', 'predict_version2'), query.version, 'pattern_' + query.pattern + '.html')
     } else {
-      // Use the most recent in the root_folder
       // Default if other parameters aren't given
-      filename = 'task/chicken_task/predict_version2/T1/pattern_1.html'
+      sendHtmlFile(res, next, page('task', 'chicken_task', 'predict_version2', 'T1', 'pattern_1.html'))
     }
-
-    console.log(filename)
-
-    fs.readFile(filename, function (err, data) {
-      // Write Header
-      res.writeHead(200, {
-        'Content-Type': 'text/html'
-      })
-      // Wrte Body
-      // console.log(data)
-      res.write(data)
-      res.end()
-
-      if (err) {
-        console.log('file does not exitss')
-        display404(res)
-      }
-    })
   }
 
-  function displayTask (task, req, res, query) {
+  function displayTask (task, req, res, next, query) {
     logger.info(`task requested: ${task} by ${query.id}`)
 
     if (task == 'cooperation_task') {
@@ -1266,55 +1077,33 @@ module.exports = function (app) {
       }
     }
 
-    fs.readFile(`public/js/tasks/${task}/index.html`, function (err, data) {
-      // Write Header
-      res.writeHead(200, {
-        'Content-Type': 'text/html'
-      })
-      // Wrte Body
-      res.write(data)
-      res.end()
-    })
+    // task must name an existing directory in public/js/tasks (exact, case-sensitive match)
+    sendPageInDir(res, next, page('public', 'js', 'tasks'), task, 'index.html')
   }
 
-  function displaySurvey(survey, res) {
-    console.log('survey requested')
+  function displaySurvey (survey, res, next) {
     logger.info('survey requested: ' + survey)
-    fs.readFile(`public/js/surveys/${survey}/index.html`, function (err, data) {
-      if (err) {
-        console.log(err.stack)
-      }
-      // Write Header
-      res.writeHead(200, {
-        'Content-Type': 'text/html'
-      })
-      // Wrte Body
-      res.write(data)
-      res.end()
-    })
-  }
-  function display24HourPage (res) {
-    fs.readFile('tooearly.html', function (err, data) {
-      // Write Header
-      res.writeHead(200, {
-        'Content-Type': 'text/html'
-      })
-      // Wrte Body
-      res.write(data)
-      res.end()
-    })
+    // survey must name an existing directory in public/js/surveys (exact, case-sensitive match)
+    sendPageInDir(res, next, page('public', 'js', 'surveys'), survey, 'index.html')
   }
 
-  function displayCompleted (res) {
-    fs.readFile('completed.html', function (err, data) {
-      // Write Header
-      res.writeHead(200, {
-        'Content-Type': 'text/html'
-      })
-      // Wrte Body
-      res.write(data)
-      res.end()
+  function display24HourPage (res, next) {
+    sendHtmlFile(res, next, page('tooearly.html'))
+  }
+
+  function displayCompleted (res, next) {
+    sendHtmlFile(res, next, page('completed.html'))
+  }
+
+  // Creates a new file without replacing an existing one. On a name clash it retries with
+  // nextPath() a bounded number of times. done(err, writtenPath)
+  function writeNewFile (firstPath, nextPath, content, done) {
+    let attempts = 0
+    const attempt = (p) => fs.writeFile(p, content, { flag: 'wx' }, (err) => {
+      if (err && err.code === 'EEXIST' && ++attempts < 20) return attempt(nextPath())
+      done(err, p)
     })
+    attempt(firstPath)
   }
 
   // SENDHTML CODES
@@ -1846,25 +1635,30 @@ module.exports = function (app) {
     // //console.log(data);
 
     con.query('INSERT INTO dot_probe1 SET ?', data, function (err, result) {
-      if (err) {
-        if (err.code == 'ER_DUP_ENTRY') {
-          // Duplicate Entry
-          // User already has ID on the database
-          console.log('Duplicate Entry on dot_probe1 Table')
-          // Duplicate so will reroute
-          reRoute(con, newMTURKID, response)
+      try {
+        if (err) {
+          if (err.code == 'ER_DUP_ENTRY') {
+            // Duplicate Entry
+            // User already has ID on the database
+            console.log('Duplicate Entry on dot_probe1 Table')
+            // Duplicate so will reroute
+            reRoute(con, newMTURKID, response)
+          } else {
+            console.log(err)
+          }
+          // console.log(err);
         } else {
-          console.log(err)
+          // get the result of the SQL Database
+          // 1st Time New User Login
+          addRecordToStatusTable(newMTURKID, con)
+          response.writeHead(301, {
+            Location: '/?study=wave1&session=1' + '&mkturk_id=' + newMTURKID + '&survey=demo'
+          })
+          response.end()
         }
-        // console.log(err);
-      } else {
-        // get the result of the SQL Database
-        // 1st Time New User Login
-        addRecordToStatusTable(newMTURKID, con)
-        response.writeHead(301, {
-          Location: '/?study=wave1&session=1' + '&mkturk_id=' + newMTURKID + '&survey=demo'
-        })
-        response.end()
+      } catch (e) {
+        logger.error(e, 'insertNewData failed')
+        if (!response.headersSent) response.status(500).end()
       }
     })
   }

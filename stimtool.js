@@ -149,6 +149,19 @@ var authRoute = require('./routes/auth.js')(app)
 var canonRoute = require('./canonapi.js')(app) // before api.js, which ends with a catch-all route
 var apiRoute = require('./api.js')(app)
 
+// Must come after every route: an error in one request becomes a 500 for that request only
+app.use(require('./pages.js').handleRouteError)
+
+// Last resort for an exception or rejection that escapes every handler (a bug in some async
+// callback). This single process serves every participant, so log it and keep serving rather
+// than drop all in-flight requests and uploads.
+process.on('uncaughtException', function (err) {
+    logger.fatal(err, 'uncaught exception; continuing to serve')
+})
+process.on('unhandledRejection', function (reason) {
+    logger.error(reason, 'unhandled promise rejection')
+})
+
  /// IGNORE EVERYTHING AFTER HERE
 var server = app.listen(process.env.PORT, function () {
     logger.info('NODE_ENV: ' + process.env.NODE_ENV)
