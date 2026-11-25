@@ -1,5 +1,5 @@
 /**
- * Landing page logic for the CANON condition studies (public/canon/CANON_*.html).
+ * Landing page logic for the CANON condition studies and survey sets (public/canon/CANON_*.html).
  * Same Begin / Skip behaviour as index.js, plus a check that a T2 visit uses the
  * opposite schedule letter from the participant's T1 visit.
  * @author Aardron Robinson
@@ -106,10 +106,14 @@ function showWarning (message, onProceed) {
 // About
 document.getElementById('about').addEventListener('click', function (event) {
   event.preventDefault()
-  var study = document.getElementById('study-list').value
-  $.getJSON('/study/' + study + '_T1.json', data => {
+  var studyList = document.getElementById('study-list')
+  var study = studyList.value
+  // The chosen session, else the page's first one (T1 for a condition, the single session for a survey set)
+  var session = $('#session-list').val() || $('#session-list option:not(:disabled)').first().val()
+  var label = studyList.options[studyList.selectedIndex].textContent
+  $.getJSON('/study/' + study + '_' + session + '.json', data => {
     document.getElementById('info-container').style.display = 'block'
-    document.getElementById('info-title').innerHTML = 'CANON Task List'
+    document.getElementById('info-title').textContent = label === 'CANON' ? 'CANON Task List' : label
     document.getElementById('info-text').innerHTML = data.text_html
   })
 })
@@ -184,9 +188,11 @@ document.getElementById('skip').addEventListener('click', (event) => {
     })
 })
 
-// ?session=T1 / ?session=T2 pre-selects the visit
+// ?session=T1 / ?session=T2 pre-selects the visit; a page with a single session (the survey sets) selects it
 if (getQueryVariable('session')) {
   $('#session-list').val(getQueryVariable('session'))
+} else if ($('#session-list option:not(:disabled)').length === 1) {
+  $('#session-list').val($('#session-list option:not(:disabled)').val())
 }
 
 if (performance.navigation.type === 2) {

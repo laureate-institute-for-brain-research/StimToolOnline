@@ -1,0 +1,11 @@
+{
+    "name": "CANON_Screening-Surveys Screening",
+    "order": [
+        "/?index=0&survey=canon_mcq9",
+        "/?index=1&survey=canon_mrpq",
+        "/?index=2&survey=canon_swls_screening",
+        "/completed?"
+    ],
+    "fullscreen": true,
+    "text_html": "<p>CANON Screening-Surveys (REDCap event main_arm_1), in this order:</p><ol><li>Monetary Choice Questionnaire (MCQ-9)</li><li>Monetary Risk Preference Questionnaire \u2013 Modified (MRPQ)</li><li>Screening: Satisfaction With Life Scale (SWLS)</li></ol>"
+}

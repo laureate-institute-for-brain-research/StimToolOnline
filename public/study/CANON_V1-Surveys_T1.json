@@ -1,0 +1,28 @@
+{
+    "name": "CANON_V1-Surveys T1",
+    "order": [
+        "/?index=0&survey=canon_swls",
+        "/?index=1&survey=canon_dpes",
+        "/?index=2&survey=canon_spane",
+        "/?index=3&survey=canon_wba",
+        "/?index=4&survey=canon_race_ethnicity_religion",
+        "/?index=5&survey=canon_ses",
+        "/?index=6&survey=canon_cos",
+        "/?index=7&survey=canon_cdrisc10",
+        "/?index=8&survey=canon_css",
+        "/?index=9&survey=canon_lotr",
+        "/?index=10&survey=canon_oasis",
+        "/?index=11&survey=canon_pra",
+        "/?index=12&survey=canon_ipsaq",
+        "/?index=13&survey=canon_asi3",
+        "/?index=14&survey=canon_retro_fus",
+        "/?index=15&survey=canon_bdi2",
+        "/?index=16&survey=canon_ders",
+        "/?index=17&survey=canon_pdsq",
+        "/?index=18&survey=canon_aces",
+        "/?index=19&survey=canon_sss",
+        "/completed?"
+    ],
+    "fullscreen": true,
+    "text_html": "<p>CANON V1-Surveys (REDCap event visit_1_arm_1), in this order:</p><ol><li>Satisfaction With Life Scale (SWLS)</li><li>Dispositional Positive Emotion Scales (DPES)</li><li>Scale Of Positive And Negative Experience (SPANE)</li><li>Well-Being Assessment (WBA)</li><li>Race/Ethnicity/Religion</li><li>Socio Economic Status (SES)</li><li>Cultural Orientation Scale (COS)</li><li>Connor-Davidson Resilience Scale (CD-RISC-10)</li><li>Career Satisfaction Scale (CSS)</li><li>Life Orientation Test Revised (LOT-R)</li><li>Overall Anxiety Severity And Impairment Scale (OASIS)</li><li>Perceived Resource Availability (PRA)</li><li>Internal, Personal, and Situational Attributions Questionnaire (IPSAQ)</li><li>Anxiety Sensitivity Index (ASI-3)</li><li>Retrospective Family Unpredictability Scale (Retro-FUS)</li><li>Beck Depression Inventory II (BDI-II)</li><li>Difficulties In Emotion Regulation Scale (DERS)</li><li>Psychiatric Diagnostic Screening Questionnaire (PDSQ)</li><li>Adverse Childhood Experiences Questionnaire (ACES)</li><li>Stanford Sleepiness Scale \u2013 Modified (SSS)</li></ol>"
+}

@@ -1,0 +1,26 @@
+{
+    "name": "CANON_V2-Surveys T2",
+    "order": [
+        "/?index=0&survey=canon_bfi",
+        "/?index=1&survey=canon_teps",
+        "/?index=2&survey=canon_cit",
+        "/?index=3&survey=canon_sub",
+        "/?index=4&survey=canon_vhs",
+        "/?index=5&survey=canon_pdss",
+        "/?index=6&survey=canon_whohpq",
+        "/?index=7&survey=canon_phq9",
+        "/?index=8&survey=canon_arsq",
+        "/?index=9&survey=canon_gad7",
+        "/?index=10&survey=canon_whodas",
+        "/?index=11&survey=canon_bfnes",
+        "/?index=12&survey=canon_bisbas",
+        "/?index=13&survey=canon_rse",
+        "/?index=14&survey=canon_lsas",
+        "/?index=15&survey=canon_ctq",
+        "/?index=16&survey=canon_dast10",
+        "/?index=17&survey=canon_sss",
+        "/completed?"
+    ],
+    "fullscreen": true,
+    "text_html": "<p>CANON V2-Surveys (REDCap event visit_2_arm_1), in this order:</p><ol><li>Big Five Inventory (BFI)</li><li>Temporal Experience Of Pleasure Scale (TEPS)</li><li>Comprehensive Inventory Of Thriving (CIT)</li><li>Scale of Unpredictability Beliefs (SUB)</li><li>Valuing Happiness Scale (VHS)</li><li>Panic Disorder Severity Scale (PDSS)</li><li>WHO: Health And Work Performance (WHOHPQ)</li><li>Patient Health Questionnaire (PHQ-9)</li><li>Adult Rejection Sensitivity Questionnaire (A-RSQ)</li><li>Generalized Anxiety Disorder (GAD-7)</li><li>WHO: Disability Assessment Screen (WHODAS)</li><li>Brief Fear of Negative Evaluation Scale (BFNE-S)</li><li>Behavioral Inhibition System/Behavioral Approach System (BIS/BAS)</li><li>Rosenberg Selfesteem Scale (RSE)</li><li>Liebowitz Social Anxiety Scale Self-Report (LSAS-SR)</li><li>Childhood Trauma Questionnaire (CTQ)</li><li>Drug Abuse Screening Test (DAST-10)</li><li>Stanford Sleepiness Scale \u2013 Modified (SSS)</li></ol>"
+}

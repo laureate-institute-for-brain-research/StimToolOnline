@@ -1,0 +1,49 @@
+
+Instruments
+
+Instrument	Form Name	Events
+Monetary Choice Questionnaire (MCQ-9)	monetary_choice_questionnaire_mcq9	main_arm_1
+Monetary Risk Preference Questionnaire – Modified (MRPQ)	monetary_risk_preference_questionnaire_mrpq_modifi	main_arm_1
+Screening: Satisfaction With Life Scale (SWLS)	screening_satisfaction_with_life_scale_swls	main_arm_1
+MR Safety Screening v1	mr_safety_screening_v1	visit_1_arm_1
+visit_2_arm_1
+Satisfaction With Life Scale (SWLS)	satisfaction_with_life_scale_swls	visit_1_arm_1
+Dispositional Positive Emotion Scales (DPES)	dispositional_positive_emotion_scales_dpes	visit_1_arm_1
+Scale Of Positive And Negative Experience (SPANE)	scale_of_positive_and_negative_experience_spane	visit_1_arm_1
+Well-Being Assessment (WBA)	wellbeing_assessment_wba	visit_1_arm_1
+Race/Ethnicity/Religion	raceethnicityreligion	visit_1_arm_1
+Socio Economic Status (SES)	ses	visit_1_arm_1
+Cultural Orientation Scale (COS)	cultural_orientation_scale_cos	visit_1_arm_1
+Connor-Davidson Resilience Scale (CD-RISC-10)	connordavidson_resilience_scale_cdrisc10	visit_1_arm_1
+Career Satisfaction Scale (CSS)	career_satisfaction_scale_css	visit_1_arm_1
+Life Orientation Test Revised (LOT-R)	life_orientation_test_revised_lotr	visit_1_arm_1
+Overall Anxiety Severity And Impairment Scale (OASIS)	overall_anxiety_severity_and_impairment_scale_oasi	visit_1_arm_1
+Perceived Resource Availability (PRA)	perceived_resource_availability_pra	visit_1_arm_1
+Internal, Personal, and Situational Attributions Questionnaire (IPSAQ)	ipsaq	visit_1_arm_1
+Anxiety Sensitivity Index (ASI-3)	anxiety_sensitivity_index_asi3	visit_1_arm_1
+Retrospective Family Unpredictability Scale (Retro-FUS)	retrospective_family_unpredictability_scale	visit_1_arm_1
+Beck Depression Inventory II (BDI-II)	beck_depression_inventory_ii_bdiii	visit_1_arm_1
+Difficulties In Emotion Regulation Scale (DERS)	difficulties_in_emotion_regulation_scale_ders	visit_1_arm_1
+Psychiatric Diagnostic Screening Questionnaire (PDSQ)	psychiatric_diagnostic_screening_questionnaire_pds	visit_1_arm_1
+Adverse Childhood Experiences Questionnaire (ACES)	adverse_childhood_experiences_questionnaire_aces	visit_1_arm_1
+Big Five Inventory (BFI)	big_five_inventory_bfi	visit_2_arm_1
+Temporal Experience Of Pleasure Scale (TEPS)	temporal_experience_of_pleasure_scale_teps	visit_2_arm_1
+Comprehensive Inventory Of Thriving (CIT)	comprehensive_inventory_of_thriving_cit	visit_2_arm_1
+Scale of Unpredictability Beliefs (SUB)	scale_of_unpredictability_beliefs_sub	visit_2_arm_1
+Valuing Happiness Scale (VHS)	valuing_happiness_scale_vhs	visit_2_arm_1
+Panic Disorder Severity Scale (PDSS)	panic_disorder_severity_scale_pdss	visit_2_arm_1
+C-SSRS Self-Report	cssrs_self_report	visit_1_arm_1
+visit_2_arm_1
+WHO: Health And Work Performance (WHOHPQ)	world_health_organization_health_and_work_performa	visit_2_arm_1
+Patient Health Questionnaire (PHQ-9)	patient_health_questionnaire_phq9	visit_2_arm_1
+Adult Rejection Sensitivity Questionnaire (A-RSQ)	adult_rejection_sensitivity_questionnaire_arsq	visit_2_arm_1
+Generalized Anxiety Disorder (GAD-7)	generalized_anxiety_disorder_gad7	visit_2_arm_1
+WHO: Disability Assessment Screen (WHODAS)	who_disability_assessment_sc	visit_2_arm_1
+Brief Fear of Negative Evaluation Scale (BFNE-S)	brief_fear_of_negative_evaluation_scale_bfnes	visit_2_arm_1
+Behavioral Inhibition System/Behavioral Approach System (BIS/BAS)	behavioral_inhibition_systembehavioral_approach_sy	visit_2_arm_1
+Rosenberg Selfesteem Scale (RSE)	rosenberg_selfesteem_scale_rse	visit_2_arm_1
+Liebowitz Social Anxiety Scale Self-Report (LSAS-SR)	liebowitz_social_anxiety_scale_lsas	visit_2_arm_1
+Childhood Trauma Questionnaire (CTQ)	childhood_trauma_questionnaire_ctq	visit_2_arm_1
+Drug Abuse Screening Test (DAST-10)	drug_abuse_screening_test_dast10	visit_2_arm_1
+Stanford Sleepiness Scale – Modified (SSS)	stanford_sleepiness_scale_modified_sss	visit_1_arm_1
+visit_2_arm_1

@@ -1,7 +1,9 @@
 /**
  * Picker for the CANON condition landing pages (public/canon/index.html, served at /canon/).
  * Lists the 24 CANON_{A|B}{1|2}_{HAPPY|SAD}_PM{1|2|3} pages in a dropdown and opens the chosen one,
- * optionally with ?session=T1|T2 so the landing page pre-selects the visit.
+ * optionally with ?session=T1|T2 so the landing page pre-selects the visit. The Surveys group lists the
+ * three survey sets (CANON_V1-Surveys, CANON_V2-Surveys, CANON_Screening-Surveys); each has a single
+ * session (T1, T2, Screening), so choosing one pins the visit list to it.
  * @author Aardron Robinson
  */
 
@@ -48,6 +50,51 @@ var copyButton = document.getElementById('copy')
   conditionList.appendChild(group)
 })
 
+/* ---- survey sets: each has one fixed session (study JSON public/study/<study>_<session>.json) ---- */
+var surveyGroup = document.createElement('optgroup')
+surveyGroup.label = 'Surveys'
+;[
+  ['CANON_V1-Surveys', 'V1-Surveys', 'T1'],
+  ['CANON_V2-Surveys', 'V2-Surveys', 'T2'],
+  ['CANON_Screening-Surveys', 'Screening-Surveys', 'Screening']
+].forEach(function (set) {
+  var option = document.createElement('option')
+  option.value = set[0]
+  option.textContent = set[1]
+  option.setAttribute('data-session', set[2])
+  surveyGroup.appendChild(option)
+})
+conditionList.appendChild(surveyGroup)
+
+// The visit list's own options (Choose on the next page / T1 / T2), restored when a condition is chosen
+var visitOptions = Array.prototype.slice.call(visitList.options)
+var chosenVisit = visitList.value
+
+/** The fixed session of the chosen survey set, or null for a condition (or nothing chosen). */
+function fixedSession () {
+  var option = conditionList.options[conditionList.selectedIndex]
+  return option ? option.getAttribute('data-session') : null
+}
+
+/** A survey set pins the visit to its session; a condition gets the T1/T2 choice back. */
+function syncVisitList () {
+  var session = fixedSession()
+  if (session) {
+    if (!visitList.disabled) chosenVisit = visitList.value
+    var only = document.createElement('option')
+    only.value = session
+    only.textContent = session
+    visitList.options.length = 0
+    visitList.appendChild(only)
+    visitList.disabled = true
+  } else if (visitList.disabled) {
+    visitList.options.length = 0
+    visitOptions.forEach(function (option) { visitList.appendChild(option) })
+    visitList.value = chosenVisit
+    visitList.disabled = false
+  }
+}
+
 /** Path of the chosen landing page, or null when no condition is chosen yet. */
 function chosenPath () {
   if (!conditionList.value) return null
@@ -56,6 +103,7 @@ function chosenPath () {
 }
 
 function update () {
+  syncVisitList()
   var path = chosenPath()
   linkOutput.value = path ? window.location.origin + path : ''
   openButton.disabled = !path
