@@ -71,6 +71,12 @@
             font-size: 0.85em;
         }
 
+        /* Dropdown lists open in a fixed .sv-popup layer. survey-core 1.12's own stylesheet gives it z-index 2000,
+           the 1.8.41 modern.css used here does not, so later question titles (position: relative) painted over it. */
+        .sv-popup {
+            z-index: 2000;
+        }
+
     </style>
     <title>Surveys</title>
     <meta charset="utf-8">
