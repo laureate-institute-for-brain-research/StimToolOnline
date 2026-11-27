@@ -223,6 +223,15 @@
         }
         function fin(x) { return (typeof x === 'number' && !isFinite(x)) ? '' : x; }
 
+        // Saved rows become CSV files that staff open in Excel. A text value starting with = + - @, a tab or a
+        // carriage return would be read there as a formula, so it is stored with a leading apostrophe (shown
+        // as plain text). Numbers, including negative ones typed into a text box, are left as they are.
+        var NUMBER = /^[-+]?(\d+(\.\d*)?|\.\d+)([eE][-+]?\d+)?$/;
+        function csvSafe(x) {
+            if (typeof x !== 'string' || !/^[=+\-@\t\r]/.test(x) || NUMBER.test(x)) return x;
+            return "'" + x;
+        }
+
         function today() {
             var d = new Date(), p = function (n) { return String(n).padStart(2, '0'); };
             return d.getFullYear() + '-' + p(d.getMonth() + 1) + '-' + p(d.getDate());
@@ -259,6 +268,8 @@
             Object.keys(raw).forEach(function (key) {
                 if (key.indexOf('TRQ') === 0) D[key] = raw[key];
             });
+            // after the scores, so they are computed from the answers as given
+            Object.keys(D).forEach(function (key) { D[key] = csvSafe(D[key]); });
             return D;
         }
 
