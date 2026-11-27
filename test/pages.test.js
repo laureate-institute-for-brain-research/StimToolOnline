@@ -283,7 +283,7 @@ test('save routes: a failed write is logged, not thrown from the fs callback', a
     await request(good, 'POST', '/saveFlanker?subject=SYN001&session=1&version=1', { body: row, headers: ua })
     await request(good, 'POST', '/saveColorStroop?subject=SYN001&session=1&version=1', { body: row, headers: ua })
     await request(good, 'POST', '/saveEmotionalStroop?subject=SYN001&session=1&version=1', { body: row, headers: ua })
-    // These two also hit the disabled MySQL code afterwards (500), but their writes were already queued
+    // These two are refused before writing (study SYNTH has no data directory; see legacyresults.test.js)
     await request(good, 'POST', '/saveDPTask/?study=SYNTH&session=1&mkturk_id=SYN001&task=dp', { body: { content: 'x' }, headers: ua })
     await request(good, 'POST', '/saveChickenTask/?study=SYNTH&session=2&mkturk_id=SYN001&task=ct', { body: { content: '' }, headers: ua })
     await sleep(300) // let the write callbacks run

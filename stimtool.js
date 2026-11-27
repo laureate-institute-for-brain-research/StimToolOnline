@@ -78,6 +78,11 @@ var models = require('./models')
 // });
 
 
+// Legacy result-saving routes (api.js) get a small body limit. Registered first: body-parser
+// skips a body that is already parsed, so the 100 MB parsers below never handle these routes.
+var legacyResults = require('./legacyresults.js')
+app.use(legacyResults.SAVE_PATHS, legacyResults.saveBodyParsers())
+
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({
     extended: true,

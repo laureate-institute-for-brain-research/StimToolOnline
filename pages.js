@@ -5,6 +5,7 @@
 // nothing can throw outside Express's error handling.
 
 const fs = require('fs')
+const http = require('http')
 const path = require('path')
 const pino = require('pino')
 const logger = pino({ level: process.env.LOG_LEVEL || 'info' })
@@ -60,11 +61,21 @@ function sendPageInDir (res, next, baseDir, name, file) {
   })
 }
 
-// Last Express middleware: one failed request gets a 500, the server keeps running.
+// Last Express middleware: one failed request gets an error response, the server keeps running.
+// An error that carries a 4xx status (body-parser's 413 for an oversized body, a refused legacy
+// save or score request) keeps that status; anything else is a 500. Only the standard status
+// text is sent, never the error message.
 // eslint-disable-next-line no-unused-vars
 function handleRouteError (err, req, res, next) {
-  logger.error(err, `request failed: ${req.method} ${req.path}`)
+  const status = Number(err && (err.status || err.statusCode))
+  const clientError = Number.isInteger(status) && status >= 400 && status < 500
+  if (clientError) {
+    logger.warn(`request refused (${status}): ${req.method} ${req.path}: ${err.message}`)
+  } else {
+    logger.error(err, `request failed: ${req.method} ${req.path}`)
+  }
   if (res.headersSent) return next(err) // Express closes the half-sent response
+  if (clientError) return res.status(status).type('text/plain').send(http.STATUS_CODES[status] || 'Bad Request')
   res.status(500).type('text/plain').send('Internal Server Error')
 }
 

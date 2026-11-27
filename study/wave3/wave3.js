@@ -15,6 +15,7 @@ const path = require('path');
 // Configuration File for Wave 2 Study
 var config = require('./wave3-config.json')
 var keys = require('../../keys')
+var { readCsvRows } = require('../../legacyresults')
 
 // Connecting to database
 // Each study/wave should have their own database
@@ -979,14 +980,16 @@ function getCodeEmailHTML(code){
 	`
 }
 
+// Reads the file with the bounded reader shared with api.js: a file larger than a real export
+// (or unreadable) scores as {} instead of being loaded and split in full.
 function getChickenTaskScore(filename) {
+    var contents
     try {
-        stringContent = fs.readFileSync(filename).toString();
+        contents = readCsvRows(filename);
     } catch (err) {
         return ({})
     }
-    var contents = toArrayfromCSVString(stringContent);
-    returnJSON = {}
+    var returnJSON = {}
 
     returnJSON['points'] = '0'
     returnJSON['avg_rt'] = 0
@@ -1008,14 +1011,4 @@ function getChickenTaskScore(filename) {
     returnJSON['avg_rt'] = returnJSON['avg_rt'] / 400
     // console.log(returnJSON)
     return (returnJSON)
-}
-
-function toArrayfromCSVString(string) {
-    var line = string.split('\n');
-    var x = new Array(line.length);
-    for (var i = 0; i < line.length; i++) {
-        x[i] = line[i].split(',')
-    }
-
-    return x;
 }

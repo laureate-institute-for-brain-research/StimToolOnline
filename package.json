@@ -45,7 +45,7 @@
     "minimist": "1.2.6"
   },
   "scripts": {
-    "test": "tape test/hitlog.test.js test/datasave.test.js test/studylink.test.js test/canonmemory.test.js test/pages.test.js"
+    "test": "tape test/hitlog.test.js test/datasave.test.js test/studylink.test.js test/canonmemory.test.js test/pages.test.js test/legacyresults.test.js"
   },
   "repository": {
     "type": "git",

@@ -9,6 +9,9 @@ const keys = require('./keys')
 const pino = require('pino')
 const logger = pino({ level: process.env.LOG_LEVEL || 'info' })
 const { isSafeName, sendHtmlFile, sendPageInDir } = require('./pages')
+const {
+  LegacyInputError, requireSafeIds, requireKnownStudy, requireContent, requireRoomToAppend, readCsvRows
+} = require('./legacyresults')
 
 // options.pagesRoot: directory the HTML pages are read from (default: working directory)
 module.exports = function (app, options = {}) {
@@ -91,6 +94,11 @@ module.exports = function (app, options = {}) {
 
   // POST SURVEY DATA
   app.post('/saveSurvey/', function (req, res) {
+    const checked = url.parse(req.url, true).query
+    requireKnownStudy(checked.study, 'surveys')
+    requireSafeIds({ survey: checked.survey, mkturk_id: checked.mkturk_id, session: checked.session })
+    if (checked.study === 'mindreal') requireSafeIds({ subsesssion: checked.subsesssion })
+
     const d = new Date()
     const q = url.URL(req.url, true).query
     const session = q.session
@@ -188,8 +196,10 @@ module.exports = function (app, options = {}) {
     const task = q.task
     const ipaddr = req.headers['x-forwarded-for'] || req.connection.remoteAddress
 
+    requireKnownStudy(study, 'tasks')
+    requireSafeIds({ mkturk_id: mturkId, session })
     const data = req.body // json input
-    const content = data.content
+    const content = requireContent(data.content)
     const head1 = 'Orginal File Name:,' + 'DP-' + mturkId + '-' + fileDate + '.csv' + ',UserAGENT:' + req.headers['user-agent'] + ',IP: ' + ipaddr + ',Time:,' + fileDate + ",Parameter File:,None:FromPsyToolkit,Event Codes:,[('INSTRUCT_ONSET', 1), ('TASK_ONSET', 2), ('TRIAL_ONSET', 3), ('CUE_ONSET', 4), ('IMAGE_ONSET', 5), ('TARGET_ONSET', 6), ('RESPONSE', 7), ('ERROR_DELAY', 8), ('BREAK_ONSET', 9), ('BREAK_END', 10)],Trial Types are coded as follows: 8 bits representing [valence neut/neg/pos] [target_orientation H/V] [target_side left/right] [duration .5/1] [valenced_image left/right] [cue_orientation H/V] [cue_side left/right] \n"
     const head2 = 'trial_number,trial_type,event_code,absolute_time,response_time,response,result\n'
 
@@ -278,6 +288,7 @@ module.exports = function (app, options = {}) {
     const month = d.getMonth() + 1 // on a separate since if we add, it concatenates the numbers
     const fileDate = d.getFullYear() + '_' + month + '_' + d.getDate() + '_' + d.getHours() + '_' + d.getMinutes()
 
+    if (q.id) requireSafeIds({ id: q.id })
     const randomPath = () => 'data/square_circle_rating/sc-' + (Math.floor(Math.random() * 100000) + 1) + '.csv'
     const firstPath = q.id ? 'data/square_circle_rating/sc-' + q.id + '.csv' : randomPath()
 
@@ -318,8 +329,11 @@ module.exports = function (app, options = {}) {
     const ipaddr = req.headers['x-forwarded-for'] || req.connection.remoteAddress
     const type = q.type
 
+    // Checked before anything is written: the score helpers parse this file later
+    requireKnownStudy(study, 'tasks')
+    requireSafeIds({ mkturk_id: mturkId, session })
     const data = req.body // json input
-    const content = data.content
+    const content = requireContent(data.content)
     const head1 = 'Version,' + q.version + ',' + 'Pattern,' + pattern + ',Type,' + type + ',Orginal_File_Name,' + 'CT-' + mturkId + '-T' + session + '.csv,' + 'IP,' + ipaddr + ',Time,' + fileDate + ',chicken_left_x,-75,chicken_left_y,0,chicken_right_x,75,chicken_right_y,0,block1_sigma,110,block1_hazard,0.05,block2_sigma,160,block2_hazard,0.05,block3_sigma,110,block3_hazard,0.95,block4_sigma,160,block4_hazard,0.95' + ',Parameter_File,None:FromPsyToolkit' + ',UserAGENT,' + '"' + req.headers['user-agent'].replace(' ', '_') + '"\n'
     const head2 = 'trial_type,trial_number,block_num,egg_x_position,egg_y_position,absolute_time_sec,response_time_sec,response,current_chicken,next_chicken,correct,points,left_chicken_x_position,left_chicken_y_position,right_chicken_x_position,right_chicken_y_position,give_feedback\n'
 
@@ -369,7 +383,9 @@ module.exports = function (app, options = {}) {
 
     const data = payload[0]
 
+    requireSafeIds({ id: q.id, session: q.session })
     const filename = 'data/wave3/tasks/wave3-GT-' + q.id + '-T' + q.session + '.csv'
+    requireRoomToAppend(filename)
     const head1 = 'Version:,' + q.version + ',Orginal File Name:,' + 'GT-' + q.id + '-T' + q.session + '.csv' + ',"UserAGENT:' + req.headers['user-agent'] + '",IP: ' + ipaddr + ',Time:,' + fileDate + ',Parameter File:,None:FromjsPsych\n'
     const head2 = 'trial_index,trial_type,trial_number,event,condition,absolute_time_ms,response_time_ms,key_press,outcome,points\n'
     const datarow = data.trial_index + ',' + data.trial_type + ',' + data.trial_number + ',' +
@@ -410,7 +426,9 @@ module.exports = function (app, options = {}) {
 
     const savePath = 'data/cognitive_control/tasks/flanker/'
 
+    requireSafeIds({ subject: q.subject, session: q.session })
     const filename = savePath + 'cognitive_control-FL-' + q.subject + '-T' + q.session + '.csv'
+    requireRoomToAppend(filename)
     const head1 = 'Version:,' + q.version + ',Orginal File Name:,' + 'FL-' + q.subject + '-T' + q.session + '.csv' + ',IP: ' + ipaddr + ',Time:,' + fileDate + ',Parameter File:,None:FromjsPsych,UserAGENT:"' + req.headers['user-agent'] + '"\n'
     const head2 = 'trial_index,trial_type,trial_number,event,direction,congruency,absolute_time_ms,response_time_ms,key_press,result\n'
     const datarow = data.trial_index + ',' + data.symbol + ',' + data.trial_number + ',' +
@@ -451,7 +469,9 @@ module.exports = function (app, options = {}) {
 
     const savePath = 'data/cognitive_control/tasks/color_stroop/'
 
+    requireSafeIds({ subject: q.subject, session: q.session })
     const filename = savePath + 'cognitive_control-Color_Stroop-' + q.subject + '-T' + q.session + '.csv'
+    requireRoomToAppend(filename)
     const head1 = 'Version:,' + q.version + ',Orginal File Name:,' + 'Color_Stroop-' + q.subject + '-T' + q.session + '.csv' + ',IP: ' + ipaddr + ',Time:,' + fileDate + ',Parameter File:,None:FromjsPsych,UserAGENT:"' + req.headers['user-agent'] + '"\n'
     const head2 = 'trial_index,trial_type,trial_number,event,direction,congruency,absolute_time_ms\n'
     const datarow = data.trial_index + ',' + data.symbol + ',' + data.trial_number + ',' +
@@ -491,7 +511,9 @@ module.exports = function (app, options = {}) {
 
     const savePath = 'data/cognitive_control/tasks/emotional_stroop/'
 
+    requireSafeIds({ subject: q.subject, session: q.session })
     const filename = savePath + 'cognitive_control-Emotional_Stroop-' + q.subject + '-T' + q.session + '.csv'
+    requireRoomToAppend(filename)
     const head1 = 'Version:,' + q.version + ',Orginal File Name:,' + 'Emotional_Stroop-' + q.subject + '-T' + q.session + '.csv' + ',IP: ' + ipaddr + ',Time:,' + fileDate + ',Parameter File:,None:FromjsPsych,UserAGENT:"' + req.headers['user-agent'] + '"\n'
     const head2 = 'trial_index,trial_type,trial_number,event,direction,congruency,absolute_time_ms\n'
     const datarow = data.trial_index + ',' + data.symbol + ',' + data.trial_number + ',' +
@@ -572,6 +594,7 @@ module.exports = function (app, options = {}) {
     const mturkId = q.mkturk_id
     const session = q.session
     const study = q.study
+    requireSafeIds({ study, mkturk_id: mturkId, session })
     const filename = 'data/' + study + '/surveys/' + study + '-SURVEY-' + 'phq' + '-' + mturkId + '-T' + session + '.csv'
     res.send(getPHQScore(filename))
   })
@@ -581,6 +604,7 @@ module.exports = function (app, options = {}) {
     const mturkId = q.mkturk_id
     const session = q.session
     const study = q.study
+    requireSafeIds({ study, mkturk_id: mturkId, session })
     const filename = 'data/' + study + '/surveys/' + study + '-SURVEY-' + 'oasis' + '-' + mturkId + '-T' + session + '.csv'
 
     // oasis sums up scores the same as phq
@@ -597,6 +621,7 @@ module.exports = function (app, options = {}) {
     const mturkId = q.mkturk_id
     // var type = q.type;
 
+    requireSafeIds({ mkturk_id: mturkId })
     const filename = 'surveys/data/SURVEY-asi-' + mturkId + '-T2.csv'
     let value = 'not specified'
     switch (q.type) {
@@ -623,6 +648,7 @@ module.exports = function (app, options = {}) {
     const mturkId = q.mkturk_id
     const session = q.session
     const study = q.study
+    requireSafeIds({ study, mkturk_id: mturkId, session })
     const filename = 'data/' + study + '/surveys/' + study + '-SURVEY-' + 'panas' + '-' + mturkId + '-T' + session + '.csv'
 
     let value = 'not specified'
@@ -644,6 +670,7 @@ module.exports = function (app, options = {}) {
     const mturkId = q.mkturk_id
     // const session = q.session
     const study = q.study
+    requireSafeIds({ study, mkturk_id: mturkId })
     const jsonReturn = {}
     // var filename = 'data/' + study + '/surveys/' + study +'-SURVEY-' + 'panas' + '-' + mkturk_id + '-T' + session + '.csv'
 
@@ -665,10 +692,12 @@ module.exports = function (app, options = {}) {
     // es.send('404. We cant find that bro.');
   })
 
+  // Score helpers: every file is read with readCsvRows (legacyresults.js), which refuses a file
+  // larger than a real export with a 413 instead of loading and splitting all of it.
+
   function getChickenTaskScore (filename) {
     try {
-      const stringContent = fs.readFileSync(filename).toString()
-      const contents = toArrayfromCSVString(stringContent)
+      const contents = readCsvRows(filename)
       const returnJSON = {}
 
       returnJSON.points = '0'
@@ -690,6 +719,7 @@ module.exports = function (app, options = {}) {
       console.log(returnJSON)
       return (returnJSON)
     } catch (err) {
+      if (err instanceof LegacyInputError) throw err // oversized file: the request fails
       return ({})
     }
   }
@@ -736,8 +766,7 @@ module.exports = function (app, options = {}) {
     */
   function getPANASXScore (filename) {
     try {
-      const stringContent = fs.readFileSync(filename).toString()
-      const contents = toArrayfromCSVString(stringContent)
+      const contents = readCsvRows(filename)
       const panasx_negaffect_score = ['panasx_afraid', 'panasx_scared', 'panasx_nervous', 'panasx_jittery', 'panasx_irritable', 'panasx_hostile', 'panasx_guilty', 'panasx_ashamed', 'panasx_upset', 'panasx_distressed']
       const panasx_posaffect_score = ['panasx_active', 'panasx_alert', 'panasx_attentive', 'panasx_determined', 'panasx_enthusiastic', 'panasx_excited', 'panasx_inspired', 'panasx_interested', 'panasx_proud', 'panasx_strong']
       const panasx_fear_score = ['panasx_afraid', 'panasx_scared', 'panasx_frightened', 'panasx_nervous', 'panasx_jittery', 'panasx_shaky']
@@ -859,13 +888,13 @@ module.exports = function (app, options = {}) {
       }
       return (returnJSON)
     } catch (err) {
+      if (err instanceof LegacyInputError) throw err // oversized file: the request fails
       return ({})
     }
   }
 
   function getPANASPositive (filename) {
-    const stringContent = fs.readFileSync(filename).toString()
-    const contents = toArrayfromCSVString(stringContent)
+    const contents = readCsvRows(filename)
     q_num = [1, 3, 5, 9, 10, 12, 14, 16, 17, 19]
 
     // Value should be + 1 more since the suryve has fields like:
@@ -892,8 +921,7 @@ module.exports = function (app, options = {}) {
   }
 
   function getPANASNegative (filename) {
-    const stringContent = fs.readFileSync(filename).toString()
-    const contents = toArrayfromCSVString(stringContent)
+    const contents = readCsvRows(filename)
     q_num = [2, 4, 6, 7, 8, 11, 13, 15, 18, 20]
 
     let Total = 0
@@ -907,8 +935,7 @@ module.exports = function (app, options = {}) {
   }
 
   function getASITotal (filename) {
-    const stringContent = fs.readFileSync(filename).toString()
-    const contents = toArrayfromCSVString(stringContent)
+    const contents = readCsvRows(filename)
     let Total = 0
     for (let i = 2; i < contents.length - 1; i++) {
       value = parseInt(contents[i][1])
@@ -920,8 +947,7 @@ module.exports = function (app, options = {}) {
   }
 
   function getASIPhysical (filename) {
-    const stringContent = fs.readFileSync(filename).toString()
-    const contents = toArrayfromCSVString(stringContent)
+    const contents = readCsvRows(filename)
     q_num = [4, 12, 8, 7, 15, 3]
 
     let Total = 0
@@ -935,8 +961,7 @@ module.exports = function (app, options = {}) {
   }
 
   function getASICognitive (filename) {
-    const stringContent = fs.readFileSync(filename).toString()
-    const contents = toArrayfromCSVString(stringContent)
+    const contents = readCsvRows(filename)
     q_num = [14, 18, 10, 16, 2, 5]
 
     let Total = 0
@@ -950,8 +975,7 @@ module.exports = function (app, options = {}) {
   }
 
   function getASISocial (filename) {
-    const stringContent = fs.readFileSync(filename).toString()
-    const contents = toArrayfromCSVString(stringContent)
+    const contents = readCsvRows(filename)
     q_num = [9, 6, 11, 13, 17, 1]
 
     let Total = 0
@@ -966,8 +990,7 @@ module.exports = function (app, options = {}) {
 
   // Will return the phq score given the survey filename
   function getPHQScore (filename) {
-    const stringContent = fs.readFileSync(filename).toString()
-    const contents = toArrayfromCSVString(stringContent)
+    const contents = readCsvRows(filename)
 
     let Total = 0
     // skips the first line
@@ -982,16 +1005,6 @@ module.exports = function (app, options = {}) {
       // }
     }
     return Total.toString()
-  }
-
-  function toArrayfromCSVString (string) {
-    const line = string.split('\n')
-    const x = new Array(line.length)
-    for (let i = 0; i < line.length; i++) {
-      x[i] = line[i].split(',')
-    }
-
-    return x
   }
 
   // 			Output Pages 		//
