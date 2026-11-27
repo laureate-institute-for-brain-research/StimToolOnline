@@ -10,8 +10,10 @@ const pino = require('pino')
 const logger = pino({ level: process.env.LOG_LEVEL || 'info' })
 const { isSafeName, sendHtmlFile, sendPageInDir } = require('./pages')
 const {
-  LegacyInputError, requireSafeIds, requireKnownStudy, requireContent, requireRoomToAppend, readCsvRows
+  LegacyInputError, requireSafeIds, requireKnownStudy, requireContent, requireRoomToAppend,
+  readScoreRows, requireScoreIds, isScoresNotFound
 } = require('./legacyresults')
+const staffAuth = require('./authentication/basic.js')
 
 // options.pagesRoot: directory the HTML pages are read from (default: working directory)
 module.exports = function (app, options = {}) {
@@ -588,23 +590,30 @@ module.exports = function (app, options = {}) {
     })
   })
 
+  // Score routes: a participant's mental-health survey and task scores. Staff only (HTTP basic
+  // auth, checked before anything else), since the only "proof" a request carries is an MTurk
+  // worker ID that can be known or guessed. The participant completion pages that used to call
+  // these (study/mindreal/complete.html, completed_ct.html) are no longer served.
+  // Ids must match strict patterns and the study must be a known legacy study (requireScoreIds);
+  // an unknown study or a missing/unreadable file is the same generic 404 (readScoreRows).
+
   // Return the phq score of the given mkturk_id
-  app.get('/getPHQ', function (req, res) {
+  app.get('/getPHQ', staffAuth, function (req, res) {
     const q = url.parse(req.url, true).query
     const mturkId = q.mkturk_id
     const session = q.session
     const study = q.study
-    requireSafeIds({ study, mkturk_id: mturkId, session })
+    requireScoreIds({ study, mkturk_id: mturkId, session }, 'surveys')
     const filename = 'data/' + study + '/surveys/' + study + '-SURVEY-' + 'phq' + '-' + mturkId + '-T' + session + '.csv'
     res.send(getPHQScore(filename))
   })
 
-  app.get('/getOASIS', function (req, res) {
+  app.get('/getOASIS', staffAuth, function (req, res) {
     const q = url.parse(req.url, true).query
     const mturkId = q.mkturk_id
     const session = q.session
     const study = q.study
-    requireSafeIds({ study, mkturk_id: mturkId, session })
+    requireScoreIds({ study, mkturk_id: mturkId, session }, 'surveys')
     const filename = 'data/' + study + '/surveys/' + study + '-SURVEY-' + 'oasis' + '-' + mturkId + '-T' + session + '.csv'
 
     // oasis sums up scores the same as phq
@@ -616,12 +625,12 @@ module.exports = function (app, options = {}) {
   // physical
   // cognitive
   // social
-  app.get('/getASI', function (req, res) {
+  app.get('/getASI', staffAuth, function (req, res) {
     const q = url.parse(req.url, true).query
     const mturkId = q.mkturk_id
     // var type = q.type;
 
-    requireSafeIds({ mkturk_id: mturkId })
+    requireScoreIds({ mkturk_id: mturkId }) // fixed directory, no study
     const filename = 'surveys/data/SURVEY-asi-' + mturkId + '-T2.csv'
     let value = 'not specified'
     switch (q.type) {
@@ -643,12 +652,12 @@ module.exports = function (app, options = {}) {
     res.send(value)
   })
 
-  app.get('/getPANAS', function (req, res) {
+  app.get('/getPANAS', staffAuth, function (req, res) {
     const q = url.parse(req.url, true).query
     const mturkId = q.mkturk_id
     const session = q.session
     const study = q.study
-    requireSafeIds({ study, mkturk_id: mturkId, session })
+    requireScoreIds({ study, mkturk_id: mturkId, session }, 'surveys')
     const filename = 'data/' + study + '/surveys/' + study + '-SURVEY-' + 'panas' + '-' + mturkId + '-T' + session + '.csv'
 
     let value = 'not specified'
@@ -665,24 +674,38 @@ module.exports = function (app, options = {}) {
     res.send(value)
   })
 
-  app.get('/getScores', (req, res) => {
+  app.get('/getScores', staffAuth, (req, res) => {
     const q = url.parse(req.url, true).query
     const mturkId = q.mkturk_id
     // const session = q.session
     const study = q.study
-    requireSafeIds({ study, mkturk_id: mturkId })
+    requireScoreIds({ study, mkturk_id: mturkId }, '') // data/<study> (surveys/ and tasks/ below)
     const jsonReturn = {}
     // var filename = 'data/' + study + '/surveys/' + study +'-SURVEY-' + 'panas' + '-' + mkturk_id + '-T' + session + '.csv'
 
+    // A missing session file is {} as before; no file at all is the generic 404
+    let found = 0
+    const scoreOrEmpty = (score, filename) => {
+      try {
+        const value = score(filename)
+        found++
+        return value
+      } catch (err) {
+        if (isScoresNotFound(err)) return {}
+        throw err
+      }
+    }
+
     jsonReturn.PANASX = {
-      T1: getPANASXScore('data/' + study + '/surveys/' + study + '-SURVEY-' + 'panasx' + '-' + mturkId + '-T' + '1' + '.csv'),
-      T2: getPANASXScore('data/' + study + '/surveys/' + study + '-SURVEY-' + 'panasx' + '-' + mturkId + '-T' + '2' + '.csv')
+      T1: scoreOrEmpty(getPANASXScore, 'data/' + study + '/surveys/' + study + '-SURVEY-' + 'panasx' + '-' + mturkId + '-T' + '1' + '.csv'),
+      T2: scoreOrEmpty(getPANASXScore, 'data/' + study + '/surveys/' + study + '-SURVEY-' + 'panasx' + '-' + mturkId + '-T' + '2' + '.csv')
     }
 
     jsonReturn.ChickenTask = {
-      T1: getChickenTaskScore('data/' + study + '/tasks/' + study + '-CT-' + mturkId + '-T' + '1' + '.csv'),
-      T2: getChickenTaskScore('data/' + study + '/tasks/' + study + '-CT-' + mturkId + '-T' + '2' + '.csv')
+      T1: scoreOrEmpty(getChickenTaskScore, 'data/' + study + '/tasks/' + study + '-CT-' + mturkId + '-T' + '1' + '.csv'),
+      T2: scoreOrEmpty(getChickenTaskScore, 'data/' + study + '/tasks/' + study + '-CT-' + mturkId + '-T' + '2' + '.csv')
     }
+    if (found === 0) throw new LegacyInputError(404, 'scores not found')
     res.send(jsonReturn)
   })
 
@@ -692,12 +715,13 @@ module.exports = function (app, options = {}) {
     // es.send('404. We cant find that bro.');
   })
 
-  // Score helpers: every file is read with readCsvRows (legacyresults.js), which refuses a file
-  // larger than a real export with a 413 instead of loading and splitting all of it.
+  // Score helpers: every file is read with readScoreRows (legacyresults.js), which refuses a file
+  // larger than a real export with a 413 instead of loading and splitting all of it, and turns a
+  // missing or unreadable file into the generic 404 (no path, code or stack in the response).
 
   function getChickenTaskScore (filename) {
     try {
-      const contents = readCsvRows(filename)
+      const contents = readScoreRows(filename)
       const returnJSON = {}
 
       returnJSON.points = '0'
@@ -719,7 +743,7 @@ module.exports = function (app, options = {}) {
       console.log(returnJSON)
       return (returnJSON)
     } catch (err) {
-      if (err instanceof LegacyInputError) throw err // oversized file: the request fails
+      if (err instanceof LegacyInputError) throw err // missing (404) or oversized (413) file
       return ({})
     }
   }
@@ -766,7 +790,7 @@ module.exports = function (app, options = {}) {
     */
   function getPANASXScore (filename) {
     try {
-      const contents = readCsvRows(filename)
+      const contents = readScoreRows(filename)
       const panasx_negaffect_score = ['panasx_afraid', 'panasx_scared', 'panasx_nervous', 'panasx_jittery', 'panasx_irritable', 'panasx_hostile', 'panasx_guilty', 'panasx_ashamed', 'panasx_upset', 'panasx_distressed']
       const panasx_posaffect_score = ['panasx_active', 'panasx_alert', 'panasx_attentive', 'panasx_determined', 'panasx_enthusiastic', 'panasx_excited', 'panasx_inspired', 'panasx_interested', 'panasx_proud', 'panasx_strong']
       const panasx_fear_score = ['panasx_afraid', 'panasx_scared', 'panasx_frightened', 'panasx_nervous', 'panasx_jittery', 'panasx_shaky']
@@ -888,13 +912,13 @@ module.exports = function (app, options = {}) {
       }
       return (returnJSON)
     } catch (err) {
-      if (err instanceof LegacyInputError) throw err // oversized file: the request fails
+      if (err instanceof LegacyInputError) throw err // missing (404) or oversized (413) file
       return ({})
     }
   }
 
   function getPANASPositive (filename) {
-    const contents = readCsvRows(filename)
+    const contents = readScoreRows(filename)
     q_num = [1, 3, 5, 9, 10, 12, 14, 16, 17, 19]
 
     // Value should be + 1 more since the suryve has fields like:
@@ -921,7 +945,7 @@ module.exports = function (app, options = {}) {
   }
 
   function getPANASNegative (filename) {
-    const contents = readCsvRows(filename)
+    const contents = readScoreRows(filename)
     q_num = [2, 4, 6, 7, 8, 11, 13, 15, 18, 20]
 
     let Total = 0
@@ -935,7 +959,7 @@ module.exports = function (app, options = {}) {
   }
 
   function getASITotal (filename) {
-    const contents = readCsvRows(filename)
+    const contents = readScoreRows(filename)
     let Total = 0
     for (let i = 2; i < contents.length - 1; i++) {
       value = parseInt(contents[i][1])
@@ -947,7 +971,7 @@ module.exports = function (app, options = {}) {
   }
 
   function getASIPhysical (filename) {
-    const contents = readCsvRows(filename)
+    const contents = readScoreRows(filename)
     q_num = [4, 12, 8, 7, 15, 3]
 
     let Total = 0
@@ -961,7 +985,7 @@ module.exports = function (app, options = {}) {
   }
 
   function getASICognitive (filename) {
-    const contents = readCsvRows(filename)
+    const contents = readScoreRows(filename)
     q_num = [14, 18, 10, 16, 2, 5]
 
     let Total = 0
@@ -975,7 +999,7 @@ module.exports = function (app, options = {}) {
   }
 
   function getASISocial (filename) {
-    const contents = readCsvRows(filename)
+    const contents = readScoreRows(filename)
     q_num = [9, 6, 11, 13, 17, 1]
 
     let Total = 0
@@ -990,7 +1014,7 @@ module.exports = function (app, options = {}) {
 
   // Will return the phq score given the survey filename
   function getPHQScore (filename) {
-    const contents = readCsvRows(filename)
+    const contents = readScoreRows(filename)
 
     let Total = 0
     // skips the first line

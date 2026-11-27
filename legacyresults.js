@@ -1,7 +1,7 @@
 // Limits for the legacy result routes in api.js (wave1/wave2/wave3/mindreal/cognitive_control):
 // the save routes that write CSV files under data/, and the score routes that read them back.
 //
-// Anyone can call these routes without logging in, so neither side trusts the request:
+// The save routes take no login and the score routes are staff-only, but neither trusts the request:
 //   - a save writes only when the study already has its data directory, every name in the file
 //     path is a single safe path component, and the content is no bigger than a real export;
 //   - the request body for these routes is capped well below the global 100 MB limit;
@@ -85,6 +85,50 @@ function requireRoomToAppend (file) {
   if (size >= MAX_FILE_BYTES) throw tooLarge('result file')
 }
 
+// ---- score routes (/getPHQ, /getOASIS, /getASI, /getPANAS, /getScores) ----------------------
+// These are staff-only (api.js puts authentication/basic.js in front of them). Every value that
+// goes into a score file path must also match a strict pattern, and the study must be one of the
+// legacy studies those files were written for.
+
+const SCORE_STUDIES = ['wave1', 'wave2', 'wave3', 'mindreal', 'cognitive_control']
+const PARTICIPANT_ID_RE = /^[A-Za-z0-9_-]{1,64}$/ // MTurk worker IDs and synthetic/staff IDs
+const SESSION_RE = /^[0-9]{1,3}$/
+
+// One response for every "no such scores" case (unknown study, no file, unreadable file), so the
+// answer is the same whether or not the participant exists
+const scoresNotFound = () => new LegacyInputError(404, 'scores not found')
+
+// ids: { mkturk_id, session?, study? }: a route that uses a session or study passes that key (even
+// when the request left it out), and its value is then required. With a study,
+// data/<study>/<sub> must also exist. Malformed ids -> 400; an unknown study -> the generic 404.
+function requireScoreIds (ids, sub = '', dataRoot = 'data') {
+  const { study, mkturk_id: mkturkId, session } = ids
+  if (typeof mkturkId !== 'string' || !PARTICIPANT_ID_RE.test(mkturkId)) throw new LegacyInputError(400, 'invalid mkturk_id')
+  if ('session' in ids && (typeof session !== 'string' || !SESSION_RE.test(session))) throw new LegacyInputError(400, 'invalid session')
+  if (!('study' in ids)) return
+  if (typeof study !== 'string' || !SCORE_STUDIES.includes(study)) throw scoresNotFound()
+  let known = false
+  try {
+    known = fs.statSync(path.join(dataRoot, study, sub)).isDirectory()
+  } catch (err) {
+    known = false
+  }
+  if (!known) throw scoresNotFound()
+}
+
+// readCsvRows for the score routes: a file that is missing, unreadable or not a regular file is
+// the generic 404 (no path, code or stack reaches the client). Only an oversized file keeps its 413.
+function readScoreRows (file) {
+  try {
+    return readCsvRows(file)
+  } catch (err) {
+    if (err instanceof LegacyInputError && err.status === 413) throw err
+    throw scoresNotFound()
+  }
+}
+
+const isScoresNotFound = (err) => err instanceof LegacyInputError && err.status === 404
+
 // Reads a result CSV as rows of cells, with the same shape the old toArrayfromCSVString gave
 // (split on '\n', then on ','), but bounded: throws a 413 LegacyInputError for a file over
 // MAX_FILE_BYTES or MAX_ROWS lines, and keeps at most MAX_CELLS cells per row.
@@ -121,6 +165,12 @@ module.exports = {
   requireContent,
   requireRoomToAppend,
   readCsvRows,
+  readScoreRows,
+  requireScoreIds,
+  isScoresNotFound,
+  SCORE_STUDIES,
+  PARTICIPANT_ID_RE,
+  SESSION_RE,
   MAX_CONTENT_BYTES,
   MAX_FILE_BYTES,
   MAX_ROWS,

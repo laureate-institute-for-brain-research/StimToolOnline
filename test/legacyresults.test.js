@@ -1,8 +1,12 @@
-// Regression tests for the legacy result routes in api.js (CWE-770): the score helpers used to
-// read a whole result file synchronously and split every line and cell, and POST /saveChickenTask/
-// (and the other legacy save routes) let anyone write a file of up to 100 MB for them to parse.
+// Regression tests for the legacy result routes in api.js:
+//   - CWE-770: the score helpers used to read a whole result file synchronously and split every
+//     line and cell, and POST /saveChickenTask/ (and the other legacy save routes) let anyone
+//     write a file of up to 100 MB for them to parse.
+//   - CWE-639: GET /getPHQ, /getOASIS, /getASI, /getPANAS and /getScores returned any
+//     participant's scores to anyone who supplied the (guessable) MTurk worker ID; a missing file
+//     answered differently from an existing one. They are now staff-only (HTTP basic auth).
 //
-// Every file here is synthetic and lives in a fresh temp directory.
+// Every file and credential here is synthetic; files live in a fresh temp directory.
 //
 //   npm test
 
@@ -11,10 +15,20 @@ const fs = require('fs')
 const os = require('os')
 const path = require('path')
 const http = require('http')
+const crypto = require('crypto')
 
 const scratch = fs.realpathSync(fs.mkdtempSync(path.join(os.tmpdir(), 'legacyresults-test-')))
+const savedEnv = { DASHBOARD_USER: process.env.DASHBOARD_USER, DASHBOARD_PASSWORD: process.env.DASHBOARD_PASSWORD }
 process.env.LOG_LEVEL = 'silent'
 process.env.KEYS_PATH = path.join(scratch, 'no-keys.json')
+
+// Synthetic staff credentials, generated per run (authentication/basic.js reads them per request)
+const hex = (n = 6) => crypto.randomBytes(n).toString('hex')
+process.env.DASHBOARD_USER = 'synthstaff_' + hex()
+process.env.DASHBOARD_PASSWORD = hex(16)
+const basic = (user, pass) => 'Basic ' + Buffer.from(user + ':' + pass).toString('base64')
+const STAFF = { Authorization: basic(process.env.DASHBOARD_USER, process.env.DASHBOARD_PASSWORD) }
+const WRONG = { Authorization: basic(process.env.DASHBOARD_USER, hex(16)) }
 
 const express = require('express')
 const bodyParser = require('body-parser')
@@ -49,6 +63,12 @@ function surveyExport (answers) {
     answers.map(([q, a]) => `${q},"${a}",100`).join('\n') + '\n'
 }
 
+// n answers, all `value`, unquoted (the PHQ/OASIS/PANAS/ASI helpers parseInt the raw cell)
+function plainSurvey (name, n, value) {
+  const rows = Array.from({ length: n }, (_, i) => `${name}_${i + 1},${value},100`)
+  return 'synthetic-survey\nQUESTION,RESULT,RT(ms)\n' + rows.join('\n') + '\n'
+}
+
 // A file of `bytes` bytes without writing them (sparse where the file system supports it)
 function bigFile (file, bytes) {
   fs.writeFileSync(file, '')
@@ -79,10 +99,10 @@ function listen (app) {
 }
 
 // Never rejects: a request the server never answers resolves as 'timeout'
-function request (server, method, route, body) {
+function request (server, method, route, body, extraHeaders = {}) {
   const { port } = server.address()
   const payload = body === undefined ? undefined : JSON.stringify(body)
-  const headers = { 'User-Agent': 'synthetic-agent' }
+  const headers = { 'User-Agent': 'synthetic-agent', ...extraHeaders }
   if (payload !== undefined) {
     headers['Content-Type'] = 'application/json'
     headers['Content-Length'] = Buffer.byteLength(payload)
@@ -92,7 +112,7 @@ function request (server, method, route, body) {
       let text = ''
       res.setEncoding('utf8')
       res.on('data', (c) => { text += c })
-      res.on('end', () => resolve({ status: res.statusCode, text }))
+      res.on('end', () => resolve({ status: res.statusCode, text, headers: res.headers }))
       res.on('error', () => resolve({ status: 'aborted', text }))
     })
     req.setTimeout(10000, () => { req.destroy(); resolve({ status: 'timeout', text: '' }) })
@@ -100,7 +120,8 @@ function request (server, method, route, body) {
     req.end(payload)
   })
 }
-const get = (server, route) => request(server, 'GET', route)
+const get = (server, route, headers) => request(server, 'GET', route, undefined, headers)
+const staffGet = (server, route) => get(server, route, STAFF)
 const post = (server, route, body) => request(server, 'POST', route, body)
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
 
@@ -132,13 +153,16 @@ test('setup', async (t) => {
   fs.writeFileSync(surveyFile('panasx', 'SYN001', 1), surveyExport([['panasx_afraid', 3], ['panasx_happy', 2], ['panasx_calm', 4]]))
   // Unquoted answers: getPHQScore does parseInt(cell) without stripping quotes (unchanged here)
   fs.writeFileSync(surveyFile('phq', 'SYN001', 1), 'synthetic-survey\nQUESTION,RESULT,RT(ms)\nphq_1,1,100\nphq_2,2,100\nphq_3,3,100\n')
+  fs.writeFileSync(surveyFile('oasis', 'SYN001', 1), plainSurvey('oasis', 5, 1)) // total 5
+  fs.writeFileSync(surveyFile('panas', 'SYN001', 1), plainSurvey('panas', 20, 1)) // 10 items x (1+1) = 20 each
+  fs.writeFileSync(path.join(asiDir, 'SURVEY-asi-SYN001-T2.csv'), plainSurvey('asi', 18, 2)) // total 36, physical 12
   plain = await listen(buildApp({ withLegacyParsers: false }))
   wired = await listen(buildApp({ withLegacyParsers: true }))
   t.end()
 })
 
 async function assertScoresStillServed (t, label) {
-  const r = await get(plain, '/getScores?study=wave3&mkturk_id=SYN001')
+  const r = await staffGet(plain, '/getScores?study=wave3&mkturk_id=SYN001')
   t.equal(r.status, 200, `${label}: legitimate /getScores still answered`)
   let body = {}
   try { body = JSON.parse(r.text) } catch (e) {}
@@ -146,7 +170,7 @@ async function assertScoresStillServed (t, label) {
 }
 
 test('scores for real-sized exports are unchanged', async (t) => {
-  const r = await get(plain, '/getScores?study=wave3&mkturk_id=SYN001')
+  const r = await staffGet(plain, '/getScores?study=wave3&mkturk_id=SYN001')
   t.equal(r.status, 200)
   const body = JSON.parse(r.text)
   t.deepEqual(body.ChickenTask.T1, { points: '321', avg_rt: 0.5 }, 'chicken task T1 score')
@@ -156,7 +180,7 @@ test('scores for real-sized exports are unchanged', async (t) => {
   t.equal(body.PANASX.T1.panasx_serenity_score, 4, 'PANAS-X serenity')
   t.deepEqual(body.PANASX.T2, {}, 'missing PANAS-X T2 -> {}')
 
-  const phq = await get(plain, '/getPHQ?study=wave3&mkturk_id=SYN001&session=1')
+  const phq = await staffGet(plain, '/getPHQ?study=wave3&mkturk_id=SYN001&session=1')
   t.equal(phq.status, 200)
   t.equal(phq.text, '6', 'PHQ total')
   t.end()
@@ -198,14 +222,14 @@ test('an oversized planted result file is refused without being read', async (t)
   ]
   for (const route of routes) {
     const spy = spyReads()
-    const r = await get(plain, route)
+    const r = await staffGet(plain, route)
     spy.restore()
     t.equal(r.status, 413, `${route} -> 413`)
     t.ok(spy.bytes <= MAX_FILE_BYTES + 1, `${route}: read ${spy.bytes} bytes (limit ${MAX_FILE_BYTES})`)
   }
 
   // Repeating the request costs the same small amount every time
-  const repeated = await Promise.all(Array.from({ length: 20 }, () => get(plain, '/getScores?study=wave3&mkturk_id=SYN_BIG')))
+  const repeated = await Promise.all(Array.from({ length: 20 }, () => staffGet(plain, '/getScores?study=wave3&mkturk_id=SYN_BIG')))
   t.ok(repeated.every((r) => r.status === 413), '20 concurrent repeats -> 413')
   t.deepEqual(escaped, [], 'nothing thrown outside Express')
   await assertScoresStillServed(t, 'after oversized files')
@@ -215,21 +239,92 @@ test('an oversized planted result file is refused without being read', async (t)
 test('a small file with too many rows is refused', async (t) => {
   fs.writeFileSync(ctFile('SYN_ROWS', 1), 'a\n'.repeat(MAX_ROWS + 1))
   t.ok(fs.statSync(ctFile('SYN_ROWS', 1)).size < MAX_FILE_BYTES, 'file is under the byte limit')
-  const r = await get(plain, '/getScores?study=wave3&mkturk_id=SYN_ROWS')
+  const r = await staffGet(plain, '/getScores?study=wave3&mkturk_id=SYN_ROWS')
   t.equal(r.status, 413, 'too many rows -> 413')
   t.end()
 })
 
-test('score routes refuse identifiers that are not one plain path component', async (t) => {
+// ---- CWE-639: scores only for staff ---------------------------------------------------------
+
+// Every score route, for the synthetic participant SYN001 whose files exist, with the score staff get
+const SCORE_ROUTES = [
+  ['/getPHQ?study=wave3&mkturk_id=SYN001&session=1', '6'],
+  ['/getOASIS?study=wave3&mkturk_id=SYN001&session=1', '5'],
+  ['/getPANAS?type=positive&study=wave3&mkturk_id=SYN001&session=1', '20'],
+  ['/getPANAS?type=negative&study=wave3&mkturk_id=SYN001&session=1', '20'],
+  ['/getASI?type=total&mkturk_id=SYN001', '36'],
+  ['/getASI?type=physical&mkturk_id=SYN001', '12'],
+  ['/getScores?study=wave3&mkturk_id=SYN001', null] // JSON, checked separately
+]
+const asNobody = (route) => route.replace('SYN001', 'SYN_NOBODY')
+
+test('score routes answer nothing to a caller without staff credentials', async (t) => {
+  for (const [route, score] of SCORE_ROUTES) {
+    for (const [label, headers] of [['no credentials', undefined], ['wrong password', WRONG]]) {
+      const spy = spyReads()
+      const r = await get(plain, route, headers)
+      spy.restore()
+      t.equal(r.status, 401, `${route} (${label}) -> 401`)
+      t.equal(r.text, '', `${route} (${label}): empty body, no score`)
+      t.equal(spy.bytes, 0, `${route} (${label}): no file read`)
+
+      // Same answer for a participant who has no files at all: nothing to tell them apart
+      const nobody = await get(plain, asNobody(route), headers)
+      t.deepEqual([nobody.status, nobody.text, nobody.headers['www-authenticate']],
+        [r.status, r.text, r.headers['www-authenticate']], `${route} (${label}): same as a non-existent participant`)
+    }
+
+    const staff = await staffGet(plain, route)
+    t.equal(staff.status, 200, `${route} (staff) -> 200`)
+    if (score !== null) t.equal(staff.text, score, `${route} (staff) -> ${score}`)
+  }
+  await assertScoresStillServed(t, 'staff')
+  t.end()
+})
+
+test('missing or unreadable score files give one generic 404, the same as an unknown participant', async (t) => {
+  // Unreadable: a directory where the result file would be (not a regular file on any platform)
+  fs.mkdirSync(surveyFile('phq', 'SYN_DIR', 1))
+  fs.mkdirSync(ctFile('SYN_DIR', 1))
+
   const routes = [
-    '/getScores?study=..&mkturk_id=SYN001',
-    '/getScores?study=wave3&mkturk_id=..%2F..%2Fx',
-    '/getScores?study=wave3',
-    '/getPHQ?study=wave3&mkturk_id=SYN001&session=1%2F..%2F..',
-    '/getASI?type=total&mkturk_id=..%2Fx'
+    ...SCORE_ROUTES.map(([route]) => asNobody(route)),
+    '/getPHQ?study=wave3&mkturk_id=SYN_DIR&session=1',
+    '/getScores?study=wave3&mkturk_id=SYN_DIR',
+    '/getPHQ?study=NO_SUCH_STUDY&mkturk_id=SYN001&session=1', // unknown study
+    '/getScores?study=wave1&mkturk_id=SYN001' // a legacy study with no data directory here
   ]
   for (const route of routes) {
-    t.equal((await get(plain, route)).status, 400, `${route} -> 400`)
+    const r = await staffGet(plain, route)
+    t.equal(r.status, 404, `${route} -> 404`)
+    t.equal(r.text, 'Not Found', `${route}: generic body (no path, error code or stack)`)
+  }
+  t.deepEqual(escaped, [], 'nothing thrown outside Express')
+  t.end()
+})
+
+test('score routes take only strict identifiers and a known legacy study', async (t) => {
+  // A study directory that exists and holds a matching file, but is not a legacy score study
+  const other = path.join(workDir, 'data', 'NOTLEGACY', 'surveys')
+  fs.mkdirSync(other, { recursive: true })
+  fs.writeFileSync(path.join(other, 'NOTLEGACY-SURVEY-phq-SYN001-T1.csv'), plainSurvey('phq', 3, 1))
+
+  const cases = [
+    ['/getScores?study=..&mkturk_id=SYN001', 404],
+    ['/getScores?study=wave3&mkturk_id=..%2F..%2Fx', 400],
+    ['/getScores?study=wave3', 400],
+    ['/getPHQ?study=wave3&mkturk_id=SYN001&session=1%2F..%2F..', 400],
+    ['/getASI?type=total&mkturk_id=..%2Fx', 400],
+    // Accepted by the old one-path-component check, refused now
+    ['/getPHQ?study=wave3&mkturk_id=SYN.001&session=1', 400],
+    ['/getPHQ?study=wave3&mkturk_id=' + 'A'.repeat(65) + '&session=1', 400],
+    ['/getPHQ?study=wave3&mkturk_id=SYN001&session=T1', 400],
+    ['/getPHQ?study=wave3&mkturk_id=SYN001', 400], // no session
+    ['/getPHQ?study=NOTLEGACY&mkturk_id=SYN001&session=1', 404],
+    ['/getPHQ?study=WAVE3&mkturk_id=SYN001&session=1', 404]
+  ]
+  for (const [route, status] of cases) {
+    t.equal((await staffGet(plain, route)).status, status, `${route} -> ${status}`)
   }
   t.end()
 })
@@ -333,6 +428,10 @@ test('teardown', (t) => {
   wired.close()
   process.chdir(cwd)
   process.removeListener('uncaughtException', onUncaught)
+  for (const [k, v] of Object.entries(savedEnv)) {
+    if (v === undefined) delete process.env[k]
+    else process.env[k] = v
+  }
   fs.rmSync(scratch, { recursive: true, force: true })
   t.end()
 })
