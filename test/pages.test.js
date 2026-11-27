@@ -299,6 +299,7 @@ test('save routes: a failed write is logged, not thrown from the fs callback', a
 test('/saveSquareCircleRating: a repeated id never blocks the server or overwrites the first file', (t) => {
   // Runs in a child process: the old handler spun forever in `while (err == null)` once the file
   // existed, which would freeze this test process too.
+  const RESULT_MARKER = '@@SC_RESULT@@'
   const dir = path.join(scratch, 'sc-work')
   fs.mkdirSync(path.join(dir, 'data', 'square_circle_rating'), { recursive: true })
   const script = `
@@ -330,13 +331,21 @@ test('/saveSquareCircleRating: a repeated id never blocks the server or overwrit
       await sleep(200)
       const d = 'data/square_circle_rating'
       const files = fs.readdirSync(d).sort().map((f) => [f, fs.readFileSync(d + '/' + f, 'utf8')])
-      process.stdout.write(JSON.stringify({ statuses, files }), () => process.exit(0))
+      // After a marker: the route's console.log output shares this stdout
+      process.stdout.write('\\n${RESULT_MARKER}' + JSON.stringify({ statuses, files }), () => process.exit(0))
     })
   `
   const child = spawnSync(process.execPath, ['-e', script], { cwd: dir, timeout: 15000, encoding: 'utf8' })
   t.equal(child.status, 0, 'child finished (server not frozen)')
   let out = { statuses: [], files: [] }
-  try { out = JSON.parse(child.stdout) } catch (e) { t.fail('no result from child: ' + (child.stderr || '').slice(0, 500)) }
+  const stdout = child.stdout || ''
+  const at = stdout.lastIndexOf(RESULT_MARKER)
+  try {
+    if (at < 0) throw new Error('no result marker')
+    out = JSON.parse(stdout.slice(at + RESULT_MARKER.length))
+  } catch (e) {
+    t.fail('no result from child: ' + stdout.slice(-500) + ' / ' + (child.stderr || '').slice(-500))
+  }
   t.deepEqual(out.statuses, [200, 200, 200], 'all three requests answered')
   t.equal(out.files.length, 3, 'three separate files')
   const first = out.files.find(([f]) => f === 'sc-SYN001.csv')
